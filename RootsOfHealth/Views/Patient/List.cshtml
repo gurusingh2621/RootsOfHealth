@@ -1,0 +1,78 @@
+﻿@model RootsOfHealth.Models.PatientMainBO
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2></h2>
+
+<!-- Content start here -->
+
+<section id="content" class="responsive-container pt-0">
+    <div class="inner-content mt-0">
+
+        <div class="container-fluid p-0">
+            <div class="appointment">
+
+                <div class="recent-paitents All-paitents mt-0">
+
+
+
+                </div>
+
+
+
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+<!-- Content end here -->
+@*<script src="js/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>*@
+
+@section scripts {
+
+
+
+    <script>
+        $(document).ready(function () {
+
+            $.ajax({
+
+                type: "Get",
+                url: '/Patient/GetAllPatients',
+                dataType: "html",
+                contentType: "application/json; charset=utf-8",
+                success: function (result) {
+
+                    $('.All-paitents').html(result);
+                    $("#tblPatient").dataTable();
+                },
+                error: function () {
+                    toastr.error("Some error occurred!! or data not found");
+                },
+                complete: function () {
+
+
+                }
+            });
+
+
+
+        });
+
+
+
+    </script>
+
+}

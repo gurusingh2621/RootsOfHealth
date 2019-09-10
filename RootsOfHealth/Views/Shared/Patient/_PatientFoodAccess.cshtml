@@ -1,0 +1,342 @@
+﻿@model RootsOfHealth.Models.PatientFoodAccessBO
+
+<div class="tab-pane fade" id="FoodAccess" role="tabpanel" aria-labelledby="FoodAccess-tab">
+    <div class="inner-content">
+        <div class="paitent-detail">
+            <div class="row" style="margin-right:0px;">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12 pr-0">
+                    <div class="paitent-detail-left">
+
+                        <div class="detail-heading d-flex">
+                            <h2>Patient Food Access</h2>
+                            <div class="detail-button ml-auto">
+                                <a tabindex="1" href="javascript:{}" onclick="return FoodAccessSave();" id="btnFood" class="btn btn-success">
+                                    <i class="far fa-save"></i>
+                                    Save
+                                </a>
+                                </div>
+                            </div>
+                        <!-----------------------Score Start----------------------->
+
+                        <div class="top-image-row d-flex">
+                            <div class="top-image-left">
+                                <div class="form-row-first label-fields">
+                                    <div class="top-form-row d-flex height-auto">
+                                        <div class="two-columns">
+
+                                            <label class="label-fields">
+                                                Score
+                                            </label>
+                                        </div>
+                                        <div class="two-columns">
+
+                                            <label class="label-fields">
+                                                Status
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="two-columns">
+
+                                            <label id="txtfoodscore" class="label-fields"></label>
+
+                                        </div>
+
+                                        <div class="two-columns">
+
+                                            <label id="txtfoodstatus" class="label-fields"></label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="detail-button ml-auto">
+                                <a href="/Patient/Add?PatientID=@ViewBag.PatientId"
+                                   class="btn btn-success label-fields">
+                                    <i class="far fa-edit"></i>
+                                    Edit
+                                </a>
+                            </div>
+                            </div>
+
+                            <!-----------------------Score End----------------------->
+
+
+
+                            <form class="detail-patient-form" id="frmFoodAccess">
+
+
+
+                                <div class="mental-table">
+                                    <div class="form-row-first">
+                                        <div class="top-form-row d-flex height-auto">
+                                            <div class="one-columns">
+                                                <label>
+                                                    How many pieces or servings of fruit, any sort,
+                                                    do you eat on a typical day?
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="bootom-form-row d-flex">
+                                            <div class="three-columns">
+                                                @if (Model.ServingsOfFruit != null)
+                                                {
+                                                    <label class="label-fields">@(Model.ddlServingsOfFruit.Where(p => p.Value == Model.ServingsOfFruit.ToString()).FirstOrDefault().Text)</label>
+                                                }
+
+                                                @Html.DropDownListFor(m => m.ServingsOfFruit, new SelectList(Model.ddlServingsOfFruit, "Value", "Text", Model.ServingsOfFruit), new { @class = "form-control", @Name = "ServingsOfFruit", @tabindex = "1" })
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row-first">
+                                        <div class="top-form-row d-flex height-auto">
+                                            <div class="one-columns">
+                                                <label>
+                                                    How many portions of vegetables, excluding
+                                                    potatoes, do you eat on a typical day?
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="bootom-form-row d-flex">
+                                            <div class="three-columns">
+
+                                                @if (Model.PortionsOfVegetables != null)
+                                                {
+                                                    <label class="label-fields">@(Model.ddlPortionsOfVegetables.Where(p => p.Value == Model.PortionsOfVegetables.ToString()).FirstOrDefault().Text)</label>
+                                                }
+                                                @Html.DropDownListFor(m => m.PortionsOfVegetables, new SelectList(Model.ddlPortionsOfVegetables, "Value", "Text", Model.PortionsOfVegetables), new { @class = "form-control", @Name = "PortionsOfVegetables", @tabindex = "1" })
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row-first">
+                                        <div class="top-form-row d-flex height-auto">
+                                            <div class="one-columns">
+                                                <label>
+                                                    Where do you get the majority of your
+                                                    food?
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="bootom-form-row d-flex">
+                                            <div class="three-columns">
+                                                @if (Model.MajorityOfFood != null)
+                                                {
+                                                    <label class="label-fields">@(Model.ddlMajorityOfFood.Where(p => p.Value == Model.MajorityOfFood.ToString()).FirstOrDefault().Text)</label>
+                                                }
+                                                @Html.DropDownListFor(m => m.MajorityOfFood, new SelectList(Model.ddlMajorityOfFood, "Value", "Text", Model.MajorityOfFood), new { @class = "form-control", @Name = "MajorityOfFood", @tabindex = "1" })
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="detail-button mt-3 w-100 text-center">
+                                    <input type="hidden" name="CreatedDate" />
+                                    <input type="hidden" name="ModifiedDate" />
+                                    <input type="hidden" id="hdfPatientID" name="PatientID" value="@Model.PatientID" />
+                                    <input type="hidden" id="hdfFoodAccessID" name="FoodAccessID" value="@Model.FoodAccessID" />
+                                    
+                                </div>
+
+
+                            </form>
+                        </div>
+
+                    </div>
+
+                @*<div class="col-lg-4 col-md-12 col-sm-12 col-12 ">
+
+
+                    <div class="sidebar-right">
+                        <div class="appointement">
+                            <h3>Appointment</h3>
+                            <div class="scroll scroll-height">
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6>
+                                        <span class="date">Date: 24-4-2019</span>, <span class="time">
+                                            Time:
+                                            5:30 PM
+                                        </span>
+                                    </h6>
+                                    <p>
+                                        At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum
+                                    </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6>
+                                        <span class="date">Date: 26-4-2019</span>, <span class="time">
+                                            Time:
+                                            5:30 PM
+                                        </span>
+                                    </h6>
+                                    <p>
+                                        At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum
+                                    </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6>
+                                        <span class="date">Date: 28-4-2019</span>, <span class="time">
+                                            Time:
+                                            5:30 PM
+                                        </span>
+                                    </h6>
+                                    <p>
+                                        At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum
+                                    </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6>
+                                        <span class="date">Date: 30-4-2019</span>, <span class="time">
+                                            Time:
+                                            5:30 PM
+                                        </span>
+                                    </h6>
+                                    <p>
+                                        At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum
+                                    </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6>
+                                        <span class="date">Date: 1-5-2019</span>, <span class="time">
+                                            Time:
+                                            5:30 PM
+                                        </span>
+                                    </h6>
+                                    <p>
+                                        At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum
+                                    </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="appointement">
+                            <h3>Notes</h3>
+                            <div class="scroll scroll-height">
+
+
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6>
+                                        <span class="date">Date: 24-4-2019</span>, <span class="time">
+                                            Time:
+                                            5:30 PM
+                                        </span>
+                                    </h6>
+                                    <p>
+                                        At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum
+                                    </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6>
+                                        <span class="date">Date: 26-4-2019</span>, <span class="time">
+                                            Time:
+                                            5:30 PM
+                                        </span>
+                                    </h6>
+                                    <p>
+                                        At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum
+                                    </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6>
+                                        <span class="date">Date: 28-4-2019</span>, <span class="time">
+                                            Time:
+                                            5:30 PM
+                                        </span>
+                                    </h6>
+                                    <p>
+                                        At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum
+                                    </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6>
+                                        <span class="date">Date: 30-4-2019</span>, <span class="time">
+                                            Time:
+                                            5:30 PM
+                                        </span>
+                                    </h6>
+                                    <p>
+                                        At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum
+                                    </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6>
+                                        <span class="date">Date: 1-5-2019</span>, <span class="time">
+                                            Time:
+                                            5:30 PM
+                                        </span>
+                                    </h6>
+                                    <p>
+                                        At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum
+                                    </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+            </div>
+        </div>
+
+    </div>
+</div>

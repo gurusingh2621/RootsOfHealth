@@ -1,0 +1,380 @@
+﻿@model IEnumerable<RootsOfHealth.Models.LookUpOptionBO>
+@{
+    ViewBag.Title = "ShowLookUpOption";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<!-- Content start here -->
+<section id="content" class="responsive-container pt-0">
+    <div class="profile-tabs">
+        <div class="">
+
+
+            <div class="inner-content mt-0">
+               
+                    <div class="container-fluid p-0">
+                        <div class="appointment">
+                            <div class="paitent-detail-left">
+                                <div class="detail-heading d-flex">
+                                    <h2>Look Up Field </h2>
+                                </div>
+                                <div class="SidebarScroll scroll inner-main-content">
+                                    @foreach (var t in Model.GroupBy(o => o.FormName))
+                                    {
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label>@t.Key</label>
+                                                </div>
+
+                                            </div>
+
+
+                                            @foreach (var f in Model.Where(o => o.FormName == t.Key).GroupBy(o => o.FieldName).ToList())
+                                {
+                                                <div class="bootom-form-row d-flex">
+                                                    <div class="three-columns">
+
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                                    <div class="form-row-first mt-0 mb-3" style="display: block;" id="LookUpbtn">
+                                                        <div class="top-form-row d-flex">
+                                                            <div class="one-columns">
+                                                                <label>@f.Key</label>
+
+
+                                                                @foreach (var p in Model.Where(o => o.FormName == t.Key && o.FieldName == f.Key))
+                                                    {
+                                                                    <button type="button" class="btn btn-success addNew-btn-success" style="float:right" onclick="AddNew(@p.LookUpFieldID)">
+                                                                        Add New
+                                                                    </button>
+                                                        break;
+                                                    }
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="bootom-form-row d-flex">
+                                                            <div class="one-columns">
+                                                                <table class="table table-bordered">
+                                                                    <tbody>
+                                                                        <tr class="table-active">
+
+                                                                            <th>
+                                                                                Option Name
+                                                                            </th>
+
+                                                                            <th>
+                                                                                Option Value
+                                                                            </th>
+
+                                                                            <th>Action</th>
+                                                                        </tr>
+                                                                        @foreach (var p in Model.Where(o => o.FormName == t.Key && o.FieldName == f.Key))
+                                                            {
+                                                                            <tr>
+                                                                                <td>
+                                                                                    @p.OptionName
+                                                                                </td>
+
+                                                                                <td>
+                                                                                    @p.OptionValue
+                                                                                </td>
+
+                                                                                <td>
+
+                                                                                    <a class="btn btn-success" href="#" onclick="EditLookUpField(@p.ID)">Edit</a>
+
+                                                                                    <a href="#" class="btn btn-danger" onclick="Remove(@p.ID)">Delete</a>
+                                                                                </td>
+                                                                            </tr>
+                                                            }
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+
+
+
+                                                    </div>
+                                                </div>
+                                }
+                                        </div>
+
+                                    }
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+
+
+
+                            </div>
+
+
+
+                    </div>
+               
+            </div>
+        </div>
+    </div>
+
+</section>
+
+
+
+
+
+<!-- Modal Start -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">LookUp Field Option</h5>
+                <button type="button" class="close" onclick="closeModel()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formAppointment" class="appointement-form">
+                    <input type="text" hidden="hidden" id="txtID" class="form-control" placeholder="">
+                    <input type="text" hidden="hidden" id="txtLookUpFieldID" class="form-control" placeholder="">
+                    <div class="form-group d-flex align-items-center">
+                        <label for="inputPassword" class="m-0"> Option Name:</label>
+                        <input type="text" id="txtOptionName" class="form-control" placeholder="">
+                    </div>
+                    <div class="form-group d-flex align-items-center">
+                        <label for="inputPassword">Option Value</label>
+                        <input id="txtOptionValue" class="form-control" />
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" onclick="closeModel()" class="btn btn-secondary">Cancel</button>
+                        <button type="button" onclick="SaveLookUpFieldOption()" id="btnSave" class="btn btn-primary">Save</button>
+                        <button type="button" onclick="UpdateLookUpFieldOption()" id="btnUpdate" hidden="hidden" class="btn btn-primary">Update</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal End -->
+<!-- Content end here -->
+@section scripts{
+    <script>
+        $(document).ready(function () {
+           
+        });
+
+
+
+        var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
+
+        //--Remove LookUpFieldOption-----
+
+        function Remove(id) {
+
+            if (confirm("Are you sure,you want to delete."))
+                var d = new Date();
+          
+            var model = {
+                ID: id,
+                ModifiedBy:@Session["userid"].ToString(),
+                ModifiedDate: d.toJSON()
+            };
+            $.ajax({
+                type: "POST",
+                url: Apipath + '/api/PatientMain/RemoveLookUpFieldOption',
+                data: JSON.stringify(model),
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                success: function (result) {
+                    if (result != '') {
+                        location.href = '/Patient/WebGridShowLookUpOption';
+                        toastr.success("delete successfully");
+
+                    }
+                    else {
+                        toastr.error("Error while updating data");
+                    }
+                },
+                error: function () {
+
+                    toastr.error("Error while deleting data");
+                }
+            });
+        }
+
+         //---- open add LookUpFieldOption popup
+        function AddNew(id) {
+            
+            emptyModel();
+            $('#exampleModal').modal('show');
+            $("#txtLookUpFieldID").val(id);
+        }
+
+        //--- empty modal fields
+        function emptyModel() {
+          
+            $("#txtLookUpFieldID").val("");
+            $("#txtOptionName").val("");
+            $("#txtOptionValue").val("");
+           
+        }
+
+        //--- close add edit LookUpFieldOption model
+        function closeModel() {
+            emptyModel();
+            $('#exampleModal').modal('hide');
+        }
+
+        //---- Save new LookUpFieldOption
+        function SaveLookUpFieldOption() {
+           
+         
+            var d = new Date();
+          
+            var model = {
+                LookUpFieldID: $("#txtLookUpFieldID").val(),
+                OptionName: $("#txtOptionName").val(),
+                OptionValue: $("#txtOptionValue").val(),
+                CreatedDate: d.toJSON(),
+                ModifiedDate: d.toJSON(),
+                IsDeleted: false,
+            };
+            $.ajax({
+                type: "POST",
+                url: Apipath + '/api/PatientMain/AddLookUpOptions',
+                data: JSON.stringify(model),
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                success: function (result) {
+                 
+                    if (result != '') {
+                       
+                        toastr.success("LooKUp Field Option saved successfully");
+                        closeModel();
+                        location.href = '/Patient/WebGridShowLookUpOption';
+
+                    }
+                    else {
+                        toastr.error("Error while saved data");
+                    }
+                },
+                error: function () {
+
+                    toastr.error("Error while saved data");
+                }
+            });
+        }
+
+        //--------Update LookUpFieldOption
+        function UpdateLookUpFieldOption() {
+
+          
+            var d = new Date();
+         
+            var model = {
+                ID: $("#txtID").val(),
+                LookUpFieldID: $("#txtLookUpFieldID").val(),
+                OptionName: $("#txtOptionName").val(),
+                OptionValue: $("#txtOptionValue").val(),
+                ModifiedDate: d.toJSON(),
+                IsDeleted: false,
+            };
+            $.ajax({
+                type: "POST",
+                url: Apipath + '/api/PatientMain/AddLookUpOptions',
+                data: JSON.stringify(model),
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                success: function (result) {
+                   
+                    if (result != '') {
+
+                        toastr.success("LooKUpFieldOption saved successfully");
+                        closeModel();
+                        location.href = '/Patient/WebGridShowLookUpOption';
+
+                    }
+                    else {
+                        toastr.error("Error while Saved data");
+                    }
+                },
+                error: function () {
+
+                    toastr.error("Error while Saved data");
+                }
+            });
+        }
+
+        //----- get LookUpFieldOption  detail by  id
+        function EditLookUpField(id) {
+            $('#exampleModal').modal('show');
+       
+            var data = {
+                ID: id
+            };
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/GetLookUpFieldOptionByID',
+                data: data,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (result) {
+                   
+                    $('#btnSave').attr('hidden', 'hidden');
+                    $('#btnUpdate').removeAttr('hidden');
+
+                        $("#txtID").val(result.ID);
+                        $("#txtLookUpFieldID").val(result.LookUpFieldID);
+                        $("#txtOptionName").val(result.OptionName);
+                        $("#txtOptionValue").val(result.OptionValue);
+                   
+                },
+                error: function (e) {
+                    toastr.error("Error while inserting data");
+                }
+            });
+        }
+
+
+        //---- Get all LookUpFieldOption from backend
+        function GetLookUpOption() {
+            //var data = {};
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/GetLookUpOption',
+                //data: JSON.stringify(data),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (result) {
+                   
+                },
+                error: function (e) {
+                    toastr.error("Error while inserting data");
+                }
+            });
+        }
+
+
+
+
+
+
+
+    </script>
+}

@@ -1,0 +1,39 @@
+﻿@model IEnumerable<RootsOfHealth.Models.UserRolesBO>
+
+    <table class="table table-bordered">
+    <tr class="table-active">
+
+        <th>
+            @Html.DisplayName("Role")
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+
+        <th>Action</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.RoleName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                <a href="#" onclick="ShowEdit(@item.RoleID)" class="btn btn-success">Edit</a>
+                @*@Html.ActionLink("Edit", "EditRole", new { roleid = item.RoleID })*@
+                <a href="#" class="btn btn-danger" onclick="Remove(@item.RoleID)">Delete</a>
+            </td>
+        </tr>
+    }
+
+</table>
+
+
+
+
+

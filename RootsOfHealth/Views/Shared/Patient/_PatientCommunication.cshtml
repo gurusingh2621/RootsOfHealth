@@ -1,0 +1,493 @@
+﻿@model RootsOfHealth.Models.PatientCommunicationAndMobilityBO
+
+<div class="tab-pane fade" id="Communication" role="tabpanel" aria-labelledby="Communication-tab">
+    <div class="inner-content">
+        <div class="paitent-detail">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="paitent-detail-left">
+                        <div class="detail-heading d-flex">
+                            <h2>
+                              Patient Communication & Mobility
+                            </h2>
+
+                            <div class="detail-button ml-auto">
+                                <a href="/Patient/Add?PatientID=@ViewBag.PatientId"
+                                   class="btn btn-success label-fields">
+                                    <i class="far fa-edit"></i>
+                                    Edit
+                                </a>
+                                <a tabindex="6" href="javascript:{}" onclick="return  CommunicationSave();" id="CommunicationSave" class="btn btn-success">
+                                    <i class="far fa-save"></i>
+                                    Save
+                                </a>
+
+                                @*<a href="#!" id="btnProfileEdit" class="btn btn-success">
+            <i class="far fa-edit"></i>
+            Edit
+        </a>
+        <a href="#!" id="btnProfileCancel" class="btn btn-info" style="display: none;">
+            <i class="far fa-edit"></i>
+            Cancel
+        </a>
+        <a href="#!" id="btnProfileSave" class="btn btn-success" style="display: none;">
+            <i class="far fa-save"></i>
+            Save
+        </a>*@
+                            </div>
+
+                        </div>
+
+                        <div class="top-image-row d-flex">
+                            <div class="top-image-left">
+
+                                <!--<div class="paitent-img">-->
+                                <!-- <img class="img-fluid" src="images/paitent-img.png" alt=""> -->
+                                <!--</div>-->
+                                <!--<a href="#" class="upload-link">Upload Image</a>-->
+                                <!-- <div class="points-status">
+
+        <div class="row">
+            <div class="col-lg-5 col-md-5 col-sm-12 col-12">
+                <div class="points">
+                    <h5>Status: <span>Secure</span></h5>
+                    <h5>Overall: <span>200</span></h5>
+                    <h5>Score: <span>8</span></h5>
+                </div>
+
+            </div>
+            <div class="col-lg-7 col-md-7 col-sm-12 col-12">
+                <h4>Points</h4>
+
+
+                <div class="progress" data-percentage="60">
+                    <span class="progress-left">
+                        <span class="progress-bar"></span>
+                    </span>
+                    <span class="progress-right">
+                        <span class="progress-bar"></span>
+                    </span>
+                    <div class="progress-value">
+                        <div>
+                            60%
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div> -->
+
+
+                                <div class="form-row-first label-fields">
+                                    <div class="top-form-row d-flex height-auto">
+                                        <div class="two-columns">
+
+                                            <label class="label-fields">
+                                                Score
+                                            </label>
+                                        </div>
+                                        <div class="two-columns">
+
+                                            <label class="label-fields">
+                                                Status
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="two-columns">
+
+                                            <label id="txtcommunscore" class="label-fields"></label>
+
+                                        </div>
+
+                                        <div class="two-columns">
+
+                                            <label id="txtcommunstatus" class="label-fields"></label>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+                            </div>
+                        </div>
+                        <form class="detail-patient-form" id="frmCommunication">
+                            <div class="form-row-first">
+                                <div class="top-form-row d-flex height-auto">
+                                    <div class="two-columns">
+                                        <label class="Add">
+                                            Do you have a personal phone where we can easily
+                                            reach you?
+                                        </label>
+                                        <label class="label-fields">
+                                            Do you have a personal phone where we can easily
+                                            reach you?
+                                        </label>
+                                    </div>
+                                    <div class="two-columns">
+                                        <label class="Add">
+                                            Over the past year, did you ever have difficulty
+                                            going to work, school, shopping, or an appointment,
+                                            because the lack of convenient transportation?
+                                        </label>
+                                        <label class="label-fields">
+                                            Over the past year, did you ever have difficulty
+                                            going to work, school, shopping, or an appointment,
+                                            because the lack of convenient transportation?
+                                        </label>
+                                    </div>
+
+
+                                </div>
+                                <div class="bootom-form-row d-flex">
+                                    <div class="two-columns">
+                                        <div class="custom-control custom-radio d-inline-block mr-3">
+                                            <label class="label-fields">@Html.Raw(Model.PersonalPhone == true ? "Yes" : "No")</label>
+                                            <label class="label-fields" id="lblPersonalPhone" hidden="hidden">@Model.PersonalPhone</label>
+                                            <input tabindex="1" type="radio" class="custom-control-input"
+                                                   id="PhoneRadioYes" name="Phone" value="true" onclick="Radio()">
+                                            <label class="custom-control-label"
+                                                   for="PhoneRadioYes">Yes</label>
+                                        </div>
+                                        <div class="custom-control custom-radio d-inline-block">
+                                            <input tabindex="2" type="radio" class="custom-control-input"
+                                                   id="PhoneRadioNo" name="Phone" value="false" onclick="Radio()">
+                                            <label class="custom-control-label"
+                                                   for="PhoneRadioNo">No</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="two-columns">
+                                        @*<label class="label-fields" id="lblDifficultyPlaces">@Model.DifficultyGoingPlaces</label>
+        <select tabindex="3" class="form-control" id="ddDifficultyGoingPlaces" name="DifficultyGoingPlaces">
+            <option value="Never">Never</option>
+            <option value="Once or Twice">Once or Twice</option>
+            <option value="Several Days">Several Days</option>
+            <option value="Most Days">Most Days</option>
+            <option value="Every Day">Every Day</option>
+        </select>*@
+
+
+                                        @if (Model.DifficultyGoingPlaces != null)
+                                        {<label id="lblDifficultyPlaces" class="label-fields">@(Model.ddlDifficultyGoingPlaces.Where(p => p.Value == Model.DifficultyGoingPlaces.ToString()).FirstOrDefault().Text)</label>}
+
+                                        @Html.DropDownListFor(m => m.DifficultyGoingPlaces, new SelectList(Model.ddlDifficultyGoingPlaces, "Value", "Text", Model.DifficultyGoingPlaces), new { @id = "ddDifficultyGoingPlaces", @class = "form-control", @Name = "DifficultyGoingPlaces", @tabindex = "1" })
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row-first">
+                                <div class="top-form-row d-flex height-auto">
+                                    <div class="one-columns">
+                                        <label class="Add">
+                                            Which of the following modes of transportation will
+                                            you typically use to get to Roots?
+                                        </label>
+                                        <label class="label-fields">
+                                            Which of the following modes of transportation will
+                                            you typically use to get to Roots?
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="bootom-form-row d-flex">
+                                    <div class="three-columns">
+                                        @*<label class="label-fields" id="lblTransportation">
+          @Model.ModesOfTransportation
+        </label>
+        <select tabindex="4" class="form-control" id="ddModesOfTransportation" name="ModesOfTransportation">
+            <option value="Public Transportation">Public Transportation</option>
+            <option value="My own car">My own car</option>
+            <option value="Ride from friend/family">Ride from friend/family</option>
+            <option value="Walk, but I live within 1 mile">Walk, but I live within 1 mile</option>
+            <option value="Walk, but I live more than 1 mile away">Walk, but I live more than 1 mile away</option>
+            <option value="Other">Other</option>
+        </select>*@
+
+
+
+                                        @if(Model.ModesOfTransportation!=null)
+                                        {
+                                            <label id="lblTransportation" class="label-fields">@(Model.ddlModesOfTransportation.Where(p=>p.Value==Model.ModesOfTransportation.ToString()).FirstOrDefault().Text)</label>
+                                        }
+                                        @Html.DropDownListFor(m=>m.ModesOfTransportation,new SelectList(Model.ddlModesOfTransportation,"Value","Text",Model.ModesOfTransportation),new { @id = "ddModesOfTransportation", @class = "form-control", @Name = "ModesOfTransportation", @tabindex = "4" })
+
+
+                                        <div class="one-columns" id="divOtherTransportation" style="display:none">
+                                            <div class="form-row-first mt-0 mb-3">
+                                                <div class="top-form-row d-flex">
+                                                    <div class="one-columns">
+                                                        <label>Other Transportation</label>
+                                                    </div>
+
+                                                </div>
+                                                <div class="bootom-form-row d-flex">
+                                                    <div class="one-columns">
+                                                        <label class="label-fields">
+                                                            @Model.OtherTransportation
+                                                        </label>
+
+                                                        <input tabindex="5" type="text" id="txtOtherTransportation" name="OtherTransportation" value="@Model.OtherTransportation" class="form-control" placeholder="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                            <div class="detail-button mt-3 w-100 text-center">
+                                <!-- <a href="#!" class="btn btn-info"><i class="far fa-edit"></i>
+                                Cancel</a> -->
+                                <input type="hidden" name="CreatedDate" />
+                                <input type="hidden" name="ModifiedDate" />
+                                <input type="hidden" name="PatientID" value="@Model.PatientID" />
+                                <input type="hidden" name="PersonalPhone" />
+                                <input type="hidden" name="PatientCommunicationAndMobilityID" value="@Model.PatientCommunicationAndMobilityID" />
+                                
+
+                            </div>
+
+                        </form>
+                    </div>
+                    <!-- <div class="recent-paitents">
+                        <h2 class="mb-3">Recent Patients</h2>
+                        <div class="recent-paitent-row d-flex">
+                            <div class="recent-paitents-img">
+                                <img class="img-fluid" src="images/recent-paitent-img.png" alt="">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col" style="width:160px;">Name</th>
+                                            <th scope="col" style="width:268px;">Email</th>
+                                            <th scope="col" style="width:160px;">Phone</th>
+                                            <th scope="col" style="width:160px;">Last Modify</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <td style="width:160px;">Omnis iste</td>
+                                            <td style="width:268px;">Omnisiste@gmail.com</td>
+                                            <td style="width:160px;">98756 45365</td>
+                                            <td style="width:160px;">23-4-2019</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="recent-paitent-row d-flex">
+                            <div class="recent-paitents-img">
+                                <img class="img-fluid" src="images/recent-paitent-img-1.png" alt="">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col" style="width:160px;">Name</th>
+                                            <th scope="col" style="width:268px;">Email</th>
+                                            <th scope="col" style="width:160px;">Phone</th>
+                                            <th scope="col" style="width:160px;">Last Modify</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <td style="width:160px;">praesentium</td>
+                                            <td style="width:268px;">praesentium@gmail.com</td>
+                                            <td style="width:160px;">68756 45365</td>
+                                            <td style="width:160px;">20-4-2019</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="recent-paitent-row d-flex">
+                            <div class="recent-paitents-img">
+                                <img class="img-fluid" src="images/recent-paitent-img-2.png" alt="">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col" style="width:160px;">Name</th>
+                                            <th scope="col" style="width:268px;">Email</th>
+                                            <th scope="col" style="width:160px;">Phone</th>
+                                            <th scope="col" style="width:160px;">Last Modify</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <td style="width:160px;">voluptatum</td>
+                                            <td style="width:268px;">voluptatum@gmail.com</td>
+                                            <td style="width:160px;">78756 45365</td>
+                                            <td style="width:160px;">18-4-2019</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+
+                <!-- <div class="col-lg-4 col-md-12 col-sm-12 col-12 ">
+
+
+                    <div class="sidebar-right">
+                        <div class="appointement">
+                            <h3>Appointment</h3>
+                            <div class="scroll scroll-height">
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 24-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 26-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 28-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 30-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 1-5-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="appointement">
+                            <h3>Notes</h3>
+                            <div class="scroll scroll-height">
+
+
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 24-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 26-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 28-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 30-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 1-5-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+
+    </div>
+</div>

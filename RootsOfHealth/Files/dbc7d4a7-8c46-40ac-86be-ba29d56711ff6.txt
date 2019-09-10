@@ -1,0 +1,11 @@
+Scaffold-DbContext "Server=test.cikovhvgncqo.eu-west-2.rds.amazonaws.com,1433;Database=Test;User Id=sa;Password=L3tmeinsa!;MultipleActiveResultSets=true" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Tables BusinessDetails,NonTraderUserDetails,PersonalDetails,questionCategories,Questions,UserDetails,Answers,AnswersLike,Trade,TradeTypes -force
+
+
+--create table NonTraderUserDetails(
+--ID [int] IDENTITY(1,1) NOT NULL Primary key,
+--[UserId] [nvarchar](450) NOT NULL,
+--[FirstName] [varchar](50) NOT NULL,
+--[LastName] [varchar](50) NOT NULL,
+--PostalAdress [varchar](50),
+--FOREIGN KEY (UserId) REFERENCES aspnetusers(id),
+--)

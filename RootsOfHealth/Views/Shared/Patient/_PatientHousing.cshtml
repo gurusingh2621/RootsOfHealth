@@ -1,0 +1,446 @@
+﻿@model RootsOfHealth.Models.PatientHousingBO 
+<!-- Housing tab start here  -->
+<div class="tab-pane fade" id="Housing" role="tabpanel" aria-labelledby="Housing-tab">
+    <div class="inner-content">
+        <div class="paitent-detail">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="paitent-detail-left">
+                        <div class="detail-heading d-flex">
+                            <h2>Patient Housing</h2>
+
+                            <div class="detail-button ml-auto">
+
+                                <a href="/Patient/Add?PatientID=@ViewBag.PatientId"
+                                   class="btn btn-success label-fields">
+                                    <i class="far fa-edit"></i>
+                                    Edit
+                                </a>
+                                <a tabindex="3" href="javascript:{}" onclick="return HousingSave();" id="HousingSave" class="btn btn-success">
+                                    <i class="far fa-save"></i>
+                                    Save
+                                </a>
+
+                                @*<a href="#!" id="btnProfileEdit" class="btn btn-success">
+            <i class="far fa-edit"></i>
+            Edit
+        </a>*@
+                                @*<a href="#!" id="btnProfileCancel" class="btn btn-info" style="display: none;">
+            <i class="far fa-edit"></i>
+            Cancel
+        </a>
+        <a href="#!" id="btnProfileSave" class="btn btn-success" style="display: none;">
+            <i class="far fa-save"></i>
+            Save
+        </a>*@
+                            </div>
+
+                        </div>
+
+                        <div class="top-image-row d-flex">
+                            <div class="top-image-left">
+
+                                <!--<div class="paitent-img">-->
+                                <!-- <img class="img-fluid" src="images/paitent-img.png" alt=""> -->
+                                <!--</div>-->
+                                <!--<a href="#" class="upload-link">Upload Image</a>-->
+                                @*<div class="points-status">
+
+            <div class="row">
+                <div class="col-lg-5 col-md-5 col-sm-12 col-12">
+                    <div class="points">
+                        <h5>Status: <span id="txthousingstatus"></span></h5>
+                        <h5>Overall: <span>200</span></h5>
+                        <h5>Score: <span id="txthousingscore"></span></h5>
+                    </div>
+
+                </div>
+                <div class="col-lg-7 col-md-7 col-sm-12 col-12">
+                    <h4>Points</h4>
+
+
+                    <div class="progress" data-percentage="60">
+                        <span class="progress-left">
+                            <span class="progress-bar"></span>
+                        </span>
+                        <span class="progress-right">
+                            <span class="progress-bar"></span>
+                        </span>
+                        <div class="progress-value">
+                            <div>
+                                60%
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>*@
+
+
+                                <div class="form-row-first label-fields">
+                                    <div class="top-form-row d-flex height-auto">
+                                        <div class="two-columns">
+
+                                            <label class="label-fields">
+                                                Score
+                                            </label>
+                                        </div>
+                                        <div class="two-columns">
+
+                                            <label class="label-fields">
+                                                Status
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="two-columns">
+
+                                            <label id="txthousingscore" class="label-fields"></label>
+
+                                        </div>
+
+                                        <div class="two-columns">
+
+                                            <label id="txthousingstatus" class="label-fields"></label>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+
+
+                            </div>
+                        </div>
+                        <form id="frmHousing" method="post" class="detail-patient-form">
+
+
+                            <div class="form-row-first">
+                                <div class="top-form-row d-flex height-auto">
+                                    <div class="two-columns">
+                                        <label class="Add">
+                                            Which of the following best describes the place you
+                                            live now
+                                        </label>
+                                        <label class="label-fields">
+                                         The best Place you live
+                                        </label>
+                                    </div>
+                                    <div class="two-columns">
+                                        <label class="Add">
+                                            Over the past 3 months, did you ever have to sleep in
+                                            an emergency shelter, in a vehicle, or on the street or
+                                            park, or stay temporarily with friends because of the
+                                            lack of housing?
+                                        </label>
+                                        <label class="label-fields">
+                                            You Stay Temporarily
+                                        </label>
+                                    </div>
+
+                                </div>
+                                <div class="bootom-form-row d-flex">
+                                    <div class="two-columns">
+                                        @*<label class="label-fields" id="lblPlaceLive">
+                                            @Model.PlaceLiveNow
+
+                                        </label>*@
+
+                                        @*<select tabindex="1" class="form-control" id="ddPlaceLiveNow" name="PlaceLiveNow">
+            <option value="I own a house or apartment">I own a house or apartment</option>
+            <option value="I rent a house or apartment">I rent a house or apartment</option>
+            <option value="Hotel">Hotel</option>
+            <option value="A Treatment Facility or Group Home">A Treatment Facility or Group Home</option>
+            <option value="An Emergency Shelter">An Emergency Shelter</option>
+            <option value="Couch surfing">Couch surfing</option>
+            <option value=" I have no housing (I’m sleeping on the street,
+                            in a park, a vehicle, or a bus or train station)">
+                I have no housing (I’m sleeping on the street,
+                in a park, a vehicle, or a bus or train station)
+            </option>
+        </select>*@
+
+                                        @if (Model.PlaceLiveNow != null)
+                                        {<label id="lblPlaceLive" class="label-fields">@(Model.ddlPlaceLiveNow.Where(p => p.Value == Model.PlaceLiveNow.ToString()).FirstOrDefault().Text)</label>}
+
+                                        @Html.DropDownListFor(m => m.PlaceLiveNow, new SelectList(Model.ddlPlaceLiveNow, "Value", "Text", Model.PlaceLiveNow), new { @class = "form-control", @Name = "PlaceLiveNow", @tabindex = "1" })
+
+
+
+
+                                    </div>
+
+                                    <div class="two-columns">
+                                        @*<label class="label-fields" id="lblShelter">
+                                            @Model.EmergencyShelter
+
+                                        </label>*@
+                                        @*<select tabindex="2" class="form-control" id="ddEmergencyShelter" name="EmergencyShelter">
+            <option value="Never">Never</option>
+            <option value="Once or Twice">Once or Twice</option>
+            <option value="Several Days">Several Days</option>
+            <option value="Most days">Most days</option>
+            <option value="Every Day">Every Day</option>
+
+        </select>*@
+                                        @if (Model.EmergencyShelter != null)
+                                        {<label id="lblShelter" class="label-fields">@(Model.ddlEmergencyShelter.Where(p => p.Value == Model.EmergencyShelter.ToString()).FirstOrDefault().Text)</label>}
+
+                                        @Html.DropDownListFor(m => m.EmergencyShelter, new SelectList(Model.ddlEmergencyShelter, "Value", "Text", Model.EmergencyShelter), new { @class = "form-control", @Name = "EmergencyShelter", @tabindex = "1" })
+
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="detail-button mt-3 w-100 text-center">
+                                <!-- <a href="#!" class="btn btn-info"><i class="far fa-edit"></i>
+
+                                Cancel</a> -->
+                                <input type="hidden" name="CreatedDate" />
+                                <input type="hidden" name="ModifiedDate" />
+                                <input type="hidden" name="PatientHousingID" value="@Model.PatientHousingID" />
+                                <input type="hidden" name="PatientID" value="@Model.PatientID" />
+                                
+
+
+                            </div>
+                        </form>
+
+                    </div>
+                    <!-- <div class="recent-paitents">
+                        <h2 class="mb-3">Recent Patients</h2>
+                        <div class="recent-paitent-row d-flex">
+                            <div class="recent-paitents-img">
+                                <img class="img-fluid" src="images/recent-paitent-img.png" alt="">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col" style="width:160px;">Name</th>
+                                            <th scope="col" style="width:268px;">Email</th>
+                                            <th scope="col" style="width:160px;">Phone</th>
+                                            <th scope="col" style="width:160px;">Last Modify</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <td style="width:160px;">Omnis iste</td>
+                                            <td style="width:268px;">Omnisiste@gmail.com</td>
+                                            <td style="width:160px;">98756 45365</td>
+                                            <td style="width:160px;">23-4-2019</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="recent-paitent-row d-flex">
+                            <div class="recent-paitents-img">
+                                <img class="img-fluid" src="images/recent-paitent-img-1.png" alt="">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col" style="width:160px;">Name</th>
+                                            <th scope="col" style="width:268px;">Email</th>
+                                            <th scope="col" style="width:160px;">Phone</th>
+                                            <th scope="col" style="width:160px;">Last Modify</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <td style="width:160px;">praesentium</td>
+                                            <td style="width:268px;">praesentium@gmail.com</td>
+                                            <td style="width:160px;">68756 45365</td>
+                                            <td style="width:160px;">20-4-2019</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="recent-paitent-row d-flex">
+                            <div class="recent-paitents-img">
+                                <img class="img-fluid" src="images/recent-paitent-img-2.png" alt="">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col" style="width:160px;">Name</th>
+                                            <th scope="col" style="width:268px;">Email</th>
+                                            <th scope="col" style="width:160px;">Phone</th>
+                                            <th scope="col" style="width:160px;">Last Modify</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <td style="width:160px;">voluptatum</td>
+                                            <td style="width:268px;">voluptatum@gmail.com</td>
+                                            <td style="width:160px;">78756 45365</td>
+                                            <td style="width:160px;">18-4-2019</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+                <!--
+                                                <div class="col-lg-4 col-md-12 col-sm-12 col-12 ">
+                                                    <div class="sidebar-right">
+                                                        <div class="appointement">
+                                                            <h3>Appointment</h3>
+                                                            <div class="scroll scroll-height">
+                                                                <div class="appointement-row">
+                                                                    <div class="calender-img">
+                                                                        <img src="images/calender-icon.png" alt="">
+                                                                    </div>
+                                                                    <h6><span class="date">Date: 24-4-2019</span>, <span
+                                                                            class="time">Time:
+                                                                            5:30 PM</span></h6>
+                                                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                                                        qui
+                                                                        blanditiis praesentium voluptatum </p>
+                                                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                                                </div>
+                                                                <div class="appointement-row">
+                                                                    <div class="calender-img">
+                                                                        <img src="images/calender-icon.png" alt="">
+                                                                    </div>
+                                                                    <h6><span class="date">Date: 26-4-2019</span>, <span
+                                                                            class="time">Time:
+                                                                            5:30 PM</span></h6>
+                                                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                                                        qui
+                                                                        blanditiis praesentium voluptatum </p>
+                                                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                                                </div>
+                                                                <div class="appointement-row">
+                                                                    <div class="calender-img">
+                                                                        <img src="images/calender-icon.png" alt="">
+                                                                    </div>
+                                                                    <h6><span class="date">Date: 28-4-2019</span>, <span
+                                                                            class="time">Time:
+                                                                            5:30 PM</span></h6>
+                                                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                                                        qui
+                                                                        blanditiis praesentium voluptatum </p>
+                                                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                                                </div>
+                                                                <div class="appointement-row">
+                                                                    <div class="calender-img">
+                                                                        <img src="images/calender-icon.png" alt="">
+                                                                    </div>
+                                                                    <h6><span class="date">Date: 30-4-2019</span>, <span
+                                                                            class="time">Time:
+                                                                            5:30 PM</span></h6>
+                                                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                                                        qui
+                                                                        blanditiis praesentium voluptatum </p>
+                                                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                                                </div>
+                                                                <div class="appointement-row">
+                                                                    <div class="calender-img">
+                                                                        <img src="images/calender-icon.png" alt="">
+                                                                    </div>
+                                                                    <h6><span class="date">Date: 1-5-2019</span>, <span
+                                                                            class="time">Time:
+                                                                            5:30 PM</span></h6>
+                                                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                                                        qui
+                                                                        blanditiis praesentium voluptatum </p>
+                                                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="appointement">
+                                                            <h3>Notes</h3>
+                                                            <div class="scroll scroll-height">
+
+
+                                                                <div class="appointement-row">
+                                                                    <div class="calender-img">
+                                                                        <img src="images/calender-icon.png" alt="">
+                                                                    </div>
+                                                                    <h6><span class="date">Date: 24-4-2019</span>, <span
+                                                                            class="time">Time:
+                                                                            5:30 PM</span></h6>
+                                                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                                                        qui
+                                                                        blanditiis praesentium voluptatum </p>
+                                                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                                                </div>
+                                                                <div class="appointement-row">
+                                                                    <div class="calender-img">
+                                                                        <img src="images/calender-icon.png" alt="">
+                                                                    </div>
+                                                                    <h6><span class="date">Date: 26-4-2019</span>, <span
+                                                                            class="time">Time:
+                                                                            5:30 PM</span></h6>
+                                                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                                                        qui
+                                                                        blanditiis praesentium voluptatum </p>
+                                                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                                                </div>
+                                                                <div class="appointement-row">
+                                                                    <div class="calender-img">
+                                                                        <img src="images/calender-icon.png" alt="">
+                                                                    </div>
+                                                                    <h6><span class="date">Date: 28-4-2019</span>, <span
+                                                                            class="time">Time:
+                                                                            5:30 PM</span></h6>
+                                                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                                                        qui
+                                                                        blanditiis praesentium voluptatum </p>
+                                                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                                                </div>
+                                                                <div class="appointement-row">
+                                                                    <div class="calender-img">
+                                                                        <img src="images/calender-icon.png" alt="">
+                                                                    </div>
+                                                                    <h6><span class="date">Date: 30-4-2019</span>, <span
+                                                                            class="time">Time:
+                                                                            5:30 PM</span></h6>
+                                                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                                                        qui
+                                                                        blanditiis praesentium voluptatum </p>
+                                                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                                                </div>
+                                                                <div class="appointement-row">
+                                                                    <div class="calender-img">
+                                                                        <img src="images/calender-icon.png" alt="">
+                                                                    </div>
+                                                                    <h6><span class="date">Date: 1-5-2019</span>, <span
+                                                                            class="time">Time:
+                                                                            5:30 PM</span></h6>
+                                                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                                                        qui
+                                                                        blanditiis praesentium voluptatum </p>
+                                                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- Housing tab end here  -->

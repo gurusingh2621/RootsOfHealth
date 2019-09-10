@@ -1,0 +1,1969 @@
+﻿@model RootsOfHealth.Models.PatientDetailBO
+
+
+
+@{
+               
+                 Html.RenderPartial("~/Views/Shared/Patient/_PatientMain.cshtml", Model.PatientMain);
+            }
+
+
+<!-- Housing tab start here  -->
+@{
+   
+        Html.RenderPartial("~/Views/Shared/Patient/_PatientHousing.cshtml", Model.PatientHousing);
+    
+}
+<!-- Housing tab end here  -->
+<!-- Financial tab start here  -->
+@{
+    Html.RenderPartial("~/Views/Shared/Patient/_PatientFinancial.cshtml", Model.PatientFinancialSecurity);
+}
+<!-- Financial tab end here  -->
+<!-- Employment tab start here  -->
+@{
+    Html.RenderPartial("~/Views/Shared/Patient/_PatientEmployment.cshtml", Model.PatientEmploymentEducation);
+}
+<!-- Employment tab end here  -->
+<!-- Communication tab start here  -->
+@{
+    Html.RenderPartial("~/Views/Shared/Patient/_PatientCommunication.cshtml", Model.PatientCommunicationAndMobility);
+}
+
+<!-- Communication tab end here  -->
+<!-- Healthcare tab start here  -->
+@{
+    Html.RenderPartial("~/Views/Shared/Patient/_PatientHealthcare.cshtml", Model.PatientHealthcare);
+}
+
+<!-- Healthcare tab end here  -->
+<!-- SocialSupports tab start here  -->
+@{
+    Html.RenderPartial("~/Views/Shared/Patient/_PatientSocialSupport.cshtml", Model.PatientSocialSupport);
+}
+<!-- SocialSupports tab end here  -->
+<!-- Legal Status tab start here  -->
+@{
+    Html.RenderPartial("~/Views/Shared/Patient/_PatientLegalStatus.cshtml", Model.PatientLegalStatus);
+}
+<!-- Legal Status tab end here  -->
+<!-- Alcohol Disorder Tab start here  -->
+@{
+    Html.RenderPartial("~/Views/Shared/Patient/_PatientSubstance.cshtml", Model.PatientSubstanceUse);
+}
+<!-- Alcohol Disorder Tab end here  -->
+<!-- Mental Health Tab start here   -->
+@{
+    Html.RenderPartial("~/Views/Shared/Patient/_PatientMentalHealth.cshtml", Model.PatientMentalHealth);
+}
+<!-- Mental Health Tab end here   -->
+<!-- Food Access Tab start here -->
+@{
+    Html.RenderPartial("~/Views/Shared/Patient/_PatientFoodAccess.cshtml", Model.PatientFoodAccess);
+}
+<!-- Food Access Tab end here -->
+<!-- Programs Tab start here  -->
+
+@{
+    Html.RenderPartial("~/Views/Shared/Patient/_PatientPrograms.cshtml", Model.PatientProgram);
+}
+
+<!-- Programs Tab end here  -->
+
+
+
+@*<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>*@
+<script src="~/Scripts/jquery-ui.min.js"></script>
+<script>
+    function notescloseModel() {
+
+        $(".close").click();
+
+
+    }
+
+    $.date = function (dateObject) {
+        var d = new Date(dateObject);
+        var day = d.getDate();
+        var month = d.getMonth() + 1;
+        var year = d.getFullYear();
+        if (day < 10) {
+            day = "0" + day;
+        }
+        if (month < 10) {
+            month = "0" + month;
+        }
+        var date = day + "/" + month + "/" + year;
+
+        return date;
+    };
+
+
+
+    $("#hideAppointmentContent").click(function (e) {
+        $("#appointementContent").hide();
+        $('#pat_out_div').addClass('col-lg-12 col-md-12 col-sm-12 col-12');
+        $('#pat_out_div').removeClass('col-lg-8 col-md-12 col-sm-12 col-12 pr-0');
+        e.preventDefault();
+    });
+    $("#hideNoteContent").click(function (e) {
+        $(".appointement-notes").hide();
+        $('#pat_out_div').addClass('col-lg-12 col-md-12 col-sm-12 col-12');
+        $('#pat_out_div').removeClass('col-lg-8 col-md-12 col-sm-12 col-12 pr-0');
+        e.preventDefault();
+    });
+    $("#btnPatientAppointments").click(function (e) {
+        $("#appointementContent").show();
+        $(".appointement-notes").hide();
+        $('#pat_out_div').removeClass('col-lg-12 col-md-12 col-sm-12 col-12');
+        $('#pat_out_div').addClass('col-lg-8 col-md-12 col-sm-12 col-12 pr-0');
+        e.preventDefault();
+    });
+    $("#btnPatientNotes").click(function (e) {
+        $("#appointementContent").hide();
+        $(".appointement-notes").show();
+        $('#pat_out_div').removeClass('col-lg-12 col-md-12 col-sm-12 col-12');
+        $('#pat_out_div').addClass('col-lg-8 col-md-12 col-sm-12 col-12 pr-0');
+        e.preventDefault();
+    });
+    function ShowMore(id) {
+
+        var $this = $("#"+id);
+        var $content = $this.parent().prev("p.content");
+        var linkText = $this.text();
+
+        if (linkText === "read more") {
+            linkText = "Show less";
+            $content.switchClass("hideContent", "showContent", 400);
+        } else {
+            linkText = "read more";
+            $content.switchClass("showContent", "hideContent", 400);
+        };
+
+        $this.text(linkText);
+
+    }
+
+    //--get list of appointment by Patient ID
+    function getListAllAppointments() {
+
+
+        var data = {
+            PatientID: '@ViewBag.PatientId',
+            startdate: '@DateTime.Now.ToString("yyyy-MM-dd")',
+            enddate: '@DateTime.Now.AddDays(7).ToString("yyyy-MM-dd")'
+        };
+
+        $.ajax({
+            type: "GET",
+            url: Apipath + '/api/PatientMain/GetListPatientAppointmentByPatientId',
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                $("#hdnCurrentDate").val(data.CurrentDate);
+                if (data.Data.length) {
+                    var result = data.Data;
+                    var tbl = '';
+                    for (var i = 0; i < result.length; i++) {
+
+                        tbl += '<div class="appointement-row">'
+                        tbl += '<div class="calender-img" >'
+                        tbl += '<img src="/images/calender-icon.png" alt=""></div>'
+                        tbl += '<h6>'
+                        tbl += '<span class="date">Date:' + $.date(result[i].AppointmentDate) + '</span>,'
+                        tbl += '<span class="time">'
+                        tbl += ' Time:' + result[i].AppointmentTime + '</span></h6>'
+                        tbl += '<p class="content hideContent">' + result[i].Notes + '</p > <div class="show-more">'
+                        if (result[i].Notes.length>100) {
+                            tbl += '<a href="#!" id="'+result[i].PatientAppointmentID+'" onclick="ShowMore(' + result[i].PatientAppointmentID + ')" class="btn btn-link" >read more</a>' }
+                        tbl += '</div ></div>'
+
+                    }
+
+                    $('#appointementlst').html(tbl);
+
+                } else {
+                    $("#loadMore").hide();
+                }
+
+
+            },
+            error: function (e) {
+                toastr.error("Error while getting appotment data.");
+            }
+        });
+    }
+
+    function getListAllAppointmentsLoadMore() {
+
+        var data = {
+            PatientID: '@ViewBag.PatientId',
+            startdate: $("#hdnCurrentDate").val(),
+            enddate: $("#hdnCurrentDate").val()
+        };
+
+        $.ajax({
+            type: "GET",
+            url: Apipath + '/api/PatientMain/GetListPatientAppointmentByPatientId',
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+
+                if (data.Data.length) {
+                    $("#hdnCurrentDate").val(data.CurrentDate);
+                    var result = data.Data;
+                    var tbl = '';
+                    for (var i = 0; i < result.length; i++) {
+
+                        tbl += '<div class="appointement-row">'
+                        tbl += '<div class="calender-img" >'
+                        tbl += '<img src="/images/calender-icon.png" alt=""></div>'
+                        tbl += '<h6>'
+                        tbl += '<span class="date">Date:' + $.date(result[i].AppointmentDate) + '</span>,'
+                        tbl += '<span class="time">'
+                        tbl += ' Time:' + result[i].AppointmentTime + '</span></h6>'
+                        tbl += '<p class="content hideContent">' + result[i].Notes + '</p > <div class="show-more">'
+                        if (result[i].Notes.length>100) {
+                            tbl += '<a href="#!" id="' + result[i].PatientAppointmentID + '" onclick="ShowMore(' + result[i].PatientAppointmentID + ')" class="btn btn-link" >read more</a>'
+                        }
+                        tbl += '</div ></div>'
+
+                    }
+                    var newappointment = $('#appointementlst').html();
+                    $('#appointementlst').html(newappointment + tbl);
+                    $("#appointementlst").animate({ scrollTop: $('#appointementlst').prop("scrollHeight") }, 1000);
+
+                } else {
+                    $("#loadMore").hide();
+                }
+
+
+            },
+            error: function (e) {
+                toastr.error("Error while getting appotment data.");
+            }
+        });
+    }
+
+
+
+    function notesSave() {
+
+        var data = {
+            Description: $.trim($("#txtNotes1").val()),
+            PatientID: '@ViewBag.PatientId',
+            CreatedBy: parseInt(@Session["userid"].ToString()),
+            CreatedDate:'@DateTime.Now.ToString()',
+            ModifiedBy:parseInt(@Session["userid"].ToString()),
+            ModifiedDate:'@DateTime.Now.ToString()'
+        };
+        $.ajax({
+            type: "POST",
+            url: Apipath + '/api/PatientMain/savenotes',
+            data: JSON.stringify(data),
+            contentType: 'application/json; charset=UTF-8',
+            dataType: "json",
+            success: function (data) {
+                $("#txtNotes1").val('');
+                $(".close").click();
+                getListAllNotesLoadMore();
+            }
+        });
+
+    }
+    function getListAllNotesLoadMore() {
+
+        var data = {
+            PatientID: '@ViewBag.PatientId',
+        };
+
+        $.ajax({
+            type: "GET",
+            url: Apipath + '/api/PatientMain/GetListPatientnotesbyid',
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                $('#notesList').html('');
+                if (result.length) {
+
+
+                    var tbl = '';
+                    for (var i = 0; i < result.length; i++) {
+
+                        var splitDateTime = result[i].CreatedDate.split("T");
+
+                        tbl += '<div class="appointement-row">'
+                        tbl += '<div class="notesclose" onclick="RemoveNote(' + result[i].NotesID + ')">&#10539;</div>'
+                        tbl += '<div class="calender-img" >'
+                        tbl += '<img src="/images/calender-icon.png" alt=""></div>'
+                        tbl += '<h6>'
+                        tbl += '<span class="date">Date:' + $.date(splitDateTime[0]) + '</span>,'
+                        tbl += '<span class="time">'
+                        tbl += ' Time:' + splitDateTime[1].substring(0,splitDateTime[1].lastIndexOf(':')); + '</span></h6>'
+                        tbl += '<p class="content hideContent">' + result[i].Description + '</p> <div class="show-more">'
+                        if (result[i].Description.length>100) {
+                            tbl += '<a href="#!" id="' + result[i].NotesID + '" onclick="ShowMore(' + result[i].NotesID + ')" class="btn btn-link" >read more</a>' }
+                        tbl += '</div ></div>'
+
+                    }
+
+                    $('#notesList').html(tbl);
+
+                    $("#notesList").animate({ scrollDown: $('#notesList').prop("scrollHeight") }, 1000);
+
+                }
+
+
+            },
+            error: function (e) {
+                toastr.error("Error while getting appotment data.");
+            }
+        });
+    }
+
+
+      function RemoveNote(id) {
+
+                if (confirm("Are you sure,you want to delete.")) {
+
+                    var model = {
+                        noteid: id,
+                        modifyby:@Session["userid"].ToString(),
+                        modifydate:'@DateTime.Now.ToString("yyyy-MM-dd")'
+                    };
+                    $.ajax({
+                        type: "POST",
+                        url: Apipath + '/api/PatientMain/removenote',
+                        data: JSON.stringify(model),
+                        contentType: 'application/json; charset=UTF-8',
+                        dataType: "json",
+                        success: function (result) {
+                                toastr.success("delete successfully");
+                                getListAllNotesLoadMore();
+
+                        },
+                        error: function () {
+
+                            toastr.error("Error while deleting data");
+                        }
+                    });
+                }
+            }
+
+
+
+
+
+
+      $(document).ready(function () {
+          //notification changes start here--------------------
+
+          @if (Model.ScheduleDate.IsHousingDue=="Red")
+        {
+            @: $("#HouNot").attr('class', 'notCountR');
+            @: $("#Housing-tab").css('border-left', '5px solid #a53333');
+            @: $("#HouNot").show();
+            @: $("#HouNot").html(@Model.ScheduleDate.HousingNotification);
+
+            if (Model.ScheduleDate.HousingNotification == "0")
+            {
+        @: $("#HouNot").attr('title', 'Due date isToday.');
+             }
+            else
+            {
+        @: $("#HouNot").attr('title', 'Due ' +@Model.ScheduleDate.HousingNotification+' days ago');
+             }
+        }
+
+        else if(Model.ScheduleDate.IsHousingDue == "Orange")
+        {
+        @: $("#HouNot").attr('class', 'notCountO');
+        @: $("#Housing-tab").css('border-left', '5px solid #e4854d');
+        @: $("#HouNot").show();
+        @: $("#HouNot").html(@Model.ScheduleDate.HousingNotification);
+        @: $("#HouNot").attr('title','Due after ' + @Model.ScheduleDate.HousingNotification+' days.');
+
+         }
+        else if(Model.ScheduleDate.IsHousingDue == "Green")
+        {
+        @: $("#HouNot").attr('class', 'notCountG');
+        @: $("#Housing-tab").css('border-left', '5px solid #0aa22d');
+        @: $("#HouNot").show();
+        @: $("#HouNot").html(@Model.ScheduleDate.HousingNotification);
+        @: $("#HouNot").attr('title', 'Due after ' +  @Model.ScheduleDate.HousingNotification+' days.');
+
+        }
+
+
+
+
+
+
+          @if (Model.ScheduleDate.IsFinancialDue== "Red")
+          {
+            @: $("#FincNot").attr('class', 'notCountR');
+            @: $("#Financial-tab").css('border-left', '5px solid #a53333');
+            @: $("#FincNot").show();
+            @: $("#FincNot").html(@Model.ScheduleDate.FinancialNotification);
+
+              if (Model.ScheduleDate.FinancialNotification == "0")
+              {
+                   @: $("#FincNot").attr('title', 'Due date isToday.');
+              }
+              else
+              {
+               @: $("#FincNot").attr('title', 'Due ' +@Model.ScheduleDate.FinancialNotification+' days ago');
+               }
+        }
+        else if(Model.ScheduleDate.IsFinancialDue == "Orange")
+        {
+        @: $("#FincNot").attr('class', 'notCountO');
+        @: $("#Financial-tab").css('border-left', '5px solid #e4854d');
+        @: $("#FincNot").show();
+        @: $("#FincNot").html(@Model.ScheduleDate.FinancialNotification);
+        @: $("#FincNot").attr('title', 'Due after ' +  @Model.ScheduleDate.FinancialNotification+' days.');
+
+        }
+        else if(Model.ScheduleDate.IsFinancialDue == "Green")
+        {
+        @: $("#FincNot").attr('class', 'notCountG');
+        @: $("#Financial-tab").css('border-left', '5px solid #0aa22d');
+        @: $("#FincNot").show();
+        @: $("#FincNot").html(@Model.ScheduleDate.FinancialNotification);
+        @: $("#FincNot").attr('title', 'Due after ' +  @Model.ScheduleDate.FinancialNotification+' days.');
+
+        }
+
+
+
+           @if (Model.ScheduleDate.IsEmploymentDue== "Red")
+           {
+            @: $("#EmpNot").attr('class', 'notCountR');
+            @: $("#Employment-tab").css('border-left', '5px solid #a53333');
+            @: $("#EmpNot").show();
+            @: $("#EmpNot").html(@Model.ScheduleDate.EmploymentNotification);
+
+              if (Model.ScheduleDate.EmploymentNotification == "0")
+              {
+                   @: $("#EmpNot").attr('title', 'Due date isToday.');
+              }
+              else
+              {
+               @: $("#EmpNot").attr('title', 'Due ' +@Model.ScheduleDate.EmploymentNotification+' days ago');
+               }
+        }
+        else if(Model.ScheduleDate.IsEmploymentDue == "Orange")
+        {
+        @: $("#EmpNot").attr('class', 'notCountO');
+        @: $("#Employment-tab").css('border-left', '5px solid #e4854d');
+        @: $("#EmpNot").show();
+        @: $("#EmpNot").html(@Model.ScheduleDate.EmploymentNotification);
+        @: $("#EmpNot").attr('title', 'Due after ' +  @Model.ScheduleDate.EmploymentNotification+' days.');
+
+        }
+        else if(Model.ScheduleDate.IsEmploymentDue == "Green")
+        {
+        @: $("#EmpNot").attr('class', 'notCountG');
+        @: $("#Employment-tab").css('border-left', '5px solid #0aa22d');
+        @: $("#EmpNot").show();
+        @: $("#EmpNot").html(@Model.ScheduleDate.EmploymentNotification);
+        @: $("#EmpNot").attr('title', 'Due after ' +  @Model.ScheduleDate.EmploymentNotification+' days.');
+
+        }
+
+
+
+     @if (Model.ScheduleDate.IsCommunicationDue == "Red")
+      {
+            @: $("#CommNot").attr('class', 'notCountR');
+            @: $("#Communication-tab").css('border-left', '5px solid #a53333');
+            @: $("#CommNot").show();
+            @: $("#CommNot").html(@Model.ScheduleDate.CommunicationNotification);
+
+              if (Model.ScheduleDate.CommunicationNotification == "0")
+              {
+                   @: $("#CommNot").attr('title', 'Due date isToday.');
+              }
+              else
+              {
+               @: $("#CommNot").attr('title', 'Due ' +@Model.ScheduleDate.CommunicationNotification+' days ago');
+               }
+        }
+        else if(Model.ScheduleDate.IsCommunicationDue == "Orange")
+        {
+        @: $("#CommNot").attr('class', 'notCountO');
+        @: $("#Communication-tab").css('border-left', '5px solid #e4854d');
+        @: $("#CommNot").show();
+        @: $("#CommNot").html(@Model.ScheduleDate.CommunicationNotification);
+        @: $("#CommNot").attr('title', 'Due after ' +  @Model.ScheduleDate.CommunicationNotification+' days.');
+
+        }
+        else if(Model.ScheduleDate.IsCommunicationDue == "Green")
+        {
+        @: $("#CommNot").attr('class', 'notCountG');
+        @: $("#Communication-tab").css('border-left', '5px solid #0aa22d');
+        @: $("#CommNot").show();
+        @: $("#CommNot").html(@Model.ScheduleDate.CommunicationNotification);
+        @: $("#CommNot").attr('title', 'Due after ' +  @Model.ScheduleDate.CommunicationNotification+' days.');
+
+        }
+
+
+
+
+       @if (Model.ScheduleDate.IsHealthcareDue == "Red")
+      {
+            @: $("#HealthNot").attr('class', 'notCountR');
+            @: $("#Healthcare-tab").css('border-left', '5px solid #a53333');
+            @: $("#HealthNot").show();
+            @: $("#HealthNot").html(@Model.ScheduleDate.HealthcareNotification);
+
+              if (Model.ScheduleDate.HealthcareNotification == "0")
+              {
+                   @: $("#HealthNot").attr('title', 'Due date isToday.');
+              }
+              else
+              {
+               @: $("#HealthNot").attr('title', 'Due ' +@Model.ScheduleDate.HealthcareNotification+' days ago');
+               }
+        }
+        else if(Model.ScheduleDate.IsHealthcareDue == "Orange")
+        {
+        @: $("#HealthNot").attr('class', 'notCountO');
+        @: $("#Healthcare-tab").css('border-left', '5px solid #e4854d');
+        @: $("#HealthNot").show();
+        @: $("#HealthNot").html(@Model.ScheduleDate.HealthcareNotification);
+        @: $("#HealthNot").attr('title', 'Due after ' +  @Model.ScheduleDate.HealthcareNotification+' days.');
+
+        }
+        else if(Model.ScheduleDate.IsHealthcareDue == "Green")
+        {
+        @: $("#HealthNot").attr('class', 'notCountG');
+        @: $("#Healthcare-tab").css('border-left', '5px solid #0aa22d');
+        @: $("#HealthNot").show();
+        @: $("#HealthNot").html(@Model.ScheduleDate.HealthcareNotification);
+        @: $("#HealthNot").attr('title', 'Due after ' +  @Model.ScheduleDate.HealthcareNotification+' days.');
+
+        }
+
+
+
+         @if (Model.ScheduleDate.IsSocialSupportsDue == "Red")
+      {
+            @: $("#SocialNot").attr('class', 'notCountR');
+            @: $("#SocialSupports-tab").css('border-left', '5px solid #a53333');
+            @: $("#SocialNot").show();
+            @: $("#SocialNot").html(@Model.ScheduleDate.SocialNotification);
+
+              if (Model.ScheduleDate.SocialNotification == "0")
+              {
+                   @: $("#SocialNot").attr('title', 'Due date isToday.');
+              }
+              else
+              {
+               @: $("#SocialNot").attr('title', 'Due ' +@Model.ScheduleDate.SocialNotification+' days ago');
+               }
+        }
+        else if(Model.ScheduleDate.IsSocialSupportsDue == "Orange")
+        {
+        @: $("#SocialNot").attr('class', 'notCountO');
+        @: $("#SocialSupports-tab").css('border-left', '5px solid #e4854d');
+        @: $("#SocialNot").show();
+        @: $("#SocialNot").html(@Model.ScheduleDate.SocialNotification);
+        @: $("#SocialNot").attr('title', 'Due after ' +  @Model.ScheduleDate.SocialNotification+' days.');
+
+        }
+        else if(Model.ScheduleDate.IsSocialSupportsDue == "Green")
+        {
+        @: $("#SocialNot").attr('class', 'notCountG');
+        @: $("#SocialSupports-tab").css('border-left', '5px solid #0aa22d');
+        @: $("#SocialNot").show();
+        @: $("#SocialNot").html(@Model.ScheduleDate.SocialNotification);
+        @: $("#SocialNot").attr('title', 'Due after ' +  @Model.ScheduleDate.SocialNotification+' days.');
+
+        }
+
+
+
+          @if (Model.ScheduleDate.IsLegalStatusDue == "Red")
+      {
+            @: $("#LegalNot").attr('class', 'notCountR');
+            @: $("#LegalStatus-tab").css('border-left', '5px solid #a53333');
+            @: $("#LegalNot").show();
+            @: $("#LegalNot").html(@Model.ScheduleDate.LegalNotification);
+
+              if (Model.ScheduleDate.LegalNotification == "0")
+              {
+                   @: $("#LegalNot").attr('title', 'Due date isToday.');
+              }
+              else
+              {
+               @: $("#LegalNot").attr('title', 'Due ' +@Model.ScheduleDate.LegalNotification+' days ago');
+               }
+        }
+        else if(Model.ScheduleDate.IsLegalStatusDue == "Orange")
+        {
+        @: $("#LegalNot").attr('class', 'notCountO');
+        @: $("#LegalStatus-tab").css('border-left', '5px solid #e4854d');
+        @: $("#LegalNot").show();
+        @: $("#LegalNot").html(@Model.ScheduleDate.LegalNotification);
+        @: $("#LegalNot").attr('title', 'Due after ' +  @Model.ScheduleDate.LegalNotification+' days.');
+
+        }
+        else if(Model.ScheduleDate.IsLegalStatusDue == "Green")
+        {
+        @: $("#LegalNot").attr('class', 'notCountG');
+        @: $("#LegalStatus-tab").css('border-left', '5px solid #0aa22d');
+        @: $("#LegalNot").show();
+        @: $("#LegalNot").html(@Model.ScheduleDate.LegalNotification);
+        @: $("#LegalNot").attr('title', 'Due after ' +  @Model.ScheduleDate.LegalNotification+' days.');
+
+        }
+
+
+
+
+             @if (Model.ScheduleDate.IsDastDue == "Red")
+      {
+            @: $("#DastNot").attr('class', 'notCountR');
+            @: $("#Dast-tab").css('border-left', '5px solid #a53333');
+            @: $("#DastNot").show();
+            @: $("#DastNot").html(@Model.ScheduleDate.DastNotification);
+
+              if (Model.ScheduleDate.DastNotification == "0")
+              {
+                   @: $("#DastNot").attr('title', 'Due date isToday.');
+              }
+              else
+              {
+               @: $("#DastNot").attr('title', 'Due ' +@Model.ScheduleDate.DastNotification+' days ago');
+               }
+        }
+        else if(Model.ScheduleDate.IsDastDue == "Orange")
+        {
+        @: $("#DastNot").attr('class', 'notCountO');
+        @: $("#Dast-tab").css('border-left', '5px solid #e4854d');
+        @: $("#DastNot").show();
+        @: $("#DastNot").html(@Model.ScheduleDate.DastNotification);
+        @: $("#DastNot").attr('title', 'Due after ' +  @Model.ScheduleDate.DastNotification+' days.');
+
+        }
+        else if(Model.ScheduleDate.IsDastDue == "Green")
+        {
+        @: $("#DastNot").attr('class', 'notCountG');
+        @: $("#Dast-tab").css('border-left', '5px solid #0aa22d');
+        @: $("#DastNot").show();
+        @: $("#DastNot").html(@Model.ScheduleDate.DastNotification);
+        @: $("#DastNot").attr('title', 'Due after ' +  @Model.ScheduleDate.DastNotification+' days.');
+
+        }
+
+
+
+                  @if (Model.ScheduleDate.IsAuditDue == "Red")
+      {
+            @: $("#AuditNot").attr('class', 'notCountR');
+            @: $("#Audit-tab").css('border-left', '5px solid #a53333');
+            @: $("#AuditNot").show();
+            @: $("#AuditNot").html(@Model.ScheduleDate.AuditNotification);
+
+              if (Model.ScheduleDate.AuditNotification == "0")
+              {
+                   @: $("#AuditNot").attr('title', 'Due date isToday.');
+              }
+              else
+              {
+               @: $("#AuditNot").attr('title', 'Due ' +@Model.ScheduleDate.AuditNotification+' days ago');
+               }
+        }
+        else if(Model.ScheduleDate.IsAuditDue == "Orange")
+        {
+        @: $("#AuditNot").attr('class', 'notCountO');
+        @: $("#Audit-tab").css('border-left', '5px solid #e4854d');
+        @: $("#AuditNot").show();
+        @: $("#AuditNot").html(@Model.ScheduleDate.AuditNotification);
+        @: $("#AuditNot").attr('title', 'Due after ' +  @Model.ScheduleDate.AuditNotification+' days.');
+
+        }
+        else if(Model.ScheduleDate.IsAuditDue == "Green")
+        {
+        @: $("#AuditNot").attr('class', 'notCountG');
+        @: $("#Audit-tab").css('border-left', '5px solid #0aa22d');
+        @: $("#AuditNot").show();
+        @: $("#AuditNot").html(@Model.ScheduleDate.AuditNotification);
+        @: $("#AuditNot").attr('title', 'Due after ' +  @Model.ScheduleDate.AuditNotification+' days.');
+
+        }
+
+
+        debugger;
+        var DastN = "";
+        var AuditN = "";
+        DastN = $("#DastNot").attr('title');
+        AuditN = $("#AuditNot").attr('title');
+        if (DastN == undefined)
+        {
+            DastN = ""
+
+        }
+        if (AuditN == undefined) {
+            AuditN = ""
+
+        }
+        $("#SubNot").attr('title', ' Dast=' + DastN + ' & Audit=' + AuditN);
+
+
+        var subnottitle = $("#SubNot").attr('title');
+
+        if (subnottitle.indexOf("Due") == -1)
+        {
+            $("#SubNot").hide();
+
+        }
+        else
+        {
+               $("#SubNot").attr('class', 'notCountR');
+              //$("#Alcohol-tab").css('border-left', '5px solid #a53333');
+              $("#SubNot").show();
+              $("#SubNot").html('i');
+             $("#SubNot").attr('title', ' Dast=' + DastN + ' & Audit=' + AuditN);
+        }
+
+
+
+
+             @if (Model.ScheduleDate.IsMentalHealthDue == "Red")
+          {
+            @: $("#MentalNot").attr('class', 'notCountR');
+            @: $("#MentalHealth-tab").css('border-left', '5px solid #a53333');
+            @: $("#MentalNot").show();
+            @: $("#MentalNot").html(@Model.ScheduleDate.MentalNotification);
+
+              if (Model.ScheduleDate.MentalNotification == "0")
+              {
+                   @: $("#MentalNot").attr('title', 'Due date isToday.');
+              }
+              else
+              {
+               @: $("#MentalNot").attr('title', 'Due ' +@Model.ScheduleDate.MentalNotification+' days ago');
+               }
+        }
+        else if(Model.ScheduleDate.IsMentalHealthDue == "Orange")
+        {
+        @: $("#MentalNot").attr('class', 'notCountO');
+        @: $("#MentalHealth-tab").css('border-left', '5px solid #e4854d');
+        @: $("#MentalNot").show();
+        @: $("#MentalNot").html(@Model.ScheduleDate.MentalNotification);
+        @: $("#MentalNot").attr('title', 'Due after ' +  @Model.ScheduleDate.MentalNotification+' days.');
+
+        }
+        else if(Model.ScheduleDate.IsMentalHealthDue == "Green")
+        {
+        @: $("#MentalNot").attr('class', 'notCountG');
+        @: $("#MentalHealth-tab").css('border-left', '5px solid #0aa22d');
+        @: $("#MentalNot").show();
+        @: $("#MentalNot").html(@Model.ScheduleDate.MentalNotification);
+        @: $("#MentalNot").attr('title', 'Due after ' +  @Model.ScheduleDate.MentalNotification+' days.');
+
+        }
+
+
+
+              @if (Model.ScheduleDate.IsFoodAccessDue == "Red")
+          {
+            @: $("#FoodNot").attr('class', 'notCountR');
+            @: $("#FoodAccess-tab").css('border-left', '5px solid #a53333');
+            @: $("#FoodNot").show();
+            @: $("#FoodNot").html(@Model.ScheduleDate.FoodNotification);
+
+              if (Model.ScheduleDate.FoodNotification == "0")
+              {
+                   @: $("#FoodNot").attr('title', 'Due date isToday.');
+              }
+              else
+              {
+               @: $("#FoodNot").attr('title', 'Due ' +@Model.ScheduleDate.FoodNotification+' days ago');
+               }
+        }
+        else if(Model.ScheduleDate.IsFoodAccessDue == "Orange")
+        {
+        @: $("#FoodNot").attr('class', 'notCountO');
+        @: $("#FoodAccess-tab").css('border-left', '5px solid #e4854d');
+        @: $("#FoodNot").show();
+        @: $("#FoodNot").html(@Model.ScheduleDate.FoodNotification);
+        @: $("#FoodNot").attr('title', 'Due after ' +  @Model.ScheduleDate.FoodNotification+' days.');
+
+        }
+        else if(Model.ScheduleDate.IsFoodAccessDue == "Green")
+        {
+        @: $("#FoodNot").attr('class', 'notCountG');
+        @: $("#FoodAccess-tab").css('border-left', '5px solid #0aa22d');
+        @: $("#FoodNot").show();
+        @: $("#FoodNot").html(@Model.ScheduleDate.FoodNotification);
+        @: $("#FoodNot").attr('title', 'Due after ' +  @Model.ScheduleDate.FoodNotification+' days.');
+
+        }
+
+          //motification changes end here-------------------------
+
+        @if (Model.PatientHousing.PatientHousingID == 0)
+        {
+           <text>$("#Housing-tab").find('span').css('display', 'none');</text>
+        }
+        else{
+             @:$("#Housing-tab").find('span').css('display', 'inline');
+    }
+         @if (Model.PatientFinancialSecurity.PatientFinancialSecurityID == 0)
+        {
+            @:$("#Financial-tab").find('span').css('display', 'none');
+        }
+         else{
+     @:$("#Financial-tab").find('span').css('display', 'inline');
+          }
+         @if (Model.PatientEmploymentEducation.PatientEmploymentEducationID == 0)
+        {
+            @:$("#Employment-tab").find('span').css('display', 'none');
+        }
+         else{
+              @:$("#Employment-tab").find('span').css('display', 'inline');
+         }
+         @if (Model.PatientCommunicationAndMobility.PatientCommunicationAndMobilityID == 0)
+        {
+            @:$("#Communication-tab").find('span').css('display', 'none');
+        }
+         else
+         {
+@:$("#Communication-tab").find('span').css('display', 'inline');
+         }
+
+          @if (Model.PatientHealthcare.PatientHealthcareID == 0)
+        {
+            @:$("#Healthcare-tab").find('span').css('display', 'none');
+        }
+          else
+          {
+              @:$("#Healthcare-tab").find('span').css('display', 'inline');
+          }
+         @if (Model.PatientSocialSupport.SocialSupportsID == 0)
+        {
+            @:$("#SocialSupports-tab").find('span').css('display', 'none');
+        }
+         else
+         { @:$("#SocialSupports-tab").find('span').css('display', 'inline');
+
+         }
+         @if (Model.PatientLegalStatus.LegalStatusID == 0)
+        {
+            @:$("#LegalStatus-tab").find('span').css('display', 'none');
+        }
+         else
+         {
+              @:$("#LegalStatus-tab").find('span').css('display', 'inline');
+         }
+         @if (Model.PatientSubstanceUse.SubstanceUseID == 0)
+         {
+             @:$("#Alcohol-tab").find('span').css('display', 'none');
+             if (Model.PatientSubstanceUse.Audit.AuditID == 0)
+             {
+                  @:$("#Audit-tab").find('span').css('display', 'none');
+             }
+             else
+             {
+         @:$("#Audit-tab").find('span').css('display', 'inline');
+           @:$("#Alcohol-tab").find('span').css('display', 'inline');
+             }
+             if (Model.PatientSubstanceUse.Dast.DastID == 0)
+             {
+                  @:$("#Dast-tab").find('span').css('display', 'none');
+             }
+             else
+             {
+                  @:$("#Dast-tab").find('span').css('display', 'inline');
+                   @:$("#Alcohol-tab").find('span').css('display', 'inline');
+             }
+
+         }
+         else
+         {
+
+              if (Model.PatientSubstanceUse.Audit.AuditID == 0)
+             {
+                  @:$("#Audit-tab").find('span').css('display', 'none');
+             }
+             else
+             {
+         @:$("#Audit-tab").find('span').css('display', 'inline');
+           @:$("#Alcohol-tab").find('span').css('display', 'inline');
+             }
+              if (Model.PatientSubstanceUse.Dast.DastID == 0)
+             {
+                  @:$("#Dast-tab").find('span').css('display', 'none');
+             }
+             else
+             {
+                  @:$("#Dast-tab").find('span').css('display', 'inline');
+                   @:$("#Alcohol-tab").find('span').css('display', 'inline');
+             }
+
+         }
+
+            @if (Model.PatientMentalHealth.MentalHealthID == 0)
+        {
+
+            @:$("#MentalHealth-tab").find('span').css('display', 'none');
+        }
+            else
+            {
+                 @:$("#MentalHealth-tab").find('span').css('display', 'inline');
+            }
+                @if (Model.PatientFoodAccess.FoodAccessID == 0)
+        {
+
+            @:$("#FoodAccess-tab").find('span').css('display', 'none');
+        }
+                else
+                {
+            @:$("#FoodAccess-tab").find('span').css('display', 'inline');
+                }
+
+           @if (Model.PatientProgram.PatientProgramsID == 0)
+        {
+               @:$("#Programs-tab").find('span').css('display', 'none');
+          if (Model.PatientProgram.ClinicOnly.ClinicOnlyID == 0)
+               {
+                   @:$("#aclinic").find('span').css('display', 'none');
+               }
+               else
+               {
+                   @:$("#aclinic").find('span').css('display', 'inline');
+                   @:$("#Programs-tab").find('span').css('display', 'inline');
+
+               }
+               if (Model.PatientProgram.DreamOnly.DreamOnlyID == 0)
+               {
+                   @:$("#adream").find('span').css('display', 'none');
+               }
+               else
+               {
+                    @:$("#adream").find('span').css('display', 'inline');
+                   @:$("#Programs-tab").find('span').css('display', 'inline');
+               }
+               if (Model.PatientProgram.OUOnly.OUOnlyID == 0)
+               {@:$("aou").find('span').css('display', 'none');
+
+               }
+               else
+               {
+                    @:$("#aou").find('span').css('display', 'inline');
+                   @:$("#Programs-tab").find('span').css('display', 'inline');
+               }
+               if (Model.PatientProgram.PeraltaCollege.PeraltaCollegesID == 0)
+               {
+                   @:$("#aPeraltaColleges").find('span').css('display', 'none');
+               }
+               else
+               { @:$("#aPeraltaColleges").find('span').css('display', 'inline');
+                   @:$("#Programs-tab").find('span').css('display', 'inline');
+
+               }
+
+           }
+           else
+           {
+
+               if (Model.PatientProgram.ClinicOnly.ClinicOnlyID == 0)
+               {
+                   @:$("#aclinic").find('span').css('display', 'none');
+               }
+               else
+               {
+                   @:$("#aclinic").find('span').css('display', 'inline');
+                   @:$("#Programs-tab").find('span').css('display', 'inline');
+
+               }
+               if (Model.PatientProgram.DreamOnly.DreamOnlyID == 0)
+               {
+                   @:$("#adream").find('span').css('display', 'none');
+               }
+               else
+               {
+                    @:$("#adream").find('span').css('display', 'inline');
+                   @:$("#Programs-tab").find('span').css('display', 'inline');
+               }
+               if (Model.PatientProgram.OUOnly.OUOnlyID == 0)
+               {@:$("#aou").find('span').css('display', 'none');
+
+               }
+               else
+               {
+                    @:$("#aou").find('span').css('display', 'inline');
+                   @:$("#Programs-tab").find('span').css('display', 'inline');
+               }
+               if (Model.PatientProgram.PeraltaCollege.PeraltaCollegesID == 0)
+               {
+                   @:$("#aPeraltaColleges").find('span').css('display', 'none');
+               }
+               else
+               { @:$("#aPeraltaColleges").find('span').css('display', 'inline');
+                   @:$("#Programs-tab").find('span').css('display', 'inline');
+
+               }
+
+           }
+        $('.form-control').css('display', 'none');
+        $('.Add').css('display', 'none');
+        $('.selectboxmultiple').css('display', 'none');
+        //$('#pat_out_div').removeClass('col-lg-12 col-md-12 col-sm-12 col-12');
+        //$('#pat_out_div').addClass('col-lg-8 col-md-12 col-sm-12 col-12 pr-0');
+        $('.recent-paitents').css('display', 'block');
+        $('#appointement_div').css('display', 'block');
+        getListAllAppointments();
+        getListAllNotesLoadMore();
+        //-----------Score Bind Start------------------------------//
+        //-----------------Housingscore start----------------------//
+        $('#txthousingscore').html(@Model.PatientScore.housingscore+"/26");
+        $('#txthousingstatus').html('@Model.PatientScore.housingstatus');
+         //-----------------Housingscore end----------------------//
+         //----------------financialscore start----------------------//
+        $('#txtfinancialscore').html(@Model.PatientScore.financialcscore+"/22");
+        $('#txtfinancialstatus').html('@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Model.PatientScore.financialcstatus.ToLower())');
+         //-----------------financialscore end----------------------//
+         //----------------Employmentscore start----------------------//
+        $('#txtemploymentscore').html(@Model.PatientScore.employmentscore+"/20");
+        $('#txtemploymentstatus').html('@Model.PatientScore.employmentstatus');
+         //-----------------Employmentscore end----------------------//
+        //----------------communicationscore start----------------------//
+        $('#txtcommunscore').html(@Model.PatientScore.communicationscore+"/12");
+        $('#txtcommunstatus').html('@Model.PatientScore.communicationstatus');
+         //-----------------communicationscore end----------------------//
+          //----------------Healthcarescore start----------------------//
+        $('#txthealthscore').html(@Model.PatientScore.healthcarescore+"/26");
+        $('#txthealthstatus').html('@Model.PatientScore.healthcarestatus');
+         //-----------------Healthcarescore end----------------------//
+        //----------------Socialscore start----------------------//
+        $('#txtsocialscore').html(@Model.PatientScore.socialsupportscore+"/12");
+        $('#txtsocialstatus').html('@Model.PatientScore.socialsupportstatus');
+         //-----------------Socialscore end----------------------//
+         //----------------Legalscore start----------------------//
+        $('#txtlegalscore').html(@Model.PatientScore.legalstatusscore+"/18");
+        $('#txtlegalstatus').html('@Model.PatientScore.legalstatusstatus');
+         //-----------------Legalscore end----------------------//
+           //----------------Substancescore start----------------------//
+        $('#txtsubtscore').html(@Model.PatientScore.substancescore+"/20");
+        $('#txtsubtstatus').html('@Model.PatientScore.substancestatus');
+         //-----------------Substancescore end----------------------//
+          //----------------Mental Health score start----------------------//
+        $('#txtmentalscore').html(@Model.PatientScore.mentalhealthscore+"/20");
+        $('#txtmentalstatus').html('@Model.PatientScore.mentalhealthstatus');
+         //-----------------Mental Health score end----------------------//
+
+            //----------------Food Access score start----------------------//
+        $('#txtfoodscore').html(@Model.PatientScore.foodaccessscore+"/26");
+        $('#txtfoodstatus').html('@Model.PatientScore.foodaccessstatus');
+         //-----------------Food Access score end----------------------//
+         //----------------Profile(Overall) score start----------------------//
+        $('#txtoverallscore').html(@Model.PatientScore.OverallScore+"/200");
+
+        $('#txtoverallstatus').html('@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Model.PatientScore.OverallStatus.ToLower())');
+         //-----------------Profile(Overall) score end----------------------//
+
+
+          //-----------Score Bind end------------------------------//
+
+        //----------------PeraltaCollege Start----------------//
+
+        var lblOneYouAre = $('#lblOneYouAre').html();
+        if (lblOneYouAre == "Student") {
+            $('#divStudent').css('display', 'block');
+        }
+        //----------------PeraltaCollege end----------------//
+
+        var lblgender = $('#lblGender').html();
+        if (lblgender == "Other") {
+            $('#divOtherGender').css('display', 'block');
+        }
+
+        var lblRace = $('#lblOtherRace').html();
+        if (lblRace != "") {
+            $('#OtherRace').css('display', 'block');
+        }
+
+        var lblPerAdd = $('#lblPerAdd').html();
+        if (lblPerAdd == "False") {
+            $('#divPermanentAddress').css('display', 'block');
+        }
+
+        var lblContact = $('#lblContact').html();
+        if (lblContact == "Other") {
+            $('#OtherContact').css('display', 'block');
+        }
+
+        $('.custom-control-input').css('display', 'none');
+        $('.custom-control-label').css('display', 'none');
+        $('.custom-file-label').css('display', 'none');
+
+
+        var lblMarital = $('#lblMarital').html();
+        if (lblMarital == "Other") {
+            $('#OtherMaritalStatus').css('display', 'block');
+        }
+
+        var lblOtherLang = $('#lblOtherLang').html();
+        if (lblOtherLang != "") {
+            $('#OtherLanguage').css('display', 'block');
+        }
+
+        var lblSmoker = $('#lblSmoker').html();
+        if (lblSmoker == "Yes") {
+            $('#divQuit').css('display', 'block');
+            $('#divLastTimeYouSmoked').css('display', 'block');
+        }
+
+        var lblQuit = $('#lblQuit').html();
+        if (lblQuit == "Yes") {
+            $('#divSmokingQuitDate').css('display', 'block');
+        }
+
+        var lblPronoun = $('#lblPronoun').html();
+        if (lblPronoun == "Other") {
+            $('#divOtherPronouns').css('display', 'block');
+        }
+
+        var lblThink = $('#lblThink').html();
+        if (lblThink == "Unspecified/Other") {
+            $('#divOtherThinkYourselfAs').css('display', 'block');
+        }
+
+
+        var lblNumChildren = $('#lblNumChildren').html();
+        $('.ChildrenAgeDiv').html('');
+        var divhtml = '';
+        for (var i = 1; i <= parseInt(lblNumChildren); i++) {
+            var temp = $('.ChildrenAgeTemp').html();
+            temp = temp.replace('#number', i);
+            temp = temp.replace('#yearid', 'year_' + i);
+            temp = temp.replace('#daysid', 'days_' + i);
+            divhtml = divhtml + temp;
+        }
+
+        $('.ChildrenAgeDiv').html(divhtml);
+
+        var lblAgeChildren = $('#lblAgeChildren').html();
+
+        var AgeChildrenArray = lblAgeChildren!=undefined ? lblAgeChildren.split(',') : '';
+
+        for (var i = 0; i < AgeChildrenArray.length; i++) {
+            var AgeChildren = AgeChildrenArray[i].split(':');
+            $('#year_' + (i + 1)).html(AgeChildren[0]);
+            $('#days_' + (i + 1)).html(AgeChildren[1]);
+        }
+
+        $('#HousingSave').css('display', 'none');
+        $('#ProfileSave').css('display', 'none');
+        $('#FinancialSecuritySave').css('display', 'none');
+        $('#EmploymentEducation').css('display', 'none');
+        $('#CommunicationSave').css('display', 'none');
+        $('#HealthcareSave').css('display', 'none');
+        $('#SocialSupportsSave').css('display', 'none');
+        $('#LegalStatusSave').css('display', 'none');
+        $('#btnDast').css('display', 'none');
+        $('#btnAudit').css('display', 'none');
+        $('#btnFood').css('display', 'none');
+        $('#btnMental').css('display', 'none');
+        $('#btnClinic').css('display', 'none');
+        $('#btnDream').css('display', 'none');
+        $('#btnOUOnly').css('display', 'none');
+        $('#btnPeralta').css('display', 'none');
+
+
+
+        var lblCalRec = $('#lblCalRec').html().trim();
+        if (lblCalRec == "") {
+            $('#CalRec').removeClass('fa-times');
+            $('#CalRec').removeClass('fa-check');
+        }
+        if (lblCalRec == "Receiving") {
+            $('#CalRec').removeClass('fa-times');
+            $('#CalRec').addClass('fa-check');
+        }
+        var lblCalPen = $('#lblCalPen').html().trim();
+        if (lblCalPen == "") {
+            $('#CalPen').removeClass('fa-times');
+            $('#CalPen').removeClass('fa-check');
+        }
+        if (lblCalPen == "Pending") {
+            $('#CalPen').removeClass('fa-times');
+            $('#CalPen').addClass('fa-check');
+        }
+        var lblCalApp = $('#lblCalApp').html().trim();
+        if (lblCalApp == "") {
+            $('#CalApp').removeClass('fa-times');
+            $('#CalApp').removeClass('fa-check');
+        }
+        if (lblCalApp == "Applied & Denied") {
+            $('#CalApp').removeClass('fa-times');
+            $('#CalApp').addClass('fa-check');
+        }
+        var lblCalNev = $('#lblCalNev').html().trim();
+        if (lblCalNev == "") {
+            $('#CalNev').removeClass('fa-times');
+            $('#CalNev').removeClass('fa-check');
+        }
+        if (lblCalNev == "Never Applied") {
+            $('#CalNev').removeClass('fa-times');
+            $('#CalNev').addClass('fa-check');
+        }
+
+
+        var lblSSRec = $('#lblSSRec').html().trim();
+        if (lblSSRec == "") {
+            $('#SSRec').removeClass('fa-times');
+            $('#SSRec').removeClass('fa-check');
+        }
+        if (lblSSRec == "Receiving") {
+            $('#SSRec').removeClass('fa-times');
+            $('#SSRec').addClass('fa-check');
+        }
+        var lblSSPen = $('#lblSSPen').html().trim();
+        if (lblSSPen == "") {
+            $('#SSPen').removeClass('fa-times');
+            $('#SSPen').removeClass('fa-check');
+        }
+        if (lblSSPen == "Pending") {
+            $('#SSPen').removeClass('fa-times');
+            $('#SSPen').addClass('fa-check');
+        }
+        var lblSSApp = $('#lblSSApp').html().trim();
+        if (lblSSApp == "") {
+            $('#SSApp').removeClass('fa-times');
+            $('#SSApp').removeClass('fa-check');
+        }
+        if (lblSSApp == "Applied & Denied") {
+            $('#SSApp').removeClass('fa-times');
+            $('#SSApp').addClass('fa-check');
+        }
+        var lblSSNev = $('#lblSSNev').html().trim();
+        if (lblSSNev == "") {
+            $('#SSNev').removeClass('fa-times');
+            $('#SSNev').removeClass('fa-check');
+        }
+        if (lblSSNev == "Never Applied") {
+            $('#SSNev').removeClass('fa-times');
+            $('#SSNev').addClass('fa-check');
+        }
+
+
+        var lblGARec = $('#lblGARec').html().trim();
+        if (lblGARec == "") {
+            $('#GARec').removeClass('fa-times');
+            $('#GARec').removeClass('fa-check');
+        }
+        if (lblGARec == "Receiving") {
+            $('#GARec').removeClass('fa-times');
+            $('#GARec').addClass('fa-check');
+        }
+        var lblGAPen = $('#lblGAPen').html().trim();
+        if (lblGAPen == "") {
+            $('#GAPen').removeClass('fa-times');
+            $('#GAPen').removeClass('fa-check');
+        }
+        if (lblGAPen == "Pending") {
+            $('#GAPen').removeClass('fa-times');
+            $('#GAPen').addClass('fa-check');
+        }
+        var lblGAApp = $('#lblGAApp').html().trim();
+        if (lblGAApp == "") {
+            $('#GAApp').removeClass('fa-times');
+            $('#GAApp').removeClass('fa-check');
+        }
+        if (lblGAApp == "Applied & Denied") {
+            $('#GAApp').removeClass('fa-times');
+            $('#GAApp').addClass('fa-check');
+        }
+
+        var lblGANev = $('#lblGANev').html().trim();
+        if (lblGANev == "") {
+            $('#GANev').removeClass('fa-times');
+            $('#GANev').removeClass('fa-check');
+        }
+        if (lblGANev == "Never Applied") {
+            $('#GANev').removeClass('fa-times');
+            $('#GANev').addClass('fa-check');
+        }
+
+
+        var lblWIRec = $('#lblWIRec').html().trim();
+        if (lblWIRec == "") {
+            $('#WIRec').removeClass('fa-times');
+            $('#WIRec').removeClass('fa-check');
+        }
+        if (lblWIRec == "Receiving") {
+            $('#WIRec').removeClass('fa-times');
+            $('#WIRec').addClass('fa-check');
+        }
+        var lblWIPen = $('#lblWIPen').html().trim();
+        if (lblWIPen == "") {
+            $('#WIPen').removeClass('fa-times');
+            $('#WIPen').removeClass('fa-check');
+        }
+        if (lblWIPen == "Pending") {
+            $('#WIPen').removeClass('fa-times');
+            $('#WIPen').addClass('fa-check');
+        }
+        var lblWIApp = $('#lblWIApp').html().trim();
+        if (lblWIApp == "") {
+            $('#WIApp').removeClass('fa-times');
+            $('#WIApp').removeClass('fa-check');
+        } else
+        if (lblWIApp == "Applied & Denied") {
+            $('#WIApp').removeClass('fa-times');
+            $('#WIApp').addClass('fa-check');
+        }
+        var lblWINev = $('#lblWINev').html().trim();
+        if (lblWINev == "") {
+            $('#WINev').removeClass('fa-times');
+            $('#WINev').removeClass('fa-check');
+        } else
+        if (lblWINev == "Never Applied") {
+            $('#WINev').removeClass('fa-times');
+            $('#WINev').addClass('fa-check');
+        }
+
+
+
+        var lblUnRec = $('#lblUnRec').html().trim();
+        if (lblUnRec == "") {
+            $('#UnRec').removeClass('fa-times');
+            $('#UnRec').removeClass('fa-check');
+        } else
+        if (lblUnRec == "Receiving") {
+            $('#UnRec').removeClass('fa-times');
+            $('#UnRec').addClass('fa-check');
+        }
+        var lblUnPen = $('#lblUnPen').html().trim();
+        if (lblUnPen == "") {
+            $('#UnPen').removeClass('fa-times');
+            $('#UnPen').removeClass('fa-check');
+        } else
+        if (lblUnPen == "Pending") {
+            $('#UnPen').removeClass('fa-times');
+            $('#UnPen').addClass('fa-check');
+        }
+        var lblUnApp = $('#lblUnApp').html().trim();
+        if (lblUnApp == "") {
+            $('#UnApp').removeClass('fa-times');
+            $('#UnApp').removeClass('fa-check');
+        } else
+        if (lblUnApp == "Applied & Denied") {
+            $('#UnApp').removeClass('fa-times');
+            $('#UnApp').addClass('fa-check');
+        }
+        var lblUnNev = $('#lblUnNev').html().trim();
+        if (lblUnNev == "") {
+            $('#UnNev').removeClass('fa-times');
+            $('#UnNev').removeClass('fa-check');
+        } else
+        if (lblUnNev == "Never Applied") {
+            $('#UnNev').removeClass('fa-times');
+            $('#UnNev').addClass('fa-check');
+        }
+
+
+        var lblSDRec = $('#lblSDRec').html().trim();
+        if (lblSDRec == "") {
+            $('#SDRec').removeClass('fa-times');
+            $('#SDRec').removeClass('fa-check');
+        } else
+        if (lblSDRec == "Receiving") {
+            $('#SDRec').removeClass('fa-times');
+            $('#SDRec').addClass('fa-check');
+        }
+        var lblSDPen = $('#lblSDPen').html().trim();
+        if (lblSDPen == "") {
+            $('#SDPen').removeClass('fa-times');
+            $('#SDPen').removeClass('fa-check');
+        } else
+        if (lblSDPen == "Pending") {
+            $('#SDPen').removeClass('fa-times');
+            $('#SDPen').addClass('fa-check');
+        }
+        var lblSDApp = $('#lblSDApp').html().trim();
+        if (lblSDApp == "") {
+            $('#SDApp').removeClass('fa-times');
+            $('#SDApp').removeClass('fa-check');
+        } else
+            if (lblSDApp == "Applied & Denied") {
+                $('#SDApp').removeClass('fa-times');
+                $('#SDApp').addClass('fa-check');
+            }
+        var lblSDNev = $('#lblSDNev').html().trim();
+
+        if (lblSDNev == "") {
+            $('#SDNev').removeClass('fa-times');
+            $('#SDNev').removeClass('fa-check');
+        } else
+        if (lblSDNev == "Never Applied") {
+            $('#SDNev').removeClass('fa-times');
+            $('#SDNev').addClass('fa-check');
+        }
+
+
+
+        var lblReRec = $('#lblReRec').html().trim();
+        if (lblReRec == "") {
+            $('#ReRec').removeClass('fa-times');
+            $('#ReRec').removeClass('fa-check');
+        } else if (lblReRec == "Receiving") {
+            $('#ReRec').removeClass('fa-times');
+            $('#ReRec').addClass('fa-check');
+        }
+        var lblRePen = $('#lblRePen').html().trim();
+        if (lblRePen == "") {
+            $('#RePen').removeClass('fa-times');
+            $('#RePen').removeClass('fa-check');
+        } else if (lblRePen == "Pending") {
+            $('#RePen').removeClass('fa-times');
+            $('#RePen').addClass('fa-check');
+        }
+        var lblReApp = $('#lblReApp').html().trim();
+        if (lblReApp == "") {
+            $('#ReApp').removeClass('fa-times');
+            $('#ReApp').removeClass('fa-check');
+        } else if (lblReApp == "Applied & Denied") {
+            $('#ReApp').removeClass('fa-times');
+            $('#ReApp').addClass('fa-check');
+        }
+        var lblReNev = $('#lblReNev').html().trim();
+        if (lblReNev == "") {
+            $('#ReNev').removeClass('fa-times');
+            $('#ReNev').removeClass('fa-check');
+        } else if (lblReNev == "Never Applied") {
+            $('#ReNev').removeClass('fa-times');
+            $('#ReNev').addClass('fa-check');
+        }
+
+        //--------------------Employment Education Start--------------------//
+
+        var lblLevelofEducation = $('#lblLevelofEducation').html();
+
+        if (lblLevelofEducation == "Some high school") {
+            $('#divHighestGrade').css('display', 'block');
+        }
+        var lblWorkSituation = $('#lblWorkSituation').html();
+        if (lblWorkSituation == "I am employed full-time") {
+            $('#divFullTimeNameLocation').css('display', 'block');
+        }
+
+        if (lblWorkSituation == "I am employed part-time") {
+            $('#divPartTimeNameLocation').css('display', 'block');
+        }
+        if (lblWorkSituation == "Other") {
+            $('#divOther').css('display', 'block');
+        }
+
+        var lblParticipating = $('#lblParticipating').html();
+        if (lblParticipating == "No, but I have in the past") {
+            $('#divProgramSchoolAndYearAttended').css('display', 'block');
+        }
+
+        if (lblParticipating == "Yes") {
+            $('#divParticipatingIn').css('display', 'block');
+        }
+
+
+        var lblParticipatingIn = $('#lblParticipatingIn').html();
+        if (lblParticipatingIn == "Training Program") {
+            $('#divProgramName').css('display', 'block');
+        }
+        if (lblParticipatingIn == "Student") {
+            $('#divSchoolName').css('display', 'block');
+        }
+        if (lblParticipatingIn == "Training Program,Student") {
+            $('#divSchoolName').css('display', 'block');
+            $('#divProgramName').css('display', 'block');
+        }
+
+        //--------------------Employment Education end--------------------//
+
+         //--------------------Communication And Mobility Start--------------------//
+
+        var lblTransportation = $('#lblTransportation').html();
+        if (lblTransportation == "Other") {
+            $('#divOtherTransportation').css('display', 'block');
+        }
+
+        //--------------------Communication And Mobility end--------------------//
+        //--------------------Healthcare start--------------------//
+
+        var diagoption = "";
+        var lblDiagnosed = $('#lblDiagnosedmatch').html();
+        var lblDiagnosedArray = lblDiagnosed != undefined ? lblDiagnosed.split(',') : '';
+
+        for (var i = 0; i < lblDiagnosedArray.length; i++) {
+            var diagoption = diagoption + "," + $('#ddDiagnosed option[value="' + lblDiagnosedArray[i] + '"]').text();
+        }
+        var diagoption = diagoption.substring(1);
+        $('#lblDiagnosed').html(diagoption);
+
+
+          //--------------------Healthcare end--------------------//
+
+
+
+        var lblInsurance = $('#lblInsurance').html();
+        if (lblInsurance == "Yes") {
+            $('#divInsuranceYes').show();
+        }
+
+        var lblDoctor = $('#lblDoctor').html();
+        if (lblDoctor == "Yes") {
+            $('#divRegularDoctorYes').show();
+        }
+
+
+        var lblDentist = $('#lblDentist').html();
+        if (lblDentist == "Yes") {
+            $('#divRegularDentistYes').show();
+        }
+
+        var lblOtherDoctors = $('#lblOtherDoctors').html();
+        if (lblOtherDoctors == "Yes") {
+            $('#divOtherDoctorsYes').show();
+        }
+
+        var lblCaseManager = $('#lblCaseManager').html();
+        if (lblCaseManager == "Yes") {
+            //$('#divSocialWorker').css('display', 'block');
+            $('#divSocialWorker').show();
+        }
+
+        var lblSmoke = $('#lblSmoke').html();
+        if (lblSmoke == "Yes") {
+            $('#divSmoke').show();
+        }
+
+
+
+
+
+        var lblInPrison = $('#lblInPrison').html();
+        if (lblSmoke == "Yes") {
+            $('#divPrison').show();
+        }
+
+
+        var lblRestitution = $('#lblRestitution').html();
+        if (lblRestitution == "Yes") {
+            $('#divOwe').show();
+        }
+
+        var lblCurrentlyOnParole = $('#lblCurrentlyOnParole').html();
+        if (lblCurrentlyOnParole == "Yes") {
+            $('#divParoleProbation').show();
+        }
+
+        var lblGovernmentID = $('#lblGovernmentID').html();
+        if (lblGovernmentID == "Yes") {
+            $('#divGovernmentImg').css('display', 'inline-block');
+            //$('#divGovernmentImg').show();
+        }
+
+
+        $('#txtSSN').val('@ViewBag.SSNNumber');
+        $('#lblssn').html('@ViewBag.SSNNumber');
+
+        //-------------------Dast start--------------------------//
+
+
+
+
+
+        $('#PFirstName').html('@ViewBag.FirstName');
+        $('#PDOB').html('@ViewBag.DOB');
+
+        var lblDrugsContaininglst = $('#lblDrugsContaining').html();
+        var lblDrugsContaining = lblDrugsContaininglst != undefined ? lblDrugsContaininglst.split(',') : '';
+        //var lblDrugsContaining = $('#lblDrugsContaining').html().split(",");
+        for (i = 0; i < lblDrugsContaining.length; i++) {
+
+            if (lblDrugsContaining[i] == "8") {
+                $('#lblOtherDrug').show();
+            }
+        }
+
+        $('#frmDast').find(':checkbox[name^="frmDast_check1"]').each(function () {
+
+            $(this).prop("checked", ($.inArray($(this).val(), lblDrugsContaining) != -1));
+            $(this).attr("disabled", true);
+        });
+
+
+
+
+
+        var lblMedical = $('#hdfUsedDrugsForMedicalReasons').val();
+
+        switch (lblMedical.trim()) {
+            case "":
+                $('#MedicalYes').removeClass('fa-times');
+                $('#MedicalYes').removeClass('fa-check');
+                $('#MedicalNo').removeClass('fa-times');
+                $('#MedicalNo').removeClass('fa-check');
+                break;
+            case "False":
+                $('#MedicalNo').removeClass('fa-times');
+                $('#MedicalNo').addClass('fa-check');
+                break;
+            case "True":
+                $('#MedicalYes').removeClass('fa-times');
+                $('#MedicalYes').addClass('fa-check');
+                break;
+        }
+
+        var lblAbuse = $('#hdfOneDrugAtATime').val();
+        switch (lblAbuse.trim()) {
+            case "":
+                $('#AbuseYes').removeClass('fa-times');
+                $('#AbuseYes').removeClass('fa-check');
+                $('#AbuseNo').removeClass('fa-times');
+                $('#AbuseNo').removeClass('fa-check');
+                break;
+            case "False":
+                $('#AbuseNo').removeClass('fa-times');
+                $('#AbuseNo').addClass('fa-check');
+                break;
+            case "True":
+                $('#AbuseYes').removeClass('fa-times');
+                $('#AbuseYes').addClass('fa-check');
+                break;
+        }
+
+
+        var lblUnableNo = $('#lblUnableNo').html().trim();
+
+        if (lblUnableNo == "") {
+            $('#UnableNo').removeClass('fa-times');
+            $('#UnableNo').removeClass('fa-check');
+        } else if (lblUnableNo == "False") {
+            $('#UnableNo').removeClass('fa-times');
+            $('#UnableNo').addClass('fa-check');
+        }
+        var lblUnableYes = $('#lblUnableYes').html().trim();
+        if (lblUnableYes == "") {
+            $('#UnableYes').removeClass('fa-times');
+            $('#UnableYes').removeClass('fa-check');
+        } else if (lblUnableYes == "True") {
+            $('#UnableYes').removeClass('fa-times');
+            $('#UnableYes').addClass('fa-check');
+        }
+
+
+        var lblBlackoutsNo = $('#lblBlackoutsNo').html().trim();
+        if (lblBlackoutsNo == "") {
+            $('#BlackoutsNo').removeClass('fa-times');
+            $('#BlackoutsNo').removeClass('fa-check');
+        } else if (lblBlackoutsNo == "False") {
+            $('#BlackoutsNo').removeClass('fa-times');
+            $('#BlackoutsNo').addClass('fa-check');
+        }
+        var lblBlackoutsYes = $('#lblBlackoutsYes').html().trim();
+        if (lblBlackoutsYes == "") {
+            $('#BlackoutsYes').removeClass('fa-times');
+            $('#BlackoutsYes').removeClass('fa-check');
+        } else if (lblBlackoutsYes == "True") {
+            $('#BlackoutsYes').removeClass('fa-times');
+            $('#BlackoutsYes').addClass('fa-check');
+        }
+
+        var lblGuiltyNo = $('#lblGuiltyNo').html().trim();
+        if (lblGuiltyNo == "") {
+            $('#GuiltyNo').removeClass('fa-times');
+            $('#GuiltyNo').removeClass('fa-check');
+        } else if (lblGuiltyNo == "False") {
+            $('#GuiltyNo').removeClass('fa-times');
+            $('#GuiltyNo').addClass('fa-check');
+        }
+        var lblGuiltyYes = $('#lblGuiltyYes').html().trim();
+        if (lblGuiltyYes == "") {
+            $('#GuiltyYes').removeClass('fa-times');
+            $('#GuiltyYes').removeClass('fa-check');
+        } else if (lblGuiltyYes == "True") {
+            $('#GuiltyYes').removeClass('fa-times');
+            $('#GuiltyYes').addClass('fa-check');
+        }
+
+
+        var lblSpouseNo = $('#lblSpouseNo').html().trim();
+        if (lblSpouseNo == "") {
+            $('#SpouseNo').removeClass('fa-times');
+            $('#SpouseNo').removeClass('fa-check');
+        } else if (lblSpouseNo == "False") {
+            $('#SpouseNo').removeClass('fa-times');
+            $('#SpouseNo').addClass('fa-check');
+        }
+        var lblSpouseYes = $('#lblSpouseYes').html().trim();
+        if (lblSpouseYes == "") {
+            $('#SpouseYes').removeClass('fa-times');
+            $('#SpouseYes').removeClass('fa-check');
+        } else if (lblSpouseYes == "True") {
+            $('#SpouseYes').removeClass('fa-times');
+            $('#SpouseYes').addClass('fa-check');
+        }
+
+
+        var lblNeglectedNo = $('#lblNeglectedNo').html().trim();
+        if (lblNeglectedNo == "") {
+            $('#NeglectedNo').removeClass('fa-times');
+            $('#NeglectedNo').removeClass('fa-check');
+        } else if (lblNeglectedNo == "False") {
+            $('#NeglectedNo').removeClass('fa-times');
+            $('#NeglectedNo').addClass('fa-check');
+        }
+        var lblNeglectedYes = $('#lblNeglectedYes').html().trim();
+        if (lblNeglectedYes == "") {
+            $('#NeglectedYes').removeClass('fa-times');
+            $('#NeglectedYes').removeClass('fa-check');
+        } else if (lblNeglectedYes == "True") {
+            $('#NeglectedYes').removeClass('fa-times');
+            $('#NeglectedYes').addClass('fa-check');
+        }
+
+        var lblEngagedNo = $('#lblEngagedNo').html().trim();
+        if (lblEngagedNo == "") {
+            $('#EngagedNo').removeClass('fa-times');
+            $('#EngagedNo').removeClass('fa-check');
+        } else if (lblEngagedNo == "False") {
+            $('#EngagedNo').removeClass('fa-times');
+            $('#EngagedNo').addClass('fa-check');
+        }
+
+
+        var lblEngagedYes = $('#lblEngagedYes').html().trim();
+        if (lblEngagedYes == "") {
+            $('#EngagedYes').removeClass('fa-times');
+            $('#EngagedYes').removeClass('fa-check');
+        } else if (lblEngagedYes == "True") {
+            $('#EngagedYes').removeClass('fa-times');
+            $('#EngagedYes').addClass('fa-check');
+        }
+
+
+
+        var lblSymptomsNo = $('#lblSymptomsNo').html().trim();
+        if (lblSymptomsNo == "") {
+            $('#SymptomsNo').removeClass('fa-times');
+            $('#SymptomsNo').removeClass('fa-check');
+        } else if (lblSymptomsNo == "False") {
+            $('#SymptomsNo').removeClass('fa-times');
+            $('#SymptomsNo').addClass('fa-check');
+        }
+        var lblSymptomsYes = $('#lblSymptomsYes').html().trim();
+        if (lblSymptomsYes == "") {
+            $('#SymptomsYes').removeClass('fa-times');
+            $('#SymptomsYes').removeClass('fa-check');
+        } else if (lblSymptomsYes == "True") {
+            $('#SymptomsYes').removeClass('fa-times');
+            $('#SymptomsYes').addClass('fa-check');
+        }
+
+        var lblHepatitiesNo = $('#lblHepatitiesNo').html().trim();
+        if (lblHepatitiesNo == "") {
+            $('#HepatitiesNo').removeClass('fa-times');
+            $('#HepatitiesNo').removeClass('fa-check');
+        } else if (lblHepatitiesNo == "False") {
+            $('#HepatitiesNo').removeClass('fa-times');
+            $('#HepatitiesNo').addClass('fa-check');
+        }
+        var lblHepatitiesYes = $('#lblHepatitiesYes').html().trim();
+        if (lblHepatitiesYes == "") {
+            $('#HepatitiesYes').removeClass('fa-times');
+            $('#HepatitiesYes').removeClass('fa-check');
+        } else if (lblHepatitiesYes == "True") {
+            $('#HepatitiesYes').removeClass('fa-times');
+            $('#HepatitiesYes').addClass('fa-check');
+        }
+
+        //-------------------Dast end----------------------------//
+        //-------------Audit start-------------------------------------//
+
+
+        var txtDrinkContainingAlcohol = $('#txtDrinkContainingAlcohol').html();
+        if (txtDrinkContainingAlcohol == "Never") {
+            $('#divInjuredDrinking').css('display', 'none');
+            $('#divFriendsSuggested').css('display', 'none');
+        }
+        else {
+            $('#divInjuredDrinking').css('display', 'block');
+            $('#divFriendsSuggested').css('display', 'block');
+        }
+
+        var txtHowManyDrinks = $('#txtHowManyDrinks').html();
+        var txtSixOrMoreDrink = $('#txtSixOrMoreDrink').html();
+        if (txtHowManyDrinks == "1 or 2" && txtSixOrMoreDrink == "Never") {
+            $('#divInjuredDrinking').css('display', 'none');
+            $('#divFriendsSuggested').css('display', 'none');
+        }
+        else {
+            $('#divInjuredDrinking').css('display', 'block');
+            $('#divFriendsSuggested').css('display', 'block');
+        }
+
+
+        //----------------Audit End----------------------------------//
+
+        //------------------------Mental Health Start-----------------//
+
+
+        $('#PmentalFirstName').html('@ViewBag.FirstName');
+        $('#mentalPDOB').html('@ViewBag.mentalPDOB');
+
+        ApplyTickCross($('#hdfLittleInterest').val(), $('#interestOne'), $('#interestTwo'), $('#interestThree'), $('#interestFour'));
+        ApplyTickCross($('#hdfFeelingDown').val(), $('#depressedOne'), $('#depressedTwo'), $('#depressedThree'), $('#depressedFour'));
+
+        ApplyTickCross($('#hdfTroubleFalling').val(), $('#asleepOne'), $('#asleepTwo'), $('#asleepThree'), $('#asleepFour'));
+        ApplyTickCross($('#hdfFeelingTired').val(), $('#energyOne'), $('#energyTwo'), $('#energyThree'), $('#energyFour'));
+        ApplyTickCross($('#hdfPoorAppetite').val(), $('#appetiteOne'), $('#appetiteTwo'), $('#appetiteThree'), $('#appetiteFour'));
+        ApplyTickCross($('#hdfFeelingBad').val(), $('#FeelingOne'), $('#FeelingTwo'), $('#FeelingThree'), $('#FeelingFour'));
+        ApplyTickCross($('#hdfTroubleConcentraiting').val(), $('#TroubleOne'), $('#TroubleTwo'), $('#TroubleThree'), $('#TroubleFour'));
+        ApplyTickCross($('#hdfrestless').val(), $('#noticedOne'), $('#noticedTwo'), $('#noticedThree'), $('#noticedFour'));
+        ApplyTickCross($('#hdfHurtingYourself').val(), $('#betterOne'), $('#betterTwo'), $('#betterThree'), $('#betterFour'));
+        ApplyTickCross($('#hdfProblemsMade').val(), $('#questionnaireOne'), $('#questionnaireTwo'), $('#questionnaireThree'), $('#questionnaireFour'));
+
+
+
+
+
+        function ApplyTickCross(d, ele1, ele2, ele3, ele4) {
+            switch (d) {
+                case "":
+                    ele1.removeClass('fa-times');
+                    ele1.removeClass('fa-check');
+                    ele2.removeClass('fa-times');
+                    ele2.removeClass('fa-check');
+                    ele3.removeClass('fa-times');
+                    ele3.removeClass('fa-check');
+                    ele4.removeClass('fa-times');
+                    ele4.removeClass('fa-check');
+                    break;
+                case "0":
+                    ele1.removeClass('fa-times');
+                    ele1.addClass('fa-check');
+                    break;
+                case "1":
+                    ele2.removeClass('fa-times');
+                    ele2.addClass('fa-check');
+                    break;
+                case "2":
+                    ele3.removeClass('fa-times');
+                    ele3.addClass('fa-check');
+                    break;
+                case "3":
+                    ele4.removeClass('fa-times');
+                    ele4.addClass('fa-check');
+                    break;
+
+            }
+
+
+
+        }
+
+
+
+
+
+        var option = "";
+        var lblMentalHealth = $('#lblMentalHealth').html();
+        var lblMentalHealthArray = lblMentalHealth != undefined ? lblMentalHealth.split(','):'';
+        for (var i = 0; i < lblMentalHealthArray.length; i++) {
+            var option = option + "," + $('#ddMentalHealth option[value="' + lblMentalHealthArray[i] + '"]').text();
+        }
+        var option = option.substring(1);
+        $('#lblMentalHealthCond').html(option);
+
+
+
+
+
+
+         //------------------------Mental Health end-----------------//
+
+        //--------------------clinic only(program) Start-----------------------------//
+
+
+        ApplyTickCross1($('#hdfTestedForTB').val(), $('#ipositiveOne'), $('#ipositiveTwo'));
+        ApplyTickCross1($('#hdfTBdiseaseAtAnyTime').val(), $('#iinfectiousOne'), $('#iinfectiousTwo'));
+
+        ApplyTickCross1($('#hdfWeakenedImmuneSystem').val(), $('#iSystemOne'), $('#iSystemTwo'));
+        ApplyTickCross1($('#hdfElevatedRateOfTB').val(), $('#iElevatedOne'), $('#iElevatedTwo'));
+        ApplyTickCross1($('#hdfVolunteerOfHighRisk').val(), $('#iVolunteerOne'), $('#iVolunteerTwo'));
+
+
+
+
+
+        function ApplyTickCross1(d, ele1, ele2) {
+
+
+            if (d == "True") {
+                ele1.removeClass('fa-times');
+                ele1.addClass('fa-check');
+            }
+            if (d == "False") {
+                ele2.removeClass('fa-times');
+                ele2.addClass('fa-check');
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+        var RadioPregnant = $('#lblpregnant').html();
+        if (RadioPregnant == "Yes") {
+            $('#divIsPregnant').show();
+
+        }
+        else {
+            $('#divIsPregnant').hide();
+        }
+
+        var RadioBirth = $('#lblbirth').html();
+        if (RadioBirth == "Yes") {
+            $('#divBirthControl').show();
+
+        }
+        else {
+            $('#divBirthControl').hide();
+        }
+
+
+        var RadioPregnant = $('#lblPregnant').html();
+        if (RadioPregnant == "Yes") {
+            $('#divPregnantYes').show();
+
+        }
+        else {
+            $('#divPregnantYes').hide();
+        }
+
+         //--------------------clinic only(program) end-----------------------------//
+
+    });
+
+
+
+
+
+
+</script>

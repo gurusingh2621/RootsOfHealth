@@ -1,0 +1,465 @@
+﻿@model RootsOfHealth.Models.UserBO
+
+@{
+    ViewBag.Title = "AddUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    #content .inner-content .top-image-row .paitent-img {
+        max-width: 60%;
+    }
+    .btn-success:hover {
+        background: #35c8af;
+        border: 1px solid #35c8af;
+    }
+    .appointment .form-control {
+        border: 1px solid #e2e2e2;
+        background: #fff;
+        border-radius: 0;
+        font-size: 13px;
+        height: 42px;
+    }
+    .appointment select {
+        border: 1px solid #e2e2e2;
+        background: url(../images/chevron-arrow-down.svg) no-repeat 0 0 !important;
+        border-radius: 0;
+        font-size: 13px;
+        height: 42px;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-size: 12px !important;
+        background-position: 97% 13px !important;
+        padding: .375rem 1.7rem .375rem .75rem;
+    }
+    .appointment select:focus {
+        outline:none;
+        box-shadow:none;
+    }
+    .appointment label {
+        font-size: 15px;
+    }
+    .appointment .btn-primary {
+        background: #22baa0;
+        border-radius: 50px;
+        border: 1px solid #22baa0;
+        font-size: 15px;
+        font-weight: 500;
+        padding: 8px 20px;
+        margin-right: 5px;
+    }
+    #userImg {
+        margin-top: 17px;
+    }
+
+
+    #content .inner-content .top-image-row .paitent-img {
+        max-width: 60%;
+        border-radius: 100%;
+        overflow: hidden;
+    }
+</style>
+<section id="content" class="responsive-container pt-0">
+    <div class="inner-content">
+        <div class="container-fluid pl-0 pr-0">
+
+            <div class="appointment">
+                <h2>Create User</h2>
+                
+                <div>
+                    @Html.ActionLink("Users", "Index","Account",htmlAttributes:new { @class = "btn btn-success" })
+                </div>
+                <div class="form-horizontal">
+                    
+                    <div class="top-image-row d-flex">
+                        <div class="top-image-left">
+
+                            <div class="paitent-img">
+                                    <img class="img-fluid" id="profile-img-tag" src="/Files/profile.png">
+
+                            </div>
+
+
+
+
+                        </div>
+                    </div>
+
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                  
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                @*@Html.Label("Upload Profile Image", new { @class = "control-label" })*@
+
+                                <input class="Add" type="file" tabindex="1" id="userImg" />
+                            </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.Label("First Name", htmlAttributes: new { @class = "control-label" })
+
+                                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.Label("Last Name", htmlAttributes: new { @class = "control-label" })
+
+                                    @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.Label("User Name", htmlAttributes: new { @class = "control-label" })
+
+                                    @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label" })
+
+                                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @type = "password" } })
+                                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
+
+                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.Label("Role", htmlAttributes: new { @class = "control-label" })
+
+                                    @Html.EditorFor(model => model.RoleID, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.RoleID, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.Label("Phone No", htmlAttributes: new { @class = "control-label" })
+
+                                    @Html.EditorFor(model => model.PhoneNo, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.PhoneNo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label" })
+
+                                    @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.State, htmlAttributes: new { @class = "control-label" })
+
+                                    @Html.EditorFor(model => model.State, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label" })
+
+                                    @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Zip, htmlAttributes: new { @class = "control-label" })
+
+                                    @Html.EditorFor(model => model.Zip, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Zip, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <input id="usersImg" type="hidden" name="usersImg" value="" />
+                                    <input type="button" value="Create" onclick="SaveOnly()" class="btn btn-primary" />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+            </div>
+</div>
+        </div>
+    </section>
+@section scripts{
+    <script>
+        var check = true;
+        var checkEmail = true;
+        var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
+        $("#userImg").change(function () {
+
+            var formData = new FormData();
+            var totalFiles = document.getElementById("userImg").files.length;
+            for (var i = 0; i < totalFiles; i++) {
+                var file = document.getElementById("userImg").files[i];
+                file = this.files[i];
+                const fileType = file['type'];
+                const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+                if (!validImageTypes.includes(fileType)) {
+                    // invalid file type code goes here.
+                    toastr.error("Invalid Image");
+                }
+
+                formData.append("usersImg", file);
+            }
+            $.ajax({
+                type: "POST",
+                url: '/Account/Upload',
+                data: formData,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function (response) {
+
+                    $("input[type=hidden][name=usersImg]").val(response);
+                    $('#profile-img-tag').attr('src', "/Files/" + response)
+                },
+                error: function (error) {
+                    toastr.error("errror");
+                },
+            })
+        });
+
+        function validateEmail(sEmail) {
+
+    var filter = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+
+    if (filter.test(sEmail)) {
+
+        return true;
+
+    }
+
+    else {
+
+        return false;
+
+    }
+
+}
+
+        $(function () {
+            $("#PhoneNo").on("keypress keyup blur", function (event) {
+                $(this).val($(this).val().replace(/[^\d].+/, ""));
+                if ((event.which < 48 || event.which > 57)) {
+                    event.preventDefault();
+                }
+            });
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/roleslist',
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                success: function (result) {
+
+                    $("#RoleID")
+                        .replaceWith('<select id="RoleID" name="RoleID" class="form-control list-box tri-state">' +
+                        '<option value="1">1</option>' +
+                        '<option value="2">2</option>' +
+                        '</select>');
+                    var s = '<option value="-1">Please Select a Role</option>';
+                    for (var i = 0; i < result.length; i++) {
+                        s += '<option value="' + result[i].RoleID + '">' + result[i].RoleName + '</option>';
+                    }
+                    $("#RoleID").html('');
+                    $("#RoleID").html(s);
+
+                },
+                error: function () {
+
+                    toastr.error("Error while inserting data");
+                }
+            });
+
+            $('#UserName').focusout(function () {
+                CheckName_Avilablity();
+            });
+            $('#Email').focusout(function () {
+                CheckEmail_Avilablity();
+            });
+
+        });
+        function CheckName_Avilablity() {
+
+            if ($('#UserName').val().trim() != '') {
+                $.ajax({
+                    type: "GET",
+                    url: Apipath + '/api/PatientMain/getuserbyusername?username=' + $('#UserName').val(),
+                    contentType: 'application/json; charset=UTF-8',
+                    dataType: "json",
+                    success: function (result) {
+
+                        if (result != undefined || result != null) {
+                            toastr.error("username already exist.please try diffrent username.");
+                            $('#UserName').addClass("invalid-field");
+
+                            check = false;
+
+                        } else {
+                            $('#UserName').removeClass("invalid-field");
+                            check = true;
+
+                        }
+
+
+                    },
+                    error: function () {
+
+                        toastr.error("Error while checking username");
+                    }
+                });
+
+            }
+
+        }
+
+        function CheckEmail_Avilablity() {
+
+            if ($('#Email').val().trim() != '') {
+                $.ajax({
+                    type: "GET",
+                    url: Apipath + '/api/PatientMain/checkemailexist?Email=' + $('#Email').val() +'&userid='+0,
+                    contentType: 'application/json; charset=UTF-8',
+                    dataType: "json",
+                    success: function (result) {
+
+                        if (result != undefined && result != null && result != 0) {
+                            checkEmail = false;
+                            toastr.error("Email already exist.please try diffrent email.");
+                            $('#Email').addClass("invalid-field");
+
+
+
+                        } else {
+                            $('#Email').removeClass("invalid-field");
+                            checkEmail = true;
+
+                        }
+
+
+                    },
+                    error: function () {
+
+                        toastr.error("Error while checking Email");
+                    }
+                });
+
+            }
+
+        }
+        function SaveOnly() {
+
+           
+            var file = $("#userImg").get(0).files[0];
+           
+     
+            if ($("#FirstName").val().trim() == '') {
+                toastr.error("First name is required");
+                return false;
+            }
+
+            if ($("#LastName").val().trim() == '') {
+                toastr.error("Last name is required");
+                return false;
+            }
+
+            if ($("#UserName").val().trim() == '') {
+                toastr.error("Username  is required");
+                return false;
+            }
+
+            if ($("#Password").val().trim() == '') {
+                toastr.error("Password is required");
+                return false;
+            }
+
+            if ($("#Email").val().trim() == '') {
+                toastr.error("Email is required");
+                return false;
+            }
+            if (!validateEmail($("#Email").val().trim())) {
+                toastr.error("Invalid Email Address");
+                return false;
+               
+            }
+            
+            if ($("#PhoneNo").val().trim() == '') {
+                toastr.error("Phone No. is required");
+                return false;
+            }
+            if ($('#RoleID').val() == "-1") {
+                toastr.error("please select a role");
+                return false;
+            }
+            if (check == false) {
+                toastr.error("username already exist.please try diffrent username.");
+                return false;
+            };
+            if (checkEmail == false) {
+                toastr.error("Email already exist.please try diffrent email.");
+                return false;
+            };
+
+             var model = {
+                "FirstName": $("#FirstName").val(),
+                "LastName": $("#LastName").val(),
+                "UserName": $("#UserName").val(),
+                "Password": $("#Password").val(),
+                "Email": $("#Email").val(),
+                "CreatedBy": @Session["userid"].ToString(),
+                "ModifiedBy":@Session["userid"].ToString(),
+                "PhoneNo": $("#PhoneNo").val(),
+                "Address": $("#Address").val(),
+                "State": $("#State").val(),
+                "City": $("#City").val(),
+                "Zip": $("#Zip").val(),
+                "CreatedDate": new Date(),
+                "ModifiedDate": new Date(),
+                "RoleID": $('#RoleID').val(),
+                "Image": $("input[type=hidden][name=usersImg]").val(),
+
+            };
+             $.ajax({
+                 type: "POST",
+                 url: Apipath + '/api/PatientMain/adduser',
+                 data: JSON.stringify(model),
+                 contentType: 'application/json; charset=UTF-8',
+                 dataType: "json",
+                 success: function (result) {
+                     if (result != '') {
+                         toastr.success("User addedd successfully");
+                         window.location.href='/Account/Index'
+                     }
+                     else {
+                         toastr.error("Error while adding user");
+                     }
+                 },
+                 error: function () {
+
+                     toastr.error("Error while adding user");
+                 }
+             });
+        }
+
+    </script>
+    }

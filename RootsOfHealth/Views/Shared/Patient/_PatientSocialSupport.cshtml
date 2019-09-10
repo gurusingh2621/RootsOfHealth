@@ -1,0 +1,562 @@
+﻿@model RootsOfHealth.Models.PatientSocialSupportBO
+
+<div class="tab-pane fade" id="SocialSupports" role="tabpanel" aria-labelledby="SocialSupports-tab">
+    <div class="inner-content">
+        <div class="paitent-detail">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="paitent-detail-left">
+                        <div class="detail-heading d-flex">
+                            <h2>
+                                Patient Social Supports and
+                                Safety
+                            </h2>
+                            <div class="detail-button ml-auto">
+
+                                <a href="/Patient/Add?PatientID=@ViewBag.PatientId"
+                                   class="btn btn-success label-fields">
+                                    <i class="far fa-edit"></i>
+                                    Edit
+                                </a>
+                                <a tabindex="1" href="javascript:{}" onclick="return SocialSupportsSave()" id="SocialSupportsSave" class="btn btn-success">
+                                    <i class="far fa-save"></i>
+                                    Save
+                                </a>
+
+                            </div>
+
+                        </div>
+                        <div class="inner-main-content">
+                            <div class="top-image-row d-flex">
+                                <div class="top-image-left">
+
+
+                                    <div class="form-row-first label-fields">
+                                        <div class="top-form-row d-flex height-auto">
+                                            <div class="two-columns">
+
+                                                <label class="label-fields">
+                                                    Score
+                                                </label>
+                                            </div>
+                                            <div class="two-columns">
+
+                                                <label class="label-fields">
+                                                    Status
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                        <div class="bootom-form-row d-flex">
+                                            <div class="two-columns">
+
+                                                <label id="txtsocialscore" class="label-fields"></label>
+
+                                            </div>
+
+                                            <div class="two-columns">
+
+                                                <label id="txtsocialstatus" class="label-fields"></label>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+
+                                </div>
+                            </div>
+                            <form class="detail-patient-form" id="frmSocialSupports">
+                                <div class="form-row-first">
+                                    <div class="top-form-row d-flex height-auto">
+                                        <div class="one-columns">
+                                            <label class="Add">
+                                                Is there someone now that you can depend on if you
+                                                ever needed help to do a task, like getting a ride
+                                                somewhere, or help with shopping or cooking a
+                                                meal?
+                                            </label>
+                                            <label class="label-fields">
+                                                Is there someone now that you can depend on if you
+                                                ever needed help to do a task, like getting a ride
+                                                somewhere, or help with shopping or cooking a
+                                                meal?
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="two-columns">
+                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                <label class="label-fields" id="lblYouCanDependOn">@Model.IsSomeoneYouCanDependOn</label>
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="DependRadioNo" onclick="Radio()" name="DependOnRadio" value="No">
+                                                <label class="custom-control-label"
+                                                       for="DependRadioNo">No</label>
+                                            </div>
+                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="DependRadioYes" onclick="Radio()" name="DependOnRadio"
+                                                       value="Yes">
+                                                <label class="custom-control-label"
+                                                       for="DependRadioYes">Yes</label>
+                                            </div>
+
+                                            <div class="custom-control custom-radio d-inline-block">
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="DependRadioknow" onclick="Radio()" name="DependOnRadio"
+                                                       value="Don’t Know">
+                                                <label class="custom-control-label"
+                                                       for="DependRadioknow">Don’t Know</label>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <div class="form-row-first">
+                                    <div class="top-form-row d-flex height-auto">
+                                        <div class="two-columns">
+                                            <label class="Add">
+                                                Are you currently involved with any church, community
+                                                group, club, etc.?
+                                            </label>
+                                            <label class="label-fields">
+                                                Are you currently involved with any church, community
+                                                group, club, etc.?
+                                            </label>
+                                        </div>
+                                        <div class="two-columns">
+                                            <label class="Add">
+                                                Is there someone you can call when you’re feeling
+                                                down or stressed?
+                                            </label>
+                                            <label class="label-fields">
+                                                Is there someone you can call when you’re feeling
+                                                down or stressed?
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="two-columns">
+                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                <label class="label-fields">@Html.Raw(Model.InvolvedInCommunityGroup == true ? "Yes" : "No")</label>
+                                                <label class="label-fields" id="lblCommunityGroup" hidden="hidden">@Model.InvolvedInCommunityGroup</label>
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="InvolvedRadioNo" onclick="Radio()" name="CommunityGroup"
+                                                       value="false">
+                                                <label class="custom-control-label"
+                                                       for="InvolvedRadioNo">No</label>
+                                            </div>
+                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="InvolvedRadioYes" onclick="Radio()" name="CommunityGroup"
+                                                       value="true">
+                                                <label class="custom-control-label"
+                                                       for="InvolvedRadioYes">Yes</label>
+                                            </div>
+
+                                        </div>
+                                        <div class="two-columns">
+                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                <label class="label-fields">@Html.Raw(Model.IsSomeoneYouCanCall == true ? "Yes" : "No")</label>
+                                                <label class="label-fields" id="lblYouCanCall" hidden="hidden">@Model.IsSomeoneYouCanCall</label>
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="FeelingRadioNo" onclick="Radio()" name="CallRadio"
+                                                       value="false">
+                                                <label class="custom-control-label"
+                                                       for="FeelingRadioNo">No</label>
+                                            </div>
+                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="FeelingRadioYes" onclick="Radio()" name="CallRadio"
+                                                       value="true">
+                                                <label class="custom-control-label"
+                                                       for="FeelingRadioYes">Yes</label>
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <div class="form-row-first">
+                                    <div class="top-form-row d-flex height-auto">
+                                        <div class="two-columns">
+                                            <label class="Add">
+                                                Does a partner, or anyone at home, hurt, hit or
+                                                threaten you?
+                                            </label>
+                                            <label class="label-fields">
+                                                Does a partner, or anyone at home, hurt, hit or
+                                                threaten you?
+                                            </label>
+                                        </div>
+                                        <div class="two-columns">
+                                            <label class="Add">Do you feel safe in your neighborhood?</label>
+                                            <label class="label-fields">Do you feel safe in your neighborhood?</label>
+                                        </div>
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="two-columns">
+                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                <label class="label-fields">@Html.Raw(Model.IsAnyoneThreatenYou == true ? "Yes" : "No")</label>
+                                                <label class="label-fields" id="lblThreatenYou" hidden="hidden">@Model.IsAnyoneThreatenYou</label>
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="HurtRadioNo" onclick="Radio()" name="ThreatenYouRadio" value="false">
+                                                <label class="custom-control-label"
+                                                       for="HurtRadioNo">No</label>
+                                            </div>
+                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="HurtRadioYes" onclick="Radio()" name="ThreatenYouRadio" value="true">
+                                                <label class="custom-control-label"
+                                                       for="HurtRadioYes">Yes</label>
+                                            </div>
+
+                                        </div>
+                                        <div class="two-columns">
+                                            @*<label class="label-fields" id="lblNeighborhood">@Model.FeelSafeNeighborhood</label>
+                            <select tabindex="1" name="FeelSafeNeighborhood" id="ddFeelSafeNeighborhood" class="form-control">
+                                <option value="Never">Never</option>
+                                <option value="Once or Twice">Once or Twice</option>
+                                <option value="Several Days">Several Days</option>
+                                <option value="Most Days">Most Days</option>
+                                <option value="Every Day">Every Day</option>
+                            </select>*@
+
+                                            @if (Model.FeelSafeNeighborhood != null)
+                                        {
+                                        <label id="lblNeighborhood" class="label-fields">@(Model.ddlFeelSafeNeighborhood.Where(p => p.Value == Model.FeelSafeNeighborhood.ToString()).FirstOrDefault().Text)</label>
+                                        }
+                                            @Html.DropDownListFor(m => m.FeelSafeNeighborhood, new SelectList(Model.ddlFeelSafeNeighborhood, "Value", "Text", Model.FeelSafeNeighborhood), new { @id = "ddFeelSafeNeighborhood", @class = "form-control", @Name = "FeelSafeNeighborhood", @tabindex = "1" })
+
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row-first">
+                                    <div class="top-form-row d-flex height-auto">
+                                        <div class="two-columns">
+                                            <label class="Add">
+                                                Have you ever had to exchange sex for anything that you needed like money, food, or a place to stay?
+                                                (Financial Security)
+                                            </label>
+                                            <label class="label-fields">
+                                                Have you ever had to exchange sex for anything that you needed like money, food, or a place to stay?
+                                                (Financial Security)
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="three-columns">
+                                            @*<label class="label-fields" id="lblFinancialSecurity">@Model.FinancialSecurity</label>
+                            <select tabindex="1" name="FinancialSecurity" id="ddFinancialSecurity" class="form-control">
+                                <option value="Never">Never</option>
+                                <option value="Once or Twice">Once or Twice</option>
+                                <option value="Several Days">Several Days</option>
+                                <option value="Most Days">Most Days</option>
+                                <option value="Every Day">Every Day</option>
+                            </select>*@
+
+
+                                            @if (Model.FinancialSecurity != null)
+                                        {
+                                        <label id="lblFinancialSecurity" class="label-fields">@(Model.ddlFinancialSecurity.Where(p => p.Value == Model.FinancialSecurity.ToString()).FirstOrDefault().Text)</label>
+                                        }
+                                            @Html.DropDownListFor(m => m.FinancialSecurity, new SelectList(Model.ddlFinancialSecurity, "Value", "Text", Model.FinancialSecurity), new { @id = "ddFinancialSecurity", @class = "form-control", @Name = "FinancialSecurity", @tabindex = "1" })
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row-first">
+                                    <div class="top-form-row d-flex height-auto">
+                                        <div class="two-columns">
+                                            <label class="Add">
+                                                Has someone ever asked you to exchange sex for
+                                                anything that you needed like money, food, or a place to
+                                                stay?
+                                            </label>
+                                            <label class="label-fields">
+                                                Has someone ever asked you to exchange sex for
+                                                anything that you needed like money, food, or a place to
+                                                stay?
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="three-columns">
+                                            @*<label class="label-fields" id="lblPlaceToStay">@Model.PlaceToStay</label>
+                            <select tabindex="1" name="PlaceToStay" id="ddPlaceToStay" class="form-control">
+                                <option value="Never">Never</option>
+                                <option value="Once or Twice">Once or Twice</option>
+                                <option value="Several Days">Several Days</option>
+                                <option value="Most Days">Most Days</option>
+                                <option value="Every Day">Every Day</option>
+                            </select>*@
+
+                                            @if (Model.PlaceToStay != null)
+                                        {
+                                        <label id="lblPlaceToStay" class="label-fields">@(Model.ddlPlaceToStay.Where(p => p.Value == Model.PlaceToStay.ToString()).FirstOrDefault().Text)</label>
+                                        }
+                                            @Html.DropDownListFor(m => m.PlaceToStay, new SelectList(Model.ddlPlaceToStay, "Value", "Text", Model.PlaceToStay), new { @id = "ddPlaceToStay", @class = "form-control", @Name = "PlaceToStay", @tabindex = "1" })
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="detail-button mt-3 w-100 text-center">
+                                    <!-- <a href="#!" class="btn btn-info"><i class="far fa-edit"></i>
+                Cancel</a> -->
+
+                                    <input type="hidden" name="CreatedDate" />
+                                    <input type="hidden" name="ModifiedDate" />
+                                    <input type="hidden" name="IsSomeoneYouCanDependOn" />
+                                    <input type="hidden" name="InvolvedInCommunityGroup" />
+                                    <input type="hidden" name="IsSomeoneYouCanCall" />
+                                    <input type="hidden" name="IsAnyoneThreatenYou" />
+                                    <input type="hidden" name="PatientID" value="@Model.PatientID" />
+                                    <input type="hidden" name="SocialSupportsID" value="@Model.SocialSupportsID" />
+                                    
+
+                                </div>
+                            </form>
+                            </div>
+                        </div>
+                    <!-- <div class="recent-paitents">
+                        <h2 class="mb-3">Recent Patients</h2>
+                        <div class="recent-paitent-row d-flex">
+                            <div class="recent-paitents-img">
+                                <img class="img-fluid" src="images/recent-paitent-img.png" alt="">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col" style="width:160px;">Name</th>
+                                            <th scope="col" style="width:268px;">Email</th>
+                                            <th scope="col" style="width:160px;">Phone</th>
+                                            <th scope="col" style="width:160px;">Last Modify</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <td style="width:160px;">Omnis iste</td>
+                                            <td style="width:268px;">Omnisiste@gmail.com</td>
+                                            <td style="width:160px;">98756 45365</td>
+                                            <td style="width:160px;">23-4-2019</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="recent-paitent-row d-flex">
+                            <div class="recent-paitents-img">
+                                <img class="img-fluid" src="images/recent-paitent-img-1.png" alt="">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col" style="width:160px;">Name</th>
+                                            <th scope="col" style="width:268px;">Email</th>
+                                            <th scope="col" style="width:160px;">Phone</th>
+                                            <th scope="col" style="width:160px;">Last Modify</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <td style="width:160px;">praesentium</td>
+                                            <td style="width:268px;">praesentium@gmail.com</td>
+                                            <td style="width:160px;">68756 45365</td>
+                                            <td style="width:160px;">20-4-2019</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="recent-paitent-row d-flex">
+                            <div class="recent-paitents-img">
+                                <img class="img-fluid" src="images/recent-paitent-img-2.png" alt="">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col" style="width:160px;">Name</th>
+                                            <th scope="col" style="width:268px;">Email</th>
+                                            <th scope="col" style="width:160px;">Phone</th>
+                                            <th scope="col" style="width:160px;">Last Modify</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <td style="width:160px;">voluptatum</td>
+                                            <td style="width:268px;">voluptatum@gmail.com</td>
+                                            <td style="width:160px;">78756 45365</td>
+                                            <td style="width:160px;">18-4-2019</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+
+                <!-- <div class="col-lg-4 col-md-12 col-sm-12 col-12 ">
+
+
+                    <div class="sidebar-right">
+                        <div class="appointement">
+                            <h3>Appointment</h3>
+                            <div class="scroll scroll-height">
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 24-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 26-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 28-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 30-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 1-5-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="appointement">
+                            <h3>Notes</h3>
+                            <div class="scroll scroll-height">
+
+
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 24-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 26-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 28-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 30-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 1-5-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+
+    </div>
+</div>

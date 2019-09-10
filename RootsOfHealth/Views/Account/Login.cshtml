@@ -1,0 +1,172 @@
+﻿@model RootsOfHealth.Models.UserBO
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: url(/Files/thermometer-1539191_1920.jpg) no-repeat center;
+            background-size: cover;
+            font-family: sans-serif;
+            height: 100vh;
+        }
+        body:after {
+            content:"";
+            width:100%;
+            height:100%;
+            position:fixed;
+            top:0;
+            background-color:rgba(0,0,0,0.75)
+        }
+
+        .login-box {
+            width: 480px;
+            
+            background: #fff;
+            color: #fff;
+            top: 50%;
+            left: 50%;
+            position: absolute;
+            transform: translate(-50%,-50%);
+            box-sizing: border-box;
+            padding: 50px 30px 70px;
+            z-index:1;
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            position: absolute;
+            top: -50px;
+            left: calc(50% - 50px);
+        }
+
+        .login-box h1 {
+            color: #333;
+            text-transform: capitalize;
+            font-size: 30px;
+            text-align: center;
+            margin: 0 0 25px 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .login-box p {
+            margin: 0;
+            padding: 0;
+            font-weight: bold;
+        }
+
+        .login-box input {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+            .login-box input[type="text"], input[type="password"] {
+                border: 1px solid #e6e6e6;
+                background: #efefef;
+                outline: none;
+                height: 48px;
+                color: #333;
+                font-size: 14px;
+                border-radius: 30px;
+                padding: 10px 20px 10px 51px;
+                box-sizing: border-box;
+                margin-bottom: 0px;
+                font-family: 'Roboto', sans-serif;
+            }
+            .login-box input[type="submit"] {
+                border: none;
+                outline: none;
+                height: 48px;
+                background: #22baa0;
+                color: #fff;
+                font-size: 18px;
+                border-radius: 30px;
+                margin-top: 20px;
+                text-transform: uppercase;
+                font-family: 'Roboto', sans-serif;
+                font-weight: 500;
+                letter-spacing: 0.5px;
+                transition:all 0.5s;
+            }
+
+                .login-box input[type="submit"]:hover {
+                    cursor: pointer;
+                    background: #12a088;
+                    color: #fff;
+                }
+
+        .login-box a {
+            text-decoration: none;
+            font-size: 14px;
+            color: #fff;
+        }
+
+            .login-box a:hover {
+                color: #39dc79;
+            }
+        .UserIcon {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 100%;
+            top: 9px;
+            left: 9px;
+            display: flex;
+            background: #fff;
+        }
+        .userName {
+            position: relative;
+        }
+        span.UserIcon img {
+            width: 17px;
+            height: 17px;
+            margin: auto;
+            /* display: block; */
+        }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        @*<img src="~/images/avatar.png" class="avatar">*@
+       
+        <h1>Log in</h1>
+       @using (Html.BeginForm())
+       {
+        @Html.AntiForgeryToken()
+           <div class="form-group">
+               <p>Username</p>
+               <div class="userName">
+                    @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @placeholder = "Enter Username" } })
+                   <span class="UserIcon"><img src="~/images/profile.svg"></span>
+               </div>
+               
+               
+           </div>
+
+        <div class="form-group">
+            <p>Password</p>
+            <div class="userName">
+                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @placeholder = "Enter Password", @type = "password" } })
+                <span class="UserIcon"><img src="~/images/key.svg"></span>
+            </div>
+            </div>
+            <input type="submit" name="submit" value="Login">
+            // <a href="#">Forget Password</a>
+            }
+
+
+        </div>
+
+</body>
+</html>

@@ -1,0 +1,1701 @@
+﻿@model RootsOfHealth.Models.PatientMainBO
+
+<div onscroll="abc()" class="tab-pane fade show active test" id="Profile" role="tabpanel" aria-labelledby="Profile-tab">
+    <!-- Inner content start here  -->
+    <div class="inner-content">
+        <div class="paitent-detail" style="height: 460px;">
+            <div class="row">
+                <div id="pat_out_div" class="col-lg-12 col-md-12 col-sm-12 col-12">
+                    @*<div class="col-lg-8 col-md-12 col-sm-12 col-12 pr-0">*@
+                    <div class="paitent-detail-left">
+                        <div class="detail-heading d-flex">
+                            <h2>Patient Profile</h2>
+
+                            <div class="detail-button ml-auto">
+
+                                <a href='' onclick=""
+                                   id="btnPatientAppointments" class="btn btn-success label-fields">
+                                  
+                                    Appointments
+                                </a>
+
+                                <a href='' onclick=""
+                                   id="btnPatientNotes" class="btn btn-success label-fields">
+                                   
+                                  Notes
+                                </a>
+
+                                <a href='' onclick="this.href='/Patient/Add?PatientID='+@Model.PatientID"
+                                   id="btnProfileEdit" class="btn btn-success label-fields">
+                                    <i class="far fa-edit"></i>
+                                    Edit
+                                </a>
+
+                                <a style="display:none" class="btn btn-info" href="javascript:{}" id="btnaddprogram" data-toggle="modal" data-target="#myModal"><span class="add-icon"></span> Add Patient Programs</a>
+                                <a tabindex="57" href="javascript:{}" onclick="return ProfileSave();" id="ProfileSave" class="btn btn-success">
+                                    <i class="far fa-save"></i>
+                                    Save
+                                </a>
+
+                                @*<a href="/Patient/Add" id="btnProfileEdit" class="btn btn-success">
+                    <i class="far fa-edit"></i>
+                    Edit
+                </a>*@
+                                @*<a href="#!" id="btnProfileCancel" class="btn btn-info" style="display: none;">
+                    <i class="far fa-edit"></i>
+                    Cancel
+                </a>
+                <a href="#!" id="btnProfileSave" class="btn btn-success" style="display: none;">
+                    <i class="far fa-save"></i>
+                    Save
+                </a>*@
+                            </div>
+
+
+                        </div>
+                        <div class="SidebarScroll scroll inner-main-content" >
+
+
+
+                            <div class="top-image-row d-flex profileImgRow">
+                                <div class="top-image-left">
+
+                                    <div class="paitent-img">
+                                        @*<img class="img-fluid" id="patientpic" src="images/paitent-img.png" alt="">*@
+                                        @if (string.IsNullOrEmpty(Model.PatientImg))
+                                        {
+                                           
+                                            <img class="img-fluid" id="patientpic" src = "/images/avatar.png" width="200" height="200"/>
+                                        }
+                                        else
+                                        {
+                                            <img class="img-fluid" id="patientpic" src="~/Files/@Model.PatientImg" alt="no image">
+                                        }
+                                    </div>
+                                    @*<a  href="#" class="upload-link">Upload Image</a>*@
+
+
+
+                                </div>
+                                <!----------------------Score  Start------------------------------------------------>
+                                <div class="score-result d-flex">
+                                    <div class="score-full">
+                                        <div class="form-row-first label-fields mt-0">
+                                            <div class="top-form-row d-flex height-auto">
+                                                <div class="two-columns">
+
+                                                    <label class="label-fields">
+                                                        Score
+                                                    </label>
+                                                </div>
+                                                <div class="two-columns">
+
+                                                    <label class="label-fields">
+                                                        Status
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="two-columns">
+
+                                                    <label id="txtoverallscore" class="label-fields"></label>
+
+                                                </div>
+
+                                                <div class="two-columns">
+
+                                                    <label id="txtoverallstatus" class="label-fields"></label>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <!----------------------Score  end------------------------------------------------>
+                            </div>
+                            <form id="frmProfile" method="post" class="detail-patient-form" enctype="multipart/form-data">
+
+                                <input class="Add" type="file" tabindex="1" name="PatientImg" id="PatientImg" />
+
+
+                                <div class="form-row-first">
+                                    <div class="top-form-row d-flex">
+                                        <div class="three-columns">
+                                            <label>First name</label>
+                                        </div>
+                                        <div class="three-columns">
+                                            <label>Middle Name</label>
+                                        </div>
+                                        <div class="three-columns">
+                                            <label>Last Name</label>
+                                        </div>
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="three-columns border-bottom-none">
+                                            <label class="label-fields">@Model.FirstName</label>
+                                            <input tabindex="2" type="text" id="txtFirstName" name="FirstName" class="form-control"
+                                                   value="@Model.FirstName" placeholder="" required>
+                                        </div>
+                                        <div class="three-columns border-bottom-none">
+                                            <label class="label-fields">@Model.MiddleName</label>
+                                            <input tabindex="3" type="text" id="txtMiddleName" name="MiddleName" class="form-control"
+                                                   value="@Model.MiddleName" placeholder="">
+                                        </div>
+                                        <div class="three-columns border-bottom-none">
+                                            <label class="label-fields">@Model.LastName</label>
+                                            <input tabindex="4" type="text" id="txtLastName" name="LastName" class="form-control"
+                                                   placeholder="" value="@Model.LastName">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label>Preferred Name/Nickname</label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label class="label-fields">@Model.NickName</label>
+                                                    <input tabindex="5" type="text" id="txtNickName" name="NickName" class="form-control"
+                                                           placeholder="" value="@Model.NickName">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-12 col-12 pl-0">
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label class="Add">Which gender do you identify as?</label>
+                                                    <label class="label-fields">Gender</label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label class="label-fields" id="lblGender">@Model.Gender</label>
+                                                    <select tabindex="6" id="ddGender" name="Gender" class="form-control">
+                                                        <option value="0">Select</option>
+                                                        <option value="Male">Male</option>
+                                                        <option value="Female">Female</option>
+                                                        <option value="Transgender Male/Trans Man/Female-to-Male">
+                                                            Transgender Male/Trans Man/Female-to-Male
+                                                        </option>
+                                                        <option value="Transgender Female/Trans Woman/Male-to-Female">
+                                                            Transgender Female/Trans Woman/Male-to-Female
+                                                        </option>
+                                                        <option value="Genderqueer (neither exclusively male or
+                                                                    female)">
+                                                            Genderqueer (neither exclusively male or
+                                                            female)
+                                                        </option>
+                                                        <option value="Other">Other</option>
+                                                    </select>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                                <div class="form-row-first mt-0 mb-3" style="display:none" id="divOtherGender">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label>Other Gender</label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="label-fields">@Model.OtherGender</label>
+                                                            <input tabindex="7" type="text" id="txtOtherGender" name="OtherGender" class="form-control"
+                                                                   placeholder="" value="@Model.OtherGender">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row-first">
+                                    <div class="top-form-row d-flex">
+                                        <div class="two-columns">
+                                            <label>Date of Birth</label>
+                                        </div>
+                                        <div class="two-columns">
+                                            <label>Social Security Number</label>
+                                        </div>
+
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="two-columns">
+                                            <label class="label-fields">@Model.DateOfBirth</label>
+                                            <input tabindex="8" autocomplete="off" type="text" id="txtDOB" name="DateOfBirth" class="form-control date"
+                                                   placeholder="" value="@Model.DateOfBirth" style="width:100px">
+                                        </div>
+                                        <div class="two-columns">
+                                            <label class="label-fields">@Model.SocialSecurityNumber</label>
+                                            <input tabindex="9" type="text" id="txtSocialSecNo" name="SocialSecurityNumber" class="form-control"
+                                                   placeholder="000-00-0000" value="@Model.SocialSecurityNumber">
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label class="Add">
+                                                        Race/Ethnicity (Select all that
+                                                        apply)
+                                                    </label>
+                                                    <label class="label-fields">
+                                                        Race/Ethnicity
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label class="label-fields" id="lblRace">@Model.RaceEthnicity</label>
+                                                    <select tabindex="10" id="ddRace" class="selectboxmultiple" multiple>
+                                                        <option value="Select All">Select All</option>
+                                                        <option value="Black/African/African-American">Black/African/African-American</option>
+                                                        <option value="Latino/Hispanic">Latino/Hispanic</option>
+                                                        <option value="White/Caucasian">White/Caucasian</option>
+                                                        <option value="Asian">Asian</option>
+                                                        <option value="Native Hawaiian/Pacific Islander">
+                                                            Native Hawaiian/Pacific Islander
+                                                        </option>
+                                                        <option value="Native American/Alaskan">Native American/Alaskan</option>
+                                                        <option value="Other">Other</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                                <div class="form-row-first mt-0 mb-3" id="OtherRace" style='display:none;'>
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label>Other Race/Ethnicity</label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="label-fields" id="lblOtherRace">@Model.OtherRace</label>
+                                                            <input tabindex="11" type="text" id="txtOtherRace" name="OtherRace" class="form-control"
+                                                                   placeholder="" value="@Model.OtherRace">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8 col-md-8 col-sm-12 col-12 pl-0">
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex">
+                                                <div class="two-columns">
+                                                    <label>Address</label>
+                                                </div>
+                                                <div class="two-columns">
+                                                    <label class="Add">
+                                                        Is this address where you live the majority
+                                                        of the time?
+                                                    </label>
+                                                    <label class="label-fields">
+                                                        IsPermanentAddress
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="two-columns">
+                                                    <label class="label-fields">@Model.Address</label>
+                                                    <input tabindex="12" type="text" id="txtAddress" name="Address" class="form-control"
+                                                           placeholder="" value="@Model.Address">
+                                                </div>
+                                                <div class="two-columns">
+                                                    <label class="label-fields" id="lblPerAdd">@Model.IsPermanentAddress</label>
+                                                    <select tabindex="13" id="ddPermanentAddress" name="IsPermanentAddress" class="form-control">
+                                                        <option value="0">Select</option>
+                                                        <option value="true">Yes</option>
+                                                        <option value="false">No</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                                <div class="form-row-first mt-1">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="three-columns">
+                                                            <label>City</label>
+                                                        </div>
+                                                        <div class="three-columns">
+                                                            <label>State</label>
+                                                        </div>
+                                                        <div class="three-columns">
+                                                            <label>Zip</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex mb-1">
+                                                        <div class="three-columns border-bottom-none">
+                                                            <label class="label-fields">@Model.City</label>
+                                                            <input tabindex="14" type="text" id="txtCity" name="City" class="form-control"
+                                                                   placeholder="" value="@Model.City">
+                                                        </div>
+                                                        <div class="three-columns border-bottom-none">
+                                                            <label class="label-fields">@Model.State</label>
+                                                            <input tabindex="15" type="text" id="txtState" name="State" class="form-control"
+                                                                   placeholder="" value="@Model.State">
+                                                        </div>
+                                                        <div class="three-columns border-bottom-none">
+                                                            <label class="label-fields">@Model.Zip</label>
+                                                            <input tabindex="16" type="text" id="txtZip" name="Zip" class="form-control"
+                                                                   placeholder="" value="@Model.Zip">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="custom-row">
+
+                                                <div class="form-row-first m-0" id="divPermanentAddress" style='display:none'>
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="Add">what is that address?</label>
+                                                            <label class="label-fields">Permanent Address</label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="label-fields">@Model.PermanentAddress</label>
+                                                            <input tabindex="17" type="text" id="txtPermanentAddress" name="PermanentAddress" class="form-control"
+                                                                   placeholder="" value="@Model.PermanentAddress">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-row-first">
+                                    <div class="top-form-row d-flex">
+                                        <div class="three-columns">
+                                            <label>Email Address</label>
+                                        </div>
+                                        <div class="three-columns">
+                                            <label>Home Phone</label>
+                                        </div>
+                                        <div class="three-columns">
+                                            <label>Cell Phone</label>
+                                        </div>
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="three-columns border-bottom-none">
+                                            <label class="label-fields">@Model.EmailAddress</label>
+                                            <input tabindex="18" type="text" id="txtEmailAddress" name="EmailAddress" class="form-control"
+                                                   placeholder="" value="@Model.EmailAddress">
+                                        </div>
+                                        <div class="three-columns border-bottom-none">
+                                            <label class="label-fields">@Model.HomePhone</label>
+                                            <input tabindex="19" type="text" id="txtHomePhone" name="HomePhone" class="form-control"
+                                                   placeholder="(000) 000-0000" value="@Model.HomePhone">
+                                        </div>
+                                        <div class="three-columns border-bottom-none">
+                                            <label class="label-fields">@Model.CellPhone</label>
+                                            <input tabindex="20" type="text" id="txtCellPhone" name="CellPhone" class="form-control"
+                                                   placeholder="(000) 000-0000" value="@Model.CellPhone">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-row-first">
+                                    <div class="top-form-row d-flex">
+                                        <div class="one-columns">
+                                            <label>Best way to contact you</label>
+                                        </div>
+
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="three-columns">
+                                            <label class="label-fields" id="lblContact">@Model.WayToContact</label>
+                                            <select tabindex="21" id="ddWayToContact" name="WayToContact" class="form-control">
+                                                <option value="Home">Home</option>
+                                                <option value="Cell">Cell</option>
+                                                <option value="Email">Email</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-row-first mt-0 mb-3" style='display:none;' id="OtherContact">
+                                            <div class="top-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label>Other Contact</label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label class="label-fields">@Model.OtherContact</label>
+                                                    <input tabindex="22" type="text" id="txtOtherContact" name="OtherContact" class="form-control"
+                                                           placeholder="" value="@Model.OtherContact">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label class="Add">
+                                                        How many children do you have and
+                                                        what are their ages?
+                                                    </label>
+                                                    <label class="label-fields">
+                                                        Number Of Children
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="three-columns">
+                                                    <label class="label-fields" id="lblNumChildren">@Model.PatientChildren</label>
+                                                    <label class="label-fields" id="lblAgeChildren" hidden="hidden">@Model.PatientChildrensAges</label>
+                                                    <input tabindex="23" type="number" id="txtChildren" name="PatientChildren" class="form-control"
+                                                           placeholder="" value="@Model.PatientChildren">
+                                                    @*<input  type="button" id="btnchildren" value="submit"/>*@
+                                                </div>
+
+                                            </div>
+
+                                            <div class="ChildrenAgeDiv">
+
+                                            </div>
+
+
+
+                                            <div class="ChildrenAgeTemplate" style="display:none">
+                                                <div class="form-row-first">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label>
+                                                                Children Age #number
+                                                            </label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row mb-2">
+                                                        <div class="row">
+                                                            <div class="col-lg-6 col-md-6 col-sm-6 col-6 pr-0">
+                                                                <div class="form-row-first">
+                                                                    <div class="top-form-row d-flex">
+                                                                        <div class="one-columns">
+                                                                            <label> Years</label>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="bootom-form-row d-flex ">
+                                                                        <div class="one-columns">
+                                                                            <input tabindex="23" type="text" id="#yearid"
+                                                                                   class="form-control"
+                                                                                   placeholder="">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                                                                <div class="form-row-first">
+                                                                    <div class="top-form-row d-flex">
+                                                                        <div class="one-columns">
+                                                                            <label>Days</label>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="bootom-form-row d-flex">
+                                                                        <div class="one-columns">
+                                                                            <input tabindex="23" type="text" id="#daysid"
+                                                                                   class="form-control"
+                                                                                   placeholder="">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+
+
+
+                                            <div class="ChildrenAgeTemp" style="display:none">
+                                                <div class="form-row-first">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label>
+                                                                Children Age #number
+                                                            </label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row mb-2">
+                                                        <div class="row">
+                                                            <div class="col-lg-6 col-md-6 col-sm-6 col-6 pr-0">
+                                                                <div class="form-row-first">
+                                                                    <div class="top-form-row d-flex">
+                                                                        <div class="one-columns">
+                                                                            <label> Years</label>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="bootom-form-row d-flex ">
+                                                                        <div class="one-columns">
+                                                                            <label class="label-fields" id="#yearid"></label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                                                                <div class="form-row-first">
+                                                                    <div class="top-form-row d-flex">
+                                                                        <div class="one-columns">
+                                                                            <label>Days</label>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="bootom-form-row d-flex">
+                                                                        <div class="one-columns">
+                                                                            <label class="label-fields" id="#daysid"></label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label>
+                                                        Emergency Contact #1
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row mb-3 pb-0">
+                                                <div class="row">
+                                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0">
+                                                        <div class="form-row-first mt-1">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label> Name</label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex ">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields">@Model.EmergencyContact1Name</label>
+                                                                    <input tabindex="24" type="text" id="txtEmergencyContact1Name" name="EmergencyContact1Name"
+                                                                           class="form-control"
+                                                                           placeholder="" value="@Model.EmergencyContact1Name">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0">
+                                                        <div class="form-row-first mt-1">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label> Email Address</label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields">@Model.EmergencyContact1EmailAddress</label>
+                                                                    <input tabindex="25" type="text" id="txtEmergencyContact1EmailAddress" name="EmergencyContact1EmailAddress"
+                                                                           class="form-control"
+                                                                           placeholder="" value="@Model.EmergencyContact1EmailAddress">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                                                        <div class="form-row-first mt-1">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>Relationship</label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields">@Model.EmergencyContact1Relationship</label>
+                                                                    <input tabindex="26" type="text" id="txtEmergencyContact1Relationship" name="EmergencyContact1Relationship"
+                                                                           class="form-control"
+                                                                           placeholder="" value="@Model.EmergencyContact1Relationship">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-8 col-md-8 col-sm-12 col-12 pr-0">
+                                                        <div class="form-row-first">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>Address</label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields">@Model.EmergencyContact1Address</label>
+                                                                    <input tabindex="27" type="text" id="txtEmergencyContact1Address" name="EmergencyContact1Address"
+                                                                           class="form-control"
+                                                                           placeholder="" value="@Model.EmergencyContact1Address">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-12">
+
+
+                                                                <div class="form-row-first mb-2 mt-1">
+                                                                    <div class="top-form-row d-flex ">
+                                                                        <div class="three-columns">
+                                                                            <label>City</label>
+                                                                        </div>
+                                                                        <div class="three-columns">
+                                                                            <label>State</label>
+                                                                        </div>
+                                                                        <div class="three-columns">
+                                                                            <label>Zip</label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="bootom-form-row d-flex ">
+                                                                        <div class="three-columns border-bottom-none">
+                                                                            <label class="label-fields">@Model.EmergencyContact1City</label>
+                                                                            <input tabindex="28" type="text" id="txtEmergencyContact1City" name="EmergencyContact1City" class="form-control"
+                                                                                   placeholder="" value="@Model.EmergencyContact1City">
+                                                                        </div>
+                                                                        <div class="three-columns border-bottom-none">
+                                                                            <label class="label-fields">@Model.EmergencyContact1State</label>
+                                                                            <input tabindex="29" type="text" id="txtEmergencyContact1State" name="EmergencyContact1State" class="form-control"
+                                                                                   placeholder="" value="@Model.EmergencyContact1State">
+                                                                        </div>
+                                                                        <div class="three-columns border-bottom-none">
+                                                                            <label class="label-fields">@Model.EmergencyContact1Zip</label>
+                                                                            <input tabindex="30" type="text" id="txtEmergencyContact1Zip" name="EmergencyContact1Zip" class="form-control"
+                                                                                   placeholder="" value="@Model.EmergencyContact1Zip">
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label>
+                                                        Emergency Contact #2
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row mb-2 mt-1">
+                                                <div class="row">
+                                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0">
+                                                        <div class="form-row-first mt-1">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label> Name</label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex ">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields">@Model.EmergencyContact2Name</label>
+                                                                    <input tabindex="31" type="text" id="txtEmergencyContact2Name" name="EmergencyContact2Name"
+                                                                           class="form-control"
+                                                                           placeholder="" value="@Model.EmergencyContact2Name">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0">
+                                                        <div class="form-row-first mt-1">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label> Email Address</label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields">@Model.EmergencyContact2EmailAddress</label>
+                                                                    <input tabindex="32" type="text" id="txtEmergencyContact2EmailAddress" name="EmergencyContact2EmailAddress"
+                                                                           class="form-control"
+                                                                           placeholder="" value="@Model.EmergencyContact2EmailAddress">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                                                        <div class="form-row-first mt-1">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>Relationship</label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields">@Model.EmergencyContact2Relationship</label>
+                                                                    <input tabindex="33" type="text" id="txtEmergencyContact2Relationship" name="EmergencyContact2Relationship"
+                                                                           class="form-control"
+                                                                           placeholder="" value="@Model.EmergencyContact2Relationship">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-8 col-md-8 col-sm-12 col-12 pr-0">
+                                                        <div class="form-row-first">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>Address</label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields">@Model.EmergencyContact2Address</label>
+                                                                    <input tabindex="34" type="text" id="txtEmergencyContact2Address" name="EmergencyContact2Address"
+                                                                           class="form-control"
+                                                                           placeholder="" value="@Model.EmergencyContact2Address">
+                                                                </div>
+                                                            </div>
+
+
+                                                            <div class="col-12">
+
+
+                                                                <div class="form-row-first mb-3 mt-1">
+                                                                    <div class="top-form-row d-flex">
+                                                                        <div class="three-columns">
+                                                                            <label>City</label>
+                                                                        </div>
+                                                                        <div class="three-columns">
+                                                                            <label>State</label>
+                                                                        </div>
+                                                                        <div class="three-columns">
+                                                                            <label>Zip</label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="bootom-form-row d-flex">
+                                                                        <div class="three-columns border-bottom-none">
+                                                                            <label class="label-fields">@Model.EmergencyContact2City</label>
+                                                                            <input tabindex="35" type="text" id="txtEmergencyContact2City" name="EmergencyContact2City" class="form-control"
+                                                                                   placeholder="" value="@Model.EmergencyContact2City">
+                                                                        </div>
+                                                                        <div class="three-columns border-bottom-none">
+                                                                            <label class="label-fields">@Model.EmergencyContact2State</label>
+                                                                            <input tabindex="36" type="text" id="txtEmergencyContact2State" name="EmergencyContact2State" class="form-control"
+                                                                                   placeholder="" value="@Model.EmergencyContact2State">
+                                                                        </div>
+                                                                        <div class="three-columns border-bottom-none">
+                                                                            <label class="label-fields">@Model.EmergencyContact2Zip</label>
+                                                                            <input tabindex="37" type="text" id="txtEmergencyContact2Zip" name="EmergencyContact2Zip" class="form-control"
+                                                                                   placeholder="" value="@Model.EmergencyContact2Zip">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    @*<div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="form-row-first">
+                            <div class="top-form-row d-flex">
+                                <div class="two-columns">
+                                    <label>Emergency Contact #2</label>
+                                </div>
+                                <div class="two-columns">
+                                    <label>Emergency Contact #2</label>
+                                </div>
+                            </div>
+                            <div class="bootom-form-row d-flex">
+                                <div class="two-columns">
+                                    <input type="text" id="txtEmergencyContact1" name="EmergencyContact1" class="form-control"
+                                           placeholder=" ">
+                                </div>
+                                <div class="two-columns">
+                                    <input type="text" id="txtEmergencyContact2" name="EmergencyContact2" class="form-control"
+                                           placeholder="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>*@
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-row-first mt-3">
+                                            <div class="top-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label class="Add">
+                                                        How many people in your household in each of
+                                                        the following categories
+                                                    </label>
+                                                    <label class="label-fields">
+                                                        People in household having
+                                                        following categories
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row mb-2">
+                                                <div class="row">
+                                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0">
+                                                        <div class="form-row-first mt-1">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>Children under 18</label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex ">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields">@Model.ChildrenUnder18</label>
+                                                                    <input tabindex="38" type="number" id="txtChildrenUnder18" name="ChildrenUnder18"
+                                                                           class="form-control"
+                                                                           placeholder="" value="@Model.ChildrenUnder18">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0">
+                                                        <div class="form-row-first mt-1">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>Adults 18-65</label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields">@Model.Adults18to65</label>
+                                                                    <input tabindex="39" type="number" id="txtAdults18to65" name="Adults18to65"
+                                                                           class="form-control"
+                                                                           placeholder="" value="@Model.Adults18to65">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                                                        <div class="form-row-first mt-1">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>Adults 65+</label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields">@Model.Adults65Plus</label>
+                                                                    <input tabindex="40" type="number" id="Adults65Plus" name="Adults65Plus"
+                                                                           class="form-control"
+                                                                           placeholder="" value="@Model.Adults65Plus">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label>Preferred Pharmacy</label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row pb-3 grey-bg">
+                                                <div class="row">
+                                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0">
+                                                        <div class="form-row-first mt-1">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>Name</label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields">@Model.PreferredPharmacyName</label>
+                                                                    <input tabindex="41" type="text" id="txtPharmacyName" name="PreferredPharmacyName"
+                                                                           class="form-control"
+                                                                           placeholder="" value="@Model.PreferredPharmacyName">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0">
+                                                        <div class="form-row-first mt-1">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>Location</label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields">@Model.PreferredPharmacyLocation</label>
+                                                                    <input tabindex="42" type="text" id="txtPharmacyLocation" name="PreferredPharmacyLocation"
+                                                                           class="form-control"
+                                                                           placeholder="" value="@Model.PreferredPharmacyLocation">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex">
+                                                <div class="three-columns">
+                                                    <label class="Add">
+                                                        Are you now or were you ever
+                                                        a member of the U.S. Armed
+                                                        Forces?
+                                                    </label>
+                                                    <label class="label-fields">
+                                                        U.S. Armed Forces
+                                                    </label>
+                                                </div>
+                                                <div class="three-columns">
+                                                    <label>Marital status</label>
+                                                </div>
+                                                <div class="three-columns">
+                                                    <label class="Add">
+                                                        Which languages do you speak
+                                                        comfortably?
+                                                    </label>
+                                                    <label class="label-fields">
+                                                        Languages
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="three-columns border-bottom-none">
+                                                    <div class="custom-control custom-radio d-inline-block mr-2">
+                                                        <label class="label-fields">@Html.Raw(Model.EverMemberOfUSArmedForces == true ? "Yes" : "No")</label>
+                                                        <label id="lblUSArmedForces" hidden="hidden">@Model.EverMemberOfUSArmedForces</label>
+                                                        <input tabindex="43" type="radio" class="custom-control-input"
+                                                               id="MemberRadioYes" onclick="Radio()" name="USArmedRadio"
+                                                               value="true">
+                                                        <label class="custom-control-label"
+                                                               for="MemberRadioYes" value="true">Yes</label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio  d-inline-block">
+                                                        <input tabindex="44" type="radio" class="custom-control-input"
+                                                               id="MemberRadioNo" onclick="Radio()" name="USArmedRadio"
+                                                               value="false">
+                                                        <label class="custom-control-label"
+                                                               for="MemberRadioNo" value="false">No</label>
+                                                    </div>
+
+                                                </div>
+                                                <div class="three-columns border-bottom-none">
+                                                    <label class="label-fields" id="lblMarital">@Model.MaritalStatus</label>
+                                                    <select tabindex="45" id="ddMaritalStatus" name="MaritalStatus" class="form-control">
+                                                        <option value="0">Select</option>
+                                                        <option value="Married">Married</option>
+                                                        <option value="Single">Single</option>
+                                                        <option value="Domestic partnership">
+                                                            Domestic partnership
+                                                        </option>
+                                                        <option value="Divorced">Divorced</option>
+                                                        <option value="Separated">Separated</option>
+                                                        <option value="Widowed">Widowed</option>
+                                                        <option value="Other">Other</option>
+                                                    </select>
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                                            <div class="form-row-first" id="OtherMaritalStatus" style='display:none'>
+                                                                <div class="top-form-row d-flex">
+                                                                    <div class="one-columns">
+                                                                        <label>
+                                                                            Other Marital
+                                                                            status
+                                                                        </label>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="bootom-form-row d-flex">
+                                                                    <div class="one-columns">
+                                                                        <label class="label-fields">@Model.OtherMaritalStatus</label>
+                                                                        <input tabindex="46" type="text" id="txtOtherMarital" name="OtherMaritalStatus"
+                                                                               class="form-control"
+                                                                               placeholder="" value="@Model.OtherMaritalStatus">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="three-columns border-bottom-none">
+                                                    <label class="label-fields" id="lblLanguages">@Model.LanguagesSpeak</label>
+                                                    <select tabindex="47" id="ddLanguages" class="selectboxmultiple" multiple>
+                                                        <option value="Select All">Select All</option>
+                                                        <option value="English">English</option>
+                                                        <option value="Spanish">Spanish</option>
+                                                        <option value="Arabic">
+                                                            Arabic
+                                                        </option>
+                                                        <option value="Amharic">Amharic</option>
+                                                        <option value="Tigrinya">Tigrinya</option>
+                                                        <option value="Other">Other</option>
+
+                                                    </select>
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                                            <div class="form-row-first" id="OtherLanguage" style='display:none'>
+                                                                <div class="top-form-row d-flex">
+                                                                    <div class="one-columns">
+                                                                        <label>Other language</label>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="bootom-form-row d-flex">
+                                                                    <div class="one-columns">
+                                                                        <label class="label-fields" id="lblOtherLang">@Model.OtherLanguageSpeak</label>
+                                                                        <input tabindex="48" type="text" id="txtOtherLanguage" name="OtherLanguageSpeak"
+                                                                               class="form-control"
+                                                                               placeholder="" value="@Model.OtherLanguageSpeak">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+
+                                        </div>
+
+                                        @*<div class="form-row-first">
+                            <div class="top-form-row d-flex">
+                                <div class="three-columns">
+                                    <label>Have you ever been a smoker</label>
+                                </div>
+                                <div class="three-columns">
+                                    <label>
+                                        What are your preferred
+                                        pronouns
+                                    </label>
+                                </div>
+                                <div class="three-columns">
+                                    <label>Do you think of yourself as</label>
+                                </div>
+                            </div>
+                            <div class="bootom-form-row d-flex">
+                                <div class="three-columns border-bottom-none">
+                                    <select id="ddSmoker" name="EverBeenSmoker" class="form-control">
+                                        <option value="0">Select</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                    </select>
+                                    <div class="form-row-first mt-2" id="HaveYouQuit" style='display:none'>
+                                        <div class="top-form-row d-flex">
+                                            <div class="one-columns">
+                                                <label>Have you Quit?</label>
+                                            </div>
+
+                                        </div>
+                                        <div class="bootom-form-row d-flex">
+                                            <div class="one-columns">
+                                                <select id="ddQuit" name="QuitSmoking" class="form-control">
+                                                    <option value="0">Select</option>
+                                                    <option value="true">Yes</option>
+                                                    <option value="false">No</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-row-first mt-2" id="QuitDate" style='display:none'>
+                                        <div class="top-form-row d-flex">
+                                            <div class="one-columns">
+                                                <label>Quit Date</label>
+                                            </div>
+
+                                        </div>
+                                        <div class="bootom-form-row d-flex ">
+                                            <div class="one-columns">
+                                                <input type="text" id="txtQuitDate" name="SmokingQuitDate" class="form-control"
+                                                       placeholder=""  style="width:100px">
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+                                <div class="three-columns border-bottom-none">
+                                    <select id="ddPreferredPronouns" name="PreferredPronouns" class="form-control">
+                                        <option value="She/Her">She/Her</option>
+                                        <option value="He/Him">He/Him</option>
+                                        <option value="They/Them">They/Them</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                            <div class="form-row-first mt-2" id="OtherPronouns" style='display:none'>
+                                                <div class="top-form-row d-flex">
+                                                    <div class="one-columns">
+                                                        <label>Other Pronouns</label>
+                                                    </div>
+
+                                                </div>
+                                                <div class="bootom-form-row d-flex">
+                                                    <div class="one-columns">
+                                                        <input type="text" id="txtOtherPronouns" name="OtherPronouns"
+                                                               class="form-control"
+                                                               placeholder="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="three-columns border-bottom-none">
+                                    <select id="ddThinkYourselfAs" name="ThinkYourselfAs" class="form-control">
+                                        <option value="Straight or Heterosexual">
+                                            Straight or Heterosexual
+                                        </option>
+                                        <option value="Lesbian">Lesbian</option>
+                                        <option value="Gay">Gay</option>
+                                        <option value="Bisexual">Bisexual</option>
+                                        <option value="Queer">Queer</option>
+                                        <option value="Questioning">Questioning</option>
+                                        <option value="Unspecified/Other">Unspecified/Other</option>
+                                    </select>
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                            <div class="form-row-first mt-2" id="OtherThinkYouself" style='display:none'>
+                                                <div class="top-form-row d-flex">
+                                                    <div class="one-columns">
+                                                        <label>
+                                                            Other you think yourself
+                                                            as
+                                                        </label>
+                                                    </div>
+
+                                                </div>
+                                                <div class="bootom-form-row d-flex">
+                                                    <div class="one-columns">
+                                                        <input type="text" id="txtOtherThinkYourself" name="OtherThinkYourselfAs"
+                                                               class="form-control"
+                                                               placeholder="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>*@
+
+
+
+
+
+
+                                        <div class="form-row-first">
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-12 p-0">
+
+                                                <div class="bootom-form-row mb-1">
+                                                    <div class="row">
+                                                        <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0">
+                                                            <div class="form-row-first mt-1">
+                                                                <div class="top-form-row d-flex">
+                                                                    <div class="one-columns">
+                                                                        <label class="Add">Have you ever been a smoker</label>
+                                                                        <label class="label-fields">Smoker</label>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="bootom-form-row d-flex">
+                                                                    <div class="one-columns">
+                                                                        <label class="label-fields" id="lblSmoker">@Html.Raw(@Model.EverBeenSmoker == true ? "Yes" : "No")</label>
+                                                                        <label hidden="hidden" id="lblEverSmoker">@Model.EverBeenSmoker</label>
+                                                                        <select tabindex="49" id="ddSmoker" name="EverBeenSmoker" class="form-control">
+                                                                            <option value="0">Select</option>
+                                                                            <option value="true">Yes</option>
+                                                                            <option value="false">No</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0" id="divQuit" style="display:none">
+                                                            <div class="form-row-first">
+                                                                <div class="top-form-row d-flex">
+
+                                                                    <div class="one-columns">
+                                                                        <label class="Add">Have you Quit?</label>
+                                                                        <label class="label-fields">Quit</label>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="bootom-form-row d-flex">
+                                                                    <div class="one-columns">
+                                                                        <label class="label-fields" id="lblQuit">@Html.Raw(@Model.QuitSmoking == true ? "Yes" : "No")</label>
+                                                                        <label hidden="hidden" id="lblQuitSmoking">@Model.QuitSmoking</label>
+                                                                        <select tabindex="50" id="ddQuit" name="QuitSmoking" class="form-control">
+                                                                            <option value="0">Select</option>
+                                                                            <option value="true">Yes</option>
+                                                                            <option value="false">No</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4 col-md-4 col-sm-12 col-12" id="divLastTimeYouSmoked" style="display:none">
+                                                            <div class="form-row-first">
+                                                                <div class="top-form-row d-flex">
+                                                                    <div class="one-columns">
+                                                                        <label class="Add">
+                                                                            When was the last time you smoked?
+                                                                        </label>
+                                                                        <label class="label-fields">
+                                                                            Last Time You Smoked
+                                                                        </label>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="bootom-form-row d-flex">
+                                                                    <div class="one-columns">
+                                                                        <label class="label-fields" id="lblLastTime">@Model.LastTimeYouSmoked</label>
+                                                                        <select tabindex="51" name="LastTimeYouSmoked" class="form-control" id="ddLastTimeYouSmoked">
+                                                                            <option value="0">Select</option>
+                                                                            <option value="Within the past few days">Within the past few days</option>
+                                                                            <option value="1-2 months ago">1-2 months ago</option>
+                                                                            <option value="3-6 months ago">3-6 months ago</option>
+                                                                            <option value="6 months or more">6 months or more</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="col-lg-4 col-md-4 col-sm-12 col-12" id="divSmokingQuitDate" style="display:none">
+                                                            <div class="form-row-first">
+                                                                <div class="top-form-row d-flex">
+                                                                    <div class="one-columns">
+                                                                        <label>Quit Date</label>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="bootom-form-row d-flex">
+                                                                    <div class="one-columns">
+                                                                        <label class="label-fields">@Model.SmokingQuitDate</label>
+                                                                        <input tabindex="52" type="text" autocomplete="off" id="txtQuitDate" name="SmokingQuitDate" class="form-control date"
+                                                                               placeholder="" value="@Model.SmokingQuitDate" style="width:100px">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+
+
+
+                                        <div class="row">
+                                            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                                                <div class="form-row-first">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="Add">
+                                                                What are your preferred
+                                                                pronouns
+                                                            </label>
+                                                            <label class="label-fields">
+                                                                Preferred
+                                                                Pronouns
+                                                            </label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="label-fields" id="lblPronoun">@Model.PreferredPronouns</label>
+                                                            <select tabindex="53" id="ddPreferredPronouns" name="PreferredPronouns" class="form-control">
+                                                                <option value="0">Select</option>
+                                                                <option value="She/Her">She/Her</option>
+                                                                <option value="He/Him">He/Him</option>
+                                                                <option value="They/Them">They/Them</option>
+                                                                <option value="Other">Other</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12" id="divOtherPronouns" style="display:none">
+                                                        <div class="form-row-first mt-0 mb-3">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>
+                                                                        Other Pronouns
+                                                                    </label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields">@Model.OtherPronouns</label>
+                                                                    <input tabindex="54" type="text" id="txtOtherPronouns" name="OtherPronouns"
+                                                                           class="form-control"
+                                                                           placeholder="" value="@Model.OtherPronouns">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 col-sm-12 col-12 pl-0">
+                                                <div class="form-row-first">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="Add">Do you think of yourself as</label>
+                                                            <label class="label-fields">Think Yourself As</label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="label-fields" id="lblThink">@Model.ThinkYourselfAs</label>
+                                                            <select tabindex="55" id="ddThinkYourselfAs" name="ThinkYourselfAs" class="form-control">
+                                                                <option value="0">Select</option>
+                                                                <option value="Straight or Heterosexual">
+                                                                    Straight or Heterosexual
+                                                                </option>
+                                                                <option value="Lesbian">Lesbian</option>
+                                                                <option value="Gay">Gay</option>
+                                                                <option value="Bisexual">Bisexual</option>
+                                                                <option value="Queer">Queer</option>
+                                                                <option value="Questioning">Questioning</option>
+                                                                <option value="Unspecified/Other">Unspecified/Other</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12" id="divOtherThinkYourselfAs" style="display:none">
+                                                        <div class="form-row-first mt-0 mb-3">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>
+                                                                        Other you think yourself
+                                                                        as
+                                                                    </label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields">@Model.OtherThinkYourselfAs</label>
+                                                                    <input tabindex="56" type="text" id="txtOtherThinkYourself" name="OtherThinkYourselfAs"
+                                                                           class="form-control"
+                                                                           placeholder="" value="@Model.OtherThinkYourselfAs">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="detail-button mt-3 w-100 text-center">
+                                    <input type="hidden" name="CreatedDate" />
+                                    <input type="hidden" name="ModifiedDate" />
+                                    <input id="hdfPatientImg" type="hidden" name="PatientImg" value="@Model.PatientImg" />
+                                    <input id="hdfPatientChildrensAges" type="hidden" name="PatientChildrensAges" />
+                                    <input id="hdfEverMemberOfUSArmedForces" type="hidden" name="EverMemberOfUSArmedForces" />
+                                    <input id="hdfMultipleSelectedRace" type="hidden" name="RaceEthnicity" />
+                                    <input id="hdfMultipleSelectedLanguages" type="hidden" name="LanguagesSpeak" />
+                                    <input type="hidden" name="PatientID" id="mainpatientid" value="@Model.PatientID" />
+
+                                  
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    @*<div class="recent-paitents" style="display:none">
+                            <h2 class="mb-3">Recent Patients</h2>
+                            <div class="recent-paitent-row d-flex">
+                                <div class="recent-paitents-img">
+                                    <img class="img-fluid" src="images/recent-paitent-img.png" alt="">
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th scope="col" style="width:160px;">Name</th>
+                                                <th scope="col" style="width:268px;">Email</th>
+                                                <th scope="col" style="width:160px;">Phone</th>
+                                                <th scope="col" style="width:160px;">Last Modify</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            <tr>
+                                                <td style="width:160px;">Omnis iste</td>
+                                                <td style="width:268px;">Omnisiste@gmail.com</td>
+                                                <td style="width:160px;">98756 45365</td>
+                                                <td style="width:160px;">23-4-2019</td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="recent-paitent-row d-flex">
+                                <div class="recent-paitents-img">
+                                    <img class="img-fluid" src="images/recent-paitent-img-1.png" alt="">
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th scope="col" style="width:160px;">Name</th>
+                                                <th scope="col" style="width:268px;">Email</th>
+                                                <th scope="col" style="width:160px;">Phone</th>
+                                                <th scope="col" style="width:160px;">Last Modify</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            <tr>
+                                                <td style="width:160px;">praesentium</td>
+                                                <td style="width:268px;">praesentium@gmail.com</td>
+                                                <td style="width:160px;">68756 45365</td>
+                                                <td style="width:160px;">20-4-2019</td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="recent-paitent-row d-flex">
+                                <div class="recent-paitents-img">
+                                    <img class="img-fluid" src="images/recent-paitent-img-2.png" alt="">
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th scope="col" style="width:160px;">Name</th>
+                                                <th scope="col" style="width:268px;">Email</th>
+                                                <th scope="col" style="width:160px;">Phone</th>
+                                                <th scope="col" style="width:160px;">Last Modify</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            <tr>
+                                                <td style="width:160px;">voluptatum</td>
+                                                <td style="width:268px;">voluptatum@gmail.com</td>
+                                                <td style="width:160px;">78756 45365</td>
+                                                <td style="width:160px;">18-4-2019</td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>*@
+
+                </div>
+
+                <div class="col-lg-4 col-md-12 col-sm-12 col-12 " id="appointement_div" style="display:none">
+
+                    <input hidden="hidden" id="hdnCurrentDate" value="" />
+                    <div class="sidebar-right">
+                        <div class="appointement"  id="appointementContent" style="display:none;height: auto;
+    max-height: 450px;">
+                            <h3 style="width: auto !important;
+                      float: left;">Appointment</h3>
+                            <button id="hideAppointmentContent" class="btn btn-link addnotebtn">Close</button>
+                            <div class="scroll scroll-height" id="appointementlst">
+                              
+                                
+                            </div>
+                            <a href="#!" id="loadMore" class="btn btn-link" onclick="getListAllAppointmentsLoadMore()">Load More</a>
+                        </div>
+                        <div class="appointement appointement-notes"   style="display:none">
+                            <h3>Notes</h3>
+                            <button id="hideNoteContent" class="btn btn-link addnotebtn" style="margin-left:20px">  Close </button>
+                            <button data-toggle="modal" data-target="#notesModal" class="btn btn-link addnotebtn"> Add Note </button>
+                          
+                            <div class="scroll scroll-height" id="notesList">
+ 
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- Inner content end here  -->
+</div>
+
+<!--Notes Modal start here-->
+<div class="modal fade" id="notesModal" tabindex="-1" role="dialog" aria-labelledby="notesModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="notesModalLabel">Patient Note</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formNotes" class="appointement-form">
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea cols="10" id="txtNotes1" rows="5" class="form-control"></textarea>
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" onclick="notescloseModel()" class="btn btn-secondary">Cancel</button>
+                        <button type="button" onclick="notesSave()" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--Notes mOdal End Here-->
+
+<!-- Programe Modal start here  -->
+<div class="programeModal">
+    <div class="modal fade" id="myModal" >
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Patient Programs</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="programList">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Programe Modal end here -->
+@Scripts.Render("~/bundles/jquery")
+
+
+<script>
+
+    $(".scroll").scroll(function () {
+        var sticky = $('.sidebar-right'),
+            scroll = $(".scroll").scrollTop();
+
+        if (scroll >= 20) sticky.addClass('fixed');
+        else sticky.removeClass('fixed');
+    });
+
+
+   
+
+
+           
+
+    
+</script>

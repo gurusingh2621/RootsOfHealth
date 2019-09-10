@@ -1,0 +1,52 @@
+﻿@model IEnumerable<RootsOfHealth.Models.PatientMainBO>
+
+<h2 class="mb-3">All Patients</h2>
+
+<table id="tblPatient" class="display table table-hover table-striped table-bordered">
+    <thead>
+        <tr class="table-active">
+            <th>Image</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Last Modify</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+        {
+
+            <tr>
+                <td style="width:100px" height="100px">
+                    @if (string.IsNullOrWhiteSpace(p.PatientImg))
+                    {
+                        <img class="img-fluid" id="patientpic" src="/images/avatar.png" />
+                    }
+                    else
+                    {
+                        <img class="img-fluid" src="~/Files/@p.PatientImg" alt="">
+
+                    }
+                </td>
+                <td>@p.FirstName @p.LastName</td>
+                <td>@p.EmailAddress</td>
+                <td>@p.CellPhone  </td>
+                <td>@p.ModifiedDate</td>
+                <td>
+
+                    <a href='' onclick="this.href='/Patient/Detail?PatientID='+@p.PatientID"
+                       id="btnProfileEdit" class="btn btn-success label-fields">
+                        <i class="far fa-edit"></i>
+                        View
+                    </a>
+                    <a href='' onclick="this.href='/Patient/Add?PatientID='+@p.PatientID"
+                       id="btnProfileEdit" class="btn btn-success label-fields">
+                        <i class="far fa-edit"></i>
+                        Edit
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

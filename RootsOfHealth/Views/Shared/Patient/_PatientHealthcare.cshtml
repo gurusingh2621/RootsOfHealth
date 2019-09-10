@@ -1,0 +1,1359 @@
+﻿@model RootsOfHealth.Models.PatientHealthcareBO
+
+<div class="tab-pane fade" id="Healthcare" role="tabpanel" aria-labelledby="Healthcare-tab">
+    <div class="inner-content">
+        <div class="paitent-detail">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="paitent-detail-left">
+                        <div class="detail-heading d-flex">
+                            <h2>Patient Healthcare</h2>
+
+                            <div class="detail-button ml-auto">
+                                <a href="/Patient/Add?PatientID=@ViewBag.PatientId"
+                                   class="btn btn-success label-fields">
+                                    <i class="far fa-edit"></i>
+                                    Edit
+                                </a>
+                                <a tabindex="36" href="javascript:{}" onclick="return HealthcareSave()" id="HealthcareSave" class="btn btn-success">
+                                    <i class="far fa-save"></i>
+                                    Save
+                                </a>
+
+
+                            </div>
+
+                        </div>
+                        <div class="inner-main-content">
+                            <div class="top-image-row d-flex">
+                                <div class="top-image-left">
+
+
+
+
+                                    <div class="form-row-first label-fields">
+                                        <div class="top-form-row d-flex height-auto">
+                                            <div class="two-columns">
+
+                                                <label class="label-fields">
+                                                    Score
+                                                </label>
+                                            </div>
+                                            <div class="two-columns">
+
+                                                <label class="label-fields">
+                                                    Status
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                        <div class="bootom-form-row d-flex">
+                                            <div class="two-columns">
+
+                                                <label id="txthealthscore" class="label-fields"></label>
+
+                                            </div>
+
+                                            <div class="two-columns">
+
+                                                <label id="txthealthstatus" class="label-fields"></label>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                            <form class="detail-patient-form" id="frmHealthcare">
+                                <div class="form-row-first">
+                                    <div class="top-form-row d-flex height-auto">
+                                        <div class="one-columns">
+                                            <label class="Add">Do you currently have health insurance? </label>
+                                            <label class="label-fields">Do you currently have health insurance? </label>
+                                        </div>
+
+
+
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="one-columns">
+                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                <label class="label-fields" id="lblInsurance">@Html.Raw(Model.HealthInsurance == true ? "Yes" : "No")</label>
+                                                <label class="label-fields" id="lblInsuranceRadio" hidden="hidden">@Model.HealthInsurance</label>
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="HealthRadioYes" name="InsuranceRadio"
+                                                       value="true" onclick="Radio()">
+                                                <label class="custom-control-label"
+                                                       for="HealthRadioYes">Yes</label>
+                                            </div>
+                                            <div class="custom-control custom-radio d-inline-block">
+                                                <input tabindex="2" type="radio" class="custom-control-input"
+                                                       id="HealthRadioNo" name="InsuranceRadio" value="false" onclick="Radio()">
+                                                <label class="custom-control-label"
+                                                       for="HealthRadioNo">No</label>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="bootom-form-row mb-3">
+                                        <div class="row" id="divInsuranceYes" style="display:none">
+                                            <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0">
+                                                <div class="form-row-first mt-0">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label>
+                                                                Plan Name
+                                                            </label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex ">
+                                                        <div class="one-columns">
+                                                            <label class="label-fields">@Model.PlanName</label>
+                                                            <input tabindex="3" type="text" id="txtPlanName" name="PlanName" class="form-control"
+                                                                   placeholder="" value="@Model.PlanName">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0">
+                                                <div class="form-row-first mt-0">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label>Policy Number</label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="label-fields">@Model.PolicyNumber</label>
+                                                            <input tabindex="4" type="text" id="txtPolicyNumber" name="PolicyNumber" class="form-control"
+                                                                   placeholder="" value="@Model.PolicyNumber">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                                                <div class="form-row-first mt-0">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label>SSN</label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="label-fields" id="lblssn">@Model.SSN</label>
+                                                            <input tabindex="5" disabled="disabled" type="text" id="txtSSN" name="SSN" class="form-control"
+                                                                   placeholder="" value="@Model.SSN">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row-first">
+                                    <div class="top-form-row d-flex height-auto">
+                                        <div class="one-columns">
+                                            <label class="Add">Do you have a regular primary care doctor?</label>
+                                            <label class="label-fields">Do you have a regular primary care doctor?</label>
+                                        </div>
+
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="one-columns">
+                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                <label class="label-fields" id="lblDoctor">@Html.Raw(Model.PrimaryCareDoctor==true?"Yes":"No")</label>
+                                                <label class="label-fields" id="lblDoctorRadio" hidden="hidden">@Model.PrimaryCareDoctor</label>
+                                                <input tabindex="6" type="radio" class="custom-control-input"
+                                                       id="DoctorRadioYes" name="RegularDoctorRadio"
+                                                       value="true" onclick="Radio()">
+                                                <label class="custom-control-label"
+                                                       for="DoctorRadioYes">Yes</label>
+                                            </div>
+                                            <div class="custom-control custom-radio d-inline-block">
+                                                <input tabindex="7" type="radio" class="custom-control-input"
+                                                       id="DoctorRadioNo" name="RegularDoctorRadio" value="false" onclick="Radio()">
+                                                <label class="custom-control-label"
+                                                       for="DoctorRadioNo">No</label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="bootom-form-row mb-3">
+                                        <div class="row" id="divRegularDoctorYes" style="display:none;">
+                                            <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0">
+                                                <div class="form-row-first mt-0">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="Add">
+                                                                When did you last see your
+                                                                doctor?
+                                                            </label>
+                                                            <label class="label-fields">
+                                                                When did you last see your
+                                                                doctor?
+                                                            </label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex ">
+                                                        <div class="one-columns">
+                                                            @*<input type="text" name="LastSeeDoctor" class="form-control"
+                                            placeholder="">*@
+                                                            @*<label class="label-fields" id="lblLastSeeDoctor">@Model.LastSeeDoctor</label>
+                                            <select tabindex="8" name="LastSeeDoctor" class="form-control" id="ddLastSeeDoctor">
+                                                <option value="0">Select</option>
+                                                <option value="Within the last month"> Within the last month</option>
+                                                <option value="Within the last 6 months">Within the last 6 months</option>
+                                                <option value="Within the last year">Within the last year</option>
+                                                <option value="Within the last 3 years">Within the last 3 years</option>
+                                                <option value="More than 3 years ago"> More than 3 years ago</option>
+                                            </select>*@
+
+                                                            @if (Model.LastSeeDoctor != null)
+                                                        {
+                                                        <label id="lblLastSeeDoctor" class="label-fields">@(Model.ddlLastSeeDoctor.Where(p => p.Value == Model.LastSeeDoctor.ToString()).FirstOrDefault().Text)</label>
+                                                        }
+                                                            @Html.DropDownListFor(m => m.LastSeeDoctor, new SelectList(Model.ddlLastSeeDoctor, "Value", "Text", Model.LastSeeDoctor), new { @id = "ddLastSeeDoctor", @class = "form-control", @Name = "LastSeeDoctor", @tabindex = "8" })
+
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0">
+                                                <div class="form-row-first mt-0">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label>Name of Doctor</label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="label-fields">@Model.NameOfDoctor</label>
+                                                            <input tabindex="9" type="text" id="txtNameOfDoctor" name="NameOfDoctor" class="form-control"
+                                                                   placeholder="" value="@Model.NameOfDoctor">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                                                <div class="form-row-first mt-0">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label>Location</label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="label-fields">@Model.DoctorLocation</label>
+                                                            <input tabindex="10" type="text" id="txtDoctorLocation" name="DoctorLocation" class="form-control"
+                                                                   placeholder="" value="@Model.DoctorLocation">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-row-first">
+                                    <div class="top-form-row d-flex height-auto">
+                                        <div class="two-columns">
+                                            <label class="Add">Do you have a regular dentist?</label>
+                                            <label class="label-fields">Do you have a regular dentist?</label>
+                                        </div>
+
+
+
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="two-columns">
+                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                <label class="label-fields" id="lblDentist">@Html.Raw(Model.RegularDentist == true ? "Yes" : "No")</label>
+                                                <label class="label-fields" id="lblDentistRadio" hidden="hidden">@Model.RegularDentist</label>
+                                                <input tabindex="11" type="radio" class="custom-control-input"
+                                                       id="DentistRadioYes" name="RegularDentistRadio"
+                                                       value="true" onclick="Radio()">
+                                                <label class="custom-control-label"
+                                                       for="DentistRadioYes">Yes</label>
+                                            </div>
+                                            <div class="custom-control custom-radio d-inline-block">
+                                                <input tabindex="12" type="radio" class="custom-control-input"
+                                                       id="DentistRadioNo" name="RegularDentistRadio"
+                                                       value="false" onclick="Radio()">
+                                                <label class="custom-control-label"
+                                                       for="DentistRadioNo">No</label>
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="bootom-form-row mb-3">
+                                        <div class="row" id="divRegularDentistYes" style="display:none">
+                                            <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0">
+                                                <div class="form-row-first mt-0">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="Add">
+                                                                When did you last see your
+                                                                dentist?
+                                                            </label>
+                                                            <label class="label-fields">
+                                                                When did you last see your
+                                                                dentist?
+                                                            </label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex ">
+                                                        <div class="one-columns">
+                                                            @*<input type="text" name="LastSeeDentist" class="form-control"
+                                            placeholder="">*@
+                                                            @*<label class="label-fields" id="lblLastSeeDentist">@Model.LastSeeDentist</label>
+                                            <select tabindex="13" name="LastSeeDentist" class="form-control" id="ddLastSeeDentist">
+                                                <option value="0">Select</option>
+                                                <option value="Within the last month"> Within the last month</option>
+                                                <option value="Within the last 6 months">Within the last 6 months</option>
+                                                <option value="Within the last year">Within the last year</option>
+                                                <option value="Within the last 3 years">Within the last 3 years</option>
+                                                <option value="More than 3 years ago"> More than 3 years ago</option>
+                                            </select>*@
+
+                                                            @if (Model.LastSeeDentist != null)
+                                                        {
+                                                        <label id="lblLastSeeDentist" class="label-fields">@(Model.ddlLastSeeDentist.Where(p => p.Value == Model.LastSeeDentist.ToString()).FirstOrDefault().Text)</label>
+                                                        }
+                                                            @Html.DropDownListFor(m => m.LastSeeDentist, new SelectList(Model.ddlLastSeeDentist, "Value", "Text", Model.LastSeeDentist), new { @id = "ddLastSeeDentist", @class = "form-control", @Name = "LastSeeDentist", @tabindex = "13" })
+
+
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0">
+                                                <div class="form-row-first mt-0">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label>Name of Dentist </label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="label-fields">@Model.NameOfDentist</label>
+                                                            <input tabindex="14" type="text" id="txtNameOfDentist" name="NameOfDentist" class="form-control"
+                                                                   placeholder="" value="@Model.NameOfDentist">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                                                <div class="form-row-first mt-0">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label>Location</label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="label-fields">@Model.DentistLocation</label>
+                                                            <input tabindex="15" type="text" id="txtDentistLocation" name="DentistLocation" class="form-control"
+                                                                   placeholder="" value="@Model.DentistLocation">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row-first">
+                                    <div class="top-form-row d-flex height-auto">
+                                        <div class="two-columns">
+                                            <label class="Add">
+                                                Do you see any other doctors, therapists, counselors?
+                                            </label>
+                                            <label class="label-fields">
+                                                Do you see any other doctors, therapists, counselors?
+                                            </label>
+                                        </div>
+
+
+
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="two-columns">
+                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                <label class="label-fields" id="lblOtherDoctors">@Html.Raw(Model.OtherDoctorsTherapists==true?"Yes":"No")</label>
+                                                <label class="label-fields" id="lblOtherDoctorsRadio" hidden="hidden">@Model.OtherDoctorsTherapists</label>
+                                                <input tabindex="16" type="radio" class="custom-control-input"
+                                                       id="CounslerRadioYes" name="OtherDoctorsRadio"
+                                                       value="true" onclick="Radio()">
+                                                <label class="custom-control-label"
+                                                       for="CounslerRadioYes">Yes</label>
+                                            </div>
+                                            <div class="custom-control custom-radio d-inline-block">
+                                                <input tabindex="17" type="radio" class="custom-control-input"
+                                                       id="CounslerRadioNo" name="OtherDoctorsRadio"
+                                                       value="false" onclick="Radio()">
+                                                <label class="custom-control-label"
+                                                       for="CounslerRadioNo">No</label>
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+                                    <div class="bootom-form-row mb-3">
+                                        <div class="row" id="divOtherDoctorsYes" style="display:none">
+
+                                            <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0">
+                                                <div class="form-row-first mt-0">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label>Name of other doctors, therapists, counselors </label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="label-fields">@Model.TherapistsName</label>
+                                                            <input tabindex="18" type="text" id="txtTherapistsName" name="TherapistsName" class="form-control"
+                                                                   placeholder="" value="@Model.TherapistsName">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                                                <div class="form-row-first mt-0">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label>Location</label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="label-fields">@Model.TherapistsLocation</label>
+                                                            <input tabindex="19" type="text" id="txtTherapistsLocation" name="TherapistsLocation" class="form-control"
+                                                                   placeholder="" value="@Model.TherapistsLocation">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label class="Add">
+                                                        Do you have a case manager or social worker
+                                                        who helps you manage your healthcare?
+                                                    </label>
+                                                    <label class="label-fields">
+                                                        Do you have a case manager or social worker
+                                                        who helps you manage your healthcare?
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <div class="custom-control custom-radio d-inline-block mr-3">
+                                                        <label class="label-fields" id="lblCaseManager">@Html.Raw(Model.CaseManager==true?"Yes":"No")</label>
+                                                        <label class="label-fields" id="lblSocialWorkerRadio" hidden="hidden">@Model.CaseManager</label>
+                                                        <input tabindex="20" type="radio" class="custom-control-input"
+                                                               id="SocialRadioYes" name="SocialWorkerRadio"
+                                                               value="true" onclick="Radio()">
+                                                        <label class="custom-control-label"
+                                                               for="SocialRadioYes">Yes</label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio d-inline-block">
+                                                        <input tabindex="21" type="radio" class="custom-control-input"
+                                                               id="SocialRadioNo" name="SocialWorkerRadio"
+                                                               value="false" onclick="Radio()">
+                                                        <label class="custom-control-label"
+                                                               for="SocialRadioNo">No</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="bootom-form-row mb-3">
+                                                <div class="row" id="divSocialWorker" style="display:none">
+
+                                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0">
+                                                        <div class="form-row-first mt-0">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>Name of case manager or social worker  </label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields">@Model.CaseManagerName</label>
+                                                                    <input tabindex="22" type="text" id="txtCaseManagerName"
+                                                                           class="form-control"
+                                                                           name="CaseManagerName" placeholder="" value="@Model.CaseManagerName">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                                                        <div class="form-row-first mt-0">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>Location</label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields">@Model.CaseManagerLocation</label>
+                                                                    <input tabindex="23" type="text" id="txtCaseManagerLocation"
+                                                                           name="CaseManagerLocation" class="form-control"
+                                                                           placeholder="" value="@Model.CaseManagerLocation">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="form-row-first">
+                                    <div class="top-form-row d-flex height-auto">
+                                        <div class="one-columns">
+                                            <label class="Add">In general, would you say your health is: </label>
+                                            <label class="label-fields">In general, would you say your health is: </label>
+                                        </div>
+
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="three-columns">
+                                            @*<label class="label-fields" id="lblYourHealthIs">@Model.YourHealthIs</label>
+                            <select tabindex="24" name="YourHealthIs" class="form-control" id="ddYourHealthIs">
+                                <option value="0">Select</option>
+                                <option value="Poor">Poor</option>
+                                <option value="Fair">Fair</option>
+                                <option value="Good">Good</option>
+                                <option value="Very good">Very good</option>
+                                <option value="Excellent">Excellent</option>
+                            </select>*@
+
+
+                                            @if (Model.YourHealthIs != null)
+                                        {
+                                        <label id="lblYourHealthIs" class="label-fields">@(Model.ddlYourHealthIs.Where(p => p.Value == Model.YourHealthIs.ToString()).FirstOrDefault().Text)</label>
+                                        }
+                                            @Html.DropDownListFor(m => m.YourHealthIs, new SelectList(Model.ddlYourHealthIs, "Value", "Text", Model.YourHealthIs), new { @id = "ddYourHealthIs", @class = "form-control", @Name = "YourHealthIs", @tabindex = "24" })
+
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <div class="form-row-first">
+                                    <div class="top-form-row d-flex height-auto">
+                                        <div class="one-columns">
+                                            <label class="Add">
+                                                During the past month, how often did poor physical
+                                                health keep you from doing your usual activities, work,
+                                                or recreation?
+                                            </label>
+                                            <label class="label-fields">
+                                                During the past month, how often did poor physical
+                                                health keep you from doing your usual activities, work,
+                                                or recreation?
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="three-columns">
+                                            @*<label class="label-fields" id="lblPoorPhysicalHealth">@Model.PastMonthPoorPhysicalHealth</label>
+                            <select tabindex="25" name="PastMonthPoorPhysicalHealth" class="form-control" id="ddPastMonthPoorPhysicalHealth">
+                                <option value="Never">Never</option>
+                                <option value="Some Days">Some Days</option>
+                                <option value="More than half the days">More than half the days</option>
+                                <option value="Every Day">Every Day</option>
+                            </select>*@
+
+
+                                            @if (Model.PastMonthPoorPhysicalHealth != null)
+                                        {
+                                        <label id="lblPoorPhysicalHealth" class="label-fields">@(Model.ddlPastMonthPoorPhysicalHealth.Where(p => p.Value == Model.PastMonthPoorPhysicalHealth.ToString()).FirstOrDefault().Text)</label>
+                                        }
+                                            @Html.DropDownListFor(m => m.PastMonthPoorPhysicalHealth, new SelectList(Model.ddlPastMonthPoorPhysicalHealth, "Value", "Text", Model.PastMonthPoorPhysicalHealth), new { @id = "ddPastMonthPoorPhysicalHealth", @class = "form-control", @Name = "PastMonthPoorPhysicalHealth", @tabindex = "25" })
+
+
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label class="Add">
+                                                        Have you ever been diagnosed with any of the
+                                                        following medical conditions? (check all that
+                                                        apply)
+                                                    </label>
+                                                    <label class="label-fields">
+                                                        Have you ever been diagnosed with any of the
+                                                        following medical conditions? (check all that
+                                                        apply)
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="three-columns">
+                                                    @*<label class="label-fields" id="lblDiagnosed">@Model.Diagnosed</label>
+                                    <select tabindex="26" class="selectboxmultiple" id="ddDiagnosed" multiple>
+                                        <option value="Select All">Select All</option>
+                                        <option value="Allergies">Allergies</option>
+                                        <option value="Anemia">Anemia</option>
+                                        <option value="Arthritis">Arthritis</option>
+                                        <option value="asthma">asthma</option>
+                                        <option value="cancer">cancer</option>
+                                        <option value="congestive heart failure">congestive heart failure</option>
+                                        <option value="Diabetes">Diabetes</option>
+                                        <option value="Emphysema">Emphysema</option>
+                                        <option value="Heart disease">Heart disease</option>
+                                        <option value="Hepatitis">Hepatitis</option>
+                                        <option value="High cholesterol">High cholesterol</option>
+                                        <option value="High blood pressure">High blood pressure</option>
+                                        <option value="kidney disease">kidney disease</option>
+                                        <option value="Chronic pain">Chronic pain</option>
+                                        <option value="Enlarged prostate">Enlarged prostate</option>
+                                        <option value="Seizure">Seizure</option>
+                                        <option value="Sexually transmitted disease">Sexually transmitted disease</option>
+                                    </select>*@
+
+
+                                                    @if (Model.Diagnosed != null)
+                                                {
+                                                <label class="label-fields" hidden="hidden" id="lblDiagnosedmatch">@Model.Diagnosed</label>
+                                                <label class="label-fields" id="lblDiagnosed">@Model.Diagnosed</label>
+                                                }
+                                                    @Html.DropDownListFor(m => m.Diagnosed, new SelectList(Model.ddlDiagnosed, "Value", "Text", Model.Diagnosed), new { @class = "selectboxmultiple", @Id = "ddDiagnosed", @Name = "Diagnosed", @tabindex = "26", @multiple = "multiple" })
+
+
+
+
+
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label class="Add">
+                                                        On average, how many days per week do you
+                                                        engage in moderate to strenuous exercise (like
+                                                        walking fast, running, jogging, dancing,
+                                                        swimming, biking, or other activities that cause
+                                                        a light or heavy sweat)?
+                                                    </label>
+                                                    <label class="label-fields">
+                                                        On average, how many days per week do you
+                                                        engage in moderate to strenuous exercise (like
+                                                        walking fast, running, jogging, dancing,
+                                                        swimming, biking, or other activities that cause
+                                                        a light or heavy sweat)?
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="three-columns">
+                                                    @*<label class="label-fields" id="lblWeekStrenuous">@Model.PerWeekStrenuousExercise</label>
+                                    <select tabindex="27" class="form-control" id="ddPerWeekStrenuousExercise" name="PerWeekStrenuousExercise">
+                                        <option value="0 days">0 days</option>
+                                        <option value="1-2 days">1-2 days</option>
+                                        <option value="3-4 days">3-4 days</option>
+                                        <option value="5-7 days">5-7 days</option>
+                                    </select>*@
+
+
+                                                    @if (Model.PerWeekStrenuousExercise != null)
+                                                {
+                                                <label id="lblWeekStrenuous" class="label-fields">@(Model.ddlPerWeekStrenuousExercise.Where(p => p.Value == Model.PerWeekStrenuousExercise.ToString()).FirstOrDefault().Text)</label>
+                                                }
+                                                    @Html.DropDownListFor(m => m.PerWeekStrenuousExercise, new SelectList(Model.ddlPerWeekStrenuousExercise, "Value", "Text", Model.PerWeekStrenuousExercise), new { @id = "ddPerWeekStrenuousExercise", @class = "form-control", @Name = "PerWeekStrenuousExercise", @tabindex = "27" })
+
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label class="Add">
+                                                        On average, how many minutes per day do you
+                                                        engage in moderate to strenuous exercise (like
+                                                        walking fast, running, jogging, dancing,
+                                                        swimming, biking, or other activities that cause
+                                                        a light or heavy sweat)?
+                                                    </label>
+                                                    <label class="label-fields">
+                                                        On average, how many minutes per day do you
+                                                        engage in moderate to strenuous exercise (like
+                                                        walking fast, running, jogging, dancing,
+                                                        swimming, biking, or other activities that cause
+                                                        a light or heavy sweat)?
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="three-columns">
+                                                    @*<label class="label-fields" id="lblDayStrenuous">@Model.PerDayStrenuousExercise</label>
+                                    <select tabindex="28" class="form-control" id="ddPerDayStrenuousExercise" name="PerDayStrenuousExercise">
+                                        <option value="0 mins">0 mins</option>
+                                        <option value="15 mins">15 mins</option>
+                                        <option value="30 mins">30 mins</option>
+                                        <option value="45 mins">45 mins</option>
+                                        <option value="1 hr. or more">1 hr. or more</option>
+                                    </select>*@
+
+                                                    @if (Model.PerDayStrenuousExercise != null)
+                                                {
+                                                <label id="lblDayStrenuous" class="label-fields">@(Model.ddlPerDayStrenuousExercise.Where(p => p.Value == Model.PerDayStrenuousExercise.ToString()).FirstOrDefault().Text)</label>
+                                                }
+                                                    @Html.DropDownListFor(m => m.PerDayStrenuousExercise, new SelectList(Model.ddlPerDayStrenuousExercise, "Value", "Text", Model.PerDayStrenuousExercise), new { @id = "ddPerDayStrenuousExercise", @class = "form-control", @Name = "PerDayStrenuousExercise", @tabindex = "28" })
+
+
+
+
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label class="Add">
+                                                        Over the past year, how many times did you go
+                                                        to the emergency room (regular or psych
+                                                        emergency)?
+                                                    </label>
+                                                    <label class="label-fields">
+                                                        Over the past year, how many times did you go
+                                                        to the emergency room (regular or psych
+                                                        emergency)?
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="three-columns">
+                                                    @*<label class="label-fields" id="lblYearEmergency">@Model.PastYearEmergency</label>
+                                    <select tabindex="29" class="form-control" id="ddPastYearEmergency" name="PastYearEmergency">
+                                        <option value="None">None</option>
+                                        <option value="Once">Once</option>
+                                        <option value="Twice">Twice</option>
+                                        <option value="Three times">Three times</option>
+                                        <option value="Four or more times">Four or more times</option>
+                                    </select>*@
+
+
+                                                    @if (Model.PastYearEmergency != null)
+                                                {
+                                                <label id="lblYearEmergency" class="label-fields">@(Model.ddlPastYearEmergency.Where(p => p.Value == Model.PastYearEmergency.ToString()).FirstOrDefault().Text)</label>
+                                                }
+                                                    @Html.DropDownListFor(m => m.PastYearEmergency, new SelectList(Model.ddlPastYearEmergency, "Value", "Text", Model.PastYearEmergency), new { @id = "ddPastYearEmergency", @class = "form-control", @Name = "PastYearEmergency", @tabindex = "29" })
+
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+
+                                    @*<div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                                            <div class="form-row-first">
+                                                                <div class="top-form-row d-flex">
+                                                                    <div class="two-columns">
+                                                                        <label>Do you smoke cigarettes?</label>
+                                                                    </div>
+                                                                    <div class="two-columns">
+                                                                        <label>
+                                                                            Do you use any tobacco or nicotine products
+                                                                            besides cigarettes, such as chewing tobacco,
+                                                                            snuff, cigars, or e-cigarettes?
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="bootom-form-row d-flex">
+                                                                    <div class="two-columns">
+                                                                        <div class="custom-control custom-radio d-inline-block mr-3">
+                                                                            <input type="radio" class="custom-control-input"
+                                                                                   id="SmokeRadioYes" name="SmokeRadio"
+                                                                                   value="true" onclick="Radio()">
+                                                                            <label class="custom-control-label"
+                                                                                   for="SmokeRadioYes">Yes</label>
+                                                                        </div>
+                                                                        <div class="custom-control custom-radio d-inline-block">
+                                                                            <input type="radio" class="custom-control-input"
+                                                                                   id="SmokeRadioNo" name="SmokeRadio"
+                                                                                   value="false" onclick="Radio()">
+                                                                            <label class="custom-control-label"
+                                                                                   for="SmokeRadioNo">No</label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="two-columns">
+                                                                        <div class="custom-control custom-radio d-inline-block mr-3">
+                                                                            <input type="radio" class="custom-control-input"
+                                                                                   id="cigarettesRadioYes" name="TobaccoProductsRadio"
+                                                                                   value="true" onclick="Radio()">
+                                                                            <label class="custom-control-label"
+                                                                                   for="cigarettesRadioYes">Yes</label>
+                                                                        </div>
+                                                                        <div class="custom-control custom-radio d-inline-block">
+                                                                            <input type="radio" class="custom-control-input"
+                                                                                   id="cigarettesRadioNo" name="TobaccoProductsRadio"
+                                                                                   value="false" onclick="Radio()">
+                                                                            <label class="custom-control-label"
+                                                                                   for="cigarettesRadioNo">No</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                @*<div class="bootom-form-row d-flex">
+                        <div class="three-columns pt-0">
+                            <select class="form-control">
+                                <option>Less than ½ a pack</option>
+                                <option>½ - 1 pack</option>
+                                <option>More than one pack </option>
+                            </select>
+
+                        </div>
+                    </div>
+                                                                <div class="col-lg-5 col-md-5 col-sm-5 col-5">
+                                                                    <div class="form-row-first">
+                                                                        <div class="top-form-row d-flex">
+                                                                            <div class="one-columns">
+                                                                                <label>
+                                                                                    how many cigarettes do you smoke per day?
+                                                                                </label>
+                                                                            </div>
+
+                                                                        </div>
+                                                                        <div class="bootom-form-row d-flex">
+                                                                            <div class="one-columns">
+                                                                                <select class="form-control" id="ddSmokePerDay" name="SmokePerDay">
+                                                                                    <option>Less than ½ a pack</option>
+                                                                                    <option>½ - 1 pack</option>
+                                                                                    <option>More than one pack </option>
+                                                                                </select>
+
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>*@
+
+
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label class="Add">
+                                                        Do you smoke cigarettes?
+                                                    </label>
+                                                    <label class="label-fields">
+                                                        Do you smoke cigarettes?
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <div class="custom-control custom-radio d-inline-block mr-3">
+                                                        <label class="label-fields" id="lblSmoke">@Html.Raw(Model.SmokeCigarettes==true?"Yes":"No")</label>
+                                                        <label class="label-fields" id="lblSmokeCigarettes" hidden="hidden">@Model.SmokeCigarettes</label>
+                                                        <input tabindex="30" type="radio" class="custom-control-input"
+                                                               id="SmokeRadioYes" name="SmokeRadio"
+                                                               value="true" onclick="Radio()">
+                                                        <label class="custom-control-label"
+                                                               for="SmokeRadioYes">Yes</label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio d-inline-block">
+                                                        <input tabindex="31" type="radio" class="custom-control-input"
+                                                               id="SmokeRadioNo" name="SmokeRadio"
+                                                               value="false" onclick="Radio()">
+                                                        <label class="custom-control-label"
+                                                               for="SmokeRadioNo">No</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="bootom-form-row mb-3">
+                                                <div class="row" id="divSmoke" style="display:none">
+
+                                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0">
+                                                        <div class="form-row-first mt-0">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label class="Add">how many cigarettes do you smoke per day?  </label>
+                                                                    <label class="label-fields">how many cigarettes do you smoke per day?  </label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    @*<label class="label-fields" id="lblSmokePerDay">@Model.SmokePerDay</label>
+                                                    <select tabindex="32" class="form-control" id="ddSmokePerDay" name="SmokePerDay">
+                                                        <option value="0">Select</option>
+                                                        <option value="Less than ½ a pack">Less than ½ a pack</option>
+                                                        <option value="½ - 1 pack">½ - 1 pack</option>
+                                                        <option value="More than one pack">More than one pack </option>
+                                                    </select>*@
+
+
+                                                                    @if (Model.SmokePerDay != null)
+                                                                {
+                                                                <label id="lblSmokePerDay" class="label-fields">@(Model.ddlSmokePerDay.Where(p => p.Value == Model.SmokePerDay.ToString()).FirstOrDefault().Text)</label>
+                                                                }
+                                                                    @Html.DropDownListFor(m => m.SmokePerDay, new SelectList(Model.ddlSmokePerDay, "Value", "Text", Model.SmokePerDay), new { @id = "ddSmokePerDay", @class = "form-control", @Name = "SmokePerDay", @tabindex = "32" })
+
+
+
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                                                        <div class="form-row-first mt-0">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label class="Add">How frequently do you smoke?</label>
+                                                                    <label class="label-fields">How frequently do you smoke?</label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    @*<label class="label-fields" id="lblFrequentlySmoke">@Model.FrequentlySmoke</label>
+                                                    <select tabindex="33" name="FrequentlySmoke" class="form-control" id="ddFrequentlySmoke">
+                                                        <option value="0">Select</option>
+                                                        <option value="Every day or almost every day">Every day or almost every day</option>
+                                                        <option value="Once or twice a week">Once or twice a week</option>
+                                                        <option value="Once a month">Once a month</option>
+                                                    </select>*@
+
+
+                                                                    @if (Model.FrequentlySmoke != null)
+                                                                {
+                                                                <label id="lblFrequentlySmoke" class="label-fields">@(Model.ddlFrequentlySmoke.Where(p => p.Value == Model.FrequentlySmoke.ToString()).FirstOrDefault().Text)</label>
+                                                                }
+                                                                    @Html.DropDownListFor(m => m.FrequentlySmoke, new SelectList(Model.ddlFrequentlySmoke, "Value", "Text", Model.FrequentlySmoke), new { @id = "ddFrequentlySmoke", @class = "form-control", @Name = "FrequentlySmoke", @tabindex = "33" })
+
+
+
+
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
+
+
+
+                                    </div>
+                                    @*<div class="row">*@
+                                    @*<div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="form-row-first">
+                        <div class="top-form-row d-flex">
+
+                            <div class="two-columns" id="divLastTimeYouSmoked" style="display:none">
+                                <label>
+
+                                    When was the last time you smoked?
+                                </label>
+                            </div>
+                            <div class="two-columns" style="display:none" id="divFrequentlySmoke">
+                                <label>How frequently do you smoke?</label>
+                            </div>
+                        </div>
+                        <div class="bootom-form-row d-flex">
+                            <div class="two-columns">
+                                <select name="LastTimeYouSmoked" class="form-control" id="ddLastTimeYouSmoked" style="display:none">
+                                    <option>Within the past few days </option>
+                                    <option>1-2 months ago </option>
+                                    <option>3-6 months ago </option>
+                                    <option>6 months or more </option>
+                                </select>
+
+                            </div>
+                            <div class="two-columns">
+                                <select name="FrequentlySmoke" class="form-control" id="ddFrequentlySmoke" style="display:none">
+                                    <option>Every day or almost every day</option>
+                                    <option>Once or twice a week</option>
+                                    <option>Once a month</option>
+
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>*@
+
+
+
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label class="Add">
+                                                        Do you use any tobacco or nicotine products
+                                                        besides cigarettes, such as chewing tobacco,
+                                                        snuff, cigars, or e-cigarettes?
+                                                    </label>
+                                                    <label class="label-fields">
+                                                        Do you use any tobacco or nicotine products
+                                                        besides cigarettes, such as chewing tobacco,
+                                                        snuff, cigars, or e-cigarettes?
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <div class="custom-control custom-radio d-inline-block mr-3">
+                                                        <label class="label-fields">@Html.Raw(Model.TobaccoProducts==true?"Yes":"No")</label>
+                                                        <label class="label-fields" id="lblTobaccoProducts" hidden="hidden">@Model.TobaccoProducts</label>
+                                                        <input tabindex="34" type="radio" class="custom-control-input"
+                                                               id="cigarettesRadioYes" name="TobaccoProductsRadio"
+                                                               value="true" onclick="Radio()">
+                                                        <label class="custom-control-label"
+                                                               for="cigarettesRadioYes">Yes</label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio d-inline-block">
+                                                        <input tabindex="35" type="radio" class="custom-control-input"
+                                                               id="cigarettesRadioNo" name="TobaccoProductsRadio"
+                                                               value="false" onclick="Radio()">
+                                                        <label class="custom-control-label"
+                                                               for="cigarettesRadioNo">No</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    @*</div>*@
+
+                                </div>
+
+                                <div class="detail-button mt-3 w-100 text-center">
+                                    <!-- <a href="#!" class="btn btn-info"><i class="far fa-edit"></i>
+                Cancel</a> -->
+                                    <input type="hidden" name="CreatedDate" />
+                                    <input type="hidden" name="ModifiedDate" />
+                                    <input type="hidden" name="Diagnosed" />
+                                    <input type="hidden" name="HealthInsurance" />
+                                    <input type="hidden" name="PrimaryCareDoctor" />
+                                    <input type="hidden" name="RegularDentist" />
+                                    <input type="hidden" name="OtherDoctorsTherapists" />
+                                    <input type="hidden" name="CaseManager" />
+                                    <input type="hidden" name="SmokeCigarettes" />
+                                    <input type="hidden" name="TobaccoProducts" />
+
+                                    <input type="hidden" name="PatientID" value="@Model.PatientID" />
+                                    <input type="hidden" name="PatientHealthcareID" value="@Model.PatientHealthcareID" />
+                                    
+                                </div>
+                            </form>
+
+                            </div>
+                        </div>
+                    <!-- <div class="recent-paitents">
+                        <h2 class="mb-3">Recent Patients</h2>
+                        <div class="recent-paitent-row d-flex">
+                            <div class="recent-paitents-img">
+                                <img class="img-fluid" src="images/recent-paitent-img.png" alt="">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col" style="width:160px;">Name</th>
+                                            <th scope="col" style="width:268px;">Email</th>
+                                            <th scope="col" style="width:160px;">Phone</th>
+                                            <th scope="col" style="width:160px;">Last Modify</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <td style="width:160px;">Omnis iste</td>
+                                            <td style="width:268px;">Omnisiste@gmail.com</td>
+                                            <td style="width:160px;">98756 45365</td>
+                                            <td style="width:160px;">23-4-2019</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="recent-paitent-row d-flex">
+                            <div class="recent-paitents-img">
+                                <img class="img-fluid" src="images/recent-paitent-img-1.png" alt="">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col" style="width:160px;">Name</th>
+                                            <th scope="col" style="width:268px;">Email</th>
+                                            <th scope="col" style="width:160px;">Phone</th>
+                                            <th scope="col" style="width:160px;">Last Modify</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <td style="width:160px;">praesentium</td>
+                                            <td style="width:268px;">praesentium@gmail.com</td>
+                                            <td style="width:160px;">68756 45365</td>
+                                            <td style="width:160px;">20-4-2019</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="recent-paitent-row d-flex">
+                            <div class="recent-paitents-img">
+                                <img class="img-fluid" src="images/recent-paitent-img-2.png" alt="">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col" style="width:160px;">Name</th>
+                                            <th scope="col" style="width:268px;">Email</th>
+                                            <th scope="col" style="width:160px;">Phone</th>
+                                            <th scope="col" style="width:160px;">Last Modify</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <td style="width:160px;">voluptatum</td>
+                                            <td style="width:268px;">voluptatum@gmail.com</td>
+                                            <td style="width:160px;">78756 45365</td>
+                                            <td style="width:160px;">18-4-2019</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+
+                <!-- <div class="col-lg-4 col-md-12 col-sm-12 col-12 ">
+
+
+                    <div class="sidebar-right">
+                        <div class="appointement">
+                            <h3>Appointment</h3>
+                            <div class="scroll scroll-height">
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 24-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 26-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 28-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 30-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 1-5-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="appointement">
+                            <h3>Notes</h3>
+                            <div class="scroll scroll-height">
+
+
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 24-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 26-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 28-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 30-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 1-5-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+
+    </div>
+</div>

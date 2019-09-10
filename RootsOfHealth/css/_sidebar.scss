@@ -1,0 +1,132 @@
+/* Sidebar CSS start here */
+.sidebar-menu {
+    position: fixed;
+    width: 55px;
+    height: 100%;
+    background: #34425a;
+    top:60px;
+    padding: 20px 0;
+    transition: all 0.5s;
+    .logo {
+        width: 100%;
+        max-width: 145px;
+        margin: 0 auto 20px;
+        display: block;
+        padding: 0 10px;
+    }
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        li {
+             font-size: 0;
+            transition: all 0.5s;
+            color: #beceec;
+            display: list-item;
+            text-align: center;
+            
+        }
+        a {
+            color: #beceec;
+            display: list-item;
+            padding: 10px 15px;
+            &:hover {
+                text-decoration: none;
+                background: #2b384e;
+                color: #fff;
+                .home-icon {
+                    background-position: -3px 0;
+                }
+                .app-icon {
+                    background-position: -3px -54px;
+                }
+                .patient-icon {
+                    background-position: -3px -103px;
+                }
+                .add-icon { 
+                    background-position: -2px -172px;
+                }
+                .account-icon { 
+                    background-position: -3px -228px;
+                }
+                .logout-icon {
+                    background-position: -4px -275px;
+                }
+            }
+            .home-icon {
+                display: block;
+                width: 22px;
+                height: 22px;
+                background: url(../images/sidebar-menu-icons.png) no-repeat 0 0;
+                background-position: -46px 0;
+                margin: auto;
+                margin-bottom: 4px;
+            }
+            .app-icon {
+                display: block;
+                width: 22px;
+                height: 22px;
+                background: url(../images/sidebar-menu-icons.png) no-repeat 0 0;
+                background-position: -46px -54px;
+                margin: auto;
+                margin-bottom: 4px;
+            }
+            .patient-icon {
+                display: block;
+                width: 22px;
+                height: 35px;
+                background: url(../images/sidebar-menu-icons.png) no-repeat 0 0;
+                background-position: -46px -103px;
+                margin: auto;
+                margin-bottom: 4px;
+            }
+            .add-icon {
+                display: block;
+                width: 27px;
+                height: 24px;
+                background: url(../images/sidebar-menu-icons.png) no-repeat 0 0;
+                background-position: -45px -172px;
+                margin: auto;
+                margin-bottom: 4px;
+            }
+            .account-icon {
+                display: block;
+                width: 22px;
+                height: 22px;
+                background: url(../images/sidebar-menu-icons.png) no-repeat 0 0;
+                background-position: -46px -228px;
+                margin: auto;
+                margin-bottom: 4px;
+            }
+            .logout-icon {
+                display: block;
+                width: 19px;
+                height: 21px;
+                background: url(../images/sidebar-menu-icons.png) no-repeat 0 0;
+                background-position: -47px -275px;
+                margin: auto;
+                margin-bottom: 4px;
+            }
+        }
+        .active {
+            text-decoration: none;
+                background: #2b384e;
+                color: #fff;
+                .home-icon {
+                    background-position: -3px 0;
+                }
+        }
+
+      
+    }
+   
+}
+aside.sidebar-menu.sidebar-res {
+    width: 168px !important;
+    
+     ul li {
+        font-size: 15px;
+    }
+}
+
+/* Sidebar CSS end here */

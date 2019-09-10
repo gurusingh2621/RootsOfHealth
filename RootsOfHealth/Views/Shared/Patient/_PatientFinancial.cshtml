@@ -1,0 +1,844 @@
+﻿@model RootsOfHealth.Models.PatientFinancialSecurityBO
+
+<div class="tab-pane fade" id="Financial" role="tabpanel" aria-labelledby="Financial-tab">
+    <div class="inner-content">
+        <div class="paitent-detail">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="paitent-detail-left">
+                        <div class="detail-heading d-flex">
+                            <h2>Patient Financial Security</h2>
+                            <div class="detail-button ml-auto">
+                                <a href="/Patient/Add?PatientID=@ViewBag.PatientId"
+                                   class="btn btn-success label-fields">
+                                    <i class="far fa-edit"></i>
+                                    Edit
+                                </a>
+                                <a tabindex="33" href="javascript:{}" onclick="return  FinancialSecuritySave();" id="FinancialSecuritySave" class="btn btn-success">
+                                    <i class="far fa-save"></i>
+                                    Save
+                                </a>
+                            </div>
+
+
+                        </div>
+
+                       
+                        <div class="inner-main-content">
+                            <div class="top-image-row d-flex">
+                                <div class="top-image-left">
+
+
+
+                                    <div class="form-row-first label-fields">
+                                        <div class="top-form-row d-flex height-auto">
+                                            <div class="two-columns">
+
+                                                <label class="label-fields">
+                                                    Score
+                                                </label>
+                                            </div>
+                                            <div class="two-columns">
+
+                                                <label class="label-fields">
+                                                    Status
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                        <div class="bootom-form-row d-flex">
+                                            <div class="two-columns">
+
+                                                <label id="txtfinancialscore" class="label-fields"></label>
+
+                                            </div>
+
+                                            <div class="two-columns">
+
+                                                <label id="txtfinancialstatus" class="label-fields"></label>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+
+
+
+                                </div>
+                            </div>
+                            <form class="detail-patient-form" id="frmFinancialSecurity">
+                                <div class="form-row-first">
+                                    <div class="top-form-row d-flex height-auto">
+                                        <div class="two-columns">
+                                            <label class="Add">
+                                                Over the past 3 months, did you ever have
+                                                difficulties in paying your bills for expenses like
+                                                housing, utilities, child care, transportation,
+                                                telephone, medical care, or other basic needs?
+                                            </label>
+                                            <label class="label-fields">
+                                                Difficulties in paying your bills for expenses like
+                                                housing, utilities, child care, transportation,
+                                                telephone, medical care, or other basic needs.
+                                            </label>
+                                        </div>
+                                        <div class="two-columns">
+                                            <label class="Add">
+                                                Does your income generally cover your basic household
+                                                expenses
+                                            </label>
+                                            <label class="label-fields">
+                                                your income generally cover your basic household
+                                                expenses.
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="two-columns">
+                                            @*<label class="label-fields" id="lblPayingBills">@Model.DifficultiesInPayingBills</label>*@
+
+                                            @*<select tabindex="1" class="form-control" id="ddPayingBills" name="DifficultiesInPayingBills">
+                            <option value="Never">Never</option>
+                            <option value="One Month">One Month</option>
+                            <option value="Two Months">Two Months</option>
+                            <option value="Every Month">Every Month</option>
+                        </select>*@
+
+
+                                            @if (Model.DifficultiesInPayingBills != null)
+                                            {<label id="lblPayingBills" class="label-fields">@(Model.ddlDifficultiesInPayingBills.Where(p => p.Value == Model.DifficultiesInPayingBills.ToString()).FirstOrDefault().Text)</label>}
+
+                                            @Html.DropDownListFor(m => m.DifficultiesInPayingBills, new SelectList(Model.ddlDifficultiesInPayingBills, "Value", "Text", Model.DifficultiesInPayingBills), new { @class = "form-control", @Name = "DifficultiesInPayingBills", @tabindex = "1" })
+
+
+                                        </div>
+
+                                        <div class="two-columns">
+                                            <div class="custom-control custom-radio d-inline-block mr-2">
+                                                <label class="label-fields">@Html.Raw(Model.IncomeCoverHouseholdExpenses == true ? "Yes" : "No")</label>
+                                                <label class="label-fields" id="lblHouseholdExpenses" hidden="hidden">@Model.IncomeCoverHouseholdExpenses</label>
+                                                <input tabindex="2" type="radio" class="custom-control-input"
+                                                       id="IncomeRadioYes" onclick="Radio()" name="HouseholdExpensesRadio"
+                                                       value="true">
+                                                <label class="custom-control-label"
+                                                       for="IncomeRadioYes">Yes</label>
+                                            </div>
+                                            <div class="custom-control custom-radio d-inline-block mr-2">
+                                                <input tabindex="3" type="radio" class="custom-control-input"
+                                                       id="IncomeRadioNo" onclick="Radio()" name="HouseholdExpensesRadio" value="false">
+                                                <label class="custom-control-label"
+                                                       for="IncomeRadioNo">No</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row-first">
+                                    <div class="top-form-row d-flex height-auto">
+                                        <div class="one-columns">
+                                            <label class="Add">
+                                                Over the 3 months, did you ever cut the size of your
+                                                meals or skip meals because there wasn't enough money
+                                                for food?
+                                            </label>
+                                            <label class="label-fields">
+                                                Over the 3 months, you ever cut the size of your
+                                                meals or skip meals because there wasn't enough money
+                                                for food.
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="three-columns">
+                                            @*<label class="label-fields" id="lblSkipMeals">@Model.SkipMeals</label>*@
+
+                                            @*<select tabindex="4" class="form-control" id="ddSkipMeals" name="SkipMeals">
+                            <option value="Never">Never</option>
+                            <option value="Once or Twice">Once or Twice</option>
+                            <option value="Several days">Several days</option>
+                            <option value="Most Days">Most Days</option>
+                            <option value="Every Day">Every Day</option>
+                        </select>*@
+
+                                            @if (Model.SkipMeals != null)
+                                            {<label id="lblSkipMeals" class="label-fields">@(Model.ddlSkipMeals.Where(p => p.Value == Model.SkipMeals.ToString()).FirstOrDefault().Text)</label>}
+
+                                            @Html.DropDownListFor(m => m.SkipMeals, new SelectList(Model.ddlSkipMeals, "Value", "Text", Model.SkipMeals), new { @class = "form-control", @Name = "SkipMeals", @tabindex = "1" })
+
+
+
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <div class="form-row-first">
+                                    <div class="top-form-row d-flex height-auto">
+                                        <div class="one-columns">
+                                            <label class="Add">
+                                                Have you applied for or do you receive benefits or
+                                                cash assistance from any of the following
+                                                programs
+                                            </label>
+                                            <label class="label-fields">
+                                                You receive benefits or
+                                                cash assistance from any of the following
+                                                programs.
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="one-columns">
+                                            <table class="table mt-1 mb-1">
+                                                <thead class="thead-light">
+                                                    <tr>
+                                                        <th scope="col"></th>
+                                                        <th scope="col">Receiving</th>
+                                                        <th scope="col">Pending</th>
+                                                        <th scope="col">Applied & Denied</th>
+                                                        <th scope="col">Never Applied</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <th scope="row" style="width:300px;">
+                                                            Calworks
+                                                            Benefits (TANF)
+                                                        </th>
+                                                        <td>
+                                                            <div class="custom-control custom-radio">
+                                                                <label class="label-fields" hidden="hidden" id="lblCalRec">
+                                                                    @Model.CalworksBenefits
+                                                            </label>
+                                                            <i id="CalRec" class="fas fa-times"></i>
+                                                            <input tabindex="5" type="radio"
+                                                                   class="custom-control-input"
+                                                                   id="recievingRadio" onclick="Radio()" name="Calworks"
+                                                                   value="Receiving">
+                                                            <label class="custom-control-label"
+                                                                   for="recievingRadio"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="custom-control custom-radio">
+                                                            <label class="label-fields" hidden="hidden" id="lblCalPen">@Model.CalworksBenefits </label>
+                                                            <i id="CalPen" class="fas fa-times"></i>
+                                                            <input tabindex="6" type="radio"
+                                                                   class="custom-control-input"
+                                                                   id="pendingRadio" onclick="Radio()" name="Calworks"
+                                                                   value="Pending">
+                                                            <label class="custom-control-label"
+                                                                   for="pendingRadio"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+
+                                                        <div class="custom-control custom-radio">
+                                                            <label class="label-fields" hidden="hidden" id="lblCalApp">@Model.CalworksBenefits </label>
+                                                            <i id="CalApp" class="fas fa-times"></i>
+                                                            <input tabindex="7" type="radio"
+                                                                   class="custom-control-input"
+                                                                   id="appliedRadio" onclick="Radio()" name="Calworks"
+                                                                   value="Applied & Denied">
+                                                            <label class="custom-control-label"
+                                                                   for="appliedRadio"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="custom-control custom-radio">
+                                                            <label class="label-fields" hidden="hidden" id="lblCalNev">@Model.CalworksBenefits </label>
+                                                            <i id="CalNev" class="fas fa-times"></i>
+                                                            <input tabindex="8" type="radio"
+                                                                   class="custom-control-input"
+                                                                   id="neverappliedRadio" onclick="Radio()"
+                                                                   name="Calworks" value="Never Applied">
+                                                            <label class="custom-control-label"
+                                                                   for="neverappliedRadio"></label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        Social Security Disability
+                                                        Insurance (SSI)
+                                                    </th>
+                                                    <td>
+                                                        <div class="custom-control custom-radio">
+                                                            <label class="label-fields" hidden="hidden" id="lblSSRec">@Model.SocialSecurityDisabilityInsurance</label>
+                                                            <i id="SSRec" class="fas fa-times"></i>
+                                                            <input tabindex="9" type="radio"
+                                                                   class="custom-control-input"
+                                                                   id="SSIrecievingRadio" onclick="Radio()"
+                                                                   name="SSIRadio" value="Receiving">
+                                                            <label class="custom-control-label"
+                                                                   for="SSIrecievingRadio"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="custom-control custom-radio">
+                                                            <label class="label-fields" hidden="hidden" id="lblSSPen">@Model.SocialSecurityDisabilityInsurance</label>
+                                                            <i id="SSPen" class="fas fa-times"></i>
+                                                            <input tabindex="10" type="radio"
+                                                                   class="custom-control-input"
+                                                                   id="SSIpendingRadio" name="SSIRadio"
+                                                                   value="Pending" onclick="Radio()">
+                                                            <label class="custom-control-label"
+                                                                   for="SSIpendingRadio"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="custom-control custom-radio">
+                                                            <label class="label-fields" hidden="hidden" id="lblSSApp">@Model.SocialSecurityDisabilityInsurance</label>
+                                                            <i id="SSApp" class="fas fa-times"></i>
+                                                            <input tabindex="11" type="radio"
+                                                                   class="custom-control-input"
+                                                                   id="SSIappliedRadio" name="SSIRadio"
+                                                                   value="Applied & Denied" onclick="Radio()">
+                                                            <label class="custom-control-label"
+                                                                   for="SSIappliedRadio"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="custom-control custom-radio">
+                                                            <label class="label-fields" hidden="hidden" id="lblSSNev">@Model.SocialSecurityDisabilityInsurance</label>
+                                                            <i id="SSNev" class="fas fa-times"></i>
+                                                            <input tabindex="12" type="radio"
+                                                                   class="custom-control-input"
+                                                                   id="SSIneverappliedRadio"
+                                                                   name="SSIRadio" value="Never Applied" onclick="Radio()">
+                                                            <label class="custom-control-label"
+                                                                   for="SSIneverappliedRadio"></label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">General Assistance (GA)</th>
+                                                    <td>
+                                                        <div class="custom-control custom-radio">
+                                                            <label class="label-fields" hidden="hidden" id="lblGARec">@Model.GeneralAssistance</label>
+                                                            <i id="GARec" class="fas fa-times"></i>
+                                                            <input tabindex="13" type="radio"
+                                                                   class="custom-control-input"
+                                                                   id="GeneralRadio" name="GARadio"
+                                                                   value="Receiving" onclick="Radio()">
+                                                            <label class="custom-control-label"
+                                                                   for="GeneralRadio"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="custom-control custom-radio">
+                                                            <label class="label-fields" hidden="hidden" id="lblGAPen">@Model.GeneralAssistance</label>
+                                                            <i id="GAPen" class="fas fa-times"></i>
+                                                            <input tabindex="14" type="radio"
+                                                                   class="custom-control-input"
+                                                                   id="GeneralPendingRadio"
+                                                                   name="GARadio" value="Pending" onclick="Radio()">
+                                                            <label class="custom-control-label"
+                                                                   for="GeneralPendingRadio"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="custom-control custom-radio">
+                                                            <label class="label-fields" hidden="hidden" id="lblGAApp">@Model.GeneralAssistance</label>
+                                                            <i id="GAApp" class="fas fa-times"></i>
+                                                            <input tabindex="15" type="radio"
+                                                                   class="custom-control-input"
+                                                                   id="GeneralAppliedRadio"
+                                                                   name="GARadio" value="Applied & Denied" onclick="Radio()">
+                                                            <label class="custom-control-label"
+                                                                   for="GeneralAppliedRadio"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="custom-control custom-radio">
+                                                            <label class="label-fields" hidden="hidden" id="lblGANev">@Model.GeneralAssistance</label>
+                                                            <i id="GANev" class="fas fa-times"></i>
+                                                            <input tabindex="16" type="radio"
+                                                                   class="custom-control-input"
+                                                                   id="GeneralNeverAppliedRadio"
+                                                                   name="GARadio" value="Never Applied" onclick="Radio()">
+                                                            <label class="custom-control-label"
+                                                                   for="GeneralNeverAppliedRadio"></label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        Women, Infant & Children
+                                                        Benefits (WIC)
+                                                    </th>
+                                                    <td>
+                                                        <div class="custom-control custom-radio">
+                                                            <label class="label-fields" hidden="hidden" id="lblWIRec">@Model.WomenInfantChildrenBenefits</label>
+                                                            <i id="WIRec" class="fas fa-times"></i>
+                                                            <input tabindex="17" type="radio"
+                                                                   class="custom-control-input"
+                                                                   id="InfantRadio" onclick="Radio()" name="WICRadio"
+                                                                   value="Receiving">
+                                                            <label class="custom-control-label"
+                                                                   for="InfantRadio"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="custom-control custom-radio">
+                                                            <label class="label-fields" hidden="hidden" id="lblWIPen">@Model.WomenInfantChildrenBenefits</label>
+                                                            <i id="WIPen" class="fas fa-times"></i>
+                                                            <input tabindex="18" type="radio"
+                                                                   class="custom-control-input"
+                                                                   id="InfantPendingRadio"
+                                                                   name="WICRadio" onclick="Radio()" value="Pending">
+                                                            <label class="custom-control-label"
+                                                                   for="InfantPendingRadio"></label>
+                                                        </div>
+
+                                                    </td>
+                                                    <td>
+                                                        <div class="custom-control custom-radio">
+                                                            <label class="label-fields" hidden="hidden" id="lblWIApp">@Model.WomenInfantChildrenBenefits</label>
+                                                            <i id="WIApp" class="fas fa-times"></i>
+                                                            <input tabindex="19" type="radio"
+                                                                   class="custom-control-input"
+                                                                   id="InfantAppliedRadio"
+                                                                   name="WICRadio" onclick="Radio()" value="Applied & Denied">
+                                                            <label class="custom-control-label"
+                                                                   for="InfantAppliedRadio"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+
+                                                        <div class="custom-control custom-radio">
+                                                            <label class="label-fields" hidden="hidden" id="lblWINev">@Model.WomenInfantChildrenBenefits</label>
+                                                            <i id="WINev" class="fas fa-times"></i>
+                                                            <input tabindex="20" type="radio"
+                                                                   class="custom-control-input"
+                                                                   id="InfantNeverAppliedRadio"
+                                                                   name="WICRadio" onclick="Radio()" value="Never Applied">
+                                                            <label class="custom-control-label"
+                                                                   for="InfantNeverAppliedRadio"></label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Unemployment Benefits</th>
+                                                    <td>
+                                                        <div class="custom-control custom-radio">
+                                                            <label class="label-fields" hidden="hidden" id="lblUnRec">@Model.UnemploymentBenefits</label>
+                                                            <i id="UnRec" class="fas fa-times"></i>
+                                                            <input tabindex="21" type="radio"
+                                                                   class="custom-control-input"
+                                                                   id="UnemployRadio" onclick="Radio()" name="Unemployment"
+                                                                   value="Receiving">
+                                                            <label class="custom-control-label"
+                                                                   for="UnemployRadio"></label>
+                                                        </div>
+
+                                                    </td>
+                                                    <td>
+
+                                                        <div class="custom-control custom-radio">
+                                                            <label class="label-fields" hidden="hidden" id="lblUnPen">@Model.UnemploymentBenefits</label>
+                                                            <i id="UnPen" class="fas fa-times"></i>
+                                                            <input tabindex="22" type="radio"
+                                                                   class="custom-control-input"
+                                                                   id="UnemployPendingRadio" onclick="Radio()"
+                                                                   name="Unemployment" value="Pending">
+                                                            <label class="custom-control-label"
+                                                                   for="UnemployPendingRadio"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="custom-control custom-radio">
+                                                            <label class="label-fields" hidden="hidden" id="lblUnApp">@Model.UnemploymentBenefits</label>
+                                                            <i id="UnApp" class="fas fa-times"></i>
+                                                            <input tabindex="23" type="radio"
+                                                                   class="custom-control-input"
+                                                                   id="UnemployAppliedRadio" onclick="Radio()"
+                                                                   name="Unemployment" value="Applied & Denied">
+                                                            <label class="custom-control-label"
+                                                                   for="UnemployAppliedRadio"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="custom-control custom-radio">
+                                                            <label class="label-fields" hidden="hidden" id="lblUnNev">@Model.UnemploymentBenefits</label>
+                                                            <i id="UnNev" class="fas fa-times"></i>
+                                                            <input tabindex="24" type="radio"
+                                                                   class="custom-control-input"
+                                                                   id="UnemployNeverAppliedRadio" onclick="Radio()"
+                                                                   name="Unemployment" value="Never Applied">
+                                                            <label class="custom-control-label"
+                                                                   for="UnemployNeverAppliedRadio"></label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        State Disability Insurance
+                                                        Benefits (SDI)
+                                                    </th>
+                                                    <td>
+                                                        <div class="custom-control custom-radio">
+                                                            <label class="label-fields" hidden="hidden" id="lblSDRec">@Model.StateDisabilityInsuranceBenefits</label>
+                                                            <i id="SDRec" class="fas fa-times"></i>
+                                                            <input tabindex="25" type="radio"
+                                                                   class="custom-control-input"
+                                                                   id="SDIRadio" onclick="Radio()" name="SDIRadio"
+                                                                   value="Receiving">
+                                                            <label class="custom-control-label"
+                                                                   for="SDIRadio"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="custom-control custom-radio">
+                                                            <label class="label-fields" hidden="hidden" id="lblSDPen">@Model.StateDisabilityInsuranceBenefits</label>
+                                                            <i id="SDPen" class="fas fa-times"></i>
+                                                            <input tabindex="26" type="radio"
+                                                                   class="custom-control-input"
+                                                                   id="SDIPendingRadio" name="SDIRadio"
+                                                                   value="Pending" onclick="Radio()">
+                                                            <label class="custom-control-label"
+                                                                   for="SDIPendingRadio"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="custom-control custom-radio">
+                                                            <label class="label-fields" hidden="hidden" id="lblSDApp">@Model.StateDisabilityInsuranceBenefits</label>
+                                                            <i id="SDApp" class="fas fa-times"></i>
+                                                            <input tabindex="27" type="radio"
+                                                                   class="custom-control-input"
+                                                                   id="SDIAppliedRadio" name="SDIRadio"
+                                                                   value="Applied & Denied" onclick="Radio()">
+                                                            <label class="custom-control-label"
+                                                                   for="SDIAppliedRadio"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="custom-control custom-radio">
+                                                            <label class="label-fields" hidden="hidden" id="lblSDNev">@Model.StateDisabilityInsuranceBenefits</label>
+                                                            <i id="SDNev" class="fas fa-times"></i>
+                                                            <input tabindex="28" type="radio"
+                                                                   class="custom-control-input"
+                                                                   id="SDINeverAppliedRadio"
+                                                                   name="SDIRadio" value="Never Applied" onclick="Radio()">
+                                                            <label class="custom-control-label"
+                                                                   for="SDINeverAppliedRadio"></label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">
+                                                        Rental Assistance Benefits (e.g.
+                                                        Section 8 housing)
+                                                    </th>
+                                                    <td>
+                                                        <div class="custom-control custom-radio">
+                                                            <label class="label-fields" hidden="hidden" id="lblReRec">@Model.RentalAssistanceBenefits</label>
+                                                            <i id="ReRec" class="fas fa-times"></i>
+                                                            <input tabindex="29" type="radio"
+                                                                   class="custom-control-input"
+                                                                   id="RABRadio" name="RentalAssistance"
+                                                                   value="Receiving" onclick="Radio()">
+                                                            <label class="custom-control-label"
+                                                                   for="RABRadio"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="custom-control custom-radio">
+                                                            <label class="label-fields" hidden="hidden" id="lblRePen">@Model.RentalAssistanceBenefits</label>
+                                                            <i id="RePen" class="fas fa-times"></i>
+                                                            <input tabindex="30" type="radio"
+                                                                   class="custom-control-input"
+                                                                   id="RABPendingRadio" name="RentalAssistance"
+                                                                   value="Pending" onclick="Radio()">
+                                                            <label class="custom-control-label"
+                                                                   for="RABPendingRadio"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="custom-control custom-radio">
+                                                            <label class="label-fields" hidden="hidden" id="lblReApp">@Model.RentalAssistanceBenefits</label>
+                                                            <i id="ReApp" class="fas fa-times"></i>
+                                                            <input tabindex="31" type="radio"
+                                                                   class="custom-control-input"
+                                                                   id="RABAppliedRadio" name="RentalAssistance"
+                                                                   value="Applied & Denied" onclick="Radio()">
+                                                            <label class="custom-control-label"
+                                                                   for="RABAppliedRadio"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="custom-control custom-radio">
+                                                            <label class="label-fields" hidden="hidden" id="lblReNev">@Model.RentalAssistanceBenefits</label>
+                                                            <i id="ReNev" class="fas fa-times"></i>
+                                                            <input tabindex="32" type="radio"
+                                                                   class="custom-control-input"
+                                                                   id="RABNeverAppliedRadio"
+                                                                   name="RentalAssistance" value="Never Applied" onclick="Radio()">
+                                                            <label class="custom-control-label"
+                                                                   for="RABNeverAppliedRadio"></label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <div class="detail-button mt-3 w-100 text-center">
+                                <!-- <a href="#!" class="btn btn-info"><i class="far fa-edit"></i>
+        Cancel</a> -->
+                                <input type="hidden" name="CreatedDate" />
+                                <input type="hidden" name="ModifiedDate" />
+                                <input type="hidden" name="PatientFinancialSecurityID" value="@Model.PatientFinancialSecurityID" />
+                                <input type="hidden" name="IncomeCoverHouseholdExpenses" />
+                                <input type="hidden" name="CalworksBenefits" />
+                                <input type="hidden" name="SocialSecurityDisabilityInsurance" />
+                                <input type="hidden" name="GeneralAssistance" />
+                                <input type="hidden" name="WomenInfantChildrenBenefits" />
+                                <input type="hidden" name="UnemploymentBenefits" />
+                                <input type="hidden" name="StateDisabilityInsuranceBenefits" />
+                                <input type="hidden" name="RentalAssistanceBenefits" />
+                                <input type="hidden" name="PatientID" value="@Model.PatientID" />
+                                
+
+                            </div>
+                        </form>
+
+
+                        </div>
+                    </div>
+                    <!-- <div class="recent-paitents">
+                        <h2 class="mb-3">Recent Patients</h2>
+                        <div class="recent-paitent-row d-flex">
+                            <div class="recent-paitents-img">
+                                <img class="img-fluid" src="images/recent-paitent-img.png" alt="">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col" style="width:160px;">Name</th>
+                                            <th scope="col" style="width:268px;">Email</th>
+                                            <th scope="col" style="width:160px;">Phone</th>
+                                            <th scope="col" style="width:160px;">Last Modify</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <td style="width:160px;">Omnis iste</td>
+                                            <td style="width:268px;">Omnisiste@gmail.com</td>
+                                            <td style="width:160px;">98756 45365</td>
+                                            <td style="width:160px;">23-4-2019</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="recent-paitent-row d-flex">
+                            <div class="recent-paitents-img">
+                                <img class="img-fluid" src="images/recent-paitent-img-1.png" alt="">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col" style="width:160px;">Name</th>
+                                            <th scope="col" style="width:268px;">Email</th>
+                                            <th scope="col" style="width:160px;">Phone</th>
+                                            <th scope="col" style="width:160px;">Last Modify</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <td style="width:160px;">praesentium</td>
+                                            <td style="width:268px;">praesentium@gmail.com</td>
+                                            <td style="width:160px;">68756 45365</td>
+                                            <td style="width:160px;">20-4-2019</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="recent-paitent-row d-flex">
+                            <div class="recent-paitents-img">
+                                <img class="img-fluid" src="images/recent-paitent-img-2.png" alt="">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col" style="width:160px;">Name</th>
+                                            <th scope="col" style="width:268px;">Email</th>
+                                            <th scope="col" style="width:160px;">Phone</th>
+                                            <th scope="col" style="width:160px;">Last Modify</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <td style="width:160px;">voluptatum</td>
+                                            <td style="width:268px;">voluptatum@gmail.com</td>
+                                            <td style="width:160px;">78756 45365</td>
+                                            <td style="width:160px;">18-4-2019</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+
+                <!-- <div class="col-lg-4 col-md-12 col-sm-12 col-12 ">
+
+
+                    <div class="sidebar-right">
+                        <div class="appointement">
+                            <h3>Appointment</h3>
+                            <div class="scroll scroll-height">
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 24-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 26-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 28-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 30-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 1-5-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="appointement">
+                            <h3>Notes</h3>
+                            <div class="scroll scroll-height">
+
+
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 24-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 26-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 28-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 30-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 1-5-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+
+    </div>
+</div>

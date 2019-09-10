@@ -1,0 +1,63 @@
+﻿@model IEnumerable<RootsOfHealth.Models.PatientMainBO>
+
+@*<h2 class="mb-3">Recent Patients</h2>*@
+<div class="scroll">
+
+
+    <div class="table-scroll">
+        @{ int index = 0;}
+        @foreach (var p in Model)
+        {
+
+            if (index == 0)
+            {
+                <input type="hidden" id="topPatientId" value="@p.PatientID"></input>
+            }
+
+            <div id="div_@p.PatientID" onclick="bindTopPatient('@p.PatientID');" target="#myTabContent" style="cursor:pointer" class="recent-paitent-row d-flex">
+                <div class="recent-paitents-img" style="width:100px" height="100px">
+                    @if (p.PatientImg == "")
+                    {
+                <img class="img-fluid" id="patientpic" src="/images/avatar.png" >
+                                    
+
+                                }
+                                else
+                                {
+
+                <img class="img-fluid" src="~/Files/@p.PatientImg" alt="">
+            }
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col" style="width:160px;">Name</th>
+                                <th scope="col" style="width:268px;">Email</th>
+                                <th scope="col" style="width:160px;">Phone</th>
+                                <th scope="col" style="width:160px;">Last Modify</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+                                <td style="width:160px;">@p.FirstName @p.LastName</td>
+                                <td style="width:268px;">@p.EmailAddress</td>
+                                <td style="width:160px;">@p.CellPhone  </td>
+                                <td style="width:160px;">@p.ModifiedDate</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+
+
+            index++;
+
+        }
+    </div>
+</div>

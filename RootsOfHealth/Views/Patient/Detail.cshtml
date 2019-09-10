@@ -1,0 +1,327 @@
+﻿@model RootsOfHealth.Models.PatientMainBO
+@{
+    ViewBag.Title = "PIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    Response.Cookies["patientid"].Value = Model.PatientID.ToString();
+}
+
+<!-- Content start here -->
+<section id="content" class="responsive-container">
+    <div class="profile-tabs">
+        <div class="tabs-scroll">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="Profile-tab" data-toggle="tab" href="#Profile" role="tab"
+                       aria-controls="Profile" aria-selected="true">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="Housing-tab" data-toggle="tab" href="#Housing" role="tab"
+                       aria-controls="Housing" aria-selected="false">Housing</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="Financial-tab" data-toggle="tab" href="#Financial" role="tab"
+                       aria-controls="Financial" aria-selected="false">Financial Security</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="Employment-tab" data-toggle="tab" href="#Employment" role="tab"
+                       aria-controls="Employment" aria-selected="false">Employment/Education</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="Communication-tab" data-toggle="tab" href="#Communication" role="tab"
+                       aria-controls="Communication" aria-selected="false">Communication & Mobility</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="Healthcare-tab" data-toggle="tab" href="#Healthcare" role="tab"
+                       aria-controls="Healthcare" aria-selected="false">Healthcare</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="SocialSupports-tab" data-toggle="tab" href="#SocialSupports"
+                       role="tab" aria-controls="SocialSupports" aria-selected="false">
+                        Social Supports and
+                        Safety
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="LegalStatus-tab" data-toggle="tab" href="#LegalStatus" role="tab"
+                       aria-controls="LegalStatus" aria-selected="false">Legal Status</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="Alcohol-tab" data-toggle="tab" href="#AlcoholDisorder" role="tab"
+                       aria-controls="AlcoholDisorder" aria-selected="false">Substance Use</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="MentalHealth-tab" data-toggle="tab" href="#MentalHealth" role="tab"
+                       aria-controls="MentalHealth" aria-selected="false">Mental Health</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="FoodAccess-tab" data-toggle="tab" href="#FoodAccess" role="tab"
+                       aria-controls="FoodAccess" aria-selected="false">Food Access</a>
+                </li>
+
+                <li class="nav-item clearfix" id="programtbs" style="display:none">
+                    <a class="nav-link" id="Programs-tab" data-toggle="tab" href="#Programs" role="tab"
+                       aria-controls="Programs" aria-selected="false">Programs</a>
+                </li>
+            </ul>
+        </div>
+        <div class="tab-content" id="myTabContent">
+            <div class="inner-content">
+                <div class="paitent-detail">
+
+                </div>
+
+            </div>
+
+
+
+
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+
+@section scripts {
+
+
+
+    <script>
+        var PID=@Model.PatientID;
+        $(document).ready(function () {
+            $(".nav-menu").removeClass("active");
+            $("#DashBoard").addClass("active");
+            $("#btnProfileCancel").hide();
+            $("#btnProfileSave").hide();
+            $(".input-fields").hide();
+
+            $("#btnProfileEdit").click(function () {
+                $("#btnProfileEdit").hide();
+                $("#btnProfileCancel").show();
+                $("#btnProfileSave").show();
+                $(".input-fields").show();
+                $(".label-fields").hide();
+
+                //onchange divs hides.
+                $("#divOtherGender").hide();
+                $("#divIfNoAddress").hide();
+                $("#divMaritalStatus").hide();
+                $("#divOtherLanguage").hide();
+                $("#divOtherPronouns").hide();
+                $("#divOtherYouThink").hide();
+                $("#divhaveYouQuit").hide();
+                $("#divQuitDate").hide();
+                $("#divOtherContact").hide();
+
+            })
+
+
+            $("#btnProfileSave").click(function () {
+                onSaveAndCancel();
+            });
+
+            $("#btnProfileCancel").click(function () {
+                onSaveAndCancel();
+            })
+
+            function onSaveAndCancel() {
+                $("#btnProfileEdit").show();
+                $("#btnProfileCancel").hide();
+                $("#btnProfileSave").hide();
+                $(".input-fields").hide();
+                $(".label-fields").show();
+
+                // onchange divs show.
+                $("#divOtherGender").show();
+                $("#divIfNoAddress").show();
+                $("#divMaritalStatus").show();
+                $("#divOtherLanguage").show();
+                $("#divOtherPronouns").show();
+                $("#divOtherYouThink").show();
+                $("#divhaveYouQuit").show();
+                $("#divQuitDate").show();
+                $("#divOtherContact").show();
+            }
+
+
+            // change function of gender
+            $("#ddlGendar").change(function () {
+                if ($("#ddlGendar").val() == "other") {
+                    $("#divOtherGender").show();
+                }
+                else {
+                    $("#divOtherGender").hide();
+                }
+            })
+
+
+            $("#ddlContact").change(function () {
+                if ($("#ddlContact").val() == "Other") {
+                    $("#divOtherContact").show();
+                }
+                else {
+                    $("#divOtherContact").hide();
+                }
+            })
+
+
+
+            $("#ddlSmoker").change(function () {
+                if ($("#ddlSmoker").val() == "Yes") {
+                    $("#divhaveYouQuit").show();
+                }
+                else {
+                    $("#divhaveYouQuit").hide();
+                    $("#divQuitDate").hide();
+                }
+            })
+
+            $("#ddlHaveYouQuit").change(function () {
+                if ($("#ddlHaveYouQuit").val() == "Yes") {
+                    $("#divQuitDate").show();
+                }
+                else {
+                    $("#divQuitDate").hide();
+                }
+            })
+
+
+
+
+            $("#ddlDoYouThink").change(function () {
+                if ($("#ddlDoYouThink").val() == "Unspecified/Other") {
+                    $("#divOtherYouThink").show();
+                }
+                else {
+                    $("#divOtherYouThink").hide();
+                }
+            })
+
+            $("#ddlMaritalStatus").change(function () {
+
+                if ($("#ddlMaritalStatus").val() == "other") {
+                    $("#divMaritalStatus").show();
+                }
+                else {
+                    $("#divMaritalStatus").hide();
+                }
+            })
+
+            $("#ddlPreferredPronouns").change(function () {
+                if ($("#ddlPreferredPronouns").val() == "Other") {
+                    $("#divOtherPronouns").show();
+                }
+                else {
+                    $("#divOtherPronouns").hide();
+                }
+            })
+
+            $("#ddlLanguage").change(function () {
+                if ($("#ddlLanguage").val() == "Other") {
+                    $("#divOtherLanguage").show();
+                }
+                else {
+                    $("#divOtherLanguage").hide();
+                }
+            })
+
+            //$("#ddlRaceEthnicity").click(function () {
+            //    //var test = $(this).children();
+            //    //console.log(test);
+            //})
+
+
+            // change function of gender
+            $("#ddlLiveAddress").change(function () {
+                if ($("#ddlLiveAddress").val() == "No") {
+                    $("#divIfNoAddress").show();
+                }
+                else {
+                    $("#divIfNoAddress").hide();
+                }
+            })
+
+            $('.nav-menu').click(function () {
+                if ($(".sidebar-menu").hasClass("sidebar-res")) {
+                    $('.sidebar-menu').removeClass('sidebar-res');
+                    $('#content').removeClass('responsive-container');
+
+                } else {
+
+                    $('.sidebar-menu').addClass('sidebar-res');
+                    $('#content').addClass('responsive-container');
+                }
+            })
+            $('.selectboxmultiple').selectpicker();
+
+
+            bindPatient(PID);
+
+
+        });
+
+
+
+        function bindPatient(PID) {
+
+
+            $.ajax({
+
+                type: "Post",
+                url: '/DashBoard/GetPatientDetail',
+                data: JSON.stringify({ PatientID:PID}),
+
+                dataType: "html",
+                contentType: "application/json; charset=utf-8",
+                success: function (result) {
+
+                    $('#myTabContent').html(result);
+
+                },
+                error: function () {
+                    toastr.error("Some error occurred!! or data not found");
+                },
+                complete: function () {
+
+                    GetPatientPrograms(PID);
+                }
+            });
+        }
+
+
+        function GetPatientPrograms(PID) {
+
+
+            $.ajax({
+
+                type: "Post",
+                url: '/DashBoard/GetPatientPrograms',
+                data: JSON.stringify({ PatientID: PID }),
+
+                dataType: "html",
+                contentType: "application/json; charset=utf-8",
+                success: function (result) {
+
+
+                    $('.modal-body').html(result);
+
+                },
+                error: function () {
+                    toastr.error("Some error occurred!! or data not found");
+                },
+                complete: function () {
+
+
+                }
+            });
+        }
+
+    </script>
+
+}
+
+

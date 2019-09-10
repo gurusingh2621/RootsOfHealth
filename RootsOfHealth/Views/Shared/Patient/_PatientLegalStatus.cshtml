@@ -1,0 +1,829 @@
+﻿@model RootsOfHealth.Models.PatientLegalStatuBO
+
+<div class="tab-pane fade" id="LegalStatus" role="tabpanel" aria-labelledby="LegalStatus-tab">
+    <div class="inner-content">
+        <div class="paitent-detail">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="paitent-detail-left">
+                        <div class="detail-heading d-flex">
+                            <h2>Patient Legal Status</h2>
+
+                            <div class="detail-button ml-auto">
+
+                                <a href="/Patient/Add?PatientID=@ViewBag.PatientId"
+                                   class="btn btn-success label-fields">
+                                    <i class="far fa-edit"></i>
+                                    Edit
+                                </a>
+                                <a tabindex="1" href="javascript:{}" onclick="return LegalStatusSave()" id="LegalStatusSave" class="btn btn-success">
+                                    <i class="far fa-save"></i>
+                                    Save
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                        <div class="inner-main-content">
+                            <div class="top-image-row d-flex">
+                                <div class="top-image-left">
+
+                                    <div class="form-row-first label-fields">
+                                        <div class="top-form-row d-flex height-auto">
+                                            <div class="two-columns">
+
+                                                <label class="label-fields">
+                                                    Score
+                                                </label>
+                                            </div>
+                                            <div class="two-columns">
+
+                                                <label class="label-fields">
+                                                    Status
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                        <div class="bootom-form-row d-flex">
+                                            <div class="two-columns">
+
+                                                <label id="txtlegalscore" class="label-fields"></label>
+
+                                            </div>
+
+                                            <div class="two-columns">
+
+                                                <label id="txtlegalstatus" class="label-fields"></label>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <form class="detail-patient-form" id="frmLegalStatus">
+                                <div class="form-row-first">
+                                    <div class="top-form-row d-flex height-auto">
+                                        <div class="two-columns">
+                                            <label class="Add">Have you ever been arrested? </label>
+                                            <label class="label-fields">Have you ever been arrested? </label>
+                                        </div>
+                                        <div class="two-columns">
+                                            <label class="Add">Do you have an ongoing criminal case? </label>
+                                            <label class="label-fields">Do you have an ongoing criminal case? </label>
+                                        </div>
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="two-columns">
+                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                <label class="label-fields" id="lblEverBeenArrested">@Model.EverBeenArrested</label>
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="ArrestedRadioYes" onclick="Radio()" name="ArrestedRadio"
+                                                       value="Yes">
+                                                <label class="custom-control-label"
+                                                       for="ArrestedRadioYes">Yes</label>
+                                            </div>
+                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="ArrestedRadioNo" onclick="Radio()" name="ArrestedRadio"
+                                                       value="No">
+                                                <label class="custom-control-label"
+                                                       for="ArrestedRadioNo">No</label>
+                                            </div>
+
+                                            <div class="custom-control custom-radio d-inline-block">
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="PreferRadiosay" onclick="Radio()" name="ArrestedRadio"
+                                                       value="Prefer not to say">
+                                                <label class="custom-control-label"
+                                                       for="PreferRadiosay">Prefer not to say</label>
+                                            </div>
+                                        </div>
+                                        <div class="two-columns">
+                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                <label class="label-fields" id="lblCriminalCase">@Model.OnGoingCriminalCase</label>
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="CriminalRadioYes" onclick="Radio()" name="CriminalCaseRadio"
+                                                       value="Yes">
+                                                <label class="custom-control-label"
+                                                       for="CriminalRadioYes">Yes</label>
+                                            </div>
+                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="CriminalRadioNo" onclick="Radio()" name="CriminalCaseRadio"
+                                                       value="No">
+                                                <label class="custom-control-label"
+                                                       for="CriminalRadioNo">No</label>
+                                            </div>
+
+                                            <div class="custom-control custom-radio d-inline-block">
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="CriminalRadiosay" onclick="Radio()" name="CriminalCaseRadio"
+                                                       value="Prefer not to say">
+                                                <label class="custom-control-label"
+                                                       for="CriminalRadiosay">Prefer not to say</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row-first">
+                                    <div class="top-form-row d-flex height-auto">
+                                        <div class="one-columns">
+                                            <label class="Add">Have you ever been in prison or jail? </label>
+                                            <label class="label-fields">Have you ever been in prison or jail? </label>
+                                        </div>
+
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="two-columns">
+                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                <label class="label-fields" id="lblInPrison">@Model.EverBeenInPrison</label>
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="PrisonRadioYes" onclick="Radio()" name="PrisonRadio"
+                                                       value="Yes">
+                                                <label class="custom-control-label"
+                                                       for="PrisonRadioYes">Yes</label>
+                                            </div>
+                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="PrisonRadioNo" onclick="Radio()" name="PrisonRadio" value="No">
+                                                <label class="custom-control-label"
+                                                       for="PrisonRadioNo">No</label>
+                                            </div>
+
+
+                                            <div class="custom-control custom-radio d-inline-block">
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="PrisonRadioTo" onclick="Radio()" name="PrisonRadio" value="Prefer not to say">
+                                                <label class="custom-control-label"
+                                                       for="PrisonRadioTo">Prefer not to say</label>
+                                            </div>
+
+                                        </div>
+
+
+
+
+
+
+                                    </div>
+                                    <div class="bootom-form-row mb-3">
+                                        <div class="row" id="divPrison" style="display:none">
+                                            <div class="col-lg-6 col-md-6 col-sm-12 col-12 pr-0">
+                                                <div class="form-row-first mt-0">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="Add">When were you last released?</label>
+                                                            <label class="label-fields">When were you last released?</label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex ">
+                                                        <div class="one-columns">
+                                                            @*<label class="label-fields" id="lblLastReleased">@Model.LastReleased</label>
+                                            <select tabindex="1" name="LastReleased" class="form-control" id="ddLastReleased">
+                                                <option value="0">Select</option>
+                                                <option value="Within the last month"> Within the last month</option>
+                                                <option value="Within the last 6 months">Within the last 6 months</option>
+                                                <option value="Within the last year">Within the last year</option>
+                                                <option value="Within the last 3 years">Within the last 3 years</option>
+                                                <option value="More than 3 years ago"> More than 3 years ago</option>
+                                            </select>*@
+
+
+
+                                                            @if (Model.LastReleased != null)
+                                                        {
+                                                        <label id="lblLastReleased" class="label-fields">@(Model.ddlLastReleased.Where(p => p.Value == Model.LastReleased.ToString()).FirstOrDefault().Text)</label>
+                                                        }
+                                                            @Html.DropDownListFor(m => m.LastReleased, new SelectList(Model.ddlLastReleased, "Value", "Text", Model.LastReleased), new { @id = "ddLastReleased", @class = "form-control", @Name = "LastReleased", @tabindex = "1" })
+
+
+
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 col-sm-12 col-12 pr-0">
+                                                <div class="form-row-first mt-0">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label>CDC/PFN #</label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="label-fields">@Model.CDCAndPFNNumber</label>
+                                                            <input tabindex="1" type="text" id="txtCDC" name="CDCAndPFNNumber" class="form-control"
+                                                                   placeholder="" value="@Model.CDCAndPFNNumber">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 col-sm-12 col-12 pr-0 mt-3">
+                                                <div class="form-row-first mt-0">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="Add">
+                                                                Are you interested in criminal record
+                                                                clearing?
+                                                            </label>
+                                                            <label class="label-fields">
+                                                                Are you interested in criminal record
+                                                                clearing?
+                                                            </label>
+
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex ">
+                                                        <div class="one-columns">
+                                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                                <label class="label-fields">@Html.Raw(Model.InterestedInCriminalRecordClearing == true ? "Yes" : "No")</label>
+                                                                <label class="label-fields" id="lblRecordClearing" hidden="hidden">@Model.InterestedInCriminalRecordClearing</label>
+
+                                                                <input tabindex="1" type="radio"
+                                                                       class="custom-control-input"
+                                                                       id="ClearingRadioYes"
+                                                                       name="RecordClearingRadio" onclick="Radio()" value="true">
+                                                                <label class="custom-control-label"
+                                                                       for="ClearingRadioYes">Yes</label>
+                                                            </div>
+                                                            <div class="custom-control custom-radio d-inline-block">
+                                                                <input tabindex="1" type="radio"
+                                                                       class="custom-control-input"
+                                                                       id="ClearingRadioNo" onclick="Radio()" name="RecordClearingRadio"
+                                                                       value="false">
+                                                                <label class="custom-control-label"
+                                                                       for="ClearingRadioNo">No</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 col-sm-12 col-12 pr-0 mt-3">
+                                                <div class="form-row-first mt-0">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="Add">Do you owe restitution?</label>
+                                                            <label class="label-fields">Do you owe restitution?</label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex ">
+                                                        <div class="one-columns">
+                                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                                <label class="label-fields" id="lblRestitution">@Html.Raw(Model.OweRestitution == true ? "Yes" : "No")</label>
+                                                                <label class="label-fields" id="lblOweRestitution" hidden="hidden">@Model.OweRestitution</label>
+                                                                <input tabindex="1" type="radio"
+                                                                       class="custom-control-input"
+                                                                       id="RestitutionRadioYes"
+                                                                       name="RestitutionRadio" onclick="Radio()" value="true">
+                                                                <label class="custom-control-label"
+                                                                       for="RestitutionRadioYes">Yes</label>
+                                                            </div>
+                                                            <div class="custom-control custom-radio d-inline-block">
+                                                                <input tabindex="1" type="radio"
+                                                                       class="custom-control-input"
+                                                                       id="RestitutionRadioNo"
+                                                                       name="RestitutionRadio" onclick="Radio()" value="false">
+                                                                <label class="custom-control-label"
+                                                                       for="RestitutionRadioNo">No</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row-first" id="divOwe" style="display:none">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="Add">how much do you owe?</label>
+                                                            <label class="label-fields">how much do you owe?</label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex ">
+                                                        <div class="one-columns">
+                                                            <label class="label-fields">@Model.HowMuchOwe</label>
+                                                            <input tabindex="1" type="text" id="txtHowMuchOwe" name="HowMuchOwe" placeholder=""
+                                                                   class="form-control" value="@Model.HowMuchOwe">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+                                </div>
+                                <div class="form-row-first">
+                                    <div class="top-form-row d-flex height-auto">
+                                        <div class="two-columns">
+                                            <label class="Add">Are you currently on parole or probation? </label>
+                                            <label class="label-fields">Are you currently on parole or probation? </label>
+                                        </div>
+
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="two-columns">
+                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                <label class="label-fields" id="lblCurrentlyOnParole">@Model.CurrentlyOnParole</label>
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="ParoleRadioYes" onclick="Radio()" name="CurrentlyOnParoleRadio"
+                                                       value="Yes">
+                                                <label class="custom-control-label"
+                                                       for="ParoleRadioYes">Yes</label>
+                                            </div>
+                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="ParoleRadioNo" onclick="Radio()" name="CurrentlyOnParoleRadio" value="No">
+                                                <label class="custom-control-label"
+                                                       for="ParoleRadioNo">No</label>
+                                            </div>
+                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="ParoleRadioPrefer" onclick="Radio()" name="CurrentlyOnParoleRadio"
+                                                       value="Prefer not to say">
+                                                <label class="custom-control-label"
+                                                       for="ParoleRadioPrefer">Prefer not to say</label>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="three-columns" id="divParoleProbation" style="display:none">
+                                            <div class="form-row-first">
+                                                <div class="top-form-row d-flex">
+                                                    <div class="one-columns">
+                                                        <label>select parole or probation</label>
+                                                    </div>
+
+                                                </div>
+                                                <div class="bootom-form-row d-flex ">
+                                                    <div class="one-columns">
+                                                        @*<label class="label-fields" id="lblParoleProbation">@Model.ParoleProbation</label>
+                                        <select tabindex="1" name="ParoleProbation" id="ddParoleProbation" class="form-control">
+                                            <option value="0">Select</option>
+                                            <option value="Parole">Parole</option>
+                                            <option value="Probation">Probation</option>
+                                        </select>*@
+
+                                                        @if (Model.ParoleProbation != null)
+                                                    {
+                                                    <label id="lblParoleProbation" class="label-fields">@(Model.ddlParoleProbation.Where(p => p.Value == Model.ParoleProbation.ToString()).FirstOrDefault().Text)</label>
+                                                    }
+                                                        @Html.DropDownListFor(m => m.ParoleProbation, new SelectList(Model.ddlParoleProbation, "Value", "Text", Model.ParoleProbation), new { @id = "ddParoleProbation", @class = "form-control", @Name = "ParoleProbation", @tabindex = "1" })
+
+
+
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row-first">
+                                                <div class="top-form-row d-flex">
+                                                    <div class="one-columns">
+                                                        <label class="Add">When does your (insert probation or parole here) end?</label>
+                                                        <label class="label-fields">When does your (insert probation or parole here) end?</label>
+                                                    </div>
+
+                                                </div>
+                                                <div class="bootom-form-row d-flex ">
+                                                    <div class="one-columns">
+                                                        <label class="label-fields">@Model.ParoleProbationEnd</label>
+                                                        <input tabindex="1" type="text" id="txtProbParoleEnd" name="ParoleProbationEnd" placeholder="" value="@Model.ParoleProbationEnd" class="form-control date">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="form-row-first">
+                                    <div class="top-form-row d-flex height-auto">
+                                        <div class="one-columns">
+                                            <label class="Add">
+                                                Are you currently having difficulties in getting a
+                                                job, housing, or any government benefits because of your
+                                                legal status, background or a criminal record?
+                                            </label>
+                                            <label class="label-fields">
+                                                Are you currently having difficulties in getting a
+                                                job, housing, or any government benefits because of your
+                                                legal status, background or a criminal record?
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="three-columns">
+                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                <label class="label-fields" id="lblGettingAJob">@Model.DifficultiesInGettingAJob</label>
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="HousingRadioNo" onclick="Radio()" name="GettingAJobRadio"
+                                                       value="No">
+                                                <label class="custom-control-label"
+                                                       for="HousingRadioNo">No</label>
+                                            </div>
+                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="HousingRadioYes" onclick="Radio()" name="GettingAJobRadio"
+                                                       value="Yes">
+                                                <label class="custom-control-label"
+                                                       for="HousingRadioYes">Yes</label>
+                                            </div>
+                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="HousingRadioSay" onclick="Radio()" name="GettingAJobRadio"
+                                                       value="Prefer not to say">
+                                                <label class="custom-control-label"
+                                                       for="HousingRadioSay">Prefer not to say</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row-first">
+                                    <div class="top-form-row d-flex height-auto">
+                                        <div class="one-columns">
+                                            <label class="Add">
+                                                Do you have a government issued ID or driver’s
+                                                license?
+                                            </label>
+                                            <label class="label-fields">
+                                                Do you have a government issued ID or driver’s
+                                                license?
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="two-columns">
+                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                <label class="label-fields" id="lblGovernmentID">@Html.Raw(Model.GovernmentIssuedID==true?"Yes":"No")</label>
+                                                <label class="label-fields" id="lblIssuedID" hidden="hidden">@Model.GovernmentIssuedID</label>
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="IssuedRadioYes" onclick="Radio()" name="GovernmentIDRadio"
+                                                       value="true">
+                                                <label class="custom-control-label"
+                                                       for="IssuedRadioYes">Yes</label>
+                                            </div>
+                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="IssuedRadioNo" onclick="Radio()" name="GovernmentIDRadio" value="false">
+                                                <label class="custom-control-label"
+                                                       for="IssuedRadioNo">No</label>
+                                            </div>
+                                            <div class="custom-file mt-2" id="divGovernmentImg" style="display:none">
+
+                                                <div class="top-image-left">
+
+                                                    <div class="paitent-img">
+                                                        @if (!string.IsNullOrWhiteSpace(Model.GovernmentIDImg))
+                                                    {
+
+                                                    <img style="max-width:250px" class="img-fluid" id="Governmentpic" src="~/Files/@Model.GovernmentIDImg" alt="">
+                                                    }
+                                                    </div>
+
+                                                </div>
+
+                                                <input tabindex="1" type="file" class="Add" style="margin-top:10px"
+                                                       id="GovernmentIDImg" name="GovernmentIDImg">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row-first">
+                                    <div class="top-form-row d-flex height-auto">
+                                        <div class="one-columns">
+                                            <label class="Add">
+                                                Do you have concerns about your family’s immigration
+                                                status?
+                                            </label>
+                                            <label class="label-fields">
+                                                Do you have concerns about your family’s immigration
+                                                status?
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="two-columns">
+                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                <label class="label-fields">@Html.Raw(Model.ConcernsAboutFamilyImmigrationStatus==true?"Yes":"No")</label>
+                                                <label class="label-fields" hidden="hidden" id="lblImmigrationStatus">@Model.ConcernsAboutFamilyImmigrationStatus</label>
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="ImmigrationRadioYes" onclick="Radio()" name="ImmigrationStatusRadio"
+                                                       value="true">
+                                                <label class="custom-control-label"
+                                                       for="ImmigrationRadioYes">Yes</label>
+                                            </div>
+                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="ImmigrationRadioNo" onclick="Radio()" name="ImmigrationStatusRadio"
+                                                       value="false">
+                                                <label class="custom-control-label"
+                                                       for="ImmigrationRadioNo">No</label>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row-first">
+                                    <div class="top-form-row d-flex height-auto">
+                                        <div class="one-columns">
+                                            <label class="Add">
+                                                Do you have concerns with or disputes with your
+                                                landlord (threats of eviction, etc.)?
+                                            </label>
+                                            <label class="label-fields">
+                                                Do you have concerns with or disputes with your
+                                                landlord (threats of eviction, etc.)?
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="two-columns">
+                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                <label class="label-fields">@Html.Raw(Model.ConcernsWithLandlord == true ? "Yes" : "No")</label>
+                                                <label class="label-fields" hidden="hidden" id="lblLandlord">@Model.ConcernsWithLandlord</label>
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="LandlordRadioYes" onclick="Radio()" name="LandlordRadio"
+                                                       value="true">
+                                                <label class="custom-control-label"
+                                                       for="LandlordRadioYes">Yes</label>
+                                            </div>
+                                            <div class="custom-control custom-radio d-inline-block mr-3">
+                                                <input tabindex="1" type="radio" class="custom-control-input"
+                                                       id="LandlordRadioNo" onclick="Radio()" name="LandlordRadio"
+                                                       value="false">
+                                                <label class="custom-control-label"
+                                                       for="LandlordRadioNo">No</label>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="detail-button mt-3 w-100 text-center">
+                                    <!-- <a href="#!" class="btn btn-info"><i class="far fa-edit"></i>
+                Cancel</a> -->
+
+                                    <input type="hidden" name="CreatedDate" />
+                                    <input type="hidden" name="ModifiedDate" />
+                                    <input type="hidden" name="EverBeenArrested" />
+                                    <input type="hidden" name="OnGoingCriminalCase" />
+                                    <input type="hidden" name="EverBeenInPrison" />
+                                    <input type="hidden" name="InterestedInCriminalRecordClearing" />
+                                    <input type="hidden" name="OweRestitution" />
+                                    <input type="hidden" name="CurrentlyOnParole" />
+                                    <input type="hidden" name="DifficultiesInGettingAJob" />
+                                    <input type="hidden" name="GovernmentIssuedID" />
+                                    <input type="hidden" name="ConcernsAboutFamilyImmigrationStatus" />
+                                    <input type="hidden" name="ConcernsWithLandlord" />
+                                    <input type="hidden" name="PatientID" value="@Model.PatientID" />
+                                    <input type="hidden" name="LegalStatusID" value="@Model.LegalStatusID" />
+                                    <input type="hidden" name="GovernmentIDImg" value="@Model.GovernmentIDImg" />
+                                    
+
+                                </div>
+                            </form>
+                            </div>
+                        </div>
+                    <!-- <div class="recent-paitents">
+                        <h2 class="mb-3">Recent Patients</h2>
+                        <div class="recent-paitent-row d-flex">
+                            <div class="recent-paitents-img">
+                                <img class="img-fluid" src="images/recent-paitent-img.png" alt="">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col" style="width:160px;">Name</th>
+                                            <th scope="col" style="width:268px;">Email</th>
+                                            <th scope="col" style="width:160px;">Phone</th>
+                                            <th scope="col" style="width:160px;">Last Modify</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <td style="width:160px;">Omnis iste</td>
+                                            <td style="width:268px;">Omnisiste@gmail.com</td>
+                                            <td style="width:160px;">98756 45365</td>
+                                            <td style="width:160px;">23-4-2019</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="recent-paitent-row d-flex">
+                            <div class="recent-paitents-img">
+                                <img class="img-fluid" src="images/recent-paitent-img-1.png" alt="">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col" style="width:160px;">Name</th>
+                                            <th scope="col" style="width:268px;">Email</th>
+                                            <th scope="col" style="width:160px;">Phone</th>
+                                            <th scope="col" style="width:160px;">Last Modify</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <td style="width:160px;">praesentium</td>
+                                            <td style="width:268px;">praesentium@gmail.com</td>
+                                            <td style="width:160px;">68756 45365</td>
+                                            <td style="width:160px;">20-4-2019</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="recent-paitent-row d-flex">
+                            <div class="recent-paitents-img">
+                                <img class="img-fluid" src="images/recent-paitent-img-2.png" alt="">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col" style="width:160px;">Name</th>
+                                            <th scope="col" style="width:268px;">Email</th>
+                                            <th scope="col" style="width:160px;">Phone</th>
+                                            <th scope="col" style="width:160px;">Last Modify</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <td style="width:160px;">voluptatum</td>
+                                            <td style="width:268px;">voluptatum@gmail.com</td>
+                                            <td style="width:160px;">78756 45365</td>
+                                            <td style="width:160px;">18-4-2019</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+
+                <!-- <div class="col-lg-4 col-md-12 col-sm-12 col-12 ">
+                    <div class="sidebar-right">
+                        <div class="appointement">
+                            <h3>Appointment</h3>
+                            <div class="scroll scroll-height">
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 24-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 26-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 28-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 30-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 1-5-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="appointement">
+                            <h3>Notes</h3>
+                            <div class="scroll scroll-height">
+
+
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 24-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 26-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 28-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 30-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 1-5-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+
+    </div>
+</div>

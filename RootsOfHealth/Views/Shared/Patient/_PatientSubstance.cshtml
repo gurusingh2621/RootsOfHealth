@@ -1,0 +1,1294 @@
+﻿@model RootsOfHealth.Models.PatientSubstanceUseBO
+
+<div class="tab-pane fade" id="AlcoholDisorder" role="tabpanel" aria-labelledby="Alcohol-tab">
+    <div class="inner-content">
+        <div class="paitent-detail">
+            <div class="row" style="margin-right:0px;">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12 pr-0">
+                    <div class="paitent-detail-left">
+
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="Dast-tab" data-toggle="tab" href="#DAST">DAST<span class="" id="DastNot" style="display:none"></span><span class="check"><i class="fas fa-check-circle"></i></span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="Audit-tab" data-toggle="tab" href="#AUDIT">AUDIT<span class="" id="AuditNot" style="display:none"></span><span class="check"><i class="fas fa-check-circle"></i></span></a>
+                            </li>
+
+                        </ul>
+                      
+                        <div class="inner-main-content" style="margin-top:0px">
+                            <div class="top-image-row d-flex">
+                                <div class="top-image-left">
+
+                                    <div class="form-row-first label-fields mt-0">
+                                        <div class="top-form-row d-flex height-auto">
+                                            <div class="two-columns">
+
+                                                <label class="label-fields">
+                                                    Score
+                                                </label>
+                                            </div>
+                                            <div class="two-columns">
+
+                                                <label class="label-fields">
+                                                    Status
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                        <div class="bootom-form-row d-flex">
+                                            <div class="two-columns">
+
+                                                <label id="txtsubtscore" class="label-fields"></label>
+
+                                            </div>
+
+                                            <div class="two-columns">
+
+                                                <label id="txtsubtstatus" class="label-fields"></label>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="PatientName">
+                                    <div class="Patient-row">
+                                        <label>Patient Name:</label>
+                                        <label id="PFirstName"></label>
+
+                                    </div>
+
+                                    <div class="Patient-row">
+                                        <label>Date of Birth:</label>
+                                        <label id="PDOB"></label>
+
+                                    </div>
+                                </div>
+
+                                <div class="detail-button ml-auto">
+
+                                    <a href="/Patient/Add?PatientID=@ViewBag.PatientId"
+                                       class="btn btn-success label-fields">
+                                        <i class="far fa-edit"></i>
+                                        Edit
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="tab-content">
+                                <div class="tab-pane container active" id="DAST">
+                                    <form id="frmDast">
+                                        <div class="dastContent">
+                                            <div class="detail-heading d-flex mt-4 align-items-start">
+                                                <div class="drug-protect">
+                                                    <div class="dastHeading">
+                                                    <h2>DAST</h2>
+                                                        <div class="detail-button ml-auto">
+
+                                                            <a tabindex="1" href="javascript:{}" onclick="return DastSave();" id="btnDast" class="btn btn-success">
+                                                                <i class="far fa-save"></i>
+                                                                Save
+                                                            </a>
+                                                        </div>
+                                    </div>
+                                                    <div class="drug-radibtns">
+                                                        <div class="row">
+                                                            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                                                <div class="custom-control custom-checkbox d-inline-block mr-2">
+                                                                    <label class="label-fields" hidden="hidden" id="lblDrugsContaining">@Model.Dast.DrugsContaining</label>
+                                                                    <input tabindex="1" type="checkbox"
+                                                                           class="custom-control-input"
+                                                                           id="methamphetamines"
+                                                                           name="frmDast_check1" value="1">
+                                                                    <label class="custom-control-label"
+                                                                           for="methamphetamines">
+                                                                        methamphetamines
+                                                                        (speed, crystal)
+                                                                    </label>
+                                                                    <input tabindex="1" type="checkbox"
+                                                                           class="label-fields"
+                                                                           id="methamphetamines"
+                                                                           name="frmDast_check1" value="1">
+                                                                    <label class="label-fields"
+                                                                           for="methamphetamines">
+                                                                        methamphetamines  (speed, crystal)
+                                                                    </label>
+
+
+
+                                                                </div>
+                                                                <div class="custom-control custom-checkbox d-inline-block mr-2">
+
+                                                                    <input tabindex="1" type="checkbox"
+                                                                           class="custom-control-input"
+                                                                           id="cannabis" name="frmDast_check1"
+                                                                           value="2">
+                                                                    <label class="custom-control-label"
+                                                                           for="cannabis">
+                                                                        cannabis (marijuana,
+                                                                        pot)
+                                                                    </label>
+                                                                    <input tabindex="1" type="checkbox"
+                                                                           class="label-fields"
+                                                                           id="cannabis" name="frmDast_check1"
+                                                                           value="2">
+                                                                    <label class="label-fields"
+                                                                           for="cannabis">
+                                                                        cannabis (marijuana,
+                                                                        pot)
+                                                                    </label>
+                                                                </div>
+                                                                <div class="custom-control custom-checkbox d-inline-block mr-2">
+                                                                    <input tabindex="1" type="checkbox"
+                                                                           class="custom-control-input"
+                                                                           id="inhalants" name="frmDast_check1"
+                                                                           value="3">
+                                                                    <label class="custom-control-label"
+                                                                           for="inhalants">
+                                                                        inhalants (paint
+                                                                        thinner, aerosol, glue)
+                                                                    </label>
+                                                                    <input tabindex="1" type="checkbox"
+                                                                           class="label-fields"
+                                                                           id="inhalants" name="frmDast_check1"
+                                                                           value="3">
+                                                                    <label class="label-fields"
+                                                                           for="inhalants">
+                                                                        inhalants (paint
+                                                                        thinner, aerosol, glue)
+                                                                    </label>
+
+
+                                                                </div>
+                                                                <div class="custom-control custom-checkbox d-inline-block mr-2">
+                                                                    <input tabindex="1" type="checkbox"
+                                                                           class="custom-control-input"
+                                                                           id="tranquilizers" name="frmDast_check1"
+                                                                           value="4">
+                                                                    <label class="custom-control-label"
+                                                                           for="tranquilizers">
+                                                                        tranquilizers
+                                                                        (valium)
+                                                                    </label>
+                                                                    <input tabindex="1" type="checkbox"
+                                                                           class="label-fields"
+                                                                           id="tranquilizers" name="frmDast_check1"
+                                                                           value="4">
+                                                                    <label class="label-fields"
+                                                                           for="tranquilizers">
+                                                                        tranquilizers
+                                                                        (valium)
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+
+                                                                <div class="custom-control custom-checkbox d-inline-block mr-2">
+                                                                    <input tabindex="1" type="checkbox"
+                                                                           class="custom-control-input"
+                                                                           id="cocaine" name="frmDast_check1"
+                                                                           value="5">
+                                                                    <label class="custom-control-label"
+                                                                           for="cocaine">cocaine</label>
+
+                                                                    <input tabindex="1" type="checkbox"
+                                                                           class="label-fields"
+                                                                           id="cocaine" name="frmDast_check1"
+                                                                           value="5">
+                                                                    <label class="label-fields"
+                                                                           for="cocaine">cocaine</label>
+
+                                                                </div>
+                                                                <div class="custom-control custom-checkbox d-inline-block mr-2">
+                                                                    <input tabindex="1" type="checkbox"
+                                                                           class="custom-control-input"
+                                                                           id="narcotics" name="frmDast_check1"
+                                                                           value="6">
+                                                                    <label class="custom-control-label"
+                                                                           for="narcotics">
+                                                                        narcotics (heroin,
+                                                                        oxycodone, methadone, etc.)
+                                                                    </label>
+                                                                    <input tabindex="1" type="checkbox"
+                                                                           class="label-fields"
+                                                                           id="narcotics" name="frmDast_check1"
+                                                                           value="6">
+                                                                    <label class="label-fields"
+                                                                           for="narcotics">
+                                                                        narcotics (heroin,
+                                                                        oxycodone, methadone, etc.)
+                                                                    </label>
+                                                                </div>
+                                                                <div class="custom-control custom-checkbox d-inline-block mr-2">
+                                                                    <input tabindex="1" type="checkbox"
+                                                                           class="custom-control-input"
+                                                                           id="hallucinogens" name="frmDast_check1"
+                                                                           value="7">
+                                                                    <label class="custom-control-label"
+                                                                           for="hallucinogens">
+                                                                        hallucinogens
+                                                                        (LSD, mushrooms)
+                                                                    </label>
+                                                                    <input tabindex="1" type="checkbox"
+                                                                           class="label-fields"
+                                                                           id="hallucinogens" name="frmDast_check1"
+                                                                           value="7">
+                                                                    <label class="label-fields"
+                                                                           for="hallucinogens">
+                                                                        hallucinogens
+                                                                        (LSD, mushrooms)
+                                                                    </label>
+                                                                </div>
+                                                                <div class="custom-control custom-checkbox d-inline-block mr-2">
+                                                                    <input tabindex="1" type="checkbox"
+                                                                           class="custom-control-input"
+                                                                           id="OthersDast" name="frmDast_check1"
+                                                                           value="8">
+                                                                    <label class="custom-control-label"
+                                                                           for="OthersDast">Others</label>
+                                                                    <input tabindex="1" type="checkbox"
+                                                                           class="label-fields"
+                                                                           id="OthersDast" name="frmDast_check1"
+                                                                           value="8">
+                                                                    <label class="label-fields"
+                                                                           for="OthersDast">Others</label>
+                                                                </div>
+                                                                <div class="custom-control custom-checkbox d-inline-block mr-2">
+                                                                    <label id="lblOtherDrug" style="display:none" class="label-fields">@Model.Dast.OtherDrug</label>
+                                                                    <input tabindex="1" type="text"
+                                                                           class="Add"
+                                                                           name="OtherDrug"
+                                                                           value="@Model.Dast.OtherDrug" />
+
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+
+
+                                            </div>
+
+                                            <div class="used-drugs">
+                                                <div class="used-row d-flex">
+                                                    <p>How often have you used these drugs?</p>
+                                                    <div class="custom-control custom-radio d-inline-block mr-2">
+                                                        <label class="label-fields">@Model.Dast.HowOftenUse</label>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="Monthly" name="frmDast_radio0" value="Monthly">
+                                                        <label class="custom-control-label"
+                                                               for="Monthly">Monthly or less</label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio d-inline-block mr-2">
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="Weekly" name="frmDast_radio0" value="Weekly">
+                                                        <label class="custom-control-label"
+                                                               for="Weekly">Weekly</label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio d-inline-block mr-2">
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="Daily" name="frmDast_radio0" value="Daily">
+                                                        <label class="custom-control-label"
+                                                               for="Daily">Daily or almost daily</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="drug-reason">
+                                                <div class="bootom-form-row d-flex">
+
+                                                    <table class="table">
+                                                        <thead class="thead-light">
+                                                            <tr>
+                                                                <th scope="col"></th>
+                                                                <th scope="col"
+                                                                    style="width:109px; text-align:center;">
+                                                                    No
+                                                                </th>
+                                                                <th scope="col"
+                                                                    style="width:109px; text-align:center;">
+                                                                    Yes
+                                                                </th>
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <th scope="row" style="width:730px;">
+                                                                    1. Have
+                                                                    you used drugs other than those required
+                                                                    for medical reasons?
+                                                                <td>
+                                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                                        <i id="MedicalNo" class="fas fa-times"></i>
+                                                                        <input tabindex="1" type="radio"
+                                                                               class="custom-control-input"
+                                                                               id="MedicalRadioNo"
+                                                                               name="frmDast_radio1"
+                                                                               value="False">
+                                                                        <label class="custom-control-label"
+                                                                               for="MedicalRadioNo"></label>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                                        <i id="MedicalYes" class="fas fa-times"></i>
+                                                                        <input tabindex="1" type="radio"
+                                                                               class="custom-control-input"
+                                                                               id="MedicalRadioYes"
+                                                                               name="frmDast_radio1"
+                                                                               value="True">
+                                                                        <label class="custom-control-label"
+                                                                               for="MedicalRadioYes"></label>
+                                                                    </div>
+                                                                </td>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">
+                                                                    2. Do you abuse more than
+                                                                    one drug at a time?
+                                                                </th>
+                                                                <td>
+                                                                    <div class="custom-control custom-radio centerRadioBtn">
+                                                                        <label class="label-fields" hidden="hidden" id="lblAbuseNo">@Model.Dast.OneDrugAtATime</label>
+                                                                        <i id="AbuseNo" class="fas fa-times"></i>
+                                                                        <input tabindex="1" type="radio"
+                                                                               class="custom-control-input"
+                                                                               id="AbuseRadioNo"
+                                                                               name="frmDast_radio2"
+                                                                               value="False">
+                                                                        <label class="custom-control-label"
+                                                                               for="AbuseRadioNo"></label>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="custom-control custom-radio centerRadioBtn">
+                                                                        <label class="label-fields" hidden="hidden" id="lblAbuseYes">@Model.Dast.OneDrugAtATime</label>
+                                                                        <i id="AbuseYes" class="fas fa-times"></i>
+                                                                        <input tabindex="1" type="radio"
+                                                                               class="custom-control-input"
+                                                                               id="AbuseRadioYes"
+                                                                               name="frmDast_radio2"
+                                                                               value="True">
+                                                                        <label class="custom-control-label"
+                                                                               for="AbuseRadioYes"></label>
+                                                                    </div>
+                                                                </td>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">
+                                                                    3. Are you unable to stop
+                                                                    using drugs when you want to?
+                                                                </th>
+                                                                <td>
+                                                                    <div class="custom-control custom-radio centerRadioBtn">
+                                                                        <label class="label-fields" hidden="hidden" id="lblUnableNo">@Model.Dast.UnableToStopUsingDrugs</label>
+                                                                        <i id="UnableNo" class="fas fa-times"></i>
+                                                                        <input tabindex="1" type="radio"
+                                                                               class="custom-control-input"
+                                                                               id="UnableRadioNo"
+                                                                               name="frmDast_radio3"
+                                                                               value="False">
+                                                                        <label class="custom-control-label"
+                                                                               for="UnableRadioNo"></label>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="custom-control custom-radio centerRadioBtn">
+                                                                        <label class="label-fields" hidden="hidden" id="lblUnableYes">@Model.Dast.UnableToStopUsingDrugs</label>
+                                                                        <i id="UnableYes" class="fas fa-times"></i>
+                                                                        <input tabindex="1" type="radio"
+                                                                               class="custom-control-input"
+                                                                               id="UnableRadioYes"
+                                                                               name="frmDast_radio3"
+                                                                               value="True">
+                                                                        <label class="custom-control-label"
+                                                                               for="UnableRadioYes"></label>
+                                                                    </div>
+                                                                </td>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">
+                                                                    4. Have you ever had
+                                                                    blackouts or flasbacks as a result of
+                                                                    drug use?
+                                                                </th>
+                                                                <td>
+                                                                    <div class="custom-control custom-radio centerRadioBtn">
+                                                                        <label class="label-fields" hidden="hidden" id="lblBlackoutsNo">@Model.Dast.Blackouts</label>
+                                                                        <i id="BlackoutsNo" class="fas fa-times"></i>
+                                                                        <input tabindex="1" type="radio"
+                                                                               class="custom-control-input"
+                                                                               id="BlackoutsRadioNo"
+                                                                               name="frmDast_radio4"
+                                                                               value="False">
+                                                                        <label class="custom-control-label"
+                                                                               for="BlackoutsRadioNo"></label>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="custom-control custom-radio centerRadioBtn">
+                                                                        <label class="label-fields" hidden="hidden" id="lblBlackoutsYes">@Model.Dast.Blackouts</label>
+                                                                        <i id="BlackoutsYes" class="fas fa-times"></i>
+                                                                        <input tabindex="1" type="radio"
+                                                                               class="custom-control-input"
+                                                                               id="BlackoutsRadioYes"
+                                                                               name="frmDast_radio4"
+                                                                               value="True">
+                                                                        <label class="custom-control-label"
+                                                                               for="BlackoutsRadioYes"></label>
+                                                                    </div>
+
+                                                                </td>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">
+                                                                    5. Do you ever feel bad or
+                                                                    guilty about your drug use?
+                                                                </th>
+                                                                </th>
+                                                                <td>
+                                                                    <div class="custom-control custom-radio centerRadioBtn">
+                                                                        <label class="label-fields" hidden="hidden" id="lblGuiltyNo">@Model.Dast.GuiltyAboutYourDrug</label>
+                                                                        <i id="GuiltyNo" class="fas fa-times"></i>
+                                                                        <input tabindex="1" type="radio"
+                                                                               class="custom-control-input"
+                                                                               id="GuiltyRadioNo"
+                                                                               name="frmDast_radio5"
+                                                                               value="False">
+                                                                        <label class="custom-control-label"
+                                                                               for="GuiltyRadioNo"></label>
+                                                                    </div>
+
+                                                                </td>
+                                                                <td>
+
+                                                                    <div class="custom-control custom-radio centerRadioBtn">
+                                                                        <label class="label-fields" hidden="hidden" id="lblGuiltyYes">@Model.Dast.GuiltyAboutYourDrug</label>
+                                                                        <i id="GuiltyYes" class="fas fa-times"></i>
+                                                                        <input tabindex="1" type="radio"
+                                                                               class="custom-control-input"
+                                                                               id="GuiltyRadioYes"
+                                                                               name="frmDast_radio5"
+                                                                               value="True">
+                                                                        <label class="custom-control-label"
+                                                                               for="GuiltyRadioYes"></label>
+                                                                    </div>
+                                                                </td>
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">
+                                                                    6. Does your spouse (or
+                                                                    parents) ever complain about your
+                                                                    involvement
+                                                                </th>
+                                                                <td>
+                                                                    <div class="custom-control custom-radio centerRadioBtn">
+                                                                        <label class="label-fields" hidden="hidden" id="lblSpouseNo">@Model.Dast.SpouseComplain</label>
+                                                                        <i id="SpouseNo" class="fas fa-times"></i>
+                                                                        <input tabindex="1" type="radio"
+                                                                               class="custom-control-input"
+                                                                               id="SpouseRadioNo"
+                                                                               name="frmDast_radio6"
+                                                                               value="False">
+                                                                        <label class="custom-control-label"
+                                                                               for="SpouseRadioNo"></label>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="custom-control custom-radio centerRadioBtn">
+                                                                        <label class="label-fields" hidden="hidden" id="lblSpouseYes">@Model.Dast.SpouseComplain</label>
+                                                                        <i id="SpouseYes" class="fas fa-times"></i>
+                                                                        <input tabindex="1" type="radio"
+                                                                               class="custom-control-input"
+                                                                               id="SpouseRadioYes"
+                                                                               name="frmDast_radio6"
+                                                                               value="True">
+                                                                        <label class="custom-control-label"
+                                                                               for="SpouseRadioYes"></label>
+                                                                    </div>
+                                                                </td>
+
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row">
+                                                                    7. Have you neglected your
+                                                                    family because of your use of drugs?
+                                                                </th>
+                                                                <td>
+                                                                    <div class="custom-control custom-radio centerRadioBtn">
+                                                                        <label class="label-fields" hidden="hidden" id="lblNeglectedNo">@Model.Dast.NeglectedFamily</label>
+                                                                        <i id="NeglectedNo" class="fas fa-times"></i>
+                                                                        <input tabindex="1" type="radio"
+                                                                               class="custom-control-input"
+                                                                               id="NeglectedRadioNo"
+                                                                               name="frmDast_radio7"
+                                                                               value="False">
+                                                                        <label class="custom-control-label"
+                                                                               for="NeglectedRadioNo"></label>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="custom-control custom-radio centerRadioBtn">
+                                                                        <label class="label-fields" hidden="hidden" id="lblNeglectedYes">@Model.Dast.NeglectedFamily</label>
+                                                                        <i id="NeglectedYes" class="fas fa-times"></i>
+                                                                        <input tabindex="1" type="radio"
+                                                                               class="custom-control-input"
+                                                                               id="NeglectedRadioYes"
+                                                                               name="frmDast_radio7"
+                                                                               value="True">
+                                                                        <label class="custom-control-label"
+                                                                               for="NeglectedRadioYes"></label>
+                                                                    </div>
+                                                                </td>
+
+
+                                                            </tr>
+
+                                                            <tr>
+                                                                <th scope="row">
+                                                                    8. Have you engaged in
+                                                                    illegal activities in order to obtain
+                                                                    drugs?
+                                                                </th>
+                                                                <td>
+                                                                    <div class="custom-control custom-radio centerRadioBtn">
+                                                                        <label class="label-fields" hidden="hidden" id="lblEngagedNo">@Model.Dast.EngagedInIllegalActivities</label>
+                                                                        <i id="EngagedNo" class="fas fa-times"></i>
+                                                                        <input tabindex="1" type="radio"
+                                                                               class="custom-control-input"
+                                                                               id="EngagedRadioNo"
+                                                                               name="frmDast_radio8"
+                                                                               value="False">
+                                                                        <label class="custom-control-label"
+                                                                               for="EngagedRadioNo"></label>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="custom-control custom-radio centerRadioBtn">
+                                                                        <label class="label-fields" hidden="hidden" id="lblEngagedYes">@Model.Dast.EngagedInIllegalActivities</label>
+                                                                        <i id="EngagedYes" class="fas fa-times"></i>
+                                                                        <input tabindex="1" type="radio"
+                                                                               class="custom-control-input"
+                                                                               id="EngagedRadioYes"
+                                                                               name="frmDast_radio8"
+                                                                               value="True">
+                                                                        <label class="custom-control-label"
+                                                                               for="EngagedRadioYes"></label>
+                                                                    </div>
+                                                                </td>
+
+
+                                                            </tr>
+
+                                                            <tr>
+                                                                <th scope="row">
+                                                                    9. Have you ever experienced
+                                                                    withdreawal symptoms (felt sick) when
+                                                                    you stopped taking drugs?
+                                                                </th>
+                                                                <td>
+                                                                    <div class="custom-control custom-radio centerRadioBtn">
+                                                                        <label class="label-fields" hidden="hidden" id="lblSymptomsNo">@Model.Dast.WithdrawalSymptoms</label>
+                                                                        <i id="SymptomsNo" class="fas fa-times"></i>
+                                                                        <input tabindex="1" type="radio"
+                                                                               class="custom-control-input"
+                                                                               id="SymptomsRadioNo"
+                                                                               name="frmDast_radio9"
+                                                                               value="False">
+                                                                        <label class="custom-control-label"
+                                                                               for="SymptomsRadioNo"></label>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="custom-control custom-radio centerRadioBtn">
+                                                                        <label class="label-fields" hidden="hidden" id="lblSymptomsYes">@Model.Dast.WithdrawalSymptoms</label>
+                                                                        <i id="SymptomsYes" class="fas fa-times"></i>
+                                                                        <input tabindex="1" type="radio"
+                                                                               class="custom-control-input"
+                                                                               id="SymptomsRadioYes"
+                                                                               name="frmDast_radio9"
+                                                                               value="True">
+                                                                        <label class="custom-control-label"
+                                                                               for="SymptomsRadioYes"></label>
+                                                                    </div>
+                                                                </td>
+
+
+                                                            </tr>
+
+                                                            <tr>
+                                                                <th scope="row">
+                                                                    10. Have you had medical
+                                                                    loss, hepatities, convulsions,
+                                                                    bleeding)?
+                                                                </th>
+                                                                <td>
+                                                                    <div class="custom-control custom-radio centerRadioBtn">
+                                                                        <label class="label-fields" hidden="hidden" id="lblHepatitiesNo">@Model.Dast.MedicalLoss</label>
+                                                                        <i id="HepatitiesNo" class="fas fa-times"></i>
+                                                                        <input tabindex="1" type="radio"
+                                                                               class="custom-control-input"
+                                                                               id="HepatitiesRadioNo"
+                                                                               name="frmDast_radio10"
+                                                                               value="False">
+                                                                        <label class="custom-control-label"
+                                                                               for="HepatitiesRadioNo"></label>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="custom-control custom-radio centerRadioBtn">
+                                                                        <label class="label-fields" hidden="hidden" id="lblHepatitiesYes">@Model.Dast.MedicalLoss</label>
+                                                                        <i id="HepatitiesYes" class="fas fa-times"></i>
+                                                                        <input tabindex="1" type="radio"
+                                                                               class="custom-control-input"
+                                                                               id="HepatitiesRadioYes"
+                                                                               name="frmDast_radio10"
+                                                                               value="True">
+                                                                        <label class="custom-control-label"
+                                                                               for="HepatitiesRadioYes"></label>
+                                                                    </div>
+                                                                </td>
+
+
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row"></th>
+                                                                <td style="text-align:center"></td>
+                                                                <td style="text-align:center"></td>
+
+
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+
+
+
+                                                </div>
+                                                <div class="used-drugs mt-2">
+                                                    <div class="used-row d-flex">
+                                                        <p>Have you ever injected drugs?</p>
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <label class="label-fields">@Html.Raw(Model.Dast.EverInjectedDrugs = true ? "Yes" : "No")</label>
+                                                            <input tabindex="1" type="radio" class="custom-control-input"
+                                                                   id="injectedNever" name="frmDast_radio11"
+                                                                   value="False">
+                                                            <label class="custom-control-label"
+                                                                   for="injectedNever">Never</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <input tabindex="1" type="radio" class="custom-control-input"
+                                                                   id="injectedYes" name="frmDast_radio11"
+                                                                   value="True">
+                                                            <label class="custom-control-label"
+                                                                   for="injectedYes">Yes</label>
+                                                        </div>
+
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            @if (Model.Dast.InjectedDrugInLast90OrMoreThen90Days == "InLast90")
+                                                        {
+                                                        <label>In the past 90</label>
+                                                        }
+                                                        else if (Model.Dast.InjectedDrugInLast90OrMoreThen90Days == "Morethen90")
+                                                        {
+                                                        <label>More than 90 days ago</label>
+                                                        }
+
+
+                                                            <input tabindex="1" type="radio" class="custom-control-input"
+                                                                   id="last90" name="frmDast_radio12"
+                                                                   value="InLast90">
+                                                            <label class="custom-control-label"
+                                                                   for="last90">
+                                                                In the past 90
+                                                                days
+                                                            </label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <input tabindex="1" type="radio" class="custom-control-input"
+                                                                   id="morethen90" name="frmDast_radio12"
+                                                                   value="Morethen90">
+                                                            <label class="custom-control-label"
+                                                                   for="morethen90">
+                                                                More than 90 days ago
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="used-drugs mt-2">
+                                                    <div class="used-row d-flex">
+                                                        <p>
+                                                            Have you ever been in treatment for substance
+                                                            abuse?
+                                                        </p>
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <label class="label-fields">@Model.Dast.TreatmentForSubstanceAbuse</label>
+                                                            <input tabindex="1" type="radio" class="custom-control-input"
+                                                                   id="treatmentNever" name="frmDast_radio13"
+                                                                   value="Never">
+                                                            <label class="custom-control-label"
+                                                                   for="treatmentNever">Never</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <input tabindex="1" type="radio" class="custom-control-input"
+                                                                   id="substanceCurrently" name="frmDast_radio13"
+                                                                   value="Currently">
+                                                            <label class="custom-control-label"
+                                                                   for="substanceCurrently">Currently</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <input tabindex="1" type="radio" class="custom-control-input"
+                                                                   id="treatmentPast" name="frmDast_radio13"
+                                                                   value="Inthepast">
+                                                            <label class="custom-control-label"
+                                                                   for="treatmentPast">In the past</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row-first">
+                                                @*<div class="top-form-row d-flex height-auto">
+                                    <div class="one-columns">
+                                        <label>
+                                            Based on DAST interpretation leading to
+                                            categorization in the following groups
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="bootom-form-row d-flex">
+                                    <div class="three-columns">
+                                        <select name="" class="form-control">
+                                            <option>Health</option>
+                                            <option>Risky</option>
+                                            <option>Harmful</option>
+                                            <option>Severe</option>
+                                        </select>
+                                    </div>
+                                </div>*@
+                                            </div>
+
+                                        </div>
+
+                                        <div class="detail-button mt-3 w-100 text-center">
+                                            <input type="hidden" name="CreatedDate" />
+                                            <input type="hidden" name="ModifiedDate" />
+
+                                            <input id="hdfSpouseComplain" type="hidden" name="SpouseComplain" value="@(Model.Dast.SpouseComplain == null ? null : Model.Dast.SpouseComplain.ToString())" />
+                                            <input id="hdfNeglectedFamily" type="hidden" name="NeglectedFamily" value="@(Model.Dast.NeglectedFamily == null ? "" : Model.Dast.NeglectedFamily.ToString())" />
+                                            <input id="hdfEngagedInIllegalActivities" type="hidden" name="EngagedInIllegalActivities" value="@(Model.Dast.EngagedInIllegalActivities == null ? "" : Model.Dast.EngagedInIllegalActivities.ToString())" />
+                                            <input id="hdfWithdrawalSymptoms" type="hidden" name="WithdrawalSymptoms" value="@(Model.Dast.WithdrawalSymptoms == null ? "" : Model.Dast.WithdrawalSymptoms.ToString())" />
+                                            <input id="hdfMedicalLoss" type="hidden" name="MedicalLoss" value="@(Model.Dast.MedicalLoss == null ? "" : Model.Dast.MedicalLoss.ToString())" />
+                                            <input id="hdfEverInjectedDrugs" type="hidden" name="EverInjectedDrugs" value="@Model.Dast.EverInjectedDrugs" />
+                                            <input id="hdfInjectedDrugInLast90OrMoreThen90Days" type="hidden" name="InjectedDrugInLast90OrMoreThen90Days" value="@(Model.Dast.InjectedDrugInLast90OrMoreThen90Days == null ? "" : Model.Dast.InjectedDrugInLast90OrMoreThen90Days.ToString())" />
+
+                                            <input id="hdfTreatmentForSubstanceAbuse" type="hidden" name="TreatmentForSubstanceAbuse" value="@Model.Dast.TreatmentForSubstanceAbuse" />
+
+                                            <input id="hdfGuiltyAboutYourDrug" type="hidden" name="GuiltyAboutYourDrug" value="@(Model.Dast.GuiltyAboutYourDrug == null ? "" : Model.Dast.GuiltyAboutYourDrug.ToString())" />
+                                            <input id="hdfBlackouts" type="hidden" name="Blackouts" value="@(Model.Dast.Blackouts == null ? "" : Model.Dast.Blackouts.ToString())" />
+                                            <input id="hdfUnableToStopUsingDrugs" type="hidden" name="UnableToStopUsingDrugs" value="@(Model.Dast.UnableToStopUsingDrugs == null ? "" : Model.Dast.UnableToStopUsingDrugs.ToString())" />
+                                            <input id="hdfOneDrugAtATime" type="hidden" dirname="OneDrugAtATime" name="OneDrugAtATime" value="@(Model.Dast.OneDrugAtATime == null ? "" : Model.Dast.OneDrugAtATime.ToString())" />
+                                            <input id="hdfUsedDrugsForMedicalReasons" type="hidden" name="UsedDrugsForMedicalReasons" value="@(Model.Dast.UsedDrugsForMedicalReasons == null ? "" : Model.Dast.UsedDrugsForMedicalReasons.ToString())" />
+                                            <input id="hdfHowOftenUse" type="hidden" name="HowOftenUse" value="@Model.Dast.HowOftenUse" />
+                                            <input id="hdfDrugsContaining" type="hidden" name="DrugsContaining" value="@Model.Dast.DrugsContaining" />
+                                            <input type="hidden" id="hdfPatientID" name="PatientID" value="@Model.Dast.PatientID" />
+                                            <input type="hidden" id="hdfDastID" name="DastID" value="@Model.Dast.DastID" />
+                                            
+                                        </div>
+
+                                    </form>
+                                </div>
+                                <div class="tab-pane fade" id="AUDIT">
+                                    <div class="dastHeading mt-3">
+                                        <h2>AUDIT</h2>
+                                        <div class="detail-button ml-auto">
+
+                                            <a href="/Patient/Add?PatientID=@ViewBag.PatientId"
+                                               class="btn btn-success label-fields">
+                                                <i class="far fa-edit"></i>
+                                                Edit
+                                            </a>
+                                            <a tabindex="1" href="javascript:{}" onclick="return AuditSave();" id="btnAudit" class="btn btn-success">
+                                                <i class="far fa-save"></i>
+                                                Save
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <form class="detail-patient-form" id="frmAudit">
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex height-auto">
+                                                <div class="two-columns">
+                                                    <label>
+                                                        How often do you have a drink containing
+                                                        alcohol?
+                                                    </label>
+                                                </div>
+                                                <div class="two-columns">
+                                                    <label>
+                                                        How many drinks containing alcohol do you
+                                                        have
+                                                        on a typical day when you are drinking?
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="two-columns">
+
+                                                    @if (Model.Audit.DrinkContainingAlcohol != null)
+                                                {<label class="label-fields" id="txtDrinkContainingAlcohol">@(Model.ddlDrinkAlcohol.Where(p => p.Value == Model.Audit.DrinkContainingAlcohol.ToString()).FirstOrDefault().Text)</label>}
+
+                                                    @Html.DropDownListFor(m => m.Audit.DrinkContainingAlcohol, new SelectList(Model.ddlDrinkAlcohol, "Value", "Text", Model.Audit.DrinkContainingAlcohol), new { @class = "form-control", @Id = "ddDrinkContainingAlcohol", @Name = "DrinkContainingAlcohol", @tabindex = "1" })
+
+
+                                                </div>
+                                                <div class="two-columns">
+
+                                                    @if (Model.Audit.HowManyDrinks != null)
+                                                {
+                                                <label class="label-fields" id="txtHowManyDrinks">@(Model.ddlHowManyDrinks.Where(p => p.Value == Model.Audit.HowManyDrinks.ToString()).FirstOrDefault().Text)</label>
+                                                }
+
+                                                    @Html.DropDownListFor(m => m.Audit.HowManyDrinks, new SelectList(Model.ddlHowManyDrinks, "Value", "Text", Model.Audit.HowManyDrinks), new { @class = "form-control", @Id = "ddHowManyDrinks", @Name = "HowManyDrinks", @tabindex = "1" })
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex height-auto">
+                                                <div class="one-columns">
+                                                    <label>
+                                                        How often do you have six or more drink on one
+                                                        occassion?
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="three-columns">
+                                                    @if (Model.Audit.SixOrMoreDrink != null)
+                                                {
+                                                <label class="label-fields" id="txtSixOrMoreDrink">@(Model.ddlSixOrMoreDrink.Where(p => p.Value == Model.Audit.SixOrMoreDrink.ToString()).FirstOrDefault().Text)</label>
+                                                }
+                                                    @Html.DropDownListFor(m => m.Audit.SixOrMoreDrink, new SelectList(Model.ddlSixOrMoreDrink, "Value", "Text", Model.Audit.SixOrMoreDrink), new { @class = "form-control", @Id = "ddSixOrMoreDrink", @Name = "SixOrMoreDrink", @tabindex = "1" })
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex height-auto">
+                                                <div class="one-columns">
+
+                                                    <label>
+                                                        How often during the last year have you found
+                                                        that you were not able to stop drinking once you
+                                                        had started?
+                                                    </label>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="three-columns">
+
+                                                    @if (Model.Audit.NotAbleToStopDrinking != null)
+                                                {
+                                                <label class="label-fields">@(Model.ddlNotAbleToStopDrinking.Where(p => p.Value == Model.Audit.NotAbleToStopDrinking.ToString()).FirstOrDefault().Text)</label>
+                                                }
+
+                                                    @Html.DropDownListFor(m => m.Audit.NotAbleToStopDrinking, new SelectList(Model.ddlNotAbleToStopDrinking, "Value", "Text", Model.Audit.NotAbleToStopDrinking), new { @class = "form-control", @Name = "NotAbleToStopDrinking", @tabindex = "1" })
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex height-auto">
+                                                <div class="one-columns">
+                                                    <label>
+                                                        How often during the last year have you
+                                                        failed do what was normally expected from you
+                                                        because of drinking.
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="three-columns">
+                                                    @if (Model.Audit.FailedWhatWasExpected != null)
+                                                {
+                                                <label class="label-fields">@(Model.ddlFailedWhatWasExpected.Where(p => p.Value == Model.Audit.FailedWhatWasExpected.ToString()).FirstOrDefault().Text)</label>
+                                                }
+                                                    @Html.DropDownListFor(m => m.Audit.FailedWhatWasExpected, new SelectList(Model.ddlFailedWhatWasExpected, "Value", "Text", Model.Audit.FailedWhatWasExpected), new { @class = "form-control", @Name = "FailedWhatWasExpected", @tabindex = "1" })
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex height-auto">
+                                                <div class="one-columns">
+                                                    <label>
+                                                        How often during the last year have you
+                                                        needed a first drink in the
+                                                        morning to get yourself going after a heavy
+                                                        drinking session?
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="three-columns">
+
+                                                    @if (Model.Audit.FirstDrinkMorning != null)
+                                                {
+                                                <label class="label-fields">@(Model.ddlFirstDrinkMorning.Where(p => p.Value == Model.Audit.FirstDrinkMorning.ToString()).FirstOrDefault().Text)</label>
+                                                }
+                                                    @Html.DropDownListFor(m => m.Audit.FirstDrinkMorning, new SelectList(Model.ddlFirstDrinkMorning, "Value", "Text", Model.Audit.FirstDrinkMorning), new { @class = "form-control", @Name = "FirstDrinkMorning", @tabindex = "1" })
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex height-auto">
+                                                <div class="one-columns">
+                                                    <label>
+                                                        How often during the last year have you had a
+                                                        feeling of guilt
+                                                        or remorse after drinking?
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="three-columns">
+                                                    @if (Model.Audit.FeelingOfGuilt != null)
+                                                {
+                                                <label class="label-fields">@(Model.ddlFeelingOfGuilt.Where(p => p.Value == Model.Audit.FeelingOfGuilt.ToString()).FirstOrDefault().Text)</label>
+                                                }
+                                                    @Html.DropDownListFor(m => m.Audit.FeelingOfGuilt, new SelectList(Model.ddlFeelingOfGuilt, "Value", "Text", Model.Audit.FeelingOfGuilt), new { @class = "form-control", @Name = "FeelingOfGuilt", @tabindex = "1" })
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex height-auto">
+                                                <div class="one-columns">
+                                                    <label>
+                                                        How often during the last year you have been
+                                                        unable to remember what happened the night
+                                                        before
+                                                        because you had been drinking?
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="three-columns">
+                                                    @if (Model.Audit.UnableToRemember != null)
+                                                {
+                                                <label class="label-fields">@(Model.ddlUnableToRemember.Where(p => p.Value == Model.Audit.UnableToRemember.ToString()).FirstOrDefault().Text)</label>
+                                                }
+                                                    @Html.DropDownListFor(m => m.Audit.UnableToRemember, new SelectList(Model.ddlUnableToRemember, "Value", "Text", Model.Audit.UnableToRemember), new { @class = "form-control", @Name = "UnableToRemember", @tabindex = "1" })
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row-first" id="divInjuredDrinking">
+                                            <div class="top-form-row d-flex height-auto">
+                                                <div class="two-columns">
+                                                    <label>
+                                                        Have you or someone else been injured as a
+                                                        result of your drinking?
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="three-columns">
+
+                                                    @if (Model.Audit.InjuredOfYourDrinking != null)
+                                                {
+                                                <label class="label-fields" id="txtInjuredDrinking">@(Model.ddlInjuredOfYourDrinking.Where(p => p.Value == Model.Audit.InjuredOfYourDrinking.ToString()).FirstOrDefault().Text)</label>
+                                                }
+                                                    @Html.DropDownListFor(m => m.Audit.InjuredOfYourDrinking, new SelectList(Model.ddlInjuredOfYourDrinking, "Value", "Text", Model.Audit.InjuredOfYourDrinking), new { @class = "form-control", @Id = "ddInjuredDrinking", @Name = "InjuredOfYourDrinking", @tabindex = "1" })
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row-first" id="divFriendsSuggested">
+                                            <div class="top-form-row d-flex height-auto">
+                                                <div class="one-columns">
+                                                    <label>
+                                                        Has a relative or friends or a doctor or
+                                                        another
+                                                        health worker been concerned about your drinking
+                                                        or suggested you cut down?
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="three-columns">
+
+                                                    @if (Model.Audit.FriendsSuggestedYouCutDown != null)
+                                                {
+                                                <label class="label-fields" id="txtFriendsSuggested">@(Model.ddlFriendsSuggestedYouCutDown.Where(p => p.Value == Model.Audit.FriendsSuggestedYouCutDown.ToString()).FirstOrDefault().Text)</label>
+                                                }
+                                                    @Html.DropDownListFor(m => m.Audit.FriendsSuggestedYouCutDown, new SelectList(Model.ddlFriendsSuggestedYouCutDown, "Value", "Text", Model.Audit.FriendsSuggestedYouCutDown), new { @class = "form-control", @Id = "ddFriendsSuggested", @Name = "FriendsSuggestedYouCutDown", @tabindex = "1" })
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        @*<div class="form-row-first">
+                            <div class="top-form-row d-flex height-auto">
+                                <div class="one-columns">
+                                    <label>
+                                        Based on AUDIT interpretation leading to
+                                        categorization in the following groups
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="bootom-form-row d-flex">
+                                <div class="three-columns">
+                                    <select name="" class="form-control">
+                                        <option>Low Risk Use</option>
+                                        <option>At Risk Use</option>
+                                        <option>High Risk Use</option>
+                                        <option>Very High Risk</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>*@
+
+
+
+
+                                        <div class="detail-button mt-3 w-100 text-center">
+                                            <input type="hidden" name="CreatedDate" />
+                                            <input type="hidden" name="ModifiedDate" />
+                                            <input type="hidden" id="hdfPatientID" name="PatientID" value="@Model.Audit.PatientID" />
+                                            <input type="hidden" id="hdfAuditID" name="AuditID" value="@Model.Audit.AuditID" />
+                                           
+                                        </div>
+
+
+
+                                    </form>
+                                </div>
+                            </div>
+                           </div>
+                        </div>
+
+                </div>
+
+                @*<div class="col-lg-4 col-md-12 col-sm-12 col-12 ">
+                    <div class="sidebar-right">
+                        <div class="appointement">
+                            <h3>Appointment</h3>
+                            <div class="scroll scroll-height">
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6>
+                                        <span class="date">Date: 24-4-2019</span>, <span class="time">
+                                            Time:
+                                            5:30 PM
+                                        </span>
+                                    </h6>
+                                    <p>
+                                        At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum
+                                    </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6>
+                                        <span class="date">Date: 26-4-2019</span>, <span class="time">
+                                            Time:
+                                            5:30 PM
+                                        </span>
+                                    </h6>
+                                    <p>
+                                        At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum
+                                    </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6>
+                                        <span class="date">Date: 28-4-2019</span>, <span class="time">
+                                            Time:
+                                            5:30 PM
+                                        </span>
+                                    </h6>
+                                    <p>
+                                        At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum
+                                    </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6>
+                                        <span class="date">Date: 30-4-2019</span>, <span class="time">
+                                            Time:
+                                            5:30 PM
+                                        </span>
+                                    </h6>
+                                    <p>
+                                        At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum
+                                    </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6>
+                                        <span class="date">Date: 1-5-2019</span>, <span class="time">
+                                            Time:
+                                            5:30 PM
+                                        </span>
+                                    </h6>
+                                    <p>
+                                        At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum
+                                    </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="appointement">
+                            <h3>Notes</h3>
+                            <div class="scroll scroll-height">
+
+
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6>
+                                        <span class="date">Date: 24-4-2019</span>, <span class="time">
+                                            Time:
+                                            5:30 PM
+                                        </span>
+                                    </h6>
+                                    <p>
+                                        At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum
+                                    </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6>
+                                        <span class="date">Date: 26-4-2019</span>, <span class="time">
+                                            Time:
+                                            5:30 PM
+                                        </span>
+                                    </h6>
+                                    <p>
+                                        At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum
+                                    </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6>
+                                        <span class="date">Date: 28-4-2019</span>, <span class="time">
+                                            Time:
+                                            5:30 PM
+                                        </span>
+                                    </h6>
+                                    <p>
+                                        At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum
+                                    </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6>
+                                        <span class="date">Date: 30-4-2019</span>, <span class="time">
+                                            Time:
+                                            5:30 PM
+                                        </span>
+                                    </h6>
+                                    <p>
+                                        At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum
+                                    </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6>
+                                        <span class="date">Date: 1-5-2019</span>, <span class="time">
+                                            Time:
+                                            5:30 PM
+                                        </span>
+                                    </h6>
+                                    <p>
+                                        At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum
+                                    </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+
+  
+</script>

@@ -1,0 +1,646 @@
+﻿@model RootsOfHealth.Models.PatientEmploymentEducationBO
+
+<div class="tab-pane fade" id="Employment" role="tabpanel" aria-labelledby="Employment-tab">
+    <div class="inner-content">
+        <div class="paitent-detail">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="paitent-detail-left">
+                        <div class="detail-heading d-flex">
+                            <h2>Patient Employment/Education</h2>
+
+                            <div class="detail-button ml-auto">
+                                <a href="/Patient/Add?PatientID=@ViewBag.PatientId"
+                                   class="btn btn-success label-fields">
+                                    <i class="far fa-edit"></i>
+                                    Edit
+                                </a>
+                                <a tabindex="12" href="javascript:{}" onclick="return  EmploymentEducationSave();" id="EmploymentEducation" class="btn btn-success">
+                                    <i class="far fa-save"></i>
+                                    Save
+                                </a>
+
+                                @*<a href="#!" id="btnProfileEdit" class="btn btn-success">
+            <i class="far fa-edit"></i>
+            Edit
+        </a>
+        <a href="#!" id="btnProfileCancel" class="btn btn-info" style="display: none;">
+            <i class="far fa-edit"></i>
+            Cancel
+        </a>
+        <a href="#!" id="btnProfileSave" class="btn btn-success" style="display: none;">
+            <i class="far fa-save"></i>
+            Save
+        </a>*@
+                            </div>
+
+                        </div>
+                        <div class="top-image-row d-flex">
+                            <div class="top-image-left">
+
+                                <!--<div class="paitent-img">-->
+                                <!-- <img class="img-fluid" src="images/paitent-img.png" alt=""> -->
+                                <!--</div>-->
+                                <!--<a href="#" class="upload-link">Upload Image</a>-->
+                                <!-- <div class="points-status">
+
+        <div class="row">
+            <div class="col-lg-5 col-md-5 col-sm-12 col-12">
+                <div class="points">
+                    <h5>Status: <span>Secure</span></h5>
+                    <h5>Overall: <span>200</span></h5>
+                    <h5>Score: <span>8</span></h5>
+                </div>
+
+            </div>
+            <div class="col-lg-7 col-md-7 col-sm-12 col-12">
+                <h4>Points</h4>
+
+
+                <div class="progress" data-percentage="60">
+                    <span class="progress-left">
+                        <span class="progress-bar"></span>
+                    </span>
+                    <span class="progress-right">
+                        <span class="progress-bar"></span>
+                    </span>
+                    <div class="progress-value">
+                        <div>
+                            60%
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div> -->
+
+                                <div class="form-row-first label-fields">
+                                    <div class="top-form-row d-flex height-auto">
+                                        <div class="two-columns">
+
+                                            <label class="label-fields">
+                                                Score
+                                            </label>
+                                        </div>
+                                        <div class="two-columns">
+
+                                            <label class="label-fields">
+                                                Status
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="two-columns">
+
+                                            <label id="txtemploymentscore" class="label-fields"></label>
+
+                                        </div>
+
+                                        <div class="two-columns">
+
+                                            <label id="txtemploymentstatus" class="label-fields"></label>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <form class="detail-patient-form" id="frmEmploymentEducation">
+
+                            <div class="form-row-first">
+                                <div class="top-form-row d-flex height-auto">
+                                    <div class="two-columns">
+                                        <label class="Add">
+                                            What is the highest level of education you have
+                                            completed?
+                                        </label>
+                                        <label class="label-fields">
+                                            What is the highest level of education you have
+                                            completed?
+                                        </label>
+                                    </div>
+                                    <div class="two-columns">
+                                        <label class="Add">
+                                            Which of the following best describes your work
+                                            situation today?
+                                        </label>
+                                        <label class="label-fields">
+                                            Which of the following best describes your work
+                                            situation today?
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="bootom-form-row d-flex">
+                                    <div class="two-columns">
+                                        @*<label class="label-fields" id="lblLevelofEducation">@Model.LevelofEducation </label>*@
+
+                                        @*<select tabindex="1" class="form-control" id="ddLevelofEducation" name="LevelofEducation">
+            <option value="None">None</option>
+            <option value="Up to 8th grade">Up to 8th grade</option>
+            <option value="Some high school">Some high school</option>
+            <option value="High school diploma">High school diploma</option>
+            <option value="GED">GED</option>
+            <option value="Trade/tech/vocational training">Trade/tech/vocational training</option>
+            <option value="Associate degree">Associate degree</option>
+            <option value="Some college">Some college</option>
+            <option value="Bachelor’s degree">Bachelor’s degree</option>
+            <option value="Graduate/prof. degree">Graduate/prof. degree</option>
+        </select>*@
+
+                                        @if (Model.LevelofEducation != null)
+                                        {<label id="lblLevelofEducation" class="label-fields">@(Model.ddlLevelofEducation.Where(p => p.Value == Model.LevelofEducation.ToString()).FirstOrDefault().Text)</label>}
+
+                                        @Html.DropDownListFor(m => m.LevelofEducation, new SelectList(Model.ddlLevelofEducation, "Value", "Text", Model.LevelofEducation), new { @id = "ddLevelofEducation", @class = "form-control", @Name = "LevelofEducation", @tabindex = "1" })
+
+
+
+
+                                        <div class="one-columns" id="divHighestGrade" style="display:none">
+                                            <div class="form-row-first">
+                                                <div class="top-form-row d-flex">
+                                                    <div class="one-columns">
+                                                        <label class="Add">what is the highest grade you completed? </label>
+                                                        <label class="label-fields">what is the highest grade you completed?</label>
+                                                    </div>
+
+                                                </div>
+                                                <div class="bootom-form-row d-flex">
+                                                    <div class="one-columns">
+                                                        <label class="label-fields">@Model.HighestGrade</label>
+                                                        <input tabindex="2" type="text" id="txtHighestGrade" name="HighestGrade" value="@Model.HighestGrade" class="form-control" placeholder="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+
+                                    <div class="two-columns">
+                                        @*<label class="label-fields" id="lblWorkSituation">@Model.WorkSituation</label>*@
+
+                                        @*<select tabindex="3" class="form-control" id="ddWorkSituation" name="WorkSituation">
+            <option value="0">Select</option>
+            <option value="I am employed full-time">I am employed full-time</option>
+            <option value="I am employed part-time">I am employed part-time</option>
+            <option value="I am self-employed">I am self-employed</option>
+            <option value="I do odd jobs/occasional work">I do odd jobs/occasional work</option>
+            <option value="I am unemployed, but looking for work">I am unemployed, but looking for work</option>
+            <option value="I am unemployed but not looking for work">
+                I am unemployed but not looking for work
+            </option>
+            <option value="I care for a child or family member full time">
+                I care for a child or family member full time
+            </option>
+            <option value="I am temporarily disabled">I am temporarily disabled</option>
+            <option value="I am permanently disabled">I am permanently disabled</option>
+            <option value="I am retired from work">I am retired from work</option>
+            <option value="Other">Other</option>
+        </select>*@
+
+                                        @if (Model.WorkSituation != null)
+                                        {<label id="lblWorkSituation" class="label-fields">@(Model.ddlWorkSituation.Where(p => p.Value == Model.WorkSituation.ToString()).FirstOrDefault().Text)</label>}
+
+                                        @Html.DropDownListFor(m => m.WorkSituation, new SelectList(Model.ddlWorkSituation, "Value", "Text", Model.WorkSituation), new { @id = "ddWorkSituation", @class = "form-control", @Name = "WorkSituation", @tabindex = "1" })
+
+
+
+
+
+                                        <div class="row-inline">
+                                            <div class="one-columns" id="divFullTimeNameLocation" style="display:none">
+                                                <div class="form-row-first">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="Add">what is the name and location(Full-Time) of where you work? </label>
+                                                            <label class="label-fields">what is the name and location(Full-Time) of where you work? </label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="label-fields">@Model.FullTimeNameLocation</label>
+                                                            <input tabindex="4" type="text" id="txtFullTimeNameLocation" name="FullTimeNameLocation" value="@Model.FullTimeNameLocation" class="form-control" placeholder="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="one-columns" id="divPartTimeNameLocation" style="display:none">
+                                                <div class="form-row-first">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="Add">what is the name and location(Part-Time) of where you work? </label>
+                                                            <label class="label-fields">what is the name and location(Part-Time) of where you work? </label>
+
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="label-fields">@Model.PartTimeNameLocation</label>
+                                                            <input tabindex="5" type="text" id="txtPartTimeNameLocation" name="PartTimeNameLocation" class="form-control" value="@Model.PartTimeNameLocation" placeholder="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="one-columns" id="divOther" style="display:none">
+                                                <div class="form-row-first">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="Add">Other Work Situation</label>
+                                                            <label class="label-fields">Other Work Situation</label>
+
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="label-fields">@Model.OtherWorkSituation</label>
+                                                            <input tabindex="6" type="text" id="txtOtherWorkSituation" name="OtherWorkSituation" class="form-control" value="@Model.OtherWorkSituation" placeholder="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+
+
+
+
+
+                            <div class="form-row-first">
+                                <div class="top-form-row d-flex height-auto">
+                                    <div class="one-columns">
+                                        <label class="Add">
+                                            Are you currently participating in an educational or
+                                            training program to improve your work opportunities?
+                                        </label>
+                                        <label class="label-fields">
+                                            Are you currently participating in an educational or
+                                            training program to improve your work opportunities?
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="bootom-form-row d-flex">
+
+                                    <div class="three-columns">
+                                        @*<label class="label-fields" id="lblParticipating">@Model.ParticipatingInEducationalOrTrainingProgram</label>*@
+
+                                        @*<select tabindex="7" class="form-control" id="ddParticipatingInEducationalOrTrainingProgram" name="ParticipatingInEducationalOrTrainingProgram">
+            <option value="0">Select</option>
+            <option value="Yes">Yes</option>
+            <option value="No, but I would like to">No, but I would like to</option>
+            <option value="No, and I am not interested">No, and I am not interested</option>
+            <option value="No, but I have in the past">No, but I have in the past</option>
+        </select>*@
+
+
+                                        @if (Model.ParticipatingInEducationalOrTrainingProgram!= null)
+                                        {<label id="lblParticipating" class="label-fields">@(Model.ddlParticipatingInEducationalOrTrainingProgram.Where(p => p.Value == Model.ParticipatingInEducationalOrTrainingProgram.ToString()).FirstOrDefault().Text)</label>}
+
+                                        @Html.DropDownListFor(m => m.ParticipatingInEducationalOrTrainingProgram, new SelectList(Model.ddlParticipatingInEducationalOrTrainingProgram, "Value", "Text", Model.ParticipatingInEducationalOrTrainingProgram), new { @id = "ddParticipatingInEducationalOrTrainingProgram", @class = "form-control", @Name = "ParticipatingInEducationalOrTrainingProgram", @tabindex = "1" })
+
+
+
+
+                                        <div class="one-columns" id="divProgramSchoolAndYearAttended" style="display:none">
+                                            <div class="form-row-first">
+                                                <div class="top-form-row d-flex">
+                                                    <div class="one-columns">
+                                                        <label>Name of Program/School and Year attended  </label>
+
+                                                    </div>
+
+                                                </div>
+                                                <div class="bootom-form-row d-flex">
+                                                    <div class="one-columns">
+                                                        <label class="label-fields">@Model.ProgramSchoolAndYearAttended</label>
+                                                        <input tabindex="8" type="text" id="txtProgramSchoolAndYearAttended" value="@Model.ProgramSchoolAndYearAttended" name="ProgramSchoolAndYearAttended" class="form-control" placeholder="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="form-row-first" id="divParticipatingIn" style="display:none">
+                                                <div class="top-form-row d-flex">
+                                                    <div class="one-columns">
+                                                        <label>Participating In</label>
+                                                    </div>
+
+                                                </div>
+                                                <div class="bootom-form-row d-flex">
+                                                    <div class="one-columns">
+                                                        <label class="label-fields" id="lblParticipatingIn">@Model.ParticipatingIn</label>
+                                                        <select tabindex="9" class="selectboxmultiple" id="ddParticipatingIn" multiple>
+
+                                                            <option value="Training Program">Training Program</option>
+                                                            <option value="Student">Student</option>
+
+
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-12" id="divProgramName" style="display:none">
+                                                    <div class="form-row-first mt-0 mb-3">
+                                                        <div class="top-form-row d-flex">
+                                                            <div class="one-columns">
+                                                                <label>Name Of Program</label>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="bootom-form-row d-flex">
+                                                            <div class="one-columns">
+                                                                <label class="label-fields">@Model.ProgramName</label>
+                                                                <input tabindex="10" type="text" id="txtProgramName" name="ProgramName" class="form-control" value="@Model.ProgramName" placeholder="">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-12" id="divSchoolName" style="display:none">
+                                                    <div class="form-row-first mt-0 mb-3">
+                                                        <div class="top-form-row d-flex">
+                                                            <div class="one-columns">
+                                                                <label>Name Of School</label>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="bootom-form-row d-flex">
+                                                            <div class="one-columns">
+                                                                <label class="label-fields">@Model.SchoolName</label>
+                                                                <input tabindex="11" type="text" id="txtSchoolName" name="SchoolName" value="@Model.SchoolName" class="form-control" placeholder="">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="detail-button mt-3 w-100 text-center">
+                                <!-- <a href="#!" class="btn btn-info"><i class="far fa-edit"></i>
+                                Cancel</a> -->
+                                <input type="hidden" name="CreatedDate" />
+                                <input type="hidden" name="ModifiedDate" />
+                                <input type="hidden" name="ParticipatingIn" />
+                                <input type="hidden" name="PatientID" value="@Model.PatientID" />
+                                <input type="hidden" name="PatientEmploymentEducationID" value="@Model.PatientEmploymentEducationID" />
+                               
+
+
+                            </div>
+                        </form>
+                    </div>
+                    <!-- <div class="recent-paitents">
+                        <h2 class="mb-3">Recent Patients</h2>
+                        <div class="recent-paitent-row d-flex">
+                            <div class="recent-paitents-img">
+                                <img class="img-fluid" src="images/recent-paitent-img.png" alt="">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col" style="width:160px;">Name</th>
+                                            <th scope="col" style="width:268px;">Email</th>
+                                            <th scope="col" style="width:160px;">Phone</th>
+                                            <th scope="col" style="width:160px;">Last Modify</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <td style="width:160px;">Omnis iste</td>
+                                            <td style="width:268px;">Omnisiste@gmail.com</td>
+                                            <td style="width:160px;">98756 45365</td>
+                                            <td style="width:160px;">23-4-2019</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="recent-paitent-row d-flex">
+                            <div class="recent-paitents-img">
+                                <img class="img-fluid" src="images/recent-paitent-img-1.png" alt="">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col" style="width:160px;">Name</th>
+                                            <th scope="col" style="width:268px;">Email</th>
+                                            <th scope="col" style="width:160px;">Phone</th>
+                                            <th scope="col" style="width:160px;">Last Modify</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <td style="width:160px;">praesentium</td>
+                                            <td style="width:268px;">praesentium@gmail.com</td>
+                                            <td style="width:160px;">68756 45365</td>
+                                            <td style="width:160px;">20-4-2019</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="recent-paitent-row d-flex">
+                            <div class="recent-paitents-img">
+                                <img class="img-fluid" src="images/recent-paitent-img-2.png" alt="">
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col" style="width:160px;">Name</th>
+                                            <th scope="col" style="width:268px;">Email</th>
+                                            <th scope="col" style="width:160px;">Phone</th>
+                                            <th scope="col" style="width:160px;">Last Modify</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr>
+                                            <td style="width:160px;">voluptatum</td>
+                                            <td style="width:268px;">voluptatum@gmail.com</td>
+                                            <td style="width:160px;">78756 45365</td>
+                                            <td style="width:160px;">18-4-2019</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+
+                <!-- <div class="col-lg-4 col-md-12 col-sm-12 col-12 ">
+
+
+                    <div class="sidebar-right">
+                        <div class="appointement">
+                            <h3>Appointment</h3>
+                            <div class="scroll scroll-height">
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 24-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 26-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 28-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 30-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 1-5-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="appointement">
+                            <h3>Notes</h3>
+                            <div class="scroll scroll-height">
+
+
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 24-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 26-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 28-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 30-4-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                                <div class="appointement-row">
+                                    <div class="calender-img">
+                                        <img src="images/calender-icon.png" alt="">
+                                    </div>
+                                    <h6><span class="date">Date: 1-5-2019</span>, <span
+                                            class="time">Time:
+                                            5:30 PM</span></h6>
+                                    <p>At vero eos et accusamus et iusto odio dignissimos ducimus
+                                        qui
+                                        blanditiis praesentium voluptatum </p>
+                                    <a href="#!" class="btn btn-link">Read More...</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+
+    </div>
+</div>

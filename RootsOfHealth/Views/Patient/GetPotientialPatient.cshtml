@@ -1,0 +1,62 @@
+﻿@model IEnumerable<RootsOfHealth.Models.PotientialPatientBO>
+@{
+    ViewBag.Title = "GetPotientialPatient";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section id="content" class="responsive-container">
+    <div class="inner-content">
+        <div class="container-fluid pl-0 pr-0">
+            <div class="appointment">
+              
+                
+                <table id="tblPotientialPatient" class="display table table-hover table-striped table-bordered">
+                    
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Last Modify</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+@foreach (var p in Model)
+{
+                            <tr>
+                                <td>@p.FirstName @p.LastName</td>
+                                <td>@p.EmailAddress</td>
+                                <td>@p.CellPhone  </td>
+                                <td>@p.ModifiedDate</td>
+                                <td>
+                                    <button href='' id="btnpatientmove" class="btn btn-success label-fields">
+                                        <i class="far fa-edit"></i>
+                                        Move
+                                    </button>
+                                   
+                                </td>
+                            </tr>
+}
+                        </tbody>
+                    
+                </table>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+          
+            var table = $("#tblPotientialPatient").dataTable();
+            //$('#tblPotientialPatient tbody').on('click', 'button', function () {
+            //    var data = table.api().row($(this).parents('tr')).data();
+            //    console.log(data);
+            //});
+        });
+       
+        </script>
+    }

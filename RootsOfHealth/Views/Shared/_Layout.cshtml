@@ -1,0 +1,455 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+
+    <link href="https://cdn.rawgit.com/atatanasov/gijgo/master/dist/combined/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+
+    <link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.11.0.css" type="text/css" media="all">
+
+    <!-- CSS for Calenders -->
+
+
+    <link href="~/css/fullcalendar.min.css" rel="stylesheet" />
+    <link href="~/css/select2.min.css" rel="stylesheet" />
+    <!-- Font Awesome CSS start here -->
+
+    <link href="~/css/all.min.css" rel="stylesheet" />
+    <!-- Bootstrap CSS start here  -->
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/style.css" rel="stylesheet" media="print,all,screen" />
+    <!-- Responsive CSS start here  -->
+
+    <link href="~/css/responsive.css" rel="stylesheet" />
+    <link href="~/css/toastr.min.css" rel="stylesheet" />
+    <title>Welcome to Roots Community Health Center </title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.15/datatables.min.css" />
+    <link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
+          rel="stylesheet">
+
+
+
+    <!-- Custom CSS start here  -->
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+
+
+
+    <style>
+        .loaderOverlay {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255,255,255,0.95);
+            display:none;
+        }
+        .loader {
+            width: 100px;
+            height: 100px;
+            border-radius: 100%;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+#loader-6{
+
+}
+
+        #loader-6 span {
+            display: inline-block;
+            width: 5px;
+            height: 20px;
+            background-color: #22baa0;
+            margin-right: 2px;
+        }
+
+#loader-6 span:nth-child(1){
+  animation: grow 1s ease-in-out infinite;
+}
+
+#loader-6 span:nth-child(2){
+  animation: grow 1s ease-in-out 0.15s infinite;
+}
+
+#loader-6 span:nth-child(3){
+  animation: grow 1s ease-in-out 0.30s infinite;
+}
+
+#loader-6 span:nth-child(4){
+  animation: grow 1s ease-in-out 0.45s infinite;
+}
+
+@@keyframes grow{
+  0%, 100%{
+    -webkit-transform: scaleY(1);
+    -ms-transform: scaleY(1);
+    -o-transform: scaleY(1);
+    transform: scaleY(1);
+  }
+
+  50%{
+    -webkit-transform: scaleY(1.8);
+    -ms-transform: scaleY(1.8);
+    -o-transform: scaleY(1.8);
+    transform: scaleY(1.8);
+  }
+}
+    </style>
+</head>
+<body>
+    <div class="loaderOverlay">
+        <div class="loader" id="loader-6">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    @*<div class="scroll">*@
+    <div>
+        <!-- Header start here  -->
+        <header class="page-header">
+            <nav class="navbar navbar-expand-lg fixed-top">
+                <div class="header-left d-flex">
+                    <a href="#" class="nav-menu"><img src="~/images/nav-icon.png" /></a>
+
+                </div>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto">
+                        <div class="header-right d-flex">
+                            <div class="searchbox">
+                                <button type="submit"><i class="fas fa-search"></i></button>
+                                <input type="text" placeholder="Search..." id="searchPatient" onkeyup="SearchPatient()" autocomplete="off">
+
+                                <div class="searchboxDropDown">
+                                    <div class="scroll">
+                                        <ul id="patientList">
+                                            <li>
+                                                <div class="imagebox">
+                                                    <img src="~/images/recent-paitent-img.png" alt="">
+                                                </div>
+                                                <div class="searchDeatails">
+                                                    <span>Name: John</span>
+                                                    <span>Email: John@gmail.com</span>
+                                                    <span>SSN: 45896325</span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="imagebox">
+                                                    <img src="~/images/recent-paitent-img.png" alt="">
+                                                </div>
+                                                <div class="searchDeatails">
+                                                    <span>Name: John</span>
+                                                    <span>Email: John@gmail.com</span>
+                                                    <span>SSN: 45896325</span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="imagebox">
+                                                    <img src="~/images/recent-paitent-img.png" alt="">
+                                                </div>
+                                                <div class="searchDeatails">
+                                                    <span>Name: John</span>
+                                                    <span>Email: John@gmail.com</span>
+                                                    <span>SSN: 45896325</span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="imagebox">
+                                                    <img src="~/images/recent-paitent-img.png" alt="">
+                                                </div>
+                                                <div class="searchDeatails">
+                                                    <span>Name: John</span>
+                                                    <span>Email: John@gmail.com</span>
+                                                    <span>SSN: 45896325</span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="imagebox">
+                                                    <img src="~/images/recent-paitent-img.png" alt="">
+                                                </div>
+                                                <div class="searchDeatails">
+                                                    <span>Name: John</span>
+                                                    <span>Email: John@gmail.com</span>
+                                                    <span>SSN: 45896325</span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="imagebox">
+                                                    <img src="~/images/recent-paitent-img.png" alt="">
+                                                </div>
+                                                <div class="searchDeatails">
+                                                    <span>Name: John</span>
+                                                    <span>Email: John@gmail.com</span>
+                                                    <span>SSN: 45896325</span>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="nav-item dropdown">
+
+                                <a class="notification" id="dropdownMenuButton" data-toggle="dropdown"
+                                   aria-haspopup="true" aria-expanded="false">
+                                    <i class="far fa-bell"></i><span>5</span>
+                                </a>
+
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <div class="notification-header d-flex">
+                                        <h5>Notification </h5> <a href="#!" class="view-all">Clear All</a>
+                                    </div>
+                                    <div class="notification-body">
+                                        <div class="scroll">
+                                            <a class="dropdown-item" href="#">
+                                                <span href="#!" class="close"><i class="fas fa-times"></i></span>
+                                                <img src="~/images/recent-paitent-img.png" alt="">
+                                                <span class="noti-text">
+                                                    <h6>Crestina pride</h6>
+                                                    <p>Sed ut perspiciatis unde omnis iste natus error sit </p>
+                                                </span>
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                <img src="~/images/recent-paitent-img-1.png" alt="">
+                                                <span class="noti-text">
+                                                    <h6>Crestina pride</h6>
+                                                    <p>Sed ut perspiciatis unde omnis iste natus error sit </p>
+                                                </span>
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                <img src="~/images/recent-paitent-img-2.png" alt="">
+                                                <span class="noti-text">
+                                                    <h6>Crestina pride</h6>
+                                                    <p>Sed ut perspiciatis unde omnis iste natus error sit </p>
+                                                </span>
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                <img src="~/images/recent-paitent-img-2.png" alt="">
+                                                <span class="noti-text">
+                                                    <h6>Crestina pride</h6>
+                                                    <p>Sed ut perspiciatis unde omnis iste natus error sit </p>
+                                                </span>
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                <img src="~/images/recent-paitent-img-2.png" alt="">
+                                                <span class="noti-text">
+                                                    <h6>Crestina pride</h6>
+                                                    <p>Sed ut perspiciatis unde omnis iste natus error sit </p>
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <a href="#!" class="view-all-btn">View All</a>
+                                </div>
+
+
+
+                            </div>
+                            <div class="nav-item dropdown">
+                                <a class="user" id="userDropdown" data-toggle="dropdown" aria-haspopup="true"
+                                   aria-expanded="false">
+                                    @if (Request.Cookies["userimage"] != null || Request.Cookies["userimage"].Value != "")
+                                    {
+                                        <img src="~/Files/@Request.Cookies["userimage"].Value" width="45px" height="45px" alt="user img">
+                                    }
+                                    else
+                                    {
+                                        <img src="~/Files/profile.png" width="45px" height="45px" alt="user img">
+                                    }
+                                    <span class="user-text">@FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name</span>
+                                    <i class="fas fa-chevron-down"></i>
+                                </a>
+
+                                <div class="dropdown-menu dropdown-user" aria-labelledby="userDropdown">
+                                    <ul>
+                                        <li><a href="/Account/Settings"><i class="fas fa-users-cog"></i> Account Setting</a></li>
+                                        <li><a href="/Account/UserDetails?username=@FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name"><i class="fas fa-users-cog"></i> Profile</a></li>
+                                        <li><a href="/Account/Logout"><i class="fas fa-sign-in-alt"></i> Log Out</a></li>
+                                    </ul>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                    </ul>
+
+                </div>
+            </nav>
+        </header>
+        <!-- Header end here  -->
+        <!-- Sidebar start here  -->
+        <aside class="sidebar-menu sidebar-res scroll">
+            <a href="#" class="logo">
+                <img class="img-fluid" src="~/images/logo.png" alt="">
+            </a>
+            <ul>
+                <li><a href="/DashBoard/Index" id="DashBoard" class="nav-menu"><span class="home-icon"></span> Home </a></li>
+                <li><a href="/Patient/Appointment" id="Appointment" class="nav-menu"><span class="app-icon"></span> Appointment</a></li>
+                <li><a href="/Patient/List" id="Patient" class="nav-menu"><span class="patient-icon"></span> Patients</a></li>
+                <li><a href="/Patient/Add" id="Add" class="nav-menu"><span class="add-icon"></span> Add Patient</a></li>
+                <li><a href="/Patient/Authorization" id="Authorization" class="nav-menu"><span class="authorization-icon"></span>Authorization</a></li>
+                @*<li><a href="/Account/Index" id="Account" class="nav-menu"><span class="account-icon"></span>Users</a></li>
+                <li><a href="/Account/Roles" id="Account" class="nav-menu"><span class="account-icon"></span>Roles</a></li>*@
+                <li><a href="/Account/UserDetails?username=@FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name" id="Account" class="nav-menu"><span class="account-icon"></span> My Account</a></li>
+
+                @*<li><a href="/Patient/WebGridShowLookUpOption" id="LookUpOption" class="nav-menu"><span class="account-icon"></span>LookUpTable</a></li>
+
+                <li><a href="/Patient/FormScheduling" id="FormScheduling" class="nav-menu"><span class="logout-icon"></span> Form Scheduling</a></li>*@
+                <li><a href="/Patient/GetPotientialPatient" id="PotientPatient" class="nav-menu"><span class="add-icon"></span> PotientPatient</a></li>
+                <li><a href="/Account/Logout" id="logout" class="nav-menu"><span class="logout-icon"></span> Log Out</a></li>
+            </ul>
+
+        </aside>
+        <!-- Sidebar end here  -->
+        @RenderBody()
+
+    </div>
+    <script type="text/javascript">
+         var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
+        function RedirectPatient(ID) {
+
+            window.location = '/Patient/Add?PatientID=' + ID;
+        }
+
+        $(document).click(function (e) {
+
+            if (e.target.id != 'patientList') {
+                $("#searchPatient").val('');
+                $(".searchboxDropDown").css('display', 'none');
+            }
+        });
+        function SearchPatient() {
+
+            var keyword = $("#searchPatient").val();
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/SearchPatient?keyword=' + keyword,
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                success: function (result) {
+
+                    if (result.length) {
+                        $("#patientList").html('');
+                        var tbl = '';
+                        for (var i = 0; i < result.length; i++) {
+                            if (result[i].EmailAddress == null) { result[i].EmailAddress = ''; }
+                            if (result[i].SocialSecurityNumber == null) { result[i].SocialSecurityNumber = ''; }
+
+
+                            tbl += '<li style="cursor: pointer;" onclick="RedirectPatient(' + result[i].PatientID + ')">'
+                            if (result[i].PatientImg == '' || result[i].PatientImg ==null) {
+                                tbl += '<div class="imagebox"><img src="/images/avatar.png" alt=""> </div>'
+                            } else {
+                                tbl += '<div class="imagebox"><img src="/Files/' + result[i].PatientImg + '" alt=""> </div>'
+                            }
+                            tbl += '<div class="searchDeatails">'
+                            tbl += '<span>Name:' + result[i].FirstName + ' ' + result[i].MiddleName + ' ' + result[i].LastName + '</span >'
+
+                            tbl += '<span>Email: ' + result[i].EmailAddress + '</span >'
+                            tbl += '<span>SSN: ' + result[i].SocialSecurityNumber + '</span > </div> </li>'
+
+
+                        }
+                        $(".searchboxDropDown").css('display', 'block');
+                        $("#patientList").html(tbl);
+
+
+
+
+                    } else {
+                        $(".searchboxDropDown").css('display', 'none');
+                    }
+
+
+                },
+                error: function () {
+
+                    toastr.error("Error while checking record");
+                }
+            });
+        }
+    </script>
+    @Scripts.Render("~/bundles/jquery")
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+
+    
+    <script src="~/Scripts/bootstrap_multiselect.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.15/datatables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+    <script src="~/Scripts/toastr.min.js"></script>
+
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*@
+    @*<script src="~/Scripts/bootstrap_multiselect.js"></script>*@
+
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/fullcalendar.min.js"></script>
+    <script src="https://cdn.rawgit.com/atatanasov/gijgo/master/dist/combined/js/gijgo.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/select2.min.js"></script>
+    <script src="~/Scripts/jquery.mask.js"></script>
+
+
+
+
+    
+
+    <script type="text/javascript">
+
+
+
+        $(document).ready(function () {
+
+           
+            //$(".scroll").scroll(function () {
+            //   
+            //    console.log($(window).scrollTop());
+            //    if ($(window).scrollTop() > 800 && $(window).scrollTop() < 850) {
+            //        alert('mission accomplished');
+            //    }
+            //});
+        });
+
+        $('.nav-menu').click(function () {
+            if ($(".sidebar-menu").hasClass("sidebar-res")) {
+                $('.sidebar-menu').removeClass('sidebar-res');
+                $('#content').removeClass('responsive-container');
+
+            } else {
+                $('.sidebar-menu').addClass('sidebar-res');
+                $('#content').addClass('responsive-container');
+            }
+        })
+        $('.selectboxmultiple').selectpicker();
+        $('.select2').select2({ placeholder: "Select Patient", allowClear: true, searchInputPlaceholder: 'Search ...' });
+
+
+
+
+    </script>
+
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

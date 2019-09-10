@@ -1,0 +1,232 @@
+﻿@model RootsOfHealth.Models.Program
+
+<div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-12 col-12 pt-4 pb-5 pr-5 right-border">
+
+        <h6>Available Program</h6>
+        <ul class="list-group ap">      
+            @foreach (var s in Model.AvailablePrograms)
+            {
+                <li  style="cursor:pointer;" onclick="selectProgram('@s.ProgramsID',this)" class="list-group-item d-flex">@s.ProgramsName</li>
+            }
+
+            <a  onclick="addProgram()" class="transferAvail" href="#"><i class="fas fa-chevron-right"></i></a>
+            @*<a class="transferAvail top-space" href="#"><i class="fas fa-angle-double-left"></i></a>*@
+        </ul>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-12 col-12 pt-4 pb-5 pl-5">
+        <h6>Patient Program</h6>
+        <ul class="list-group pp">
+         
+            @foreach (var s in Model.PatientPrograms)
+            {
+                <li  style="cursor:pointer;"  onclick="selectPatientPrograms('@s.PatientProgramsID',this)"  class="list-group-item d-flex">@s.ProgramsName</li>
+            }
+
+            <a onclick="removeProgram()" class="transferPatient" href="#"><i class="fas fa-chevron-left"></i></a>
+            @*<a class="transferPatient top-spaceright" href="#"><i class="fas fa-angle-double-right"></i></a>*@
+        </ul>
+    </div>
+
+    <input type="hidden" id="programid" />
+    <input type="hidden" id="patientprogramid" />
+</div>
+
+<script>
+    var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]'
+
+    function selectProgram(id,ele) {
+
+        $('#programid').val(id);
+
+        $('.ap li').removeClass('selected-program');
+        $(ele).addClass('selected-program');
+
+
+    }
+
+    function selectPatientPrograms(id,ele) {
+
+        $('#patientprogramid').val(id);
+
+        $('.pp li').removeClass('selected-program');
+        $(ele).addClass('selected-program');
+    }
+
+    function removeProgram() {
+
+        var id = $('#patientprogramid').val();
+
+        if (id == undefined || id == '') {
+
+            toastr.error("Please select program to remove");
+            return;
+        }
+
+        var d = new Date();
+        var month = d.getMonth() + 1;
+        var day = d.getDate();
+        var time = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+        var ModifyDate = d.getFullYear() + '/' +
+            (month < 10 ? '0' : '') + month + '/' +
+            (day < 10 ? '0' : '') + day + "  " + time;
+
+        var formData = { 'PatientProgramsID': $('#patientprogramid').val(), 'ModifiedBy': 0, 'ModifiedDate': ModifyDate }
+
+        $.ajax({
+            type: "POST",
+            url: Apipath + '/api/PatientMain/UpdatePatientProgramsInfo',         
+            data: JSON.stringify(formData),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+                $('#patientprogramid').val('');
+                toastr.success("Program removed successfully");
+            },
+            error: function () {
+                toastr.error("Error while inserting program");
+            },
+            complete: function () {
+
+                GetPatientPrograms();
+                programShowHide();
+
+            }
+        });
+    }
+
+    function addProgram() {
+
+        var id = $('#programid').val();
+
+        if (id == undefined || id == '') {
+
+            toastr.error("Please select program to add");
+            return;
+        }
+
+        var d = new Date();
+        var month = d.getMonth() + 1;
+        var day = d.getDate();
+        var time = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+       var CreatedDate = d.getFullYear() + '/' +
+            (month < 10 ? '0' : '') + month + '/' +
+            (day < 10 ? '0' : '') + day + "  " + time;
+
+
+
+        var formData = {'PatientProgramsID': 0, 'ProgramsID': $('#programid').val(), 'PatientID': $('#mainpatientid').val(), 'CreatedBy': 0, 'CreatedDate': CreatedDate, 'ModifiedBy': 0, 'ModifiedDate': CreatedDate,'IsDeleted':'False'}
+
+        $.ajax({
+            type: "POST",
+            url: Apipath + '/api/PatientMain/AddPatientPrograms',
+            data: JSON.stringify(formData),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+               
+                $('#programid').val('');
+             
+
+                toastr.success("Program added successfully");
+            },
+            error: function () {
+                toastr.error("Error while inserting data");
+            },
+            complete: function () {
+
+                GetPatientPrograms();
+                programShowHide();
+            }
+        });
+    }
+  
+   
+    
+
+    var patientPrograms = [];
+    function programShowHide() {
+       
+        
+        $('.pp li').each(function () {
+            patientPrograms.push($(this).html());
+           
+        });
+
+        if (patientPrograms.length > 0) {
+            $("#programtbs").show();
+        } else {
+            $("#programtbs").hide();
+        }
+
+
+        $("#Clinic").hide();
+        $("#Dream").hide();
+        $("#OU").hide();
+        $("#Peralta").hide();
+
+        //$("#ClinicOnly").hide();
+        //$("#DreamOnly").hide();
+        //$("#OUOnly").hide();
+
+        if ($.inArray("Clinic", patientPrograms) != -1) {
+            $("#Clinic").show();    
+        }
+        if ($.inArray("Dream", patientPrograms) != -1) {
+            $("#Dream").show();    
+        } 
+        if ($.inArray("OU", patientPrograms) != -1 ) {
+            $("#OU").show();      
+        } 
+        if ($.inArray("Peralta College", patientPrograms) != -1) {
+            $("#Peralta").show();
+        } 
+
+        if ($.inArray("Clinic", patientPrograms) != -1) {
+            $("#aclinic").click();
+        } else if ($.inArray("Dream", patientPrograms) != -1) {
+            $("#adream").click();
+        }
+        else if ($.inArray("OU", patientPrograms) != -1) {
+            $("#aou").click();
+        }
+        else if ($.inArray("Peralta College", patientPrograms) != -1) {
+            $("#aPeraltaColleges").click();
+        }
+           
+
+
+
+        //for (i = 0; i < patientPrograms.length; i++)
+        //{
+           
+        //    switch (patientPrograms[i]) {
+        //        case 'Clinic':
+        //            $("#Clinic").show();
+        //            $("#aclinic").click();
+        //            break;
+        //        case 'DreamOnly':
+        //            $("#Dream").show();    
+        //            $("#adream").click();
+        //            break;
+        //        case 'OUOnly':
+        //            $("#OU").show();      
+        //            $("#aou").click();
+        //            break;
+
+
+        //    }
+          
+
+        //}
+
+        patientPrograms = [];
+       
+    }
+
+    $(document).ready(function () {
+        
+        programShowHide();
+       
+    });
+</script>

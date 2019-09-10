@@ -1,0 +1,168 @@
+﻿@model RootsOfHealth.Models.UserBO
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<h2>Index</h2>
+<style>
+    .appointment table td img {
+        width: 30px;
+        height:30px;
+        object-fit:cover;
+        border-radius:100%;
+    }
+    .btn-success:hover {
+        background: #35c8af;
+        border: 1px solid #35c8af;
+    }
+    .appointment table th {
+        background-color: #f5f5f5;
+    }
+    .appointment table .btn-success {
+        background: #22baa0;
+        border-radius: 50px;
+        border: 1px solid #22baa0;
+        font-size: 15px;
+        font-weight: 500;
+        padding: 5px 19px;
+        margin-right: 5px;
+    }
+    .appointment table .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+        border-radius: 50px;
+        border: 1px solid #dc3545;
+        font-size: 15px;
+        font-weight: 500;
+        padding: 5px 19px;
+        margin-right: 5px;
+    }
+
+</style>
+<section id="content" class="responsive-container">
+    <div class="inner-content">
+        <div class="container-fluid pl-0 pr-0">
+            <div class="appointment">
+                <h2>Users</h2>
+                <p>
+                    @Html.ActionLink("Create New", "AddUser", "Account", htmlAttributes: new { @class = "btn btn-success" })
+                </p>
+                <table id="tblUser" class="display table table-hover table-striped table-bordered">
+                    <thead>
+                    <tr class="table-active">
+                        <th>
+                            @Html.DisplayNameFor(model => model.Image)
+                        </th>
+                        <th>
+                            @Html.DisplayName("Name")
+                        </th>
+                        
+                        <th>
+                            @Html.DisplayName("User Name")
+                        </th>
+
+                        <th>
+                            @Html.DisplayName("Role")
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Email)
+                        </th>
+                        <th>
+                            @Html.DisplayName("Phone No")
+                        </th>
+
+                        <th>Action</th>
+                    </tr>
+                        </thead>
+                    <tbody>
+                        @foreach (var item in Model.UserList)
+                        {
+                            <tr>
+                                <td>
+                                    @if (item.Image != "")
+                                {
+                                <img src="~/Files/@item.Image" alt="Sample Image" />
+                                }
+                                else
+                                {
+                                <img class="img-fluid" id="patientpic" src="/Files/profile.png" />
+                                }
+
+                                </td>
+                                <td>
+
+                                    @Html.Raw(item.FirstName+" "+item.LastName)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UserName)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.RoleName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Email)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PhoneNo)
+                                </td>
+
+
+
+                                <td>
+
+                                    @Html.ActionLink("Edit", "EditUserDetails", new { username = item.UserName.ToString() },htmlAttributes:new { @class = "btn btn-success" })
+
+                                    <a href="#" class="btn btn-danger" onclick="Remove(@item.UserID)">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</section>
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#tblUser").dataTable();
+        });
+        var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
+        function Remove(id) {
+            if (confirm("Are you sure,you want to delete.")) {
+                var model = {
+                    userid: id,
+                    modifyby:@Session["userid"].ToString(),
+                    ModifiedDate: new Date()
+                };
+                $.ajax({
+                    type: "POST",
+                    url: Apipath + '/api/PatientMain/removeuser',
+                    data: JSON.stringify(model),
+                    contentType: 'application/json; charset=UTF-8',
+                    dataType: "json",
+                    success: function (result) {
+                        if (result != '') {
+                            location.href = '/Account/Index';
+                            toastr.success("delete successfully");
+
+                        }
+                        else {
+                            toastr.error("Error while updating data");
+                        }
+                    },
+                    error: function () {
+
+                        toastr.error("Error while deleting data");
+                    }
+                });
+            }
+        }
+
+    </script>
+}

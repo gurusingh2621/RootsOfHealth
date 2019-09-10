@@ -1,0 +1,980 @@
+﻿@model RootsOfHealth.Models.PatientMentalHealthBO
+
+<div class="tab-pane fade" id="MentalHealth" role="tabpanel" aria-labelledby="MentalHealth-tab">
+    <div class="inner-content">
+        <div class="paitent-detail">
+            <div class="row" style="margin-right:0px;">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12 pr-0">
+                    <div class="paitent-detail-left">
+                        <div class="detail-heading d-flex">
+                            <h2>Patient Health Questionnaire (PHQ-9)</h2>
+                            <div class="detail-button ml-auto">
+                                <a tabindex="1" href="javascript:{}" onclick="return MentalHealthSave();" id="btnMental" class="btn btn-success">
+                                    <i class="far fa-save"></i>
+                                    Save
+                                </a>
+                                </div>
+                            </div>
+                        <div class="inner-main-content">
+                            <div class="top-image-row d-flex">
+                                <div class="top-image-left">
+                                    <div class="form-row-first label-fields">
+                                        <div class="top-form-row d-flex height-auto">
+                                            <div class="two-columns">
+
+                                                <label class="label-fields">
+                                                    Score
+                                                </label>
+                                            </div>
+                                            <div class="two-columns">
+
+                                                <label class="label-fields">
+                                                    Status
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                        <div class="bootom-form-row d-flex">
+                                            <div class="two-columns">
+
+                                                <label id="txtmentalscore" class="label-fields"></label>
+
+                                            </div>
+
+                                            <div class="two-columns">
+
+                                                <label id="txtmentalstatus" class="label-fields"></label>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="detail-button ml-auto">
+
+                                    <a href="/Patient/Add?PatientID=@ViewBag.PatientId"
+                                       class="btn btn-success label-fields">
+                                        <i class="far fa-edit"></i>
+                                        Edit
+                                    </a>
+                                </div>
+                            </div>
+                            <!---score end-->
+                            <div class="phq-patient-detail d-flex">
+                                <div class="patient-name">
+                                    <label>Patient Name:</label>
+                                    <label id="PmentalFirstName"></label>
+
+                                </div>
+                                <div class="patient-date">
+                                    <label>Date:</label>
+                                    <label id="mentalPDOB">'@ViewBag.mentalPDOB'</label>
+
+                                </div>
+                            </div>
+
+                            <div class="mental-table">
+                                <form class="detail-patient-form" id="frmPHQ">
+                                    <table class="table">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th scope="col"></th>
+                                                <th scope="col" style="width:109px; text-align:center;">
+                                                    Not at all
+                                                </th>
+                                                <th scope="col" style="width:109px; text-align:center;">
+                                                    Several days
+                                                </th>
+                                                <th scope="col" style="width:109px; text-align:center;">
+                                                    More than half the days
+                                                </th>
+                                                <th scope="col" style="width:109px; text-align:center;">
+                                                    Nearly every day
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+
+
+
+                                                <th scope="row" style="width:400px;">
+                                                    1. Over the last 2
+                                                    weeks, how often have you been bothered by any of
+                                                    the following problems?
+                                                </th>
+                                                @*<td>
+                                    <div class="custom-control custom-radio centerRadioBtn">
+                                        <input type="radio" class="custom-control-input"
+                                               id="problemsRadioOne" name="example1"
+                                               value="customEx">
+                                        <label class="custom-control-label"
+                                               for="problemsRadioOne"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="custom-control custom-radio centerRadioBtn">
+                                        <input type="radio" class="custom-control-input"
+                                               id="problemsRadioTwo" name="example1"
+                                               value="customEx">
+                                        <label class="custom-control-label"
+                                               for="problemsRadioTwo"></label>
+                                    </div>
+                                </td>
+                                <td>
+
+                                    <div class="custom-control custom-radio centerRadioBtn">
+                                        <input type="radio" class="custom-control-input"
+                                               id="problemsRadioThree" name="example1"
+                                               value="customEx">
+                                        <label class="custom-control-label"
+                                               for="problemsRadioThree"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="custom-control custom-radio centerRadioBtn">
+                                        <input type="radio" class="custom-control-input"
+                                               id="problemsRadioFour" name="example1"
+                                               value="customEx">
+                                        <label class="custom-control-label"
+                                               for="problemsRadioFour"></label>
+                                    </div>
+                                </td>*@
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">
+                                                    a. Little interest or pleasure in doing
+                                                    things
+                                                </th>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="interestOne" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="interestRadioOne" name="frmPHQ_radio0"
+                                                               value="0">
+                                                        <label class="custom-control-label"
+                                                               for="interestRadioOne"></label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="interestTwo" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="interestRadioTwo" name="frmPHQ_radio0"
+                                                               value="1">
+                                                        <label class="custom-control-label"
+                                                               for="interestRadioTwo"></label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="interestThree" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="interestRadioThree" name="frmPHQ_radio0"
+                                                               value="2">
+                                                        <label class="custom-control-label"
+                                                               for="interestRadioThree"></label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="interestFour" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="interestRadioFour" name="frmPHQ_radio0"
+                                                               value="3">
+                                                        <label class="custom-control-label"
+                                                               for="interestRadioFour"></label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">
+                                                    b. Feeling down, depressed, or hopless
+                                                </th>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="depressedOne" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="depressedRadioOne" name="frmPHQ_radio1"
+                                                               value="0">
+                                                        <label class="custom-control-label"
+                                                               for="depressedRadioOne"></label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="depressedTwo" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="depressedRadioTwo" name="frmPHQ_radio1"
+                                                               value="1">
+                                                        <label class="custom-control-label"
+                                                               for="depressedRadioTwo"></label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="depressedThree" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="depressedRadioThree" name="frmPHQ_radio1"
+                                                               value="2">
+                                                        <label class="custom-control-label"
+                                                               for="depressedRadioThree"></label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="depressedFour" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="depressedRadioFour" name="frmPHQ_radio1"
+                                                               value="3">
+                                                        <label class="custom-control-label"
+                                                               for="depressedRadioFour"></label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">
+                                                    c. Trouble falling/staying asleep,
+                                                    sleeping too much
+                                                </th>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="asleepOne" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="asleepRadioOne" name="frmPHQ_radio2"
+                                                               value="0">
+                                                        <label class="custom-control-label"
+                                                               for="asleepRadioOne"></label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="asleepTwo" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="asleepRadioTwo" name="frmPHQ_radio2"
+                                                               value="1">
+                                                        <label class="custom-control-label"
+                                                               for="asleepRadioTwo"></label>
+                                                    </div>
+
+                                                </td>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="asleepThree" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="asleepRadioThree" name="frmPHQ_radio2"
+                                                               value="2">
+                                                        <label class="custom-control-label"
+                                                               for="asleepRadioThree"></label>
+                                                    </div>
+                                                </td>
+                                                <td>
+
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="asleepFour" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="asleepRadioFour" name="frmPHQ_radio2"
+                                                               value="3">
+                                                        <label class="custom-control-label"
+                                                               for="asleepRadioFour"></label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">
+                                                    d. Feeling tired or having little energy
+                                                </th>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="energyOne" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="energyRadioOne" name="frmPHQ_radio3"
+                                                               value="0">
+                                                        <label class="custom-control-label"
+                                                               for="energyRadioOne"></label>
+                                                    </div>
+
+                                                </td>
+                                                <td>
+
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="energyTwo" class="fas fa-times"></i>
+
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="energyRadioTwo" name="frmPHQ_radio3"
+                                                               value="1">
+                                                        <label class="custom-control-label"
+                                                               for="energyRadioTwo"></label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="energyThree" class="fas fa-times"></i>
+
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="energyRadioThree" name="frmPHQ_radio3"
+                                                               value="2">
+                                                        <label class="custom-control-label"
+                                                               for="energyRadioThree"></label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="energyFour" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="energyRadioFour" name="frmPHQ_radio3"
+                                                               value="3">
+                                                        <label class="custom-control-label"
+                                                               for="energyRadioFour"></label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">e. Poor appetite or overeating</th>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="appetiteOne" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="appetiteRadioOne" name="frmPHQ_radio4"
+                                                               value="0">
+                                                        <label class="custom-control-label"
+                                                               for="appetiteRadioOne"></label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="appetiteTwo" class="fas fa-times"></i>
+                                                        <input type="radio" class="custom-control-input"
+                                                               id="appetiteRadioTwo" name="frmPHQ_radio4"
+                                                               value="1">
+                                                        <label class="custom-control-label"
+                                                               for="appetiteRadioTwo"></label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="appetiteThree" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="appetiteRadioThree" name="frmPHQ_radio4"
+                                                               value="2">
+                                                        <label class="custom-control-label"
+                                                               for="appetiteRadioThree"></label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="appetiteFour" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="appetiteRadioFour" name="frmPHQ_radio4"
+                                                               value="3">
+                                                        <label class="custom-control-label"
+                                                               for="appetiteRadioFour"></label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">
+                                                    f. Feeling bad about youself or that you
+                                                    are a failure or have let yourself or your family
+                                                    down
+                                                </th>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="FeelingOne" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="FeelingRadioOne" name="frmPHQ_radio5"
+                                                               value="0">
+                                                        <label class="custom-control-label"
+                                                               for="FeelingRadioOne"></label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="FeelingTwo" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="FeelingRadioTwo" name="frmPHQ_radio5"
+                                                               value="1">
+                                                        <label class="custom-control-label"
+                                                               for="FeelingRadioTwo"></label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="FeelingThree" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="FeelingRadioThree" name="frmPHQ_radio5"
+                                                               value="2">
+                                                        <label class="custom-control-label"
+                                                               for="FeelingRadioThree"></label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="FeelingFour" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="FeelingRadioFour" name="frmPHQ_radio5"
+                                                               value="3">
+                                                        <label class="custom-control-label"
+                                                               for="FeelingRadioFour"></label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <th scope="row">
+                                                    g. Trouble concentraiting on things,
+                                                    such as reading the newspaper or watching
+                                                    television.
+                                                </th>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="TroubleOne" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="TroubleRadioOne" name="frmPHQ_radio6"
+                                                               value="0">
+                                                        <label class="custom-control-label"
+                                                               for="TroubleRadioOne"></label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="TroubleTwo" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="TroubleRadioTwo" name="frmPHQ_radio6"
+                                                               value="1">
+                                                        <label class="custom-control-label"
+                                                               for="TroubleRadioTwo"></label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="TroubleThree" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="TroubleRadioThree" name="frmPHQ_radio6"
+                                                               value="2">
+                                                        <label class="custom-control-label"
+                                                               for="TroubleRadioThree"></label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="TroubleFour" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="TroubleRadioFour" name="frmPHQ_radio6"
+                                                               value="3">
+                                                        <label class="custom-control-label"
+                                                               for="TroubleRadioFour"></label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">
+                                                    h. Moving or speaking so slowly that
+                                                    other people could have noticed. Or the opposite,
+                                                    being
+                                                    so fidgety or restless that you have been moving
+                                                    around a lot more than usual.
+                                                </th>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="noticedOne" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="noticedRadioOne" name="frmPHQ_radio7"
+                                                               value="0">
+                                                        <label class="custom-control-label"
+                                                               for="noticedRadioOne"></label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="noticedTwo" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="noticedRadioTwo" name="frmPHQ_radio7"
+                                                               value="1">
+                                                        <label class="custom-control-label"
+                                                               for="noticedRadioTwo"></label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="noticedThree" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="noticedRadioThree" name="frmPHQ_radio7"
+                                                               value="2">
+                                                        <label class="custom-control-label"
+                                                               for="noticedRadioThree"></label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="noticedFour" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="noticedRadioFour" name="frmPHQ_radio7"
+                                                               value="3">
+                                                        <label class="custom-control-label"
+                                                               for="noticedRadioFour"></label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">
+                                                    i. Thoughts that you would be better off
+                                                    dead or of hurting yourself in some way
+                                                </th>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="betterOne" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="betterRadioOne" name="frmPHQ_radio8"
+                                                               value="0">
+                                                        <label class="custom-control-label"
+                                                               for="betterRadioOne"></label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="betterTwo" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="betterRadioTwo" name="frmPHQ_radio8"
+                                                               value="1">
+                                                        <label class="custom-control-label"
+                                                               for="betterRadioTwo"></label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="betterThree" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="betterRadioThree" name="frmPHQ_radio8"
+                                                               value="2">
+                                                        <label class="custom-control-label"
+                                                               for="betterRadioThree"></label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="betterFour" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="betterRadioFour" name="frmPHQ_radio8"
+                                                               value="3">
+                                                        <label class="custom-control-label"
+                                                               for="betterRadioFour"></label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">
+                                                    2. if you checked off any problem on
+                                                    this questionnaire so far, how difficult have
+                                                    problems made it for
+                                                    you to do your work, take care of things at home, or
+                                                    get along with other people?
+                                                </th>
+                                                <td>
+                                                    <p style="text-align:center;margin:0; font-size:13px;">
+                                                        Not difficult at all
+                                                    </p>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="questionnaireOne" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="questionnaireRadioOne" name="frmPHQ_radio9"
+                                                               value="0">
+                                                        <label class="custom-control-label"
+                                                               for="questionnaireRadioOne"></label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <p style="text-align:center;margin:0; font-size:13px;">
+                                                        Somewhat difficult
+                                                    </p>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="questionnaireTwo" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="questionnaireRadioTwo" name="frmPHQ_radio9"
+                                                               value="1">
+                                                        <label class="custom-control-label"
+                                                               for="questionnaireRadioTwo"></label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <p style="text-align:center;margin:0; font-size:13px;">
+                                                        Very <br /> difficult
+                                                    </p>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="questionnaireThree" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="questionnaireRadioThree" name="frmPHQ_radio9"
+                                                               value="2">
+                                                        <label class="custom-control-label"
+                                                               for="questionnaireRadioThree"></label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <p style="text-align:center;margin:0; font-size:13px;">
+                                                        Extremely difficult
+                                                    </p>
+                                                    <div class="custom-control custom-radio centerRadioBtn">
+
+                                                        <i id="questionnaireFour" class="fas fa-times"></i>
+                                                        <input tabindex="1" type="radio" class="custom-control-input"
+                                                               id="questionnaireRadioFor" name="frmPHQ_radio9"
+                                                               value="3">
+                                                        <label class="custom-control-label"
+                                                               for="questionnaireRadioFor"></label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <input type="hidden" name="CreatedDate" />
+                                    <input type="hidden" name="ModifiedDate" />
+
+                                    <input id="hdfLittleInterest" type="hidden" name="LittleInterest" value="@(Model.PHQ9.LittleInterest)" />
+                                    <input id="hdfFeelingDown" type="hidden" name="FeelingDown" value="@(Model.PHQ9.FeelingDown)" />
+                                    <input id="hdfTroubleFalling" type="hidden" name="TroubleFalling" value="@(Model.PHQ9.TroubleFalling)" />
+                                    <input id="hdfFeelingTired" type="hidden" name="FeelingTired" value="@(Model.PHQ9.FeelingTired)" />
+                                    <input id="hdfPoorAppetite" type="hidden" name="PoorAppetite" value="@(Model.PHQ9.PoorAppetite)" />
+                                    <input id="hdfFeelingBad" type="hidden" name="FeelingBad" value="@(Model.PHQ9.PoorAppetite)" />
+                                    <input id="hdfTroubleConcentraiting" type="hidden" name="TroubleConcentraiting" value="@(Model.PHQ9.TroubleConcentraiting)" />
+                                    <input id="hdfrestless" type="hidden" name="restless" value="@(Model.PHQ9.restless)" />
+                                    <input id="hdfHurtingYourself" type="hidden" name="HurtingYourself" value="@(Model.PHQ9.HurtingYourself)" />
+                                    <input id="hdfProblemsMade" type="hidden" name="ProblemsMade" value="@(Model.PHQ9.ProblemsMade)" />
+                                    <input id="hdfPHQ9Interpretation" type="hidden" name="PHQ9Interpretation" value="@(Model.PHQ9.PHQ9Interpretation)" />
+                                    <input type="hidden" id="hdfPatientID" name="PatientID" value="@Model.PHQ9.PatientID" />
+                                    <input type="hidden" id="hdfPHQ9ID" name="PHQ9ID" value="@Model.PHQ9.PHQ9ID" />
+                                </form>
+                                <form id="frmMentalHealth">
+                                    <div class="form-row-first">
+                                        <div class="top-form-row d-flex height-auto">
+                                            <div class="one-columns">
+                                                <label>
+                                                    Have you ever been diagnosed with any of the
+                                                    following mental health conditions?
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="bootom-form-row d-flex">
+                                            <div class="three-columns">
+                                                @*<label class="label-fields" id="lblMentalHealth">@Model.MentalHealthConditions</label>
+                                <select tabindex="1" class="selectboxmultiple" id="ddMentalHealth" multiple>
+                                    <option value="Select All">Select All</option>
+                                    <option value="2">Anxiety</option>
+                                    <option value="3">bipolar disorder</option>
+                                    <option value="2">depression</option>
+                                    <option value="2">PTSD</option>
+                                    <option value="4">
+                                        schizophrenia
+                                    </option>
+                                </select>*@
+
+
+                                                @if (Model.MentalHealthConditions != null)
+                                            {
+                                            <label class="label-fields" hidden="hidden" id="lblMentalHealth">@Model.MentalHealthConditions</label>
+                                            <label class="label-fields" id="lblMentalHealthCond">@Model.MentalHealthConditions</label>
+                                            }
+                                                @Html.DropDownListFor(m => m.MentalHealthConditions, new SelectList(Model.ddlMentalHealthConditions, "Value", "Text", Model.MentalHealthConditions), new { @class = "selectboxmultiple", @Id = "ddMentalHealth", @Name = "MentalHealthConditions", @tabindex = "1", @multiple = "multiple" })
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row-first">
+                                        <div class="top-form-row d-flex height-auto">
+                                            <div class="one-columns">
+                                                <label>
+                                                    During the past month, how often did poor mental
+                                                    health keep you from doing your usual activities,
+                                                    work, or recreation?
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="bootom-form-row d-flex">
+                                            <div class="three-columns">
+                                                @if (Model.PoorMentalHealth != null)
+                                            {
+                                            <label class="label-fields">@(Model.ddlPoorMentalHealth.Where(p => p.Value == Model.PoorMentalHealth.ToString()).FirstOrDefault().Text)</label>
+                                            }
+                                                @Html.DropDownListFor(m => m.PoorMentalHealth, new SelectList(Model.ddlPoorMentalHealth, "Value", "Text", Model.PoorMentalHealth), new { @class = "form-control", @Name = "PoorMentalHealth", @tabindex = "1" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row-first">
+                                        <div class="top-form-row d-flex height-auto">
+                                            <div class="one-columns">
+                                                <label>
+                                                    During the past month, how often did you suffer
+                                                    excessive worry about work, school, family,
+                                                    relationships or another important thing in your
+                                                    life?
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="bootom-form-row d-flex">
+                                            <div class="three-columns">
+
+                                                @if (Model.SufferExcessive != null)
+                                            {
+                                            <label class="label-fields">@(Model.ddlSufferExcessive.Where(p => p.Value == Model.SufferExcessive.ToString()).FirstOrDefault().Text)</label>
+                                            }
+                                                @Html.DropDownListFor(m => m.SufferExcessive, new SelectList(Model.ddlSufferExcessive, "Value", "Text", Model.SufferExcessive), new { @class = "form-control", @Name = "SufferExcessive", @tabindex = "1" })
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="detail-button mt-3 w-100 text-center">
+                                        <input type="hidden" name="CreatedDate" />
+                                        <input type="hidden" name="ModifiedDate" />
+
+                                        <input id="hdfPHQ9Interpretation" type="hidden" name="PHQ9Interpretation" value="@(Model.PHQ9Interpretation)" />
+                                        @*<input id="hdfMentalHealthConditions" type="hidden" name="MentalHealthConditions" />*@
+
+                                        <input type="hidden" id="hdfPHQ9ID" name="PHQ9ID" value="@Model.PHQ9.PHQ9ID" />
+                                        <input type="hidden" id="hdfPatientID" name="PatientID" value="@Model.PatientID" />
+                                        <input type="hidden" id="hdfMentalHealthID" name="MentalHealthID" value="@Model.MentalHealthID" />
+                                        
+                                    </div>
+                                </form>
+
+                            </div>
+
+                            </div>
+                        </div>
+
+            </div>
+           
+            @*<div class="col-lg-4 col-md-12 col-sm-12 col-12 ">
+
+
+                <div class="sidebar-right">
+                    <div class="appointement">
+                        <h3>Appointment</h3>
+                        <div class="scroll scroll-height">
+                            <div class="appointement-row">
+                                <div class="calender-img">
+                                    <img src="images/calender-icon.png" alt="">
+                                </div>
+                                <h6>
+                                    <span class="date">Date: 24-4-2019</span>, <span class="time">
+                                        Time:
+                                        5:30 PM
+                                    </span>
+                                </h6>
+                                <p>
+                                    At vero eos et accusamus et iusto odio dignissimos ducimus
+                                    qui
+                                    blanditiis praesentium voluptatum
+                                </p>
+                                <a href="#!" class="btn btn-link">Read More...</a>
+                            </div>
+                            <div class="appointement-row">
+                                <div class="calender-img">
+                                    <img src="images/calender-icon.png" alt="">
+                                </div>
+                                <h6>
+                                    <span class="date">Date: 26-4-2019</span>, <span class="time">
+                                        Time:
+                                        5:30 PM
+                                    </span>
+                                </h6>
+                                <p>
+                                    At vero eos et accusamus et iusto odio dignissimos ducimus
+                                    qui
+                                    blanditiis praesentium voluptatum
+                                </p>
+                                <a href="#!" class="btn btn-link">Read More...</a>
+                            </div>
+                            <div class="appointement-row">
+                                <div class="calender-img">
+                                    <img src="images/calender-icon.png" alt="">
+                                </div>
+                                <h6>
+                                    <span class="date">Date: 28-4-2019</span>, <span class="time">
+                                        Time:
+                                        5:30 PM
+                                    </span>
+                                </h6>
+                                <p>
+                                    At vero eos et accusamus et iusto odio dignissimos ducimus
+                                    qui
+                                    blanditiis praesentium voluptatum
+                                </p>
+                                <a href="#!" class="btn btn-link">Read More...</a>
+                            </div>
+                            <div class="appointement-row">
+                                <div class="calender-img">
+                                    <img src="images/calender-icon.png" alt="">
+                                </div>
+                                <h6>
+                                    <span class="date">Date: 30-4-2019</span>, <span class="time">
+                                        Time:
+                                        5:30 PM
+                                    </span>
+                                </h6>
+                                <p>
+                                    At vero eos et accusamus et iusto odio dignissimos ducimus
+                                    qui
+                                    blanditiis praesentium voluptatum
+                                </p>
+                                <a href="#!" class="btn btn-link">Read More...</a>
+                            </div>
+                            <div class="appointement-row">
+                                <div class="calender-img">
+                                    <img src="images/calender-icon.png" alt="">
+                                </div>
+                                <h6>
+                                    <span class="date">Date: 1-5-2019</span>, <span class="time">
+                                        Time:
+                                        5:30 PM
+                                    </span>
+                                </h6>
+                                <p>
+                                    At vero eos et accusamus et iusto odio dignissimos ducimus
+                                    qui
+                                    blanditiis praesentium voluptatum
+                                </p>
+                                <a href="#!" class="btn btn-link">Read More...</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="appointement">
+                        <h3>Notes</h3>
+                        <div class="scroll scroll-height">
+
+
+                            <div class="appointement-row">
+                                <div class="calender-img">
+                                    <img src="images/calender-icon.png" alt="">
+                                </div>
+                                <h6>
+                                    <span class="date">Date: 24-4-2019</span>, <span class="time">
+                                        Time:
+                                        5:30 PM
+                                    </span>
+                                </h6>
+                                <p>
+                                    At vero eos et accusamus et iusto odio dignissimos ducimus
+                                    qui
+                                    blanditiis praesentium voluptatum
+                                </p>
+                                <a href="#!" class="btn btn-link">Read More...</a>
+                            </div>
+                            <div class="appointement-row">
+                                <div class="calender-img">
+                                    <img src="images/calender-icon.png" alt="">
+                                </div>
+                                <h6>
+                                    <span class="date">Date: 26-4-2019</span>, <span class="time">
+                                        Time:
+                                        5:30 PM
+                                    </span>
+                                </h6>
+                                <p>
+                                    At vero eos et accusamus et iusto odio dignissimos ducimus
+                                    qui
+                                    blanditiis praesentium voluptatum
+                                </p>
+                                <a href="#!" class="btn btn-link">Read More...</a>
+                            </div>
+                            <div class="appointement-row">
+                                <div class="calender-img">
+                                    <img src="images/calender-icon.png" alt="">
+                                </div>
+                                <h6>
+                                    <span class="date">Date: 28-4-2019</span>, <span class="time">
+                                        Time:
+                                        5:30 PM
+                                    </span>
+                                </h6>
+                                <p>
+                                    At vero eos et accusamus et iusto odio dignissimos ducimus
+                                    qui
+                                    blanditiis praesentium voluptatum
+                                </p>
+                                <a href="#!" class="btn btn-link">Read More...</a>
+                            </div>
+                            <div class="appointement-row">
+                                <div class="calender-img">
+                                    <img src="images/calender-icon.png" alt="">
+                                </div>
+                                <h6>
+                                    <span class="date">Date: 30-4-2019</span>, <span class="time">
+                                        Time:
+                                        5:30 PM
+                                    </span>
+                                </h6>
+                                <p>
+                                    At vero eos et accusamus et iusto odio dignissimos ducimus
+                                    qui
+                                    blanditiis praesentium voluptatum
+                                </p>
+                                <a href="#!" class="btn btn-link">Read More...</a>
+                            </div>
+                            <div class="appointement-row">
+                                <div class="calender-img">
+                                    <img src="images/calender-icon.png" alt="">
+                                </div>
+                                <h6>
+                                    <span class="date">Date: 1-5-2019</span>, <span class="time">
+                                        Time:
+                                        5:30 PM
+                                    </span>
+                                </h6>
+                                <p>
+                                    At vero eos et accusamus et iusto odio dignissimos ducimus
+                                    qui
+                                    blanditiis praesentium voluptatum
+                                </p>
+                                <a href="#!" class="btn btn-link">Read More...</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+        </div>
+        </div>
+
+    </div>
+</div>

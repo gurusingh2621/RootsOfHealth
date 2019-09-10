@@ -1,0 +1,277 @@
+﻿@model RootsOfHealth.Models.UserBO
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    
+    #content .inner-content .top-image-row .paitent-img {
+        max-width: 60%;
+    }
+
+    .btn-success:hover {
+        background: #35c8af;
+        border: 1px solid #35c8af;
+    }
+
+    .appointment .form-control {
+        border: 1px solid #e2e2e2;
+        background: #fff;
+        border-radius: 0;
+        font-size: 13px;
+        height: 42px;
+    }
+
+    .appointment select {
+        border: 1px solid #e2e2e2;
+        background: url(../images/chevron-arrow-down.svg) no-repeat 0 0 !important;
+        border-radius: 0;
+        font-size: 13px;
+        height: 42px;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-size: 12px !important;
+        background-position: 97% 13px !important;
+        padding: .375rem 1.7rem .375rem .75rem;
+    }
+
+        .appointment select:focus {
+            outline: none;
+            box-shadow: none;
+        }
+
+    .appointment label {
+        font-size: 15px;
+    }
+
+    .appointment .btn-primary {
+        background: #22baa0;
+        border-radius: 50px;
+        border: 1px solid #22baa0;
+        font-size: 15px;
+        font-weight: 500;
+        padding: 8px 20px;
+        margin-right: 5px;
+    }
+
+    input#usersImg {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .field-icon {
+        float: right;
+        margin-left: -25px;
+        margin-top: -28px;
+        position: relative;
+        z-index: 2;
+        margin-right: 10px;
+    }
+
+</style>
+<section id="content" class="responsive-container">
+    <div class="profile-tabs">
+        <div class="tabs-scroll">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="UserProfile-tab" data-toggle="tab" href="#UserProfile" role="tab"
+                       aria-controls="UserProfile" aria-selected="true">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"  id="ChnagePWD-tab" data-toggle="tab" href="#ChnagePWD" role="tab"
+                       aria-controls="ChnagePWD" aria-selected="false">Change Password</a>
+                </li>
+               
+                
+            </ul>
+        </div>
+        <div class="tab-content" id="myTabContent">
+            @{
+                Html.RenderPartial("~/Views/Shared/Account/_UserDetail.cshtml", Model);
+            }
+
+            @{
+                Html.RenderPartial("~/Views/Shared/Account/_ChangePassword.cshtml", Model);
+            }
+            </div>
+        </div>
+    </section>
+
+@section scripts{
+    <script>
+        var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
+        $("#usersImg").change(function () {
+
+            var formData = new FormData();
+            var totalFiles = document.getElementById("usersImg").files.length;
+            for (var i = 0; i < totalFiles; i++) {
+                var file = document.getElementById("usersImg").files[i];
+                file = this.files[i];
+                const fileType = file['type'];
+                const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+                if (!validImageTypes.includes(fileType)) {
+                    // invalid file type code goes here.
+                    toastr.error("Invalid Image");
+                }
+
+                formData.append("usersImg", file);
+            }
+            $.ajax({
+                type: "POST",
+                url: '/Account/Upload',
+                data: formData,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function (response) {
+
+                    $("input[type=hidden][name=userImg]").val(response);
+                    $("#patientpic").attr('src', "/Files/" + response)
+                   
+                },
+                error: function (error) {
+                    toastr.error("errror");
+                },
+            })
+        });
+
+        $("#PhoneNo").on("keypress keyup blur", function (event) {
+            $(this).val($(this).val().replace(/[^\d].+/, ""));
+            if ((event.which < 48 || event.which > 57)) {
+                event.preventDefault();
+            }
+        });
+        function Save() {
+
+            
+
+            if ($("#FirstName").val().trim() == '') {
+                toastr.error("First name is required");
+                return false;
+            }
+
+            if ($("#LastName").val().trim() == '') {
+                toastr.error("Last name is required");
+                return false;
+            }
+
+            if ($("#UserName").val().trim() == '') {
+                toastr.error("Username is required");
+                return false;
+            }
+
+
+
+            if ($("#Email").val().trim() == '') {
+                toastr.error("Email is required");
+                return false;
+            }
+
+            var model = {
+                "UserID":'@Model.UserID',
+                "FirstName": $("#FirstName").val(),
+                "LastName": $("#LastName").val(),
+                "UserName": $("#UserName").val(),
+                "Password": '@Model.Password',
+                "Email": $("#Email").val(),
+
+                "ModifiedBy":@Session["userid"].ToString(),
+                "PhoneNo": $("#PhoneNo").val(),
+                "Address": $("#Address").val(),
+                "State": $("#State").val(),
+                "City": $("#City").val(),
+                "Zip": $("#Zip").val(),
+                "ModifiedDate": new Date(),
+                "RoleID": '@Model.RoleID',
+                "Image": $("input[type=hidden][name=userImg]").val(),
+
+            };
+
+
+
+
+            $.ajax({
+                type: "POST",
+                url: Apipath + '/api/PatientMain/adduser',
+                data: JSON.stringify(model),
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                success: function (result) {
+                    if (result != '') {
+                        toastr.success("User updated successfully");
+                    }
+                    else {
+                        toastr.error("Error while updating data");
+                    }
+                },
+                error: function () {
+
+                    toastr.error("Error while updating data");
+                }
+            });
+        }
+
+        function changePassword(){
+            if ($("#txtPassword").val().trim() == '') {
+                toastr.error("Current password is required.");
+                return false;
+            }
+            if ($("#txtPassword1").val().trim() == '') {
+                toastr.error("New password is required.");
+                return false;
+            }
+            if ($("#txtPassword2").val().trim() == '') {
+                toastr.error("confirm password is required.");
+                return false;
+            }
+
+            if ($("#txtPassword1").val().trim() != $("#txtPassword2").val().trim()) {
+                toastr.error("New password and confirm password must be same.");
+                return false;
+            }
+
+            var model = {
+                userid: '@Model.UserID',
+                oldpassword: $("#txtPassword").val(),
+                newpassword: $("#txtPassword1").val()
+            };
+            $.ajax({
+                type: "POST",
+                url: Apipath + '/api/PatientMain/changepassword',
+                data: JSON.stringify(model),
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                success: function (result) {
+
+                    if (result == 1) {
+                        $("#txtPassword1").val('');
+                        $("#txtPassword2").val('');
+                        toastr.success("User Password updated successfully!");
+                    } else if (result == -1) {
+                        toastr.error("Current password is incorrect.");
+                    }
+                    else {
+                        toastr.error("Error while updating data");
+                    }
+                },
+                error: function () {
+
+                    toastr.error("Error while updating data");
+                }
+            });
+
+        }
+
+        $(".toggle-password").click(function () {
+
+            $(this).toggleClass("fa-eye fa-eye-slash");
+            var input = $($(this).attr("toggle"));
+            if (input.attr("type") == "password") {
+                input.attr("type", "text");
+            } else {
+                input.attr("type", "password");
+            }
+        });
+</script>
+    }

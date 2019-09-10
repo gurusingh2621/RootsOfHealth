@@ -1,0 +1,180 @@
+﻿
+@{
+    ViewBag.Title = "Settings";
+}
+
+
+<style>
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+    .appointemnt-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+    }
+</style>
+
+
+<section id="content" class="responsive-container pt-0">
+    <div class="inner-content">
+        <div class="container-fluid pl-0 pr-0">
+
+            <div class="appointment">
+                <div class="appointemnt-row">
+                    Notification Alert <label class="switch">
+                        <input type="checkbox" id="customSwitch" onclick="onNotification()">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+             
+                
+                </div>
+
+</div>
+</div>
+
+</section>
+@section scripts{
+    <script>
+           var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
+        $(function () {
+            $.ajax({
+                type: "Get",
+                url: Apipath + '/api/PatientMain/checkaccountsetting?userid='+@Session["userid"],
+                dataType: 'json',
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                success: function (response) {
+                    if (response == 1) {
+                        $("#customSwitch").attr('checked', 'checked');
+                    } else {
+                        $("#customSwitch").removeAttr('checked');
+                    }
+                        if (response == -1) {
+                        toastr.error("Notification alert not set yet.");
+                    }
+
+                },
+                error: function (error) {
+                    toastr.error("errror");
+                },
+            })
+        });
+
+        function onNotification() {
+           
+            var notify = false;
+            if ($("#customSwitch").prop("checked") == true) {
+                notify = true;
+            }
+             var model = {
+                 "userid":@Session["userid"],
+                 "notificationalert": notify
+
+            };
+             $.ajax({
+                 type: "POST",
+                 url: Apipath + '/api/PatientMain/saveaccountsetting',
+                 data: JSON.stringify(model),
+                 contentType: 'application/json; charset=UTF-8',
+                 dataType: "json",
+                 success: function (result) {
+                     if (result != '') {
+                         toastr.success("Saved");
+                     }
+                     else {
+                         toastr.error("Error while updating data");
+                     }
+                 },
+                 error: function () {
+
+                     toastr.error("Error while updating data");
+                 }
+             });
+        }
+
+        @*function offNotification() {
+             var model = {
+                 "userid":@Session["userid"],
+                 "notificationalert": false
+
+            };
+             $.ajax({
+                 type: "POST",
+                 url: Apipath + '/api/PatientMain/saveaccountsetting',
+                 data: JSON.stringify(model),
+                 contentType: 'application/json; charset=UTF-8',
+                 dataType: "json",
+                 success: function (result) {
+                     if (result != '') {
+                         toastr.success("Saved");
+                     }
+                     else {
+                         toastr.error("Error while updating data");
+                     }
+                 },
+                 error: function () {
+
+                     toastr.error("Error while updating data");
+                 }
+             });
+        }*@
+    </script>
+    }

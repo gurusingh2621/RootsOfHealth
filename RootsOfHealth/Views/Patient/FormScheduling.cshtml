@@ -1,0 +1,234 @@
+﻿@model IEnumerable<RootsOfHealth.Models.FormSchedulingBO>
+@{
+    ViewBag.Title = "FormScheduling";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*<h2>FormScheduling</h2>*@
+
+<!-- Form scheduling Tab Start here  -->
+
+<section id="content" class="responsive-container p-0">
+    <div class="inner-content mt-0">
+        <div class="paitent-detail">
+
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+
+                    <div class="authorization">
+                        <div class="detail-heading d-flex">
+                            <h2>Form scheduling </h2>
+                        </div>
+                        <div class="form-schedule mt-3">
+                            <table class="table">
+                                <thead class="thead-light">
+                                    <tr>
+
+                                        <th scope="col" style="width:25%">Schedule Form</th>
+                                        <th scope="col" style="width:25%">For Every</th>
+                                       
+                                        <th scope="col" style="width:25%">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var form in Model)
+                                    {
+                                        <tr>
+
+                                            <td>
+                                                @form.FormName
+                                            </td>
+                                            <td>
+                                                <ul class="days">
+                                                    <li><a href="#!">@form.ForEvery @form.ForType</a></li>
+                                                </ul>
+                                            </td>
+
+                                          
+
+                                            <td>
+                                                <a href="#!" onclick="EditFormScheduling(@form.FormSchedulingID)" class="btn btn-success" data-toggle="modal" data-target="#FormModal">
+                                                    <i class="far fa-edit"></i>
+                                                    Edit
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+
+<!-- Form scheduling Tab end here  -->
+<!-- Form Modal start here  -->
+<div class="FormModal">
+    <div class="modal fade" id="FormModal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Form Schedule Edit</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="formModalEdit">
+
+                        <form class="appointement-form">
+                            <input type="text" hidden="hidden" id="txtFormSchedulingID" class="form-control" placeholder="">
+                            <div class="form-group d-flex align-items-center">
+                                <label for="staticEmail" class="m-0">Form Name</label>
+                                @*<input type="text" class="form-control w-40" id="txtFormName">*@
+                                <label for="staticEmail" class="m-0" style="white-space:nowrap" id="lblFormName"></label>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="d-flex formGrowRow">
+                                    <label for="inputPassword" class="m-0">For every</label>
+                                    <input type="text" class="form-control"  style="height:25px;width:25px;" id="txtEvery">
+                                    <select class="form-control" style="height:25px !important;padding: 0;" id="ddType">
+                                        <option>Week</option>
+                                        <option>Days</option>
+                                        <option>Month</option>
+                                    </select>
+                                </div>
+
+                            </div>
+
+
+
+
+                            <div class="modal-footer">
+                                <button type="button" onclick="closeModel()" class="btn btn-secondary">Cancel</button>
+                                <button type="button" onclick="UpdateFormScheduling()" class="btn btn-primary">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Form Modal end here -->
+@section scripts{
+<script>
+
+    var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
+
+    $(document).ready(function () {
+
+    });
+
+    //----- get Form Scheduling  detail by  id
+    function EditFormScheduling(id) {
+       
+        
+        var data = {
+            ID: id
+        };
+        $.ajax({
+            type: "GET",
+            url: Apipath + '/api/PatientMain/GetFormSchedulingByID',
+            data: data,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+               
+                $("#txtFormSchedulingID").val(result.FormSchedulingID);
+                $("#lblFormName").html(result.FormName);
+                $("#txtEvery").val(result.ForEvery);
+                $("#ddType").val('' + result.ForType);
+               
+
+            },
+            error: function (e) {
+                toastr.error("Error while inserting data");
+            }
+        });
+    }
+
+
+    //--------Update FormScheduling
+    function UpdateFormScheduling() {
+
+        
+        var d = new Date();
+       
+
+        var model = {
+
+            FormSchedulingID: $("#txtFormSchedulingID").val(),
+            ForEvery: $("#txtEvery").val(),
+            ForType: $("#ddType").val(),
+            ModifiedDate: d.toJSON(),
+            IsDeleted: false,
+        };
+
+        if ($("#txtEvery").val().trim() == "") {
+            toastr.error("Please Fill ForEvery Detail");
+            $('#txtEvery').focus();
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: Apipath + '/api/PatientMain/UpdateFormScheduling',
+                data: JSON.stringify(model),
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                success: function (result) {
+                   
+                    if (result != '') {
+
+                        toastr.success("Form scheduling saved successfully");
+                        closeModel();
+                        location.href = '/Patient/FormScheduling';
+
+                    }
+                    else {
+                        toastr.error("Error while Saved data");
+                    }
+                },
+                error: function () {
+
+                    toastr.error("Error while Saved data");
+                }
+            });
+        }
+
+
+    }
+
+
+    //--- empty modal fields
+    function emptyModel() {
+
+        $("#lblFormName").html("");
+        $("#txtEvery").val("");
+        $("#ddType").val("");
+
+    }
+
+    //--- close add edit LookUpFieldOption model
+    function closeModel() {
+        emptyModel();
+        $('#exampleModal').modal('hide');
+    }
+
+
+
+
+
+
+</script>
+       }
