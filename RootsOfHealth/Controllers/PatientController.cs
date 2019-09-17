@@ -1476,6 +1476,37 @@ namespace RootsOfHealth.Controllers
 
         }
 
+        public ActionResult NotesTemplateField()
+        {
+            List<ProgramBO> ProgramList = new List<ProgramBO>();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                //HTTP GET
+                var responseTask = client.GetAsync("/api/PatientMain/GetAllPatientPrograms");
+
+
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<List<ProgramBO>>();
+                    readTask.Wait();
+                    ProgramList = readTask.Result;
+                    ViewBag.ProgramList = ProgramList;
+
+                }
+                else //web api sent error response 
+                {
+                    //log response status here..
+
+
+                }
+            }
+            return View();
+        }
+
 
 
 

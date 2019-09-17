@@ -1635,7 +1635,7 @@ span.fc-title {
 .appointement-form label {
   color: #4d4d4d;
   font-size: 13px;
-  width: 90px;
+  width: 100px;
 }
 
 .appointement-form .form-control {
@@ -1663,16 +1663,22 @@ span.fc-title {
   background-size: 12px;
   background-position: 97% 13px;
   padding: .375rem 1.7rem .375rem .75rem;
-  max-width: 339px;
+  max-width: 495px;;
   width: 100%;
 }
 
 .appointement-form textarea.form-control {
-  width: 100%;
-  height: 117px;
-  color: #4d4d4d;
-  font-size: 13px;
+    width: 100%;
+    height: 117px;
+    color: #4d4d4d;
+    font-size: 13px;
+    max-width: 495px;
 }
+/*.appointement-form input.form-control {
+    max-width: 495px;
+    width: 100%;
+    font-size: 13px;
+}*/
 
 .appointement-form .modal-footer {
   border-top: none;
@@ -2740,8 +2746,9 @@ p {
 }*/
 
 .show-more {
-    padding: 10px 0;
+    padding: 0px 0;
     /*text-align: center;*/
+    pading-left:32px;
 }
 
 /*List AppointmentByPatientID end here */
@@ -2941,6 +2948,9 @@ overflow: auto;*/
 
 /*Notes css */
 textarea#txtNotes1 {
+    display: block !important;
+}
+select#ddlProgramTypereadonly {
     display: block !important;
 }
 
@@ -3194,3 +3204,39 @@ button.addnotebtn {
     line-height: 17px;
     z-index: 9;
 }
+
+.field-box {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+    .field-box input {
+        margin: 0 15px;
+    }
+    .field-box label {
+        margin: 0;
+        font-size: 15px;
+        margin-left: 5px;
+    }
+
+
+#fields .btn-danger {
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 6px 20px;
+    margin-right: 5px;
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+#fields .btn-success {
+    background: #22baa0;
+    border-radius: 50px;
+    border: 1px solid #22baa0;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 6px 20px;
+    margin-right: 5px;
+}
+

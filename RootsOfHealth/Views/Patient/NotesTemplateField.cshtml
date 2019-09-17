@@ -1,0 +1,306 @@
+﻿@using RootsOfHealth.Models;
+@{
+    ViewBag.Title = "NotesTemplateField";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+   
+}
+<style>
+    .dataTables_info{
+        display:none;
+    }
+    #txtfield {
+        max-width: 495px;
+        width: 100%;
+        font-size: 13px;
+    }
+</style>
+<section id="content" class="responsive-container pt-0">
+    <div class="inner-content">
+        <div class="container-fluid pl-0 pr-0">
+
+            <div class="appointment">
+                <h2>Notes Template</h2>
+               
+                <div class="form-horizontal">
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <p><button type="button" onclick="OpenPopup()" class="btn btn-success">Add Field</button></p>
+                        </div>
+                            <div class="col-md-6">
+                                <div class="form-group  d-flex align-items-center">
+                                    <label  class="m-0" style="min-width:100px;">Select Program</label>
+                                    <select id="ProgramsID" class="form-control" onchange="GetFieldsByID()">
+                                        @foreach (var item in ViewBag.ProgramList as List<ProgramBO>)
+                                        {
+                                            <option value="@item.ProgramsID">@item.ProgramsName</option>
+                                        }
+                                    </select>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table  class="table table-bordered tblField" hidden="hidden">
+                                    <thead>
+                                        <tr class="table-active">
+
+                                            <th>
+                                                Field label
+                                            </th>
+
+                                            <th>
+                                                Field type
+                                            </th>
+
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="fields"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                    </div>
+                        </div>
+                    </div>
+                </div>
+    </section>
+
+<div class="modal fade show" id="fieldModal" tabindex="-1" role="dialog" aria-labelledby="fieldModalLabel">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="fieldModalLabel">Add New Field</h5>
+                <button type="button" class="close" onclick="closeModel()" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="appointement-form">
+                    <input type="text" hidden="hidden" id="txtfieldID" class="form-control">
+                  
+                    <div class="form-group d-flex align-items-center">
+                        <label class="m-0"> Field Label:</label>
+                        <input type="text" id="txtfield" class="form-control">
+                    </div>
+                    <div class="form-group d-flex align-items-center">
+                        <label class="m-0">Field Type:</label>
+                        <select class='form-control' id="ddlType">
+                            <option value='Text'>Text</option>
+                            <option value='Number'>Number</option>
+                            <option value='Date'>Date</option>
+                            <option value='Large text'>Large text</option>
+                        </select>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" onclick="closeModel()" class="btn btn-secondary">Cancel</button>
+                        <button type="button" onclick="SaveFields()" id="btnSave" class="btn btn-primary">Save</button>
+                        <button type="button" onclick="SaveFields()" id="btnUpdate"style="display:none" class="btn btn-primary">Update</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+@section Scripts{
+<script>
+    $(function () {
+        GetFieldsByID();
+    })
+         var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
+
+    function OpenPopup() {
+        if ($("#ProgramsID").val() == "0") {
+            toastr.error("Please select program.");
+            return;
+        }
+        $("#ddlType").removeAttr("disabled");
+        $("#fieldModal").modal('show');
+
+    }
+    function closeModel() {
+        $("#txtfieldID").val('0');
+        $("#txtfield").val('');
+        $("#fieldModal").modal('hide');
+        $("#ddlType").val("Text");
+        $("#btnUpdate").hide();
+        $("#btnSave").show();
+        $("#fieldModalLabel").html("Add New Field");
+    }
+
+        function SaveFields() {
+            if ($("#ProgramsID").val() == "0") {
+                toastr.error("Please select program.");
+                closeModel();
+                return;
+            }
+            if ($("#txtfield").val().trim() == "") {
+               
+                toastr.error("Field label is required.");
+                return;
+            }
+        
+            var model = {
+                NotesTemplateFieldID: $("#txtfieldID").val(),
+                Field: $("#txtfield").val(),
+                FieldType: $("#ddlType").val(),
+                ProgramID: $("#ProgramsID").val(),
+                CreatedBy: @Session["userid"].ToString(),
+                CreatedDate: '@DateTime.Today',
+                ModifiedBy:@Session["userid"].ToString(),
+                ModifiedDate: '@DateTime.Today'
+            };
+            $.ajax({
+                type: "POST",
+                url: Apipath + '/api/PatientMain/savenotestemplatefield',
+                data: JSON.stringify(model),
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                success: function (result) {
+                    if (result != '') {
+                        toastr.success("Field saved successfully");
+                        GetFieldsByID();
+                        closeModel();
+                    }
+                    else {
+                        toastr.error("Error while adding field");
+                    }
+                },
+                error: function () {
+
+                    toastr.error("Error while adding field");
+                }
+            });
+    }
+
+    function GetFieldsByID() {
+        var id = $("#ProgramsID").val();
+        $.ajax({
+            type: "GET",
+            url: Apipath + '/api/PatientMain/GetNotesTemplateByProgramID?programid='+id,
+            contentType: 'application/json; charset=UTF-8',
+            dataType: "json",
+            success: function (result) {
+              
+                if (result.length) {
+                    $(".table-bordered").removeAttr("hidden");
+                    $(".dataTables_wrapper").removeAttr("hidden");
+                    $("#fields").html('');
+                    for (var i = 0; i < result.length; i++) {
+                        $("#fields").append(" <tr class='row1' data-id="+result[i].NotesTemplateFieldID+">" +
+                            "<td>" + result[i].Field + "</td>" +
+                            "<td>" + result[i].FieldType + "</td>" +
+                            '<td><a class="btn btn-success" href="#" onClick="EditFieldsByID(\'' + result[i].NotesTemplateFieldID + '\')">Edit</a>' +
+                            '<a class="btn btn-danger" href="#" onClick="RemoveFieldsByID(\'' + result[i].NotesTemplateFieldID + '\')">Remove</a>'+
+                            "</td>" +
+                            "</tr>"
+                        )
+
+                        
+                    }
+                   
+                    $(".tblField").dataTable();
+                    $("#fields").sortable({
+                        items: "tr",
+                        cursor: 'move',
+                        opacity: 0.6,
+                        update: function () {
+                            sendOrderToServer();
+                        }
+                        
+                    });
+
+                }
+                else {
+                    $("#fields").html('');
+                    $(".table-bordered").attr("hidden", "hidden");
+                    $(".dataTables_wrapper").attr("hidden", "hidden");
+                }
+            },
+            error: function () {
+
+                toastr.error("Error while Getting field");
+            }
+        });
+    }
+    function EditFieldsByID(id) {
+       
+        $.ajax({
+            type: "GET",
+            url: Apipath + '/api/PatientMain/EditNotesTemplate?templateid='+id,
+            contentType: 'application/json; charset=UTF-8',
+            dataType: "json",
+            success: function (result) {
+               
+                if (result!="") {
+                    $("#txtfieldID").val(result.NotesTemplateFieldID);
+                    $("#txtfield").val(result.Field);
+                    $("#ddlType").val(result.FieldType);
+                    $("#btnSave").hide();
+                    $("#btnUpdate").show();
+                    $("#fieldModalLabel").html("Update Field");
+                    $("#fieldModal").modal('show');
+                    $("#ddlType").attr("disabled", "disabled");
+                }
+
+            },
+            error: function () {
+
+                toastr.error("Error while Getting field");
+            }
+        });
+
+    }
+    function RemoveFieldsByID(id) {
+        if (confirm("Are you sure,you want to delete.")) {
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/RemoveNotesTemplate?templateid=' + id,
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                success: function (result) {
+
+                    if (result == "1") {
+                        GetFieldsByID();
+                    }
+                },
+                error: function () {
+
+                    toastr.error("Error while Getting field");
+                }
+            });
+        }
+    }
+
+    function sendOrderToServer() {
+
+        var order = [];
+        $('tr.row1').each(function (index, element) {
+            order.push({
+                NotesTemplateFieldID: $(this).attr('data-id'),
+                Position: index + 1
+            });
+        });
+
+        $.ajax({
+            type: "POST",
+            url: Apipath + '/api/PatientMain/UpdateNotesPosition',
+            data: JSON.stringify(order),
+            contentType: 'application/json; charset=UTF-8',
+            dataType: "json",
+            success: function (result) {
+             
+            },
+            error: function () {
+
+                toastr.error("Error while updating order");
+            }
+        });
+       
+    }
+</script>
+    }

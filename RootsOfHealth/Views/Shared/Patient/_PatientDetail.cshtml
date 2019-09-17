@@ -75,12 +75,33 @@
 @*<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>*@
 <script src="~/Scripts/jquery-ui.min.js"></script>
 <script>
+    $("#opennotepopup").click(function () {
+        $("#ddlProgramType").closest("div").show();
+        notescloseModel();
+    });
     function notescloseModel() {
-
+       
+        $("#ddlProgramType").val(0);
+       
+        $("#txtNotes1").val('');
+        $('.tmpdiv').find('input, textarea')
+            .each(function () {
+                $(this).val('');
+            });
+        $(".tmpdiv").html('');
         $(".close").click();
-
-
     }
+    $(".close").click(function () {
+        $("#noteshdnID").val(0);
+        $("#ddlProgramType").val(0);
+        $("#ddlProgramType").removeAttr("hidden");
+        $("#txtNotes1").val('');
+        $('.tmpdiv').find('input, textarea')
+            .each(function () {
+                $(this).val('');
+            });
+        $(".tmpdiv").html('');
+    });
 
     $.date = function (dateObject) {
         var d = new Date(dateObject);
@@ -97,9 +118,6 @@
 
         return date;
     };
-
-
-
     $("#hideAppointmentContent").click(function (e) {
         $("#appointementContent").hide();
         $('#pat_out_div').addClass('col-lg-12 col-md-12 col-sm-12 col-12');
@@ -251,13 +269,16 @@
 
     function notesSave() {
 
+        if ($.trim($("#txtNotes1").val()) == "") {
+            toastr.error("Description is required.");
+            return;
+        }
         var data = {
+            NotesID: $("#noteshdnID").val(),
             Description: $.trim($("#txtNotes1").val()),
             PatientID: '@ViewBag.PatientId',
             CreatedBy: parseInt(@Session["userid"].ToString()),
-            CreatedDate:'@DateTime.Now.ToString()',
-            ModifiedBy:parseInt(@Session["userid"].ToString()),
-            ModifiedDate:'@DateTime.Now.ToString()'
+            ModifiedBy: parseInt(@Session["userid"].ToString())
         };
         $.ajax({
             type: "POST",
@@ -265,13 +286,40 @@
             data: JSON.stringify(data),
             contentType: 'application/json; charset=UTF-8',
             dataType: "json",
-            success: function (data) {
+            success: function (result) {
+               
                 $("#txtNotes1").val('');
-                $(".close").click();
-                getListAllNotesLoadMore();
-            }
-        });
+                
+            },
+            complete: function (result) {
+               
+                var models = [];
+                $('.tmpdiv').find('.getValue')
+                    .each(function () {
+                        var b = { ID: $(this).attr('data-fieldvlueid'), NotesTemplateFieldID: $(this).attr('data-id'), NoteID: result.responseJSON, Value: $(this).val() };
+                        models.push(b);
+                    });
 
+                if (models.length == 0) {
+                    $(".close").click();
+                    getListAllNotesLoadMore();
+                    return
+                };
+                $.ajax({
+                    type: "POST",
+                    url: Apipath + '/api/PatientMain/SaveNotesTemplateFieldValue',
+                    data: JSON.stringify(models),
+                    contentType: 'application/json; charset=UTF-8',
+                    dataType: "json",
+                    success: function (result) {
+                        $(".close").click();
+                        getListAllNotesLoadMore();
+                    }
+                })
+
+            }
+
+        });
     }
     function getListAllNotesLoadMore() {
 
@@ -296,7 +344,7 @@
                         var splitDateTime = result[i].CreatedDate.split("T");
 
                         tbl += '<div class="appointement-row">'
-                        tbl += '<div class="notesclose" onclick="RemoveNote(' + result[i].NotesID + ')">&#10539;</div>'
+                        tbl += '<div class="notesclose" hidden="hidden" >&#10539;</div>'
                         tbl += '<div class="calender-img" >'
                         tbl += '<img src="/images/calender-icon.png" alt=""></div>'
                         tbl += '<h6>'
@@ -306,7 +354,7 @@
                         tbl += '<p class="content hideContent">' + result[i].Description + '</p> <div class="show-more">'
                         if (result[i].Description.length>100) {
                             tbl += '<a href="#!" id="' + result[i].NotesID + '" onclick="ShowMore(' + result[i].NotesID + ')" class="btn btn-link" >read more</a>' }
-                        tbl += '</div ></div>'
+                        tbl += '</div ><div class="editicons"><button onclick="EditNote(' + result[i].NotesID + ')"><i class="fas fa-edit"></i></button> <button  onclick="ViewNote(' + result[i].NotesID + ')"><i class="fa fa-eye" aria-hidden="true"></i></button> <button onclick="RemoveNote(' + result[i].NotesID + ')"><i class="far fa-trash-alt"></i></button></div></div>'
 
                     }
 
@@ -324,7 +372,145 @@
         });
     }
 
+    
+    function EditNote(id) {
+                    $.ajax({
+                        type: "GET",
+                        url: Apipath + '/api/PatientMain/EditNoteByID?noteid='+id,
+                        contentType: 'application/json; charset=UTF-8',
+                        dataType: "json",
+                        success: function (result) {
+                            $("#opennotepopup").click();
+                            $("#noteshdnID").val(result.NotesID);
+                            $("#txtNotes1").val(result.Description);
+                           
+                        },
+                        complete: function () {
+                            $.ajax({
+                                type: "GET",
+                                url: Apipath + '/api/PatientMain/EditNotesTemplateFieldValueByNoteID?noteid=' + id,
+                                contentType: 'application/json; charset=UTF-8',
+                                dataType: "json",
+                                success: function (result) {
+                                    $(".tmpdiv").html('');
+                                    if (result.length) {
 
+                                        for (var i = 0; i < result.length; i++) {
+                                            switch (result[i].FieldType) {
+                                                case "Text":
+                                                    $(".tmpdiv").append('<div class="form-group">' +
+                                                        '<label>' + result[i].Field + '</label>' +
+                                                        '<input type="text" class="form-control txtField getValue" data-id=' + result[i].NotesTemplateFieldID + ' data-fieldvlueid=' + result[i].ID + ' value=' + result[i].Value + '>' +
+                                                        '</div>'
+                                                    )
+                                                    break;
+                                                case "Number":
+                                                    $(".tmpdiv").append('<div class="form-group">' +
+                                                        '<label>' + result[i].Field + '</label>' +
+                                                        '<input type="number" class="form-control txtField getValue" data-id=' + result[i].NotesTemplateFieldID + ' data-fieldvlueid=' + result[i].ID + ' value=' + result[i].Value + '>' +
+                                                        '</div>'
+                                                    )
+                                                    break;
+                                                case "Date":
+                                                    $(".tmpdiv").append('<div class="form-group">' +
+                                                        '<label>' + result[i].Field + '</label>' +
+                                                        '<input type="text" class="form-control datepick getValue" data-id=' + result[i].NotesTemplateFieldID + '  data-fieldvlueid=' + result[i].ID + ' value=' + result[i].Value + '>' +
+                                                        '</div>'
+                                                    )
+                                                    break;
+                                                case "Large text":
+                                                    $(".tmpdiv").append('<div class="form-group">' +
+                                                        '<label>' + result[i].Field + '</label>' +
+                                                        '<textarea cols="10" rows="2" style="height:38px !important" class="form-control getValue" data-id=' + result[i].NotesTemplateFieldID + '  data-fieldvlueid=' + result[i].ID + '>' + result[i].Value+'</textarea>' +
+                                                        '</div>'
+                                                    )
+                                                    break;
+                                            }
+
+
+
+                                        }
+
+                                        $(".tmpdiv").find('.datepick').datepicker();
+                                        $("#ddlProgramType").closest("div").hide();
+                                    }
+                                }
+                            })
+                        },
+                        error: function () {
+
+                            toastr.error("Error while edit note");
+                        }
+                    });
+                }
+    function ViewNote(id) {
+        $.ajax({
+            type: "GET",
+            url: Apipath + '/api/PatientMain/EditNoteByID?noteid=' + id,
+            contentType: 'application/json; charset=UTF-8',
+            dataType: "json",
+            success: function (result) {
+                $("#txtNotesReadonly1").html(result.Description);
+              
+                $("#opennotepopupreadonly").click();
+            },
+            complete: function () {
+                $.ajax({
+                    type: "GET",
+                    url: Apipath + '/api/PatientMain/EditNotesTemplateFieldValueByNoteID?noteid=' + id,
+                    contentType: 'application/json; charset=UTF-8',
+                    dataType: "json",
+                    success: function (result) {
+                        $(".tmpdivreadonly").html('');
+                        if (result.length) {
+
+                            for (var i = 0; i < result.length; i++) {
+                                switch (result[i].FieldType) {
+                                    case "Text":
+                                        $(".tmpdivreadonly").append('<div class="form-group">' +
+                                            '<label>' + result[i].Field + '</label>' +
+                                            '<label>' + result[i].Value +'</label>' +
+                                            '</div>'
+                                        )
+                                        break;
+                                    case "Number":
+                                        $(".tmpdivreadonly").append('<div class="form-group">' +
+                                            '<label>' + result[i].Field + '</label>' +
+                                            '<label>' + result[i].Value + '</label>' +
+                                            '</div>'
+                                        )
+                                        break;
+                                    case "Date":
+                                        $(".tmpdivreadonly").append('<div class="form-group">' +
+                                            '<label>' + result[i].Field + '</label>' +
+                                            '<label>' + result[i].Value + '</label>' +
+                                            '</div>'
+                                        )
+                                        break;
+                                    case "Large text":
+                                        $(".tmpdivreadonly").append('<div class="form-group">' +
+                                            '<label>' + result[i].Field + '</label>' +
+                                            '<label>' + result[i].Value + '</label>' +
+                                            '</div>'
+                                        )
+                                        break;
+                                }
+
+
+
+                            }
+                            
+                          
+                        }
+                    }
+                })
+            },
+            error: function () {
+
+                toastr.error("Error while edit note");
+            }
+        });
+    }
       function RemoveNote(id) {
 
                 if (confirm("Are you sure,you want to delete.")) {
@@ -351,7 +537,76 @@
                         }
                     });
                 }
+    }
+
+    function GetFieldsByProgramID() {
+       
+        var id = $("#ddlProgramType").val();
+        $.ajax({
+            type: "GET",
+            url: Apipath + '/api/PatientMain/GetNotesTemplateByProgramID?programid=' + id,
+            contentType: 'application/json; charset=UTF-8',
+            dataType: "json",
+            success: function (result) {
+                $(".tmpdiv").html('');
+                if (result.length) {
+                    
+                    for (var i = 0; i < result.length; i++) {
+                        switch (result[i].FieldType) {
+                            case "Text":
+                                $(".tmpdiv").append('<div class="form-group">' +
+                                    '<label>' + result[i].Field + '</label>' +
+                                    '<input type="text" class="form-control txtField getValue" data-id='+result[i].NotesTemplateFieldID+' data-fieldvlueid=' + 0 + '>'+
+                                    '</div>'
+                                )
+                                break;
+                            case "Number":
+                                $(".tmpdiv").append('<div class="form-group">' +
+                                    '<label>' + result[i].Field + '</label>' +
+                                    '<input type="number" class="form-control txtField getValue" data-id=' + result[i].NotesTemplateFieldID + ' data-fieldvlueid=' + 0 + '>' +
+                                    '</div>'
+                                )
+                                break;
+                            case "Date":
+                                $(".tmpdiv").append('<div class="form-group">' +
+                                    '<label>' + result[i].Field + '</label>' +
+                                    '<input type="text" class="form-control datepick getValue" data-id=' + result[i].NotesTemplateFieldID + ' data-fieldvlueid=' + 0 + '>' +
+                                    '</div>'
+                                )
+                                break;
+                            case "Large text":
+                                $(".tmpdiv").append('<div class="form-group">' +
+                                    '<label>' + result[i].Field + '</label>' +
+                                    '<textarea cols="10" rows="2" style="height:38px !important" class="form-control getValue" data-id=' + result[i].NotesTemplateFieldID + ' data-fieldvlueid=' + 0 + '></textarea>' +
+                                    '</div>'
+                                )
+                                break;
+                        }
+                       
+
+
+                    }
+
+                  
+
+                }
+                //else {
+                    
+                //    $(".tmpdiv").append('<div class="form-group">' +
+                //        '<label>Description</label>' +
+                //        '<textarea cols="10" id="txtNotes1" rows="5" class="form-control"></textarea>' +
+                //        '</div>'
+                //    )
+                //}
+                $(".tmpdiv").find('.datepick').datepicker();
+
+            },
+            error: function () {
+
+                toastr.error("Error while Getting field");
             }
+        });
+    }
 
 
 
@@ -699,7 +954,7 @@
         }
 
 
-        debugger;
+        
         var DastN = "";
         var AuditN = "";
         DastN = $("#DastNot").attr('title');
