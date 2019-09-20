@@ -1,0 +1,595 @@
+﻿
+@{
+    ViewBag.Title = "Display";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .count-item {
+        background: #f5f5f5;
+        padding: 15px;
+        text-align: center;
+        display: table;
+        width: 100%;
+        border: 1px solid #e7e7e7;
+    }
+
+    .count-icon {
+        margin: 0 auto;
+        width: 65px;
+        height: 65px;
+        background: #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #ececec;
+        font-size: 22px;
+    }
+
+    .middle-item {
+        display: table-cell;
+        vertical-align: middle;
+    }
+
+    .count-text {
+        display: block
+    }
+
+        .count-text b {
+            font-weight: 600;
+            font-size: 30px;
+            width: 100%;
+            float: left;
+        }
+
+        .count-text small {
+            font-size: 14px;
+        }
+
+    .patienList-wrapper {
+        margin: 30px 0;
+    }
+
+    .patienList {
+        display: block;
+        text-align: left;
+        padding: 0;
+        background: #fff;
+        float: left
+    }
+
+    .patientHeading {
+        background: #f5f5f5;
+        padding: 10px 15px;
+        border-bottom: 1px solid #e7e7e7;
+        font-size: 17px;
+        color: #414242;
+        font-weight: 500;
+    }
+
+    .patientListbox {
+        float: left;
+        width: 100%;
+    }
+
+        .patientListbox .scroll {
+            padding: 15px;
+        }
+
+    .appointment.dashboard-main {
+        height: 560px;
+        overflow-y: scroll;
+    }
+
+    /* width */
+    .dashboard-main::-webkit-scrollbar,
+    .patientListbox .scroll::-webkit-scrollbar,
+    .AppointmentListbox .scroll::-webkit-scrollbar,
+    .DueListbox .scroll::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .dashboard-main::-webkit-scrollbar-track,
+    .patientListbox .scroll::-webkit-scrollbar-track,
+    .AppointmentListbox .scroll::-webkit-scrollbar-track,
+    .DueListbox .scroll::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    .dashboard-main::-webkit-scrollbar-thumb,
+    .patientListbox .scroll::-webkit-scrollbar-thumb,
+    .AppointmentListbox .scroll::-webkit-scrollbar-thumb,
+    .DueListbox .scroll::-webkit-scrollbar-thumb {
+        background: #ccc;
+    }
+
+    .AppointmentListbox .scroll, .DueListbox .scroll {
+        padding: 15px;
+        float: left;
+    }
+
+
+    /* Handle on hover */
+    /*.dashboard-main::-webkit-scrollbar-thumb:hover {
+            background: #666;
+        }*/
+    .inner-content.dashboardWrapper {
+        margin: 0 !important;
+    }
+
+    .AppointmentListbox .appointement-row {
+        background: #f8f8f8;
+        border: 1px solid #e2e2e2;
+        box-sizing: border-box;
+        float: left;
+        width: 100%;
+        margin-bottom: 15px;
+        display: flex;
+        padding: 15px;
+       
+    }
+
+    .AppointmentListbox .calender-img {
+        max-width: 10%;
+        margin-right: 2% !important;
+        flex: 0 0 10%;
+    }
+
+    .AppointmentListbox h6 {
+        flex: 0 0 88%;
+        max-width: 88%;
+    }
+
+    .AppointmentListbox .appointement-row p {
+        float: left;
+        width: 100%;
+        font-size: 13px;
+        margin: 0;
+    }
+
+    .AppointmentListbox {
+        float: left;
+        height: 450px;
+    }
+
+        .AppointmentListbox .appointement-row h6 span {
+            font-size: 14px;
+            color: #343434;
+        }
+
+    span.expandicon {
+        float: right;
+        position: relative
+    }
+
+    .exp-m {
+        display: none;
+    }
+
+    .patientLisHeading.expand .exp-m {
+        display: block;
+    }
+
+    .patientLisHeading.expand .exp-p {
+        display: none;
+    }
+
+    .AppointmentList.expand .exp-m {
+        display: block;
+    }
+
+    .AppointmentList.expand .exp-p {
+        display: none;
+    }
+
+    .patientStats.expand .exp-m {
+        display: block;
+    }
+
+    .patientStats.expand .exp-p {
+        display: none;
+    }
+
+    .formduelist.expand .exp-m {
+        display: block;
+    }
+
+    .formduelist.expand .exp-p {
+        display: none;
+    }
+
+    .DueListbox table.table th, .DueListbox table.table td {
+        line-height: normal;
+        font-size: 13px;
+        border: 0;
+    }
+
+    .DueListbox {
+        height: 280px;
+    }
+
+        .DueListbox table {
+            border: 1px solid #ddd;
+        }
+
+            .DueListbox table.table tr {
+                border-top: 1px solid #ddd;
+            }
+
+            .DueListbox table tr:nth-child(even) td {
+                background: #f4fffd;
+            }
+
+    .ConditionListbox {
+        padding: 15px;
+        box-sizing: border-box;
+    }
+
+    .show-more a {
+        color: #05a489;
+        font-size: 13px;
+        padding: 0;
+    }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.css" type="text/css">
+
+<section id="content" class="responsive-container pt-0">
+    <div class="inner-content dashboardWrapper">
+        <div class="container-fluid pl-0 pr-0">
+            <div class="appointment dashboard-main">
+                <div class="patient-Count">
+                    <div class="row">
+                        <div class=" col-md-4">
+                            <div class="count-item">
+                                <div class="middle-item">
+                                    <div class="count-icon"><i class="fa fa-users"></i></div>
+                                    <div class="count-text">
+                                        <b class="totalpatientCount"></b>
+                                        <small>
+                                            Total Patient
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class=" col-md-4">
+                            <div class="count-item">
+                                <div class="middle-item">
+                                    <div class="count-icon"><i class="fa fa-male"></i></div>
+                                    <div class="count-text">
+                                        <b class="malepatientCount"></b>
+                                        <small>
+                                            Male Patient
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class=" col-md-4">
+                            <div class="count-item">
+                                <div class="middle-item">
+                                    <div class="count-icon"><i class="fa fa-female"></i></div>
+                                    <div class="count-text">
+                                        <b class="femalepatientCount"></b>
+                                        <small>
+                                            Female Patient
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="patienList-wrapper">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="count-item patienList">
+                                <div class="patientHeading patientLisHeading">
+                                    Recent patient
+                                    <span class="expandicon">
+                                        <i class="fa fa-minus exp-p" aria-hidden="true"></i>
+                                        <i class="fa fa-plus exp-m" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <div class="patientListbox">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="count-item patienList">
+                                <div class="patientHeading AppointmentList">
+                                    Appointment
+                                    <span class="expandicon">
+                                        <i class="fa fa-minus exp-p" aria-hidden="true"></i>
+                                        <i class="fa fa-plus exp-m" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <div class="AppointmentListbox">
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="patienGraph-wrapper">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="count-item patienList">
+                                <div class="patientHeading patientStats">
+                                    Patient Condition
+                                    <span class="expandicon">
+                                        <i class="fa fa-minus exp-p" aria-hidden="true"></i>
+                                        <i class="fa fa-plus exp-m" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <div class="ConditionListbox" id="chartContainer">
+                                    <canvas id="myChart" style="padding:5px;margin: auto;display: block; "></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="count-item patienList">
+                                <div class="patientHeading formduelist">
+                                    Form Due
+                                    <span class="expandicon">
+                                        <i class="fa fa-minus exp-p" aria-hidden="true"></i>
+                                        <i class="fa fa-plus exp-m" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <div class="DueListbox">
+                                    <div class="scroll">
+                                        <table class="table">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                   
+
+                                                </tr>
+                                            </thead>
+                                            <tbody class="Duebody">
+
+                                                <tr>
+                                                    <td>k111 q</td>
+                                                    <td>a</td>
+                                                    <td>(144) 444-4444  </td>
+                                                    <td>02-08-2019 20:39:55</td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts{
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+
+    <script>
+        var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
+        $(function () {
+            PatientCount();
+            RecentPatient();
+            RecentAppotment();
+            PatientStats();
+            PatientFormStatus();
+        });
+        function PatientCount() {
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/Getpatientcount',
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                success: function (result) {
+                    $(".totalpatientCount").html(result.TotalPatient);
+                    $(".malepatientCount").html(result.MalePatient);
+                    $(".femalepatientCount").html(result.FemalePatient);
+                }
+            });
+        }
+
+        function RecentPatient() {
+            $.ajax({
+
+                type: "Get",
+                url: '/DashBoard/GetRecentPatients',
+                dataType: "html",
+                contentType: "application/json; charset=utf-8",
+                success: function (result) {
+
+                    $('.patientListbox').html(result);
+                },
+                error: function () {
+                    toastr.error("Some error occurred!! or data not found");
+                }
+
+            });
+        }
+
+        function RecentAppotment() {
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/GetRecentAppotmentDashboard',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    if (data.length) {
+
+                        var tbl = '';
+                        tbl += '<div class="scroll">';
+                        for (var i = 0; i < data.length; i++) {
+
+                            tbl += '<div class="appointement-row" id="appointementDashbordrow" onclick="RedirectAppontment(' + data[i].PatientAppointmentID + ')">'
+                            tbl += '<div class="calender-img" >'
+                            tbl += '<img src="/images/calender-icon.png" alt=""></div>'
+                            tbl += '<h6>'
+                            tbl += '<span class="date">Date:' + $.date(data[i].AppointmentDate) + '</span>,'
+                            tbl += '<span class="time">'
+                            tbl += ' Time:' + data[i].AppointmentTime + '</span>'
+                            tbl += '<p class="content hideContent">' + data[i].PatientName+"</br>"+ data[i].Notes + '</p > <div class="show-more">'
+                            if (data[i].Notes.length > 100) {
+                                tbl += '<a href="#!" id="' + data[i].PatientAppointmentID + '" onclick="ShowMore(' + data[i].PatientAppointmentID + ')" class="btn btn-link" >read more</a>'
+                            }
+                            tbl += '</div ></h6></div>'
+
+                        }
+                        tbl += "</div>";
+                        $('.AppointmentListbox').html(tbl);
+
+                    }
+
+
+                },
+                error: function (e) {
+                    toastr.error("Error while getting appotment data.");
+                }
+            });
+        }
+        function RedirectAppontment(id) {
+            window.location = '/Patient/Appointment?ID=' + id;
+        }
+        function PatientStats() {
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/GetAllPatientStatusDashboard',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var aDatasets1 = [result.SecureCount, result.StrugglingCount, result.AtriskCount, result.CrisisCount];
+
+                    var dataT = {
+                        labels: ['Secure','Struggling','At risk','Crisis'],
+                        datasets: [{
+                            label: "Patient Count",
+                            data: aDatasets1,
+                            fill: false,
+                            backgroundColor: ["rgb(57, 172, 57)", "rgb(255, 255, 51)", "rgb(255, 140, 26)", "rgb(255, 77, 77)"  ],
+                            borderColor: ["rgb(54, 162, 235)", "rgb(255, 99, 132)", "rgb(255, 159, 64)", "rgb(255, 205, 86)"],
+                            borderWidth: 0
+                        }]
+                    };
+                    var ctx = document.getElementById('myChart').getContext('2d');
+                    var myBarChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: dataT,
+                        options: {
+                            responsive: true,
+                            title: { display: false, text: 'CHART.JS DEMO CHART' },
+                            legend: { position: 'bottom' },
+                            scales: {
+                                xAxes: [{ gridLines: { display: false }, display: true, scaleLabel: { display: false, labelString: '' } }],
+                                yAxes: [{ gridLines: { display: false }, display: true, scaleLabel: { display: false, labelString: '' }, ticks: { stepSize: 50, beginAtZero: true } }]
+                            },
+                        }
+                    });
+
+
+                },
+
+                error: function (e) {
+                    toastr.error("Error while getting appotment data.");
+                }
+            });
+        }
+        function PatientFormStatus() {
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/GetAllPatientFormSatusDashboard',
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                success: function (result) {
+                    if (result.length) {
+                        var tbl = '';
+                        for (var i = 0; i < result.length; i++){
+                            tbl += '<tr>';
+                            tbl += '<td>' + result[i].PatientName + '</td>';
+                            tbl += '<td>' + result[i].FormName + '</td>';
+                            tbl += '<td>' + result[i].FormStatus + '</td>';
+                            tbl+='</tr>'
+                        }
+                        $(".Duebody").html('');
+                        $(".Duebody").html(tbl);
+                    }
+                }
+            });
+        }
+        $.date = function (dateObject) {
+            var d = new Date(dateObject);
+            var day = d.getDate();
+            var month = d.getMonth() + 1;
+            var year = d.getFullYear();
+            if (day < 10) {
+                day = "0" + day;
+            }
+            if (month < 10) {
+                month = "0" + month;
+            }
+            var date = day + "/" + month + "/" + year;
+
+            return date;
+        };
+        function ShowMore(id) {
+
+            var $this = $("#" + id);
+            var $content = $this.parent().prev("p.content");
+            var linkText = $this.text();
+
+            if (linkText === "read more") {
+                linkText = "Show less";
+                $content.switchClass("hideContent", "showContent", 400);
+              
+            } else {
+                linkText = "read more";
+                $content.switchClass("showContent", "hideContent", 400);
+               
+            };
+
+            $this.text(linkText);
+          
+        }
+
+        function StopRediection(e) {
+            e.preventDefault();
+        }
+        $('.patientLisHeading').click(function () {
+            $('.patientListbox').slideToggle();
+        })
+        $('.patientLisHeading').click(function () {
+            $(this).toggleClass('expand');
+        })
+        $('.AppointmentList').click(function () {
+            $('.AppointmentListbox').slideToggle();
+        })
+        $('.AppointmentList').click(function () {
+            $(this).toggleClass('expand');
+        })
+        $('.patientStats').click(function () {
+            $('.ConditionListbox').slideToggle();
+        })
+        $('.patientStats').click(function () {
+            $(this).toggleClass('expand');
+        })
+        $('.formduelist').click(function () {
+            $('.DueListbox').slideToggle();
+        })
+        $('.formduelist').click(function () {
+            $(this).toggleClass('expand');
+        })
+
+
+    </script>
+
+}

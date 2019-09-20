@@ -3240,3 +3240,16 @@ button.addnotebtn {
     margin-right: 5px;
 }
 
+.sidebar-menu ul a .notes-icon {
+    display: block;
+    width: 27px;
+    height: 24px;
+    background: url(../images/notesicon.png) no-repeat 0 0;
+    background-position: -46px 0;
+    margin: auto;
+    margin-bottom: 4px;
+}
+.sidebar-menu ul a:hover .notes-icon {
+    background-position: 3px 0;
+}
+
