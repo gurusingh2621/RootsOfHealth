@@ -373,9 +373,11 @@ button, input {
 .sidebar-menu ul a:hover .add-icon {
   background-position: -2px -172px;
 }
-
+.sidebar-menu ul a:hover .sett-icon {
+        background-position: 0px -2px;
+    } 
 .sidebar-menu ul a:hover .account-icon {
-  background-position: -3px -228px;
+    background-position: -3px -228px;
 }
 
 .sidebar-menu ul a:hover .logout-icon {
@@ -421,15 +423,23 @@ button, input {
   margin: auto;
   margin-bottom: 4px;
 }
-
+.sett-icon {
+    display: block;
+    width: 27px;
+    height: 24px;
+    background: url(../images/setting-icons.png) no-repeat 0 0;
+    background-position: -43px -2px;
+    margin: auto;
+    margin-bottom: 4px;
+}
 .sidebar-menu ul a .account-icon {
-  display: block;
-  width: 22px;
-  height: 22px;
-  background: url(../images/sidebar-menu-icons.png) no-repeat 0 0;
-  background-position: -46px -228px;
-  margin: auto;
-  margin-bottom: 4px;
+    display: block;
+    width: 22px;
+    height: 22px;
+    background: url(../images/sidebar-menu-icons.png) no-repeat 0 0;
+    background-position: -46px -228px;
+    margin: auto;
+    margin-bottom: 4px;
 }
 
     .sidebar-menu ul a .authorization-icon {
@@ -3193,4 +3203,127 @@ button.addnotebtn {
     font-weight: 600;
     line-height: 17px;
     z-index: 9;
+}
+
+
+#calendar .fc-toolbar.fc-header-toolbar {
+    /* position: relative; */
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+.appointment #calendar .fc-toolbar .fc-left {
+    float: none;
+    display: inline-block;
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    margin-top: 0;
+    order: 3;
+}
+.appointment #calendar .fc-toolbar .fc-clear {
+    display: none;
+}
+.appointment #calendar .fc-toolbar .fc-left .fc-prev-button {
+    width: 40px;
+    height: 40px !important;
+    background-position: 14px 12px;
+    margin-right:5px;
+}
+.appointment #calendar .fc-toolbar .fc-left .fc-next-button {
+    width: 40px;
+    height: 40px !important;
+    background-position: -28px 12px;
+    margin-right: 5px;
+}
+.appointment #calendar .fc-toolbar .fc-button-group {
+    position: static;
+}
+#content .fc-toolbar .fc-center h2 {
+    background: #efefef;
+    padding: 10px 20px;
+    border-radius: 50px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+}
+/*23-9-19 start*/
+.mb-20 {
+    margin-bottom: 20px !important;
+}
+#typeexampleModal #formAppointment.appointement-form .form-control, #locationexampleModal #formAppointment.appointement-form .form-control {
+    width: calc(100% - 160px);
+}
+#typeexampleModal #formAppointment.appointement-form label, #locationexampleModal #formAppointment.appointement-form label {
+    width: 160px;
+}
+
+
+/*23-9-19 end*/
+.btn-success {
+    color: #fff !important;
+}  
+#content .fc-toolbar .fc-state-active {
+    background-color: #22baa0;
+    color: #fff;
+    text-shadow: none;
+    -webkit-text-shadow: none;
+}
+#content.appointmentSettingWrap .profile-tabs .nav-tabs {
+    height: auto;
+    position: sticky;
+    padding: 0 20px;
+    width: auto;
+    overflow: hidden;
+}
+#content.appointmentSettingWrap .inner-content {
+    margin-top: 0;
+    padding-top: 0;
+}
+#content.appointmentSettingWrap .appointment {
+    overflow: auto;
+    height: calc(100vh - 158px);
+}
+
+
+#content.appointmentSettingWrap table tr .btn-success {
+    padding: 5px 15px;
+    font-size: 14px;
+}
+
+@media only screen and (min-width:992px) {
+    table#tblLocation, table#tblType {
+        max-width: 70%;
+    }
+        table#tblLocation tr th:first-child, table#tblType tr th:first-child {
+            /* background-color: red; */
+            width: 50%;
+        }
+
+        table#tblLocation tr th:last-child, table#tblType tr th:last-child {
+            /* background-color: red; */
+            width: 35%;
+        }
+}
+@media only screen and (max-width: 767px) {
+    #content .fc-toolbar .fc-center h2 {
+        position: static;
+        transform: none;
+        -webkit-transform: none;
+    }
+    #calendar .fc-toolbar.fc-header-toolbar {
+        flex-wrap: wrap;
+    }
+}
+@media only screen and (max-width: 479px) {
+    #content .profile-tabs .nav-item {
+        margin-right: 15px;
+    }
+    #content .profile-tabs .nav-tabs .nav-link {
+        padding: 8px 8px;
+        font-size: 14px;
+    }
 }

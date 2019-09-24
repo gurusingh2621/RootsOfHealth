@@ -885,7 +885,7 @@ namespace RootsOfHealth.Controllers
 
         public ActionResult GetPotientialPatient()
         {
-            List<PotientialPatientBO> li=new List<PotientialPatientBO>(); ;
+            List<PotientialPatientBO> li = new List<PotientialPatientBO>(); ;
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(WebApiKey);
@@ -900,11 +900,11 @@ namespace RootsOfHealth.Controllers
                 {
                     var readTask = result.Content.ReadAsAsync<List<PotientialPatientBO>>();
                     readTask.Wait();
-                  
+
                     li = readTask.Result;
                 }
             }
-                    return View(li);
+            return View(li);
         }
         //[HttpPost]
         //public ActionResult Index(PatientMainBO request)
@@ -947,13 +947,13 @@ namespace RootsOfHealth.Controllers
         [HttpPost]
         public string Upload()
         {
-            string fileName="";
+            string fileName = "";
 
             for (int i = 0; i < Request.Files.Count; i++)
             {
                 var file = Request.Files[i];
                 string guid = Guid.NewGuid().ToString();
-                fileName = Path.GetFileName(guid+file.FileName);
+                fileName = Path.GetFileName(guid + file.FileName);
 
                 var path = Path.Combine(Server.MapPath("~/Files/"), fileName);
                 file.SaveAs(path);
@@ -999,7 +999,7 @@ namespace RootsOfHealth.Controllers
         }
 
         public ActionResult List()
-        {            
+        {
             return View();
         }
 
@@ -1077,7 +1077,7 @@ namespace RootsOfHealth.Controllers
             return View(model);
         }
 
-    
+
         public ActionResult AuthorizationData(int PatientID)
         {
             AuthorizationBO authobj = new AuthorizationBO();
@@ -1202,7 +1202,7 @@ namespace RootsOfHealth.Controllers
             }
             if (CareConnectobj != null)
             { authobj.CareConnect = CareConnectobj; }
-            else if (patientdetailobj.PatientMain!= null)
+            else if (patientdetailobj.PatientMain != null)
             {
                 if (patientdetailobj.PatientMain.DateOfBirth != null)
                 {
@@ -1210,16 +1210,17 @@ namespace RootsOfHealth.Controllers
                     {
                         authobj.CareConnect.DateOfBirth = Convert.ToDateTime(patientdetailobj.PatientMain.DateOfBirth);
                     }
-                    catch { 
-                        }
-                    
+                    catch
+                    {
+                    }
+
                 }
 
                 authobj.CareConnect.PatientName = patientdetailobj.PatientMain.FirstName + " " + patientdetailobj.PatientMain.MiddleName + " " + patientdetailobj.PatientMain.LastName;
                 authobj.CareConnect.Address = patientdetailobj.PatientMain.Address;
-                authobj.CareConnect.Address2= patientdetailobj.PatientMain.City+ ", " + patientdetailobj.PatientMain.State+", "+ patientdetailobj.PatientMain.Zip;
+                authobj.CareConnect.Address2 = patientdetailobj.PatientMain.City + ", " + patientdetailobj.PatientMain.State + ", " + patientdetailobj.PatientMain.Zip;
                 authobj.CareConnect.Tel = patientdetailobj.PatientMain.CellPhone;
-                authobj.CareConnect.PatientID =PatientID;
+                authobj.CareConnect.PatientID = PatientID;
             }
 
             if (ReleaseAndDisclousureobj != null)
@@ -1237,14 +1238,14 @@ namespace RootsOfHealth.Controllers
                     }
 
                 }
-                authobj.ReleaseAndDisclousure.PatientID =PatientID;
-                authobj.ReleaseAndDisclousure.AuthorizedBy= patientdetailobj.PatientMain.FirstName+" " + patientdetailobj.PatientMain.MiddleName + " " + patientdetailobj.PatientMain.LastName;
+                authobj.ReleaseAndDisclousure.PatientID = PatientID;
+                authobj.ReleaseAndDisclousure.AuthorizedBy = patientdetailobj.PatientMain.FirstName + " " + patientdetailobj.PatientMain.MiddleName + " " + patientdetailobj.PatientMain.LastName;
 
             }
 
 
             return PartialView("~/Views/Shared/Patient/_AddAuthorization.cshtml", authobj);
-     
+
         }
 
 
@@ -1437,7 +1438,7 @@ namespace RootsOfHealth.Controllers
         //-----------------lookup code  end--------------------------//
 
 
-       
+
 
 
         public ActionResult FormScheduling()
@@ -1476,10 +1477,69 @@ namespace RootsOfHealth.Controllers
 
         }
 
+        public ActionResult AppointmentSetting()
+        {
+           // List<TypeOfAppointmentBO> lst = new List<TypeOfAppointmentBO>();
+            //AppointmentBO model = new AppointmentBO();
+            //using (var client = new HttpClient())
+            //{
+            //    client.BaseAddress = new Uri(WebApiKey);
+            //    //HTTP GET
+            //    var responseTask = client.GetAsync("/api/PatientMain/GetSettingsOfAppointment");
 
 
+            //    responseTask.Wait();
+
+            //    var result = responseTask.Result;
+            //    if (result.IsSuccessStatusCode)
+            //    {
+            //        var readTask = result.Content.ReadAsAsync<AppointmentBO>();
+            //        readTask.Wait();
+            //        model.Type = readTask.Result.Type;
+            //        model.Location = readTask.Result.Location;
+            //    }
+            //    else //web api sent error response 
+            //    {
+            //        //log response status here..
+
+            //    }
+
+                
+            //}
+
+            return View();
+        }
 
 
+        public ActionResult GetTypeOfAppointments()
+        {
+            List<TypeOfAppointmentBO> lst = new List<TypeOfAppointmentBO>();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                //HTTP GET
+                var responseTask = client.GetAsync("/api/PatientMain/GetTypeOfAppointments");
 
+
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<List<TypeOfAppointmentBO>>();
+                    readTask.Wait();
+                    lst = readTask.Result;
+
+
+                }
+                else //web api sent error response 
+                {
+                    //log response status here..
+
+                }
+
+                return PartialView("~/Views/Shared/Patient/_GetTypeOfAppointments.cshtml",lst);
+            }
+        }
     }
 }
