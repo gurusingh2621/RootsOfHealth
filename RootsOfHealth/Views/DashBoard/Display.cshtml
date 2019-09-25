@@ -230,6 +230,20 @@
         font-size: 13px;
         padding: 0;
     }
+    .patientListbox .recent-paitents-img {
+        width: 65px !important;
+        overflow: hidden;
+        border-radius: 50%;
+        height: 50px;
+        display: table;
+    }
+    .patientListbox table.table td {
+        width: auto !important;
+    }
+    .patientListbox table.table th {
+        width: 25% !important;
+    }
+  
 </style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.css" type="text/css">
 
@@ -346,17 +360,15 @@
                                         <table class="table">
                                             <thead class="thead-light">
                                                 <tr>
-                                                   
-
+                                                   <th>Name</th>
+                                                    <th>Form</th>
+                                                    <th>Status</th>
                                                 </tr>
                                             </thead>
                                             <tbody class="Duebody">
 
                                                 <tr>
-                                                    <td>k111 q</td>
-                                                    <td>a</td>
-                                                    <td>(144) 444-4444  </td>
-                                                    <td>02-08-2019 20:39:55</td>
+                                                   
                                                 </tr>
 
                                             </tbody>
@@ -432,16 +444,16 @@
                         tbl += '<div class="scroll">';
                         for (var i = 0; i < data.length; i++) {
 
-                            tbl += '<div class="appointement-row" id="appointementDashbordrow" onclick="RedirectAppontment(' + data[i].PatientAppointmentID + ')">'
-                            tbl += '<div class="calender-img" >'
+                            tbl += '<div class="appointement-row" id="appointementDashbordrow">'
+                            tbl += '<div class="calender-img" onclick="RedirectAppontment(' + data[i].PatientAppointmentID + ')">'
                             tbl += '<img src="/images/calender-icon.png" alt=""></div>'
                             tbl += '<h6>'
-                            tbl += '<span class="date">Date:' + $.date(data[i].AppointmentDate) + '</span>,'
-                            tbl += '<span class="time">'
+                            tbl += '<span onclick="RedirectAppontment(' + data[i].PatientAppointmentID + ')" class="date">Date:' + $.date(data[i].AppointmentDate) + '</span>,'
+                            tbl += '<span onclick="RedirectAppontment(' + data[i].PatientAppointmentID + ')" class="time">'
                             tbl += ' Time:' + data[i].AppointmentTime + '</span>'
-                            tbl += '<p class="content hideContent">' + data[i].PatientName+"</br>"+ data[i].Notes + '</p > <div class="show-more">'
+                            tbl += '<p onclick="RedirectAppontment(' + data[i].PatientAppointmentID + ')" class="content hideContent">' + data[i].PatientName+"</br>"+ data[i].Notes + '</p > <div class="show-more">'
                             if (data[i].Notes.length > 100) {
-                                tbl += '<a href="#!" id="' + data[i].PatientAppointmentID + '" onclick="ShowMore(' + data[i].PatientAppointmentID + ')" class="btn btn-link" >read more</a>'
+                                tbl += '<a href="#!" id="' + data[i].PatientAppointmentID + '" onclick="ShowMore(' +  data[i].PatientAppointmentID + ')" class="btn btn-link" >read more</a>'
                             }
                             tbl += '</div ></h6></div>'
 
@@ -460,6 +472,12 @@
         }
         function RedirectAppontment(id) {
             window.location = '/Patient/Appointment?ID=' + id;
+          
+        }
+        var toppatient = "";
+        function bindTopPatient(id) {
+
+            window.location = '/Patient/Detail?PatientID=' + id;
         }
         function PatientStats() {
             $.ajax({
@@ -542,7 +560,7 @@
             return date;
         };
         function ShowMore(id) {
-
+            debugger;
             var $this = $("#" + id);
             var $content = $this.parent().prev("p.content");
             var linkText = $this.text();
@@ -558,32 +576,31 @@
             };
 
             $this.text(linkText);
-          
+           
         }
 
-        function StopRediection(e) {
-            e.preventDefault();
-        }
+        
+        
         $('.patientLisHeading').click(function () {
-            $('.patientListbox').slideToggle();
+            $('.patientListbox').slideToggle(700);
         })
         $('.patientLisHeading').click(function () {
             $(this).toggleClass('expand');
         })
         $('.AppointmentList').click(function () {
-            $('.AppointmentListbox').slideToggle();
+            $('.AppointmentListbox').slideToggle(700);
         })
         $('.AppointmentList').click(function () {
             $(this).toggleClass('expand');
         })
         $('.patientStats').click(function () {
-            $('.ConditionListbox').slideToggle();
+            $('.ConditionListbox').slideToggle(700);
         })
         $('.patientStats').click(function () {
             $(this).toggleClass('expand');
         })
         $('.formduelist').click(function () {
-            $('.DueListbox').slideToggle();
+            $('.DueListbox').slideToggle(700);
         })
         $('.formduelist').click(function () {
             $(this).toggleClass('expand');
