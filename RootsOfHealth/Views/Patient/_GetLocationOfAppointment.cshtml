@@ -1,0 +1,203 @@
+﻿
+@{
+    Layout = "";
+}
+
+<div class="inner-content">
+    <div class="appointment">
+        <div class="container-fluid pl-0 pr-0">
+            <h2 class="mb-20">
+                Location Of Appointments
+                <button type="button" class="btn btn-primary Appointment-btn d-inline-block float-right mb-20" onclick="addAppointmentlocation()">
+                    Add Location
+                </button>
+            </h2>
+
+
+            <table class="display table table-hover table-striped table-bordered" id="tblLocation">
+                <thead>
+                    <tr class="table-active">
+                        <th>Appointment Location</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @*@foreach (var p in Model.Location)
+                        {
+
+                            <tr>
+                                <td>@p.LocationOfAppointment</td>
+                                <td>
+                                    <a href='#' onclick="getLocationOfAppointmentById(@p.Id)"
+                                       id="btnProfileEdit" class="btn btn-success label-fields">
+                                        <i class="fas fa-Delete"></i>
+                                        Edit
+                                    </a>
+                                    <a href='#' onclick="deleteLocationOfAppointment(+@p.Id)"
+                                       id="btnProfileEdit" class="btn btn-success label-fields">
+                                        <i class="fa fa-trash"></i>
+                                        Delete
+                                    </a>
+
+                                </td>
+                            </tr>
+
+
+                        }*@
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="locationexampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Appointment Location</h5>
+                <button type="button" class="close" onclick="closelocationModel()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formAppointment" class="appointement-form">
+                    <input type="hidden" value="0" id="hdnlocationID" />
+                    <div class="form-group d-flex align-items-center">
+                        <label>Appointment Location</label>
+                        <input id="locationOfAppointment" class="form-control" type="text" />
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" onclick="closelocationModel()" class="btn btn-secondary">Cancel</button>
+                        <button type="button" onclick="saveAppointmentLocation()" class="btn btn-primary">Save</button>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+    var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]'
+    function deleteLocationOfAppointment(id) {
+        if (confirm("Are you sure want to delete this location?")) {
+            $.ajax({
+                type: "POST",
+                url: Apipath + "/api/PatientMain/DeleteLocationOfAppointment?Id=" + id,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (result) {
+                    if (result == 1) {
+                        GetAllLocationOfAppointment();
+                        toastr.error("Appointment location deleted successfully");
+                    }
+                },
+                error: function (err) {
+
+                    toastr.error("Something happen wrong");
+                }
+            });
+        }
+        else
+        {
+            return false;
+        }
+
+     }
+
+                function saveAppointmentLocation() {
+
+                    var location = $("#locationOfAppointment").val();
+                    var id = $("#hdnlocationID").val();
+                    var model = {
+                        Id: id,
+                        Location: location
+                    }
+                    $.ajax({
+                        type: "POST",
+                        url: Apipath + "/api/PatientMain/addUpdateLocationOfAppointment",
+                        data: model,
+                        success: function (result) {
+                            closelocationModel();
+                            GetAllLocationOfAppointment();
+                            if (result == 1) {
+                                toastr.success("Location Of Appointment saved successfully");
+                            }
+                            else if (result == 2) {
+                                toastr.success("Location Of Appointment updated successfully");
+                            }
+                            else {
+
+                                toastr.success("Something happen wrong");
+                            }
+                        },
+                        error: function (err) {
+
+                            toastr.error("Something happen wrong");
+                        }
+                    });
+                }
+
+                function getLocationOfAppointmentById(id) {
+                    $.ajax({
+                        type: "GET",
+                        url: Apipath + "/api/PatientMain/GetLocationOfAppointmentById?Id="+id,
+                        success: function (result) {
+                            $("#locationOfAppointment").val(result.LocationOfAppointment);
+                            $("#hdnlocationID").val(id);
+                            $('#locationexampleModal').modal('show');
+                        },
+                        error: function (err) {
+
+                            toastr.error("Something happen wrong");
+                        }
+                    });
+
+                }
+                function GetAllLocationOfAppointment() {
+                    $.ajax({
+                        type: "GET",
+                        url: Apipath + '/api/PatientMain/getLocationOfAppointments',
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        success: function (result) {
+                            $('#tblLocation tbody').html('');
+                            var txt = '';
+                            for (var i = 0; i < result.length; i++) {
+                                txt += '<tr><td>' + result[i].LocationOfAppointment + '</td>';
+                                txt += '<td><a  onclick="getLocationOfAppointmentById(' + result[i].Id + ')" id="btnProfileEdit" class="btn btn-success label-fields"><i class="far fa-edit"></i> Edit</a>'
+                                txt += '<a  onclick="deleteLocationOfAppointment(' + result[i].Id +')"id="btnProfileEdit" class="btn btn-success label-fields"> <i class="fa fa-trash"></i>  Delete  </a> </td> </tr>'
+                            }
+                            console.log = txt;
+                            $('#tblLocation tbody').html(txt);
+                            $("#tblLocation").dataTable();
+                        },
+                        error: function (e) {
+                            toastr.error("Something Happen Wrong");
+                        }
+                    });
+
+                }
+                function addAppointmentlocation() {
+                    emptylocationModel();
+                    $('#locationexampleModal').modal('show');
+                }
+                function emptylocationModel() {
+                    $("#hdnlocationID").val(0);
+                    $("#locationOfAppointment").val("");
+                }
+                function closelocationModel() {
+                    emptylocationModel();
+                    $('#locationexampleModal').modal('hide');
+                }
+                $(document).ready(function () {
+                    GetAllLocationOfAppointment();
+                   
+                });
+</script>
