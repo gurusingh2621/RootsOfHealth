@@ -21,6 +21,10 @@ namespace RootsOfHealth.Controllers
             return View();
         }
 
+        public ActionResult Display()
+        {
+            return View();
+        }
 
         [HttpPost]
         public ActionResult GetPatientDetail(string PatientID)

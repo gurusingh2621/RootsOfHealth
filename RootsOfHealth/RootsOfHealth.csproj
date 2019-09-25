@@ -231,6 +231,7 @@
     <Content Include="images\logo.png" />
     <Content Include="images\nav-icon.png" />
     <Content Include="images\no-image.png" />
+    <Content Include="images\notesicon.png" />
     <Content Include="images\paitent-img.png" />
     <Content Include="images\recent-paitent-img-1.png" />
     <Content Include="images\recent-paitent-img-2.png" />
@@ -340,6 +341,7 @@
     <Content Include="Views\Patient\WebGridShowLookUpOption.cshtml" />
     <Content Include="Views\Patient\GetPotientialPatient.cshtml" />
     <Content Include="Views\Patient\NotesTemplateField.cshtml" />
+    <Content Include="Views\DashBoard\Display.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
