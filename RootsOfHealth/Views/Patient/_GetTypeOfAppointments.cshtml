@@ -1,0 +1,214 @@
+﻿
+
+
+
+@{
+    Layout = "";
+}
+
+<div class="inner-content">
+    <div class="appointment">
+        <div class="container-fluid pl-0 pr-0">
+            <h2 class="mb-20">
+                Type Of Appointments
+                <button type="button" class="btn btn-primary Appointment-btn d-inline-block float-right mb-20" onclick="addAppointmenttype()">
+                    Add Type
+                </button>
+            </h2>
+            <table class="display table table-hover table-striped table-bordered" id="tblType">
+                <thead>
+                    <tr class="table-active">
+                        <th>Appointment Type</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @*@foreach (var p in Model.Type)
+            {
+
+                    <tr>
+
+                        <td>@p.TypeOfAppointments</td>
+                        <td>
+
+                            <a onclick="DeleteAppointmentType(@p.Id)"
+                               id="btnDeleteAppointType" class="btn btn-success label-fields">
+                                <i class="fa fa-trash"></i>
+                                Delete
+                            </a>
+                            <a onclick="getTypeOfAppointmentById(@p.Id)"
+                               id="btnProfileEdit" class="btn btn-success label-fields">
+                                <i class="far fa-edit"></i>
+                                Edit
+                            </a>
+                        </td>
+                    </tr>
+                    }*@
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="typeexampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Type Of Appointment</h5>
+                <button type="button" class="close" onclick="closetypeModel()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formAppointment" class="appointement-form">
+                    <input type="hidden" value="0" id="hdntypeID" />
+                    <div class="form-group d-flex align-items-center">
+                        <label>Appointment Type</label>
+                        <input id="typeOfAppointment" class="form-control" type="text" />
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" onclick="closetypeModel()" class="btn btn-secondary">Cancel</button>
+                        <button type="button" onclick="saveAppointmentType()" class="btn btn-primary">Save</button>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+     var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]'
+
+     function DeleteAppointmentType(id) {
+
+         if (confirm("Are you sure want to delete this type")) {
+             $.ajax({
+                 type: "GET",
+                 url: Apipath + "/api/PatientMain/DeleteTypeOfAppointment?Id=" + id,
+                 dataType: "json",
+                 contentType: "application/json; charset=utf-8",
+                 success: function (result) {
+                     GetAllTypeOfAppointment();
+                     if (result == 1) {
+                         toastr.error("Appointment type deleted successfully");
+                     }
+                 },
+                 error: function (err) {
+
+                     toastr.error("Something happen wrong");
+                 }
+             });
+         }
+         else
+         {
+             return false;
+         }
+    }
+
+    function getTypeOfAppointmentById(id) {
+        $.ajax({
+            type: "GET",
+            url: Apipath + "/api/PatientMain/GetTypeOfAppointmentById?Id=" + id,
+            success: function (result) {
+                $("#typeOfAppointment").val(result.TypeOfAppointments);
+                $("#hdntypeID").val(id);
+                $('#typeexampleModal').modal('show');
+            },
+            error: function (err) {
+
+                toastr.error("Something happen wrong");
+            }
+        });
+
+    }
+
+    function saveAppointmentType() {
+
+        var type = $("#typeOfAppointment").val();
+        var id = $("#hdntypeID").val();
+        var model = {
+            Id: id,
+            Type: type
+        }
+        $.ajax({
+            type: "POST",
+            url: Apipath + "/api/PatientMain/addUpdateTypeOfAppointment",
+            data: model,
+            success: function (result) {
+                closetypeModel();
+                GetAllTypeOfAppointment();
+                if (result == 1) {
+                    toastr.success("Type Of Appointment saved successfully");
+                }
+                else if (result == 2) {
+                    toastr.success("Type Of Appointment updated successfully");
+                }
+                else {
+
+                    toastr.success("Something happen wrong");
+                }
+            }
+        });
+    }
+
+    function GetAllTypeOfAppointment() {
+        $.ajax({
+            type: "GET",
+            url: Apipath + '/api/PatientMain/getTypeOfAppointments',
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+                $('#tblType tbody').html('');
+                var txt = '';
+                for (var i = 0; i < result.length; i++) {
+                    txt += '<tr><td>' + result[i].TypeOfAppointments + '</td>';
+                    txt += '<td><a  onclick="getTypeOfAppointmentById(' + result[i].Id + ')" id="btnProfileEdit" class="btn btn-success label-fields"><i class="far fa-edit"></i> Edit</a>'
+                    txt += '<a  onclick="DeleteAppointmentType(' + result[i].Id + ')"id="btnDeleteAppointType" class="btn btn-success label-fields"> <i class="fas fa-trash"></i> Delete  </a> </td> </tr>'
+                }
+                console.log = txt;
+                $('#tblType tbody').html(txt);
+                $("#tblType").dataTable();
+            },
+            error: function (e) {
+                toastr.error("Something Happen Wrong");
+            }
+        });
+
+    }
+
+    function addAppointmenttype() {
+        emptytypeModel();
+        $('#typeexampleModal').modal('show');
+    }
+    function emptytypeModel() {
+        $("#hdntypeID").val(0);
+        $("#typeOfAppointment").val("");
+    }
+    function closetypeModel() {
+        emptytypeModel();
+        $('#typeexampleModal').modal('hide');
+    }
+
+    $(document).ready(function () {
+        
+        GetAllTypeOfAppointment();
+        
+           
+    
+    });
+
+</script>
+
+
+
+
+
+
+
+
+

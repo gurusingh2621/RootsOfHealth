@@ -163,6 +163,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AppointmentBO.cs" />
     <Compile Include="Models\AuditBO.cs" />
     <Compile Include="Models\AuthorizationBO.cs" />
     <Compile Include="Models\CareConnectBO.cs" />
@@ -170,6 +171,7 @@
     <Compile Include="Models\DastBO.cs" />
     <Compile Include="Models\DreamOnlyBO.cs" />
     <Compile Include="Models\FormSchedulingBO.cs" />
+    <Compile Include="Models\LocationOfAppointmentBO.cs" />
     <Compile Include="Models\LookUpFieldBO.cs" />
     <Compile Include="Models\LookUpFieldOptionBO.cs" />
     <Compile Include="Models\LookUpOptionBO.cs" />
@@ -196,6 +198,7 @@
     <Compile Include="Models\ProgramBO.cs" />
     <Compile Include="Models\ReleaseAndDisclousureBO.cs" />
     <Compile Include="Models\ScheduleDateBO.cs" />
+    <Compile Include="Models\TypeOfAppointmentBO.cs" />
     <Compile Include="Models\UserBO.cs" />
     <Compile Include="Models\UserRolesBO.cs" />
     <Compile Include="Models\WholePersonCareBo.cs" />
@@ -236,6 +239,7 @@
     <Content Include="images\recent-paitent-img-1.png" />
     <Content Include="images\recent-paitent-img-2.png" />
     <Content Include="images\recent-paitent-img.png" />
+    <Content Include="images\setting-icons.png" />
     <Content Include="images\sidebar-menu-icons.png" />
     <Content Include="images\time-icon.png" />
     <Content Include="images\user-img.png" />
@@ -340,6 +344,9 @@
     <Content Include="Views\Shared\Account\_UserList.cshtml" />
     <Content Include="Views\Patient\WebGridShowLookUpOption.cshtml" />
     <Content Include="Views\Patient\GetPotientialPatient.cshtml" />
+    <Content Include="Views\Patient\AppointmentSetting.cshtml" />
+    <Content Include="Views\Patient\_GetTypeOfAppointments.cshtml" />
+    <Content Include="Views\Patient\_GetLocationOfAppointment.cshtml" />
     <Content Include="Views\Patient\NotesTemplateField.cshtml" />
     <Content Include="Views\DashBoard\Display.cshtml" />
   </ItemGroup>
