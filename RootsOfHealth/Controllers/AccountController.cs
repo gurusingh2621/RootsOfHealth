@@ -101,7 +101,7 @@ namespace RootsOfHealth.Controllers
                             }
                             else
                             {
-                                return RedirectToAction("Index", "DashBoard");
+                                return RedirectToAction("Display", "DashBoard");
                             }
 
                         }

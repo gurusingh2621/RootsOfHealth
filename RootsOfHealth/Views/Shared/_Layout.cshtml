@@ -301,11 +301,11 @@
                 <img class="img-fluid" src="~/images/logo.png" alt="">
             </a>
             <ul>
-                <li><a href="/DashBoard/Index" id="DashBoard" class="nav-menu"><span class="home-icon"></span> Home </a></li>
+                <li><a href="/DashBoard/Display" id="DashBoard" class="nav-menu"><span class="home-icon"></span> Home </a></li>
                 <li><a href="/Patient/Appointment" id="Appointment" class="nav-menu"><span class="app-icon"></span> Appointment</a></li>
                 <li><a href="/Patient/List" id="Patient" class="nav-menu"><span class="patient-icon"></span> Patients</a></li>
                 <li><a href="/Patient/Add" id="Add" class="nav-menu"><span class="add-icon"></span> Add Patient</a></li>
-                <li><a href="/Patient/NotesTemplateField" id="Add" class="nav-menu"><span class="add-icon"></span> Notes Template</a></li>
+                <li><a href="/Patient/NotesTemplateField" id="Add" class="nav-menu"><span class="notes-icon"></span> Notes Template</a></li>
                 <li><a href="/Patient/Authorization" id="Authorization" class="nav-menu"><span class="authorization-icon"></span>Authorization</a></li>
                 @*<li><a href="/Account/Index" id="Account" class="nav-menu"><span class="account-icon"></span>Users</a></li>
         <li><a href="/Account/Roles" id="Account" class="nav-menu"><span class="account-icon"></span>Roles</a></li>*@
@@ -328,7 +328,7 @@
          var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
         function RedirectPatient(ID) {
 
-            window.location = '/Patient/Add?PatientID=' + ID;
+           // window.location = '/Patient/Add?PatientID=' + ID;
         }
 
         $(document).click(function (e) {
@@ -337,6 +337,7 @@
                 $("#searchPatient").val('');
                 $(".searchboxDropDown").css('display', 'none');
             }
+           
         });
         function SearchPatient() {
 
