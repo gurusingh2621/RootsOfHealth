@@ -175,6 +175,7 @@
     <Compile Include="Models\LookUpFieldBO.cs" />
     <Compile Include="Models\LookUpFieldOptionBO.cs" />
     <Compile Include="Models\LookUpOptionBO.cs" />
+    <Compile Include="Models\NotesTemplateFieldBO.cs" />
     <Compile Include="Models\OUOnlyBO.cs" />
     <Compile Include="Models\PatientCommunicationAndMobilityBO.cs" />
     <Compile Include="Models\PatientDetailBO.cs" />
@@ -345,6 +346,7 @@
     <Content Include="Views\Patient\AppointmentSetting.cshtml" />
     <Content Include="Views\Patient\_GetTypeOfAppointments.cshtml" />
     <Content Include="Views\Patient\_GetLocationOfAppointment.cshtml" />
+    <Content Include="Views\Patient\NotesTemplateField.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
