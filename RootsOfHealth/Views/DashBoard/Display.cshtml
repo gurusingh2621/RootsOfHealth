@@ -314,7 +314,7 @@
                         <div class="col-md-4">
                             <div class="count-item patienList">
                                 <div class="patientHeading AppointmentList">
-                                    Appointment
+                                   Recent Appointment
                                     <span class="expandicon">
                                         <i class="fa fa-minus exp-p" aria-hidden="true"></i>
                                         <i class="fa fa-plus exp-m" aria-hidden="true"></i>
@@ -349,7 +349,7 @@
                         <div class="col-md-6">
                             <div class="count-item patienList">
                                 <div class="patientHeading formduelist">
-                                    Form Due
+                                  Recent  Form Due
                                     <span class="expandicon">
                                         <i class="fa fa-minus exp-p" aria-hidden="true"></i>
                                         <i class="fa fa-plus exp-m" aria-hidden="true"></i>
@@ -360,7 +360,7 @@
                                         <table class="table">
                                             <thead class="thead-light">
                                                 <tr>
-                                                   <th>Name</th>
+                                                   <th>Patient</th>
                                                     <th>Form</th>
                                                     <th>Status</th>
                                                 </tr>
@@ -414,6 +414,7 @@
         }
 
         function RecentPatient() {
+
             $.ajax({
 
                 type: "Get",
@@ -434,7 +435,7 @@
         function RecentAppotment() {
             $.ajax({
                 type: "GET",
-                url: Apipath + '/api/PatientMain/GetRecentAppotmentDashboard',
+                url: Apipath + '/api/PatientMain/GetRecentAppotmentDashboard?clinicid='+'@Session["ClinicID"]',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (data) {
@@ -445,13 +446,13 @@
                         for (var i = 0; i < data.length; i++) {
 
                             tbl += '<div class="appointement-row" id="appointementDashbordrow">'
-                            tbl += '<div class="calender-img" onclick="RedirectAppontment(' + data[i].PatientAppointmentID + ')">'
+                            tbl += '<div class="calender-img">'
                             tbl += '<img src="/images/calender-icon.png" alt=""></div>'
                             tbl += '<h6>'
-                            tbl += '<span onclick="RedirectAppontment(' + data[i].PatientAppointmentID + ')" class="date">Date:' + $.date(data[i].AppointmentDate) + '</span>,'
-                            tbl += '<span onclick="RedirectAppontment(' + data[i].PatientAppointmentID + ')" class="time">'
+                            tbl += '<span class="date">Date:' + $.date(data[i].AppointmentDate) + '</span>,'
+                            tbl += '<span  class="time">'
                             tbl += ' Time:' + data[i].AppointmentTime + '</span>'
-                            tbl += '<p onclick="RedirectAppontment(' + data[i].PatientAppointmentID + ')" class="content hideContent">' + data[i].PatientName+"</br>"+ data[i].Notes + '</p > <div class="show-more">'
+                            tbl += '<p  class="content hideContent"> Patient: <a href="#" onclick="bindTopPatient(' + data[i].PatientID + ')">' + data[i].PatientName +"</a></br>"+ data[i].Notes + '</p > <div class="show-more">'
                             if (data[i].Notes.length > 100) {
                                 tbl += '<a href="#!" id="' + data[i].PatientAppointmentID + '" onclick="ShowMore(' +  data[i].PatientAppointmentID + ')" class="btn btn-link" >read more</a>'
                             }
@@ -470,19 +471,17 @@
                 }
             });
         }
-        function RedirectAppontment(id) {
-            window.location = '/Patient/Appointment?ID=' + id;
-          
-        }
-        var toppatient = "";
+
+
+
         function bindTopPatient(id) {
 
-            window.location = '/Patient/Detail?PatientID=' + id;
+            window.location = '/DashBoard/Index?patientid=' + id;
         }
         function PatientStats() {
             $.ajax({
                 type: "GET",
-                url: Apipath + '/api/PatientMain/GetAllPatientStatusDashboard',
+                url: Apipath + '/api/PatientMain/GetAllPatientStatusDashboard?clinicid='+'@Session["ClinicID"]',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
@@ -525,7 +524,7 @@
         function PatientFormStatus() {
             $.ajax({
                 type: "GET",
-                url: Apipath + '/api/PatientMain/GetAllPatientFormSatusDashboard',
+                url: Apipath + '/api/PatientMain/GetAllPatientFormSatusDashboard?clinicid='+'@Session["ClinicID"]',
                 contentType: 'application/json; charset=UTF-8',
                 dataType: "json",
                 success: function (result) {
@@ -533,7 +532,7 @@
                         var tbl = '';
                         for (var i = 0; i < result.length; i++){
                             tbl += '<tr>';
-                            tbl += '<td>' + result[i].PatientName + '</td>';
+                            tbl += '<td><a href="#" onclick="bindTopPatient(' + result[i].PatientID + ')">' + result[i].PatientName + '</a></td>';
                             tbl += '<td>' + result[i].FormName + '</td>';
                             tbl += '<td>' + result[i].FormStatus + '</td>';
                             tbl+='</tr>'
@@ -560,7 +559,7 @@
             return date;
         };
         function ShowMore(id) {
-            debugger;
+
             var $this = $("#" + id);
             var $content = $this.parent().prev("p.content");
             var linkText = $this.text();
@@ -568,19 +567,19 @@
             if (linkText === "read more") {
                 linkText = "Show less";
                 $content.switchClass("hideContent", "showContent", 400);
-              
+
             } else {
                 linkText = "read more";
                 $content.switchClass("showContent", "hideContent", 400);
-               
+
             };
 
             $this.text(linkText);
-           
+
         }
 
-        
-        
+
+
         $('.patientLisHeading').click(function () {
             $('.patientListbox').slideToggle(700);
         })

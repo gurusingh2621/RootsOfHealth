@@ -3176,9 +3176,12 @@ button.addnotebtn {
     align-items: center;
     font-size: 11px;
     font-weight: 600;
-    line-height: 17px;
     z-index: 9;
+    text-align:center;
+    line-height:25px;
 }
+
+
 
 .notCountG {
     width: 25px;
@@ -3387,3 +3390,162 @@ button.addnotebtn {
     background-position: 3px 0;
 }
 
+.dataTables_scrollBody::-webkit-scrollbar {
+    width: 5px;
+}
+
+.dataTables_scrollBody::-webkit-scrollbar-track {
+    background: #f1f1f1;
+   
+}
+
+.dataTables_scrollBody::-webkit-scrollbar-thumb {
+    background: #ccc;
+   
+}
+
+
+
+
+.scroll::-webkit-scrollbar {
+    width: 5px;
+}
+
+.scroll::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.scroll::-webkit-scrollbar-thumb {
+    background: #ccc;
+}
+.scroll {
+    scrollbar-color: #f1f1f1 transparent;
+    scrollbar-width: thin
+}
+
+.height-460px {
+    padding-right: 7px;
+}
+
+
+
+
+
+
+
+.dataTables_scrollHead th {
+    border: 0;
+}
+.dataTables_scrollHead {
+    background: #efefef;
+}
+.dataTables_scrollHead th {
+    background: transparent;
+}
+table.dataTable.no-footer {
+    border:0 !important
+}
+.dataTables_scrollHead {
+    background: #5d5d5d;
+    opacity: 1;
+}
+.dataTables_scrollHead th{color:#fff; font-weight:500; letter-spacing.03em; font-size:14px;}
+.no-padding {
+    padding: 0 !important;
+}
+div#tblPatient_info {
+    font-size: 14px;
+}
+.appointement-row h6 {
+    margin: 0;
+}
+
+.dataTables_wrapper td {
+    vertical-align: middle;
+    height: auto;
+    padding: 8px 15px;
+    font-size: 14px;
+}
+p.createbtn {
+    float: right;
+    margin: 0 0 15px 0;
+    position: relative;
+}
+h2.mhead {
+    float: left;
+}
+p.createbtn a {
+    line-height: normal;
+}
+.detail-button .btn {
+    line-height: normal;
+}
+
+.editUserWrapper .nav-tabs {
+    height: auto !important;
+    overflow: hidden !important;
+}
+.editUserWrapper .inner-content {
+    margin-top: 0 !important;
+}
+.editUserWrapper .top-image-row {
+    vertical-align: baseline;
+    width: 100%;
+}
+
+.editUserWrapper .paitent-img {
+    max-width: 200px !important;
+    width: 100%;
+}
+.editscrollheight {
+    height: 406px;
+    padding-right: 8px;
+}
+p.createbtn input {
+    line-height:normal;
+    
+}
+ input.btn {
+    line-height: normal !important;
+}
+.topheading {
+    float: left;
+    width: 100%;
+}
+.selectField {
+    max-width: 500px;
+    width: 100%;
+    margin: 0px auto 20px auto;
+}
+.selectField select{border-radius:0}
+label {
+    font-size: 14px;
+}
+.dataTables_wrapper.no-footer .dataTables_scrollBody {
+    border:0 !important
+}
+.appointmentSettingWrap{padding: 20px 0 0 0 !important;}
+
+#content.appointmentSettingWrap .appointment {
+    overflow: hidden;
+    height:auto;
+}
+.dataTables_info {
+    font-size: 14px;
+    letter-spacing: .03em;
+}
+.btn-trash {
+    border-radius: 30px;
+    line-height: normal;
+    color: #fff !important;
+}
+.btn-trash, .btn-succ {
+    font-size: 13px !important;
+    line-height: normal;
+    padding: 6px 20px !important;
+}
+
+
+.appointmentSettingWrap .tab-pane {
+    padding-top: 20px;
+}

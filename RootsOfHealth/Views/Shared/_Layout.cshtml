@@ -328,7 +328,7 @@
          var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
         function RedirectPatient(ID) {
 
-            window.location = '/Patient/Add?PatientID=' + ID;
+            window.location = '/DashBoard/Index?patientid=' + ID;
         }
 
         $(document).click(function (e) {
@@ -344,7 +344,7 @@
             var keyword = $("#searchPatient").val();
             $.ajax({
                 type: "GET",
-                url: Apipath + '/api/PatientMain/SearchPatient?keyword=' + keyword,
+                url: Apipath + '/api/PatientMain/SearchPatient?keyword=' + keyword +'&clinicid='+'@Session["ClinicID"]',
                 contentType: 'application/json; charset=UTF-8',
                 dataType: "json",
                 success: function (result) {
@@ -422,17 +422,7 @@
 
 
 
-        $(document).ready(function () {
-
-           
-            //$(".scroll").scroll(function () {
-            //   
-            //    console.log($(window).scrollTop());
-            //    if ($(window).scrollTop() > 800 && $(window).scrollTop() < 850) {
-            //        alert('mission accomplished');
-            //    }
-            //});
-        });
+       
 
         $('.nav-menu').click(function () {
             if ($(".sidebar-menu").hasClass("sidebar-res")) {

@@ -1013,7 +1013,7 @@ namespace RootsOfHealth.Controllers
             {
                 client.BaseAddress = new Uri(WebApiKey);
                 //HTTP GET
-                var responseTask = client.GetAsync("/api/PatientMain/GetAllPatient");
+                var responseTask = client.GetAsync("/api/PatientMain/GetAllPatient?clinicid="+Session["ClinicID"]);
                 responseTask.Wait();
 
                 var result = responseTask.Result;

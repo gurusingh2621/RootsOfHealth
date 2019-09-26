@@ -4,21 +4,23 @@
 
     Layout = "";
 }
-<div class="tab-pane container active" id="UserProfile" role="tabpanel" aria-labelledby="UserProfile-tab">
-    <div class="inner-content">
+<div class="tab-pane active" id="UserProfile" role="tabpanel" aria-labelledby="UserProfile-tab">
+   
         <div class="appointment">
             <div class="container-fluid pl-0 pr-0">
 
                 @using (Html.BeginForm())
             {
                     @Html.AntiForgeryToken()
-                    <div class="form-horizontal">
-                        <h2>Edit User</h2>
-                     
-                        <div>
-                            @Html.ActionLink("Users", "Index", "Account", htmlAttributes:new {@class= "btn btn-success" })
-                        </div>
-                        <div class="top-image-row d-flex">
+                <div class="form-horizontal">
+                    <h2 class="mhead">Edit User</h2>
+
+                    <p class="createbtn">
+                        @Html.ActionLink("Users", "Index", "Account", htmlAttributes: new { @class = "btn btn-success" })
+                        <input type="button" value="Update" onclick="Save()" class="btn btn-primary" />
+                    </p>
+                    <div class="SidebarScroll scroll editscrollheight">
+                        <div class="top-image-row d-flex ">
                             <div class="top-image-left">
 
                                 <div class="paitent-img">
@@ -40,10 +42,10 @@
 
                             </div>
                         </div>
-                        
-                       
+
+
                         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                       
+
                         <input class="Add" type="file" tabindex="1" name="usersImg" id="usersImg" />
 
                         <div class="row">
@@ -72,12 +74,12 @@
                             </div>
 
                             @*<div class="form-group">
-                @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
-                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
+                    @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     @Html.Label("Role", htmlAttributes: new { @class = "control-label" })
@@ -131,14 +133,14 @@
                             <div class="col-md-12">
                                 <input id="userImg" type="hidden" name="userImg" value="@Model.Image" />
                                 <div class="form-group">
-                                    <input type="button" value="Update" onclick="Save()" class="btn btn-primary" />
+                                   
                                 </div>
                             </div>
                         </div>
                     </div>
-
+                </div>
                 }
             </div>
         </div>
-    </div>
+    
 </div>

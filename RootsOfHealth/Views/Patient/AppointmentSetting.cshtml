@@ -36,6 +36,11 @@
     .showHideNotes {
         height: 570px !important;
     }
+    #tblType, #tblLocation {
+        width: 100%;
+        float: left;
+        max-width: 100% !important;
+    }
     /*.row {
         margin-right: 0px;
     }*/
@@ -74,6 +79,10 @@
     </section>
 @section scripts{
 <script>
+    //$(function () {
+    //    GetAllLocationOfAppointment();
+    //    GetAllTypeOfAppointment();
+    //})
     function deleteTypeOfAppointment(id) {
                $.ajax({
                    type: "Post",
@@ -101,11 +110,6 @@
         $("#LocationOfAppointment").addClass("active show");
         $("#LocationOfAppointment-tab").addClass("active show");
     });
-    $(document).ready(function () {
-
-     //   $("#tblType").dataTable();
-       
-
-    });
+    
 </script>
 }

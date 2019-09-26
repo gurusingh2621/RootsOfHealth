@@ -9,23 +9,27 @@
 <!-- Content start here -->
 
 <section id="content" class="responsive-container pt-0">
+
     <div class="inner-content mt-0">
+       
+            <div class="container-fluid p-0">
 
-        <div class="container-fluid p-0">
-            <div class="appointment">
-
-                <div class="recent-paitents All-paitents mt-0">
-
+                <div class="appointment">
 
 
+                    <div class="recent-paitents All-paitents no-padding mt-0">
+
+
+
+
+
+                        </div>
+
+                    </div>
                 </div>
-
-
-
             </div>
-        </div>
 
-    </div>
+        
 
 </section>
 
@@ -56,7 +60,12 @@
                 success: function (result) {
 
                     $('.All-paitents').html(result);
-                    $("#tblPatient").dataTable();
+                    $("#tblPatient").dataTable({
+                        scrollY: '50vh',
+                       scrollCollapse: true,
+                        
+
+                    });
                 },
                 error: function () {
                     toastr.error("Some error occurred!! or data not found");
@@ -66,12 +75,8 @@
 
                 }
             });
-
-
-
-        });
-
-
+            
+            });
 
     </script>
 

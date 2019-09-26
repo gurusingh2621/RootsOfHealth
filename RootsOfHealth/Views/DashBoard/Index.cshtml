@@ -185,7 +185,7 @@
 
  
 
-    <script>
+<script>
         // Hamburger menu js
 
         $('#menu-toggle').click(function () {
@@ -201,7 +201,7 @@
             $(".inner-main-content").toggleClass("showHidepaitentinner-main-content");
             $(".body").toggleClass("showHidebody");
             $("#content").toggleClass("showHidecontent");
-          
+
             //$(".appointement").toggleClass("showHideappotment");
 
         })
@@ -217,7 +217,7 @@
         //});
 
         $(document).ready(function () {
-            
+
             $(".loaderOverlay").css("display","flex");
             var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]'
 
@@ -393,7 +393,7 @@
             $.ajax({
 
                 type: "Get",
-                url: '/DashBoard/GetRecentPatients',
+                url: '/DashBoard/GetRecentPatients?clinicid='+'@Session["ClinicID"]',
                 dataType: "html",
                 contentType: "application/json; charset=utf-8",
                 success: function (result) {
@@ -405,7 +405,7 @@
                 },
                 complete: function () {
 
-                    bindTopPatient();
+                    bindTopPatient('@ViewBag.PatientID');
                 }
             });
 
@@ -415,9 +415,9 @@
 
         var toppatient = "";
 
-        function bindTopPatient(id) {
-
-            if (id == "" || id == undefined) {
+    function bindTopPatient(id) {
+        
+            if (id == "" || id == undefined || id=='0') {
                 toppatient = $('#topPatientId').val();
             }
             else {
@@ -499,7 +499,7 @@
 
 
         }
-    </script>
+</script>
 
 
 }

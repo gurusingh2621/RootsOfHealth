@@ -29,7 +29,7 @@ namespace RootsOfHealth.Models
         public string Zip { get; set; }
         public string RoleName { get; set; }
         public string Image { get; set; }
-        public int ClinicID { get; set; }
+        public Nullable<int> ClinicID { get; set; }
         //public HttpPostedFileBase ImageFile { get; set; }
         public List<UserBO> UserList { get; set;}
        public List<UserRolesBO> UserRoles { get; set; }
