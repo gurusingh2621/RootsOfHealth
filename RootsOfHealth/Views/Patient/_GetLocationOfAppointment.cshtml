@@ -171,12 +171,15 @@
                             var txt = '';
                             for (var i = 0; i < result.length; i++) {
                                 txt += '<tr><td>' + result[i].LocationOfAppointment + '</td>';
-                                txt += '<td><a  onclick="getLocationOfAppointmentById(' + result[i].Id + ')" id="btnProfileEdit" class="btn btn-success label-fields"><i class="far fa-edit"></i> Edit</a>'
-                                txt += '<a  onclick="deleteLocationOfAppointment(' + result[i].Id +')"id="btnProfileEdit" class="btn btn-success label-fields"> <i class="fa fa-trash"></i>  Delete  </a> </td> </tr>'
+                                txt += '<td><a  onclick="getLocationOfAppointmentById(' + result[i].Id + ')" id="btnProfileEdit" class="btn btn-success  btn-trash label-fields"><i class="far fa-edit"></i> Edit</a>'
+                                txt += '<a  onclick="deleteLocationOfAppointment(' + result[i].Id +')"id="btnProfileEdit" class="btn  btn-trash label-fields"> <i class="fa fa-trash"></i>  Delete  </a> </td> </tr>'
                             }
                             console.log = txt;
                             $('#tblLocation tbody').html(txt);
-                            $("#tblLocation").dataTable();
+                            $("#tblLocation").dataTable({
+                                scrollY: '40vh',
+                                scrollCollapse: true,
+                            });
                         },
                         error: function (e) {
                             toastr.error("Something Happen Wrong");
@@ -196,8 +199,10 @@
                     emptylocationModel();
                     $('#locationexampleModal').modal('hide');
                 }
-                $(document).ready(function () {
-                    GetAllLocationOfAppointment();
+    $(document).ready(function () {
+
+        GetAllLocationOfAppointment();
+
                    
                 });
 </script>

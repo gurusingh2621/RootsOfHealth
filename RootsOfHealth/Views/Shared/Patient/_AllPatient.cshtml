@@ -1,52 +1,99 @@
 ﻿@model IEnumerable<RootsOfHealth.Models.PatientMainBO>
+<style>
+    .tableimg {
+        width: 45px !important;
+        overflow: hidden;
+        border-radius: 50%;
+        display: table;
+        margin: 0 auto;
+    }
+
+        .tableimg img {
+            max-width: 100%;
+            height: auto;
+        }
+
+    #tblPatient td {
+        vertical-align: middle;
+        height: auto;
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+
+    table#tblPatient .btn {
+        background: #22baa0;
+        border-radius: 50px;
+        border: 1px solid #22baa0;
+        font-size: 13px;
+        font-weight: 500;
+        padding: 6px 20px;
+        margin-right: 5px;
+    }
+
+    #tblPatient th {
+        font-size: 15px;
+        font-weight: 500;
+        color: #333;
+    }
+
+    .SidebarScroll.scroll {
+        height: 420px;
+    }
+</style>
 
 <h2 class="mb-3">All Patients</h2>
 
-<table id="tblPatient" class="display table table-hover table-striped table-bordered">
-    <thead>
-        <tr class="table-active">
-            <th>Image</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Last Modify</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var p in Model)
-        {
-
-            <tr>
-                <td style="width:100px" height="100px">
-                    @if (string.IsNullOrWhiteSpace(p.PatientImg))
-                    {
-                        <img class="img-fluid" id="patientpic" src="/images/avatar.png" />
-                    }
-                    else
-                    {
-                        <img class="img-fluid" src="~/Files/@p.PatientImg" alt="">
-
-                    }
-                </td>
-                <td>@p.FirstName @p.LastName</td>
-                <td>@p.EmailAddress</td>
-                <td>@p.CellPhone  </td>
-                <td>@p.ModifiedDate</td>
-                <td>
-
-                    <a href='' onclick="this.href='/Patient/Detail?PatientID='+@p.PatientID"
-                       id="btnProfileEdit" class="btn btn-success label-fields">
-                        <i class="far fa-edit"></i>
-                        View
-                    </a>
-                    <a href='' onclick="this.href='/Patient/Add?PatientID='+@p.PatientID"
-                       id="btnProfileEdit" class="btn btn-success label-fields">
-                        <i class="far fa-edit"></i>
-                        Edit
-                    </a>
-                </td>
+    <table id="tblPatient" class="display table table-hover table-striped table-bordered ">
+        <thead>
+            <tr class="table-active">
+                <th>Image</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Last Modify</th>
+                <th>Action</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+
+        <tbody>
+            @foreach (var p in Model)
+            {
+
+                <tr>
+                    <td style="width:100px" height="100px">
+                        <div class="tableimg">
+                            @if (string.IsNullOrWhiteSpace(p.PatientImg))
+                            {
+                                <img class="img-fluid" id="patientpic" src="/images/avatar.png" />
+                            }
+                            else
+                            {
+                                <img class="img-fluid" src="~/Files/@p.PatientImg" alt="">
+
+                            }
+                        </div>
+                    </td>
+                    <td>@p.FirstName @p.LastName</td>
+                    <td>@p.EmailAddress</td>
+                    <td>@p.CellPhone  </td>
+                    <td>@p.ModifiedDate</td>
+                    <td>
+
+                        <a href='' onclick="this.href='/DashBoard/Index?patientid='+@p.PatientID"
+                           id="btnProfileEdit" class="btn btn-success label-fields">
+                            <i class="far fa-edit"></i>
+                            View
+                        </a>
+                        <a href='' onclick="this.href='/Patient/Add?PatientID='+@p.PatientID"
+                           id="btnProfileEdit" class="btn btn-success label-fields">
+                            <i class="far fa-edit"></i>
+                            Edit
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+
+

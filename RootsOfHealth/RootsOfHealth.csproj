@@ -280,13 +280,14 @@
     <Content Include="Scripts\jquery.dragoptions.js" />
     <Content Include="Scripts\jquery.dragoptions.min.js" />
     <Content Include="Scripts\jquery.js" />
+    <Content Include="Scripts\jquery.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\moment.min.js" />
-    <Content Include="Scripts\nice-scroll.js" />
+    <Content Include="Scripts\nicescroll.js" />
     <Content Include="Scripts\select2.min.js" />
     <Content Include="Views\Patient\FormScheduling.cshtml" />
     <Content Include="Web.config">

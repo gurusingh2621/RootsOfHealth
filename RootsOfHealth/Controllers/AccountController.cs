@@ -86,7 +86,7 @@ namespace RootsOfHealth.Controllers
                                 readTask.Wait();
                                 user = readTask.Result;
                                 Session["userid"] = user.UserID;
-                                
+                                Session["ClinicID"] = user.ClinicID;
                                 if (Request.Cookies["userimage"] == null)
                                 {
                                     Response.Cookies["userimage"].Value = user.Image;

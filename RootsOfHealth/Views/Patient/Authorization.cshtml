@@ -120,14 +120,14 @@
         function closeAuthModel() {
 
             $('#example1Modal').modal('hide');
-          
-                
+
+
                 getauthorizationdata();
-            
-           
+
+
         }
         $(document).ready(function () {
-          
+
             $('#example1Modal').modal({
                 show: true,
                 keyboard: false,
@@ -153,11 +153,11 @@
         function autocomplete() {
             $.ajax({
                 type: "GET",
-                url: Apipath + '/api/PatientMain/GetAllPatient',
+                url: Apipath + '/api/PatientMain/GetAllPatient?clinicid='+'@Session["ClinicID"]',
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (result) {
-                   
+
                         autoCompleteArray = [];
                         for (var i = 0; i < result.length; i++) {
                             var label = "";
@@ -172,13 +172,13 @@
                             $("#autoPatientList").autocomplete({
                                 source: autoCompleteArray,
                                 change: function (event, ui) {
-                                  
-                                    if (ui.item != null)$("#hdnPatientId").val(ui.item.id); 
-                                    
+
+                                    if (ui.item != null)$("#hdnPatientId").val(ui.item.id);
+
                                 }
                             });
                         }
-                    
+
                 },
                 error: function (e) {
                     toastr.error("Error while inserting data");
@@ -186,7 +186,7 @@
             });
         }
         function AddDate() {
-           
+
             var d = new Date();
             var month = d.getMonth() + 1;
             var day = d.getDate();
@@ -223,23 +223,23 @@
 
 
         function myPrint(myfrm) {
-           
-           
+
+
             $("#btnRelease,#btnCare,#printOnly,#btnWpcCare,#btnWpcCare2").hide();
             var printdata = document.getElementById(myfrm);
             newwin = window.open("");
             newwin.document.write(printdata.outerHTML);
             newwin.print();
-           
+
             newwin.close();
             $("#btnRelease,#btnCare,#printOnly,#btnWpcCare,#btnWpcCare2").show();
 
         }
 
-        
+
 
         function ReleaseSave() {
-        
+
             AddDate();
             $("input[type=hidden][name=CreatedDate]").val(CreatedDate);
             $("input[type=hidden][name=ModifiedDate]").val(ModifiedDate);
@@ -249,7 +249,7 @@
             var drugscontaining = "";
 
             $.each($("input[name='frmRelease_check1']:checked"), function () {
-               
+
                 TypeOfInformation += $(this).val() + ",";
             });
 
@@ -261,7 +261,7 @@
 
 
             var formData = $("#frmRelease").serializeObject();
-           
+
 
 
             $.ajax({
@@ -271,7 +271,7 @@
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (result) {
-                   
+
 
                     $("input[type=hidden][name=ReleaseAndDisclousureID]").val(result);
 
@@ -287,7 +287,7 @@
         }
 
         function CareSave(printForm) {
-           
+
             AddDate();
             $("input[type=hidden][name=CreatedDate]").val(CreatedDate);
             $("input[type=hidden][name=ModifiedDate]").val(ModifiedDate);
@@ -295,7 +295,7 @@
 
             var inftorel = "";
 
-           
+
 
             $.each($("input[name^='frmConnect_itr']:checked"), function () {
                 inftorel += $(this).val() + ",";
@@ -307,7 +307,7 @@
 
             $('#hdnInformationToBeReleased').val(inftorel);
 
-           
+
 
             var delpre = "";
 
@@ -336,7 +336,7 @@
 
 
             var formData = $("#frmCare").serializeObject();
-           
+
 
 
             $.ajax({
@@ -346,7 +346,7 @@
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (result) {
-                    
+
 
                     $("input[type=hidden][name=hdfCareConnectID]").val(result);
 
@@ -356,9 +356,9 @@
                     } else {
                         getauthorizationdata2('frmCare');
                     }
-                    
 
-                    
+
+
 
                 },
                 error: function () {
@@ -368,7 +368,7 @@
 
         }
         function WholePersonCareSave(formPrint) {
-            
+
             AddDate();
             $("input[type=hidden][name=CreatedDate]").val(CreatedDate);
             $("input[type=hidden][name=ModifiedDate]").val(ModifiedDate);
@@ -376,7 +376,7 @@
 
             var inftorel = "";
 
-           
+
 
             $.each($("input[name^='frmConnect_itrWPC']:checked"), function () {
                 inftorel += $(this).val() + ",";
@@ -388,7 +388,7 @@
 
             $('#hdnInformationToBeReleasedWPC').val(inftorel);
 
-            
+
 
             var delpre = "";
 
@@ -417,7 +417,7 @@
 
 
             var formData = $("#frmWPCare").serializeObject();
-           
+
 
 
             $.ajax({
@@ -427,7 +427,7 @@
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (result) {
-                   
+
 
                     $("input[type=hidden][name=WholePersonCareID]").val(result);
 
@@ -447,7 +447,7 @@
         }
 
         function getauthorizationdata() {
-            
+
             var patientID = 0;
             if ($("#hdnPatientId").val() == 0) {
                 patientID = '@Request.Cookies["patientid"].Values.ToString()';
@@ -460,7 +460,7 @@
                 dataType: "html",
                 contentType: "application/json; charset=utf-8",
                 success: function (result) {
-                   
+
                     $('#myTabContent').html(result);
                     $('[name=AuthorizedPerson]').val('@FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name');
                     $('[name=PermissionTo]').val('@FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name');
@@ -484,8 +484,8 @@
                             changeMonth: true
                         }
                     );
-                   
-                    
+
+
                     $('#wpcGivenDate').datepicker(
                         {
                             changeYear: true,
@@ -504,12 +504,12 @@
                             changeMonth: true
                         }
                     );
-                    
+
                     // the selector will match all input controls of type :checkbox
                     // and attach a click event handler
                     $("input:checkbox").on('click', function () {
 
-                       
+
                         // in the handler, 'this' refers to the box clicked on
                         var $box = $(this);
                         if ($box.is(":checked")) {
@@ -521,7 +521,7 @@
                             var frmConnect_check5 = "input:checkbox[name='frmConnect_itrcheck5']";
                             var frmConnect_check6 = "input:checkbox[name='frmConnect_itrcheck6']";
 
-                            
+
 
                             var currectchkgroup = $(this).attr("name");
 
@@ -562,7 +562,7 @@
                             $box.prop("checked", false);
                         }
                     });
-                   
+
                     bindCareConnectCheckBox();
                     bindWholePersonCareCheckBox();
                     bindreleasecheckbox();
@@ -571,7 +571,7 @@
             });
 
         }
-     
+
         function getauthorizationdata2(formname) {
             var patientID = 0;
             if ($("#hdnPatientId").val() == 0) {
@@ -586,7 +586,7 @@
                 dataType: "html",
                 contentType: "application/json; charset=utf-8",
                 success: function (result) {
-                    
+
                     $('#myTabContent').html(result);
                  $('[name=AuthorizedPerson]').val('@FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name');
                     $('[name=PermissionTo]').val('@FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name');
@@ -610,7 +610,7 @@
                             $("#Care-tab").addClass("show active")
                             $("#Care").addClass("show active");
                             break;
-                        
+
                         case 'frmWPCare':
                         case 'frmWPCare2':
                             $("#Release-tab").removeClass("show active")
@@ -621,11 +621,11 @@
                             $("#WholePersonCare").addClass("show active");
                             break;
                     }
-                    
-                    
-                    
-                   
-                  
+
+
+
+
+
                 },
                 error: function () {
                     toastr.error("Some error occurred!! or data not found");
@@ -667,7 +667,7 @@
                     // and attach a click event handler
                     $("input:checkbox").on('click', function () {
 
-                        
+
                         // in the handler, 'this' refers to the box clicked on
                         var $box = $(this);
                         if ($box.is(":checked")) {
@@ -719,11 +719,11 @@
                         }
                     });
 
-                    
+
                     bindCareConnectCheckBox();
                     bindWholePersonCareCheckBox();
                     bindreleasecheckbox();
-              
+
 
                     myPrint(formname);
 
@@ -734,8 +734,8 @@
 
         }
 
-       
-        
+
+
     </script>
 
 

@@ -167,12 +167,15 @@
                 var txt = '';
                 for (var i = 0; i < result.length; i++) {
                     txt += '<tr><td>' + result[i].TypeOfAppointments + '</td>';
-                    txt += '<td><a  onclick="getTypeOfAppointmentById(' + result[i].Id + ')" id="btnProfileEdit" class="btn btn-success label-fields"><i class="far fa-edit"></i> Edit</a>'
-                    txt += '<a  onclick="DeleteAppointmentType(' + result[i].Id + ')"id="btnDeleteAppointType" class="btn btn-success label-fields"> <i class="fas fa-trash"></i> Delete  </a> </td> </tr>'
+                    txt += '<td><a  onclick="getTypeOfAppointmentById(' + result[i].Id + ')" id="btnProfileEdit" class="btn btn-success btn-succ label-fields"><i class="far fa-edit"></i> Edit</a>'
+                    txt += '<a  onclick="DeleteAppointmentType(' + result[i].Id + ')"id="btnDeleteAppointType" class="btn btn-danger btn-trash label-fields"> <i class="fas fa-trash"></i> Delete  </a> </td> </tr>'
                 }
                 console.log = txt;
                 $('#tblType tbody').html(txt);
-                $("#tblType").dataTable();
+                $("#tblType").dataTable({
+                    scrollY: '40vh',
+                    scrollCollapse: true,
+                });
             },
             error: function (e) {
                 toastr.error("Something Happen Wrong");
