@@ -319,7 +319,8 @@
                 data: {
                     PatientId: $('#fltrhdnPatientId').val(),
                     AppointmentType: $('#fltrddlTypeOfAppointment').val() == null ? 0 : $('#fltrddlTypeOfAppointment').val(),
-                    AppointmentLocation: $('#fltrddlLocationOfAppointment').val() == null ? 0 : $('#fltrddlLocationOfAppointment').val()
+                    AppointmentLocation: $('#fltrddlLocationOfAppointment').val() == null ? 0 : $('#fltrddlLocationOfAppointment').val(),
+                    clinicid:'@Session["ClinicID"]'
                 },
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
