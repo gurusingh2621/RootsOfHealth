@@ -3549,3 +3549,23 @@ label {
 .appointmentSettingWrap .tab-pane {
     padding-top: 20px;
 }
+h2.lfttext {
+    float: left;
+    width: auto;
+}
+.button-set {
+    float: right;
+}
+.appointment{float:left; width:100%;}
+.calendarBlock {
+    float: left;
+    width: 100%;
+    margin: 15px 0 0 0;
+}
+.button-set {
+    display: flex;
+    flex-wrap: wrap;
+}
+    .button-set button {
+        margin-left: 8px !important;
+    }

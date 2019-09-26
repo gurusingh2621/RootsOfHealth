@@ -30,6 +30,11 @@
         overflow-x: hidden;
         font-size: 13px;
     }
+    .ui-menu {
+
+        position: absolute;
+        z-index: 9999;
+    }
     .ui-menu .ui-menu-item-wrapper {
         padding: 3px 15px 3px 15px;
     }
@@ -37,6 +42,10 @@
     .appointement-form select {
         width: 75.5% !important;
     }
+    input#fltrautoPatientList {
+        width: 100%;
+    }
+
 </style>
 <!-- Content start here -->
 <section id="content" class="responsive-container pt-0">
@@ -46,22 +55,22 @@
             <div class="appointment">
                 <!-- Button trigger modal -->
 
-                <h2>Patients Appointment</h2>
+                <h2 class="lfttext">Patients Appointment</h2>
                 @*<button type="button" class="btn btn-primary Appointment-btn" data-toggle="modal" data-target="#exampleModal">
                         Add Appointment
                     </button>*@
+                <div class="button-set">
+                    <button type="button" class="btn btn-primary Appointment-btn" onclick="addAppointment()">
+                        Add Appointment
+                    </button>
 
-                <button type="button" class="btn btn-primary Appointment-btn" onclick="addAppointment()">
-                    Add Appointment
-                </button>
-
-                @*<button type="button" class="btn btn-primary Appointment-btn" onclick="addFilter()">
-                    Filter
-                </button>*@
-
-                <div id='calendar' style="overflow: scroll; overflow-x:hidden;
-    height: 450px;
-    margin-top: 10px;"></div>
+                    <button type="button" class="btn btn-primary Appointment-btn" onclick="addFilter()">
+                        Filter
+                    </button>
+                </div>
+                <div class="calendarBlock">
+                    <div id='calendar' style="overflow: scroll; overflow-x:hidden;height: 450px;margin-top: 10px;"></div>
+                </div>
             </div>
         </div>
 
@@ -157,6 +166,7 @@
                     <div class="form-group d-flex align-items-center">
                         <label for="inputPassword">Select Patient</label>
                         <input id="fltrautoPatientList" class="form-control" />
+                        <input type="hidden" value="0" id="fltrhdnPatientId" />
                     </div>
                     <div class="form-group d-flex align-items-center">
                         <label for="inputPassword">Type:</label>
@@ -164,15 +174,12 @@
                     </div>
                     <div class="form-group d-flex align-items-center">
                         <label for="inputPassword">Location:</label>
-
-
-
                         <select tabindex="13" id="fltrddlLocationOfAppointment" class="form-control"></select>
                     </div>
 
                     <div class="modal-footer">
                         <button type="button" onclick="closefiltermodel()" class="btn btn-secondary">Cancel</button>
-                        <button type="button" onclick="saveAppointment()" class="btn btn-primary">Search</button>
+                        <button type="button" onclick="getAllAppointments()" class="btn btn-primary">Search</button>
                     </div>
                 </form>
             </div>
@@ -304,18 +311,23 @@
 
         // get all appointments from backend
         function getAllAppointments() {
-         
-            var data = {};
+            debugger;
+         //   var data = ;
             $.ajax({
                 type: "GET",
                 url: Apipath + '/api/PatientMain/GetAllPatientAppointment',
-                data: JSON.stringify(data),
+                data: {
+                    PatientId: $('#fltrhdnPatientId').val(),
+                    AppointmentType: $('#fltrddlTypeOfAppointment').val() == null ? 0 : $('#fltrddlTypeOfAppointment').val(),
+                    AppointmentLocation: $('#fltrddlLocationOfAppointment').val() == null ? 0 : $('#fltrddlLocationOfAppointment').val()
+                },
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (result) {
                     AllAppointmentArray = [];
                     AllAppointmentArray = result;
-                    bindCalendarEvents(result)
+                    bindCalendarEvents(result);
+                    closefiltermodel()
                 },
                 error: function (e) {
                     toastr.error("Error while inserting data");
@@ -326,6 +338,7 @@
         // bind calendar events
         function bindCalendarEvents(data) {
             var eventData = [];
+            $('#calendar').fullCalendar('removeEvents');
             for (var i = 0; i < data.length; i++) {
                 var splitDateTime = data[i].AppointmentDate.split("T");
                 var finalDateTime = splitDateTime[0] + "T" + data[i].AppointmentTime;
@@ -490,7 +503,9 @@
 
         //get all patient and bind autocomplete
         function autocomplete() {
+            
             $.ajax({
+                
                 type: "GET",
                 url: Apipath + '/api/PatientMain/GetAllPatient?clinicid=' +'@Session["ClinicID"]',
                 dataType: "json",
@@ -509,7 +524,7 @@
                         }
                         autoCompleteArray.push({ "label": label, "value": label, "id": result[i].PatientID })
                         $("#autoPatientList").autocomplete({
-                           
+                            
                             source: autoCompleteArray,
                             open: function () {
                                 $("ul.ui-menu").width($(this).innerWidth());
@@ -518,10 +533,11 @@
 
                             change: function (event, ui) {
                                 $("#hdnPatientId").val(ui.item.id);
+                                $("#fltrhdnPatientId").val(ui.item.id);
                             }
                         });
                         $("#fltrautoPatientList").autocomplete({
-
+                           
                             source: autoCompleteArray,
                             open: function () {
                                 $("ul.ui-menu").width($(this).innerWidth());
@@ -529,7 +545,7 @@
                             },
 
                             change: function (event, ui) {
-                              //  $("#hdnPatientId").val(ui.item.id);
+                              $("#fltrhdnPatientId").val(ui.item.id);
                             }
                         });
                     }
