@@ -99,20 +99,20 @@ namespace RootsOfHealth.Controllers
                                     if (type == "Days")
                                     {
                                         var everyd = Convert.ToDouble(count);
-                                        t = Convert.ToDateTime(dt).AddDays(everyd).ToString("dd-MM-yyyy");
+                                    t = Convert.ToDateTime(dt).AddDays(everyd).ToShortDateString();
                                         currentdate = DateTime.Now.ToShortDateString();
 
                                     }
                                     else if (type == "Week")
                                     {
                                         var everyw = Convert.ToDouble(7 * count);
-                                        t = Convert.ToDateTime(dt).AddDays(everyw).ToString("dd-MM-yyyy");
-                                    }
+                                        t = Convert.ToDateTime(dt).AddDays(everyw).ToShortDateString();
+                                }
                                     else if (type == "Month")
                                     {
                                         var everym = Convert.ToInt16(count);
-                                        t = Convert.ToDateTime(dt).AddMonths(everym).ToString("dd-MM-yyyy");
-                                    }
+                                        t = Convert.ToDateTime(dt).AddMonths(everym).ToShortDateString();
+                                }
 
                                     var todaydate = DateTime.Now.ToShortDateString();
                                     var houschedule = DateTime.Parse(t);
@@ -158,18 +158,18 @@ namespace RootsOfHealth.Controllers
                                     if (type == "Days")
                                     {
                                         var everyd = Convert.ToDouble(count);
-                                        t = Convert.ToDateTime(dt).AddDays(everyd).ToString("dd-MM-yyyy");
-                                    }
+                                        t = Convert.ToDateTime(dt).AddDays(everyd).ToShortDateString();
+                                }
                                     else if (type == "Week")
                                     {
                                         var everyw = Convert.ToDouble(7 * count);
-                                        t = Convert.ToDateTime(dt).AddDays(everyw).ToString("dd-MM-yyyy");
-                                    }
+                                        t = Convert.ToDateTime(dt).AddDays(everyw).ToShortDateString();
+                                }
                                     else if (type == "Month")
                                     {
                                         var everym = Convert.ToInt16(count);
-                                        t = Convert.ToDateTime(dt).AddMonths(everym).ToString("dd-MM-yyyy");
-                                    }
+                                        t = Convert.ToDateTime(dt).AddMonths(everym).ToShortDateString();
+                                }
 
                                     var todaydate = DateTime.Now.ToShortDateString();
                                     var houschedule = DateTime.Parse(t);
@@ -215,18 +215,18 @@ namespace RootsOfHealth.Controllers
                                     if (type == "Days")
                                     {
                                         var everyd = Convert.ToDouble(count);
-                                        t = Convert.ToDateTime(dt).AddDays(everyd).ToString("dd-MM-yyyy");
-                                    }
+                                        t = Convert.ToDateTime(dt).AddDays(everyd).ToShortDateString();
+                                }
                                     else if (type == "Week")
                                     {
                                         var everyw = Convert.ToDouble(7 * count);
-                                        t = Convert.ToDateTime(dt).AddDays(everyw).ToString("dd-MM-yyyy");
-                                    }
+                                        t = Convert.ToDateTime(dt).AddDays(everyw).ToShortDateString();
+                                }
                                     else if (type == "Month")
                                     {
                                         var everym = Convert.ToInt16(count);
-                                        t = Convert.ToDateTime(dt).AddMonths(everym).ToString("dd-MM-yyyy");
-                                    }
+                                        t = Convert.ToDateTime(dt).AddMonths(everym).ToShortDateString();
+                                }
 
                                     var todaydate = DateTime.Now.ToShortDateString();
                                     var houschedule = DateTime.Parse(t);
@@ -273,18 +273,18 @@ namespace RootsOfHealth.Controllers
                                     if (type == "Days")
                                     {
                                         var everyd = Convert.ToDouble(count);
-                                        t = Convert.ToDateTime(dt).AddDays(everyd).ToString("dd-MM-yyyy");
-                                    }
+                                        t = Convert.ToDateTime(dt).AddDays(everyd).ToShortDateString();
+                                }
                                     else if (type == "Week")
                                     {
                                         var everyw = Convert.ToDouble(7 * count);
-                                        t = Convert.ToDateTime(dt).AddDays(everyw).ToString("dd-MM-yyyy");
-                                    }
+                                        t = Convert.ToDateTime(dt).AddDays(everyw).ToShortDateString();
+                                }
                                     else if (type == "Month")
                                     {
                                         var everym = Convert.ToInt16(count);
-                                        t = Convert.ToDateTime(dt).AddMonths(everym).ToString("dd-MM-yyyy");
-                                    }
+                                        t = Convert.ToDateTime(dt).AddMonths(everym).ToShortDateString();
+                                }
                                     //ViewBag.HouSchedule=t;
                                     var todaydate = DateTime.Now.ToShortDateString();
                                     var houschedule = DateTime.Parse(t);
@@ -330,18 +330,18 @@ namespace RootsOfHealth.Controllers
                                     if (type == "Days")
                                     {
                                         var everyd = Convert.ToDouble(count);
-                                        t = Convert.ToDateTime(dt).AddDays(everyd).ToString("dd-MM-yyyy");
-                                    }
+                                        t = Convert.ToDateTime(dt).AddDays(everyd).ToShortDateString();
+                                }
                                     else if (type == "Week")
                                     {
                                         var everyw = Convert.ToDouble(7 * count);
-                                        t = Convert.ToDateTime(dt).AddDays(everyw).ToString("dd-MM-yyyy");
-                                    }
+                                        t = Convert.ToDateTime(dt).AddDays(everyw).ToShortDateString();
+                                }
                                     else if (type == "Month")
                                     {
                                         var everym = Convert.ToInt16(count);
-                                        t = Convert.ToDateTime(dt).AddMonths(everym).ToString("dd-MM-yyyy");
-                                    }
+                                        t = Convert.ToDateTime(dt).AddMonths(everym).ToShortDateString();
+                                }
                                     //ViewBag.HouSchedule=t;
                                     var todaydate = DateTime.Now.ToShortDateString();
                                     var houschedule = DateTime.Parse(t);
@@ -387,18 +387,18 @@ namespace RootsOfHealth.Controllers
                                     if (type == "Days")
                                     {
                                         var everyd = Convert.ToDouble(count);
-                                        t = Convert.ToDateTime(dt).AddDays(everyd).ToString("dd-MM-yyyy");
-                                    }
+                                        t = Convert.ToDateTime(dt).AddDays(everyd).ToShortDateString();
+                                }
                                     else if (type == "Week")
                                     {
                                         var everyw = Convert.ToDouble(7 * count);
-                                        t = Convert.ToDateTime(dt).AddDays(everyw).ToString("dd-MM-yyyy");
-                                    }
+                                        t = Convert.ToDateTime(dt).AddDays(everyw).ToShortDateString();
+                                }
                                     else if (type == "Month")
                                     {
                                         var everym = Convert.ToInt16(count);
-                                        t = Convert.ToDateTime(dt).AddMonths(everym).ToString("dd-MM-yyyy");
-                                    }
+                                        t = Convert.ToDateTime(dt).AddMonths(everym).ToShortDateString();
+                                }
                                     //ViewBag.HouSchedule=t;
                                     var todaydate = DateTime.Now.ToShortDateString();
                                     var houschedule = DateTime.Parse(t);
@@ -445,18 +445,18 @@ namespace RootsOfHealth.Controllers
                                     if (type == "Days")
                                     {
                                         var everyd = Convert.ToDouble(count);
-                                        t = Convert.ToDateTime(dt).AddDays(everyd).ToString("dd-MM-yyyy");
-                                    }
+                                        t = Convert.ToDateTime(dt).AddDays(everyd).ToShortDateString();
+                                }
                                     else if (type == "Week")
                                     {
                                         var everyw = Convert.ToDouble(7 * count);
-                                        t = Convert.ToDateTime(dt).AddDays(everyw).ToString("dd-MM-yyyy");
-                                    }
+                                        t = Convert.ToDateTime(dt).AddDays(everyw).ToShortDateString();
+                                }
                                     else if (type == "Month")
                                     {
                                         var everym = Convert.ToInt16(count);
-                                        t = Convert.ToDateTime(dt).AddMonths(everym).ToString("dd-MM-yyyy");
-                                    }
+                                        t = Convert.ToDateTime(dt).AddMonths(everym).ToShortDateString();
+                                }
                                     //ViewBag.HouSchedule=t;
                                     var todaydate = DateTime.Now.ToShortDateString();
                                     var houschedule = DateTime.Parse(t);
@@ -508,18 +508,18 @@ namespace RootsOfHealth.Controllers
                                     if (type == "Days")
                                     {
                                         var everyd = Convert.ToDouble(count);
-                                        tdast = Convert.ToDateTime(dastdt).AddDays(everyd).ToString("dd-MM-yyyy");
-                                    }
+                                        tdast = Convert.ToDateTime(dastdt).AddDays(everyd).ToShortDateString();
+                                }
                                     else if (type == "Week")
                                     {
                                         var everyw = Convert.ToDouble(7 * count);
-                                        tdast = Convert.ToDateTime(dastdt).AddDays(everyw).ToString("dd-MM-yyyy");
-                                    }
+                                        tdast = Convert.ToDateTime(dastdt).AddDays(everyw).ToShortDateString();
+                                }
                                     else if (type == "Month")
                                     {
                                         var everym = Convert.ToInt16(count);
-                                        tdast = Convert.ToDateTime(dastdt).AddMonths(everym).ToString("dd-MM-yyyy");
-                                    }
+                                        tdast = Convert.ToDateTime(dastdt).AddMonths(everym).ToShortDateString();
+                                }
                                     //ViewBag.HouSchedule=t;
                                     var todaydate = DateTime.Now.ToShortDateString();
                                     var houscheduledast = DateTime.Parse(tdast);
@@ -560,18 +560,18 @@ namespace RootsOfHealth.Controllers
                                     if (type == "Days")
                                     {
                                         var everyd = Convert.ToDouble(count);
-                                        taudit = Convert.ToDateTime(auditdt).AddDays(everyd).ToString("dd-MM-yyyy");
-                                    }
+                                        taudit = Convert.ToDateTime(auditdt).AddDays(everyd).ToShortDateString();
+                                }
                                     else if (type == "Week")
                                     {
                                         var everyw = Convert.ToDouble(7 * count);
-                                        taudit = Convert.ToDateTime(auditdt).AddDays(everyw).ToString("dd-MM-yyyy");
-                                    }
+                                        taudit = Convert.ToDateTime(auditdt).AddDays(everyw).ToShortDateString();
+                                }
                                     else if (type == "Month")
                                     {
                                         var everym = Convert.ToInt16(count);
-                                        taudit = Convert.ToDateTime(auditdt).AddMonths(everym).ToString("dd-MM-yyyy");
-                                    }
+                                        taudit = Convert.ToDateTime(auditdt).AddMonths(everym).ToShortDateString();
+                                }
                                     //ViewBag.HouSchedule=t;
                                     var todaydate = DateTime.Now.ToShortDateString();
                                     var houscheduleaudit = DateTime.Parse(taudit);
@@ -764,18 +764,18 @@ namespace RootsOfHealth.Controllers
                                     if (type == "Days")
                                     {
                                         var everyd = Convert.ToDouble(count);
-                                        t = Convert.ToDateTime(dt).AddDays(everyd).ToString("dd-MM-yyyy");
-                                    }
+                                        t = Convert.ToDateTime(dt).AddDays(everyd).ToShortDateString();
+                                }
                                     else if (type == "Week")
                                     {
                                         var everyw = Convert.ToDouble(7 * count);
-                                        t = Convert.ToDateTime(dt).AddDays(everyw).ToString("dd-MM-yyyy");
-                                    }
+                                        t = Convert.ToDateTime(dt).AddDays(everyw).ToShortDateString();
+                                }
                                     else if (type == "Month")
                                     {
                                         var everym = Convert.ToInt16(count);
-                                        t = Convert.ToDateTime(dt).AddMonths(everym).ToString("dd-MM-yyyy");
-                                    }
+                                        t = Convert.ToDateTime(dt).AddMonths(everym).ToShortDateString();
+                                }
 
                                     var todaydate = DateTime.Now.ToShortDateString();
                                     var houschedule = DateTime.Parse(t);
@@ -821,18 +821,18 @@ namespace RootsOfHealth.Controllers
                                     if (type == "Days")
                                     {
                                         var everyd = Convert.ToDouble(count);
-                                        t = Convert.ToDateTime(dt).AddDays(everyd).ToString("dd-MM-yyyy");
-                                    }
+                                        t = Convert.ToDateTime(dt).AddDays(everyd).ToShortDateString();
+                                }
                                     else if (type == "Week")
                                     {
                                         var everyw = Convert.ToDouble(7 * count);
-                                        t = Convert.ToDateTime(dt).AddDays(everyw).ToString("dd-MM-yyyy");
-                                    }
+                                        t = Convert.ToDateTime(dt).AddDays(everyw).ToShortDateString();
+                                }
                                     else if (type == "Month")
                                     {
                                         var everym = Convert.ToInt16(count);
-                                        t = Convert.ToDateTime(dt).AddMonths(everym).ToString("dd-MM-yyyy");
-                                    }
+                                        t = Convert.ToDateTime(dt).AddMonths(everym).ToShortDateString();
+                                }
 
                                     var todaydate = DateTime.Now.ToShortDateString();
                                     var houschedule = DateTime.Parse(t);

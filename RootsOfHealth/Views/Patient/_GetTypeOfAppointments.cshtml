@@ -23,27 +23,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @*@foreach (var p in Model.Type)
-            {
-
-                    <tr>
-
-                        <td>@p.TypeOfAppointments</td>
-                        <td>
-
-                            <a onclick="DeleteAppointmentType(@p.Id)"
-                               id="btnDeleteAppointType" class="btn btn-success label-fields">
-                                <i class="fa fa-trash"></i>
-                                Delete
-                            </a>
-                            <a onclick="getTypeOfAppointmentById(@p.Id)"
-                               id="btnProfileEdit" class="btn btn-success label-fields">
-                                <i class="far fa-edit"></i>
-                                Edit
-                            </a>
-                        </td>
-                    </tr>
-                    }*@
+                 
                 </tbody>
             </table>
         </div>
@@ -128,7 +108,10 @@
     }
 
     function saveAppointmentType() {
-
+        if ($("#typeOfAppointment").val().trim() == '') {
+            toastr.error("Appointment type is required.");
+            return;
+        }
         var type = $("#typeOfAppointment").val();
         var id = $("#hdntypeID").val();
         var model = {

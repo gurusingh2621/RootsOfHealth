@@ -17,7 +17,7 @@
 
                         </ul>
                       
-                        <div class="inner-main-content" style="margin-top:0px">
+                        <div class="inner-main-content scroll" style="margin-top:0px">
                             <div class="top-image-row d-flex">
                                 <div class="top-image-left">
 
@@ -68,14 +68,7 @@
                                     </div>
                                 </div>
 
-                                <div class="detail-button ml-auto">
-
-                                    <a href="/Patient/Add?PatientID=@ViewBag.PatientId"
-                                       class="btn btn-success label-fields">
-                                        <i class="far fa-edit"></i>
-                                        Edit
-                                    </a>
-                                </div>
+                               
                             </div>
                             <div class="tab-content">
                                 <div class="tab-pane container active" id="DAST">
@@ -83,15 +76,23 @@
                                         <div class="dastContent">
                                             <div class="detail-heading d-flex mt-4 align-items-start">
                                                 <div class="drug-protect">
-                                                    <div class="dastHeading">
+                                                    <div class="dastHeading" style="display:flex;">
                                                     <h2>DAST</h2>
-                                                        <div class="detail-button ml-auto">
+                                                    <div class="detail-button ml-auto">
 
-                                                            <a tabindex="1" href="javascript:{}" onclick="return DastSave();" id="btnDast" class="btn btn-success">
-                                                                <i class="far fa-save"></i>
-                                                                Save
+                                                        <a tabindex="1" href="javascript:{}" onclick="return DastSave();" id="btnDast" class="btn btn-success">
+                                                            <i class="far fa-save"></i>
+                                                            Save
+                                                        </a>
+                                                        
+
+                                                            <a href="/Patient/Add?PatientID=@ViewBag.PatientId"
+                                                               class="btn btn-success label-fields">
+                                                                <i class="far fa-edit"></i>
+                                                                Edit
                                                             </a>
-                                                        </div>
+                                                       
+                                                    </div>
                                     </div>
                                                     <div class="drug-radibtns">
                                                         <div class="row">
@@ -813,7 +814,7 @@
                                     </form>
                                 </div>
                                 <div class="tab-pane fade" id="AUDIT">
-                                    <div class="dastHeading mt-3">
+                                    <div class="dastHeading mt-3" style="display:flex;">
                                         <h2>AUDIT</h2>
                                         <div class="detail-button ml-auto">
 

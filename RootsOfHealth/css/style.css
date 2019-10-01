@@ -380,6 +380,20 @@ button, input {
     background-position: -3px -228px;
 }
 
+
+
+
+
+.sidebar-menu ul a:hover .user-role-icon {
+        background-position: -2px -2px;
+    }
+.sidebar-menu ul a:hover .lookup-icon {
+    background-position: -3px -2px;
+}
+.sidebar-menu ul a:hover .form-sched-icon {
+        background-position: -3px -2px;
+    }
+
 .sidebar-menu ul a:hover .logout-icon {
   background-position: -4px -275px;
 }
@@ -442,6 +456,35 @@ button, input {
     margin-bottom: 4px;
 }
 
+
+
+.sidebar-menu ul a .user-role-icon {
+    display: block;
+    width: 22px;
+    height: 22px;
+    background: url(../images/role.png) no-repeat 0 0;
+    background-position: -44px -2px;
+    margin: auto;
+    margin-bottom: 4px;
+}
+.sidebar-menu ul a .lookup-icon {
+    display: block;
+    width: 22px;
+    height: 22px;
+    background: url(../images/lookuptable.png) no-repeat 0 0;
+    background-position: -43px -2px;
+    margin: auto;
+    margin-bottom: 4px;
+}
+.sidebar-menu ul a .form-sched-icon {
+    display: block;
+    width: 22px;
+    height: 22px;
+    background: url(../images/schedule.png) no-repeat 0 0;
+    background-position: -46px -2px;
+    margin: auto;
+    margin-bottom: 4px;
+}
     .sidebar-menu ul a .authorization-icon {
         display: block;
         width: 27px;
@@ -666,7 +709,7 @@ aside.sidebar-menu.sidebar-res ul li {
     border: 15px solid #fff;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.16);
     flex: 0 0 100%;
-    max-width: 200px;
+    max-width: 200px !important;
     height: 100%;
     background: #eee;
 }
@@ -3026,6 +3069,7 @@ button.addnotebtn {
     height: 350px;
     overflow-x: hidden;
     margin-top: -10px;
+    padding-right:8px;
 }
 
 .fc-body {
@@ -3162,6 +3206,7 @@ button.addnotebtn {
     }
 .detail-button.ml-auto {
     display: flex;
+    align-items:flex-start;
 }
 .notCountR {
     width: 25px;
@@ -3196,8 +3241,9 @@ button.addnotebtn {
     align-items: center;
     font-size: 11px;
     font-weight: 600;
-    line-height: 17px;
+    line-height: 25px;
     z-index: 9;
+    text-align: center;
 }
 
 
@@ -3214,8 +3260,9 @@ button.addnotebtn {
     align-items: center;
     font-size: 11px;
     font-weight: 600;
-    line-height: 17px;
+    line-height: 25px;
     z-index: 9;
+    text-align: center;
 }
 
 
@@ -3427,12 +3474,6 @@ button.addnotebtn {
     padding-right: 7px;
 }
 
-
-
-
-
-
-
 .dataTables_scrollHead th {
     border: 0;
 }
@@ -3443,10 +3484,10 @@ button.addnotebtn {
     background: transparent;
 }
 table.dataTable.no-footer {
-    border:0 !important
+    border:0
 }
 .dataTables_scrollHead {
-    background: #5d5d5d;
+    background: #5d5d5d !important;
     opacity: 1;
 }
 .dataTables_scrollHead th{color:#fff; font-weight:500; letter-spacing.03em; font-size:14px;}
@@ -3569,3 +3610,22 @@ h2.lfttext {
     .button-set button {
         margin-left: 8px !important;
     }
+/*10-1-19 start*/
+.form-schedule .table th {
+    background-color: #565656;
+    border: none;
+    font-weight: bold;
+    font-size: 14px;
+    color: #fff;
+    padding: 10px 18px;
+    border-bottom: 1px solid #565656;
+}
+.overite-prorperty.form-schedule .table th:first-child {
+    background-color: #565656 !important;
+    border-bottom: 1px solid #565656 !important;
+    border-right: none !important;
+}
+.form-schedule .table td {
+    vertical-align: middle;
+}
+/*10-1-19 end*/
