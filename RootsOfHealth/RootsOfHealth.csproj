@@ -232,6 +232,7 @@
     <Content Include="images\heading-border.png" />
     <Content Include="images\logo-dark.png" />
     <Content Include="images\logo.png" />
+    <Content Include="images\lookuptable.png" />
     <Content Include="images\nav-icon.png" />
     <Content Include="images\no-image.png" />
     <Content Include="images\notesicon.png" />
@@ -239,6 +240,8 @@
     <Content Include="images\recent-paitent-img-1.png" />
     <Content Include="images\recent-paitent-img-2.png" />
     <Content Include="images\recent-paitent-img.png" />
+    <Content Include="images\role.png" />
+    <Content Include="images\schedule.png" />
     <Content Include="images\setting-icons.png" />
     <Content Include="images\sidebar-menu-icons.png" />
     <Content Include="images\time-icon.png" />

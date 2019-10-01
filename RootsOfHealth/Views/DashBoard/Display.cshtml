@@ -392,14 +392,17 @@
 
     <script>
         var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
+       
         $(function () {
-            PatientCount();
+          
+            var clinicid ='@Session["ClinicID"]';
+            PatientCount(clinicid);
             RecentPatient();
-            RecentAppotment();
-            PatientStats();
-            PatientFormStatus();
+            RecentAppotment(clinicid);
+            PatientStats(clinicid);
+            PatientFormStatus(clinicid);
         });
-        function PatientCount() {
+        function PatientCount(id) {
             $.ajax({
                 type: "GET",
                 url: Apipath + '/api/PatientMain/Getpatientcount',
@@ -426,16 +429,19 @@
                     $('.patientListbox').html(result);
                 },
                 error: function () {
-                    toastr.error("Some error occurred!! or data not found");
+                   
                 }
 
             });
         }
 
-        function RecentAppotment() {
+        function RecentAppotment(id) {
+            if (id == '' || id == null) {
+                return;
+            }
             $.ajax({
                 type: "GET",
-                url: Apipath + '/api/PatientMain/GetRecentAppotmentDashboard?clinicid='+'@Session["ClinicID"]',
+                url: Apipath + '/api/PatientMain/GetRecentAppotmentDashboard?clinicid='+id,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (data) {
@@ -467,7 +473,7 @@
 
                 },
                 error: function (e) {
-                    toastr.error("Error while getting appotment data.");
+                    
                 }
             });
         }
@@ -478,10 +484,13 @@
 
             window.location = '/DashBoard/Index?patientid=' + id;
         }
-        function PatientStats() {
+        function PatientStats(id) {
+            if (id == '' || id == null) {
+                return;
+            }
             $.ajax({
                 type: "GET",
-                url: Apipath + '/api/PatientMain/GetAllPatientStatusDashboard?clinicid='+'@Session["ClinicID"]',
+                url: Apipath + '/api/PatientMain/GetAllPatientStatusDashboard?clinicid='+id,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
@@ -521,13 +530,17 @@
                 }
             });
         }
-        function PatientFormStatus() {
+        function PatientFormStatus(id) {
+            if (id == '' || id == null) {
+                return;
+            }
             $.ajax({
                 type: "GET",
-                url: Apipath + '/api/PatientMain/GetAllPatientFormSatusDashboard?clinicid='+'@Session["ClinicID"]',
+                url: Apipath + '/api/PatientMain/GetAllPatientFormSatusDashboard?clinicid='+id,
                 contentType: 'application/json; charset=UTF-8',
                 dataType: "json",
                 success: function (result) {
+                    debugger;
                     if (result.length) {
                         var tbl = '';
                         for (var i = 0; i < result.length; i++){

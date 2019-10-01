@@ -59,9 +59,7 @@
         background: #35c8af;
         border: 1px solid #35c8af;
     }
-    .appointment table th {
-        background-color: #f5f5f5;
-    }
+   
 
     .appointment table .btn-success {
         background: #22baa0;
@@ -86,19 +84,20 @@
 </style>
 
 <section id="content" class="responsive-container pt-0">
-    <div class="inner-content">
+    <div class="inner-content  mt-0">
         <div class="container-fluid pl-0 pr-0">
 
             <div class="appointment">
-                <h2>Roles</h2>
-                <p>
-                    
-                    <button type="button" onclick="ResetModal()" class="btn btn-success" data-toggle="modal" data-target="#addRoleModal">
-                       Add Role
-                    </button>
-                </p>
-                <div id="roleListID">
-                @Html.Partial("~/Views/Shared/Account/_RoleList.cshtml", Model)
+                <div class="detail-heading d-flex">
+                    <h2>Roles</h2>
+                    <div class="detail-button ml-auto">
+                        <button type="button" onclick="ResetModal()" class="btn btn-success" data-toggle="modal" data-target="#addRoleModal">
+                            Add Role
+                        </button>
+                    </div>
+                    </div>
+                    <div id="roleListID">
+                        @Html.Partial("~/Views/Shared/Account/_RoleList.cshtml", Model)
                     </div>
                 </div>
             </div>
@@ -413,14 +412,6 @@
         </div>
     </div>
 </div>
-   
-    
-   
-
-
-    
-
-
     <div id="editSection">
 
     </div>
@@ -436,11 +427,20 @@
                     success: function (result) {
                         $("#roleListID").html('');
                         $("#roleListID").html(result);
+                        $("#tblRole").dataTable({
+                            scrollY: '50vh',
+                            scrollCollapse: true,
+                        });
+                    
                     }
                 });
             }
           
             $(function () {
+                $("#tblRole").dataTable({
+                    scrollY: '50vh',
+                    scrollCollapse: true,
+                });
                 $("#patient_tgl").click(function () {
 
 

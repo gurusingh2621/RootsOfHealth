@@ -22,28 +22,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @*@foreach (var p in Model.Location)
-                        {
-
-                            <tr>
-                                <td>@p.LocationOfAppointment</td>
-                                <td>
-                                    <a href='#' onclick="getLocationOfAppointmentById(@p.Id)"
-                                       id="btnProfileEdit" class="btn btn-success label-fields">
-                                        <i class="fas fa-Delete"></i>
-                                        Edit
-                                    </a>
-                                    <a href='#' onclick="deleteLocationOfAppointment(+@p.Id)"
-                                       id="btnProfileEdit" class="btn btn-success label-fields">
-                                        <i class="fa fa-trash"></i>
-                                        Delete
-                                    </a>
-
-                                </td>
-                            </tr>
-
-
-                        }*@
+         
                 </tbody>
             </table>
         </div>
@@ -112,7 +91,10 @@
      }
 
                 function saveAppointmentLocation() {
-
+                    if ($("#locationOfAppointment").val().trim() == '') {
+                        toastr.error("Appointment location is required.");
+                        return;
+                    }
                     var location = $("#locationOfAppointment").val();
                     var id = $("#hdnlocationID").val();
                     var model = {
@@ -167,18 +149,21 @@
                         dataType: "json",
                         contentType: "application/json; charset=utf-8",
                         success: function (result) {
+                          
                             $('#tblLocation tbody').html('');
                             var txt = '';
                             for (var i = 0; i < result.length; i++) {
                                 txt += '<tr><td>' + result[i].LocationOfAppointment + '</td>';
                                 txt += '<td><a  onclick="getLocationOfAppointmentById(' + result[i].Id + ')" id="btnProfileEdit" class="btn btn-success  btn-trash label-fields"><i class="far fa-edit"></i> Edit</a>'
-                                txt += '<a  onclick="deleteLocationOfAppointment(' + result[i].Id +')"id="btnProfileEdit" class="btn  btn-trash label-fields"> <i class="fa fa-trash"></i>  Delete  </a> </td> </tr>'
+                                txt += '<a  onclick="deleteLocationOfAppointment(' + result[i].Id +')"id="btnProfileEdit" class="btn btn-danger btn-trash label-fields"> <i class="fa fa-trash"></i>  Delete  </a> </td> </tr>'
                             }
-                            console.log = txt;
+                           
                             $('#tblLocation tbody').html(txt);
                             $("#tblLocation").dataTable({
                                 scrollY: '40vh',
                                 scrollCollapse: true,
+                                "autoWidth": false
+                                
                             });
                         },
                         error: function (e) {

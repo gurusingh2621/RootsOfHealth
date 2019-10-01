@@ -41,9 +41,7 @@
         float: left;
         max-width: 100% !important;
     }
-    /*.row {
-        margin-right: 0px;
-    }*/
+   
 </style>
 <section id="content" class="responsive-container appointmentSettingWrap">
         <div class="profile-tabs">
@@ -95,20 +93,22 @@
                });
 
     }
-    $("#TypeOfAppointment-tab").click(function () {
-        $("#LocationOfAppointment-tab").removeClass("active show");
-        $("#LocationOfAppointment").removeClass("active show");
-        $("#TypeOfAppointment-tab").addClass("active show");
-        $("#TypeOfAppointment").addClass("active show");
+    //$("#TypeOfAppointment-tab").click(function () {
+    //    $("#LocationOfAppointment-tab").removeClass("active show");
+    //    $("#LocationOfAppointment").removeClass("active show");
+    //    $("#TypeOfAppointment-tab").addClass("active show");
+    //    $("#TypeOfAppointment").addClass("active show");
        
 
        
-    });
+    //});
     $("#LocationOfAppointment-tab").click(function () {
         $("#TypeOfAppointment").removeClass("active show");
         $("#TypeOfAppointment-tab").removeClass("active show");
         $("#LocationOfAppointment").addClass("active show");
         $("#LocationOfAppointment-tab").addClass("active show");
+        $($.fn.dataTable.tables(true)).DataTable()
+            .columns.adjust();
     });
     
 </script>
