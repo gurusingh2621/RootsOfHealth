@@ -1,10 +1,67 @@
-﻿@model IEnumerable<RootsOfHealth.Models.LookUpOptionBO>
+﻿
 @{
     ViewBag.Title = "ShowLookUpOption";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+    .ddlForm label {
+        min-width: 110px;
+        margin: 0;
+    }
 
+    .ddlForm {
+        display: flex;
+        align-items: center;
+    }
+    .notexist {
+        text-align: center;
+        padding: 15px 15px;
+        font-size: 20px;
+        text-transform: capitalize;
+        border: 1px dashed #ccc;
+        margin: 15px 0 0 0;
+        background: #f5f5f5;
+    }
+    select#ddlform {
+        border-color: transparent !important;
+        box-shadow: 0 0 0;
+        border: 1px solid #ccc !important;
+    }
+    #content #lookupList .one-columns {
+        padding: 5px 8px;
+        height: 38px;
+    }
+    section#content #LookUpbtn .btn-success.addNew-btn-success {
+        margin: 0;
+        line-height: normal;
+    }
+    .one-columns-tbl {
+        width: 100%;
+        padding: 5px;
+    }
+    .one-columns-tbl table{
+       margin:0
+    }
+        .one-columns-tbl table th, .one-columns-tbl table td {
+            padding: 8px 8px !important;
+        }
+            .one-columns-tbl table td a {
+                line-height: normal;
+            }
+        .one-columns-tbl .table td, .one-columns-tbl .table th {
+            vertical-align: middle
+        }
+    .form-row-first .one-columns-tbl .table th:first-child {
+        background-color: #f0f0f0 !important;
+    }
+    .form-row-first .one-columns-tbl .table tr:nth-child(odd) td {
+        background: #f9f9f9;
+    }
+    #lookupList .inner-main-content{
+        padding:0 !important;
+    }
+</style>
 
 <!-- Content start here -->
 <section id="content" class="responsive-container pt-0">
@@ -17,96 +74,34 @@
                     <div class="container-fluid p-0">
                         <div class="appointment">
                             <div class="paitent-detail-left">
+
                                 <div class="detail-heading d-flex">
                                     <h2>Look Up Field </h2>
-                                </div>
-                                <div class="SidebarScroll scroll inner-main-content">
-                                    @foreach (var t in Model.GroupBy(o => o.FormName))
-                                    {
-                                        <div class="form-row-first">
-                                            <div class="top-form-row d-flex">
-                                                <div class="one-columns">
-                                                    <label>@t.Key</label>
-                                                </div>
+                                    <div class="detail-button ml-auto">
+                                        <div class="form-horizontal ddlForm">
+                                            <label class="control-label">Select Form</label>
+                                            <select class="form-control" id="ddlform" onchange="GetLookupByForm()">
+                                                <option value="Housing">Housing</option>
+                                                <option value="Financial Security">Financial Security</option>
+                                                <option value="Employment Education">Employment Education</option>
+                                                <option value="Communication & Mobility">Communication & Mobility</option>
+                                                <option value="Healthcare">Healthcare</option>
+                                                <option value="Social Supports and Safety">Social Supports and Safety</option>
+                                                <option value="Legal Status">Legal Status</option>
+                                                <option value="Substance Use">Substance Use</option>
+                                                <option value="Mental Health">Mental Health</option>
+                                                <option value="Food Access">Food Access</option>
 
-                                            </div>
-
-
-                                            @foreach (var f in Model.Where(o => o.FormName == t.Key).GroupBy(o => o.FieldName).ToList())
-                                {
-                                                <div class="bootom-form-row d-flex">
-                                                    <div class="three-columns">
-
-                                                    </div>
-                                                </div>
-
-
-                                                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                                    <div class="form-row-first mt-0 mb-3" style="display: block;" id="LookUpbtn">
-                                                        <div class="top-form-row d-flex">
-                                                            <div class="one-columns">
-                                                                <label>@f.Key</label>
-
-
-                                                                @foreach (var p in Model.Where(o => o.FormName == t.Key && o.FieldName == f.Key))
-                                                    {
-                                                                    <button type="button" class="btn btn-success addNew-btn-success" style="float:right" onclick="AddNew(@p.LookUpFieldID)">
-                                                                        Add New
-                                                                    </button>
-                                                        break;
-                                                    }
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="bootom-form-row d-flex">
-                                                            <div class="one-columns">
-                                                                <table class="table table-bordered">
-                                                                    <tbody>
-                                                                        <tr class="table-active">
-
-                                                                            <th>
-                                                                                Option Name
-                                                                            </th>
-
-                                                                            <th>
-                                                                                Option Value
-                                                                            </th>
-
-                                                                            <th>Action</th>
-                                                                        </tr>
-                                                                        @foreach (var p in Model.Where(o => o.FormName == t.Key && o.FieldName == f.Key))
-                                                            {
-                                                                            <tr>
-                                                                                <td>
-                                                                                    @p.OptionName
-                                                                                </td>
-
-                                                                                <td>
-                                                                                    @p.OptionValue
-                                                                                </td>
-
-                                                                                <td>
-
-                                                                                    <a class="btn btn-success" href="#" onclick="EditLookUpField(@p.ID)">Edit</a>
-
-                                                                                    <a href="#" class="btn btn-danger" onclick="Remove(@p.ID)">Delete</a>
-                                                                                </td>
-                                                                            </tr>
-                                                            }
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-
-
-
-                                                    </div>
-                                                </div>
-                                }
+                                            </select>
                                         </div>
-
-                                    }
+                                    </div>
                                 </div>
+                               
+                                    <div  id="lookupList">
+
+
+
+                                    </div>
                             </div>
 
 
@@ -176,12 +171,29 @@
 @section scripts{
     <script>
         $(document).ready(function () {
-           
+            GetLookupByForm();
         });
 
 
 
         var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
+
+        function GetLookupByForm(){
+            $.ajax({
+                type: "GET",
+                url:'/Patient/GetLookUpOption?formname=' + $("#ddlform").val(),
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "Html",
+                success: function (result) {
+                    $("#lookupList").html("");
+                    $("#lookupList").html(result);
+
+                },
+                error: function () {
+
+                }
+            });
+        }
 
         //--Remove LookUpFieldOption-----
 

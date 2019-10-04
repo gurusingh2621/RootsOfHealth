@@ -1249,8 +1249,14 @@ namespace RootsOfHealth.Controllers
         }
 
 
-
+        [HttpGet]
         public ActionResult WebGridShowLookUpOption()
+        {
+
+            return View();
+        }
+        [HttpGet]
+        public ActionResult GetLookUpOption(string formname = "Housing")
         {
             List<LookUpOptionBO> lstlookoption = new List<LookUpOptionBO>();
 
@@ -1259,7 +1265,7 @@ namespace RootsOfHealth.Controllers
             {
                 client.BaseAddress = new Uri(WebApiKey);
                 //HTTP GET
-                var responseTask = client.GetAsync("/api/PatientMain/GetLookUpOption");
+                var responseTask = client.GetAsync("/api/PatientMain/GetLookUpOption?formname=" + formname);
 
 
                 responseTask.Wait();
@@ -1282,8 +1288,7 @@ namespace RootsOfHealth.Controllers
             }
 
 
-            return View(lstlookoption);
-
+            return PartialView("~/Views/Shared/Patient/_LookupOptionList.cshtml", lstlookoption);
         }
 
         //-----------------lookup code  start--------------------------//
