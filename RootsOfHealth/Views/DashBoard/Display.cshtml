@@ -4,6 +4,24 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <style>
+    .imagebox img {
+        max-width: 100%;
+        width: 100%;
+    }
+    ul#DashboardpatientList {
+        list-style-type: none;
+        padding: 0;
+    }
+        ul#DashboardpatientList li {
+            display: flex;
+            border-bottom: 1px solid #eee;
+            padding: 10px 15px;
+        }
+    .imagebox {
+        max-width: 50px;
+        flex: 0 0 50px;
+        margin-right: 10px;
+    }
     .count-item {
         background: #f5f5f5;
         padding: 15px;
@@ -73,7 +91,7 @@
     }
 
         .patientListbox .scroll {
-            padding: 15px;
+            padding: 0px;
         }
 
     .appointment.dashboard-main {
@@ -197,14 +215,28 @@
     .formduelist.expand .exp-p {
         display: none;
     }
+    .patientCount.expand .exp-m {
+        display: block;
+    }
 
+    .patientCount.expand .exp-p {
+        display: none;
+    }
+
+    .AgeGroupList.expand .exp-m {
+        display: block;
+    }
+
+    .AgeGroupList.expand .exp-p {
+        display: none;
+    }
     .DueListbox table.table th, .DueListbox table.table td {
         line-height: normal;
         font-size: 13px;
         border: 0;
     }
 
-    .DueListbox {
+    .DueListbox, .patientListbox, .AppointmentListbox {
         height: 280px;
     }
 
@@ -220,16 +252,18 @@
                 background: #f4fffd;
             }
 
-    .ConditionListbox {
+    .ConditionListbox, .patientCountListbox {
         padding: 15px;
         box-sizing: border-box;
     }
-
-    .show-more a {
-        color: #05a489;
-        font-size: 13px;
-        padding: 0;
+    .patientCountListbox, .AgeGroupListbox {
+        height: 300px;
     }
+        .show-more a {
+            color: #05a489;
+            font-size: 13px;
+            padding: 0;
+        }
     .patientListbox .recent-paitents-img {
         width: 65px !important;
         overflow: hidden;
@@ -249,46 +283,38 @@
 
 <section id="content" class="responsive-container pt-0">
     <div class="inner-content dashboardWrapper">
+      
         <div class="container-fluid pl-0 pr-0">
             <div class="appointment dashboard-main">
-                <div class="patient-Count">
+                <h2>DashBoard</h2>
+                <div class="patienList-wrapper">
                     <div class="row">
-                        <div class=" col-md-4">
-                            <div class="count-item">
-                                <div class="middle-item">
-                                    <div class="count-icon"><i class="fa fa-users"></i></div>
-                                    <div class="count-text">
-                                        <b class="totalpatientCount"></b>
-                                        <small>
-                                            Total Patient
-                                        </small>
-                                    </div>
+                        <div class="col-md-6">
+                            <div class="count-item patienList">
+                                <div class="patientHeading patientCount">
+                                    Patient Count
+                                    <span class="expandicon">
+                                        <i class="fa fa-minus exp-p" aria-hidden="true"></i>
+                                        <i class="fa fa-plus exp-m" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <div class="patientCountListbox">
+                                    <canvas id="patientCountChart" style="padding:5px;margin: auto;display: block; "></canvas>
                                 </div>
                             </div>
                         </div>
-                        <div class=" col-md-4">
-                            <div class="count-item">
-                                <div class="middle-item">
-                                    <div class="count-icon"><i class="fa fa-male"></i></div>
-                                    <div class="count-text">
-                                        <b class="malepatientCount"></b>
-                                        <small>
-                                            Male Patient
-                                        </small>
-                                    </div>
+                        <div class="col-md-6">
+                            <div class="count-item patienList">
+                                <div class="patientHeading AgeGroupList">
+                                    Age Group
+                                    <span class="expandicon">
+                                        <i class="fa fa-minus exp-p" aria-hidden="true"></i>
+                                        <i class="fa fa-plus exp-m" aria-hidden="true"></i>
+                                    </span>
                                 </div>
-                            </div>
-                        </div>
-                        <div class=" col-md-4">
-                            <div class="count-item">
-                                <div class="middle-item">
-                                    <div class="count-icon"><i class="fa fa-female"></i></div>
-                                    <div class="count-text">
-                                        <b class="femalepatientCount"></b>
-                                        <small>
-                                            Female Patient
-                                        </small>
-                                    </div>
+                                <div class="AgeGroupListbox">
+                                    <canvas id="agegroupChart" style="padding:5px;margin: auto;display: block; "></canvas>
+
                                 </div>
                             </div>
                         </div>
@@ -297,7 +323,7 @@
 
                 <div class="patienList-wrapper">
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-4">
                             <div class="count-item patienList">
                                 <div class="patientHeading patientLisHeading">
                                     Recent patient
@@ -307,14 +333,45 @@
                                     </span>
                                 </div>
                                 <div class="patientListbox">
+                                    <div class="scroll">
+                                        <ul id="DashboardpatientList"></ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="count-item patienList">
+                                <div class="patientHeading formduelist">
+                                    Recent  Form Due
+                                    <span class="expandicon">
+                                        <i class="fa fa-minus exp-p" aria-hidden="true"></i>
+                                        <i class="fa fa-plus exp-m" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <div class="DueListbox">
+                                    <div class="scroll">
+                                        <table class="table">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th>Patient</th>
+                                                    <th>Form</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="Duebody">
 
+                                                <tr></tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="count-item patienList">
                                 <div class="patientHeading AppointmentList">
-                                   Recent Appointment
+                                    Recent Appointment
                                     <span class="expandicon">
                                         <i class="fa fa-minus exp-p" aria-hidden="true"></i>
                                         <i class="fa fa-plus exp-m" aria-hidden="true"></i>
@@ -346,37 +403,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="count-item patienList">
-                                <div class="patientHeading formduelist">
-                                  Recent  Form Due
-                                    <span class="expandicon">
-                                        <i class="fa fa-minus exp-p" aria-hidden="true"></i>
-                                        <i class="fa fa-plus exp-m" aria-hidden="true"></i>
-                                    </span>
-                                </div>
-                                <div class="DueListbox">
-                                    <div class="scroll">
-                                        <table class="table">
-                                            <thead class="thead-light">
-                                                <tr>
-                                                   <th>Patient</th>
-                                                    <th>Form</th>
-                                                    <th>Status</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="Duebody">
-
-                                                <tr>
-                                                   
-                                                </tr>
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
 
@@ -397,36 +424,90 @@
           
             var clinicid ='@Session["ClinicID"]';
             PatientCount(clinicid);
-            RecentPatient();
+            RecentPatient(clinicid);
             RecentAppotment(clinicid);
             PatientStats(clinicid);
             PatientFormStatus(clinicid);
+            PatientAgeGroup(clinicid);
         });
         function PatientCount(id) {
+          
             $.ajax({
                 type: "GET",
-                url: Apipath + '/api/PatientMain/Getpatientcount',
+                url: Apipath + '/api/PatientMain/Getpatientcount?clinicid=' + id,
                 contentType: 'application/json; charset=UTF-8',
                 dataType: "json",
                 success: function (result) {
-                    $(".totalpatientCount").html(result.TotalPatient);
-                    $(".malepatientCount").html(result.MalePatient);
-                    $(".femalepatientCount").html(result.FemalePatient);
+                    var aDatasets1 = [result.TotalPatient, result.MalePatient, result.FemalePatient, result.TransMale, result.TransFemale, result.GenderQueer, result.Other];
+
+                    var dataT = {
+                        labels: ['Total', 'Male', 'Female', 'Trans male', 'Trans female', 'Gender Queer','Other'],
+                        datasets: [{
+                            label: "Patient Count",
+                            data: aDatasets1,
+                            fill: false,
+                            backgroundColor: ["rgb(60, 179, 113)", "rgb(30, 144, 255)", "rgb(238, 130, 238)", "rgb(211, 211, 211)", "rgb(255, 165, 0)", "rgb(106, 90, 205)", "rgb(255, 99, 71)"],
+                            borderColor: ["rgb(54, 162, 235)", "rgb(255, 99, 132)", "rgb(255, 159, 64)", "rgb(255, 205, 86)"],
+                            borderWidth: 0
+                        }]
+                    };
+                    var ctx = document.getElementById('patientCountChart').getContext('2d');
+                    var myBarChart = new Chart(ctx, {
+                        type: 'pie',
+                        data: dataT,
+                        options: {
+                            responsive: true,
+                            title: { display: false, text: 'CHART.JS DEMO CHART' },
+                            legend: { position: 'bottom' },
+                            scales: {
+                                xAxes: [{ gridLines: { display: false }, display: true, scaleLabel: { display: false, labelString: '' } }],
+                                yAxes: [{ gridLines: { display: false }, display: true, scaleLabel: { display: false, labelString: '' }, ticks: { stepSize: 50, beginAtZero: true } }]
+                            },
+                        }
+                    });
                 }
             });
         }
 
-        function RecentPatient() {
+        function RecentPatient(id) {
 
             $.ajax({
 
                 type: "Get",
-                url: '/DashBoard/GetRecentPatients',
-                dataType: "html",
+                url: Apipath + '/api/PatientMain/GetRecentPatients?clinicid=' + id,
+                dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (result) {
 
-                    $('.patientListbox').html(result);
+                    if (result.length) {
+                        $("#DashboardpatientList").html('');
+                        var tbl = '';
+                        for (var i = 0; i < result.length; i++) {
+                            if (result[i].EmailAddress == null) { result[i].EmailAddress = ''; }
+                            if (result[i].SocialSecurityNumber == null) { result[i].SocialSecurityNumber = ''; }
+
+
+                            tbl += '<li style="cursor: pointer;" onclick="bindTopPatient(' + result[i].PatientID + ')">'
+                            if (result[i].PatientImg == '' || result[i].PatientImg == null) {
+                                tbl += '<div class="imagebox"><img src="/images/avatar.png" alt=""> </div>'
+                            } else {
+                                tbl += '<div class="imagebox"><img src="/Files/' + result[i].PatientImg + '" alt=""> </div>'
+                            }
+                            tbl += '<div class="searchDeatails">'
+                            tbl += '<span>Name:' + result[i].FirstName + ' ' + result[i].MiddleName + ' ' + result[i].LastName + '</span >'
+
+                            tbl += '<span>Email: ' + result[i].EmailAddress + '</span >'
+                            tbl += '<span>SSN: ' + result[i].SocialSecurityNumber + '</span > </div> </li>'
+
+
+                        }
+                       
+                        $("#DashboardpatientList").html(tbl);
+
+
+
+
+                    }
                 },
                 error: function () {
                    
@@ -477,9 +558,7 @@
                 }
             });
         }
-
-
-
+       
         function bindTopPatient(id) {
 
             window.location = '/DashBoard/Index?patientid=' + id;
@@ -540,7 +619,7 @@
                 contentType: 'application/json; charset=UTF-8',
                 dataType: "json",
                 success: function (result) {
-                    debugger;
+                   
                     if (result.length) {
                         var tbl = '';
                         for (var i = 0; i < result.length; i++){
@@ -553,6 +632,51 @@
                         $(".Duebody").html('');
                         $(".Duebody").html(tbl);
                     }
+                }
+            });
+        }
+
+        function PatientAgeGroup(id) {
+
+            if (id == '' || id == null) {
+                return;
+            }
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/GeAgeGroupCount?clinicid=' + id,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var aDatasets1 = [result.Ltt, result.Lttone, result.Lttnine, result.Ltsfive, result.Gtsfive];
+
+                    var dataT = {
+                        labels: [' 0-12 ', ' 13-21 ', ' 22-39 ', ' 40-65 ', ' 65-100 '],
+                        datasets: [{
+                            label: "Age Group Count",
+                            data: aDatasets1,
+                            fill: false,
+                            backgroundColor: ["rgb(60, 179, 113)", "rgb(30, 144, 255)", "rgb(238, 130, 238)", "rgb(211, 211, 211)", "rgb(255, 165, 0)"],
+                            borderColor: ["rgb(54, 162, 235)", "rgb(255, 99, 132)", "rgb(255, 159, 64)", "rgb(255, 205, 86)"],
+                            borderWidth: 0
+                        }]
+                    };
+                    var ctx = document.getElementById('agegroupChart').getContext('2d');
+                    var myBarChart = new Chart(ctx, {
+                        type: 'horizontalBar',
+                        data: dataT,
+                        options: {
+                            responsive: true,
+                            title: { display: true, text: 'Age Group' },
+                            legend: { position: 'bottom' },
+                            scales: {
+                                xAxes: [{ gridLines: { display: false }, display: true, scaleLabel: { display: false, labelString: '' } }],
+                                yAxes: [{ gridLines: { display: false }, display: true, scaleLabel: { display: false, labelString: '' }, ticks: { stepSize: 50, beginAtZero: true } }]
+                            },
+                        }
+                    });
+                },
+                error: function (e) {
+                    toastr.error("Error while getting appotment data.");
                 }
             });
         }
@@ -617,7 +741,18 @@
         $('.formduelist').click(function () {
             $(this).toggleClass('expand');
         })
-
+        $('.patientCount').click(function () {
+            $('.patientCountListbox').slideToggle(700);
+        })
+        $('.patientCount').click(function () {
+            $(this).toggleClass('expand');
+        })
+        $('.AgeGroupList').click(function () {
+            $('.AgeGroupListbox').slideToggle(700);
+        })
+        $('.AgeGroupList').click(function () {
+            $(this).toggleClass('expand');
+        })
 
     </script>
 
