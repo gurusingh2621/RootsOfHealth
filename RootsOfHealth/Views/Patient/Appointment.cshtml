@@ -13,9 +13,11 @@
         border: 1px solid #22baa0;
         background: #22baa0;
     }
+
     input#autoPatientList {
         width: 393px;
     }
+
     ul#ui-id-1 {
         position: fixed;
         left: 90px !important;
@@ -30,18 +32,20 @@
         overflow-x: hidden;
         font-size: 13px;
     }
-    .ui-menu {
 
+    .ui-menu {
         position: absolute;
         z-index: 9999;
     }
-    .ui-menu .ui-menu-item-wrapper {
-        padding: 3px 15px 3px 15px;
-    }
-    
+
+        .ui-menu .ui-menu-item-wrapper {
+            padding: 3px 15px 3px 15px;
+        }
+
     .appointement-form select {
         width: 75.5% !important;
     }
+
     input#fltrautoPatientList {
         width: 100%;
     }
@@ -84,7 +88,7 @@
                     </button>
                 </div>
                 <div class="calendarBlock">
-                    <div id='calendar' class="scroll" style="padding-right:8px;height: 450px;"></div>
+                    <div id='calendar' class="scroll" style="padding-right:8px;height: 470px;"></div>
                 </div>
             </div>
         </div>
@@ -113,9 +117,15 @@
                     </div>
 
                     <div class="form-group d-flex align-items-center">
-                        <label for="inputPassword" class="m-0"> Time:</label>
-                        <input type="text" class="form-control timepicker" id="timepicker" placeholder="">
+                        <label for="inputPassword" class="m-0"> Start Time:</label>
+                        <input type="text" class="form-control timepicker _time_picker" id="timepicker" placeholder="">
                     </div>
+
+                    <div class="form-group d-flex align-items-center">
+                        <label for="inputPassword" class="m-0"> End Time:</label>
+                        <input type="text" class="form-control timepicker _time_picker" id="endtimepicker"  placeholder="">
+                    </div>
+
                     <div class="form-group d-flex align-items-center">
                         <label for="inputPassword">Select Patient</label>
                         <input id="autoPatientList" class="form-control" />
@@ -133,13 +143,11 @@
                     </div>
                     <div class="form-group d-flex align-items-center">
                         <label for="inputPassword">Type:</label>
-                        <select tabindex="13" id="ddlTypeOfAppointment"  class="form-control">
-                        </select>
+                        <select tabindex="13" id="ddlTypeOfAppointment" class="form-control"></select>
                     </div>
                     <div class="form-group d-flex align-items-center">
                         <label for="inputPassword">Location:</label>
-                        <select tabindex="13" id="ddlLocationOfAppointment"  class="form-control">
-                        </select>
+                        <select tabindex="13" id="ddlLocationOfAppointment" class="form-control"></select>
                     </div>
 
                         <div class="form-group mb-0 d-flex align-items-center">
@@ -176,8 +184,8 @@
             </div>
             <div class="modal-body">
                 <form id="formAppointment" class="appointement-form">
-                    
-                   
+
+
                     <div class="form-group d-flex align-items-center">
                         <label for="inputPassword">Select Patient</label>
                         <input id="fltrautoPatientList" class="form-control" />
@@ -231,16 +239,29 @@
             //    uiLibrary: 'materialdesign'
             //});
 
-            $('#timepicker').timeselector({
-                hours12: false
+            $('._time_picker').timeselector({
+                hours12: true
             })
-            
+
         });
 
-       
+
+
+        //document.getElementsByClassName('fc-month-button').on('click', function () {
+        //    alert();
+        //    //calendar.prev();
+        //});
+
+        //$(".fc-month-button").click(function () {
+        //    alert();
+        //})
+
+      
         // save new appointment
         function saveAppointment(appointmentInfo) {
+            debugger;
             var data = {};
+           
             if (typeof appointmentInfo == "undefined") {
                 data = {
                     PatientAppointmentID: $("#hdnAppointmentID").val(),
@@ -249,7 +270,8 @@
                     PatientID: $("#hdnPatientId").val(),
                     Notes: $("#txtNotes").val(),
                     TypeOfAppointment: $('#ddlTypeOfAppointment').val(),
-                    LocationOfAppointment: $('#ddlLocationOfAppointment').val()
+                    LocationOfAppointment: $('#ddlLocationOfAppointment').val(),
+                    AppointmentEndTime: $("#endtimepicker").val()
                 }
             }
             else {
@@ -268,7 +290,7 @@
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (result) {
-                   
+
                     getAllAppointments();
                     $('#exampleModal').modal('hide');
                     emptyModel();
@@ -280,17 +302,35 @@
                     }
                 },
                 error: function (err) {
-                   
+
                     toastr.error("Error while inserting data");
                 }
             });
         }
-        
+
+        function TwentyFourHourTime(time) {
+            var FinalTime = '';
+            var SplitedTime = time.split(' ');
+
+            if (SplitedTime[1] == 'PM') {
+                var hm = SplitedTime[0].split(':');
+                FinalTime =   hm[0] == "12" ? hm[0] + ":" + hm[1] : (parseInt(hm[0]) + 12).toString() + ":" + hm[1];
+            }
+            else if (SplitedTime[1] == 'AM') {
+                var hm = SplitedTime[0].split(':');
+                FinalTime = hm[0] == "12" ? "00:" + hm[1] : SplitedTime[0];        
+            }
+            else {
+                FinalTime = SplitedTime[0];
+            }
+            return FinalTime;
+        }
+
        // delete appointment
         function deleteAppointment()
 
         {
-            
+
            data = {
                PatientAppointmentID: parseInt($("#hdnAppointmentID").val()),
            }
@@ -306,7 +346,7 @@
                     closeModel();
                 },
                 error: function (err) {
-                 
+
                     toastr.error("Error while Deleting data");
                 }
             });
@@ -318,6 +358,7 @@
             $("#hdnAppointmentID").val(0);
             $("#datepicker").val("");
             $("#timepicker").val("");
+            $("#endtimepicker").val("");
             $("#example1").val("");
             $("#txtNotes").val("");
             $("#hdnPatientId").val("");
@@ -326,7 +367,6 @@
 
         // get all appointments from backend
         function getAllAppointments() {
-            debugger;
          //   var data = ;
             $.ajax({
                 type: "GET",
@@ -357,10 +397,11 @@
             $('#calendar').fullCalendar('removeEvents');
             for (var i = 0; i < data.length; i++) {
                 var splitDateTime = data[i].AppointmentDate.split("T");
-                var finalDateTime = splitDateTime[0] + "T" + data[i].AppointmentTime;
+                var finalDateTime = splitDateTime[0] + "T" + TwentyFourHourTime(data[i].AppointmentTime);
+                var finalEndDateTime = splitDateTime[0] + "T" + TwentyFourHourTime(data[i].AppointmentEndTime);
                 let obj = autoCompleteArray.find(o => o.id === data[i].PatientID);
                 var patientName = obj.label;
-                eventData.push({ title: data[i].Notes, id: data[i].PatientAppointmentID, start: finalDateTime, description: 'Patient :' + patientName });
+                eventData.push({ title: data[i].Notes, id: data[i].PatientAppointmentID, start: finalDateTime, end: finalEndDateTime, description: 'Patient :' + patientName });
                 $('#calendar').fullCalendar('removeEvents', data[i].PatientAppointmentID);
             }
             var date = new Date();
@@ -369,11 +410,12 @@
                 header: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'month,basicWeek,basicDay'
+                    right: 'month,agendaWeek,agendaDay'
                 },
                defaultDate: startDate,
                 editable: true,
                 defaultView: 'month',
+                allDaySlot: false,
                 eventLimit: true, // allow "more" link when too many events
                 eventRender: function (eventObj, $el) {
                     $el.popover({
@@ -384,7 +426,7 @@
                         container: 'body'
                     });
                 },
-                events: eventData,
+              events: eventData,
 
                 // event fire on click of any event
                 eventClick: function (info) {
@@ -421,6 +463,11 @@
 
             $('#calendar').fullCalendar('removeEventSource', eventData);
             $('#calendar').fullCalendar('addEventSource', eventData);
+
+            debugger;
+            var data = $('#calendar');
+
+
         }
 
 
@@ -500,6 +547,7 @@
                     var strDate = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear();
                     $("#datepicker").val(strDate);
                     $("#timepicker").val(result.AppointmentTime);
+                    $("#endtimepicker").val(result.AppointmentEndTime);
                     $("#txtNotes").val(result.Notes);
                     $("#ddlTypeOfAppointment").val(result.TypeOfAppointment == null ? 0 : result.TypeOfAppointment);
                     $("#ddlLocationOfAppointment").val(result.LocationOfAppointment == null ? 0 : result.LocationOfAppointment);
@@ -514,14 +562,14 @@
                 }
             });
         }
-       
-        
+
+
 
         //get all patient and bind autocomplete
         function autocomplete() {
-            
+
             $.ajax({
-                
+
                 type: "GET",
                 url: Apipath + '/api/PatientMain/GetAllPatient?clinicid=' +'@Session["ClinicID"]',
                 dataType: "json",
@@ -540,11 +588,11 @@
                         }
                         autoCompleteArray.push({ "label": label, "value": label, "id": result[i].PatientID })
                         $("#autoPatientList").autocomplete({
-                            
+
                             source: autoCompleteArray,
                             open: function () {
                                 $("ul.ui-menu").width($(this).innerWidth());
-                               
+
                             },
 
                             change: function (event, ui) {
@@ -553,7 +601,7 @@
                             }
                         });
                         $("#fltrautoPatientList").autocomplete({
-                           
+
                             source: autoCompleteArray,
                             open: function () {
                                 $("ul.ui-menu").width($(this).innerWidth());
