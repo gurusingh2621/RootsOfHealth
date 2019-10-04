@@ -353,6 +353,7 @@
     <Content Include="Views\Patient\_GetLocationOfAppointment.cshtml" />
     <Content Include="Views\Patient\NotesTemplateField.cshtml" />
     <Content Include="Views\DashBoard\Display.cshtml" />
+    <Content Include="Views\Shared\Patient\_LookupOptionList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
