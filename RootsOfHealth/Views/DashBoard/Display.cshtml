@@ -230,13 +230,20 @@
     .AgeGroupList.expand .exp-p {
         display: none;
     }
+    .programStats.expand .exp-m {
+        display: block;
+    }
+
+    .programStats.expand .exp-p {
+        display: none;
+    }
     .DueListbox table.table th, .DueListbox table.table td {
         line-height: normal;
         font-size: 13px;
         border: 0;
     }
 
-    .DueListbox, .patientListbox, .AppointmentListbox {
+    .DueListbox, .patientListbox, .AppointmentListbox, .ConditionListbox, .programListbox {
         height: 280px;
     }
 
@@ -398,12 +405,25 @@
                                         <i class="fa fa-plus exp-m" aria-hidden="true"></i>
                                     </span>
                                 </div>
-                                <div class="ConditionListbox" id="chartContainer">
+                                <div class="ConditionListbox">
                                     <canvas id="myChart" style="padding:5px;margin: auto;display: block; "></canvas>
                                 </div>
                             </div>
                         </div>
-                        
+                        <div class="col-md-6">
+                            <div class="count-item patienList">
+                                <div class="patientHeading programStats">
+                                    Program Count
+                                    <span class="expandicon">
+                                        <i class="fa fa-minus exp-p" aria-hidden="true"></i>
+                                        <i class="fa fa-plus exp-m" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <div class="programListbox" >
+                                    <canvas id="programChart" style="padding:5px;margin: auto;display: block; "></canvas>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -429,7 +449,46 @@
             PatientStats(clinicid);
             PatientFormStatus(clinicid);
             PatientAgeGroup(clinicid);
+            ProgramChart(clinicid);
         });
+
+        function ProgramChart(id) {
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/GetProgramCount?clinicid=' + id,
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                success: function (result) {
+                    var aDatasets1 = [result.ClinicCount, result.DreamCount, result.OUCount, result.PeraltaCollegeCount];
+
+                    var dataT = {
+                        labels: ['Clinic', 'Dream', 'OU', 'Peralta College'],
+                        datasets: [{
+                            label: "Patient Count",
+                            data: aDatasets1,
+                            fill: false,
+                            backgroundColor: ["rgb(60, 179, 113)", "rgb(30, 144, 255)", "rgb(238, 130, 238)", "rgb(211, 211, 211)"],
+                            borderColor: ["rgb(54, 162, 235)", "rgb(255, 99, 132)", "rgb(255, 159, 64)", "rgb(255, 205, 86)"],
+                            borderWidth: 0
+                        }]
+                    };
+                    var ctx = document.getElementById('programChart').getContext('2d');
+                    var myBarChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: dataT,
+                        options: {
+                            responsive: true,
+                            title: { display: false, text: '' },
+                            legend: { position: 'bottom' },
+                            scales: {
+                                xAxes: [{ gridLines: { display: false }, display: true, scaleLabel: { display: false, labelString: '' } }],
+                                yAxes: [{ gridLines: { display: false }, display: true, scaleLabel: { display: false, labelString: '' }, ticks: { stepSize: 50, beginAtZero: true } }]
+                            },
+                        }
+                    });
+                }
+            });
+        }
         function PatientCount(id) {
           
             $.ajax({
@@ -751,6 +810,12 @@
             $('.AgeGroupListbox').slideToggle(700);
         })
         $('.AgeGroupList').click(function () {
+            $(this).toggleClass('expand');
+        })
+        $('.programStats').click(function () {
+            $('.programListbox').slideToggle(700);
+        })
+        $('.programStats').click(function () {
             $(this).toggleClass('expand');
         })
 
