@@ -93,6 +93,34 @@
         max-width: 88%;
     }
     /*16-9-19 end*/
+
+    .ssn-icon {
+        position: relative
+    }
+
+    .ssn-icon-eye {
+        position: absolute;
+        top: 50%;
+        right: 5px;
+        transform: translateY(-50%);
+        font-size: 13px;
+    }
+
+        .ssn-icon-eye.showpwd i.close-eye {
+            display: block !important;
+        }
+
+        .ssn-icon-eye.showpwd i.open-eye {
+            display: none !important;
+        }
+
+        .ssn-icon-eye.showpwd {
+            display: block !important;
+        }
+
+        .ssn-icon-eye.showpwd {
+            display: none;
+        }
 </style>
 <div onscroll="abc()" class="tab-pane fade show active test" id="Profile" role="tabpanel" aria-labelledby="Profile-tab">
     <!-- Inner content start here  -->
@@ -331,14 +359,23 @@
                                     </div>
                                     <div class="bootom-form-row d-flex">
                                         <div class="two-columns">
+
                                             <label class="label-fields">@Model.DateOfBirth</label>
                                             <input tabindex="8" autocomplete="off" type="text" id="txtDOB" name="DateOfBirth" class="form-control date"
                                                    placeholder="" value="@Model.DateOfBirth" style="width:100px">
                                         </div>
                                         <div class="two-columns">
-                                            <label class="label-fields">@Model.SocialSecurityNumber</label>
-                                            <input tabindex="9" type="text" id="txtSocialSecNo" name="SocialSecurityNumber" class="form-control"
-                                                   placeholder="000-00-0000" value="@Model.SocialSecurityNumber">
+                                            <div class="ssn-icon">
+                                                <label class="label-fields">@Model.SocialSecurityNumber</label>
+
+                                                <input tabindex="9" type="password" id="txtSocialSecNo" name="SocialSecurityNumber" class="form-control"
+                                                       placeholder="000-00-0000" value="@Model.SocialSecurityNumber">
+                                                <div class="ssn-icon-eye">
+                                                    <i class="fa fa-eye open-eye" style="display:none" onclick="showSSn()"></i>
+                                                    <i class="fa fa-eye-slash close-eye" style="display:none" onclick="Hidessn()"></i>
+                                                </div>
+
+                                            </div>
 
                                         </div>
 
@@ -1835,7 +1872,15 @@
         if (scroll >= 20) sticky.addClass('fixed');
         else sticky.removeClass('fixed');
     });
-
+    $(".ssn-icon-eye").click(function () {
+        $(this).toggleClass("showpwd");
+    })
+    function showSSn() {
+        $("#txtSocialSecNo").attr("type", "text");
+    }
+    function Hidessn() {
+        $("#txtSocialSecNo").attr("type", "password");
+    }
 
 
 
