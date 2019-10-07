@@ -19,23 +19,26 @@
     }
 
     ul#ui-id-1 {
-        position: fixed;
-        left: 90px !important;
-        right: 0px;
-        top: 15%;
-        z-index: 9999999999999999;
-        max-width: 430px;
-        margin: auto;
-        text-align: left;
-        height: 200px;
-        overflow-y: scroll;
-        overflow-x: hidden;
-        font-size: 13px;
+        
+        z-index: 100001;
+        
+        
+    }
+    .d-flex {
+        position:relative
     }
 
     .ui-menu {
         position: absolute;
         z-index: 9999;
+    }
+    ul#ui-id-1 {
+        z-index: 100001;
+        width: 373px !important;
+        max-width: 373px !important;
+        right: -155px!important;
+        left: 0;
+       
     }
 
         .ui-menu .ui-menu-item-wrapper {
@@ -61,9 +64,28 @@
     }
     #autoPatientList {
         width: 100% !important;
+        position:relative
     }
     .modal-footer {
         float: right;
+    }
+
+
+
+    .fc-scroller::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .fc-scroller::-webkit-scrollbar-track {
+       background:transparent;;
+    }
+
+    .fc-scroller::-webkit-scrollbar-thumb {
+        background-color: #ccc;
+        outline: 1px solid slategrey;
+    }
+    div#calendar .fc-row.fc-widget-header {
+        border: 0;
     }
 </style>
 <!-- Content start here -->
@@ -309,6 +331,7 @@
         }
 
         function TwentyFourHourTime(time) {
+            debugger;
             var FinalTime = '';
             var SplitedTime = time.split(' ');
 
@@ -393,6 +416,7 @@
 
         // bind calendar events
         function bindCalendarEvents(data) {
+            debugger;
             var eventData = [];
             $('#calendar').fullCalendar('removeEvents');
             for (var i = 0; i < data.length; i++) {
@@ -455,7 +479,8 @@
                         AppointmentDate: strDate,
                         AppointmentTime: obj.AppointmentTime,
                         PatientID: obj.PatientID,
-                        Notes: obj.Notes
+                        Notes: obj.Notes,
+                        AppointmentEndTime: obj.AppointmentEndTime
                     }
                     saveAppointment(data);
                 }
@@ -469,6 +494,11 @@
 
 
         }
+
+        $("#calendar .fc-month-button").on("click", function () {
+            debugger;
+            alert(1);
+        });
 
 
         // close add edit appointment model
