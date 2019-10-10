@@ -75,9 +75,13 @@
 
                 }
             });
-            
+           
+        });
+        function OpenPatient(id) {
+             $('#tblPatient tbody').on('click', 'tr', function () {
+                window.location='/DashBoard/Index?patientid='+id;
             });
-
+        }
     </script>
 
 }

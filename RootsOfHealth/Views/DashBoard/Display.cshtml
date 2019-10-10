@@ -436,7 +436,7 @@
 @section scripts{
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
-
+    <script src="~/Scripts/chartjs-plugin-labels.min.js"></script>
     <script>
         var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
        
@@ -477,13 +477,45 @@
                         type: 'bar',
                         data: dataT,
                         options: {
-                            responsive: true,
-                            title: { display: false, text: '' },
-                            legend: { position: 'bottom' },
-                            scales: {
-                                xAxes: [{ gridLines: { display: false }, display: true, scaleLabel: { display: false, labelString: '' } }],
-                                yAxes: [{ gridLines: { display: false }, display: true, scaleLabel: { display: false, labelString: '' }, ticks: { stepSize: 50, beginAtZero: true } }]
+                            plugins: {
+                                labels: false
                             },
+                            "hover": {
+                                "animationDuration": 0
+                            },
+                            "animation": {
+                                "duration": 1,
+                                "onComplete": function () {
+                                    var chartInstance = this.chart,
+                                        ctx = chartInstance.ctx;
+
+                                    ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                                    ctx.textAlign = 'center';
+                                    ctx.textBaseline = 'bottom';
+                                    
+                                    this.data.datasets.forEach(function (dataset, i) {
+                                        var meta = chartInstance.controller.getDatasetMeta(i);
+                                        meta.data.forEach(function (bar, index) {
+                                            var data = dataset.data[index];
+                                            ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                                        });
+                                    });
+                                }
+                            },
+                            legend: {
+                                "display": false
+                            },
+                            tooltips: {
+                                "enabled": false
+                            },
+                            responsive: true,
+                            title: { display: true, text: 'Program Count', fontSize: 15 },
+                            scales: {
+                                xAxes: [{
+                                    gridLines: { display: false }, display: true, scaleLabel: { display: false, labelString: '' }, ticks: { fontSize: 15 }, barPercentage: 0.4 }],
+                                yAxes: [{ gridLines: { display: false }, display: true, scaleLabel: { display: false, labelString: '' }, ticks: { stepSize: 1, beginAtZero: true } }]
+                            },
+
                         }
                     });
                 }
@@ -515,13 +547,22 @@
                         type: 'pie',
                         data: dataT,
                         options: {
+                            plugins: {
+                                labels: {
+                                    render: 'value',
+                                }
+                            },
                             responsive: true,
                             title: { display: false, text: 'CHART.JS DEMO CHART' },
-                            legend: { position: 'bottom' },
-                            scales: {
-                                xAxes: [{ gridLines: { display: false }, display: true, scaleLabel: { display: false, labelString: '' } }],
-                                yAxes: [{ gridLines: { display: false }, display: true, scaleLabel: { display: false, labelString: '' }, ticks: { stepSize: 50, beginAtZero: true } }]
-                            },
+                            legend: {
+                                display: true,
+                                position: "bottom",
+                                labels: {
+                                    fontColor: "#333",
+                                    fontSize: 15
+                                }
+                            }
+                            
                         }
                     });
                 }
@@ -554,9 +595,8 @@
                             }
                             tbl += '<div class="searchDeatails">'
                             tbl += '<span>Name:' + result[i].FirstName + ' ' + result[i].MiddleName + ' ' + result[i].LastName + '</span >'
-
-                            tbl += '<span>Email: ' + result[i].EmailAddress + '</span >'
-                            tbl += '<span>SSN: ' + result[i].SocialSecurityNumber + '</span > </div> </li>'
+                            tbl += '<span>Phone No.: ' + result[i].HomePhone + '</span >'
+                            tbl += '<span>City: ' + result[i].City + '</span > </div> </li>'
 
 
                         }
@@ -650,13 +690,44 @@
                         type: 'bar',
                         data: dataT,
                         options: {
-                            responsive: true,
-                            title: { display: false, text: 'CHART.JS DEMO CHART' },
-                            legend: { position: 'bottom' },
-                            scales: {
-                                xAxes: [{ gridLines: { display: false }, display: true, scaleLabel: { display: false, labelString: '' } }],
-                                yAxes: [{ gridLines: { display: false }, display: true, scaleLabel: { display: false, labelString: '' }, ticks: { stepSize: 50, beginAtZero: true } }]
+                            plugins: {
+                                labels: false
                             },
+                            "hover": {
+                                "animationDuration": 0
+                            },
+                            "animation": {
+                                "duration": 1,
+                                "onComplete": function () {
+                                    var chartInstance = this.chart,
+                                        ctx = chartInstance.ctx;
+
+                                    ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                                    ctx.textAlign = 'center';
+                                    ctx.textBaseline = 'bottom';
+
+                                    this.data.datasets.forEach(function (dataset, i) {
+                                        var meta = chartInstance.controller.getDatasetMeta(i);
+                                        meta.data.forEach(function (bar, index) {
+                                            var data = dataset.data[index];
+                                            ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                                        });
+                                    });
+                                }
+                            },
+                            legend: {
+                                "display": false
+                            },
+                            tooltips: {
+                                "enabled": false
+                            },
+                            responsive: true,
+                            title: { display: true, text: 'Patient Condition', fontSize: 15 },
+                            scales: {
+                                xAxes: [{ gridLines: { display: false }, display: true, scaleLabel: { display: false, labelString: '' }, ticks: { fontSize: 15 }, barPercentage: 0.4 }],
+                                yAxes: [{ gridLines: { display: false }, display: true, scaleLabel: { display: false, labelString: '' }, ticks: { stepSize: 1, beginAtZero: true } }]
+                            },
+
                         }
                     });
 
@@ -706,12 +777,12 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
-                    var aDatasets1 = [result.Ltt, result.Lttone, result.Lttnine, result.Ltsfive, result.Gtsfive];
+                    var aDatasets1 = [result.Lttone, result.Lttfour, result.Ltffour, result.Ltsfour, result.Gtsfive];
 
                     var dataT = {
-                        labels: [' 0-12 ', ' 13-21 ', ' 22-39 ', ' 40-65 ', ' 65-100 '],
+                        labels: [' 13-21 ', ' 22-34 ', ' 35-54 ', ' 55-74 ', ' 75+ '],
                         datasets: [{
-                            label: "Age Group Count",
+                            label: "Age Group",
                             data: aDatasets1,
                             fill: false,
                             backgroundColor: ["rgb(60, 179, 113)", "rgb(30, 144, 255)", "rgb(238, 130, 238)", "rgb(211, 211, 211)", "rgb(255, 165, 0)"],
@@ -722,16 +793,51 @@
                     var ctx = document.getElementById('agegroupChart').getContext('2d');
                     var myBarChart = new Chart(ctx, {
                         type: 'horizontalBar',
+                       
                         data: dataT,
                         options: {
-                            responsive: true,
-                            title: { display: true, text: 'Age Group' },
-                            legend: { position: 'bottom' },
-                            scales: {
-                                xAxes: [{ gridLines: { display: false }, display: true, scaleLabel: { display: false, labelString: '' } }],
-                                yAxes: [{ gridLines: { display: false }, display: true, scaleLabel: { display: false, labelString: '' }, ticks: { stepSize: 50, beginAtZero: true } }]
+                            plugins: {
+                                labels: false
                             },
+                            "hover": {
+                                "animationDuration": 0
+                            },
+                            "animation": {
+                                "duration": 1,
+                                "onComplete": function () {
+                                    var chartInstance = this.chart,
+                                        ctx = chartInstance.ctx;
+
+                                    ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                                    ctx.textAlign = 'center';
+                                    ctx.textBaseline = 'bottom';
+
+                                    this.data.datasets.forEach(function (dataset, i) {
+                                        var meta = chartInstance.controller.getDatasetMeta(i);
+                                        meta.data.forEach(function (bar, index) {
+                                            var data = dataset.data[index];
+                                            ctx.fillText(data, bar._model.x + 5, bar._model.y + 5);
+                                        });
+                                    });
+                                }
+                            },
+                            legend: {
+                                "display": false
+                            },
+                            tooltips: {
+                                "enabled": false
+                            },
+                            responsive: true,
+                            title: { display: true, text: 'Age Group', fontSize: 15 },
+                            legend: { position: 'none' },
+                            scales: {
+                                xAxes: [{ gridLines: { display: false }, display: true, scaleLabel: { display: false, labelString: '' }, ticks: { fontSize: 15 }, barPercentage: 0.4 }],
+                                yAxes: [{ gridLines: { display: false }, display: true, scaleLabel: { display: false, labelString: '' }, ticks: { stepSize: 1, beginAtZero: true } }]
+                            },
+                           
                         }
+                       
+
                     });
                 },
                 error: function (e) {

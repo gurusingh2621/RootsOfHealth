@@ -59,7 +59,7 @@
             @foreach (var p in Model)
             {
 
-                <tr>
+                <tr onclick="OpenPatient('@p.PatientID')">
                     <td style="width:100px" height="100px">
                         <div class="tableimg">
                             @if (string.IsNullOrWhiteSpace(p.PatientImg))
