@@ -357,7 +357,7 @@
                                 </div>
                                 <div class="DueListbox">
                                     <div class="scroll">
-                                        <table class="table">
+                                        <table class="table frmtbl">
                                             <thead class="thead-light">
                                                 <tr>
                                                     <th>Patient</th>
@@ -754,7 +754,7 @@
                         var tbl = '';
                         for (var i = 0; i < result.length; i++){
                             tbl += '<tr>';
-                            tbl += '<td><a href="#" onclick="bindTopPatient(' + result[i].PatientID + ')">' + result[i].PatientName + '</a></td>';
+                            tbl += '<td><a href="#"  onclick="bindTopPatient(' + result[i].PatientID + ')">' + result[i].PatientName + '</a></td>';
                             tbl += '<td>' + result[i].FormName + '</td>';
                             tbl += '<td>' + result[i].FormStatus + '</td>';
                             tbl+='</tr>'
