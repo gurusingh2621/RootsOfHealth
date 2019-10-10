@@ -239,6 +239,7 @@
             integrity="sha256-55Jz3pBCF8z9jBO1qQ7cIf0L+neuPTD1u7Ytzrp2dqo="
             crossorigin="anonymous"></script>
     <script src="~/Content/script/jquery.timeselector.js"></script>
+
     <script>
 
         var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]'
@@ -462,8 +463,13 @@
                  // event fire on day click
                 dayClick: function (date, allDay, jsEvent, view) {
                     var date = new Date(date);
-                    var strDate = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear();
+                    var tzDifference = date.getTimezoneOffset();
+                    var offset = new Date(date.getTime() + tzDifference * 60 * 1000);
+                    var strDate = (offset.getMonth() + 1) + "/" + offset.getDate() + "/" + offset.getFullYear();
+                    var time = offset.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+                    
                     $("#datepicker").val(strDate);
+                    $("#timepicker").val(time);
                     $("#DeleteAppointment").hide();
                     $('#exampleModal').modal('show');
                 },
