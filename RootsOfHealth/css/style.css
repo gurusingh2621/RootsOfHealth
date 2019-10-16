@@ -3076,7 +3076,7 @@ button.addnotebtn {
 }
 #content .inner-content .paitent-detail-left{
     /*height:450px;*/
-    height: 490px;
+  
 }
 .inner-main-content{
     height: 420px;
@@ -3114,6 +3114,7 @@ button.addnotebtn {
 /*10-6-19 start*/
 table.frmtbl tbody tr td:nth-child(2), .table tbody tr td:nth-child(3) {
     max-width: 20px;
+    word-break: break-word;
 }
 
 table.frmtbl tbody tr td {
@@ -3478,7 +3479,7 @@ table.frmtbl tbody tr td {
 
 
 .scroll::-webkit-scrollbar {
-    width: 5px;
+    width: 8px !important;
 }
 
 .scroll::-webkit-scrollbar-track {
@@ -3687,3 +3688,25 @@ h2.lfttext {
     margin-left: 0px !important;
 }
 /*10-4-19 end*/
+
+.ssn-label-inner {
+    display: flex;
+}
+.ssn-icon-label {
+    margin-left: 10px;
+    font-size: 14px;
+}
+.lbl-hide{display:none}
+.ssn-icon-label.showlbl .open-eye {
+    display: block !important;
+}
+.ssn-icon-label.showlbl .close-eye {
+    display: none !important;
+}
+
+.set-eye-pos .ssn-icon-label .fa {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    transition: 0.5s all;
+}

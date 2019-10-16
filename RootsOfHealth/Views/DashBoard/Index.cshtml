@@ -216,8 +216,8 @@
         //    $(".scroll-height").toggleClass("showHideappotment");
         //});
 
-        $(document).ready(function () {
-
+    $(document).ready(function () {
+       
             $(".loaderOverlay").css("display","flex");
             var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]'
 
@@ -438,7 +438,11 @@
                 success: function (result) {
 
                     $('#myTabContent').html(result);
-
+                    var y = $(window).height();
+                    y = y - parseInt(170);
+                  
+                    $(".paitent-detail-left").css('height', y);
+                    $(".inner-main-content").css('height', y-80);
                 },
                 error: function () {
                     toastr.error("Some error occurred!! or data not found");

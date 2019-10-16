@@ -187,7 +187,11 @@
                 success: function (result) {
                     $("#lookupList").html("");
                     $("#lookupList").html(result);
+                    var y = $(window).height();
+                    y = y - parseInt(170);
 
+                    $(".paitent-detail-left").css('height', y);
+                    $("#lookupList").css('height', y - 80);
                 },
                 error: function () {
 

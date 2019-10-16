@@ -128,7 +128,11 @@
     var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
 
     $(document).ready(function () {
+        var y = $(window).height();
+        y = y - parseInt(170);
 
+        $(".paitent-detail-left").css('height', y);
+        $(".inner-main-content").css('height', y - 80);
     });
 
     //----- get Form Scheduling  detail by  id
