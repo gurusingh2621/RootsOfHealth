@@ -194,7 +194,7 @@
 
 @section scripts {
 
-    <script>
+<script>
         $('#menu-toggle').click(function () {
             $(this).toggleClass('open');
             if ($("#menu-toggle").hasClass("open")) {
@@ -324,7 +324,12 @@
 
         $(document).ready(function () {
             $(".open-eye").css("display", "block");
+            $(".ssn-label").css("display", "none");
+         var y = $(window).height();
+                    y = y - parseInt(170);
 
+                    $(".paitent-detail-left").css('height', y);
+                    $(".inner-main-content").css('height', y-80);
             //------notification changes start here
              @if (Model.ScheduleDate.IsHousingDue=="Red")
         {
@@ -663,7 +668,7 @@
 
         }
 
-       
+
         var DastN = "";
         var AuditN = "";
         DastN = $("#DastNot").attr('title');
@@ -2614,7 +2619,7 @@
         //    $('#LegalStatus').find('#customFile').val("");
         //});
 
-        
+
         $('.selectboxmultiple').selectpicker();
 
 
@@ -3528,7 +3533,7 @@
 
                     toastr.success("Record saved successfully");
                      $("#Housing-tab").find('span').css('display', 'inline');
-                     
+
                 },
                 error: function () {
                     $(".loaderOverlay").hide();
@@ -4122,13 +4127,13 @@
                 $("#aclinic").find('span').css('display', 'inline');
                 $("#Programs-tab").find('span').css('display', 'inline');
 
-                
+
             },
             error: function () {
                 $(".loaderOverlay").hide();
                 toastr.error("Error while inserting data");
 
-               
+
             }
         });
 
@@ -4161,13 +4166,13 @@
                 $("#adream").find('span').css('display', 'inline');
                 $("#Programs-tab").find('span').css('display', 'inline');
 
-                
+
             },
             error: function () {
                 $(".loaderOverlay").hide();
                 toastr.error("Error while inserting data");
 
-                
+
             }
         });
 
@@ -4256,13 +4261,13 @@
                 $("#aou").find('span').css('display', 'inline');
                 $("#Programs-tab").find('span').css('display', 'inline');
 
-                
+
             },
             error: function () {
                 $(".loaderOverlay").hide();
                 toastr.error("Error while inserting data");
 
-                
+
             }
         });
 
@@ -4292,13 +4297,13 @@
                     $("#aPeraltaColleges").find('span').css('display', 'inline');
                     $("#Programs-tab").find('span').css('display', 'inline');
 
-                    
+
                 },
                 error: function () {
                     $(".loaderOverlay").hide();
                     toastr.error("Error while inserting data");
 
-                    
+
                 }
             });
 
@@ -4349,7 +4354,7 @@
 
 
 
-    </script>
+</script>
 
     <script>
 

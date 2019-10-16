@@ -125,7 +125,7 @@
 <div onscroll="abc()" class="tab-pane fade show active test" id="Profile" role="tabpanel" aria-labelledby="Profile-tab">
     <!-- Inner content start here  -->
     <div class="inner-content">
-        <div class="paitent-detail" style="height: 460px;">
+        <div class="paitent-detail" /*style="height: 460px;"*/>
             <div class="row">
                 <div id="pat_out_div" class="col-lg-12 col-md-12 col-sm-12 col-12">
                     @*<div class="col-lg-8 col-md-12 col-sm-12 col-12 pr-0">*@
@@ -366,8 +366,17 @@
                                         </div>
                                         <div class="two-columns">
                                             <div class="ssn-icon">
-                                                <label class="label-fields">@Model.SocialSecurityNumber</label>
-
+                                                <div class="ssn-label">
+                                                    <div class="ssn-label-inner set-eye-pos">
+                                                        <label class="label-fields lbl-hide">@Model.SocialSecurityNumber</label>
+                                                        <div class="stardiv">*********</div>
+                                                        <div class="ssn-icon-label">
+                                                            <i class="fa fa-eye open-eye" style="display:none" onclick="Hidessnlabel()"></i>
+                                                            <i class="fa fa-eye-slash close-eye" onclick="showSSnlabel()"></i>
+                                                        </div>
+                                                    </div>
+                                                  
+                                                </div>
                                                 <input tabindex="9" type="password" id="txtSocialSecNo" name="SocialSecurityNumber" class="form-control"
                                                        placeholder="000-00-0000" value="@Model.SocialSecurityNumber">
                                                 <div class="ssn-icon-eye">
@@ -1874,14 +1883,27 @@
     });
     $(".ssn-icon-eye").click(function () {
         $(this).toggleClass("showpwd");
-    })
+    });
+
+   
+    $(".ssn-icon-label").click(function () {
+        $(this).toggleClass("showlbl");
+    });
     function showSSn() {
         $("#txtSocialSecNo").attr("type", "text");
     }
     function Hidessn() {
         $("#txtSocialSecNo").attr("type", "password");
     }
+    function showSSnlabel() {
+        $(".stardiv").hide();
+        $(".lbl-hide").show();
+    }
 
+    function Hidessnlabel() {
+        $(".stardiv").show();
+        $(".lbl-hide").hide();
+    }
 
 
 
