@@ -4,7 +4,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <style>
-    
+    #content .inner-content{
+        margin-top:0px !important;
+    }
     #content .inner-content .top-image-row .paitent-img {
         max-width: 60%;
     }
@@ -72,33 +74,42 @@
         height: auto !important;
         overflow: hidden !important;
     }
+    .appointment {
+        height: calc(100vh - 130px);
+    }
+    .SidebarScroll.scroll.inner-main-content {
+        height: calc(100vh - 215px);
+    }
+
 </style>
 <section id="content" class="responsive-container">
-    <div class="profile-tabs">
-        <div class="tabs-scroll">
-            <ul class="nav nav-tabs usrtbs" id="myTab" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" id="UserProfile-tab" data-toggle="tab" href="#UserProfile" role="tab"
-                       aria-controls="UserProfile" aria-selected="true">Profile</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link"  id="ChnagePWD-tab" data-toggle="tab" href="#ChnagePWD" role="tab"
-                       aria-controls="ChnagePWD" aria-selected="false">Change Password</a>
-                </li>
-               
-                
-            </ul>
-        </div>
-        <div class="tab-content" id="myTabContent">
-            @{
-                Html.RenderPartial("~/Views/Shared/Account/_UserDetail.cshtml", Model);
-            }
+    <div class="inner-content">
+        <div class="profile-tabs">
+            <div class="tabs-scroll">
+                <ul class="nav nav-tabs usrtbs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="UserProfile-tab" data-toggle="tab" href="#UserProfile" role="tab"
+                           aria-controls="UserProfile" aria-selected="true">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="ChnagePWD-tab" data-toggle="tab" href="#ChnagePWD" role="tab"
+                           aria-controls="ChnagePWD" aria-selected="false">Change Password</a>
+                    </li>
 
-            @{
-              Html.RenderPartial("~/Views/Shared/Account/_ChangePassword.cshtml", Model);
-            }
+
+                </ul>
+            </div>
+            <div class="tab-content" id="myTabContent">
+                @{
+                    Html.RenderPartial("~/Views/Shared/Account/_UserDetail.cshtml", Model);
+                }
+
+                @{
+                    Html.RenderPartial("~/Views/Shared/Account/_ChangePassword.cshtml", Model);
+                }
             </div>
         </div>
+    </div>
     </section>
 
 @section scripts{

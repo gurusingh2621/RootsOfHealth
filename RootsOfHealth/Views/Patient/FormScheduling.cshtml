@@ -5,7 +5,13 @@
 }
 
 @*<h2>FormScheduling</h2>*@
-
+<style>
+    .SidebarScroll.scroll.inner-main-content.overite-prorperty {
+        height: calc(100vh - 202px) !important;
+    }
+    #content .inner-content .paitent-detail-left {padding:0;
+    }
+</style>
 <!-- Form scheduling Tab Start here  -->
 
 <section id="content" class="responsive-container p-0">
@@ -126,14 +132,6 @@
 <script>
 
     var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
-
-    $(document).ready(function () {
-        var y = $(window).height();
-        y = y - parseInt(170);
-
-        $(".paitent-detail-left").css('height', y);
-        $(".inner-main-content").css('height', y - 80);
-    });
 
     //----- get Form Scheduling  detail by  id
     function EditFormScheduling(id) {

@@ -87,6 +87,9 @@
     div#calendar .fc-row.fc-widget-header {
         border: 0;
     }
+    div#calendar {
+        height: calc(100vh - 190px) !important;
+    }
 </style>
 <!-- Content start here -->
 <section id="content" class="responsive-container pt-0">
@@ -334,7 +337,7 @@
         function TwentyFourHourTime(time) {
             debugger;
             var FinalTime = '';
-            var SplitedTime = time.split(' ');
+            var SplitedTime = time == null?'': time.split(' ');
 
             if (SplitedTime[1] == 'PM') {
                 var hm = SplitedTime[0].split(':');

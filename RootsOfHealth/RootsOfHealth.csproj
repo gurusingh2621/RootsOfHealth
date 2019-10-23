@@ -230,6 +230,7 @@
     <Content Include="images\calender-icon.png" />
     <Content Include="images\chevron-arrow-down.svg" />
     <Content Include="images\heading-border.png" />
+    <Content Include="images\loader.gif" />
     <Content Include="images\logo-dark.png" />
     <Content Include="images\logo.png" />
     <Content Include="images\lookuptable.png" />

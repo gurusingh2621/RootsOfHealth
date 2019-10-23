@@ -95,7 +95,7 @@
         }
 
     .appointment.dashboard-main {
-        height: 560px;
+        /*height: 560px;*/
         overflow-y: scroll;
     }
 
@@ -320,6 +320,7 @@
                                     </span>
                                 </div>
                                 <div class="AgeGroupListbox">
+                                    
                                     <canvas id="agegroupChart" style="padding:5px;margin: auto;display: block; "></canvas>
 
                                 </div>
@@ -341,6 +342,7 @@
                                 </div>
                                 <div class="patientListbox">
                                     <div class="scroll">
+                                       
                                         <ul id="DashboardpatientList"></ul>
                                     </div>
                                 </div>
@@ -357,6 +359,7 @@
                                 </div>
                                 <div class="DueListbox">
                                     <div class="scroll">
+                                        
                                         <table class="table frmtbl">
                                             <thead class="thead-light">
                                                 <tr>
@@ -385,7 +388,7 @@
                                     </span>
                                 </div>
                                 <div class="AppointmentListbox">
-
+                                    
 
                                 </div>
                             </div>
@@ -406,6 +409,7 @@
                                     </span>
                                 </div>
                                 <div class="ConditionListbox">
+                                   
                                     <canvas id="myChart" style="padding:5px;margin: auto;display: block; "></canvas>
                                 </div>
                             </div>
@@ -419,7 +423,8 @@
                                         <i class="fa fa-plus exp-m" aria-hidden="true"></i>
                                     </span>
                                 </div>
-                                <div class="programListbox" >
+                                <div class="programListbox">
+                                   
                                     <canvas id="programChart" style="padding:5px;margin: auto;display: block; "></canvas>
                                 </div>
                             </div>
@@ -441,6 +446,7 @@
         var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
        
         $(function () {
+           
           
             var clinicid ='@Session["ClinicID"]';
             PatientCount(clinicid);
@@ -453,6 +459,7 @@
         });
 
         function ProgramChart(id) {
+           
             $.ajax({
                 type: "GET",
                 url: Apipath + '/api/PatientMain/GetProgramCount?clinicid=' + id,
@@ -522,11 +529,12 @@
 
                         }
                     });
+                   
                 }
             });
         }
         function PatientCount(id) {
-          
+           
             $.ajax({
                 type: "GET",
                 url: Apipath + '/api/PatientMain/Getpatientcount?clinicid=' + id,
@@ -569,12 +577,13 @@
                             
                         }
                     });
+                    
                 }
             });
         }
 
         function RecentPatient(id) {
-
+           
             $.ajax({
 
                 type: "Get",
@@ -611,6 +620,7 @@
 
 
                     }
+                   
                 },
                 error: function () {
                    
@@ -623,6 +633,7 @@
             if (id == '' || id == null) {
                 return;
             }
+           
             $.ajax({
                 type: "GET",
                 url: Apipath + '/api/PatientMain/GetRecentAppotmentDashboard?clinicid='+id,
@@ -670,6 +681,7 @@
             if (id == '' || id == null) {
                 return;
             }
+            
             $.ajax({
                 type: "GET",
                 url: Apipath + '/api/PatientMain/GetAllPatientStatusDashboard?clinicid='+id,
@@ -740,7 +752,7 @@
                         }
                     });
 
-
+                    
                 },
 
                 error: function (e) {
@@ -752,6 +764,7 @@
             if (id == '' || id == null) {
                 return;
             }
+           
             $.ajax({
                 type: "GET",
                 url: Apipath + '/api/PatientMain/GetAllPatientFormSatusDashboard?clinicid='+id,
@@ -771,6 +784,7 @@
                         $(".Duebody").html('');
                         $(".Duebody").html(tbl);
                     }
+                   
                 }
             });
         }
@@ -780,6 +794,7 @@
             if (id == '' || id == null) {
                 return;
             }
+            
             $.ajax({
                 type: "GET",
                 url: Apipath + '/api/PatientMain/GeAgeGroupCount?clinicid=' + id,
@@ -855,6 +870,7 @@
                        
 
                     });
+                   
                 },
                 error: function (e) {
                     toastr.error("Error while getting appotment data.");
