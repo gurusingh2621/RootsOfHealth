@@ -204,8 +204,16 @@
 
                         
                     }
-                   
-                    $(".tblField").dataTable();
+                    
+
+                        $(".tblField").dataTable({
+                            scrollY: 'calc(100vh - 375px)',
+                            scrollCollapse: true,
+                            paging: false,
+                            retrieve: true,
+                            searching: false
+                        });
+                    
                     $("#fields").sortable({
                         items: "tr",
                         cursor: 'move',

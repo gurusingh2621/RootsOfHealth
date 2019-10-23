@@ -428,7 +428,7 @@
                         $("#roleListID").html('');
                         $("#roleListID").html(result);
                         $("#tblRole").dataTable({
-                            scrollY: '50vh',
+                            scrollY: 'calc(100vh - 320px)',
                             scrollCollapse: true,
                         });
                     
@@ -438,7 +438,7 @@
           
             $(function () {
                 $("#tblRole").dataTable({
-                    scrollY: '50vh',
+                    scrollY: 'calc(100vh - 320px)',
                     scrollCollapse: true,
                 });
                 $("#patient_tgl").click(function () {

@@ -27,6 +27,12 @@ body {
   height: 30px;
   background-color: rgba(0, 0, 0, 0.15);
 }
+
+
+
+
+
+
 #content .profile-tabs .nav-tabs {
     height: 100%;
     width: 100%;
@@ -36,18 +42,20 @@ body {
     overflow-x: hidden;
 }
 
+
+
     #content .profile-tabs .nav-tabs::-webkit-scrollbar {
         width: 100%;
-        height: 12px;
+        height: 8px;
     }
 
     #content .profile-tabs .nav-tabs::-webkit-scrollbar-track-piece {
-        background-color: #d7d7d7;
+        background-color: transparent;
     }
 
     #content .profile-tabs .nav-tabs::-webkit-scrollbar-thumb:horizontal {
         height: 30px;
-        background-color: rgba(0, 0, 0, 0.15);
+        background-color: #ccc;
     }
 
 
@@ -1564,8 +1572,9 @@ a.dropdown-item.selected span.bs-ok-default.check-mark {
 
 /* Appointement Page start here */
 .appointment {
-  background: #fff;
-  padding: 30px;
+    background: #fff;
+    padding: 30px;
+    height: calc(100vh - 100px);
 }
 
 .appointment .fc-today-button {
@@ -3483,7 +3492,7 @@ table.frmtbl tbody tr td {
 }
 
 .scroll::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: ;
 }
 
 .scroll::-webkit-scrollbar-thumb {
@@ -3493,6 +3502,21 @@ table.frmtbl tbody tr td {
     scrollbar-color: #f1f1f1 transparent;
     scrollbar-width: thin
 }
+
+
+
+
+
+.sidebar-menu.scroll::-webkit-scrollbar-thumb {
+    background: #beceec;
+}
+
+
+.sidebar-menu.scroll::-webkit-scrollbar-track-piece {
+    background-color: transparent;
+}
+
+
 
 .height-460px {
     padding-right: 7px;
@@ -3508,7 +3532,8 @@ table.frmtbl tbody tr td {
     background: transparent;
 }
 table.dataTable.no-footer {
-    border:0
+    border:0;
+    border-collapse:collapse;
 }
 .dataTables_scrollHead {
     background: #5d5d5d !important;
@@ -3563,7 +3588,7 @@ p.createbtn a {
     width: 100%;
 }
 .editscrollheight {
-    height: 406px;
+    height: calc(100vh - 215px);
     padding-right: 8px;
 }
 p.createbtn input {
@@ -3661,7 +3686,7 @@ h2.lfttext {
     flex-wrap: nowrap;
     position: fixed;
     /* max-width: 5000px; */
-    overflow-x: scroll;
+    overflow-x: hidden;
     overflow-y: hidden;
     /* flex: 0 0 5000px; */
     top: 60px;
@@ -3671,13 +3696,17 @@ h2.lfttext {
     padding-top: 10px;
     right: 0;
     left: 0;
-    width: calc(100% - 50px);
-    margin-left: 50px;
+    width: calc(100% - 55px);
+    margin-left: 56px;
     transition: all 0.5s;
 }
+    #content .profile-tabs .nav-tabs:hover {
+        overflow-x: scroll;
+        mouse-wheel: horizontal;
+    }
 #content.responsive-container .profile-tabs .nav-tabs {
     width: calc(100% - 163px);
-    margin-left: 164px;
+    margin-left: 169px;
 }
 
 /*10-1-19 end*/
@@ -3709,4 +3738,35 @@ h2.lfttext {
     right: 0px;
     top: 0px;
     transition: 0.5s all;
+}
+#tblPatient tr {
+    cursor: pointer;
+}
+.dataTables_filter input {
+    border: 1px solid #ccc;
+    background: #f5f5f5;
+    padding: 5px;
+    font-size: 14px;
+}
+.dataTables_length select {
+    background: #f5f5f5;
+    padding: 5px;
+    font-size: 14px;
+}
+
+#content .inner-content{float:left; width:100%}
+.btn {
+    line-height: normal;
+    font-size: 13px !important;
+}
+
+.loader_gif {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url('/images/loader.gif') 50% 50% no-repeat rgb(249,249,249,0.44);
+    opacity: .8;
 }

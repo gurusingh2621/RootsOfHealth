@@ -3,17 +3,24 @@
     ViewBag.Title = "GetPotientialPatient";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<style>
+    
+    .appointment {
+        padding: 20px;
+        height: calc(100vh - 100px);
+    }
+    #content{padding:0;}
+</style>
 <section id="content" class="responsive-container">
-    <div class="inner-content">
+    <div class="inner-content mt-0">
         <div class="container-fluid pl-0 pr-0">
             <div class="appointment">
               
                 
                 <table id="tblPotientialPatient" class="display table table-hover table-striped table-bordered">
                     
-                        <thead class="thead-light">
-                            <tr>
+                        <thead>
+                            <tr class="table-active">
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Phone</th>
@@ -51,7 +58,10 @@
     <script>
         $(document).ready(function () {
           
-            var table = $("#tblPotientialPatient").dataTable();
+            var table = $("#tblPotientialPatient").dataTable({
+                scrollY: 'calc(100vh - 264px)',
+                scrollCollapse: true,
+            });
             //$('#tblPotientialPatient tbody').on('click', 'button', function () {
             //    var data = table.api().row($(this).parents('tr')).data();
             //    console.log(data);

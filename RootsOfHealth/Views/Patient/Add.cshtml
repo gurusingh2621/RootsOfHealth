@@ -30,7 +30,14 @@
     .showHidecontent {
         padding-top: 0px !important;
     }
+    .inner-main-content {
+        height: calc(100vh - 240px);
+    }
 
+    .paitent-detail-left {
+        height: calc(100vh - 160px);
+        overflow: hidden;
+    }
     /*.row {
         margin-right: 0px;
     }*/
@@ -325,11 +332,7 @@
         $(document).ready(function () {
             $(".open-eye").css("display", "block");
             $(".ssn-label").css("display", "none");
-         var y = $(window).height();
-                    y = y - parseInt(170);
-
-                    $(".paitent-detail-left").css('height', y);
-                    $(".inner-main-content").css('height', y-80);
+        
             //------notification changes start here
              @if (Model.ScheduleDate.IsHousingDue=="Red")
         {

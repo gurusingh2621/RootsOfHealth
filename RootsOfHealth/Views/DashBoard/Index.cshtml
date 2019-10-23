@@ -32,6 +32,16 @@
     /*.row {
         margin-right: 0px;
     }*/
+    /*.inner-content .paitent-detail {
+        height: calc(100vh - 142px);
+    }*/
+    .inner-main-content {
+        height: calc(100vh - 240px);
+    }
+    .paitent-detail-left {
+        height: calc(100vh - 160px);
+        overflow:hidden;
+    }
 </style>
 <!-- Content start here -->
 <section id="content" class="responsive-container">
@@ -438,11 +448,7 @@
                 success: function (result) {
 
                     $('#myTabContent').html(result);
-                    var y = $(window).height();
-                    y = y - parseInt(170);
-                  
-                    $(".paitent-detail-left").css('height', y);
-                    $(".inner-main-content").css('height', y-80);
+                    
                 },
                 error: function () {
                     toastr.error("Some error occurred!! or data not found");

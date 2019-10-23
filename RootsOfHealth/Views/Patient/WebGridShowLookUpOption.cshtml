@@ -61,6 +61,16 @@
     #lookupList .inner-main-content{
         padding:0 !important;
     }
+    .one-columns-tbl th:last-child {
+        width: 20%;
+    }
+    .scroll.inner-main-content {
+        height: calc(100vh - 210px);
+    }
+   .paitent-detail-left {
+        /* height: 450px; */
+        height: calc(100vh - 100px);
+    }
 </style>
 
 <!-- Content start here -->
@@ -72,7 +82,7 @@
             <div class="inner-content mt-0">
                
                     <div class="container-fluid p-0">
-                        <div class="appointment">
+                        <div class="">
                             <div class="paitent-detail-left">
 
                                 <div class="detail-heading d-flex">
@@ -187,11 +197,7 @@
                 success: function (result) {
                     $("#lookupList").html("");
                     $("#lookupList").html(result);
-                    var y = $(window).height();
-                    y = y - parseInt(170);
-
-                    $(".paitent-detail-left").css('height', y);
-                    $("#lookupList").css('height', y - 80);
+                    
                 },
                 error: function () {
 
