@@ -19,31 +19,29 @@
     }
 
     ul#ui-id-1 {
-        
         z-index: 100001;
-        
-        
     }
+
     .d-flex {
-        position:relative
+        position: relative
     }
 
     .ui-menu {
         position: absolute;
         z-index: 9999;
     }
+
     ul#ui-id-1 {
         z-index: 100001;
         width: 373px !important;
         max-width: 373px !important;
-        right: -155px!important;
+        right: -155px !important;
         left: 0;
-       
     }
 
-        .ui-menu .ui-menu-item-wrapper {
-            padding: 3px 15px 3px 15px;
-        }
+    .ui-menu .ui-menu-item-wrapper {
+        padding: 3px 15px 3px 15px;
+    }
 
     .appointement-form select {
         width: 75.5% !important;
@@ -52,20 +50,24 @@
     input#fltrautoPatientList {
         width: 100%;
     }
+
     .appointement-form select.form-control {
         width: 100% !important;
     }
+
     .appointement-form label {
         color: #4d4d4d;
         font-size: 13px;
         flex: 0 0 150px;
-        max-width:150px;
+        max-width: 150px;
         padding-right: 15px;
     }
+
     #autoPatientList {
         width: 100% !important;
-        position:relative
+        position: relative
     }
+
     .modal-footer {
         float: right;
     }
@@ -77,13 +79,15 @@
     }
 
     .fc-scroller::-webkit-scrollbar-track {
-       background:transparent;;
+        background: transparent;
+        ;
     }
 
     .fc-scroller::-webkit-scrollbar-thumb {
         background-color: #ccc;
         outline: 1px solid slategrey;
     }
+
     div#calendar .fc-row.fc-widget-header {
         border: 0;
     }
@@ -148,7 +152,7 @@
 
                     <div class="form-group d-flex align-items-center">
                         <label for="inputPassword" class="m-0"> End Time:</label>
-                        <input type="text" class="form-control timepicker _time_picker" id="endtimepicker"  placeholder="">
+                        <input type="text" class="form-control timepicker _time_picker" id="endtimepicker" placeholder="">
                     </div>
 
                     <div class="form-group d-flex align-items-center">
@@ -175,18 +179,18 @@
                         <select tabindex="13" id="ddlLocationOfAppointment" class="form-control"></select>
                     </div>
 
-                        <div class="form-group mb-0 d-flex align-items-center">
-                            <label for="inputPassword">Notes</label>
-                            <textarea cols="10" id="txtNotes" rows="5" class="form-control"></textarea>
-                            <input type="hidden" value="0" id="hdnAppointmentID" />
-                            <input type="hidden" value="0" id="hdnPatientId" />
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" onclick="closeModel()" class="btn btn-secondary">Cancel</button>
-                            <button type="button" onclick="saveAppointment()" class="btn btn-primary">Save</button>
-                            <button type="button" id="DeleteAppointment" onclick="deleteAppointment()" class="btn btn-primary">Delete</button>
-                        </div>
-</form>
+                    <div class="form-group mb-0 d-flex align-items-center">
+                        <label for="inputPassword">Notes</label>
+                        <textarea cols="10" id="txtNotes" rows="5" class="form-control"></textarea>
+                        <input type="hidden" value="0" id="hdnAppointmentID" />
+                        <input type="hidden" value="0" id="hdnPatientId" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" onclick="closeModel()" class="btn btn-secondary">Cancel</button>
+                        <button type="button" onclick="saveAppointment()" class="btn btn-primary">Save</button>
+                        <button type="button" id="DeleteAppointment" onclick="deleteAppointment()" class="btn btn-primary">Delete</button>
+                    </div>
+                </form>
             </div>
 
         </div>
@@ -282,12 +286,12 @@
         //    alert();
         //})
 
-      
+
         // save new appointment
         function saveAppointment(appointmentInfo) {
             debugger;
             var data = {};
-           
+
             if (typeof appointmentInfo == "undefined") {
                 data = {
                     PatientAppointmentID: $("#hdnAppointmentID").val(),
@@ -345,7 +349,7 @@
             }
             else if (SplitedTime[1] == 'AM') {
                 var hm = SplitedTime[0].split(':');
-                FinalTime = hm[0] == "12" ? "00:" + hm[1] : SplitedTime[0];        
+                FinalTime = hm[0] == "12" ? "00:" + hm[1] : SplitedTime[0];
             }
             else {
                 FinalTime = SplitedTime[0];
@@ -390,6 +394,8 @@
             $("#txtNotes").val("");
             $("#hdnPatientId").val("");
             $("#autoPatientList").val("");
+            $('#ddlTypeOfAppointment').val(0);
+            $('#ddlLocationOfAppointment').val(0);
         }
 
         // get all appointments from backend
@@ -465,12 +471,19 @@
 
                  // event fire on day click
                 dayClick: function (date, allDay, jsEvent, view) {
+                    debugger;
                     var date = new Date(date);
                     var tzDifference = date.getTimezoneOffset();
                     var offset = new Date(date.getTime() + tzDifference * 60 * 1000);
                     var strDate = (offset.getMonth() + 1) + "/" + offset.getDate() + "/" + offset.getFullYear();
                     var time = offset.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-                    
+                    time = time.split(":");
+                    if (time[0] == "10" || time[0] == "11" || time[0] == "12") {
+                        time = time[0] + ":" + time[1];
+                    }
+                    else {
+                        time = "0" + time[0] + ":" + time[1];
+                    }
                     $("#datepicker").val(strDate);
                     $("#timepicker").val(time);
                     $("#DeleteAppointment").hide();
