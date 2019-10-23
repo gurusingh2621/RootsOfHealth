@@ -306,7 +306,7 @@
                                     </span>
                                 </div>
                                 <div class="patientCountListbox">
-                                    <canvas id="patientCountChart" style="padding:5px;margin: auto;display: block; "></canvas>
+                                    <canvas id="patientCountChart" style="padding:5px;margin: auto;display: block; height:249px !important; "></canvas>
                                 </div>
                             </div>
                         </div>
@@ -516,6 +516,7 @@
                                 "enabled": false
                             },
                             responsive: true,
+                            maintainAspectRatio: false,
                             title: { display: true, text: 'Program Count', fontSize: 15 },
                             scales: {
                                 xAxes: [{
@@ -555,6 +556,7 @@
                         }]
                     };
                     var ctx = document.getElementById('patientCountChart').getContext('2d');
+                    
                     var myBarChart = new Chart(ctx, {
                         type: 'pie',
                         data: dataT,
@@ -565,6 +567,7 @@
                                 }
                             },
                             responsive: true,
+                            maintainAspectRatio: false,
                             title: { display: false, text: 'CHART.JS DEMO CHART' },
                             legend: {
                                 display: true,
@@ -738,6 +741,7 @@
                                 "enabled": false
                             },
                             responsive: true,
+                            maintainAspectRatio: false,
                             title: { display: true, text: 'Patient Condition', fontSize: 15 },
                             scales: {
                                 xAxes: [{
@@ -852,6 +856,7 @@
                                 "enabled": false
                             },
                             responsive: true,
+                            maintainAspectRatio: false,
                             title: { display: true, text: 'Age Group', fontSize: 15 },
                             legend: { position: 'none' },
                             scales: {
