@@ -75,6 +75,9 @@
 @*<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>*@
 <script src="~/Scripts/jquery-ui.min.js"></script>
 <script>
+    $('#datepicker').datepicker({
+        uiLibrary: 'bootstrap'
+    })
     $("#opennotepopup").click(function () {
         $("#ddlProgramType").closest("div").show();
         notescloseModel();
