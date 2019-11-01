@@ -1,5 +1,6 @@
 ﻿@model RootsOfHealth.Models.PatientMainBO
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link href="~/Content/css/jquery.timeselector.css" rel="stylesheet" />
 <style>
     select#ddlProgramType {
         display: block !important;
@@ -8,7 +9,7 @@
         display: block !important;
       
     }
-
+ 
     .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, .ui-state-active.ui-button:hover {
         border: 1px solid #22baa0;
         background: #22baa0;
@@ -121,6 +122,16 @@
         .ssn-icon-eye.showpwd {
             display: none;
         }
+    .sidebar-right button#hideAppointmentContent {
+        margin-left: 20px;
+    }
+    .appointement-form label {
+        color: #4d4d4d;
+        font-size: 13px;
+        flex: 0 0 150px;
+        max-width: 150px;
+        padding-right: 15px;
+    }
 </style>
 <div onscroll="abc()" class="tab-pane fade show active test" id="Profile" role="tabpanel" aria-labelledby="Profile-tab">
     <!-- Inner content start here  -->
@@ -1485,7 +1496,8 @@
 
                                                                 </div>
                                                                 <div class="bootom-form-row d-flex">
-                                                                    <div class="one-columns">
+
+                                                                                               <div class="one-columns">
                                                                         <label class="label-fields" id="lblLastTime">@Model.LastTimeYouSmoked</label>
                                                                         <select tabindex="51" name="LastTimeYouSmoked" class="form-control" id="ddLastTimeYouSmoked">
                                                                             <option value="0">Select</option>
@@ -1745,6 +1757,7 @@
                                 Appointment
                             </h3>
                             <button id="hideAppointmentContent" class="btn btn-link addnotebtn">Close</button>
+                            <button data-toggle="modal" id="openappointmentpopup" data-target="#AppointmentModal" onclick="addAppointment()"  class="btn btn-link addnotebtn"> Add Appointment </button>
                             <div class="scroll scroll-height" id="appointementlst">
 
 
@@ -1768,7 +1781,7 @@
 
     </div>
     <!-- Inner content end here  -->
-</div>
+
 
 <!--Notes Modal start here-->
 <div class="modal fade" id="notesModal" tabindex="-1" role="dialog" aria-labelledby="notesModalLabel"
@@ -1867,11 +1880,86 @@
     </div>
 </div>
 
-
 <!-- Programe Modal end here -->
+ 
+<!--Appointment Modal Starts Here-->
+<div class="modal fade" id="AppointmentModal" tabindex="-1" role="dialog" aria-labelledby="AppointmentModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"> Appointment</h5>
+                <button type="button" class="close" data-dismiss="modal"  onclick="closeModel()"   aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formAppointment" class="appointement-form">
+                    <div class="form-group d-flex align-items-center">
+                        <label for="staticEmail" class="m-0"> Date:</label>
+                        <input type="text" class="form-control dispaly-input-select" id="datepicker" placeholder="">
+                    </div>
+
+                    <div class="form-group d-flex align-items-center">
+                        <label for="inputPassword" class="m-0"> Start Time:</label>
+                        <input type="text" class="form-control timepicker _time_picker dispaly-input-select" id="timepicker" placeholder="">
+                    </div>
+
+                    <div class="form-group d-flex align-items-center">
+                        <label for="inputPassword" class="m-0"> End Time:</label>
+                        <input type="text" class="form-control timepicker _time_picker dispaly-input-select" id="endtimepicker" placeholder="">
+                    </div>
+
+                    @*<div class="form-group d-flex align-items-center">
+                        <label for="inputPassword">Select Patient</label>
+                        <input id="autoPatientList" class="form-control" />*@
+
+                        @*<select class="form-control select2" id="example1" name="state">
+
+                                <option value="">John</option>
+                                <option>Eric Jones</option>
+                                <option>Elina</option>
+                                <option>Thomas</option>
+
+                            </select>*@
+
+
+                    @*</div>*@
+                    <div class="form-group d-flex align-items-center">
+                        <label for="inputPassword">Type:</label>
+                        <select tabindex="13" id="ddlTypeOfAppointment" class="form-control dispaly-input-select"></select>
+                    </div>
+                    <div class="form-group d-flex align-items-center">
+                        <label for="inputPassword">Location:</label>
+                        <select tabindex="13" id="ddlLocationOfAppointment" class="form-control dispaly-input-select"></select>
+                    </div>
+
+                    <div class="form-group mb-0 d-flex align-items-center">
+                        <label for="inputPassword">Notes</label>
+                        <textarea cols="10" id="txtNotes" rows="5" class="form-control dispaly-input-select"></textarea>
+                        <input type="hidden" value="0" id="hdnAppointmentID" />
+                        <input type="hidden" value="0" id="hdnPatientId" />
+                    </div>
+                    <div class="modal-footer">
+                        <button id="closeAppointmentModel" type="button" onclick="closeModel()" class="btn btn-secondary"  data-dismiss="modal"  aria-label="Close">Cancel</button>
+                        <button type="button" onclick="saveAppointment()" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Appointment Modal end here -->
+
+
+
 @Scripts.Render("~/bundles/jquery")
-
-
+<script src="~/Content/script/jquery.timeselector.js"></script>
 <script>
 
     $(".scroll").scroll(function () {
@@ -1905,9 +1993,133 @@
         $(".lbl-hide").hide();
     }
 
+    
 
 
 
 
 
+
+
+ 
+    $('._time_picker').timeselector({
+        hours12: true
+    });
+    function addAppointment() {
+        emptyModel();
+     //   $('#AppointmentModal').modal('show');
+    }
+    function closeModel() {
+      emptyModel();
+      //  $('#AppointmentModal').modal('hide');
+    }
+
+    function GetTypeOfAppointments() {
+       
+        $.ajax({
+            type: "GET",
+            url: Apipath + '/api/PatientMain/getTypeOfAppointments',
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+                $('#ddlTypeOfAppointment').html('');
+                var txt = '<option value="0">Select</option>';
+                for (var i = 0; i < result.length; i++) {
+                    txt += '<option value="' + result[i].Id + '">' + result[i].TypeOfAppointments + '</option>';
+                    
+                }
+                $('#ddlTypeOfAppointment').html(txt);
+               
+            },
+            error: function (e) {
+                toastr.error("Something Happen Wrong");
+            }
+        });
+    }
+
+    function GetLocationOfAppointments() {
+
+        $.ajax({
+            type: "GET",
+            url: Apipath + '/api/PatientMain/getLocationOfAppointments',
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+                $('#ddlLocationOfAppointment').html('');
+                var txt = '<option value="0">Select</option>';
+                for (var i = 0; i < result.length; i++) {
+                    txt += '<option value="' + result[i].Id + '">' + result[i].LocationOfAppointment + '</option>';
+                }
+                $('#ddlLocationOfAppointment').html(txt);
+               
+                
+            },
+            error: function (e) {
+                toastr.error("Something Happen Wrong");
+            }
+        });
+    }
+
+    function emptyModel() {
+        $("#hdnAppointmentID").val(0);
+        $("#datepicker").val("");
+        $("#timepicker").val("");
+        $("#endtimepicker").val("");
+        $("#example1").val("");
+        $("#txtNotes").val("");
+        $("#hdnPatientId").val("");
+        $("#autoPatientList").val("");
+        $('#ddlTypeOfAppointment').val(0);
+        $('#ddlLocationOfAppointment').val(0);
+    }
+
+    // save new appointment
+    function saveAppointment(appointmentInfo) {
+        debugger;
+        var data = {};
+
+        if (typeof appointmentInfo == "undefined") {
+            data = {
+                PatientAppointmentID: $("#hdnAppointmentID").val(),
+                AppointmentDate: $("#datepicker").val(),
+                AppointmentTime: $("#timepicker").val(),
+                PatientID: @Model.PatientID,
+                Notes: $("#txtNotes").val(),
+                TypeOfAppointment: $('#ddlTypeOfAppointment').val(),
+                LocationOfAppointment: $('#ddlLocationOfAppointment').val(),
+                AppointmentEndTime: $("#endtimepicker").val()
+            }
+        }
+        else {
+            data = appointmentInfo;
+        }
+
+        if (data.AppointmentDate == "" || data.AppointmentTime == "" || data.PatientID == "" || data.Notes == "") {
+            toastr.error("All fields are required");
+            return false;
+        }
+        $.ajax({
+            type: "POST",
+            url: Apipath + '/api/PatientMain/AddPatientAppointment',
+            data: JSON.stringify(data),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+               // $('#AppointmentModal').modal('hide');
+                emptyModel();
+                $("#closeAppointmentModel").click();
+                getListAllAppointments();
+                    toastr.success("Appointment saved successfully");
+            },
+            error: function (err) {
+
+                toastr.error("Error while inserting data");
+            }
+        });
+    }
+    $(document).ready(function () {
+
+        GetTypeOfAppointments();
+        GetLocationOfAppointments();
+    });
 </script>
