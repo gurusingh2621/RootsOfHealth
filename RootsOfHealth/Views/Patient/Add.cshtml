@@ -53,7 +53,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link disabled-li1" onclick="ErrorTab()" id="Housing-tab" data-toggle="" href="#Housing" role="tab"
-                       aria-controls="Housing" aria-selected="false">Housing <span class="notCount" id="HouNot" style="display:none"> </span><span class="check" style="display:none"><i class="fas fa-check-circle"></i></span></a>
+                       aria-controls="Housing" aria-selected="false">Housing<span class="notCount" id="HouNot" style="display:none"> </span><span class="check" style="display:none"><i class="fas fa-check-circle"></i></span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link disabled-li1" onclick="ErrorTab()" id="Financial-tab" data-toggle="" href="#Financial" role="tab"
@@ -68,7 +68,8 @@
                        role="tab" aria-controls="Communication" aria-selected="false">
                         Communication &
                         Mobility
-                        <span class="notCount" id="CommNot" style="display:none"></span> <span class="check" style="display:none"><i class="fas fa-check-circle"></i></span></a>
+                        <span class="notCount" id="CommNot" style="display:none"></span> <span class="check" style="display:none"><i class="fas fa-check-circle"></i></span>
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link disabled-li1" onclick="ErrorTab()" id="Healthcare-tab" data-toggle="" href="#Healthcare" role="tab"
@@ -79,7 +80,8 @@
                        role="tab" aria-controls="SocialSupports" aria-selected="false">
                         Social Supports and
                         Safety
-                        <span class="notCount" id="SocialNot" style="display:none"></span><span class="check" style="display:none"><i class="fas fa-check-circle"></i></span></a>
+                        <span class="notCount" id="SocialNot" style="display:none"></span><span class="check" style="display:none"><i class="fas fa-check-circle"></i></span>
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link disabled-li1" onclick="ErrorTab()" id="LegalStatus-tab" data-toggle="" href="#LegalStatus" role="tab"
@@ -182,7 +184,7 @@
             }
 
             <!-- Programs Tab end here  -->
-          
+
 
 
 
@@ -200,8 +202,10 @@
 
 
 @section scripts {
-
-<script>
+    <script src="https://code.jquery.com/ui/1.12.0-rc.2/jquery-ui.min.js"
+            integrity="sha256-55Jz3pBCF8z9jBO1qQ7cIf0L+neuPTD1u7Ytzrp2dqo="
+            crossorigin="anonymous"></script>
+    <script>
         $('#menu-toggle').click(function () {
             $(this).toggleClass('open');
             if ($("#menu-toggle").hasClass("open")) {
@@ -329,10 +333,18 @@
         }
         var patientPrograms = [];
 
-        $(document).ready(function () {
+    $(document).ready(function () {
+        $('.date').datepicker(
+            {
+                uiLibrary: 'bootstrap',
+                changeYear: true,
+                changeMonth: true
+            }
+
+        );
             $(".open-eye").css("display", "block");
             $(".ssn-label").css("display", "none");
-        
+
             //------notification changes start here
              @if (Model.ScheduleDate.IsHousingDue=="Red")
         {
@@ -1723,12 +1735,7 @@
             }
         });
 
-        $('.date').datepicker(
-            {
-                changeYear: true,
-                changeMonth: true
-            }
-        );
+
 
         $('#txtQuitDate').datepicker(
            {
@@ -4357,7 +4364,7 @@
 
 
 
-</script>
+    </script>
 
     <script>
 

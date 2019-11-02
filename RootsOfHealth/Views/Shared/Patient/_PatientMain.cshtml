@@ -136,7 +136,7 @@
 <div onscroll="abc()" class="tab-pane fade show active test" id="Profile" role="tabpanel" aria-labelledby="Profile-tab">
     <!-- Inner content start here  -->
     <div class="inner-content">
-        <div class="paitent-detail" /*style="height: 460px;"*/>
+        <div class="paitent-detail">
             <div class="row">
                 <div id="pat_out_div" class="col-lg-12 col-md-12 col-sm-12 col-12">
                     @*<div class="col-lg-8 col-md-12 col-sm-12 col-12 pr-0">*@
@@ -372,7 +372,7 @@
                                         <div class="two-columns">
 
                                             <label class="label-fields">@Model.DateOfBirth</label>
-                                            <input tabindex="8" autocomplete="off" type="text" id="txtDOB" name="DateOfBirth" class="form-control date"
+                                            <input tabindex="8" type="text" id="txtDOB" name="DateOfBirth" class="form-control date"
                                                    placeholder="" value="@Model.DateOfBirth" style="width:100px">
                                         </div>
                                         <div class="two-columns">
@@ -1780,6 +1780,7 @@
         </div>
 
     </div>
+    </div>
     <!-- Inner content end here  -->
 
 
@@ -1956,9 +1957,6 @@
 
 <!-- Appointment Modal end here -->
 
-
-
-@Scripts.Render("~/bundles/jquery")
 <script src="~/Content/script/jquery.timeselector.js"></script>
 <script>
 
@@ -2075,7 +2073,7 @@
 
     // save new appointment
     function saveAppointment(appointmentInfo) {
-        debugger;
+      
         var data = {};
 
         if (typeof appointmentInfo == "undefined") {
