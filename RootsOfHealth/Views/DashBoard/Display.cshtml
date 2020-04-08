@@ -286,7 +286,7 @@
     }
   
 </style>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.css" type="text/css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.css" crossorigin="anonymous" type="text/css">
 
 <section id="content" class="responsive-container pt-0">
     <div class="inner-content dashboardWrapper">
@@ -306,7 +306,7 @@
                                     </span>
                                 </div>
                                 <div class="patientCountListbox">
-                                    <canvas id="patientCountChart" style="padding:5px;margin: auto;display: block; height:249px !important; "></canvas>
+                                    <canvas id="patientCountChart"  style="padding:5px;margin: auto;display: block; height:249px !important; "></canvas>
                                 </div>
                             </div>
                         </div>
@@ -440,32 +440,19 @@
 
 @section scripts{
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js" crossorigin="anonymous"></script>
     <script src="~/Scripts/chartjs-plugin-labels.min.js"></script>
     <script>
         var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
        
         $(function () {
-           
-          
             var clinicid ='@Session["ClinicID"]';
             PatientCount(clinicid);
-            RecentPatient(clinicid);
-            RecentAppotment(clinicid);
-            PatientStats(clinicid);
-            PatientFormStatus(clinicid);
-            PatientAgeGroup(clinicid);
-            ProgramChart(clinicid);
+            
         });
 
-        function ProgramChart(id) {
+        function ProgramChart(result) {
            
-            $.ajax({
-                type: "GET",
-                url: Apipath + '/api/PatientMain/GetProgramCount?clinicid=' + id,
-                contentType: 'application/json; charset=UTF-8',
-                dataType: "json",
-                success: function (result) {
                     var aDatasets1 = [result.ClinicCount, result.DreamCount, result.OUCount, result.PeraltaCollegeCount];
 
                     var dataT = {
@@ -531,8 +518,7 @@
                         }
                     });
                    
-                }
-            });
+             
         }
         function PatientCount(id) {
            
@@ -542,7 +528,9 @@
                 contentType: 'application/json; charset=UTF-8',
                 dataType: "json",
                 success: function (result) {
-                    var aDatasets1 = [result.TotalPatient, result.MalePatient, result.FemalePatient, result.TransMale, result.TransFemale, result.GenderQueer, result.Other];
+                    
+                  
+                    var aDatasets1 = [result.PatientCount.TotalPatient, result.PatientCount.MalePatient, result.PatientCount.FemalePatient, result.PatientCount.TransMale, result.PatientCount.TransFemale, result.PatientCount.GenderQueer, result.PatientCount.Other];
 
                     var dataT = {
                         labels: ['Total', 'Male', 'Female', 'Trans male', 'Trans female', 'Gender Queer','Other'],
@@ -580,21 +568,17 @@
                             
                         }
                     });
-                    
+                    RecentPatient(result.RecentPatient);
+                    RecentAppotment(result.PatientAppointment);
+                    PatientStats(result.PatientStatus);
+                    PatientFormStatus(result.PatientFormSatus);
+                    PatientAgeGroup(result.PatientAgeGroup);
+                    ProgramChart(result.PatientProgramCount);
                 }
             });
         }
 
-        function RecentPatient(id) {
-           
-            $.ajax({
-
-                type: "Get",
-                url: Apipath + '/api/PatientMain/GetRecentPatients?clinicid=' + id,
-                dataType: "json",
-                contentType: "application/json; charset=utf-8",
-                success: function (result) {
-
+        function RecentPatient(result) {
                     if (result.length) {
                         $("#DashboardpatientList").html('');
                         var tbl = '';
@@ -623,26 +607,10 @@
 
 
                     }
-                   
-                },
-                error: function () {
-                   
-                }
-
-            });
+      
         }
 
-        function RecentAppotment(id) {
-            if (id == '' || id == null) {
-                return;
-            }
-           
-            $.ajax({
-                type: "GET",
-                url: Apipath + '/api/PatientMain/GetRecentAppotmentDashboard?clinicid='+id,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (data) {
+        function RecentAppotment(data) {
                     if (data.length) {
 
                         var tbl = '';
@@ -667,30 +635,14 @@
                         $('.AppointmentListbox').html(tbl);
 
                     }
-
-
-                },
-                error: function (e) {
-                    
-                }
-            });
         }
        
         function bindTopPatient(id) {
 
             window.location = '/DashBoard/Index?patientid=' + id;
         }
-        function PatientStats(id) {
-            if (id == '' || id == null) {
-                return;
-            }
-            
-            $.ajax({
-                type: "GET",
-                url: Apipath + '/api/PatientMain/GetAllPatientStatusDashboard?clinicid='+id,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (result) {
+        function PatientStats(result) {
+           
                     var aDatasets1 = [result.SecureCount, result.StrugglingCount, result.AtriskCount, result.CrisisCount];
 
                     var dataT = {
@@ -755,27 +707,10 @@
 
                         }
                     });
-
-                    
-                },
-
-                error: function (e) {
-                    toastr.error("Error while getting appotment data.");
-                }
-            });
+            
         }
-        function PatientFormStatus(id) {
-            if (id == '' || id == null) {
-                return;
-            }
-           
-            $.ajax({
-                type: "GET",
-                url: Apipath + '/api/PatientMain/GetAllPatientFormSatusDashboard?clinicid='+id,
-                contentType: 'application/json; charset=UTF-8',
-                dataType: "json",
-                success: function (result) {
-                   
+        function PatientFormStatus(result) {
+            
                     if (result.length) {
                         var tbl = '';
                         for (var i = 0; i < result.length; i++){
@@ -789,22 +724,11 @@
                         $(".Duebody").html(tbl);
                     }
                    
-                }
-            });
+              
         }
 
-        function PatientAgeGroup(id) {
+        function PatientAgeGroup(result) {
 
-            if (id == '' || id == null) {
-                return;
-            }
-            
-            $.ajax({
-                type: "GET",
-                url: Apipath + '/api/PatientMain/GeAgeGroupCount?clinicid=' + id,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (result) {
                     var aDatasets1 = [result.zero,result.Lttone, result.Lttfour, result.Ltffour, result.Ltsfour, result.Gtsfive];
 
                     var dataT = {
@@ -876,12 +800,7 @@
 
                     });
                    
-                },
-                error: function (e) {
-                    toastr.error("Error while getting appotment data.");
                 }
-            });
-        }
         $.date = function (dateObject) {
             var d = new Date(dateObject);
             var day = d.getDate();

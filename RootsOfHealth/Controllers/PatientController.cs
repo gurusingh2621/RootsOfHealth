@@ -42,14 +42,14 @@ namespace RootsOfHealth.Controllers
                     var result1 = responseTask1.Result;
                     if (result.IsSuccessStatusCode && result1.IsSuccessStatusCode)
                     {
-                        var readTask = result.Content.ReadAsAsync<PatientDetailBO>();
+                        var readTask = result.Content.ReadAsAsync<PatientAllDetailByIDBO>();
                         readTask.Wait();
 
                         var readTask1 = result1.Content.ReadAsAsync<List<FormSchedulingBO>>();
                         readTask1.Wait();
 
 
-                        patientdetailobj = readTask.Result;
+                        patientdetailobj = readTask.Result.PatientDetail;
                         patientdetailobj.PatientSubstanceUse.Dast = patientdetailobj.Dast;
                         patientdetailobj.PatientSubstanceUse.Audit = patientdetailobj.Audit;
 
