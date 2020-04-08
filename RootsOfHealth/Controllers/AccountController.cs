@@ -50,11 +50,13 @@ namespace RootsOfHealth.Controllers
 
             return View();
         }
-        [AllowAnonymous]
+       [AllowAnonymous]
         [HttpPost]
-        public ActionResult Login(UserBO model, string returnUrl)
+        public ActionResult CheckLogin(string UserName, string Password)
         {
-
+            UserBO model = new UserBO();
+            model.UserName = UserName;
+            model.Password = Password;
             if (!string.IsNullOrWhiteSpace(model.UserName) || !string.IsNullOrWhiteSpace(model.Password))
             {
 
@@ -93,21 +95,15 @@ namespace RootsOfHealth.Controllers
                                 }
                                 GetRolePermission(Convert.ToInt32(user.RoleID));
                             }
+
+
+                            return Json("LoggedIn");
                             
-                            if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
-                                && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
-                            {
-                                return Redirect(returnUrl);
-                            }
-                            else
-                            {
-                                return RedirectToAction("Display", "DashBoard");
-                            }
 
                         }
                         else
                         {
-                            ModelState.AddModelError("", "The user name or password provided is incorrect.");
+                            return Json("The user name or password provided is incorrect.");
                         }
                     }
                 }
@@ -116,9 +112,9 @@ namespace RootsOfHealth.Controllers
             }
             else
             {
-                ModelState.AddModelError("", "please enter valid username/password.");
+                return Json("please enter valid username/password.");
             }
-            return View();
+            return Json("");
         }
 
        void GetRolePermission(int roleid)

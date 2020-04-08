@@ -157,6 +157,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Commom\Common.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CarePlanController.cs" />
     <Compile Include="Controllers\DashBoardController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
@@ -167,6 +168,9 @@
     <Compile Include="Models\AuditBO.cs" />
     <Compile Include="Models\AuthorizationBO.cs" />
     <Compile Include="Models\CareConnectBO.cs" />
+    <Compile Include="Models\CarePlanBasicInfoBO.cs" />
+    <Compile Include="Models\CarePlantemplateBO.cs" />
+    <Compile Include="Models\CarePlanTemplateFieldBO.cs" />
     <Compile Include="Models\ClinicBO.cs" />
     <Compile Include="Models\DastBO.cs" />
     <Compile Include="Models\DreamOnlyBO.cs" />
@@ -177,6 +181,7 @@
     <Compile Include="Models\LookUpOptionBO.cs" />
     <Compile Include="Models\NotesTemplateFieldBO.cs" />
     <Compile Include="Models\OUOnlyBO.cs" />
+    <Compile Include="Models\PatientAllDetailByIDBO.cs" />
     <Compile Include="Models\PatientCommunicationAndMobilityBO.cs" />
     <Compile Include="Models\PatientDetailBO.cs" />
     <Compile Include="Models\PatientEmploymentEducationBO.cs" />
@@ -358,6 +363,9 @@
     <Content Include="Views\Patient\NotesTemplateField.cshtml" />
     <Content Include="Views\DashBoard\Display.cshtml" />
     <Content Include="Views\Shared\Patient\_LookupOptionList.cshtml" />
+    <Content Include="Views\Home\UploadExcel.cshtml" />
+    <Content Include="Views\CarePlan\CreateCareForm.cshtml" />
+    <Content Include="Views\CarePlan\DynamicCareForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

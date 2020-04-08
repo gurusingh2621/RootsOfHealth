@@ -3438,10 +3438,9 @@
             $("input[type=hidden][name=LanguagesSpeak]").val(LanguagesSpeak);
             $("input[type=hidden][name=ClinicID]").val('@Session["ClinicID"]');
             //document.getElementById('frmProfile').submit();
-            debugger;
             var formData = $("#frmProfile").serializeObject();
 
-
+            console.log(formData);
 
              $.ajax({
                 type: "POST",

@@ -9,6 +9,7 @@
 <head>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width" />
+    <link href="~/css/toastr.min.css" rel="stylesheet" />
     <title>Login</title>
     <style>
         body {
@@ -19,19 +20,19 @@
             font-family: sans-serif;
             height: 100vh;
         }
-        body:after {
-            content:"";
-            width:100%;
-            height:100%;
-            position:fixed;
-            top:0;
-            background-color:rgba(0,0,0,0.75)
-        }
+            body:after {
+                content: "";
+                width: 100%;
+                height: 100%;
+                position: fixed;
+                top: 0;
+                background-color: rgba(0,0,0,0.75)
+            }
 
         .login-box {
             width: 480px;
-            
-            background: #fff;
+
+           background: #fff;
             color: #fff;
             top: 50%;
             left: 50%;
@@ -39,7 +40,7 @@
             transform: translate(-50%,-50%);
             box-sizing: border-box;
             padding: 50px 30px 70px;
-            z-index:1;
+            z-index: 1;
         }
 
         .avatar {
@@ -84,7 +85,8 @@
                 margin-bottom: 0px;
                 font-family: 'Roboto', sans-serif;
             }
-            .login-box input[type="submit"] {
+
+            .login-box input[type="button"] {
                 border: none;
                 outline: none;
                 height: 48px;
@@ -97,10 +99,10 @@
                 font-family: 'Roboto', sans-serif;
                 font-weight: 500;
                 letter-spacing: 0.5px;
-                transition:all 0.5s;
+                transition: all 0.5s;
             }
 
-                .login-box input[type="submit"]:hover {
+                .login-box input[type="button"]:hover {
                     cursor: pointer;
                     background: #12a088;
                     color: #fff;
@@ -115,6 +117,7 @@
             .login-box a:hover {
                 color: #39dc79;
             }
+
         .UserIcon {
             position: absolute;
             width: 30px;
@@ -125,9 +128,11 @@
             display: flex;
             background: #fff;
         }
+
         .userName {
             position: relative;
         }
+
         span.UserIcon img {
             width: 17px;
             height: 17px;
@@ -139,34 +144,78 @@
 <body>
     <div class="login-box">
         @*<img src="~/images/avatar.png" class="avatar">*@
-       
+
         <h1>Log in</h1>
-       @using (Html.BeginForm())
-       {
-        @Html.AntiForgeryToken()
-           <div class="form-group">
-               <p>Username</p>
-               <div class="userName">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <p>Username</p>
+                <div class="userName">
                     @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @placeholder = "Enter Username" } })
-                   <span class="UserIcon"><img src="~/images/profile.svg"></span>
-               </div>
-               
-               
-           </div>
+                    <span class="UserIcon"><img src="~/images/profile.svg"></span>
+                </div>
 
-        <div class="form-group">
-            <p>Password</p>
-            <div class="userName">
-                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @placeholder = "Enter Password", @type = "password" } })
-                <span class="UserIcon"><img src="~/images/key.svg"></span>
+
             </div>
+
+            <div class="form-group">
+                <p>Password</p>
+                <div class="userName">
+                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @placeholder = "Enter Password", @type = "password" } })
+                    <span class="UserIcon"><img src="~/images/key.svg"></span>
+                </div>
             </div>
-            <input type="submit" name="submit" value="Login">
+            <input type="button" name="submit" value="Login" onclick="Login()">
             // <a href="#">Forget Password</a>
-            }
+        }
 
 
-        </div>
+    </div>
 
 </body>
 </html>
+@Scripts.Render("~/bundles/jquery")
+
+<script src="~/Scripts/toastr.min.js"></script>
+<script>
+    function Login() {
+       
+        var email = $('#UserName').val().trim();
+        var password = $('#Password').val();
+
+        if (email != "" && password != "") {
+            $.ajax({
+                type: "Post",
+                contentType: "application/json; charset=utf-8",
+                url: "/Account/CheckLogin",
+                data:JSON.stringify({ UserName: email, Password: password }),
+                dataType: "Json",
+                success: function (response) {
+                   
+                    if (response == "LoggedIn") {
+                        window.location.href = "/DashBoard/Display";
+                    }
+                    else {
+
+                        toastr.error(response);
+                    }
+
+                },
+                error: function (data) {
+                    
+                    toastr.error('error');
+                }
+            });
+        }
+        else if (email == "" && password == "") {
+            toastr.error("Both Fields are required.");
+        }
+        else if (email == "") {
+            toastr.error("Username Field is required.")
+        }
+        else {
+            toastr.error("Password Field is required.")
+        }
+    }
+</script>

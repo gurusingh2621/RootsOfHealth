@@ -42,28 +42,22 @@ namespace RootsOfHealth.Controllers
                     client.BaseAddress = new Uri(WebApiKey);
                     //HTTP GET
                     var responseTask = client.GetAsync("/api/PatientMain/GetDetailOfPatient?patientid=" + PatientID);
-                    var responseTask1 = client.GetAsync("/api/PatientMain/GetPatientScore?patientid=" + PatientID);
-                    var responseTask2 = client.GetAsync("/api/PatientMain/GetFormScheduling");
+                    
 
                     responseTask.Wait();
-                    responseTask1.Wait();
-                    responseTask2.Wait();
+                  
 
                     var result = responseTask.Result;
-                    var result1 = responseTask1.Result;
-                    var result2 = responseTask2.Result;
+                  
 
-                    if (result.IsSuccessStatusCode && result1.IsSuccessStatusCode && result2.IsSuccessStatusCode)
+                    if (result.IsSuccessStatusCode)
                     {
-                        var readTask = result.Content.ReadAsAsync<PatientDetailBO>();
+                        var readTask = result.Content.ReadAsAsync<PatientAllDetailByIDBO>();
                         readTask.Wait();
-                        var readTask1 = result1.Content.ReadAsAsync<PatientScoreBO>();
-                        readTask1.Wait();
-                        var readTask2 = result2.Content.ReadAsAsync<List<FormSchedulingBO>>();
-                        readTask2.Wait();
+                       
 
-                        patientdetailobj = readTask.Result;
-                        patientdetailobj.PatientScore = readTask1.Result;
+                        patientdetailobj = readTask.Result.PatientDetail;
+                        patientdetailobj.PatientScore = readTask.Result.PatientScore;
                         patientdetailobj.PatientSubstanceUse.Audit = patientdetailobj.Audit;
                         patientdetailobj.PatientSubstanceUse.Dast = patientdetailobj.Dast;
 
@@ -82,7 +76,7 @@ namespace RootsOfHealth.Controllers
 
 
 
-                        formscheduleobj = readTask2.Result;
+                        formscheduleobj = readTask.Result.FormScheduling;
                         foreach (var m in formscheduleobj)
                         {
                             if (m.FormName == "Housing")
