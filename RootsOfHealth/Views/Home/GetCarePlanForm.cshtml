@@ -32,7 +32,7 @@
     <script>
          var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
         var ItemNames;
-        var tableName
+        var tableName;
         function GetDropDownName() {
             $.ajax({
                 type: "GET",
@@ -80,7 +80,7 @@
                     if ($(".renderform  [readonly=readonly]").length) {
                         $.ajax({
                             type: "GET",
-                            url: Apipath + '/api/PatientMain/GetDetailOfPatient?patientid=' + result.PatientID,
+                            url: Apipath + '/api/PatientMain/GetDetailOfPatient?patientid='+'@ViewBag.PatientID',
                             contentType: 'application/json; charset=UTF-8',
                             dataType: "json",
                             success: function (result) {
@@ -272,7 +272,7 @@
                     if ($(".renderform  [readonly=readonly]").length) {
                         $.ajax({
                             type: "GET",
-                            url: Apipath + '/api/PatientMain/GetDetailOfPatient?patientid=187',
+                            url: Apipath + '/api/PatientMain/GetDetailOfPatient?patientid='+'@ViewBag.PatientID',
                             contentType: 'application/json; charset=UTF-8',
                             dataType: "json",
                             success: function (result) {
@@ -438,6 +438,8 @@
 
         function saveTemplateField() {
             var models = [];
+            models.push({ TableName: tableName, ColoumnName: 'PatientID', FieldValue:'@ViewBag.PatientID'  });
+            models.push({ TableName: tableName, ColoumnName: 'TemplateID', FieldValue: '@ViewBag.TemplateId' });
             var TableName= tableName;
             var colstr = '';
             var valstr = '';

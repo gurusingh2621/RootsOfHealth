@@ -2170,7 +2170,7 @@
                             <div class="text-center">
                             <a href="/careplan/dynamiccareform" target="_blank" class="btn btn-success text-white" style="display:none;cursor:pointer;">EDIT</a>
                                 &nbsp;&nbsp;&nbsp;
-                               <a href="/home/GetCarePlanForm?Id=${item.TemplateID}"  class="btn btn-success text-white" style="cursor:pointer;">Show Form</a>
+                               <a href="/home/GetCarePlanForm?Id=${item.TemplateID}&patientid=${$.urlParam('patientid')}"  class="btn btn-success text-white" style="cursor:pointer;">Show Form</a>
                                       </div>
                                       </td>
                                </tr>`
@@ -2194,9 +2194,7 @@
         return results[1] || 0;
     }
     function RedirectToCarePlan() {
-        var patientID = $.urlParam('patientid');
-        window.location.href = "/careplan/DynamicCareForm?PatientId=" + patientID;
-
+        window.location.href = "/careplan/DynamicCareForm";
     }
     $(document).ready(function () {
 

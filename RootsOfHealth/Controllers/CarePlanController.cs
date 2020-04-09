@@ -43,9 +43,8 @@ namespace RootsOfHealth.Controllers
                     return Json("");
         }
         [Authorize(Roles = "navigator,supervisor")]
-        public ActionResult DynamicCareForm(int PatientId)
+        public ActionResult DynamicCareForm()
         {
-            ViewBag.PatientID = PatientId;
             return View();
         }
     }

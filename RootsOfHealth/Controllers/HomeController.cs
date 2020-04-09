@@ -13,7 +13,7 @@ using System.Net.Http.Headers;
 using RootsOfHealth.Models;
 
 namespace RootsOfHealth.Controllers
-{
+{[Authorize]
     public class HomeController : Controller
     {
         string WebApiKey = WebConfigurationManager.AppSettings["WebApi"];
@@ -130,8 +130,9 @@ namespace RootsOfHealth.Controllers
                     //var gethtml=   System.IO.File.ReadAllText(Server.MapPath("~/App_Data/data.html"));
             return Json("");
         }
-        public ActionResult GetCarePlanForm(int Id)
+        public ActionResult GetCarePlanForm(int Id,int patientid)
         {
+            ViewBag.PatientID = patientid;
             ViewBag.TemplateId = Id;
             return View();
         }
