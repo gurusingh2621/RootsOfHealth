@@ -5,11 +5,11 @@
     select#ddlProgramType {
         display: block !important;
     }
+
     label#txtNotesReadonly1 {
         display: block !important;
-      
     }
- 
+
     .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, .ui-state-active.ui-button:hover {
         border: 1px solid #22baa0;
         background: #22baa0;
@@ -40,6 +40,7 @@
         overflow-x: hidden;
         overflow: auto;
     }
+
     .ReadonlyNotesScroll {
         height: 450px;
         overflow-x: hidden;
@@ -67,12 +68,15 @@
                 flex: 0 0 75%;
                 max-width: 75%;
             }
+
     .show-more {
         padding-left: 0px;
     }
+
     #content .sidebar-right .appointement-row .content {
         margin-bottom: 0px;
     }
+
     .appointement-row .editicons {
         padding-left: 0px;
         padding-top: 5px;
@@ -84,11 +88,13 @@
         display: flex;
         flex-wrap: wrap;
     }
+
     .appointement-row .calender-img {
         flex: 0 0 10%;
         max-width: 10%;
         margin-right: 2% !important;
     }
+
     .appointement-row h6 {
         flex: 0 0 88%;
         max-width: 88%;
@@ -122,9 +128,11 @@
         .ssn-icon-eye.showpwd {
             display: none;
         }
+
     .sidebar-right button#hideAppointmentContent {
         margin-left: 20px;
     }
+
     .appointement-form label {
         color: #4d4d4d;
         font-size: 13px;
@@ -145,7 +153,7 @@
                             <h2>Patient Profile</h2>
 
                             <div class="detail-button ml-auto">
-
+                                <a href='#' data-toggle="modal" data-target="#CarePlanListModal" onclick="GetCarePlanTemplateList()" class="btn btn-success label-fields">CarePlanTemplates</a>
                                 <a href='' onclick=""
                                    id="btnPatientAppointments" class="btn btn-success label-fields">
 
@@ -171,17 +179,17 @@
                                 </a>
 
                                 @*<a href="/Patient/Add" id="btnProfileEdit" class="btn btn-success">
-                                        <i class="far fa-edit"></i>
-                                        Edit
-                                    </a>*@
+            <i class="far fa-edit"></i>
+            Edit
+        </a>*@
                                 @*<a href="#!" id="btnProfileCancel" class="btn btn-info" style="display: none;">
-                                        <i class="far fa-edit"></i>
-                                        Cancel
-                                    </a>
-                                    <a href="#!" id="btnProfileSave" class="btn btn-success" style="display: none;">
-                                        <i class="far fa-save"></i>
-                                        Save
-                                    </a>*@
+            <i class="far fa-edit"></i>
+            Cancel
+        </a>
+        <a href="#!" id="btnProfileSave" class="btn btn-success" style="display: none;">
+            <i class="far fa-save"></i>
+            Save
+        </a>*@
                             </div>
 
 
@@ -386,7 +394,7 @@
                                                             <i class="fa fa-eye-slash close-eye" onclick="showSSnlabel()"></i>
                                                         </div>
                                                     </div>
-                                                  
+
                                                 </div>
                                                 <input tabindex="9" type="password" id="txtSocialSecNo" name="SocialSecurityNumber" class="form-control"
                                                        placeholder="000-00-0000" value="@Model.SocialSecurityNumber">
@@ -1497,7 +1505,7 @@
                                                                 </div>
                                                                 <div class="bootom-form-row d-flex">
 
-                                                                                               <div class="one-columns">
+                                                                    <div class="one-columns">
                                                                         <label class="label-fields" id="lblLastTime">@Model.LastTimeYouSmoked</label>
                                                                         <select tabindex="51" name="LastTimeYouSmoked" class="form-control" id="ddLastTimeYouSmoked">
                                                                             <option value="0">Select</option>
@@ -1757,7 +1765,7 @@
                                 Appointment
                             </h3>
                             <button id="hideAppointmentContent" class="btn btn-link addnotebtn">Close</button>
-                            <button data-toggle="modal" id="openappointmentpopup" data-target="#AppointmentModal" onclick="addAppointment()"  class="btn btn-link addnotebtn"> Add Appointment </button>
+                            <button data-toggle="modal" id="openappointmentpopup" data-target="#AppointmentModal" onclick="addAppointment()" class="btn btn-link addnotebtn"> Add Appointment </button>
                             <div class="scroll scroll-height" id="appointementlst">
 
 
@@ -1780,10 +1788,8 @@
         </div>
 
     </div>
-    </div>
-    <!-- Inner content end here  -->
-
-
+</div>
+<!-- Inner content end here  -->
 <!--Notes Modal start here-->
 <div class="modal fade" id="notesModal" tabindex="-1" role="dialog" aria-labelledby="notesModalLabel"
      aria-hidden="true">
@@ -1880,9 +1886,7 @@
         </div>
     </div>
 </div>
-
 <!-- Programe Modal end here -->
- 
 <!--Appointment Modal Starts Here-->
 <div class="modal fade" id="AppointmentModal" tabindex="-1" role="dialog" aria-labelledby="AppointmentModalLabel"
      aria-hidden="true">
@@ -1890,7 +1894,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel"> Appointment</h5>
-                <button type="button" class="close" data-dismiss="modal"  onclick="closeModel()"   aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" onclick="closeModel()" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -1915,14 +1919,14 @@
                         <label for="inputPassword">Select Patient</label>
                         <input id="autoPatientList" class="form-control" />*@
 
-                        @*<select class="form-control select2" id="example1" name="state">
+                    @*<select class="form-control select2" id="example1" name="state">
 
-                                <option value="">John</option>
-                                <option>Eric Jones</option>
-                                <option>Elina</option>
-                                <option>Thomas</option>
+                            <option value="">John</option>
+                            <option>Eric Jones</option>
+                            <option>Elina</option>
+                            <option>Thomas</option>
 
-                            </select>*@
+                        </select>*@
 
 
                     @*</div>*@
@@ -1942,7 +1946,7 @@
                         <input type="hidden" value="0" id="hdnPatientId" />
                     </div>
                     <div class="modal-footer">
-                        <button id="closeAppointmentModel" type="button" onclick="closeModel()" class="btn btn-secondary"  data-dismiss="modal"  aria-label="Close">Cancel</button>
+                        <button id="closeAppointmentModel" type="button" onclick="closeModel()" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel</button>
                         <button type="button" onclick="saveAppointment()" class="btn btn-primary">Save</button>
                     </div>
                 </form>
@@ -1951,11 +1955,42 @@
         </div>
     </div>
 </div>
-
-
-
-
 <!-- Appointment Modal end here -->
+<!--CarePlanListTemplate Start-->
+<!--Appointment Modal Starts Here-->
+<div class="modal fade" id="CarePlanListModal" tabindex="-1" role="dialog" aria-labelledby="CarePlanListModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> CarePlanList</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <a href='#' class="btn btn-success label-fields" onclick="RedirectToCarePlan()" style="margin:10px;">Add</a>
+
+                <table id="tblCarePlanTemplateList" class="table table-striped border">
+                    <tr class="table-secondary">
+                    <tr class="table-active">
+                        <th>PROGRAM</th>
+                        <th>ACTIVE</th>
+                        <th>CREATED DATE</th>
+                        <th>ACTION</th>
+                    </tr>
+                    <tbody class="careplanlist">
+                        <tr></tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Appointment Modal end here -->
+<!--CarePlanListTemplate END-->
 
 <script src="~/Content/script/jquery.timeselector.js"></script>
 <script>
@@ -1971,7 +2006,7 @@
         $(this).toggleClass("showpwd");
     });
 
-   
+
     $(".ssn-icon-label").click(function () {
         $(this).toggleClass("showlbl");
     });
@@ -1991,7 +2026,6 @@
         $(".lbl-hide").hide();
     }
 
-    
 
 
 
@@ -1999,7 +2033,8 @@
 
 
 
- 
+
+
     $('._time_picker').timeselector({
         hours12: true
     });
@@ -2013,7 +2048,7 @@
     }
 
     function GetTypeOfAppointments() {
-       
+
         $.ajax({
             type: "GET",
             url: Apipath + '/api/PatientMain/getTypeOfAppointments',
@@ -2024,10 +2059,10 @@
                 var txt = '<option value="0">Select</option>';
                 for (var i = 0; i < result.length; i++) {
                     txt += '<option value="' + result[i].Id + '">' + result[i].TypeOfAppointments + '</option>';
-                    
+
                 }
                 $('#ddlTypeOfAppointment').html(txt);
-               
+
             },
             error: function (e) {
                 toastr.error("Something Happen Wrong");
@@ -2049,8 +2084,8 @@
                     txt += '<option value="' + result[i].Id + '">' + result[i].LocationOfAppointment + '</option>';
                 }
                 $('#ddlLocationOfAppointment').html(txt);
-               
-                
+
+
             },
             error: function (e) {
                 toastr.error("Something Happen Wrong");
@@ -2073,7 +2108,7 @@
 
     // save new appointment
     function saveAppointment(appointmentInfo) {
-      
+
         var data = {};
 
         if (typeof appointmentInfo == "undefined") {
@@ -2115,9 +2150,58 @@
             }
         });
     }
+
+    function GetCarePlanTemplateList() {
+        $.ajax({
+            type: "GET",
+            url: Apipath + '/api/PatientMain/gettemplatelist',
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+                var careplanlist = $(".careplanlist");
+                var careplans = "";
+                if (result.length) {
+                    $.each(result, function (index, item) {
+                        careplans += `<tr>
+                         <td width="20%">${item.ProgramsName}</td>
+                         <td width="20%">${item.IsActive ? "Yes" : "No"}</td>
+                         <td width="30%">${item.CreatedDate.split("T")[0]}</td>
+                         <td width="30%">
+                            <div class="text-center">
+                            <a href="/careplan/dynamiccareform" target="_blank" class="btn btn-success text-white" style="display:none;cursor:pointer;">EDIT</a>
+                                &nbsp;&nbsp;&nbsp;
+                               <a href="/home/GetCarePlanForm?Id=${item.TemplateID}"  class="btn btn-success text-white" style="cursor:pointer;">Show Form</a>
+                                      </div>
+                                      </td>
+                               </tr>`
+
+
+                    });
+                    careplanlist.html("").append(careplans);
+                    //$("#tblCarePlanTemplateList").modal('show');
+                } else {
+                    careplans += `<tr><td colspan="4"><p class="text-center">No data found.</p></td></tr>`;
+                    careplanlist.html("").append(careplans);
+                }
+            },
+            error: function (e) {
+                toastr.error("Something Happen Wrong");
+            }
+        });
+    }
+    $.urlParam = function (name) {
+        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        return results[1] || 0;
+    }
+    function RedirectToCarePlan() {
+        var patientID = $.urlParam('patientid');
+        window.location.href = "/careplan/DynamicCareForm?PatientId=" + patientID;
+
+    }
     $(document).ready(function () {
 
         GetTypeOfAppointments();
         GetLocationOfAppointments();
+        
     });
 </script>

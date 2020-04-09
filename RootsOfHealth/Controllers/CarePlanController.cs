@@ -20,7 +20,7 @@ namespace RootsOfHealth.Controllers
         }
         public JsonResult SaveFormTemplate(string htmlTemplate, CarePlantemplateBO Model,string ProgramName)
         {
-            string TemplateName = ProgramName + "_CarePlan" + DateTime.Now.Millisecond;
+            string TemplateName = ProgramName + "_CarePlan" + DateTime.Now.ToString("dd_MM_yyyy_hh_mm_ss");
             var dataFile = Server.MapPath("~/App_Data/"+ TemplateName + ".html");
             System.IO.File.WriteAllText(@dataFile, htmlTemplate);
             Model.TemplatePath = dataFile;
@@ -43,8 +43,9 @@ namespace RootsOfHealth.Controllers
                     return Json("");
         }
         [Authorize(Roles = "navigator,supervisor")]
-        public ActionResult DynamicCareForm()
+        public ActionResult DynamicCareForm(int PatientId)
         {
+            ViewBag.PatientID = PatientId;
             return View();
         }
     }

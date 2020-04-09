@@ -366,6 +366,7 @@
     <Content Include="Views\Home\UploadExcel.cshtml" />
     <Content Include="Views\CarePlan\CreateCareForm.cshtml" />
     <Content Include="Views\CarePlan\DynamicCareForm.cshtml" />
+    <Content Include="Views\Home\GetCarePlanForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

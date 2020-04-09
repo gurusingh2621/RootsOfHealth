@@ -13,6 +13,7 @@ namespace RootsOfHealth.Models
         public Nullable<bool> IsActive { get; set; }
         public string TemplatePath { get; set; }
         public string TemplateTable { get; set; }
+        public int PatientID { get; set; }
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> ModifiedBy { get; set; }
