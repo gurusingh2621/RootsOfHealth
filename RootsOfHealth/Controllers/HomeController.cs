@@ -103,14 +103,14 @@ namespace RootsOfHealth.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetFormHtml()
+        public JsonResult GetFormHtml(int Id)
         {
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(WebApiKey);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var responseTask = client.GetAsync("api/PatientMain/GetCarePlanTemplateByID?ID=1");
+                var responseTask = client.GetAsync("api/PatientMain/GetCarePlanTemplateByID?ID="+Id);
                 responseTask.Wait();
                 var result = responseTask.Result;
                 if (result.IsSuccessStatusCode)
@@ -130,5 +130,11 @@ namespace RootsOfHealth.Controllers
                     //var gethtml=   System.IO.File.ReadAllText(Server.MapPath("~/App_Data/data.html"));
             return Json("");
         }
+        public ActionResult GetCarePlanForm(int Id)
+        {
+            ViewBag.TemplateId = Id;
+            return View();
+        }
+
     }
 }
