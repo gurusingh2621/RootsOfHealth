@@ -179,7 +179,7 @@
 
             <div class="appointment scroll">
                 <h2>Care Plan</h2>
-                <p class="createbtn"><button type="button" onclick="saveHtml('@ViewBag.PatientID')" class="btn btn-success">Save</button></p>
+                <p class="createbtn"><button type="button" onclick="saveHtml()" class="btn btn-success">Save</button></p>
 
                 <div class="form-group  d-flex align-items-center selectField">
                     <label class="m-0" style="min-width:100px;">Select Program</label>
@@ -784,7 +784,7 @@
             return t.content.cloneNode(true);
         }
         
-        function saveHtml(patientid) {
+        function saveHtml() {
 
             $("#droppable [readonly=readonly]").each(function (i, e) {
                 return;
@@ -827,7 +827,6 @@
                 ProgramID: $("#ProgramsID").val(),
                 IsSavedDraft : 1,
                 IsActive: 1,
-                PatientID: patientid,
                 CreatedBy: @Session["userid"].ToString(),
                 ModifiedBy:@Session["userid"].ToString(),
             };
@@ -838,7 +837,6 @@
                 contentType: 'application/json; charset=UTF-8',
                 dataType: "json",
                 success: function (result) {
-                    toastr.success(result);
                 }
             }).done(function (result) {
                 var model = {
@@ -853,7 +851,7 @@
                 data: JSON.stringify(model),
                 dataType: "json",
                 success: function (result) {
-                     toastr.success(result);
+                     toastr.success("Saved successfully.");
                 },
             });
             });
