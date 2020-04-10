@@ -301,7 +301,7 @@
                                 <div class="row" style="display:flex; margin:0 -15px">
                                     <div class="col-lg-5 col-md-5 col-sm-12 col-12" style="padding:0 15px; flex: 0 0 41.666667%;max-width: 41.666667%;">
                                         <input style="width:100%;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" name="SignatureOfPatient" value="@Model.ReleaseAndDisclousure.SignatureOfPatient" />
-                                        <strong style="line-height: normal;width: 100%;display: block; white-space:normal;">Signature of patient or legal representative</strong>
+                                        <strong style="line-height: normal;width: 100%;display: block; white-space:normal;">Signature of Client or legal representative</strong>
                                     </div>
                                     <div class="col-lg-2 col-md-2 col-sm-12 col-12" style="flex: 0 0 16.666667%;max-width: 16.666667%; padding:0 15px">
                                         <input style="width:100%;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;"  class="w-100" type="text" name="SignatureDate" value="@Model.ReleaseAndDisclousure.SignatureDate" />
@@ -309,7 +309,7 @@
                                     </div>
                                     <div class="col-lg-5 col-md-5 col-sm-12 col-12" style="padding:0 15px; flex: 0 0 41.666667%;max-width: 41.666667%;">
                                         <input style="width:100%;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" name="RepresentativeRelation" value="@Model.ReleaseAndDisclousure.RepresentativeRelation" />
-                                        <strong style="line-height: normal;width: 100%;display: block;white-space:normal;">If signed by legal representative, relationship to patient</strong>
+                                        <strong style="line-height: normal;width: 100%;display: block;white-space:normal;">If signed by legal representative, relationship to Client</strong>
                                     </div>
                                 </div>
                                 <div class="row" style="display:flex; margin:0 -15px">
@@ -565,7 +565,7 @@
                                     <div class="col-lg-6 col-md-6 col-sm-12 col-12 pt-3" style="flex: 0 0 50%;max-width: 50%; padding:0 15px;z-index: 0000;">
                                         <div class="PatientDetails">
                                             <p>
-                                                <span class="name" style="height: 25px;">Patient Name:</span> <input id="patientName" style="height: 25px;text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 100px !important;" class="PatientPadding" type="text" value="@Model.CareConnect.PatientName" name="PatientName">
+                                                <span class="name" style="height: 25px;">Client Name:</span> <input id="patientName" style="height: 25px;text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 100px !important;" class="PatientPadding" type="text" value="@Model.CareConnect.PatientName" name="PatientName">
                                             </p>
                                             <p>
                                                 <span class="name" style="height: 25px;">Date of Birth</span> <input style="height: 25px;text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 90px !important;" class="dobPadding" type="text" value="@Model.CareConnect.DateOfBirth" id="careDateOfBirth" name="DateOfBirth">
@@ -864,11 +864,11 @@
                                         <div class="row" style="display:flex; margin:0 -15px">
                                             <div class="col-lg-4 col-md-4 col-sm-12 col-12" style="width:30%; padding:0 15px;">
                                                 <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" name="PatientOrRepresentativeName" value="@Model.CareConnect.PatientOrRepresentativeName" placeholder="" />
-                                                <strong>Patient/Patient’s Representative name</strong>
+                                                <strong>Client/Client’s Representative name</strong>
                                             </div>
                                             <div class="col-lg-4 col-md-4 col-sm-12 col-12" style="width:30%; padding:0 15px;">
                                                 <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" name="PatientOrRepresentativeSignature" value="@Model.CareConnect.PatientOrRepresentativeSignature" placeholder="" />
-                                                <strong>Patient/Patient’s Representative Signature</strong>
+                                                <strong>Client/Client’s Representative Signature</strong>
                                             </div>
                                             <div class="col-lg-2 col-md-2 col-sm-12 col-12" style="width:20%; padding:0 15px;">
                                                 <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" name="RelationShip" value="@Model.CareConnect.RelationShip" placeholder="" />
@@ -936,7 +936,7 @@
                                     <div class="col-lg-6 col-md-6 col-sm-12 col-12 pt-3" style="flex: 0 0 50%;max-width: 50%; padding:0 15px;z-index: 0000;">
                                         <div class="PatientDetails">
                                             <p>
-                                                <span class="name">Patient Name:</span> <input id="pname" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 100px !important;" class="PatientPadding" type="text" value="@Model.CareConnect.PatientName" name="PatientName" >
+                                                <span class="name">Client Name:</span> <input id="pname" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 100px !important;" class="PatientPadding" type="text" value="@Model.CareConnect.PatientName" name="PatientName" >
                                             </p>
                                             <p>
                                                 <span class="name">Date of Birth</span> <input id="dob"  style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 90px !important;" class="dobPadding" type="text" value="@Model.CareConnect.DateOfBirth" name="DateOfBirth" >
@@ -1044,7 +1044,7 @@
                                     <div class="col-lg-6 col-md-6 col-sm-12 col-12 pt-3" style="flex: 0 0 50%;max-width: 50%; padding:0 15px;z-index: 0000;">
                                         <div class="PatientDetails">
                                             <p>
-                                                <span class="name">Patient Name:</span> <input id="wpcName" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 100px !important;" class="PatientPadding" type="text" value="@Model.WholePersonCare.PatientName" name="PatientName">
+                                                <span class="name">Client Name:</span> <input id="wpcName" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 100px !important;" class="PatientPadding" type="text" value="@Model.WholePersonCare.PatientName" name="PatientName">
                                             </p>
                                             <p>
                                                 <span class="name">Date of Birth</span> <input id="wpcDateOfBirth" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 90px !important;" class="dobPadding" type="text" value="@Model.WholePersonCare.DateOfBirth"  name="DateOfBirth">
@@ -1291,11 +1291,11 @@
                                         <div class="row" style="display:flex; margin:0 -15px">
                                             <div class="col-lg-4 col-md-4 col-sm-12 col-12" style="width:30%; padding:0 15px;">
                                                 <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" name="PatientOrRepresentativeName" value="@Model.WholePersonCare.PatientOrRepresentativeName" placeholder="" />
-                                                <strong>Patient/Patient’s Representative name</strong>
+                                                <strong>Client/Client’s Representative name</strong>
                                             </div>
                                             <div class="col-lg-4 col-md-4 col-sm-12 col-12" style="width:30%; padding:0 15px;">
                                                 <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" name="PatientOrRepresentativeSignature" value="@Model.WholePersonCare.PatientOrRepresentativeSignature" placeholder="" />
-                                                <strong>Patient/Patient’s Representative Signature</strong>
+                                                <strong>Client/Client’s Representative Signature</strong>
                                             </div>
                                             <div class="col-lg-2 col-md-2 col-sm-12 col-12" style="width:20%; padding:0 15px;">
                                                 <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" name="RelationShip" value="@Model.WholePersonCare.RelationShip" placeholder="" />
@@ -1363,7 +1363,7 @@
                                     <div class="col-lg-6 col-md-6 col-sm-12 col-12 pt-3" style="flex: 0 0 50%;max-width: 50%; padding:0 15px;z-index: 0000;">
                                         <div class="PatientDetails">
                                             <p>
-                                                <span class="name">Patient Name:</span> <input id="wpcname" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 100px !important;" class="PatientPadding" type="text" value="@Model.WholePersonCare.PatientName" name="PatientName">
+                                                <span class="name">Client Name:</span> <input id="wpcname" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 100px !important;" class="PatientPadding" type="text" value="@Model.WholePersonCare.PatientName" name="PatientName">
                                             </p>
                                             <p>
                                                 <span class="name">Date of Birth</span> <input id="wpcdob" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 90px !important;" class="dobPadding" type="text" value="@Model.WholePersonCare.DateOfBirth" name="DateOfBirth">

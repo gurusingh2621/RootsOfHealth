@@ -195,18 +195,18 @@
                     <label>Select</label>
                     <select id="ddlform" class="form-control" onchange="getFormFields()">
                         <option value="0">Select Option</option>
-                        <option value="1">Patient profile</option>
-                        <option value="2">Patient Housing</option>
-                        <option value="3">Patient Financial Security</option>
-                        <option value="4">Patient Employment/Education</option>
-                        <option value="5">Patient Communication & Mobility</option>
-                        <option value="6">Patient Healthcare</option>
-                        <option value="7">Patient Social Supports and Safety</option>
-                        <option value="8">Patient Legal Status</option>
+                        <option value="1">Client profile</option>
+                        <option value="2">Client Housing</option>
+                        <option value="3">Client Financial Security</option>
+                        <option value="4">Client Employment/Education</option>
+                        <option value="5">Client Communication & Mobility</option>
+                        <option value="6">Client Healthcare</option>
+                        <option value="7">Client Social Supports and Safety</option>
+                        <option value="8">Client Legal Status</option>
                         <option value="9">DAST</option>
                         <option value="10">AUDIT</option>
-                        <option value="11">Patient Health Questionnaire (PHQ-9)</option>
-                        <option value="12">Patient Food Access</option>
+                        <option value="11">Client Health Questionnaire (PHQ-9)</option>
+                        <option value="12">Client Food Access</option>
                     </select>
                 </div>
                 <div class="row">
@@ -286,6 +286,9 @@
     <script>
         var new_id = 0;
         $(function () {
+            $('#droppable input').on('input', function (e) {
+                $(this).val('');
+            });
             $('#control-box li').draggable({
                 connectToSortable: '#droppable',
                 helper: function () {
@@ -327,13 +330,13 @@
                             var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group" id="' + newid + '">' +
                                 '<label class="checkbox-group">Check Box (Multiple)</label><br>' +
                                 '<label>' +
-                                '<input type="checkbox"  value="1"> A' +
+                                '<input type="checkbox" name="check" value="1"> A' +
                                 '</label>' +
                                 ' <label>' +
-                                '<input type="checkbox"  value="2"> B' +
+                                '<input type="checkbox" name="check"  value="2"> B' +
                                 '</label>' +
                                 '<label>' +
-                                '<input type="checkbox"  value="3"> C' +
+                                '<input type="checkbox" name="check"  value="3"> C' +
                                 '</label>' +
                                 '</div>' +
                                 '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
@@ -376,9 +379,9 @@
                             var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group"  id="' + newid + '">' +
                                 '<label class="radiobox-group">Radio</label><br>' +
                                 '<label for="my-radio-a">A</label>' +
-                                ' <input type="radio" value="A">' +
+                                ' <input type="radio" name="radio" value="A">' +
                                 ' <label for="my-radio-b">B</label>' +
-                                '<input type="radio"  value="B">' +
+                                '<input type="radio" name="radio" value="B">' +
                                 '</div>' +
                                 '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                                 '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
@@ -424,9 +427,12 @@
 
 
                 }
-
+                 
             }).disableSelection();
+
+           
         });
+        
         function EditHtml(type, ID) {
             var str = '';
             $(".modal-body").html("");
@@ -508,7 +514,7 @@
                         $(".dragresize  [id=" + ID + "]").html("");
                         $(".dragresize  [id=" + ID + "]").html("<label class='checkbox-group'>Checkbox(Multiple)</label><br/>");
                         $(".option-block").each(function (index) {
-                            var option_data = '<label><input type="checkbox"  value="' + $(this).find("[placeholder=Value]").val() + '">' + $(this).find("[placeholder=Key]").val() + '</label>';
+                            var option_data = '<label><input type="checkbox" name="check" value="' + $(this).find("[placeholder=Value]").val() + '">' + $(this).find("[placeholder=Key]").val() + '</label>';
                             $(option_data).appendTo(".dragresize  [id=" + ID + "]");
                         });
 
@@ -623,12 +629,11 @@
                     $("#btnSave").bind("click", function () {
 
                         var ID = $(".lbltext").attr("control-id");
-
                         $(".dragresize  [id=" + ID + "]").html("");
                         $(".dragresize  [id=" + ID + "]").html("<label class='radiobox-group'>Radio</label><br/>");
                         $(".option-block").each(function (index) {
                             var option_data = '<label>' + $(this).find("[placeholder=Key]").val() + '</label>' +
-                                '<input type = "radio"  value = "' + $(this).find("[placeholder = Value]").val() + '"/>'
+                                '<input type = "radio" name="radio"  value = "' + $(this).find("[placeholder = Value]").val() + '"/>'
                             $(option_data).appendTo(".dragresize  [id=" + ID + "]");
                         });
                         $("#" + ID).find(".radiobox-group").html($(".lbltext").val());

@@ -113,7 +113,7 @@
                 <span></span>
                 <span></span>
             </div>
-            <div id="cross" title="Hide patient Menu">
+            <div id="cross" title="Hide Client Menu">
                 <span></span>
                 <span></span>
             </div>
@@ -209,9 +209,9 @@
         $('#menu-toggle').click(function () {
             $(this).toggleClass('open');
             if ($("#menu-toggle").hasClass("open")) {
-                $("#cross").attr("title", "Hide patient Menu")
+                $("#cross").attr("title", "Hide Client Menu")
             } else {
-                $("#cross").attr("title", "Show patient Menu")
+                $("#cross").attr("title", "Show Client Menu")
             }
             $("#myTab").toggleClass('showHide');
             $(".inner-content").toggleClass("showHideInner");
@@ -2689,7 +2689,7 @@
 
         if ('@ViewBag.message' == "RecordSaved") {
 
-            toastr.success("Patient saved successfully")
+            toastr.success("Client saved successfully")
         }
 
         $("#PatientImg").change(function () {

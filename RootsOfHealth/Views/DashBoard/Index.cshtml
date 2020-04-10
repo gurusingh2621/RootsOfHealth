@@ -103,7 +103,7 @@
                 </li>
 
                 <li class="nav-item " style="display:block">
-                    <a class="nav-link" href="#" data-toggle="modal" data-target="#recentpatientModal" >Recent Patients</a>
+                    <a class="nav-link" href="#" data-toggle="modal" data-target="#recentpatientModal" >Recent Clients</a>
                 </li>
             </ul>
         </div> 
@@ -153,7 +153,7 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content" style="width:800px;">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="recentpatientModalLabel">Recent Patient</h5>
+                        <h5 class="modal-title" id="recentpatientModalLabel">Recent Client</h5>
                         <button type="button" data-dismiss="modal" class="close"  aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -201,9 +201,9 @@
         $('#menu-toggle').click(function () {
             $(this).toggleClass('open');
             if ($("#menu-toggle").hasClass("open")) {
-                $("#cross").attr("title", "Hide patient Menu")
+                $("#cross").attr("title", "Hide Client Menu")
             } else {
-                $("#cross").attr("title", "Show patient Menu")
+                $("#cross").attr("title", "Show Client Menu")
             }
             $("#myTab").toggleClass('showHide');
             $(".inner-content").toggleClass("showHideInner");
