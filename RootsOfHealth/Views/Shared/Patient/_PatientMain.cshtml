@@ -150,10 +150,10 @@
                     @*<div class="col-lg-8 col-md-12 col-sm-12 col-12 pr-0">*@
                     <div class="paitent-detail-left">
                         <div class="detail-heading d-flex">
-                            <h2>Patient Profile</h2>
+                            <h2>Client Profile</h2>
 
                             <div class="detail-button ml-auto">
-                                <a href='#' data-toggle="modal" data-target="#CarePlanListModal" onclick="GetCarePlanTemplateList()" class="btn btn-success label-fields">CarePlanTemplates</a>
+                                <a href='#' data-toggle="modal" style="display:none!important;" data-target="#CarePlanListModal" onclick="GetCarePlanTemplateList()" class="btn btn-success label-fields">CarePlanTemplates</a>
                                 <a href='' onclick=""
                                    id="btnPatientAppointments" class="btn btn-success label-fields">
 
@@ -172,7 +172,7 @@
                                     Edit
                                 </a>
 
-                                <a style="display:none" class="btn btn-info" href="javascript:{}" id="btnaddprogram" data-toggle="modal" data-target="#myModal"><span class="add-icon"></span> Add Patient Programs</a>
+                                <a style="display:none" class="btn btn-info" href="javascript:{}" id="btnaddprogram" data-toggle="modal" data-target="#myModal"><span class="add-icon"></span> Add Client Programs</a>
                                 <a tabindex="57" href="javascript:{}" onclick="return ProfileSave();" id="ProfileSave" class="btn btn-success">
                                     <i class="far fa-save"></i>
                                     Save
@@ -1796,7 +1796,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="notesModalLabel">Patient Note</h5>
+                <h5 class="modal-title" id="notesModalLabel">Client Note</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -1840,7 +1840,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="notesreadonlyModalLabel">Patient Note</h5>
+                <h5 class="modal-title" id="notesreadonlyModalLabel">Client Note</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -1874,7 +1874,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Patient Programs</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add Client Programs</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>

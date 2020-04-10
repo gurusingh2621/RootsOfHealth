@@ -367,6 +367,9 @@
     <Content Include="Views\CarePlan\CreateCareForm.cshtml" />
     <Content Include="Views\CarePlan\DynamicCareForm.cshtml" />
     <Content Include="Views\Home\GetCarePlanForm.cshtml" />
+    <Content Include="Views\Patient\_FormScheduling.cshtml" />
+    <Content Include="Views\Patient\AddLookUpOption.cshtml" />
+    <Content Include="Views\Patient\EditLookUpOption.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

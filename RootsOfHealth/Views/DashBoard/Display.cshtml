@@ -299,7 +299,7 @@
                         <div class="col-md-6">
                             <div class="count-item patienList">
                                 <div class="patientHeading patientCount">
-                                    Patient Count
+                                    Client Count
                                     <span class="expandicon">
                                         <i class="fa fa-minus exp-p" aria-hidden="true"></i>
                                         <i class="fa fa-plus exp-m" aria-hidden="true"></i>
@@ -334,7 +334,7 @@
                         <div class="col-md-4">
                             <div class="count-item patienList">
                                 <div class="patientHeading patientLisHeading">
-                                    Recent patient
+                                    Recent Client
                                     <span class="expandicon">
                                         <i class="fa fa-minus exp-p" aria-hidden="true"></i>
                                         <i class="fa fa-plus exp-m" aria-hidden="true"></i>
@@ -363,7 +363,7 @@
                                         <table class="table frmtbl">
                                             <thead class="thead-light">
                                                 <tr>
-                                                    <th>Patient</th>
+                                                    <th>Client</th>
                                                     <th>Form</th>
                                                     <th>Status</th>
                                                 </tr>
@@ -402,7 +402,7 @@
                         <div class="col-md-6">
                             <div class="count-item patienList">
                                 <div class="patientHeading patientStats">
-                                    Patient Condition
+                                    Client Condition
                                     <span class="expandicon">
                                         <i class="fa fa-minus exp-p" aria-hidden="true"></i>
                                         <i class="fa fa-plus exp-m" aria-hidden="true"></i>
@@ -458,7 +458,7 @@
                     var dataT = {
                         labels: ['Clinic', 'Dream', 'OU', 'Peralta College'],
                         datasets: [{
-                            label: "Patient Count",
+                            label: "Client Count",
                             data: aDatasets1,
                             fill: false,
                             backgroundColor: ["rgb(60, 179, 113)", "rgb(30, 144, 255)", "rgb(238, 130, 238)", "rgb(211, 211, 211)"],
@@ -535,7 +535,7 @@
                     var dataT = {
                         labels: ['Total', 'Male', 'Female', 'Trans male', 'Trans female', 'Gender Queer','Other'],
                         datasets: [{
-                            label: "Patient Count",
+                            label: "Client Count",
                             data: aDatasets1,
                             fill: false,
                             backgroundColor: ["rgb(60, 179, 113)", "rgb(30, 144, 255)", "rgb(238, 130, 238)", "rgb(211, 211, 211)", "rgb(255, 165, 0)", "rgb(106, 90, 205)", "rgb(255, 99, 71)"],
@@ -624,7 +624,7 @@
                             tbl += '<span class="date">Date:' + $.date(data[i].AppointmentDate) + '</span>,'
                             tbl += '<span  class="time">'
                             tbl += ' Time:' + data[i].AppointmentTime + '</span>'
-                            tbl += '<p  class="content hideContent"> Patient: <a href="#" onclick="bindTopPatient(' + data[i].PatientID + ')">' + data[i].PatientName +"</a></br>"+ data[i].Notes + '</p > <div class="show-more">'
+                            tbl += '<p  class="content hideContent"> Client: <a href="#" onclick="bindTopPatient(' + data[i].PatientID + ')">' + data[i].PatientName +"</a></br>"+ data[i].Notes + '</p > <div class="show-more">'
                             if (data[i].Notes.length > 100) {
                                 tbl += '<a href="#!" id="' + data[i].PatientAppointmentID + '" onclick="ShowMore(' +  data[i].PatientAppointmentID + ')" class="btn btn-link" >read more</a>'
                             }
@@ -648,7 +648,7 @@
                     var dataT = {
                         labels: ['Secure','Struggling','At risk','Crisis'],
                         datasets: [{
-                            label: "Patient Count",
+                            label: "Client Count",
                             data: aDatasets1,
                             fill: false,
                             backgroundColor: ["rgb(57, 172, 57)", "rgb(255, 255, 51)", "rgb(255, 140, 26)", "rgb(255, 77, 77)"  ],
@@ -694,7 +694,7 @@
                             },
                             responsive: true,
                             maintainAspectRatio: false,
-                            title: { display: true, text: 'Patient Condition', fontSize: 15 },
+                            title: { display: true, text: 'Client Condition', fontSize: 15 },
                             scales: {
                                 xAxes: [{
                                     barPercentage: 0.4,
