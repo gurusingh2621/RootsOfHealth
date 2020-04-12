@@ -1322,10 +1322,12 @@
         $('#txtfoodscore').html(@Model.PatientScore.foodaccessscore+"/26");
         $('#txtfoodstatus').html('@Model.PatientScore.foodaccessstatus');
          //-----------------Food Access score end----------------------//
-         //----------------Profile(Overall) score start----------------------//
+
+          //----------------Profile(Overall) score start----------------------//
         $('#txtoverallscore').html(@Model.PatientScore.OverallScore+"/200");
 
-        $('#txtoverallstatus').html('@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Model.PatientScore.OverallStatus.ToLower())');
+         @*$('#txtoverallstatus').html('@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Model.PatientScore.OverallStatus.ToLower())');*@
+           $('#txtoverallstatus').html('@Model.PatientScore.OverallStatus');
          //-----------------Profile(Overall) score end----------------------//
 
 
