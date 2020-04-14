@@ -37,7 +37,18 @@ namespace RootsOfHealth.Controllers
                 if (result.IsSuccessStatusCode)
                 {
                     var data = result.Content.ReadAsStringAsync().Result;
-                    return Json(TemplateName);
+                    if (data == "0")
+                    {
+                        return Json("0");
+                    }
+                    else
+                    {
+                        return Json(new {
+                            id=data,
+                            tablename= TemplateName
+                        });
+                    }
+                    
                 }
             }
                     return Json("");

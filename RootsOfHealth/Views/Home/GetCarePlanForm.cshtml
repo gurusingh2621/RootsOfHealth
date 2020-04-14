@@ -10,6 +10,74 @@
         padding: 10px 0;
         align-content: baseline;
     }
+
+   
+
+    .renderform .form-control {
+        height: 23px;
+        font-size: 13px;
+        border: 1px solid #e2e2e2;
+        border-radius: 0px;
+        padding: 0 15px;
+    }
+        .renderform select {
+            height: 23px !important;
+        }
+        .renderform .form-control[type="file"] {
+            border: 0;
+            padding: 0;
+            height: auto;
+        }
+
+    .renderform textarea.form-control {
+        height: 50px;
+    }
+
+    .renderform .form-control:focus {
+        box-shadow: none;
+        outline: none;
+    }
+
+    .renderform .event-btn-right {
+        position: absolute;
+        bottom: auto;
+        right: -1px;
+        z-index: 9;
+        top: -3px;
+    }
+
+    .renderform .frmbtn .form-group label:first-child {
+        background: #e2e2e2;
+        display: block;
+        margin: -11px -11px 10px;
+        padding: 4px 10px;
+        font-size: 14px;
+        color: #343434;
+        font-weight: 500;
+        line-height: normal;
+        vertical-align: middle;
+    }
+
+    .renderform .frmbtn .form-group {
+        margin: 0;
+    }
+
+    .renderform .frmbtn {
+        border: 1px solid #e2e2e2;
+        padding: 10px;
+        position: relative;
+        margin: 0 0 20px 0;
+    }
+
+    .renderform .frmbtn select.form-control {
+        padding: 0 15px;
+        background: url(../images/chevron-arrow-down.svg) no-repeat 0 0;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        -ms-appearance: none;
+        background-size: 12px;
+        background-position: 98% 5px;
+    }
 </style>
 <section id="content" class="responsive-container pt-0">
 
@@ -18,11 +86,19 @@
         <div class="container-fluid pl-0 pr-0">
 
             <div class="appointment scroll">
-                <h2>Care Plan</h2>
+                <div class="detail-heading d-flex">
+                    <h2>Care Plan</h2>
+                    <div class="detail-button ml-auto">
+                        <a href="javascript:{}" onclick="return saveTemplateField();" class="btn btn-success mr-0" style="display:none;">
+                            <i class="far fa-save"></i>
+                            Save
+                        </a>
+                    </div>
+                </div>
                 <div class="renderform">
 
                 </div>
-                <input type="button" id="button9" onclick="saveTemplateField()" class="btn btn-primary" value="Submit" />
+               
             </div>
         </div>
     </div>
@@ -33,6 +109,7 @@
          var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
         var ItemNames;
         var tableName;
+       
         function GetDropDownName() {
             $.ajax({
                 type: "GET",
@@ -249,24 +326,26 @@
                     contentType: 'application/json; charset=UTF-8',
                     dataType: "json",
                     success: function (result) {
+                        
                         console.log(result[0]);
-                        $("#templateid").val(result[0].ID);
+                        if (result.length) {
+                            $("#templateid").val(result[0].ID);
                             $(".renderform [type=text],[type=number],[type=file],[type=date]").each(function (i, e) {
-                                this.value = result[0][ $(this).attr("data-column")];
+                                this.value = result[0][$(this).attr("data-column")];
                             });
 
-                        $(".renderform select").each(function (i, e) {
-                            this.value = result[0][$(this).attr("data-column")];
-                        });
-                        $(".renderform [type=radio],[type=checkbox]").each(function (i, e) {
-                            if (this.value == result[0][$(this).attr("data-column")]) {
-                                $(this).prop("checked", true);
-                            }
-                        });
-                        $(".renderform  textarea").each(function (i, e) {
-                            this.value = result[0][$(this).attr("data-column")];
-                        });
-
+                            $(".renderform select").each(function (i, e) {
+                                this.value = result[0][$(this).attr("data-column")];
+                            });
+                            $(".renderform [type=radio],[type=checkbox]").each(function (i, e) {
+                                if (this.value == result[0][$(this).attr("data-column")]) {
+                                    $(this).prop("checked", true);
+                                }
+                            });
+                            $(".renderform  textarea").each(function (i, e) {
+                                this.value = result[0][$(this).attr("data-column")];
+                            });
+                        }
                         }
                 }).done(function () {
                     if ($(".renderform  [readonly=readonly]").length) {

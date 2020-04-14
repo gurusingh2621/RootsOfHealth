@@ -139,16 +139,6 @@
         margin: 0 0 10px 0;
         display: block;
     }
-
-
-    .highlight {
-        background-color: #34425a;
-        -moz-box-shadow: inset 0 0 10px #34425a;
-        -webkit-box-shadow: inset 0 0 10px #34425a;
-        box-shadow: inset 0 0 10px #34425a;
-        height: 90px;
-    }
-
     .form-group.set-align label {
         padding-right: 10px;
         margin-bottom: 0px;
@@ -169,6 +159,159 @@
         border: 1px dashed #aaa;
         line-height: 1.2em;
     }
+    /*13-04-2020*/
+    ul#control-box {
+        padding: 0;
+    }
+
+    .controlsTabWrap {
+        background: #34425a;
+    }
+
+        .controlsTabWrap .nav-tabs .nav-link.active {
+            background: transparent;
+            color: #fff;
+            border: 0;
+        }
+
+        .controlsTabWrap .nav-tabs .nav-link {
+        }
+
+        .controlsTabWrap .nav-tabs {
+            margin: 0 0 0px;
+        }
+
+        .controlsTabWrap .tab-content {
+            padding: 20px;
+        }
+
+            .controlsTabWrap .tab-content .tab-pane {
+                padding: 0;
+            }
+
+        .controlsTabWrap #control-box li {
+            background: transparent;
+            color: #fff;
+            border-radius: 0;
+            box-shadow: none;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .controlsTabWrap ul#control-box {
+            border: 0;
+        }
+
+    #content .controlsTabWrap.profile-tabs .nav-tabs {
+        position: static;
+        margin: 0;
+        width: 100%;
+        height: auto;
+        background: #fff;
+        padding-top: 0px;
+    }
+
+    #frmb-cb-wrap .profile-tabs .nav-tabs:hover {
+        overflow-x: hidden;
+    }
+
+    .databseSelectControl label {
+        color: #fff;
+    }
+
+    .databseSelectControl select {
+        background: #3e4e6a;
+        color: #fff;
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    div#droppable .form-control {
+        height: 23px;
+        font-size: 13px;
+        border: 1px solid #e2e2e2;
+        border-radius: 0px;
+        padding: 0 15px;
+    }
+
+        div#droppable .form-control[type="file"] {
+            border: 0;
+            padding: 0;
+            height: auto;
+        }
+
+    div#droppable textarea.form-control {
+        height: 50px;
+    }
+
+    div#droppable .form-control:focus {
+        box-shadow: none;
+        outline: none;
+    }
+
+    div#droppable .event-btn-right {
+        position: absolute;
+        bottom: auto;
+        right: -1px;
+        z-index: 9;
+        top: -3px;
+    }
+
+    .draggablediv .frmbtn .form-group label:first-child {
+        background: #e2e2e2;
+        display: block;
+        margin: -11px -11px 10px;
+        padding: 4px 10px;
+        font-size: 14px;
+        color: #343434;
+        font-weight: 500;
+        line-height: normal;
+        vertical-align: middle;
+    }
+
+    .draggablediv .frmbtn .form-group {
+        margin: 0;
+    }
+
+    .draggablediv .frmbtn {
+        border: 1px solid #e2e2e2;
+        padding: 10px;
+        position: relative;
+        margin: 0 0 20px 0;
+    }
+
+        .draggablediv .frmbtn select.form-control {
+            padding: 0 15px;
+            background: url(../images/chevron-arrow-down.svg) no-repeat 0 0;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            -ms-appearance: none;
+            background-size: 12px;
+            background-position: 98% 5px;
+        }
+
+    #content .profile-tabs.controlsTabWrap {
+        position: sticky;
+        top: 0;
+    }
+
+    .appointment {
+        position: relative;
+    }
+    .appointment .detail-button .form-group {
+        margin-right: 10px;
+    }
+        .appointment .detail-button .form-group select {
+        height: 32px;
+        border-radius: 50px;
+        padding: 0 12px;
+        box-shadow: none;
+        outline: none;
+    }
+        .appointment .detail-button .form-group {
+            margin-right: 270px;
+        }
+    .detail-button.ml-auto a:last-child {
+        margin-left: 8px;
+    }
 </style>
 
 <section id="content" class="responsive-container pt-0">
@@ -178,53 +321,80 @@
         <div class="container-fluid pl-0 pr-0">
 
             <div class="appointment scroll">
-                <h2>Care Plan</h2>
-                <p class="createbtn"><button type="button" onclick="saveHtml()" class="btn btn-success">Save</button></p>
-
-                <div class="form-group  d-flex align-items-center selectField">
-                    <label class="m-0" style="min-width:100px;">Select Program</label>
-                    <select id="ProgramsID" class="form-control">
-                        <option value="1">Clinic</option>
-                        <option value="2">Dream</option>
-                        <option value="3">OU</option>
-                        <option value="4">Peralta College</option>
-                    </select>
-
+                <div class="detail-heading d-flex">
+                    <h2>Care Plan</h2><div class="detail-button ml-auto">
+    <div class="form-group">
+        <select id="ProgramsID" class="form-control">
+            <option value="0">Select program</option>
+            <option value="1">Clinic</option>
+            <option value="2">Dream</option>
+            <option value="3">OU</option>
+            <option value="4">PeraltaCollege</option>
+        </select>
+    </div>
+    <a href="javascript:{}" onclick="return PreviewForm();"  class="btn btn-success mr-0 disabled preview">
+        <i class="far fa-save"></i>
+        Preview
+    </a>
+    <a href="javascript:{}" onclick="return saveHtml();"  class="btn btn-success mr-0">
+        <i class="far fa-save"></i>
+        Save
+    </a>
+</div>
                 </div>
-                <div class="form-group col-md-3">
-                    <label>Select</label>
-                    <select id="ddlform" class="form-control" onchange="getFormFields()">
-                        <option value="0">Select Option</option>
-                        <option value="1">Client profile</option>
-                        <option value="2">Client Housing</option>
-                        <option value="3">Client Financial Security</option>
-                        <option value="4">Client Employment/Education</option>
-                        <option value="5">Client Communication & Mobility</option>
-                        <option value="6">Client Healthcare</option>
-                        <option value="7">Client Social Supports and Safety</option>
-                        <option value="8">Client Legal Status</option>
-                        <option value="9">DAST</option>
-                        <option value="10">AUDIT</option>
-                        <option value="11">Client Health Questionnaire (PHQ-9)</option>
-                        <option value="12">Client Food Access</option>
-                    </select>
-                </div>
+
                 <div class="row">
+
                     <div id="frmb-cb-wrap" class="col-md-3">
-                        <ul id="control-box" class="frmb-control">
-                            <li data-type="label"><span><i class="fa fa-tasks" aria-hidden="true"></i>Label</span></li>
-                            <li id="btn" data-type="button"><span><i class="fa fa-tasks" aria-hidden="true"></i>Button</span></li>
-                            <li data-type="checkbox-group"><span><i class="fa fa-check-square" aria-hidden="true"></i>Checkbox</span></li>
-                            <li data-type="date"><span><i class="fa fa-calendar" aria-hidden="true"></i>Date Field</span></li>
-                            <li data-type="file"><span><i class="fa fa-file" aria-hidden="true"></i>File Upload</span></li>
-                            <li data-type="number"><span><i class="fa fa-list-ol" aria-hidden="true"></i>Number</span></li>
-                            <li data-type="radio-group"><span><i class="fa fa-stop-circle" aria-hidden="true"></i>Radio</span></li>
-                            <li data-type="select"><span><i class="fa fa-text-width" aria-hidden="true"></i>Select</span></li>
-                            <li data-type="text"><span><i class="fa fa-text-width" aria-hidden="true"></i>Text Field</span></li>
-                            <li data-type="textarea"><span><i class="fa fa-text-width" aria-hidden="true"></i>Text Area</span></li>
-                        </ul>
-                        <ul id="database-control-box" class="frmb-control">
-                        </ul>
+                        <div class="controlsTabWrap profile-tabs">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#htmlTab">HTML Field</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#databaseTab">Database Field</a>
+                                </li>
+                            </ul>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div class="tab-pane active container" id="htmlTab">
+                                    <ul id="control-box" class="frmb-control">
+                                        <li data-type="label"><span><i class="fa fa-tasks" aria-hidden="true"></i>Label</span></li>
+                                        <li id="btn" data-type="button" style="display:none;"><span><i class="fa fa-tasks" aria-hidden="true"></i>Button</span></li>
+                                        <li data-type="checkbox-group"><span><i class="fa fa-check-square" aria-hidden="true"></i>Checkbox</span></li>
+                                        <li data-type="date"><span><i class="fa fa-calendar" aria-hidden="true"></i>Date Field</span></li>
+                                        <li data-type="file"><span><i class="fa fa-file" aria-hidden="true"></i>File Upload</span></li>
+                                        <li data-type="number"><span><i class="fa fa-list-ol" aria-hidden="true"></i>Number</span></li>
+                                        <li data-type="radio-group"><span><i class="fa fa-stop-circle" aria-hidden="true"></i>Radio</span></li>
+                                        <li data-type="select"><span><i class="fa fa-text-width" aria-hidden="true"></i>Select</span></li>
+                                        <li data-type="text"><span><i class="fa fa-text-width" aria-hidden="true"></i>Text Field</span></li>
+                                        <li data-type="textarea"><span><i class="fa fa-text-width" aria-hidden="true"></i>Text Area</span></li>
+                                    </ul>
+                                </div>
+                                <div class="tab-pane container" id="databaseTab">
+                                    <div class="form-group databseSelectControl">
+                                        <label>Select from database</label>
+                                        <select id="ddlform" class="form-control" onchange="getFormFields()" style="display:none;">
+                                            <option value="0">Select Option</option>
+                                            <option value="1">Client profile</option>
+                                            <option value="2">Client Housing</option>
+                                            <option value="3">Client Financial Security</option>
+                                            <option value="4">Client Employment/Education</option>
+                                            <option value="5">Client Communication & Mobility</option>
+                                            <option value="6">Client Healthcare</option>
+                                            <option value="7">Client Social Supports and Safety</option>
+                                            <option value="8">Client Legal Status</option>
+                                            <option value="9">DAST</option>
+                                            <option value="10">AUDIT</option>
+                                            <option value="11">Client Health Questionnaire (PHQ-9)</option>
+                                            <option value="12">Client Food Access</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="col-md-9">
@@ -285,6 +455,7 @@
     <script src="~/Scripts/jquery-ui.min.js"></script>
     <script>
         var new_id = 0;
+        var templateid = 0;
         $(function () {
             $('#droppable input').on('input', function (e) {
                 $(this).val('');
@@ -304,8 +475,13 @@
                 start: function (e, ui) {
                     placeholderHeight = ui.item.outerHeight();
                     placeholderWidth = ui.item.outerWidth();
-                    ui.placeholder.height(placeholderHeight + 10);
-                    ui.placeholder.width(placeholderWidth + 10);
+                    if (placeholderWidth > 100) {
+                        ui.placeholder.height(placeholderHeight-2);
+                        ui.placeholder.width(placeholderWidth-2);
+                    } else {
+                        $(ui.placeholder).css('display', 'none');
+                    }
+                   
                 },
 
                 receive: function (event, ui) {
@@ -328,16 +504,13 @@
                             break;
                         case "checkbox-group":
                             var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group" id="' + newid + '">' +
-                                '<label class="checkbox-group">Check Box (Multiple)</label><br>' +
-                                '<label>' +
-                                '<input type="checkbox" name="check" value="1"> A' +
-                                '</label>' +
-                                ' <label>' +
-                                '<input type="checkbox" name="check"  value="2"> B' +
-                                '</label>' +
-                                '<label>' +
-                                '<input type="checkbox" name="check"  value="3"> C' +
-                                '</label>' +
+                                '<label class="checkbox-group">Check Box (Multiple)</label>' +
+                                '<div class="custom-control custom-checkbox  d-inline-block mr-2">' +
+                                '<input  type="checkbox" class="custom-control-input" name="checkbox" value="true" id="checkbox1">' +
+                                '<label class="custom-control-label" for="checkbox1" value="true">Yes</label></div>' +
+                                '<div class="custom-control custom-checkbox  d-inline-block mr-2">' +
+                                '<input type="checkbox" class="custom-control-input"  name="checkbox" value="false" id="checkbox2">' +
+                                '<label class="custom-control-label" for="checkbox2">No</label></div>' +
                                 '</div>' +
                                 '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                                 '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
@@ -377,11 +550,13 @@
                             break;
                         case "radio-group":
                             var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group"  id="' + newid + '">' +
-                                '<label class="radiobox-group">Radio</label><br>' +
-                                '<label for="my-radio-a">A</label>' +
-                                ' <input type="radio" name="radio" value="A">' +
-                                ' <label for="my-radio-b">B</label>' +
-                                '<input type="radio" name="radio" value="B">' +
+                                '<label class="radiobox-group">Radio</label>' +
+                                '<div class="custom-control custom-radio d-inline-block mr-2">' +
+                                '<input  type="radio" class="custom-control-input" name="radio" value="true" id="radio1">' +
+                                '<label class="custom-control-label" for="radio1" value="true">Yes</label></div>' +
+                                '<div class="custom-control custom-radio d-inline-block mr-2">' +
+                                '<input type="radio" class="custom-control-input"  name="radio" value="false" id="radio2">' +
+                                '<label class="custom-control-label" for="radio2">No</label></div>' +
                                 '</div>' +
                                 '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                                 '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
@@ -424,8 +599,23 @@
                             $(this).find("li").replaceWith(str);
                             break;
                     }
+                    
 
+                },
+                stop: function (event, ui) {
+                    $('input,textarea').on('input', function (e) {
+                        $(this).val('');
+                    });
+                    $('input[type="checkbox"],input[type="radio"]').click(function (event) {
+                        var $checkbox = $(this);
+                        setTimeout(function () {
+                            $checkbox.removeAttr('checked');
+                        }, 0);
 
+                        event.preventDefault();
+                        event.stopPropagation();
+                    });
+                   
                 }
                  
             }).disableSelection();
@@ -442,14 +632,18 @@
                         '<label>Label Text</label>' +
                         '<input  type="text" control-id="' + ID + '" class="form-control lbltext" value="' + $("#" + ID).html() + '"/>' +
                         '</div>';
+                    var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
+                    var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
+                    var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
                     str += '<div class="modal-row">' +
-                        '<label class="control-label"> Input Size </label>' +
-                        '<div class="form-group">' +
+                            '<label class="control-label"> Input Size </label>' +
+                            '<div class="form-group">' +
                         '<select class="form-control"  id="inputsize">' +
-                        '<option value="col-md-4">Small</option>' +
-                        '<option value="col-md-6">Medium</option>' +
-                        '<option value="col-md-12" selected>Large</option>' +
-                        '</select></div></div>';
+                        '<option value="col-md-4"' + ismd4+' > Small</option > ' +
+                        '<option value="col-md-6"' + ismd6 +'>Medium</option>' +
+                        '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
+                            '</select></div></div>';
+                    
                     $("#btnSave").unbind();
                     $("#btnSave").bind("click", function () {
                         var ID = $(".lbltext").attr("control-id");
@@ -463,13 +657,16 @@
                         '<label>Button Text</label>' +
                         '<input  type="text" control-id="' + ID + '" class="form-control lbltext" value="' + $("#" + ID).html() + '"/>' +
                         '</div>';
+                    var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
+                    var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
+                    var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
                     str += '<div class="modal-row">' +
                         '<label class="control-label"> Input Size </label>' +
                         '<div class="form-group">' +
                         '<select class="form-control"  id="inputsize">' +
-                        '<option value="col-md-4">Small</option>' +
-                        '<option value="col-md-6">Medium</option>' +
-                        '<option value="col-md-12" selected>Large</option>' +
+                        '<option value="col-md-4" ' + ismd4 +'>Small</option>' +
+                        '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
+                        '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
                         '</select></div></div>';
                     $("#btnSave").unbind();
                     $("#btnSave").bind("click", function () {
@@ -484,21 +681,23 @@
                         '<label>Label Text</label>' +
                         '<input  type="text" control-id="' + ID + '" class="form-control lbltext" value="' + $("#" + ID).find(".checkbox-group").html() + '"/>' +
                         '</div>';
-
+                    var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
+                    var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
+                    var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
                     str += '<div class="modal-row">' +
                         '<label class="control-label"> Input Size </label>' +
                         '<div class="form-group">' +
                         '<select class="form-control"  id="inputsize">' +
-                        '<option value="col-md-4">Small</option>' +
-                        '<option value="col-md-6">Medium</option>' +
-                        '<option value="col-md-12" selected>Large</option>' +
+                        '<option value="col-md-4" ' + ismd4 +'>Small</option>' +
+                        '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
+                        '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
                         '</select></div></div>';
                     str += '<div class="modal-row">' +
                         '<label>Options</label>';
                     $('.dragresize  #' + ID + " [type=checkbox]").each(function () {
                         str += '<div class="option-block">' +
                             '<div class="option-fields">' +
-                            ' <input type="text" placeholder="Key" class="form-control"  value="' + $(this).parent('label').text() + '"/>' +
+                            ' <input type="text" placeholder="Key" class="form-control"  value="' + $(this).next().text() + '"/>' +
                             ' <input type="text" placeholder="Value" class="form-control"  value="' + $(this).attr("value") + '"/>' +
                             '</div>' +
                             '<div class="popup-event-btn">' +
@@ -512,10 +711,12 @@
 
                         var ID = $(".lbltext").attr("control-id");
                         $(".dragresize  [id=" + ID + "]").html("");
-                        $(".dragresize  [id=" + ID + "]").html("<label class='checkbox-group'>Checkbox(Multiple)</label><br/>");
+                        $(".dragresize  [id=" + ID + "]").html("<label class='checkbox-group'>Checkbox(Multiple)</label>");
                         $(".option-block").each(function (index) {
-                            var option_data = '<label><input type="checkbox" name="check" value="' + $(this).find("[placeholder=Value]").val() + '">' + $(this).find("[placeholder=Key]").val() + '</label>';
-                            $(option_data).appendTo(".dragresize  [id=" + ID + "]");
+                            var option_data = `<div class="custom-control custom-checkbox  d-inline-block mr-2">
+    <input  type="checkbox" class="custom-control-input" id="${ID + index}"  name="radio" value="${$(this).find("[placeholder = Value]").val()}">
+    <label class="custom-control-label" for="${ID + index}">${$(this).find("[placeholder = Key]").val()}</label></div>
+    `;                            $(option_data).appendTo(".dragresize  [id=" + ID + "]");
                         });
 
                         $("#" + ID).find(".checkbox-group").html($(".lbltext").val());
@@ -529,13 +730,16 @@
                         '<label>Label Text</label>' +
                         '<input  type="text" control-id="' + ID + '" class="form-control lbltext" value="' + $("#" + ID).prev().prev().html() + '"/>' +
                         '</div>';
+                    var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
+                    var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
+                    var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
                     str += '<div class="modal-row">' +
                         '<label class="control-label"> Input Size </label>' +
                         '<div class="form-group">' +
                         '<select class="form-control"  id="inputsize">' +
-                        '<option value="col-md-4">Small</option>' +
-                        '<option value="col-md-6">Medium</option>' +
-                        '<option value="col-md-12" selected>Large</option>' +
+                        '<option value="col-md-4" ' + ismd4 +'>Small</option>' +
+                        '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
+                        '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
                         '</select></div></div>';
                     $("#btnSave").unbind();
                     $("#btnSave").bind("click", function () {
@@ -555,13 +759,16 @@
                         '<label>Label Text</label>' +
                         '<input  type="text" control-id="' + ID + '" class="form-control lbltext" value="' + $("#" + ID).prev().html() + '"/>' +
                         '</div>';
+                    var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
+                    var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
+                    var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
                     str += '<div class="modal-row">' +
                         '<label class="control-label"> Input Size </label>' +
                         '<div class="form-group">' +
                         '<select class="form-control"  id="inputsize">' +
-                        '<option value="col-md-4">Small</option>' +
-                        '<option value="col-md-6">Medium</option>' +
-                        '<option value="col-md-12" selected>Large</option>' +
+                        '<option value="col-md-4" ' + ismd4 +'>Small</option>' +
+                        '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
+                        '<option value="col-md-12"' + ismd12 +'>Large</option>' +
                         '</select></div></div>';
                     $("#btnSave").unbind();
                     $("#btnSave").bind("click", function () {
@@ -577,13 +784,16 @@
                         '<label>Label Text</label>' +
                         '<input  type="text" control-id="' + ID + '" class="form-control lbltext" value="' + $("#" + ID).prev().prev().html() + '"/>' +
                         '</div>';
+                    var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
+                    var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
+                    var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
                     str += '<div class="modal-row">' +
                         '<label class="control-label"> Input Size </label>' +
                         '<div class="form-group">' +
                         '<select class="form-control"  id="inputsize">' +
-                        '<option value="col-md-4">Small</option>' +
-                        '<option value="col-md-6">Medium</option>' +
-                        '<option value="col-md-12" selected>Large</option>' +
+                        '<option value="col-md-4" ' + ismd4 +'>Small</option>' +
+                        '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
+                        '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
                         '</select></div></div>';
                     $("#btnSave").unbind();
                     $("#btnSave").bind("click", function () {
@@ -603,20 +813,23 @@
                         '<label>Label Text</label>' +
                         '<input  type="text" control-id="' + ID + '" class="form-control lbltext" value="' + $("#" + ID).find(".radiobox-group").html() + '"/>' +
                         '</div>';
+                    var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
+                    var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
+                    var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
                     str += '<div class="modal-row">' +
                         '<label class="control-label"> Input Size </label>' +
                         '<div class="form-group">' +
                         '<select class="form-control"  id="inputsize">' +
-                        '<option value="col-md-4">Small</option>' +
-                        '<option value="col-md-6">Medium</option>' +
-                        '<option value="col-md-12" selected>Large</option>' +
+                        '<option value="col-md-4" ' + ismd4 +'>Small</option>' +
+                        '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
+                        '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
                         '</select></div></div>';
                     str += '<div class="modal-row">' +
                         '<label>Options</label>';
                     $('.dragresize  #' + ID + " [type=radio]").each(function () {
                         str += '<div class="option-block">' +
                             '<div class="option-fields">' +
-                            ' <input type="text" placeholder="Key" class="form-control"  value="' + $(this).prev().text() + '"/>' +
+                            ' <input type="text" placeholder="Key" class="form-control"  value="' + $(this).next().text() + '"/>' +
                             ' <input type="text" placeholder="Value" class="form-control"  value="' + $(this).attr("value") + '"/>' +
                             '</div>' +
                             '<div class="popup-event-btn">' +
@@ -630,10 +843,12 @@
 
                         var ID = $(".lbltext").attr("control-id");
                         $(".dragresize  [id=" + ID + "]").html("");
-                        $(".dragresize  [id=" + ID + "]").html("<label class='radiobox-group'>Radio</label><br/>");
+                        $(".dragresize  [id=" + ID + "]").html("<label class='radiobox-group'>Radio</label>");
                         $(".option-block").each(function (index) {
-                            var option_data = '<label>' + $(this).find("[placeholder=Key]").val() + '</label>' +
-                                '<input type = "radio" name="radio"  value = "' + $(this).find("[placeholder = Value]").val() + '"/>'
+                            var option_data = `<div class="custom-control custom-radio d-inline-block mr-2">
+    <input  type="radio" class="custom-control-input" id="${ID + index}"  name="radio" value="${$(this).find("[placeholder = Value]").val()}">
+    <label class="custom-control-label" for="${ID + index}">${$(this).find("[placeholder = Key]").val()}</label></div>
+    `;                      
                             $(option_data).appendTo(".dragresize  [id=" + ID + "]");
                         });
                         $("#" + ID).find(".radiobox-group").html($(".lbltext").val());
@@ -647,13 +862,16 @@
                         '<label>Label Text</label>' +
                         '<input  type="text" control-id="' + ID + '" class="form-control lbltext" value="' + $("#" + ID).prev().prev().html() + '"/>' +
                         '</div>';
+                    var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
+                    var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
+                    var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
                     str += '<div class="modal-row">' +
                         '<label class="control-label"> Input Size </label>' +
                         '<div class="form-group">' +
                         '<select class="form-control"  id="inputsize">' +
-                        '<option value="col-md-4">Small</option>' +
-                        '<option value="col-md-6">Medium</option>' +
-                        '<option value="col-md-12" selected>Large</option>' +
+                        '<option value="col-md-4" ' + ismd4 +'>Small</option>' +
+                        '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
+                        '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
                         '</select></div></div>';
                     str += '<div class="modal-row">' +
                         '<label>Options</label>';
@@ -695,13 +913,16 @@
                         '<label>Label Text</label>' +
                         '<input  type="text" control-id="' + ID + '" class="form-control lbltext" value="' + $("#" + ID).prev().prev().html() + '"/>' +
                         '</div>';
+                    var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
+                    var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
+                    var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
                     str += '<div class="modal-row">' +
                         '<label class="control-label"> Input Size </label>' +
                         '<div class="form-group">' +
                         '<select class="form-control"  id="inputsize">' +
-                        '<option value="col-md-4">Small</option>' +
-                        '<option value="col-md-6">Medium</option>' +
-                        '<option value="col-md-12" selected>Large</option>' +
+                        '<option value="col-md-4" ' + ismd4 +'>Small</option>' +
+                        '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
+                        '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
                         '</select></div></div>';
                     $("#btnSave").unbind();
                     $("#btnSave").bind("click", function () {
@@ -723,13 +944,16 @@
                         '<label>Label Text</label>' +
                         '<input  type="text" control-id="' + ID + '" class="form-control lbltext" value="' + $("#" + ID).prev().prev().html() + '"/>' +
                         '</div>';
+                    var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
+                    var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
+                    var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
                     str += '<div class="modal-row">' +
                         '<label class="control-label"> Input Size </label>' +
                         '<div class="form-group">' +
                         '<select class="form-control"  id="inputsize">' +
-                        '<option value="col-md-4">Small</option>' +
-                        '<option value="col-md-6">Medium</option>' +
-                        '<option value="col-md-12" selected>Large</option>' +
+                        '<option value="col-md-4" ' + ismd4 +'>Small</option>' +
+                        '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
+                        '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
                         '</select></div></div>';
                     $("#btnSave").unbind();
                     $("#btnSave").bind("click", function () {
@@ -788,9 +1012,15 @@
             t.innerHTML = htmlstr;
             return t.content.cloneNode(true);
         }
-        
+        function PreviewForm() {
+            if (templateid == 0) return;
+            window.location.href = `/home/GetCarePlanForm?Id=${templateid}&patientid=${1}`;
+        }
         function saveHtml() {
-
+            if ($("#ProgramsID").val() == "0") {
+                toastr.error("Select program type");
+                return;
+            }
             $("#droppable [readonly=readonly]").each(function (i, e) {
                 return;
             })
@@ -810,8 +1040,8 @@
                   models.push({  ColDataType: "varchar(500)", ColoumnName: $(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, "") });
               });
             $("#droppable [type=radio]").each(function (i, e) {
-                $(this).attr("data-column",$(this).siblings(".radiobox-group").html().split(" ").join("").replace(/[_\W]+/g, ""));
-                models.push({  ColDataType: "varchar(500)", ColoumnName: $(this).siblings(".radiobox-group").html().split(" ").join("").replace(/[_\W]+/g, "") });
+                $(this).attr("data-column", $(this).parent().siblings(".radiobox-group").html().split(" ").join("").replace(/[_\W]+/g, ""));
+                models.push({ ColDataType: "varchar(500)", ColoumnName: $(this).parent().siblings(".radiobox-group").html().split(" ").join("").replace(/[_\W]+/g, "") });
             });
             $("#droppable [type=checkbox]").each(function (i, e) {
                 $(this).attr("data-column", $(this).parent().siblings(".checkbox-group").html().split(" ").join("").replace(/[_\W]+/g, ""));
@@ -842,23 +1072,35 @@
                 contentType: 'application/json; charset=UTF-8',
                 dataType: "json",
                 success: function (result) {
+                    debugger;
+                    if (result == "0") {
+                        toastr.error("Program Already Exist.");
+                        return false;
+                    } else {
+                        templateid = result.id;
+                    }
+
                 }
             }).done(function (result) {
-                var model = {
-                    TemplateCreateModelList: models,
-                    TableName:result
-                }
+                if (result != "0") {
+                    var model = {
+                        TemplateCreateModelList: models,
+                        TableName: result.tablename
+                    }
 
-                $.ajax({
-                type: "POST",
-                url: Apipath + '/api/PatientMain/savetemplatecolumn',
-                contentType: 'application/json; charset=UTF-8',
-                data: JSON.stringify(model),
-                dataType: "json",
-                success: function (result) {
-                     toastr.success("Saved successfully.");
-                },
-            });
+                    $.ajax({
+                        type: "POST",
+                        url: Apipath + '/api/PatientMain/savetemplatecolumn',
+                        contentType: 'application/json; charset=UTF-8',
+                        data: JSON.stringify(model),
+                        dataType: "json",
+                        success: function (result) {
+                            toastr.success("Saved successfully.");
+                            $("a.preview").removeClass("disabled");
+                            $("#ProgramsID").val("0");
+                        },
+                    });
+                }
             });
         }
 
