@@ -370,6 +370,8 @@
     <Content Include="Views\Patient\_FormScheduling.cshtml" />
     <Content Include="Views\Patient\AddLookUpOption.cshtml" />
     <Content Include="Views\Patient\EditLookUpOption.cshtml" />
+    <Content Include="Views\CarePlan\List.cshtml" />
+    <Content Include="Views\CarePlan\ModifyTemplate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

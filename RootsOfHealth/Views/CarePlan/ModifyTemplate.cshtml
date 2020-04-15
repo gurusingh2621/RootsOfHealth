@@ -1,0 +1,1436 @@
+﻿
+@{
+    ViewBag.Title = "ModifyTemplate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .required-asterisk {
+        color: #c10000;
+    }
+
+    slide-placeholder {
+        background: #DADADA;
+        position: relative;
+    }
+
+
+    #control-box li:first-child, #database-control-box li:first-child {
+        border-radius: 5px 5px 0 0;
+        margin-top: 0;
+    }
+
+    #control-box li, #database-control-box li {
+        cursor: move;
+        list-style: none;
+        margin: 0 0 -1px 0;
+        padding: 10px;
+        text-align: left;
+        background: #fff;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        box-shadow: inset 0 0 0 1px #c5c5c5;
+        white-space: pre-wrap;
+    }
+
+    span i {
+        margin-right: 10px;
+        font-size: 16px;
+    }
+
+    .dragresize {
+        /*border: 1px dashed #ccc;
+        padding: 10px;
+        margin: 0 10px 20px 10px;*/
+        box-sizing: border-box;
+        padding: 0px 5px;
+    }
+
+    .frmbtn {
+        border: 1px dashed #ccc;
+        padding: 10px;
+        position: relative;
+        margin: 0 0 30px 0;
+    }
+
+    #droppable {
+        list-style-type: none;
+        background: #ffffff;
+        min-height: 490px;
+        border: 3px dashed #ccc;
+        width: 100%;
+        display: flex;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        padding: 10px 0;
+        align-content: baseline;
+    }
+
+    .dragresize .ui-resizable-handle {
+        opacity: 0;
+    }
+
+    .draggablediv .dragresize {
+        position: relative;
+    }
+
+    .event-btn-right {
+        position: absolute;
+        bottom: -13px;
+        right: 5px;
+        z-index: 9;
+    }
+
+    button.event-btn {
+        font-size: 12px;
+        margin: 0 0 0 5px;
+        border-radius: 3px;
+        border: 0;
+        padding: 5px 7px;
+        line-height: normal;
+        transition: all .30s ease-out;
+        cursor: pointer;
+        display: none;
+    }
+
+    .draggablediv .dragresize:hover button.event-btn {
+        display: inline
+    }
+
+    button.event-btn.file-edit {
+        background: #2ecc71;
+        color: #fff;
+    }
+
+    .file-remove {
+        background: #e74c3c;
+        color: #fff;
+    }
+
+    .popup-event-btn button.event-btn {
+        display: inline-block;
+        width: 38px;
+        height: 38px;
+        font-size: 14px;
+    }
+
+    .option-block {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px;
+    }
+
+    .option-fields {
+        display: flex;
+        flex: 0 0 81%;
+        max-width: 81%;
+    }
+
+        .option-fields input:last-child {
+            margin-left: 15px;
+        }
+
+    .modal-row {
+        margin: 0 0 10px 0;
+        display: block;
+    }
+
+    .form-group.set-align label {
+        padding-right: 10px;
+        margin-bottom: 0px;
+    }
+
+    .form-group.set-align {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .highlight {
+        background-color: #34425a;
+        -moz-box-shadow: inset 0 0 10px #34425a;
+        -webkit-box-shadow: inset 0 0 10px #34425a;
+        box-shadow: inset 0 0 10px #34425a;
+        height: 90px;
+        border: 1px dashed #aaa;
+        line-height: 1.2em;
+    }
+    /*13-04-2020*/
+    ul#control-box {
+        padding: 0;
+    }
+
+    .controlsTabWrap {
+        background: #34425a;
+    }
+
+        .controlsTabWrap .nav-tabs .nav-link.active {
+            background: transparent;
+            color: #fff;
+            border: 0;
+        }
+
+        .controlsTabWrap .nav-tabs .nav-link {
+        }
+
+        .controlsTabWrap .nav-tabs {
+            margin: 0 0 0px;
+        }
+
+        .controlsTabWrap .tab-content {
+            padding: 20px;
+        }
+
+            .controlsTabWrap .tab-content .tab-pane {
+                padding: 0;
+            }
+
+        .controlsTabWrap #control-box li {
+            background: transparent;
+            color: #fff;
+            border-radius: 0;
+            box-shadow: none;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .controlsTabWrap ul#control-box {
+            border: 0;
+        }
+
+    #content .controlsTabWrap.profile-tabs .nav-tabs {
+        position: static;
+        margin: 0;
+        width: 100%;
+        height: auto;
+        background: #fff;
+        padding-top: 0px;
+    }
+
+    #frmb-cb-wrap .profile-tabs .nav-tabs:hover {
+        overflow-x: hidden;
+    }
+
+    .databseSelectControl label {
+        color: #fff;
+    }
+
+    .databseSelectControl select {
+        background: #3e4e6a;
+        color: #fff;
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    div#droppable .form-control {
+        height: 23px;
+        font-size: 13px;
+        border: 1px solid #e2e2e2;
+        border-radius: 0px;
+        padding: 0 15px;
+    }
+
+        div#droppable .form-control[type="file"] {
+            border: 0;
+            padding: 0;
+            height: auto;
+        }
+
+    div#droppable textarea.form-control {
+        height: 50px;
+    }
+
+    div#droppable .form-control:focus {
+        box-shadow: none;
+        outline: none;
+    }
+
+    div#droppable .event-btn-right {
+        position: absolute;
+        bottom: auto;
+        right: -1px;
+        z-index: 9;
+        top: -3px;
+    }
+
+    .draggablediv .frmbtn .form-group label:first-child {
+        background: #e2e2e2;
+        display: block;
+        margin: -11px -11px 10px;
+        padding: 4px 10px;
+        font-size: 14px;
+        color: #343434;
+        font-weight: 500;
+        line-height: normal;
+        vertical-align: middle;
+    }
+
+    .draggablediv .frmbtn .form-group {
+        margin: 0;
+    }
+
+    .draggablediv .frmbtn {
+        border: 1px solid #e2e2e2;
+        padding: 10px;
+        position: relative;
+        margin: 0 0 20px 0;
+    }
+
+        .draggablediv .frmbtn select.form-control {
+            padding: 0 15px;
+            background: url(../images/chevron-arrow-down.svg) no-repeat 0 0;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            -ms-appearance: none;
+            background-size: 12px;
+            background-position: 98% 5px;
+        }
+
+    #content .profile-tabs.controlsTabWrap {
+        position: sticky;
+        top: 0;
+    }
+
+    .appointment {
+        position: relative;
+    }
+
+        .appointment .detail-button .form-group {
+            margin-right: 10px;
+        }
+
+            .appointment .detail-button .form-group select {
+                height: 32px;
+                border-radius: 50px;
+                padding: 0 12px;
+                box-shadow: none;
+                outline: none;
+            }
+
+        .appointment .detail-button .form-group {
+            margin-right: 270px;
+        }
+
+    .detail-button.ml-auto a:last-child {
+        margin-left: 8px;
+    }
+
+    span.careplancaption {
+        margin: 0 auto 0 41%;
+        font-weight: 500;
+        padding-top: 5px;
+    }
+        span.careplancaption span {
+            color: #22baa0;
+        }
+</style>
+
+<section id="content" class="responsive-container pt-0">
+
+    <div class="inner-content mt-0">
+
+        <div class="container-fluid pl-0 pr-0">
+
+            <div class="appointment scroll">
+                <div class="detail-heading d-flex">
+                    <h2>Care Plan</h2>
+
+                    <span class="careplancaption">Careplan for <span>@ViewBag.ProgramName</span> </span>
+
+                    <div class="detail-button ml-auto">
+
+                        <a href="javascript:{}" onclick="return PreviewForm();" class="btn btn-success mr-0 disabled preview">
+                            <i class="far fa-save"></i>
+                            Preview
+                        </a>
+                        <a href="javascript:{}" onclick="return saveDraftHtml();" class="btn btn-success mr-0" style="margin-left:8px;">
+                            <i class="far fa-save"></i>
+                            Save as draft
+                        </a>
+                        <a href="javascript:{}" onclick="return saveHtml();" class="btn btn-success mr-0">
+                            <i class="far fa-save"></i>
+                            Save
+                        </a>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div id="frmb-cb-wrap" class="col-md-3">
+                        <div class="controlsTabWrap profile-tabs">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#htmlTab">HTML Field</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#databaseTab">Database Field</a>
+                                </li>
+                            </ul>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div class="tab-pane active container" id="htmlTab">
+                                    <ul id="control-box" class="frmb-control">
+                                        <li data-type="label"><span><i class="fa fa-tasks" aria-hidden="true"></i>Label</span></li>
+                                        <li id="btn" data-type="button" style="display:none;"><span><i class="fa fa-tasks" aria-hidden="true"></i>Button</span></li>
+                                        <li data-type="checkbox-group"><span><i class="fa fa-check-square" aria-hidden="true"></i>Checkbox</span></li>
+                                        <li data-type="date"><span><i class="fa fa-calendar" aria-hidden="true"></i>Date Field</span></li>
+                                        <li data-type="file"><span><i class="fa fa-file" aria-hidden="true"></i>File Upload</span></li>
+                                        <li data-type="number"><span><i class="fa fa-list-ol" aria-hidden="true"></i>Number</span></li>
+                                        <li data-type="radio-group"><span><i class="fa fa-stop-circle" aria-hidden="true"></i>Radio</span></li>
+                                        <li data-type="select"><span><i class="fa fa-text-width" aria-hidden="true"></i>Select</span></li>
+                                        <li data-type="text"><span><i class="fa fa-text-width" aria-hidden="true"></i>Text Field</span></li>
+                                        <li data-type="textarea"><span><i class="fa fa-text-width" aria-hidden="true"></i>Text Area</span></li>
+                                    </ul>
+                                </div>
+                                <div class="tab-pane container" id="databaseTab">
+                                    <div class="form-group databseSelectControl">
+                                        <label>Select from database</label>
+                                        <select id="ddlform" class="form-control" onchange="getFormFields()" style="display:none;">
+                                            <option value="0">Select Option</option>
+                                            <option value="1">Client profile</option>
+                                            <option value="2">Client Housing</option>
+                                            <option value="3">Client Financial Security</option>
+                                            <option value="4">Client Employment/Education</option>
+                                            <option value="5">Client Communication & Mobility</option>
+                                            <option value="6">Client Healthcare</option>
+                                            <option value="7">Client Social Supports and Safety</option>
+                                            <option value="8">Client Legal Status</option>
+                                            <option value="9">DAST</option>
+                                            <option value="10">AUDIT</option>
+                                            <option value="11">Client Health Questionnaire (PHQ-9)</option>
+                                            <option value="12">Client Food Access</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-9">
+                        <div class="row">
+
+                            <div id="droppable" class="draggablediv">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Edit Html</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="modal-row">
+                    <label>Label</label>
+                    <input type="text" class="form-control" />
+                </div>
+
+                <div class="modal-row">
+                    <label>Options</label>
+                    <div class="option-block">
+                        <div class="option-fields">
+                            <input type="text" placeholder="Key" class="form-control" />
+                            <input type="text" placeholder="Value" class="form-control" />
+                        </div>
+
+                        <div class="popup-event-btn">
+                            <button class="event-btn file-edit"><i class="fas fa-plus"></i></button>
+                            <button class="event-btn file-remove"><i class="fa fa-minus-circle" aria-hidden="true"></i></button>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btnSave">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="~/Scripts/jquery-ui.min.js"></script>
+    <script>
+        var new_id = 0;
+        var templateid = 0;
+        $(function () {
+            $('#droppable input').on('input', function (e) {
+                $(this).val('');
+            });
+            $('#control-box li').draggable({
+                connectToSortable: '#droppable',
+                helper: function () {
+                    var cloned = $(this).clone();
+                    cloned.attr('id', (++new_id).toString());
+                    return cloned;
+                },
+            });
+            $("#droppable").sortable({
+                connectWith: "#control-box",
+                containment: "#droppable",
+                placeholder: "highlight",
+                start: function (e, ui) {
+                    placeholderHeight = ui.item.outerHeight();
+                    placeholderWidth = ui.item.outerWidth();
+                    if (placeholderWidth > 100) {
+                        ui.placeholder.height(placeholderHeight-2);
+                        ui.placeholder.width(placeholderWidth-2);
+                    } else {
+                        $(ui.placeholder).css('display', 'none');
+                    }
+
+                },
+
+                receive: function (event, ui) {
+                    var draggableId = ui.item.attr("data-type");
+                    var newid = draggableId + $(ui.helper).clone().attr('id');
+                    switch (draggableId) {
+                        case "label":
+                            var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group"><label id="' + newid + '" class="editable">Label</label></div>' +
+                                '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
+                                '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
+                                '</div>';
+                            $(this).find("li").replaceWith(str);
+                            break;
+                        case "button":
+                            var str = '<div class="dragresize col-md-12"><div class="frmbtn"><button id="' + newid + '"  type="submit" class="btn btn-primary">Button</button>' +
+                                '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
+                                '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
+                                '</div> ';
+                            $(this).find("li").replaceWith(str);
+                            break;
+                        case "checkbox-group":
+                            var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group" id="' + newid + '">' +
+                                '<label class="checkbox-group">Check Box (Multiple)</label>' +
+                                '<div class="custom-control custom-checkbox  d-inline-block mr-2">' +
+                                '<input  type="checkbox" class="custom-control-input" name="checkbox" value="true" id="checkbox1">' +
+                                '<label class="custom-control-label" for="checkbox1" value="true">Yes</label></div>' +
+                                '<div class="custom-control custom-checkbox  d-inline-block mr-2">' +
+                                '<input type="checkbox" class="custom-control-input"  name="checkbox" value="false" id="checkbox2">' +
+                                '<label class="custom-control-label" for="checkbox2">No</label></div>' +
+                                '</div>' +
+                                '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
+                                '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
+                                '</div>';
+                            $(this).find("li").replaceWith(str);
+                            break;
+                        case "date":
+                            var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
+                                '<label>Label</label><span class="required-asterisk" style="display: none;"> *</span>' +
+                                '<input id="' + newid + '"  type="date" class="form-control" id="">' +
+                                '</div>' +
+                                '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
+                                '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
+                                '</div> ';
+                            $(this).find("li").replaceWith(str);
+                            break;
+                        case "file":
+                            var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
+                                '<label >Label</label >' +
+                                '<input id="' + newid + '"  type="file" class="form-control" id="">' +
+                                '</div>' +
+                                '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
+                                '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
+                                '</div>';
+
+                            $(this).find("li").replaceWith(str);
+                            break;
+                        case "number":
+                            var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
+                                '<label>Label</label> <span class="required-asterisk" style="display: none;"> *</span>' +
+                                '<input id="' + newid + '"  type="number" class="form-control" id="">' +
+                                '</div>' +
+                                '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
+                                '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
+                                '</div>';
+                            $(this).find("li").replaceWith(str);
+                            break;
+                        case "radio-group":
+                            var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group"  id="' + newid + '">' +
+                                '<label class="radiobox-group">Radio</label>' +
+                                '<div class="custom-control custom-radio d-inline-block mr-2">' +
+                                '<input  type="radio" class="custom-control-input" name="radio" value="true" id="radio1">' +
+                                '<label class="custom-control-label" for="radio1" value="true">Yes</label></div>' +
+                                '<div class="custom-control custom-radio d-inline-block mr-2">' +
+                                '<input type="radio" class="custom-control-input"  name="radio" value="false" id="radio2">' +
+                                '<label class="custom-control-label" for="radio2">No</label></div>' +
+                                '</div>' +
+                                '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
+                                '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
+                                '</div>';
+                            $(this).find("li").replaceWith(str);
+                            break;
+                        case "select":
+                            var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
+                                '<label>Select</label><span class="required-asterisk" style="display: none;"> *</span>' +
+                                ' <select id="' + newid + '" class="form-control">' +
+                                ' <option value="0">Select Option</option>' +
+                                '<option  value="1">1</option>' +
+                                '<option  value="2">2</option>' +
+                                '<option  value="3">3</option>' +
+                                ' </select>' +
+                                '</div>' +
+                                '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
+                                '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
+                                '</div>';
+                            $(this).find("li").replaceWith(str);
+                            break;
+                        case "text":
+                            var str = '<div class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
+                                '<label>Label</label><span class="required-asterisk" style="display: none;"> *</span>' +
+                                '<input id="' + newid + '"  type="text" class="form-control" id="">' +
+                                '</div>' +
+                                '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
+                                '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
+                                '</div>';
+                            $(this).find("li").replaceWith(str);
+                            break;
+                        case "textarea":
+                            var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
+                                '<label>Textarea</label><span class="required-asterisk" style="display: none;"> *</span>' +
+                                '<textarea id="' + newid + '"  class="form-control" name="my-textarea"></textarea>' +
+                                '</div>' +
+                                '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
+                                '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
+                                '</div>';
+                            $(this).find("li").replaceWith(str);
+                            break;
+                    }
+
+
+                },
+                stop: function (event, ui) {
+                    $('input,textarea').on('input', function (e) {
+                        $(this).val('');
+                    });
+                    $('input[type="checkbox"],input[type="radio"]').click(function (event) {
+                        var $checkbox = $(this);
+                        setTimeout(function () {
+                            $checkbox.removeAttr('checked');
+                        }, 0);
+
+                        event.preventDefault();
+                        event.stopPropagation();
+                    });
+
+                }
+
+            }).disableSelection();
+
+            GetFormByTemplatePath('@ViewBag.TemplatePath');
+        });
+
+        function EditHtml(type, ID) {
+            var str = '';
+            $(".modal-body").html("");
+            switch (type) {
+                case "label":
+                    str = '<div class="modal-row">' +
+                        '<label>Label Text</label>' +
+                        '<input  type="text" control-id="' + ID + '" class="form-control lbltext" value="' + $("#" + ID).html() + '"/>' +
+                        '</div>';
+                    var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
+                    var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
+                    var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
+                    str += '<div class="modal-row">' +
+                            '<label class="control-label"> Input Size </label>' +
+                            '<div class="form-group">' +
+                        '<select class="form-control"  id="inputsize">' +
+                        '<option value="col-md-4"' + ismd4+' > Small</option > ' +
+                        '<option value="col-md-6"' + ismd6 +'>Medium</option>' +
+                        '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
+                            '</select></div></div>';
+
+                    $("#btnSave").unbind();
+                    $("#btnSave").bind("click", function () {
+                        var ID = $(".lbltext").attr("control-id");
+                        $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
+                        $("#" + ID).html($(".lbltext").val());
+                        $("#exampleModalCenter").modal("hide");
+                    });
+                    break;
+                case "button":
+                    str = '<div class="modal-row">' +
+                        '<label>Button Text</label>' +
+                        '<input  type="text" control-id="' + ID + '" class="form-control lbltext" value="' + $("#" + ID).html() + '"/>' +
+                        '</div>';
+                    var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
+                    var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
+                    var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
+                    str += '<div class="modal-row">' +
+                        '<label class="control-label"> Input Size </label>' +
+                        '<div class="form-group">' +
+                        '<select class="form-control"  id="inputsize">' +
+                        '<option value="col-md-4" ' + ismd4 +'>Small</option>' +
+                        '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
+                        '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
+                        '</select></div></div>';
+                    $("#btnSave").unbind();
+                    $("#btnSave").bind("click", function () {
+                        var ID = $(".lbltext").attr("control-id");
+                        $("#" + ID).html($(".lbltext").val());
+                        $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
+                        $("#exampleModalCenter").modal("hide");
+                    });
+                    break;
+                case "checkbox-group":
+                    str = '<div class="modal-row">' +
+                        '<label>Label Text</label>' +
+                        '<input  type="text" control-id="' + ID + '" class="form-control lbltext" value="' + $("#" + ID).find(".checkbox-group").html() + '"/>' +
+                        '</div>';
+                    var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
+                    var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
+                    var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
+                    str += '<div class="modal-row">' +
+                        '<label class="control-label"> Input Size </label>' +
+                        '<div class="form-group">' +
+                        '<select class="form-control"  id="inputsize">' +
+                        '<option value="col-md-4" ' + ismd4 +'>Small</option>' +
+                        '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
+                        '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
+                        '</select></div></div>';
+                    str += '<div class="modal-row">' +
+                        '<label>Options</label>';
+                    $('.dragresize  #' + ID + " [type=checkbox]").each(function () {
+                        str += '<div class="option-block">' +
+                            '<div class="option-fields">' +
+                            ' <input type="text" placeholder="Key" class="form-control"  value="' + $(this).next().text() + '"/>' +
+                            ' <input type="text" placeholder="Value" class="form-control"  value="' + $(this).attr("value") + '"/>' +
+                            '</div>' +
+                            '<div class="popup-event-btn">' +
+                            '<button class="event-btn file-edit" onclick="addoption(this)"><i class="fas fa-plus"></i></button>' +
+                            '<button class="event-btn file-remove" onclick="RemoveOption(this)"> <i class="fa fa-minus-circle" aria-hidden="true"></i></button > ' +
+                            '</div></div>'
+                    });
+                    str += '</div > ';
+                    $("#btnSave").unbind();
+                    $("#btnSave").bind("click", function () {
+
+                        var ID = $(".lbltext").attr("control-id");
+                        $(".dragresize  [id=" + ID + "]").html("");
+                        $(".dragresize  [id=" + ID + "]").html("<label class='checkbox-group'>Checkbox(Multiple)</label>");
+                        $(".option-block").each(function (index) {
+                            var option_data = `<div class="custom-control custom-checkbox  d-inline-block mr-2">
+    <input  type="checkbox" class="custom-control-input" id="${ID + index}"  name="radio" value="${$(this).find("[placeholder = Value]").val()}">
+    <label class="custom-control-label" for="${ID + index}">${$(this).find("[placeholder = Key]").val()}</label></div>
+    `;                            $(option_data).appendTo(".dragresize  [id=" + ID + "]");
+                        });
+
+                        $("#" + ID).find(".checkbox-group").html($(".lbltext").val());
+                        $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
+                        $("#exampleModalCenter").modal("hide");
+                    });
+                    break;
+                case "date":
+                    str = '<div class="modal-row"><div class="form-group set-align"><label for="required-input">Required</label><input type="checkbox" id="required-input"></div></div>';
+                    str += '<div class="modal-row">' +
+                        '<label>Label Text</label>' +
+                        '<input  type="text" control-id="' + ID + '" class="form-control lbltext" value="' + $("#" + ID).prev().prev().html() + '"/>' +
+                        '</div>';
+                    var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
+                    var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
+                    var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
+                    str += '<div class="modal-row">' +
+                        '<label class="control-label"> Input Size </label>' +
+                        '<div class="form-group">' +
+                        '<select class="form-control"  id="inputsize">' +
+                        '<option value="col-md-4" ' + ismd4 +'>Small</option>' +
+                        '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
+                        '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
+                        '</select></div></div>';
+                    $("#btnSave").unbind();
+                    $("#btnSave").bind("click", function () {
+                        var ID = $(".lbltext").attr("control-id");
+                        $("#" + ID).prev().prev().html($(".lbltext").val());
+                        if ($("#required-input").prop("checked")) {
+                            $("#" + ID).prev().css("display", "inline");
+                        } else {
+                            $("#" + ID).prev().css("display", "none");
+                        }
+                        $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
+                        $("#exampleModalCenter").modal("hide");
+                    });
+                    break;
+                case "file":
+                    str = '<div class="modal-row">' +
+                        '<label>Label Text</label>' +
+                        '<input  type="text" control-id="' + ID + '" class="form-control lbltext" value="' + $("#" + ID).prev().html() + '"/>' +
+                        '</div>';
+                    var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
+                    var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
+                    var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
+                    str += '<div class="modal-row">' +
+                        '<label class="control-label"> Input Size </label>' +
+                        '<div class="form-group">' +
+                        '<select class="form-control"  id="inputsize">' +
+                        '<option value="col-md-4" ' + ismd4 +'>Small</option>' +
+                        '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
+                        '<option value="col-md-12"' + ismd12 +'>Large</option>' +
+                        '</select></div></div>';
+                    $("#btnSave").unbind();
+                    $("#btnSave").bind("click", function () {
+                        var ID = $(".lbltext").attr("control-id");
+                        $("#" + ID).prev().html($(".lbltext").val());
+                        $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
+                        $("#exampleModalCenter").modal("hide");
+                    });
+                    break;
+                case "number":
+                    str = '<div class="modal-row"><div class="form-group set-align"><label for="required-input">Required</label><input type="checkbox" id="required-input"></div></div>';
+                    str += '<div class="modal-row">' +
+                        '<label>Label Text</label>' +
+                        '<input  type="text" control-id="' + ID + '" class="form-control lbltext" value="' + $("#" + ID).prev().prev().html() + '"/>' +
+                        '</div>';
+                    var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
+                    var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
+                    var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
+                    str += '<div class="modal-row">' +
+                        '<label class="control-label"> Input Size </label>' +
+                        '<div class="form-group">' +
+                        '<select class="form-control"  id="inputsize">' +
+                        '<option value="col-md-4" ' + ismd4 +'>Small</option>' +
+                        '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
+                        '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
+                        '</select></div></div>';
+                    $("#btnSave").unbind();
+                    $("#btnSave").bind("click", function () {
+                        var ID = $(".lbltext").attr("control-id");
+                        $("#" + ID).prev().prev().html($(".lbltext").val());
+                        if ($("#required-input").prop("checked")) {
+                            $("#" + ID).prev().css("display", "inline");
+                        } else {
+                            $("#" + ID).prev().css("display", "none");
+                        }
+                        $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
+                        $("#exampleModalCenter").modal("hide");
+                    });
+                    break;
+                case "radio-group":
+                    str = '<div class="modal-row">' +
+                        '<label>Label Text</label>' +
+                        '<input  type="text" control-id="' + ID + '" class="form-control lbltext" value="' + $("#" + ID).find(".radiobox-group").html() + '"/>' +
+                        '</div>';
+                    var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
+                    var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
+                    var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
+                    str += '<div class="modal-row">' +
+                        '<label class="control-label"> Input Size </label>' +
+                        '<div class="form-group">' +
+                        '<select class="form-control"  id="inputsize">' +
+                        '<option value="col-md-4" ' + ismd4 +'>Small</option>' +
+                        '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
+                        '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
+                        '</select></div></div>';
+                    str += '<div class="modal-row">' +
+                        '<label>Options</label>';
+                    $('.dragresize  #' + ID + " [type=radio]").each(function () {
+                        str += '<div class="option-block">' +
+                            '<div class="option-fields">' +
+                            ' <input type="text" placeholder="Key" class="form-control"  value="' + $(this).next().text() + '"/>' +
+                            ' <input type="text" placeholder="Value" class="form-control"  value="' + $(this).attr("value") + '"/>' +
+                            '</div>' +
+                            '<div class="popup-event-btn">' +
+                            '<button class="event-btn file-edit" onclick="addoption(this)"><i class="fas fa-plus"></i></button>' +
+                            '<button class="event-btn file-remove" onclick="RemoveOption(this)"> <i class="fa fa-minus-circle" aria-hidden="true"></i></button > ' +
+                            '</div></div>'
+                    });
+                    str += '</div> ';
+                    $("#btnSave").unbind();
+                    $("#btnSave").bind("click", function () {
+
+                        var ID = $(".lbltext").attr("control-id");
+                        $(".dragresize  [id=" + ID + "]").html("");
+                        $(".dragresize  [id=" + ID + "]").html("<label class='radiobox-group'>Radio</label>");
+                        $(".option-block").each(function (index) {
+                            var option_data = `<div class="custom-control custom-radio d-inline-block mr-2">
+    <input  type="radio" class="custom-control-input" id="${ID + index}"  name="radio" value="${$(this).find("[placeholder = Value]").val()}">
+    <label class="custom-control-label" for="${ID + index}">${$(this).find("[placeholder = Key]").val()}</label></div>
+    `;
+                            $(option_data).appendTo(".dragresize  [id=" + ID + "]");
+                        });
+                        $("#" + ID).find(".radiobox-group").html($(".lbltext").val());
+                        $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
+                        $("#exampleModalCenter").modal("hide");
+                    });
+                    break;
+                case "select":
+                    str = '<div class="modal-row"><div class="form-group set-align"><label for="required-input">Required</label><input type="checkbox" id="required-input"></div></div>';
+                    str += '<div class="modal-row">' +
+                        '<label>Label Text</label>' +
+                        '<input  type="text" control-id="' + ID + '" class="form-control lbltext" value="' + $("#" + ID).prev().prev().html() + '"/>' +
+                        '</div>';
+                    var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
+                    var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
+                    var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
+                    str += '<div class="modal-row">' +
+                        '<label class="control-label"> Input Size </label>' +
+                        '<div class="form-group">' +
+                        '<select class="form-control"  id="inputsize">' +
+                        '<option value="col-md-4" ' + ismd4 +'>Small</option>' +
+                        '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
+                        '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
+                        '</select></div></div>';
+                    str += '<div class="modal-row">' +
+                        '<label>Options</label>';
+
+                    $('#' + ID).find('option').each(function () {
+                        if ($(this).val() == 0) return;
+                        str += '<div class="option-block">' +
+                            '<div class="option-fields">' +
+                            ' <input type="text" placeholder="Key" class="form-control"  value="' + $(this).text() + '"/>' +
+                            ' <input type="text" placeholder="Value" class="form-control"  value="' + $(this).val() + '"/>' +
+                            '</div>' +
+                            '<div class="popup-event-btn">' +
+                            '<button class="event-btn file-edit" onclick="addoption(this)"><i class="fas fa-plus"></i></button>' +
+                            '<button class="event-btn file-remove" onclick="RemoveOption(this)"> <i class="fa fa-minus-circle" aria-hidden="true"></i></button > ' +
+                            '</div></div>'
+                    });
+                    str += '</div> ';
+                    $("#btnSave").unbind();
+                    $("#btnSave").bind("click", function () {
+                        var ID = $(".lbltext").attr("control-id");
+                        $("#" + ID).prev().prev().html($(".lbltext").val());
+                        $("#" + ID).html("");
+                        $(".option-block").each(function (index) {
+                            var option_data = "<option value=" + $(this).find("[placeholder=Value]").val() + ">" + $(this).find("[placeholder=Key]").val() + "</option>";
+                            $(option_data).appendTo('#' + ID);
+                        });
+                        if ($("#required-input").prop("checked")) {
+                            $("#" + ID).prev().css("display", "inline");
+                        } else {
+                            $("#" + ID).prev().css("display", "none");
+                        }
+                        $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
+                        $("#exampleModalCenter").modal("hide");
+                    });
+                    break;
+                case "text":
+                    str = '<div class="modal-row"><div class="form-group set-align"><label for="required-input">Required</label><input type="checkbox" id="required-input"></div></div>';
+                    str += '<div class="modal-row">' +
+                        '<label>Label Text</label>' +
+                        '<input  type="text" control-id="' + ID + '" class="form-control lbltext" value="' + $("#" + ID).prev().prev().html() + '"/>' +
+                        '</div>';
+                    var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
+                    var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
+                    var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
+                    str += '<div class="modal-row">' +
+                        '<label class="control-label"> Input Size </label>' +
+                        '<div class="form-group">' +
+                        '<select class="form-control"  id="inputsize">' +
+                        '<option value="col-md-4" ' + ismd4 +'>Small</option>' +
+                        '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
+                        '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
+                        '</select></div></div>';
+                    $("#btnSave").unbind();
+                    $("#btnSave").bind("click", function () {
+                        var ID = $(".lbltext").attr("control-id");
+                        $("#" + ID).prev().prev().html($(".lbltext").val());
+                        if ($("#required-input").prop("checked")) {
+                            $("#" + ID).prev().css("display", "inline");
+                        } else {
+                            $("#" + ID).prev().css("display", "none");
+                        }
+                        //$("#" + ID).addClass($("#inputsize").val());
+                        $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
+                        $("#exampleModalCenter").modal("hide");
+                    });
+                    break;
+                case "textarea":
+                    str = '<div class="modal-row"><div class="form-group set-align"><label for="required-input">Required</label><input type="checkbox" id="required-input"></div></div>';
+                    str += '<div class="modal-row">' +
+                        '<label>Label Text</label>' +
+                        '<input  type="text" control-id="' + ID + '" class="form-control lbltext" value="' + $("#" + ID).prev().prev().html() + '"/>' +
+                        '</div>';
+                    var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
+                    var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
+                    var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
+                    str += '<div class="modal-row">' +
+                        '<label class="control-label"> Input Size </label>' +
+                        '<div class="form-group">' +
+                        '<select class="form-control"  id="inputsize">' +
+                        '<option value="col-md-4" ' + ismd4 +'>Small</option>' +
+                        '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
+                        '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
+                        '</select></div></div>';
+                    $("#btnSave").unbind();
+                    $("#btnSave").bind("click", function () {
+                        var ID = $(".lbltext").attr("control-id");
+                        $("#" + ID).prev().prev().html($(".lbltext").val());
+                        if ($("#required-input").prop("checked")) {
+                            $("#" + ID).prev().css("display", "inline");
+                        } else {
+                            $("#" + ID).prev().css("display", "none");
+                        }
+                        $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
+                        $("#exampleModalCenter").modal("hide");
+                    });
+                    break;
+                  default:
+                         str = '<div class="modal-row">' +
+                        '<label class="control-label"> Input Size </label>' +
+                        '<div class="form-group">' +
+                        '<select class="form-control"  id="inputsize">' +
+                        '<option value="col-md-4">Small</option>' +
+                        '<option value="col-md-6">Medium</option>' +
+                        '<option value="col-md-12" selected>Large</option>' +
+                        '</select></div></div>';
+                    $("#btnSave").unbind();
+                    $("#btnSave").bind("click", function () {
+                        $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
+                        $("#exampleModalCenter").modal("hide");
+                    });
+                    break;
+            }
+            $(".modal-body").html(str);
+            $("#exampleModalCenter").modal("show");
+        }
+        function RemoveOption(obj) {
+
+            obj.closest(".option-block").remove();
+        };
+        function RemoveControl(obj) {
+            obj.closest(".dragresize").remove();
+        }
+        function addoption(obj) {
+            var str = '<div class="option-block">' +
+                '<div class="option-fields">' +
+                ' <input type="text" placeholder="Key" class="form-control"/>' +
+                ' <input type="text" placeholder="Value" class="form-control"/>' +
+                '</div>' +
+                '<div class="popup-event-btn">' +
+                '<button class="event-btn file-edit" onclick="addoption(this)"><i class="fas fa-plus"></i></button>' +
+                '<button class="event-btn file-remove" onclick="RemoveOption(this)"> <i class="fa fa-minus-circle" aria-hidden="true"></i></button > ' +
+                '</div></div>';
+
+            obj.closest(".option-block").after(parseHTML(str));
+        }
+        function parseHTML(htmlstr) {
+            var t = document.createElement('template');
+            t.innerHTML = htmlstr;
+            return t.content.cloneNode(true);
+        }
+        function PreviewForm() {
+            if (templateid == 0) return;
+            window.location.href = `/home/GetCarePlanForm?Id=${templateid}&patientid=${1}`;
+        }
+        function saveHtml() {
+            if ($("#droppable .dragresize ").length == 0) {
+                toastr.error("", "form is not valid,please drag field here", { progressBar: true });
+                return;
+            }
+            $("#droppable [readonly=readonly]").each(function (i, e) {
+                return;
+            })
+             var models = [];
+                $("#droppable .editable").each(function (i, e) {
+                    $(this).attr("data-column",$(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, ""));
+                models.push({  ColDataType: "varchar(500)", ColoumnName: $(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, "") });
+             });
+            $("#droppable [type=text],[type=number],[type=file],[type=date]").each(function (i, e) {
+                if ($(this).attr("readonly")) return;
+                $(this).attr("data-column",$(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, ""));
+                models.push({  ColDataType: "varchar(500)", ColoumnName: $(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, "") });
+
+            });
+              $("#droppable select").each(function (i, e) {
+                 $(this).attr("data-column",$(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, ""));
+                  models.push({  ColDataType: "varchar(500)", ColoumnName: $(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, "") });
+              });
+            $("#droppable [type=radio]").each(function (i, e) {
+                $(this).attr("data-column", $(this).parent().siblings(".radiobox-group").html().split(" ").join("").replace(/[_\W]+/g, ""));
+                models.push({ ColDataType: "varchar(500)", ColoumnName: $(this).parent().siblings(".radiobox-group").html().split(" ").join("").replace(/[_\W]+/g, "") });
+            });
+            $("#droppable [type=checkbox]").each(function (i, e) {
+                $(this).attr("data-column", $(this).parent().siblings(".checkbox-group").html().split(" ").join("").replace(/[_\W]+/g, ""));
+                 models.push({ ColDataType: "varchar(500)", ColoumnName: $(this).parent().siblings(".checkbox-group").html().split(" ").join("").replace(/[_\W]+/g, "") });
+            });
+              $("#droppable textarea").each(function (i, e) {
+                  $(this).attr("data-column",$(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, ""));
+                  models.push({ ColDataType: "varchar(500)", ColoumnName: $(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, "") });
+              });
+            $("#droppable [type=button]").each(function (i, e) {
+                $(this).attr("data-column",$(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, ""));
+                models.push({ ColDataType: "varchar(500)", ColoumnName: $(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, "") });
+            });
+
+            var gethtml = $("#droppable").html();
+              var model = {
+                TemplateID: '@ViewBag.TemplateId',
+                ProgramID: '@ViewBag.ProgramId',
+                IsActive: 1,
+                CreatedBy: @Session["userid"].ToString(),
+                ModifiedBy:@Session["userid"].ToString(),
+            };
+            $.ajax({
+                type: "POST",
+                url: '/CarePlan/SaveFormTemplate',
+                data: JSON.stringify({ htmlTemplate: gethtml,Model:model,ProgramName:'@ViewBag.ProgramName' }),
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                success: function (result) {
+                    if (result == "0") {
+                        toastr.error("Program Already Exist.");
+                        return false;
+                    } else {
+                        templateid = result.id;
+                    }
+
+                }
+            }).done(function (result) {
+                if (result != "0") {
+                    var model = {
+                        TemplateCreateModelList: models,
+                        TableName: result.tablename
+                    }
+
+                    $.ajax({
+                        type: "POST",
+                        url: Apipath + '/api/PatientMain/savetemplatecolumn',
+                        contentType: 'application/json; charset=UTF-8',
+                        data: JSON.stringify(model),
+                        dataType: "json",
+                        success: function (result) {
+                            toastr.success("Saved successfully.");
+                            $("a.preview").removeClass("disabled");
+                            $("#ProgramsID").val("0");
+                        },
+                    });
+                }
+            });
+        }
+        function saveDraftHtml() {
+            if ($("#droppable .dragresize ").length == 0) {
+                toastr.error("", "form is not valid,please drag field here", { progressBar: true });
+                return;
+            }
+            $("#droppable [readonly=readonly]").each(function (i, e) {
+                return;
+            })
+             var models = [];
+                $("#droppable .editable").each(function (i, e) {
+                    $(this).attr("data-column",$(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, ""));
+                models.push({  ColDataType: "varchar(500)", ColoumnName: $(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, "") });
+             });
+            $("#droppable [type=text],[type=number],[type=file],[type=date]").each(function (i, e) {
+                if ($(this).attr("readonly")) return;
+                $(this).attr("data-column",$(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, ""));
+                models.push({  ColDataType: "varchar(500)", ColoumnName: $(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, "") });
+
+            });
+              $("#droppable select").each(function (i, e) {
+                 $(this).attr("data-column",$(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, ""));
+                  models.push({  ColDataType: "varchar(500)", ColoumnName: $(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, "") });
+              });
+            $("#droppable [type=radio]").each(function (i, e) {
+                $(this).attr("data-column", $(this).parent().siblings(".radiobox-group").html().split(" ").join("").replace(/[_\W]+/g, ""));
+                models.push({ ColDataType: "varchar(500)", ColoumnName: $(this).parent().siblings(".radiobox-group").html().split(" ").join("").replace(/[_\W]+/g, "") });
+            });
+            $("#droppable [type=checkbox]").each(function (i, e) {
+                $(this).attr("data-column", $(this).parent().siblings(".checkbox-group").html().split(" ").join("").replace(/[_\W]+/g, ""));
+                 models.push({ ColDataType: "varchar(500)", ColoumnName: $(this).parent().siblings(".checkbox-group").html().split(" ").join("").replace(/[_\W]+/g, "") });
+            });
+              $("#droppable textarea").each(function (i, e) {
+                  $(this).attr("data-column",$(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, ""));
+                  models.push({ ColDataType: "varchar(500)", ColoumnName: $(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, "") });
+              });
+            $("#droppable [type=button]").each(function (i, e) {
+                $(this).attr("data-column",$(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, ""));
+                models.push({ ColDataType: "varchar(500)", ColoumnName: $(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, "") });
+            });
+
+            var gethtml = $("#droppable").html();
+              var model = {
+                TemplateID: '@ViewBag.TemplateId',
+                ProgramID: '@ViewBag.ProgramId',
+               IsSavedDraft: 1,
+                CreatedBy: @Session["userid"].ToString(),
+                ModifiedBy:@Session["userid"].ToString(),
+            };
+            $.ajax({
+                type: "POST",
+                url: '/CarePlan/SaveFormDraftTemplate',
+                data: JSON.stringify({ htmlTemplate: gethtml,Model:model,ProgramName:'@ViewBag.ProgramName' }),
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                success: function (result) {
+                    if (result == "0") {
+                        toastr.error("Program Already Exist.");
+                        return false;
+                    } else {
+                        templateid = result.id;
+                    }
+
+                }
+            }).done(function (result) {
+                if (result != "0") {
+                    var model = {
+                        TemplateCreateModelList: models,
+                        TableName: result.tablename
+                    }
+
+                    $.ajax({
+                        type: "POST",
+                        url: Apipath + '/api/PatientMain/savetemplatecolumn',
+                        contentType: 'application/json; charset=UTF-8',
+                        data: JSON.stringify(model),
+                        dataType: "json",
+                        success: function (result) {
+                            toastr.success("Saved successfully.");
+                            $("a.preview").removeClass("disabled");
+                            $("#ProgramsID").val("0");
+                        },
+                    });
+                }
+            });
+        }
+                function getFormFields() {
+             var patientid ='';
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/GetDetailOfPatient?patientid=187',
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                success: function (result) {
+                    console.log(result);
+                    var selectedForm = $('#ddlform').val();
+                    var str = ''
+                    $("#control-box").html("");
+                    switch (selectedForm) {
+                        case "1":
+                            str += '<li data-type="OverallScore" data-index="PatientScore"><span>Score</span></li>';
+                            str += '<li data-type="OverallStatus" data-index="PatientScore"><span>Status</span></li>';
+                            str += '<li data-type="FirstName" data-index="PatientMain"><span>First name</span></li>';
+                            str += '<li data-type="MiddleName" data-index="PatientMain"><span>Middle Name</span></li>';
+                            str += '<li data-type="LastName" data-index="PatientMain"><span>Last Name</span></li>';
+                            str += '<li data-type="NickName" data-index="PatientMain"><span>Preferred Name/Nickname</span></li>';
+                            str += '<li data-type="Gender" data-index="PatientMain"><span>Gender</span></li>';
+                            str += '<li data-type="DateOfBirth" data-index="PatientMain"><span>Date of Birth</span></li>';
+                            str += '<li data-type="SocialSecurityNumber" data-index="PatientMain"><span>Social Security Number</span></li>';
+                            str += '<li data-type="RaceEthnicity" data-index="PatientMain"><span>Race/Ethnicity</span></li>';
+                            str += '<li data-type="Address" data-index="PatientMain"><span>Address</span></li>';
+                            str += '<li data-type="IsPermanentAddress" data-index="PatientMain"><span>IsPermanentAddress</span></li>';
+                            str += '<li data-type="City" data-index="PatientMain"><span>City</span></li>';
+                            str += '<li data-type="State" data-index="PatientMain"><span>State</span></li>';
+                            str += '<li data-type="Zip" data-index="PatientMain"><span>Zip</span></li>';
+                            str += '<li data-type="EmailAddress" data-index="PatientMain"><span>Email Address</span></li>';
+                            str += '<li data-type="HomePhone" data-index="PatientMain"><span>Home Phone</span></li>';
+                            str += '<li data-type="CellPhone" data-index="PatientMain"><span>Cell Phone</span></li>';
+                            str += '<li data-type="WayToContact" data-index="PatientMain"><span>Best way to contact you</span></li>';
+                            str += '<li data-type="PatientChildren" data-index="PatientMain"><span>Number Of Children</span></li>';
+                            str += '<li data-type="EmergencyContact1Name" data-index="PatientMain"><span>Emergency Contact #1 Name</span></li>';
+                            str += '<li data-type="EmergencyContact1EmailAddress" data-index="PatientMain"><span>Emergency Contact #1 Email Address</span></li>';
+                            str += '<li data-type="EmergencyContact1Relationship" data-index="PatientMain"><span>Emergency Contact #1 Relationship</span></li>';
+                            str += '<li data-type="EmergencyContact1Address" data-index="PatientMain"><span>Emergency Contact #1 Address</span></li>';
+                            str += '<li data-type="EmergencyContact1City" data-index="PatientMain"><span>Emergency Contact #1 City</span></li>';
+                            str += '<li data-type="EmergencyContact1State" data-index="PatientMain"><span>Emergency Contact #1 State</span></li>';
+                            str += '<li data-type="EmergencyContact1Zip" data-index="PatientMain"><span>Emergency Contact #1 Zip</span></li>';
+                            str += '<li data-type="EmergencyContact2Name" data-index="PatientMain"><span>Emergency Contact #2 Name</span></li>';
+                            str += '<li data-type="EmergencyContact2EmailAddress" data-index="PatientMain"><span>Emergency Contact #2 Email Address</span></li>';
+                            str += '<li data-type="EmergencyContact2Relationship" data-index="PatientMain"><span>Emergency Contact #2 Relationship</span></li>';
+                            str += '<li data-type="EmergencyContact2Address" data-index="PatientMain"><span>Emergency Contact #2 Address</span></li>';
+                            str += '<li data-type="EmergencyContact2City" data-index="PatientMain"><span>Emergency Contact #2 City</span></li>';
+                            str += '<li data-type="EmergencyContact2State" data-index="PatientMain"><span>Emergency Contact #2 State</span></li>';
+                            str += '<li data-type="EmergencyContact2Zip" data-index="PatientMain"><span>Emergency Contact #2 Zip</span></li>';
+                            str += '<li data-type="ChildrenUnder18" data-index="PatientMain"><span>Children under 18</span></li>';
+                            str += '<li data-type="Adults18to65" data-index="PatientMain"><span>Adults 18-65</span></li>';
+                            str += '<li data-type="Adults65Plus" data-index="PatientMain"><span>Adults 65+</span></li>';
+                            str += '<li data-type="PreferredPharmacyName" data-index="PatientMain"><span>Preferred Pharmacy Name</span></li>';
+                            str += '<li data-type="PreferredPharmacyLocation" data-index="PatientMain"><span>Preferred Pharmacy Location</span></li>';
+                            str += '<li data-type="EverMemberOfUSArmedForces" data-index="PatientMain"><span>U.S. Armed Forces</span></li>';
+                            str += '<li data-type="MaritalStatus" data-index="PatientMain"><span>Marital status</span></li>';
+                            str += '<li data-type="LanguagesSpeak" data-index="PatientMain"><span>Languages</span></li>';
+                            str += '<li data-type="EverBeenSmoker" data-index="PatientMain"><span>Smoker</span></li>';
+                            str += '<li data-type="PreferredPronouns" data-index="PatientMain"><span>PreferredPronouns</span></li>';
+                            str += '<li data-type="ThinkYourselfAs" data-index="PatientMain"><span>Think Yourself As</span></li>';
+                            break;
+                        case "2":
+                            str += '<li data-type="housingscore" data-index="PatientScore"><span>Score</span></li>';
+                            str += '<li data-type="housingstatus" data-index="PatientScore"><span>Status</span></li>';
+                            str += '<li data-type="PlaceLiveNow" data-index="PatientHousing"><span>The best Place you live</span></li>';
+                            str += '<li data-type="EmergencyShelter" data-index="PatientHousing"><span>You Stay Temporarily</span></li>';
+                            break;
+                        case "3":
+                            str += '<li data-type="financialcscore" data-index="PatientScore"><span>Score</span></li>';
+                            str += '<li data-type="financialcstatus" data-index="PatientScore"><span>Status</span></li>';
+                            str += '<li data-type="DifficultiesInPayingBills" data-index="PatientFinancialSecurity"><span>Difficulties in paying your bills for expenses like'+
+                                                ' housing, utilities, child care, transportation,'+
+                                                'telephone, medical care, or other basic needs.</span></li>';
+                            str += '<li data-type="IncomeCoverHouseholdExpenses" data-index="PatientFinancialSecurity"><span>your income generally cover your basic household'+
+                                ' expenses.</span></li>';
+                            str += '<li data-type="SkipMeals" data-index="PatientFinancialSecurity"><span>Over the 3 months, you ever cut the size of your'+
+                                    ' meals or skip meals because there wasn"\ t enough money for food? </span></li>';
+                            str += '<li data-type="CalworksBenefits" data-index="PatientFinancialSecurity"><span>You receive benefits or cash assistance from any of the following programs.</span></li>'
+
+                            break;
+                        case "4":
+                         str += '<li data-type="employmentscore" data-index="PatientScore"><span>Score</span></li>';
+                         str += '<li data-type="employmentstatus" data-index="PatientScore"><span>Status</span></li>';
+                         str += '<li data-type="LevelofEducation" data-index="PatientEmploymentEducation"><span>What is the highest level of education you have completed?</span></li>';
+                         str += '<li data-type="WorkSituation" data-index="PatientEmploymentEducation"><span>Which of the following best describes your work situation today?</span></li>';
+                         str += '<li data-type="FullTimeNameLocation" data-index="PatientEmploymentEducation"><span>what is the name and location(Full-Time) of where you work?</span></li>';
+                        str += '<li data-type="ParticipatingInEducationalOrTrainingProgram" data-index="PatientEmploymentEducation"><span>Are you currently participating in an educational or training program to improve your work opportunities?</span></li>';
+
+                            break;
+                        case "5":
+                         str += '<li data-type="communicationscore" data-index="PatientScore"><span>Score</span></li>';
+                         str += '<li data-type="communicationstatus" data-index="PatientScore"><span>Status</span></li>';
+                         str += '<li data-type="PersonalPhone" data-index="PatientCommunicationAndMobility"><span>Do you have a personal phone where we can easily reach you?</span></li>';
+                         str += '<li data-type="DifficultyGoingPlaces" data-index="PatientCommunicationAndMobility"><span>Over the past year, did you ever have difficulty going to work, school, shopping, or an appointment, because the lack of convenient transportation?</span></li>';
+                         str += '<li data-type="ModesOfTransportation" data-index="PatientCommunicationAndMobility"><span>Which of the following modes of transportation will you typically use to get to Root</span></li>';
+
+                            break;
+                        case "6":
+                         str += '<li data-type="healthcarescore" data-index="PatientScore"><span>Score</span></li>';
+                         str += '<li data-type="healthcarestatus" data-index="PatientScore"><span>Status</span></li>';
+                         str += '<li data-type="HealthInsurance" data-index="PatientHealthcare"><span>Do you currently have health insurance?</span></li>';
+                         str += '<li data-type="PrimaryCareDoctor" data-index="PatientHealthcare"><span>Do you have a regular primary care doctor?</span></li>';
+                         str += '<li data-type="RegularDentist" data-index="PatientHealthcare"><span>Do you have a regular dentist?</span></li>';
+                         str += '<li data-type="OtherDoctorsTherapists" data-index="PatientHealthcare"><span>Do you see any other doctors, therapists, counselors?</span></li>';
+                         str += '<li data-type="CaseManager" data-index="PatientHealthcare"><span>Do you have a case manager or social worker who helps you manage your healthcare?</span></li>';
+                         str += '<li data-type="YourHealthIs" data-index="PatientHealthcare"><span>In general, would you say your health is:</span></li>';
+                         str += '<li data-type="PastMonthPoorPhysicalHealth" data-index="PatientHealthcare"><span>During the past month, how often did poor physical health keep you from doing your usual activities, work, or recreation?</span></li>';
+                         str += '<li data-type="Diagnosed" data-index="PatientHealthcare"><span>Have you ever been diagnosed with any of the following medical conditions? (check all that apply)</span></li>';
+                         str += '<li data-type="PerWeekStrenuousExercise" data-index="PatientHealthcare"><span>On average, how many days per week do you engage in moderate to strenuous exercise (like walking fast, running, jogging, dancing, swimming, biking, or other activities On average, how many days per week do you engage in moderate to strenuous exercise (like walking fast, running, jogging, dancing, swimming, biking, or other activities that cause a light or heavy sweat)?</span></li>';
+                         str += '<li data-type="PerDayStrenuousExercise" data-index="PatientHealthcare"><span>On average, how many minutes per day do you engage in moderate to strenuous exercise (like walking fast, running, jogging, dancing, swimming, biking, or other activities that cause a light or heavy sweat)?</span></li>';
+                         str += '<li data-type="PastYearEmergency" data-index="PatientHealthcare"><span>Over the past year, how many times did you go to the emergency room (regular or psych emergency)?</span></li>';
+                         str += '<li data-type="SmokeCigarettes" data-index="PatientHealthcare"><span>Do you smoke cigarettes?</span></li>';
+                         str += '<li data-type="TobaccoProducts" data-index="PatientHealthcare"><span>Do you use any tobacco or nicotine products besides cigarettes, such as chewing tobacco, snuff, cigars, or e-cigarettes?</span></li>';
+
+                            break;
+
+                        case "7":
+                         str += '<li data-type="socialsupportscore" data-index="PatientScore"><span>Score</span></li>';
+                         str += '<li data-type="socialsupportstatus" data-index="PatientScore"><span>Status</span></li>';
+                         str += '<li data-type="IsSomeoneYouCanDependOn" data-index="PatientSocialSupport"><span>Is there someone now that you can depend on if you ever needed help to do a task, like getting a ride somewhere, or help with shopping or cooking a meal?</span></li>';
+                         str += '<li data-type="InvolvedInCommunityGroup" data-index="PatientSocialSupport"><span>Are you currently involved with any church, community group, club, etc.?</span></li>';
+                         str += '<li data-type="IsSomeoneYouCanCall" data-index="PatientSocialSupport"><span>Is there someone you can call when you’re feeling down or stressed?</span></li>';
+                         str += '<li data-type="IsAnyoneThreatenYou" data-index="PatientSocialSupport"><span>Does a partner, or anyone at home, hurt, hit or threaten you?</span></li>';
+                         str += '<li data-type="FeelSafeNeighborhood" data-index="PatientSocialSupport"><span>Do you feel safe in your neighborhood?</span></li>';
+                         str += '<li data-type="FinancialSecurity" data-index="PatientSocialSupport"><span>Have you ever had to exchange sex for anything that you needed like money, food, or a place to stay? (Financial Security)</span></li>';
+                         str += '<li data-type="PlaceToStay" data-index="PatientSocialSupport"><span>Has someone ever asked you to exchange sex for anything that you needed like money, food, or a place to stay?</span></li>';
+
+                            break;
+                        case "8":
+                         str += '<li data-type="legalstatusscore" data-index="PatientScore"><span>Score</span></li>';
+                         str += '<li data-type="legalstatusstatus" data-index="PatientScore"><span>Status</span></li>';
+                         str += '<li data-type="EverBeenArrested" data-index="PatientLegalStatus"><span>Have you ever been arrested?</span></li>';
+                         str += '<li data-type="OnGoingCriminalCase" data-index="PatientLegalStatus"><span>Do you have an ongoing criminal case?</span></li>';
+                         str += '<li data-type="EverBeenInPrison" data-index="PatientLegalStatus"><span>Have you ever been in prison or jail?</span></li>';
+                         str += '<li data-type="ParoleProbation" data-index="PatientLegalStatus"><span>Are you currently on parole or probation?</span></li>';
+                         str += '<li data-type="DifficultiesInGettingAJob" data-index="PatientLegalStatus"><span>Are you currently having difficulties in getting a job, housing, or any government benefits because of your legal status, background or a criminal record?</span></li>';
+                         str += '<li data-type="GovernmentIssuedID" data-index="PatientLegalStatus"><span>Do you have a government issued ID or driver’s license?</span></li>';
+                         str += '<li data-type="ConcernsAboutFamilyImmigrationStatus" data-index="PatientLegalStatus"><span>Do you have concerns about your family’s immigration status?</span></li>';
+                         str += '<li data-type="ConcernsWithLandlord" data-index="PatientLegalStatus"><span>Do you have concerns with or disputes with your landlord (threats of eviction, etc.)?</span></li>';
+
+                            break;
+                        case "9":
+                         str += '<li data-type="substancescore" data-index="PatientScore"><span>Score</span></li>';
+                         str += '<li data-type="substancestatus" data-index="PatientScore"><span>Status</span></li>';
+                         str += '<li data-type="DrugsContaining" data-index="Dast"><span>methamphetamines (speed, crystal)</span></li>';
+                         str += '<li data-type="OtherDrug" data-index="Dast"><span>Others</span></li>';
+                         str += '<li data-type="HowOftenUse" data-index="Dast"><span>How often have you used these drugs?</span></li>';
+                         str += '<li data-type="EverInjectedDrugs" data-index="Dast"><span>Have you ever injected drugs?</span></li>';
+                         str += '<li data-type="TreatmentForSubstanceAbuse" data-index="Dast"><span>Have you ever been in treatment for substance abuse?</span></li>';
+
+                            break;
+                        case "10":
+                            str += '<li data-type="substancescore" data-index="PatientScore"><span>Score</span></li>';
+                            str += '<li data-type="substancestatus" data-index="PatientScore"><span>Status</span></li>';
+                            str += '<li data-type="DrinkContainingAlcohol" data-index="Audit"><span>How often do you have a drink containing alcohol?</span></li>';
+                            str += '<li data-type="HowManyDrinks" data-index="Audit"><span>How many drinks containing alcohol do you have on a typical day when you are drinking?</span></li>';
+                            str += '<li data-type="SixOrMoreDrink" data-index="10"><span>How often do you have six or more drink on one occassion?</span></li>';
+                            str += '<li data-type="NotAbleToStopDrinking" data-index="Audit"><span>How often during the last year have you found that you were not able to stop drinking once you had started?</span></li>';
+                            str += '<li data-type="FailedWhatWasExpected" data-index="Audit"><span>How often during the last year have you failed do what was normally expected from you because of drinking.</span></li>';
+                            str += '<li data-type="FirstDrinkMorning" data-index="Audit"><span>How often during the last year have you needed a first drink in the morning to get yourself going after a heavy drinking session?</span></li>';
+                            str += '<li data-type="FeelingOfGuilt" data-index="Audit"><span>How often during the last year have you had a feeling of guilt or remorse after drinking?</span></li>';
+                            str += '<li data-type="UnableToRemember" data-index="Audit"><span>How often during the last year you have been unable to remember what happened the night before because you had been drinking?</span></li>';
+                            str += '<li data-type="InjuredOfYourDrinking" data-index="Audit"><span>Have you or someone else been injured as a result of your drinking?</span></li>';
+                            str += '<li data-type="FriendsSuggestedYouCutDown" data-index="Audit"><span>Has a relative or friends or a doctor or another health worker been concerned about your drinking or suggested you cut down?</span></li>';
+
+                            break;
+                        case "11":
+                         str += '<li data-type="mentalhealthscore" data-index="PatientScore"><span>Score</span></li>';
+                         str += '<li data-type="mentalhealthstatus" data-index="PatientScore"><span>Status</span></li>';
+                         str += '<li data-type="DrinkContainingAlcohol" data-index="10"><span>How</span></li>';
+
+                            break;
+                        case "12":
+                         str += '<li data-type="foodaccessscore" data-index="PatientScore"><span>Score</span></li>';
+                         str += '<li data-type="foodaccessstatus" data-index="PatientScore"><span>Status</span></li>';
+                         str += '<li data-type="ServingsOfFruit" data-index="PatientFoodAccess"><span>How many pieces or servings of fruit, any sort, do you eat on a typical day?</span></li>';
+                         str += '<li data-type="PortionsOfVegetables" data-index="PatientFoodAccess"><span>How many portions of vegetables, excluding potatoes, do you eat on a typical day?</span></li>';
+                         str += '<li data-type="MajorityOfFood" data-index="PatientFoodAccess"><span>Where do you get the majority of your food?</span></li>';
+                             break;
+                    }
+                    $("#database-control-box").html(str);
+                    $('#database-control-box li').draggable({
+                        connectToSortable: '#droppable',
+                        helper: function () {
+                            var cloned = $(this).clone();
+                            cloned.attr('id', (++new_id).toString());
+                            return cloned;
+                        },
+                    });
+            $("#droppable").sortable({
+                connectWith: "#database-control-box",
+                containment: "#droppable",
+                placeholder: "highlight",
+                start: function (e, ui) {
+                    placeholderHeight = ui.item.outerHeight();
+                    placeholderWidth = ui.item.outerWidth();
+                    ui.placeholder.height(placeholderHeight + 10);
+                    ui.placeholder.width(placeholderWidth + 10);
+                },
+                receive: function (event, ui) {
+                    var draggableType = ui.item.attr("data-type");
+                    var responseIndex= ui.item.attr("data-index");
+                    var newid = draggableType + "_" + $(ui.helper).clone().attr('id');
+                    var lblValue = $("[data-type=" + draggableType + "] span").html();
+                    var str = '<div class="dragresize col-md-12"><div class="form-group">' +
+                        '<label>' + lblValue + '</label><span class="required-asterisk" style="display: none;"> *</span>' +
+                         '<input id="' + newid + '" readonly="readonly" type="text" class="form-control" value="{{ Value }}"  data-index="' + responseIndex+'">' +
+                         '</div>' +
+                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableType + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
+                                '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
+                                '</div>';
+                            $(this).find("li").replaceWith(str);
+
+                }
+            });
+                },
+            });
+
+        }
+
+        function GetFormByTemplatePath(path) {
+            $.ajax({
+                type: "GET",
+                url: '/careplan/getformhtmlbypath?PathName=' + path,
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                success: function (result) {
+                    $("#droppable").html(result.html);
+                },
+            });
+        }
+    </script>
+}
+

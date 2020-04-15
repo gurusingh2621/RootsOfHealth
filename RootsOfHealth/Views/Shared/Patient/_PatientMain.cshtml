@@ -153,7 +153,6 @@
                             <h2>Client Profile</h2>
 
                             <div class="detail-button ml-auto">
-                                <a href='#' data-toggle="modal" style="display:none!important;" data-target="#CarePlanListModal" onclick="GetCarePlanTemplateList()" class="btn btn-success label-fields">CarePlanTemplates</a>
                                 <a href='' onclick=""
                                    id="btnPatientAppointments" class="btn btn-success label-fields">
 
@@ -1956,41 +1955,7 @@
     </div>
 </div>
 <!-- Appointment Modal end here -->
-<!--CarePlanListTemplate Start-->
-<!--Appointment Modal Starts Here-->
-<div class="modal fade" id="CarePlanListModal" tabindex="-1" role="dialog" aria-labelledby="CarePlanListModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"> CarePlanList</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <a href='#' class="btn btn-success label-fields" onclick="RedirectToCarePlan()" style="margin:10px;">Add</a>
 
-                <table id="tblCarePlanTemplateList" class="table table-striped border">
-                    <tr class="table-secondary">
-                    <tr class="table-active">
-                        <th>PROGRAM</th>
-                        <th>ACTIVE</th>
-                        <th>CREATED DATE</th>
-                        <th>ACTION</th>
-                    </tr>
-                    <tbody class="careplanlist">
-                        <tr></tr>
-
-                    </tbody>
-                </table>
-            </div>
-
-        </div>
-    </div>
-</div>
-<!-- Appointment Modal end here -->
-<!--CarePlanListTemplate END-->
 
 <script src="~/Content/script/jquery.timeselector.js"></script>
 <script>
@@ -2151,51 +2116,7 @@
         });
     }
 
-    function GetCarePlanTemplateList() {
-        $.ajax({
-            type: "GET",
-            url: Apipath + '/api/PatientMain/gettemplatelist',
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            success: function (result) {
-                var careplanlist = $(".careplanlist");
-                var careplans = "";
-                if (result.length) {
-                    $.each(result, function (index, item) {
-                        careplans += `<tr>
-                         <td width="20%">${item.ProgramsName}</td>
-                         <td width="20%">${item.IsActive ? "Yes" : "No"}</td>
-                         <td width="30%">${item.CreatedDate.split("T")[0]}</td>
-                         <td width="30%">
-                            <div class="text-center">
-                            <a href="/careplan/dynamiccareform" target="_blank" class="btn btn-success text-white" style="display:none;cursor:pointer;">EDIT</a>
-                                &nbsp;&nbsp;&nbsp;
-                               <a href="/home/GetCarePlanForm?Id=${item.TemplateID}&patientid=${$.urlParam('patientid')}"  class="btn btn-success text-white" style="cursor:pointer;">Show Form</a>
-                                      </div>
-                                      </td>
-                               </tr>`
-
-
-                    });
-                    careplanlist.html("").append(careplans);
-                    //$("#tblCarePlanTemplateList").modal('show');
-                } else {
-                    careplans += `<tr><td colspan="4"><p class="text-center">No data found.</p></td></tr>`;
-                    careplanlist.html("").append(careplans);
-                }
-            },
-            error: function (e) {
-                toastr.error("Something Happen Wrong");
-            }
-        });
-    }
-    $.urlParam = function (name) {
-        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-        return results[1] || 0;
-    }
-    function RedirectToCarePlan() {
-        window.location.href = "/careplan/DynamicCareForm";
-    }
+    
     $(document).ready(function () {
 
         GetTypeOfAppointments();
