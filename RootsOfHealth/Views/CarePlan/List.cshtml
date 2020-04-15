@@ -1,0 +1,218 @@
+﻿
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .radiobuttonWrap {
+        display: flex;
+    }
+
+    .radiobuttonWrap .custom-control {
+       margin-right: 30px;
+    }
+    .customselect {
+        margin: 30px 0 0 0;
+    }
+        .customselect select {
+            height: 23px !important;
+            font-size: 13px;
+            border: 1px solid #e2e2e2;
+            border-radius: 0px;
+            padding: 0 15px;
+            background: url(../images/chevron-arrow-down.svg) no-repeat 0 0;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            -ms-appearance: none;
+            background-size: 12px;
+            background-position: 98% 5px;
+            box-shadow: 0 0 0 !important;
+            outline:none !important;
+        }
+
+    #CarePlanModal .modal-body {
+        padding: 30px 15px;
+    }
+    .hide{
+        display:none;
+    }
+</style>
+<section id="content" class="responsive-container pt-0">
+
+    <div class="inner-content mt-0">
+
+        <div class="container-fluid pl-0 pr-0">
+
+            <div class="appointment scroll">
+                <div class="detail-heading d-flex">
+                    <h2>Care Plan List</h2>
+                </div>
+                <table id="tblCarePlanTemplateList" class="table table-striped border">
+                    <tr class="table-secondary">
+                    <tr class="table-active">
+                        <th>PROGRAM</th>
+                        <th>STATUS</th>
+                        <th>Modified DATE</th>
+                        <th>ACTION</th>
+                    </tr>
+                    <tbody class="careplanlist">
+                        <tr></tr>
+
+                    </tbody>
+                </table>
+            </div>
+            </div>
+        </div>
+    </section>
+<div class="modal fade" id="CarePlanModal" tabindex="-1" role="dialog" aria-labelledby="CarePlanModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> Choose Template Type</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="radiobuttonWrap">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="radio01" name="radio">
+                        <label class="custom-control-label" for="radio01">add new template</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="radio02" name="radio">
+                        <label class="custom-control-label" for="radio02">select from existing template</label>
+                    </div>
+                </div>
+                <div class="customselect hide">                  
+                    <select class="form-control" id="templatedropdown">
+                        <option value="0">Select Template</option>
+                    </select>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <a href='javascript:{}' class="btn btn-success label-fields" onclick="ProceedToTemplate()">Proceed</a>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div hidden>
+    <input type="hidden" id="ModalTemplateId" />
+    <input type="hidden" id="ModalProgramId" />
+</div>
+@section scripts{
+    <script>
+        var ModalTemplateId = "";
+        var ModalProgramId = "";
+        $(function () {
+            GetCarePlanTemplateList();
+        });
+        function GetCarePlanTemplateList() {
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/gettemplatelist',
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (result) {
+                    var careplanlist = $(".careplanlist");
+                    var careplans = "";
+                    var istemplateExist = false;
+                  
+                    if (result.length) {
+                        for (var i = 0; i < result.length; i++) {
+                            if (result[i].TemplatePath != null) {
+                                istemplateExist = true;
+                                break;
+                            }
+                        }
+                        $.each(result, function (index, item) {
+                            careplans += `<tr>
+                         <td width="20%">${item.ProgramsName}</td>
+                         <td width="20%">${item.IsActive ? "Saved" : "Not Saved"}</td>
+                         <td width="30%">${item.ModifiedDate != null?item.ModifiedDate.split("T")[0]:""}</td >
+                         <td width="30%">
+                            <div>
+                            <a href="" data-toggle="modal" data-target="#CarePlanModal" data-TemplateId=${item.TemplateID} data-ProgramId=${item.ProgramsID}  class="btn btn-success text-white" style="cursor:pointer;display:${istemplateExist ? "inline" : "none"}">MODIFY</a>
+                                &nbsp;&nbsp;&nbsp;
+
+                              <a href="/careplan/modifytemplate?TemplateId=${item.TemplateID}&ProgramId=${item.ProgramsID}"  class="btn btn-success text-white" style="cursor:pointer;display:${istemplateExist?"none":"inline"}">SET</a>
+                                      </div>
+                                      </td>
+                               </tr>`
+
+
+                        });
+                        careplanlist.html("").append(careplans);
+                    } else {
+                        careplans += `<tr><td colspan="4"><p class="text-center">No data found.</p></td></tr>`;
+                        careplanlist.html("").append(careplans);
+                    }
+                },
+                error: function (e) {
+                    toastr.error("Something Happen Wrong");
+                }
+            });
+        }
+
+        function ProceedToTemplate() {
+            if (!$(' input[id="radio01"]:checked').val() && !$(' input[id="radio02"]:checked').val()) {
+                toastr.error("Select at least one option");
+                return;
+            }
+            if ($("#radio01").prop("checked")) {
+                $("#radio01").prop("checked", false);
+                window.location.href = "/careplan/modifytemplate?TemplateId="+$("#ModalTemplateId").val() + "&ProgramId="+$("#ModalProgramId").val();
+            }
+            if ($("#radio02").prop("checked")) {
+
+                if ($("#templatedropdown").val()=="0") {
+                    toastr.error("Select template");
+                    return;
+                }
+
+                $("#radio02").prop("checked", false);
+                window.location.href = "/careplan/modifytemplate?TemplateId=" + $("#ModalTemplateId").val() + "&ProgramId=" + $("#ModalProgramId").val() + "&Template=" + $("#templatedropdown").val();
+            }
+        }
+        $("#radio01").change(function () {
+
+            if ($(this).prop("checked")) {
+                $(".customselect").addClass("hide");
+            } 
+        })
+        $("#radio02").change(function () {
+
+            if ($(this).prop("checked")) {
+                $.ajax({
+                    type: "GET",
+                    url: Apipath + '/api/PatientMain/gettemplatedropdownlist',
+                    contentType: 'application/json; charset=UTF-8',
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.length) {
+                            var templatedrop = $("#templatedropdown");
+                            templatedrop.html("");
+                            templatedrop.append("<option value=0>Select Template</option>");
+                            $.each(result, function (data, value) {
+                                templatedrop.append($("<option></option>").val(value.TemplatePath).html(value.ProgramsName));
+                            });
+                            $(".customselect").removeClass("hide");
+                        }
+                    },
+                });
+                
+            } else {
+                $(".customselect").addClass("hide");
+            }
+        })
+        $('#CarePlanModal').on('show.bs.modal', function (e) {
+            $("#ModalTemplateId").val($(e.relatedTarget).data('templateid'));
+            $("#ModalProgramId").val( $(e.relatedTarget).data('programid'));
+           
+        });
+
+    </script>
+    }
