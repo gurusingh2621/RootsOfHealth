@@ -4,6 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <style>
+
     .radiobuttonWrap {
         display: flex;
     }
@@ -36,6 +37,9 @@
     .hide{
         display:none;
     }
+    .templatelist h2{
+        text-transform:uppercase;
+    }
 </style>
 <section id="content" class="responsive-container pt-0">
 
@@ -44,8 +48,8 @@
         <div class="container-fluid pl-0 pr-0">
 
             <div class="appointment scroll">
-                <div class="detail-heading d-flex">
-                    <h2>Care Plan List</h2>
+                <div class="detail-heading d-flex templatelist">
+                    <h2>Care Plan Templates</h2>
                 </div>
                 <table id="tblCarePlanTemplateList" class="table table-striped border">
                     <tr class="table-secondary">
@@ -69,7 +73,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"> Choose Template Type</h5>
+                <h5 class="modal-title"> Choose Template</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -78,11 +82,11 @@
                 <div class="radiobuttonWrap">
                     <div class="custom-control custom-radio">
                         <input type="radio" class="custom-control-input" id="radio01" name="radio">
-                        <label class="custom-control-label" for="radio01">add new template</label>
+                        <label class="custom-control-label" for="radio01">Add new template</label>
                     </div>
                     <div class="custom-control custom-radio">
                         <input type="radio" class="custom-control-input" id="radio02" name="radio">
-                        <label class="custom-control-label" for="radio02">select from existing template</label>
+                        <label class="custom-control-label" for="radio02">Select from existing template</label>
                     </div>
                 </div>
                 <div class="customselect hide">                  
@@ -129,21 +133,24 @@
                             }
                         }
                         $.each(result, function (index, item) {
+                            var ishidepopup = false;
+                            if (item.IsSavedDraft || item.IsActive) ishidepopup = true;
                             careplans += `<tr>
                          <td width="20%">${item.ProgramsName}</td>
-                         <td width="20%">${item.IsActive ? "Saved" : "Not Saved"}</td>
-                         <td width="30%">${item.ModifiedDate != null?item.ModifiedDate.split("T")[0]:""}</td >
-                         <td width="30%">
-                            <div>
-                            <a href="" data-toggle="modal" data-target="#CarePlanModal" data-TemplateId=${item.TemplateID} data-ProgramId=${item.ProgramsID}  class="btn btn-success text-white" style="cursor:pointer;display:${istemplateExist ? "inline" : "none"}">MODIFY</a>
-                                &nbsp;&nbsp;&nbsp;
+                         <td width="20%">${item.IsActive ? "Saved" : item.IsSavedDraft ? "Saved as draft" : "Not Saved"}</td>
+                         <td width="30%">${item.ModifiedDate != null ? item.ModifiedDate.split("T")[0] : ""}</td>
+                         <td width="30%"><div>`
+                            if (istemplateExist) {
+                                if (ishidepopup) {
+                                    careplans += `<a href="/careplan/modifytemplate?TemplateId=${item.TemplateID}&ProgramId=${item.ProgramsID}&Template=${item.TemplatePath}"  class="btn btn-success text-white" style="cursor:pointer;">MODIFY</a>`
+                                } else {
+                                    careplans += `<a href="" data-toggle="modal" data-target="#CarePlanModal" data-TemplateId=${item.TemplateID} data-ProgramId=${item.ProgramsID}  class="btn btn-success text-white" style="cursor:pointer;">MODIFY</a>`
+                                }
 
-                              <a href="/careplan/modifytemplate?TemplateId=${item.TemplateID}&ProgramId=${item.ProgramsID}"  class="btn btn-success text-white" style="cursor:pointer;display:${istemplateExist?"none":"inline"}">SET</a>
-                                      </div>
-                                      </td>
-                               </tr>`
-
-
+                            } else {
+                                careplans += `<a href="/careplan/modifytemplate?TemplateId=${item.TemplateID}&ProgramId=${item.ProgramsID}"  class="btn btn-success text-white" style="cursor:pointer;">SET</a>`
+                            }
+                            careplans += `</div></td></tr>`;
                         });
                         careplanlist.html("").append(careplans);
                     } else {
