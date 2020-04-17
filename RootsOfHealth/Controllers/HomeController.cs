@@ -59,7 +59,8 @@ namespace RootsOfHealth.Controllers
                         {
                             programid=data.Result.ProgramID,
                             html = gethtml,
-                            tableName = data.Result.TemplateTable
+                            tableName = data.Result.TemplateTable,
+                            IsActive=data.Result.IsActive
                         };
                         return Json(jsonResult, JsonRequestBehavior.AllowGet);
                     }
@@ -69,7 +70,8 @@ namespace RootsOfHealth.Controllers
                         {
                             programid =0,
                             html = "",
-                            tableName = ""
+                            tableName = "",
+                            IsActive=false
                         };
                         return Json(jsonResult, JsonRequestBehavior.AllowGet);
                     }

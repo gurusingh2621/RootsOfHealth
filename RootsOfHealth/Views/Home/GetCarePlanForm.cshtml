@@ -319,7 +319,8 @@
                         });
                     }
                 }
-            }).done(function () {
+            }).done(function (result) {
+                if (result.IsActive != true) return;
                 $.ajax({
                     type: "GET",
                     url: Apipath+'/api/PatientMain/GetCarePlanTemplateValueByID?TemplateID=' + ID,
