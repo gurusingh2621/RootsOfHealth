@@ -6,6 +6,10 @@
 }
 
 <style>
+    .invalid-field {
+        border: 2px solid #c10000;
+        padding:5px !important;
+    }
     .required-asterisk {
         position: relative;
     }
@@ -440,7 +444,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLongTitle">Edit Field</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="validatepopup(this)">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -456,7 +460,7 @@
                     <div class="option-block">
                         <div class="option-fields">
                             <input type="text" placeholder="Key" class="form-control" />
-                            <input type="text" placeholder="Value" class="form-control" />
+                            <input type="text" placeholder="Value" class="form-control"  />
                         </div>
 
                         <div class="popup-event-btn">
@@ -469,7 +473,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="validatepopup(this)" hidden>Close</button>
                 <button type="button" class="btn btn-primary" id="btnSave">Save changes</button>
             </div>
         </div>
@@ -480,8 +484,35 @@
     <script>
         var new_id = 0;
         var templateid =@ViewBag.TemplateId;
+        function ValidateColumnName(e) {
+            //var item = $(e).val();
+            //$(e).parent().next().find(".lblcolname").val(item.split(" ").join("").replace(/[_\W]+/g, ""));
+        }
+        function validatepopup(e) {
+            //var ControlID = $(e).parent().next().find(".lbltext").attr("control-id");
+            //var colname = $("#" + ControlID).attr("data-column");
+            //if (typeof colname !== typeof undefined && colname !== false) {              
+            //} else {
+            //    $("#" + ControlID).closest(".dragresize").remove();
+            //}
+            //var isInvalid = false;
+            //if ($(".lbltext").val().trim() == "") {
+            //    isInvalid = true;
+            //} 
+            //if ($(".lblcolname").val().trim() == "") {
+            //    isInvalid = true;
+            //}
+            //if (isInvalid) {
+            //    toastr.error("", "Label text or column name is required", { progressBar: true });  
+            //    $(e).removeAttr("data-dismiss");
+            //    return;
+            //} else {
+            //    $(e).attr("data-dismiss", "modal");
+            //    return;
+            //}
+        }
         $(function () {
-
+           
         @if (ViewBag.TemplatePath!=null && ViewBag.TemplatePath.Contains(ViewBag.ProgramName)==true)
         {
             <text>$(".preview").css("display", "inline");</text>
@@ -525,7 +556,7 @@ connectToSortable: '#droppable',
                     }                  
                     switch (draggableId) {
                         case "label":
-                            var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group"><label id="' + newid + '" class="editable">Label</label></div>' +
+                            var str = '<div  class="dragresize col-md-12"><div class="frmbtn" style="border: 0;"><div class="form-group"><label id="' + newid + '" class="editable">Label</label></div>' +
                                 '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                                 '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
                                 '</div>';
@@ -658,20 +689,22 @@ connectToSortable: '#droppable',
 
         GetFormByTemplatePath('@ViewBag.TemplatePath');
         });
-
         function EditHtml(type, ID) {
-            var str = '';
+            var popupString = '';            
+            var isdatacolexist = $("#" + ID).attr("data-column");
             $(".modal-body").html("");
             switch (type) {
                 case "label":
-                    str = '<div class="modal-row">' +
+                    popupString = '<div class="modal-row">' +
                         '<label>Label Text</label>' +
-                        '<input  type="text" control-id="' + ID + '" class="form-control lbltext" value="' + $("#" + ID).html() + '"/>' +
+                        '<textarea   control-id="' + ID + '" class="form-control lbltext"  value="' + $("#" + ID).html() + '"/>' +
                         '</div>';
+                   
+                    
                     var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
                     var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
                     var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
-                    str += '<div class="modal-row">' +
+                    popupString += '<div class="modal-row">' +
                             '<label class="control-label"> Input Size </label>' +
                             '<div class="form-group">' +
                         '<select class="form-control"  id="inputsize">' +
@@ -679,56 +712,46 @@ connectToSortable: '#droppable',
                         '<option value="col-md-6"' + ismd6 +'>Medium</option>' +
                         '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
                             '</select></div></div>';
-
+                    popupString += '</div>';
                     $("#btnSave").unbind();
                     $("#btnSave").bind("click", function () {
-                        var ID = $(".lbltext").attr("control-id");
-                        $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
-                        $("#" + ID).html($(".lbltext").val());
-                        $("#exampleModalCenter").modal("hide");
+                        if ($(".lbltext").val() == "") {
+                            toastr.error("", "Label text is required", { progressBar: true });
+                            return;
+                        }
+                                                   
+                            $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
+                            $("#" + ID).html($(".lbltext").val()); 
+                            $("#exampleModalCenter").modal("hide");
+                        
                     });
-                    break;
-                case "button":
-                    str = '<div class="modal-row">' +
-                        '<label>Button Text</label>' +
-                        '<input  type="text" control-id="' + ID + '" class="form-control lbltext" value="' + $("#" + ID).html() + '"/>' +
-                        '</div>';
-                    var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
-                    var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
-                    var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
-                    str += '<div class="modal-row">' +
-                        '<label class="control-label"> Input Size </label>' +
-                        '<div class="form-group">' +
-                        '<select class="form-control"  id="inputsize">' +
-                        '<option value="col-md-4" ' + ismd4 +'>Small</option>' +
-                        '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
-                        '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
-                        '</select></div></div>';
-                    $("#btnSave").unbind();
-                    $("#btnSave").bind("click", function () {
-                        var ID = $(".lbltext").attr("control-id");
-                        $("#" + ID).html($(".lbltext").val());
-                        $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
-                        $("#exampleModalCenter").modal("hide");
-                    });
-                    break;
+                    break;              
                 case "checkbox-group":
                     var isrequired = $("#" + ID).find(".required-asterisk");
-                    str = '<div class="modal-row"><div class="form-group set-align"><label for="required-input">Required</label>';
+                    popupString = `<div class="modal-row custom-control custom-checkbox">`;
                     if (isrequired.length) {
-                        str += '<input type="checkbox" id="required-input" checked></div></div>';
+                        popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" checked>';
                     } else {
-                        str += '<input type="checkbox" id="required-input" ></div></div>'
+                        popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" >'
+                    }
+                    popupString += `<label class="custom-control-label" for="required-input">Required</label></div>`;
+                    popupString += '<div class="modal-row">' +
+                        '<label>Label Text</label>' +
+                        '<input  type="text" control-id="' + ID + '" class="form-control lbltext"  onkeyup="ValidateColumnName(this)" value="' + $("#" + ID).find(".checkbox-group").html() + '"/>' +
+                        '</div>';
+                    var isdatacolexistcheckbox = $("#" + ID).find("input").first().attr("data-column");
+                    if (typeof isdatacolexistcheckbox !== typeof undefined && isdatacolexistcheckbox !== false) {
+                        popupString += '<div class="modal-row"><label>Column Name</label><input type="text" class="form-control lblcolname" value="' + $("#" + ID).find("input").first().attr("data-column") + '"></div>';
+
+                    } else {
+                        popupString += '<div class="modal-row"><label>Column Name</label><input type="text" class="form-control lblcolname" value=""></div>';
+
                     }
 
-                    str += '<div class="modal-row">' +
-                        '<label>Label Text</label>' +
-                        '<input  type="text" control-id="' + ID + '" class="form-control lbltext" value="' + $("#" + ID).find(".checkbox-group").html() + '"/>' +
-                        '</div>';
                     var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
                     var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
                     var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
-                    str += '<div class="modal-row">' +
+                    popupString += '<div class="modal-row">' +
                         '<label class="control-label"> Input Size </label>' +
                         '<div class="form-group">' +
                         '<select class="form-control"  id="inputsize">' +
@@ -736,10 +759,10 @@ connectToSortable: '#droppable',
                         '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
                         '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
                         '</select></div></div>';
-                    str += '<div class="modal-row">' +
+                    popupString += '<div class="modal-row">' +
                         '<label>Options</label>';
                     $('.dragresize  #' + ID + " [type=checkbox]").each(function () {
-                        str += '<div class="option-block">' +
+                        popupString += '<div class="option-block">' +
                             '<div class="option-fields">' +
                             ' <input type="text" placeholder="Key" class="form-control"  value="' + $(this).next().text() + '"/>' +
                             ' <input type="text" placeholder="Value" class="form-control"  value="' + $(this).attr("value") + '"/>' +
@@ -749,44 +772,71 @@ connectToSortable: '#droppable',
                             '<button class="event-btn file-remove" onclick="RemoveOption(this)"> <i class="fa fa-minus-circle" aria-hidden="true"></i></button > ' +
                             '</div></div>'
                     });
-                    str += '</div > ';
+                    popupString += '</div></div>';
                     $("#btnSave").unbind();
                     $("#btnSave").bind("click", function () {
-
-                        var ID = $(".lbltext").attr("control-id");
-                        $(".dragresize  [id=" + ID + "]").html("");
-                        $(".dragresize  [id=" + ID + "]").html("<label class='checkbox-group'>Checkbox(Multiple)</label>");
-                        $(".option-block").each(function (index) {
-                            var option_data = `<div class="custom-control custom-checkbox  d-inline-block mr-2">
-    <input  type="checkbox" class="custom-control-input" id="${ID + index}"  name="radio" value="${$(this).find("[placeholder = Value]").val()}">
-    <label class="custom-control-label" for="${ID + index}">${$(this).find("[placeholder = Key]").val()}</label></div>
-    `;                            $(option_data).appendTo(".dragresize  [id=" + ID + "]");
-                        });
-                        if ($("#required-input").prop("checked")) {
-                            $("#" + ID).find('label:first-child').addClass("required-asterisk");
-                        } else {
-                            $("#" + ID).find('label:first-child').removeClass("required-asterisk");
+                        if ($(".lbltext").val() == "") {
+                            toastr.error("", "Label text is required", { progressBar: true });
+                            return;
                         }
-                        $("#" + ID).find(".checkbox-group").html($(".lbltext").val());
-                        $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
-                        $("#exampleModalCenter").modal("hide");
+                        if ($(".lblcolname").val() == "") {
+                            toastr.error("", "Column name is required", { progressBar: true });
+                            return;
+                        }
+                        if (!ValidateColumn($(".lblcolname").val())) {
+                            toastr.error("", "Enter a vaild column name", { progressBar: true })
+                            return;
+                        }
+                        if (isColumnNameValid($(".lblcolname").val(), $("#" + ID).find("input").first().attr("id"))) {
+                            $(".dragresize  [id=" + ID + "]").html("");
+                            $(".dragresize  [id=" + ID + "]").html("<label class='checkbox-group'>Checkbox(Multiple)</label>");
+                            $(".option-block").each(function (index) {
+                                var option_data = `<div class="custom-control custom-checkbox  d-inline-block mr-2">
+    <input  type="checkbox" class="custom-control-input" id="${ID + index}"  name="radio"  value="${$(this).find("[placeholder = Value]").val()}">
+    <label class="custom-control-label" for="${ID + index}">${$(this).find("[placeholder = Key]").val()}</label></div>
+    `; $(option_data).appendTo(".dragresize  [id=" + ID + "]");
+                            });
+
+                            if (typeof isdatacolexistcheckbox !== typeof undefined && isdatacolexistcheckbox !== false) {
+                                $("#" + ID).find("input").first().attr("data-columnold", isdatacolexistcheckbox);
+                            } else {
+                                $("#" + ID).find("input").first().attr("data-columnold", $(".lblcolname").val());
+                            }
+                            $("#" + ID).find("input").first().attr("data-column", $(".lblcolname").val());
+                            if ($("#required-input").prop("checked")) {
+                                $("#" + ID).find('label:first-child').addClass("required-asterisk");
+                            } else {
+                                $("#" + ID).find('label:first-child').removeClass("required-asterisk");
+                            }
+                            $("#" + ID).find(".checkbox-group").html($(".lbltext").val());
+                            $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
+                            $("#exampleModalCenter").modal("hide");
+                        }
                     });
                     break;
                 case "date":
                     var isrequired = $("#" + ID).prev().hasClass("required-asterisk");
-                    str = '<div class="modal-row"><div class="form-group set-align"><label for="required-input">Required</label>';
+                    popupString = `<div class="modal-row custom-control custom-checkbox">`;
                     if (isrequired) {
-                        str += '<input type="checkbox" id="required-input" checked></div></div>';
+                        popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" checked>';
                     } else {
-                        str += '<input type="checkbox" id="required-input" ></div></div>'
-                    }                    str += '<div class="modal-row">' +
+                        popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" >'
+                    }
+                    popupString += `<label class="custom-control-label" for="required-input">Required</label></div>`;
+                    popupString += '<div class="modal-row">' +
                         '<label>Label Text</label>' +
-                        '<input  type="text" control-id="' + ID + '" class="form-control lbltext" value="' + $("#" + ID).prev().html() + '"/>' +
+                        '<input  type="text" control-id="' + ID + '" class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + $("#" + ID).prev().html() + '"/>' +
                         '</div>';
+                    if (typeof isdatacolexist !== typeof undefined && isdatacolexist !== false) {
+                        popupString += '<div class="modal-row"><label>Column Name</label><input type="text" class="form-control lblcolname" value="' + $("#" + ID).attr("data-column") + '"></div>';
+
+                    } else {
+                        popupString += '<div class="modal-row"><label>Column Name</label><input type="text" class="form-control lblcolname" value=""></div>';
+                    }
                     var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
                     var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
                     var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
-                    str += '<div class="modal-row">' +
+                    popupString += '<div class="modal-row">' +
                         '<label class="control-label"> Input Size </label>' +
                         '<div class="form-group">' +
                         '<select class="form-control"  id="inputsize">' +
@@ -794,36 +844,64 @@ connectToSortable: '#droppable',
                         '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
                         '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
                         '</select></div></div>';
+                    popupString += '</div>';
                     $("#btnSave").unbind();
                     $("#btnSave").bind("click", function () {
-                        var ID = $(".lbltext").attr("control-id");
-                        $("#" + ID).prev().html($(".lbltext").val());
-                        if ($("#required-input").prop("checked")) {
-                            $("#" + ID).prev().addClass("required-asterisk");
-                        } else {
-                            $("#" + ID).prev().removeClass("required-asterisk");
+                        if ($(".lbltext").val() == "") {
+                            toastr.error("", "Label text is required", { progressBar: true });
+                            return;
                         }
-                        $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
-                        $("#exampleModalCenter").modal("hide");
+                        if ($(".lblcolname").val() == "") {
+                            toastr.error("", "Column name is required", { progressBar: true });
+                            return;
+                        }
+                        if (!ValidateColumn($(".lblcolname").val())) {
+                            toastr.error("", "Enter a vaild column name", { progressBar: true })
+                            return;
+                        }
+                        if (isColumnNameValid($(".lblcolname").val(), ID)) {
+                            $("#" + ID).prev().html($(".lbltext").val());
+                            if (typeof isdatacolexist !== typeof undefined && isdatacolexist !== false) {
+                                $("#" + ID).attr("data-columnold", isdatacolexist);
+                            } else {
+                                $("#" + ID).attr("data-columnold", $(".lblcolname").val());
+                            }
+                            $("#" + ID).attr("data-column", $(".lblcolname").val());
+
+                            if ($("#required-input").prop("checked")) {
+                                $("#" + ID).prev().addClass("required-asterisk");
+                            } else {
+                                $("#" + ID).prev().removeClass("required-asterisk");
+                            }
+                            $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
+                            $("#exampleModalCenter").modal("hide");
+                        }
                     });
                     break;
                 case "file":
                     var isrequired = $("#" + ID).prev().hasClass("required-asterisk");
-                    str = '<div class="modal-row"><div class="form-group set-align"><label for="required-input">Required</label>';
+                    popupString = `<div class="modal-row custom-control custom-checkbox">`;
                     if (isrequired) {
-                        str += '<input type="checkbox" id="required-input" checked></div></div>';
+                        popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" checked>';
                     } else {
-                        str += '<input type="checkbox" id="required-input" ></div></div>'
+                        popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" >'
                     }
+                    popupString += `<label class="custom-control-label" for="required-input">Required</label></div>`;
 
-                    str += '<div class="modal-row">' +
+                    popupString += '<div class="modal-row">' +
                         '<label>Label Text</label>' +
-                        '<input  type="text" control-id="' + ID + '" class="form-control lbltext" value="' + $("#" + ID).prev().html() + '"/>' +
+                        '<input  type="text" control-id="' + ID + '" class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + $("#" + ID).prev().html() + '"/>' +
                         '</div>';
                     var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
                     var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
                     var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
-                    str += '<div class="modal-row">' +
+                    if (typeof isdatacolexist !== typeof undefined && isdatacolexist !== false) {
+                        popupString += '<div class="modal-row"><label>Column Name</label><input type="text" class="form-control lblcolname" value="' + $("#" + ID).attr("data-column") + '"></div>';
+
+                    } else {
+                        popupString += '<div class="modal-row"><label>Column Name</label><input type="text" class="form-control lblcolname" value=""></div>';
+                    }
+                    popupString += '<div class="modal-row">' +
                         '<label class="control-label"> Input Size </label>' +
                         '<div class="form-group">' +
                         '<select class="form-control"  id="inputsize">' +
@@ -831,36 +909,63 @@ connectToSortable: '#droppable',
                         '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
                         '<option value="col-md-12"' + ismd12 +'>Large</option>' +
                         '</select></div></div>';
+                    popupString += '</div>';
                     $("#btnSave").unbind();
                     $("#btnSave").bind("click", function () {
-                        var ID = $(".lbltext").attr("control-id");
-                        $("#" + ID).prev().html($(".lbltext").val());
-                        if ($("#required-input").prop("checked")) {
-                            $("#" + ID).prev().addClass("required-asterisk");
-                        } else {
-                            $("#" + ID).prev().removeClass("required-asterisk");
+                        if ($(".lbltext").val() == "") {
+                            toastr.error("", "Label text is required", { progressBar: true });
+                            return;
                         }
-                        $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
-                        $("#exampleModalCenter").modal("hide");
+                        if ($(".lblcolname").val() == "") {
+                            toastr.error("", "Column name is required", { progressBar: true });
+                            return;
+                        }
+                        if (!ValidateColumn($(".lblcolname").val())) {
+                            toastr.error("", "Enter a vaild column name", { progressBar: true })
+                            return;
+                        }
+                        if (isColumnNameValid($(".lblcolname").val(), ID)) {
+                            $("#" + ID).prev().html($(".lbltext").val());
+                            if (typeof isdatacolexist !== typeof undefined && isdatacolexist !== false) {
+                                $("#" + ID).attr("data-columnold", isdatacolexist);
+                            } else {
+                                $("#" + ID).attr("data-columnold", $(".lblcolname").val());
+                            }
+                            $("#" + ID).attr("data-column", $(".lblcolname").val());
+                            if ($("#required-input").prop("checked")) {
+                                $("#" + ID).prev().addClass("required-asterisk");
+                            } else {
+                                $("#" + ID).prev().removeClass("required-asterisk");
+                            }
+                            $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
+                            $("#exampleModalCenter").modal("hide");
+                        }
                     });
                     break;
                 case "number":
                     var isrequired = $("#" + ID).prev().hasClass("required-asterisk");
-                    str = '<div class="modal-row"><div class="form-group set-align"><label for="required-input">Required</label>';
+                    popupString = `<div class="modal-row custom-control custom-checkbox">`;
                     if (isrequired) {
-                        str += '<input type="checkbox" id="required-input" checked></div></div>';
+                        popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" checked>';
                     } else {
-                        str += '<input type="checkbox" id="required-input" ></div></div>'
+                        popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" >'
                     }
+                    popupString += `<label class="custom-control-label" for="required-input">Required</label></div>`;
 
-                    str += '<div class="modal-row">' +
+                    popupString += '<div class="modal-row">' +
                         '<label>Label Text</label>' +
-                        '<input  type="text" control-id="' + ID + '" class="form-control lbltext" value="' + $("#" + ID).prev().html() + '"/>' +
+                        '<input  type="text" control-id="' + ID + '" class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + $("#" + ID).prev().html() + '"/>' +
                         '</div>';
+                    if (typeof isdatacolexist !== typeof undefined && isdatacolexist !== false) {
+                        popupString += '<div class="modal-row"><label>Column Name</label><input type="text" class="form-control lblcolname" value="' + $("#" + ID).attr("data-column") + '"></div>';
+
+                    } else {
+                        popupString += '<div class="modal-row"><label>Column Name</label><input type="text" class="form-control lblcolname" value=""></div>';
+                    }
                     var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
                     var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
                     var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
-                    str += '<div class="modal-row">' +
+                    popupString += '<div class="modal-row">' +
                         '<label class="control-label"> Input Size </label>' +
                         '<div class="form-group">' +
                         '<select class="form-control"  id="inputsize">' +
@@ -868,36 +973,64 @@ connectToSortable: '#droppable',
                         '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
                         '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
                         '</select></div></div>';
+                    popupString += '</div>';
                     $("#btnSave").unbind();
                     $("#btnSave").bind("click", function () {
-                        var ID = $(".lbltext").attr("control-id");
-                        $("#" + ID).prev().html($(".lbltext").val());
-                        if ($("#required-input").prop("checked")) {
-                            $("#" + ID).prev().addClass("required-asterisk");
-                        } else {
-                            $("#" + ID).prev().removeClass("required-asterisk");
+                        if ($(".lbltext").val() == "") {
+                            toastr.error("", "Label text is required", { progressBar: true });
+                            return;
                         }
-                        $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
-                        $("#exampleModalCenter").modal("hide");
+                        if ($(".lblcolname").val() == "") {
+                            toastr.error("", "Column name is required", { progressBar: true });
+                            return;
+                        }
+                        if (!ValidateColumn($(".lblcolname").val())) {
+                            toastr.error("", "Enter a vaild column name", { progressBar: true })
+                            return;
+                        }
+                        if (isColumnNameValid($(".lblcolname").val(), ID)) {
+                            $("#" + ID).prev().html($(".lbltext").val());
+                            if (typeof isdatacolexist !== typeof undefined && isdatacolexist !== false) {
+                                $("#" + ID).attr("data-columnold", isdatacolexist);
+                            } else {
+                                $("#" + ID).attr("data-columnold", $(".lblcolname").val());
+                            }
+                            $("#" + ID).attr("data-column", $(".lblcolname").val());
+                            if ($("#required-input").prop("checked")) {
+                                $("#" + ID).prev().addClass("required-asterisk");
+                            } else {
+                                $("#" + ID).prev().removeClass("required-asterisk");
+                            }
+                            $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
+                            $("#exampleModalCenter").modal("hide");
+                        }
                     });
                     break;
                 case "radio-group":
                     var isrequired = $("#" + ID).find(".required-asterisk");
-                    str = '<div class="modal-row"><div class="form-group set-align"><label for="required-input">Required</label>';
+                    popupString = `<div class="modal-row custom-control custom-checkbox">`;
                     if (isrequired.length) {
-                        str += '<input type="checkbox" id="required-input" checked></div></div>';
+                        popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" checked>';
                     } else {
-                        str += '<input type="checkbox" id="required-input" ></div></div>'
+                        popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" >'
                     }
-
-                    str += '<div class="modal-row">' +
+                    popupString += `<label class="custom-control-label" for="required-input">Required</label></div>`;
+                   
+                    popupString += '<div class="modal-row">' +
                         '<label>Label Text</label>' +
-                        '<input  type="text" control-id="' + ID + '" class="form-control lbltext" value="' + $("#" + ID).find(".radiobox-group").html() + '"/>' +
+                        '<input  type="text" control-id="' + ID + '" class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + $("#" + ID).find(".radiobox-group").html() + '"/>' +
                         '</div>';
+                    var isdatacolexistradio = $("#" + ID).find("input").attr("data-column");
+                    if (typeof isdatacolexistradio !== typeof undefined && isdatacolexistradio !== false) {
+                        popupString += '<div class="modal-row"><label>Column Name</label><input type="text" class="form-control lblcolname" value="' + $("#" + ID).find("input").attr("data-column") + '"></div>';
+
+                    } else {
+                        popupString += '<div class="modal-row"><label>Column Name</label><input type="text" class="form-control lblcolname" value=""></div>';
+                    }
                     var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
                     var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
                     var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
-                    str += '<div class="modal-row">' +
+                    popupString += '<div class="modal-row">' +
                         '<label class="control-label"> Input Size </label>' +
                         '<div class="form-group">' +
                         '<select class="form-control"  id="inputsize">' +
@@ -905,10 +1038,10 @@ connectToSortable: '#droppable',
                         '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
                         '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
                         '</select></div></div>';
-                    str += '<div class="modal-row">' +
+                    popupString += '<div class="modal-row">' +
                         '<label>Options</label>';
                     $('.dragresize  #' + ID + " [type=radio]").each(function () {
-                        str += '<div class="option-block">' +
+                        popupString += '<div class="option-block">' +
                             '<div class="option-fields">' +
                             ' <input type="text" placeholder="Key" class="form-control"  value="' + $(this).next().text() + '"/>' +
                             ' <input type="text" placeholder="Value" class="form-control"  value="' + $(this).attr("value") + '"/>' +
@@ -918,47 +1051,72 @@ connectToSortable: '#droppable',
                             '<button class="event-btn file-remove" onclick="RemoveOption(this)"> <i class="fa fa-minus-circle" aria-hidden="true"></i></button > ' +
                             '</div></div>'
                     });
-                    str += '</div> ';
+                    popupString += '</div></div> ';
                     $("#btnSave").unbind();
                     $("#btnSave").bind("click", function () {
-
-                        var ID = $(".lbltext").attr("control-id");
-                        $(".dragresize  [id=" + ID + "]").html("");
-                        $(".dragresize  [id=" + ID + "]").html("<label class='radiobox-group'>Radio</label>");
-                        $(".option-block").each(function (index) {
-                            var option_data = `<div class="custom-control custom-radio d-inline-block mr-2">
-    <input  type="radio" class="custom-control-input" id="${ID + index}"  name="radio" value="${$(this).find("[placeholder = Value]").val()}">
+                        if ($(".lbltext").val() == "") {
+                            toastr.error("", "Label text is required", { progressBar: true });
+                            return;
+                        }
+                        if ($(".lblcolname").val() == "") {
+                            toastr.error("", "Column name is required", { progressBar: true });
+                            return;
+                        }
+                        if (!ValidateColumn($(".lblcolname").val())) {
+                            toastr.error("", "Enter a vaild column name", { progressBar: true })
+                            return;
+                        }
+                        if (isColumnNameValid($(".lblcolname").val(), $("#" + ID).find("[type=radio]").attr("id"))) {
+                            $(".dragresize  [id=" + ID + "]").html("");
+                            $(".dragresize  [id=" + ID + "]").html("<label class='radiobox-group'>Radio</label>");
+                           
+                            $(".option-block").each(function (index) {
+                                var option_data = `<div class="custom-control custom-radio d-inline-block mr-2">
+    <input  type="radio" class="custom-control-input" id="${ID + index}"  name="radio"  value="${$(this).find("[placeholder = Value]").val()}">
     <label class="custom-control-label" for="${ID + index}">${$(this).find("[placeholder = Key]").val()}</label></div>
     `;
-                            $(option_data).appendTo(".dragresize  [id=" + ID + "]");
-                        });
-                        $("#" + ID).find(".radiobox-group").html($(".lbltext").val());
-                        if ($("#required-input").prop("checked")) {
-                            $("#" + ID).find('label:first-child').addClass("required-asterisk");
-                        } else {
-                            $("#" + ID).find('label:first-child').removeClass("required-asterisk");
+                                $(option_data).appendTo(".dragresize  [id=" + ID + "]");
+                            });
+                            if (typeof isdatacolexistradio !== typeof undefined && isdatacolexistradio !== false) {
+                                $("#" + ID).find("input").first().attr("data-columnold", isdatacolexistradio);
+                            } else {
+                                $("#" + ID).find("input").first().attr("data-columnold", $(".lblcolname").val());
+                            }
+                            $("#" + ID).find("input").first().attr("data-column", $(".lblcolname").val());
+                            $("#" + ID).find(".radiobox-group").html($(".lbltext").val());
+                            if ($("#required-input").prop("checked")) {
+                                $("#" + ID).find('label:first-child').addClass("required-asterisk");
+                            } else {
+                                $("#" + ID).find('label:first-child').removeClass("required-asterisk");
+                            }
+                            $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
+                            $("#exampleModalCenter").modal("hide");
                         }
-                        $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
-                        $("#exampleModalCenter").modal("hide");
                     });
                     break;
                 case "select":
                     var isrequired = $("#" + ID).prev().hasClass("required-asterisk");
-                    str = '<div class="modal-row"><div class="form-group set-align"><label for="required-input">Required</label>';
+                    popupString = `<div class="modal-row custom-control custom-checkbox">`;
                     if (isrequired) {
-                        str += '<input type="checkbox" id="required-input" checked></div></div>';
+                        popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" checked>';
                     } else {
-                        str += '<input type="checkbox" id="required-input" ></div></div>'
+                        popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" >'
                     }
-
-                    str += '<div class="modal-row">' +
+                    popupString += `<label class="custom-control-label" for="required-input">Required</label></div>`;
+                    popupString += '<div class="modal-row">' +
                         '<label>Label Text</label>' +
-                        '<input  type="text" control-id="' + ID + '" class="form-control lbltext" value="' + $("#" + ID).prev().html() + '"/>' +
+                        '<input  type="text" control-id="' + ID + '" class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + $("#" + ID).prev().html() + '"/>' +
                         '</div>';
+                    if (typeof isdatacolexist !== typeof undefined && isdatacolexist !== false) {
+                        popupString += '<div class="modal-row"><label>Column Name</label><input type="text" class="form-control lblcolname" value="' + $("#" + ID).attr("data-column") + '"></div>';
+
+                    } else {
+                        popupString += '<div class="modal-row"><label>Column Name</label><input type="text" class="form-control lblcolname" value=""></div>';
+                    }
                     var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
                     var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
                     var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
-                    str += '<div class="modal-row">' +
+                    popupString += '<div class="modal-row">' +
                         '<label class="control-label"> Input Size </label>' +
                         '<div class="form-group">' +
                         '<select class="form-control"  id="inputsize">' +
@@ -966,12 +1124,12 @@ connectToSortable: '#droppable',
                         '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
                         '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
                         '</select></div></div>';
-                    str += '<div class="modal-row">' +
+                    popupString += '<div class="modal-row">' +
                         '<label>Options</label>';
 
                     $('#' + ID).find('option').each(function () {
                         if ($(this).val() == 0) return;
-                        str += '<div class="option-block">' +
+                        popupString += '<div class="option-block">' +
                             '<div class="option-fields">' +
                             ' <input type="text" placeholder="Key" class="form-control"  value="' + $(this).text() + '"/>' +
                             ' <input type="text" placeholder="Value" class="form-control"  value="' + $(this).val() + '"/>' +
@@ -981,42 +1139,289 @@ connectToSortable: '#droppable',
                             '<button class="event-btn file-remove" onclick="RemoveOption(this)"> <i class="fa fa-minus-circle" aria-hidden="true"></i></button > ' +
                             '</div></div>'
                     });
-                    str += '</div> ';
+                    popupString += '</div></div> ';
                     $("#btnSave").unbind();
                     $("#btnSave").bind("click", function () {
-                        var ID = $(".lbltext").attr("control-id");
-                        $("#" + ID).prev().html($(".lbltext").val());
-                        $("#" + ID).html("");
-                        $(".option-block").each(function (index) {
-                            var option_data = "<option value=" + $(this).find("[placeholder=Value]").val() + ">" + $(this).find("[placeholder=Key]").val() + "</option>";
-                            $(option_data).appendTo('#' + ID);
-                        });
-                        if ($("#required-input").prop("checked")) {
-                            $("#" + ID).prev().addClass("required-asterisk");
-                        } else {
-                            $("#" + ID).prev().removeClass("required-asterisk");
+                        if ($(".lbltext").val() == "") {
+                            toastr.error("", "Label text is required", { progressBar: true });
+                            return;
                         }
-                        $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
-                        $("#exampleModalCenter").modal("hide");
+                        if ($(".lblcolname").val() == "") {
+                            toastr.error("", "Column name is required", { progressBar: true });
+                            return;
+                        }
+                        if (!ValidateColumn($(".lblcolname").val())) {
+                            toastr.error("", "Enter a vaild column name", { progressBar: true })
+                            return;
+                        }
+                        if (isColumnNameValid($(".lblcolname").val(), ID)) {
+                            $("#" + ID).prev().html($(".lbltext").val());
+                            if (typeof isdatacolexist !== typeof undefined && isdatacolexist !== false) {
+                                $("#" + ID).attr("data-columnold", isdatacolexist);
+                            } else {
+                                $("#" + ID).attr("data-columnold", $(".lblcolname").val());
+                            }
+                            $("#" + ID).attr("data-column", $(".lblcolname").val());
+                            $("#" + ID).html("");
+                            $(".option-block").each(function (index) {
+                                var option_data = "<option value=" + $(this).find("[placeholder=Value]").val() + ">" + $(this).find("[placeholder=Key]").val() + "</option>";
+                                $(option_data).appendTo('#' + ID);
+                            });
+                            if ($("#required-input").prop("checked")) {
+                                $("#" + ID).prev().addClass("required-asterisk");
+                            } else {
+                                $("#" + ID).prev().removeClass("required-asterisk");
+                            }
+                            $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
+                            $("#exampleModalCenter").modal("hide");
+                        }
                     });
                     break;
                 case "text":
+                    var selectedvarcharcol = false;
+                    var selectedcolsize = "";
                     var isrequired = $("#" + ID).prev().hasClass("required-asterisk");
-                    str = '<div class="modal-row"><div class="form-group set-align"><label for="required-input">Required</label>';
+                    popupString = `<div class="modal-row custom-control custom-checkbox">`;
                     if (isrequired) {
-                        str += '<input type="checkbox" id="required-input" checked></div></div>';
+                        popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" checked>';
                     } else {
-                        str += '<input type="checkbox" id="required-input" ></div></div>'
+                        popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" >'
                     }
+                    popupString += `<label class="custom-control-label" for="required-input">Required</label></div>`;
 
-                    str += '<div class="modal-row">' +
+                    popupString += '<div class="modal-row">' +
                         '<label>Label Text</label>' +
-                        '<input  type="text" control-id="' + ID + '" class="form-control lbltext" value="' + $("#" + ID).prev().html() + '"/>' +
+                        '<input  type="text" control-id="' + ID + '" class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + $("#" + ID).prev().html() + '"/>' +
                         '</div>';
+                    if (typeof isdatacolexist !== typeof undefined && isdatacolexist !== false) {
+                        popupString += '<div class="modal-row"><label>Column Name</label><input type="text" class="form-control lblcolname" value="' + $("#" + ID).attr("data-column") + '"></div>';
+
+                    } else {
+                        popupString += '<div class="modal-row"><label>Column Name</label><input type="text" class="form-control lblcolname" value=""></div>';
+                    }
+                    popupString += `<div class="form-row">
+                                    <div class="form-group col-md-6">
+                                    <label class="control-label"> Column Type </label>
+                                    <select class="form-control" id="coltype" onchange="CheckColumnType(this)">`;
+                    if ($("#" + ID).attr("data-columntype")) {
+                        selectedvarcharcol = $("#" + ID).attr("data-columntype").includes("varchar");
+                        if (selectedvarcharcol) {
+                            var coltype = $("#" + ID).attr("data-columntype");
+                            selectedcolsize = coltype.substring(8, coltype.length - 1);
+                            popupString += `<option value="varchar(#size)" selected>varchar</option>
+                                            <option value="int" disabled>int</option>
+                                            </select>
+                                            </div>`
+                        } else {
+                            popupString += `<option value="varchar(#size)">varchar</option>
+                                            <option value="int" selected>int</option>
+                                            </select>
+                                            </div>`
+                        }
+                    } else {
+                        popupString += `<option value="varchar(#size)">varchar</option>
+                                    <option value="int">int</option>
+                                    </select>
+                                    </div>`
+                    }
+                   
+                    popupString += `<div class="form-group col-md-6">
+                                    <label class="control-label"> Size </label>`
+                    if ($("#" + ID).attr("data-columntype")) {
+                        if (selectedvarcharcol != true)
+                            popupString += `<select class="form-control" id="colsize" disabled>`
+                        else
+                            popupString += `<select class="form-control" id="colsize">`
+                    } else {
+                        popupString += `<select class="form-control" id="colsize">`
+                    }
+                    switch (selectedcolsize) {
+                        case "50":
+                            popupString += `<option value="50" selected>50</option>
+                                    <option value="100">100</option>
+                                    <option value="150">150</option>
+                                    <option value="200">200</option>
+                                    <option value="250">250</option>
+                                    <option value="300">300</option>
+                                    <option value="350">350</option>
+                                    <option value="400">400</option>
+                                    <option value="450">450</option>
+                                    <option value="500">500</option>
+                                    <option value="max">max</option>
+                                    </select>
+                                    </div></div> `;
+                            break;
+                        case "100":
+                            popupString += `<option value="50" disabled>50</option>
+                                    <option value="100" selected>100</option>
+                                    <option value="150">150</option>
+                                    <option value="200">200</option>
+                                    <option value="250">250</option>
+                                    <option value="300">300</option>
+                                    <option value="350">350</option>
+                                    <option value="400">400</option>
+                                    <option value="450">450</option>
+                                    <option value="500">500</option>
+                                    <option value="max">max</option>
+                                    </select>
+                                    </div></div> `;
+                            break;
+                        case "150":
+                            popupString += `<option value="50" disabled>50</option>
+                                    <option value="100" disabled>100</option>
+                                    <option value="150" selected>150</option>
+                                    <option value="200">200</option>
+                                    <option value="250">250</option>
+                                    <option value="300">300</option>
+                                    <option value="350">350</option>
+                                    <option value="400">400</option>
+                                    <option value="450">450</option>
+                                    <option value="500">500</option>
+                                    <option value="max">max</option>
+                                    </select>
+                                    </div></div> `;
+                            break;
+                        case "200":
+                            popupString += `<option value="50" disabled>50</option>
+                                    <option value="100" disabled>100</option>
+                                    <option value="150" disabled>150</option>
+                                    <option value="200" selected>200</option>
+                                    <option value="250">250</option>
+                                    <option value="300">300</option>
+                                    <option value="350">350</option>
+                                    <option value="400">400</option>
+                                    <option value="450">450</option>
+                                    <option value="500">500</option>
+                                    <option value="max">max</option>
+                                    </select>
+                                    </div></div> `;
+                            break;
+                        case "250":
+                            popupString += `<option value="50" disabled>50</option>
+                                    <option value="100" disabled>100</option>
+                                    <option value="150" disabled>150</option>
+                                    <option value="200" disabled>200</option>
+                                    <option value="250" selected>250</option>
+                                    <option value="300">300</option>
+                                    <option value="350">350</option>
+                                    <option value="400">400</option>
+                                    <option value="450">450</option>
+                                    <option value="500">500</option>
+                                    <option value="max">max</option>
+                                    </select>
+                                    </div></div> `;
+                            break;
+                        case "300":
+                            popupString += `<option value="50" disabled>50</option>
+                                    <option value="100" disabled>100</option>
+                                    <option value="150" disabled>150</option>
+                                    <option value="200" disabled>200</option>
+                                    <option value="250" disabled>250</option>
+                                    <option value="300" selected>300</option>
+                                    <option value="350">350</option>
+                                    <option value="400">400</option>
+                                    <option value="450">450</option>
+                                    <option value="500">500</option>
+                                    <option value="max">max</option>
+                                    </select>
+                                    </div></div> `;
+                            break;
+                        case "350":
+                            popupString += `<option value="50" disabled>50</option>
+                                    <option value="100" disabled>100</option>
+                                    <option value="150" disabled>150</option>
+                                    <option value="200" disabled>200</option>
+                                    <option value="250" disabled>250</option>
+                                    <option value="300" disabled>300</option>
+                                    <option value="350" selected>350</option>
+                                    <option value="400">400</option>
+                                    <option value="450">450</option>
+                                    <option value="500">500</option>
+                                    <option value="max">max</option>
+                                    </select>
+                                    </div></div> `;
+                            break;
+                        case "400":
+                            popupString += `<option value="50" disabled>50</option>
+                                    <option value="100" disabled>100</option>
+                                    <option value="150" disabled>150</option>
+                                    <option value="200" disabled>200</option>
+                                    <option value="250" disabled>250</option>
+                                    <option value="300" disabled>300</option>
+                                    <option value="350" disabled>350</option>
+                                    <option value="400" selected>400</option>
+                                    <option value="450">450</option>
+                                    <option value="500">500</option>
+                                    <option value="max">max</option>
+                                    </select>
+                                    </div></div> `;
+                            break;
+                        case "450":
+                            popupString += `<option value="50" disabled>50</option>
+                                    <option value="100" disabled>100</option>
+                                    <option value="150" disabled>150</option>
+                                    <option value="200" disabled>200</option>
+                                    <option value="250" disabled>250</option>
+                                    <option value="300" disabled>300</option>
+                                    <option value="350" disabled>350</option>
+                                    <option value="400" disabled>400</option>
+                                    <option value="450" selected>450</option>
+                                    <option value="500">500</option>
+                                    <option value="max">max</option>
+                                    </select>
+                                    </div></div> `;
+                            break;
+                        case "500":
+                            popupString += `<option value="50" disabled>50</option>
+                                    <option value="100" disabled>100</option>
+                                    <option value="150" disabled>150</option>
+                                    <option value="200" disabled>200</option>
+                                    <option value="250" disabled>250</option>
+                                    <option value="300" disabled>300</option>
+                                    <option value="350" disabled>350</option>
+                                    <option value="400" disabled>400</option>
+                                    <option value="450" disabled>450</option>
+                                    <option value="500" selected>500</option>
+                                    <option value="max">max</option>
+                                    </select>
+                                    </div></div> `;
+                            break;
+                        case "max":
+                            popupString += `<option value="50" disabled>50</option>
+                                    <option value="100" disabled>100</option>
+                                    <option value="150" disabled>150</option>
+                                    <option value="200" disabled>200</option>
+                                    <option value="250" disabled>250</option>
+                                    <option value="300" disabled>300</option>
+                                    <option value="350" disabled>350</option>
+                                    <option value="400" disabled>400</option>
+                                    <option value="450" disabled>450</option>
+                                    <option value="500" disabled>500</option>
+                                    <option value="max" selected>max</option>
+                                    </select>
+                                    </div></div> `;
+                            break;
+                        default:
+                            popupString += `<option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="150">150</option>
+                                    <option value="200">200</option>
+                                    <option value="250">250</option>
+                                    <option value="300">300</option>
+                                    <option value="350">350</option>
+                                    <option value="400">400</option>
+                                    <option value="450">450</option>
+                                    <option value="500">500</option>
+                                    <option value="max">max</option>
+                                    </select>
+                                    </div></div> `;
+                            break;
+
+                    }
                     var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
                     var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
                     var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
-                    str += '<div class="modal-row">' +
+                    popupString += '<div class="modal-row">' +
                         '<label class="control-label"> Input Size </label>' +
                         '<div class="form-group">' +
                         '<select class="form-control"  id="inputsize">' +
@@ -1024,38 +1429,75 @@ connectToSortable: '#droppable',
                         '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
                         '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
                         '</select></div></div>';
+                    popupString += '</div>';
                     $("#btnSave").unbind();
                     $("#btnSave").bind("click", function () {
-                        var ID = $(".lbltext").attr("control-id");
-                        $("#" + ID).prev().html($(".lbltext").val());
-                        if ($("#required-input").prop("checked")) {
-                            $("#" + ID).prev().addClass("required-asterisk");
-                        } else {
-                            $("#" + ID).prev().removeClass("required-asterisk");
+                        if ($(".lbltext").val() == "") {
+                            toastr.error("", "Label text is required", { progressBar: true });
+                            return;
                         }
-                        //$("#" + ID).addClass($("#inputsize").val());
-                        $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
-                        $("#exampleModalCenter").modal("hide");
+                        if ($(".lblcolname").val() == "") {
+                            toastr.error("", "Column name is required", { progressBar: true });
+                            return;
+                        }
+                        if (!ValidateColumn($(".lblcolname").val())) {
+                            toastr.error("", "Enter a vaild column name", { progressBar: true })
+                            return;
+                        }
+                        if (isColumnNameValid($(".lblcolname").val(), ID)) {
+                            $("#" + ID).prev().html($(".lbltext").val());
+                            if (typeof isdatacolexist !== typeof undefined && isdatacolexist !== false) {
+                                $("#" + ID).attr("data-columnold", isdatacolexist);
+                            } else {
+                                $("#" + ID).attr("data-columnold", $(".lblcolname").val());
+                            }
+                            $("#" + ID).attr("data-column", $(".lblcolname").val());
+                            if ($("#required-input").prop("checked")) {
+                                $("#" + ID).prev().addClass("required-asterisk");
+                            } else {
+                                $("#" + ID).prev().removeClass("required-asterisk");
+                            }
+                            var coltype = '';
+                            switch ($("#coltype").val()) {
+                                case "varchar(#size)":
+                                    var coltypeoption = $("#coltype").val();
+                                    coltype = coltypeoption.replace("#size", $("#colsize").val());
+                                    break;
+                                case "int":
+                                    coltype = "int";
+                                    break;
+                            }
+                            $("#" + ID).attr("data-columntype", coltype);
+                            $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
+                            $("#exampleModalCenter").modal("hide");
+                        }
                     });
                     break;
                 case "textarea":
 
                     var isrequired = $("#" + ID).prev().hasClass("required-asterisk");
-                    str = '<div class="modal-row"><div class="form-group set-align"><label for="required-input">Required</label>';
+                    popupString = `<div class="modal-row custom-control custom-checkbox">`;
                     if (isrequired) {
-                        str += '<input type="checkbox" id="required-input" checked></div></div>';
+                        popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" checked>';
                     } else {
-                        str +='<input type="checkbox" id="required-input" ></div></div>'
+                        popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" >'
                     }
+                    popupString += `<label class="custom-control-label" for="required-input">Required</label></div>`;
                     
-                    str += '<div class="modal-row">' +
+                    popupString += '<div class="modal-row">' +
                         '<label>Label Text</label>' +
-                        '<input  type="text" control-id="' + ID + '" class="form-control lbltext" value="' + $("#" + ID).prev().html() + '"/>' +
+                        '<input  type="text" control-id="' + ID + '" class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + $("#" + ID).prev().html() + '"/>' +
                         '</div>';
+                    if (typeof isdatacolexist !== typeof undefined && isdatacolexist !== false) {
+                        popupString += '<div class="modal-row"><label>Column Name</label><input type="text" class="form-control lblcolname" value="' + $("#" + ID).attr("data-column") + '"></div>';
+
+                    } else {
+                        popupString += '<div class="modal-row"><label>Column Name</label><input type="text" class="form-control lblcolname" value=""></div>';
+                    }
                     var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
                     var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
                     var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
-                    str += '<div class="modal-row">' +
+                    popupString += '<div class="modal-row">' +
                         '<label class="control-label"> Input Size </label>' +
                         '<div class="form-group">' +
                         '<select class="form-control"  id="inputsize">' +
@@ -1063,29 +1505,51 @@ connectToSortable: '#droppable',
                         '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
                         '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
                         '</select></div></div>';
-                   
+                    popupString += '</div>';
                     $("#btnSave").unbind();
                     $("#btnSave").bind("click", function () {
-                        var ID = $(".lbltext").attr("control-id");
-                        $("#" + ID).prev().html($(".lbltext").val());
-                        if ($("#required-input").prop("checked")) {
-                            $("#" + ID).prev().addClass("required-asterisk");
-                        } else {
-                            $("#" + ID).prev().removeClass("required-asterisk");
+                        if ($(".lbltext").val() == "") {
+                            toastr.error("", "Label text is required", { progressBar: true });
+                            return;
                         }
-                        $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
-                        $("#exampleModalCenter").modal("hide");
+                        if ($(".lblcolname").val() == "") {
+                            toastr.error("", "Column name is required", { progressBar: true });
+                            return;
+                        }
+
+                        if (!ValidateColumn($(".lblcolname").val())) {
+                            toastr.error("", "Enter a vaild column name", { progressBar: true })
+                            return;
+                        }
+                        if (isColumnNameValid($(".lblcolname").val(), ID)) {
+                            $("#" + ID).prev().html($(".lbltext").val());
+                            if (typeof isdatacolexist !== typeof undefined && isdatacolexist !== false) {
+                                $("#" + ID).attr("data-columnold", isdatacolexist);
+                            } else {
+                                $("#" + ID).attr("data-columnold", $(".lblcolname").val());
+                            }
+                            $("#" + ID).attr("data-column", $(".lblcolname").val());
+                            if ($("#required-input").prop("checked")) {
+                                $("#" + ID).prev().addClass("required-asterisk");
+                            } else {
+                                $("#" + ID).prev().removeClass("required-asterisk");
+                            }
+                            $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
+                            $("#exampleModalCenter").modal("hide");
+                        }
                     });
                     break;
                   default:
-                         str = '<div class="modal-row">' +
+                         popupString = '<div class="modal-row">' +
                         '<label class="control-label"> Input Size </label>' +
                         '<div class="form-group">' +
                         '<select class="form-control"  id="inputsize">' +
                         '<option value="col-md-4">Small</option>' +
                         '<option value="col-md-6">Medium</option>' +
                         '<option value="col-md-12" selected>Large</option>' +
-                        '</select></div></div>';
+                        '</select></div>';
+                    popupString += '<div class="modal-row"><label>Column Name</label><input type="text" class="form-control lblcolname" value="Label"></div>';
+                    popupString += '</div>';
                     $("#btnSave").unbind();
                     $("#btnSave").bind("click", function () {
                         $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
@@ -1093,18 +1557,17 @@ connectToSortable: '#droppable',
                     });
                     break;
             }
-            $(".modal-body").html(str);
+            $(".modal-body").html(popupString);
             $("#exampleModalCenter").modal("show");
         }
         function RemoveOption(obj) {
-
             obj.closest(".option-block").remove();
         };
         function RemoveControl(obj) {
             obj.closest(".dragresize").remove();
         }
         function addoption(obj) {
-            var str = '<div class="option-block">' +
+            var popupString = '<div class="option-block">' +
                 '<div class="option-fields">' +
                 ' <input type="text" placeholder="Key" class="form-control"/>' +
                 ' <input type="text" placeholder="Value" class="form-control"/>' +
@@ -1114,7 +1577,7 @@ connectToSortable: '#droppable',
                 '<button class="event-btn file-remove" onclick="RemoveOption(this)"> <i class="fa fa-minus-circle" aria-hidden="true"></i></button > ' +
                 '</div></div>';
 
-            obj.closest(".option-block").after(parseHTML(str));
+            obj.closest(".option-block").after(parseHTML(popupString));
         }
         function parseHTML(htmlstr) {
             var t = document.createElement('template');
@@ -1126,56 +1589,45 @@ connectToSortable: '#droppable',
             window.location.href = `/home/GetCarePlanForm?Id=${templateid}&patientid=${1}`;
         }
         function saveHtml() {
-            if ($("#droppable .dragresize ").length == 0) {
+            if ($("#droppable .dragresize").length == 0) {
                 toastr.error("", "Please drag field here", { progressBar: true });
                 return;
             }
-            var invalidcount = 0;
-            $("#droppable .form-group label:first-child").each(function (index, item) {
-                if ($(item).text() == "Label" || $(item).text() == "Check Box (Multiple)" || $(item).text() == "Radio" || $(item).text() == "Select" || $(item).text() == "Textarea") {
-                    invalidcount += 1;
-
+            var isvalid = true;
+            $("#droppable").find("input,select,textarea,").each(function (index, item) {
+                var colname = $(item).attr("data-column");
+                if (typeof colname !== typeof undefined && colname !== false) {
+                }
+                else {
+                    if ($(item).is("input")) {
+                        switch ($(item).attr("type")) {
+                            case "radio":
+                            case "checkbox":
+                                var datacol = $(item).parent().parent().find("input").first().attr("data-column");
+                                if (typeof datacol !== typeof undefined && datacol !== false) {
+                                } else {
+                                    $(item).closest(".dragresize").addClass("invalid-field");
+                                    isvalid = false;
+                                }
+                                break;
+                            default:
+                                $(item).closest(".dragresize").addClass("invalid-field");
+                                isvalid = false;
+                                break;
+                          
+                        }
+                    }
+                    
                 }
             });
-            if (invalidcount > 0) {
-                toastr.error("", "Please set valid field title", { progressBar: true });
+            if (!isvalid) {
+
+                toastr.error("", "All fields are required for control", { progressBar: true });
                 return;
             }
             $("#droppable [readonly=readonly]").each(function (i, e) {
                 return;
             })
-             var models = [];
-                $("#droppable .editable").each(function (i, e) {
-                    $(this).attr("data-column",$(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, ""));
-                models.push({  ColDataType: "varchar(500)", ColoumnName: $(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, "") });
-             });
-            $("#droppable [type=text],[type=number],[type=file],[type=date]").each(function (i, e) {
-                if ($(this).attr("readonly")) return;
-                $(this).attr("data-column",$(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, ""));
-                models.push({  ColDataType: "varchar(500)", ColoumnName: $(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, "") });
-
-            });
-              $("#droppable select").each(function (i, e) {
-                 $(this).attr("data-column",$(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, ""));
-                  models.push({  ColDataType: "varchar(500)", ColoumnName: $(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, "") });
-              });
-            $("#droppable [type=radio]").each(function (i, e) {
-                $(this).attr("data-column", $(this).parent().siblings(".radiobox-group").html().split(" ").join("").replace(/[_\W]+/g, ""));
-                models.push({ ColDataType: "varchar(500)", ColoumnName: $(this).parent().siblings(".radiobox-group").html().split(" ").join("").replace(/[_\W]+/g, "") });
-            });
-            $("#droppable [type=checkbox]").each(function (i, e) {
-                $(this).attr("data-column", $(this).parent().siblings(".checkbox-group").html().split(" ").join("").replace(/[_\W]+/g, ""));
-                 models.push({ ColDataType: "varchar(500)", ColoumnName: $(this).parent().siblings(".checkbox-group").html().split(" ").join("").replace(/[_\W]+/g, "") });
-            });
-              $("#droppable textarea").each(function (i, e) {
-                  $(this).attr("data-column",$(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, ""));
-                  models.push({ ColDataType: "varchar(500)", ColoumnName: $(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, "") });
-              });
-            $("#droppable [type=button]").each(function (i, e) {
-                $(this).attr("data-column",$(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, ""));
-                models.push({ ColDataType: "varchar(500)", ColoumnName: $(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, "") });
-            });
-
             var gethtml = $("#droppable").html();
               var model = {
                 TemplateID: '@ViewBag.TemplateId',
@@ -1201,11 +1653,53 @@ connectToSortable: '#droppable',
                 }
             }).done(function (result) {
                 if (result != "0") {
-                    var model = {
-                        TemplateCreateModelList: models,
-                        TableName: result.tablename
-                    }
+                    var models = [];
+                    
+                    $("#droppable [type=text]").each(function (index, item) {
+                        if ($(item).attr("readonly")) return;
+                        models.push({ ColDataType: $(item).attr("data-columntype"), ColoumnName: $(item).attr("data-column"), PreviousColoumnName: $(item).attr("data-columnold") });
+                    });
+                    $("#droppable [type=number],[type=file],[type=date]").each(function (index, item) {
+                        if ($(item).attr("readonly")) return;
+                        models.push({ ColDataType: "varchar(500)", ColoumnName: $(item).attr("data-column"), PreviousColoumnName: $(item).attr("data-columnold") });
+                    });
+                    $("#droppable select").each(function (index, item) {
+                        models.push({ ColDataType: "varchar(500)", ColoumnName: $(item).attr("data-column"), PreviousColoumnName: $(item).attr("data-columnold") });
+                    });
+                    $("#droppable [type=radio]").each(function (index, item) {
+                       var radioitem= $(item).attr("data-column");
+                        if (typeof radioitem !== typeof undefined && radioitem !== false) {
+                            models.push({ ColDataType: "varchar(500)", ColoumnName: $(item).attr("data-column"), PreviousColoumnName: $(item).attr("data-columnold") });
+                        }
+                    });
+                    $("#droppable [type=checkbox]").each(function (index, item) {
+                        var checkitem = $(item).attr("data-column");
+                        if (typeof checkitem !== typeof undefined && checkitem !== false) {
+                            models.push({ ColDataType: "varchar(500)", ColoumnName: $(item).attr("data-column"), PreviousColoumnName: $(item).attr("data-columnold") });
+                        }
+                    });
+                    $("#droppable textarea").each(function (index, item) {
+                        models.push({ ColDataType: "varchar(max)", ColoumnName: $(item).attr("data-column"), PreviousColoumnName: $(item).attr("data-columnold") });
+                    });
+                    $("#droppable [type=button]").each(function (index, item) {
+                        models.push({ ColDataType: "varchar(500)", ColoumnName: $(item).attr("data-column"), PreviousColoumnName: $(item).attr("data-columnold") });
+                    });
 
+                    var UniqueItems = models.reduce(function (item, e1) {
+                       
+                        var matches = item.filter(function (e2) { return e1.ColoumnName == e2.ColoumnName });
+                        if (matches.length == 0) {
+                            item.push(e1);
+                        }
+                        return item;
+                    }, []);
+
+                    var model = {
+                        TableName:result.tablename,
+                        ColoumnName: Array.prototype.map.call(UniqueItems, function (item) { return item.ColoumnName; }).join(","),
+                        PreviousColoumnName: Array.prototype.map.call(UniqueItems, function (item) { return item.PreviousColoumnName; }).join(","),
+                        ColDataType: Array.prototype.map.call(UniqueItems, function (item) { return item.ColDataType; }).join(",")
+                    }
                     $.ajax({
                         type: "POST",
                         url: Apipath + '/api/PatientMain/savetemplatecolumn',
@@ -1213,10 +1707,9 @@ connectToSortable: '#droppable',
                         data: JSON.stringify(model),
                         dataType: "json",
                         success: function (res) {
-                            debugger;
                             toastr.success("Saved successfully.");
                             $("a.preview").css("display", "inline");
-
+                            window.location.href = '/careplan/modifytemplate?TemplateId=' + result.id + '&ProgramId=' +@ViewBag.ProgramId+'&Template=' + result.TemplateName;
                         },
                     });
                 }
@@ -1227,57 +1720,58 @@ connectToSortable: '#droppable',
                 toastr.error("", "Please drag field here", { progressBar: true });
                 return;
             }
-            var invalidcount = 0;
-            $("#droppable .form-group label:first-child").each(function (index, item) {
-                if ($(item).text() == "Label" || $(item).text() == "Check Box (Multiple)" || $(item).text() == "Radio" || $(item).text() == "Select" || $(item).text() == "Textarea") {
-                    invalidcount += 1;
+            //var invalidcount = 0;
+            //$("#droppable .form-group label:first-child").each(function (index, item) {
+            //    if ($(item).text() == "Label" || $(item).text() == "Check Box (Multiple)" || $(item).text() == "Radio" || $(item).text() == "Select" || $(item).text() == "Textarea") {
+            //        invalidcount += 1;
+                   
+            //    }
+            //});
+            //if (invalidcount > 0) {
+
+            //    toastr.error("", "Please set valid field title", { progressBar: true });
+            //    return;
+            //}
+            var isvalid = true;
+            $("#droppable").find("input,select,textarea").each(function (index, item) {              
+                var colname = $(item).attr("data-column");
+                if (typeof colname !== typeof undefined && colname !== false) {
+                } else {
+                    if ($(item).is("input")) {
+                        switch ($(item).attr("type")) {
+                            case "radio":
+                            case "checkbox":
+                                var datacol = $(item).parent().parent().find("input").first().attr("data-column");
+                                if (typeof datacol !== typeof undefined && datacol !== false) {
+                                } else {
+                                    $(item).closest(".dragresize").addClass("invalid-field");
+                                    isvalid = false;
+                                }
+                                break;
+                            default:
+                                $(item).closest(".dragresize").addClass("invalid-field");
+                                isvalid = false;
+                                break;
+
+                        }
+                    }
 
                 }
+
             });
-            if (invalidcount > 0) {
-                toastr.error("", "Please set valid field title", { progressBar: true });
+            if (!isvalid) {
+
+                toastr.error("", "All fields are required for control", { progressBar: true });
                 return;
             }
             $("#droppable [readonly=readonly]").each(function (i, e) {
                 return;
-            })
-             var models = [];
-                $("#droppable .editable").each(function (i, e) {
-                    $(this).attr("data-column",$(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, ""));
-                models.push({  ColDataType: "varchar(500)", ColoumnName: $(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, "") });
-             });
-            $("#droppable [type=text],[type=number],[type=file],[type=date]").each(function (i, e) {
-                if ($(this).attr("readonly")) return;
-                $(this).attr("data-column",$(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, ""));
-                models.push({  ColDataType: "varchar(500)", ColoumnName: $(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, "") });
-
-            });
-              $("#droppable select").each(function (i, e) {
-                 $(this).attr("data-column",$(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, ""));
-                  models.push({  ColDataType: "varchar(500)", ColoumnName: $(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, "") });
-              });
-            $("#droppable [type=radio]").each(function (i, e) {
-                $(this).attr("data-column", $(this).parent().siblings(".radiobox-group").html().split(" ").join("").replace(/[_\W]+/g, ""));
-                models.push({ ColDataType: "varchar(500)", ColoumnName: $(this).parent().siblings(".radiobox-group").html().split(" ").join("").replace(/[_\W]+/g, "") });
-            });
-            $("#droppable [type=checkbox]").each(function (i, e) {
-                $(this).attr("data-column", $(this).parent().siblings(".checkbox-group").html().split(" ").join("").replace(/[_\W]+/g, ""));
-                 models.push({ ColDataType: "varchar(500)", ColoumnName: $(this).parent().siblings(".checkbox-group").html().split(" ").join("").replace(/[_\W]+/g, "") });
-            });
-              $("#droppable textarea").each(function (i, e) {
-                  $(this).attr("data-column",$(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, ""));
-                  models.push({ ColDataType: "varchar(500)", ColoumnName: $(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, "") });
-              });
-            $("#droppable [type=button]").each(function (i, e) {
-                $(this).attr("data-column",$(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, ""));
-                models.push({ ColDataType: "varchar(500)", ColoumnName: $(this).siblings("label").html().split(" ").join("").replace(/[_\W]+/g, "") });
-            });
-
+            })          
             var gethtml = $("#droppable").html();
               var model = {
                 TemplateID: '@ViewBag.TemplateId',
                 ProgramID: '@ViewBag.ProgramId',
-               IsSavedDraft: 1,
+                IsSavedDraft: 1,
                 CreatedBy: @Session["userid"].ToString(),
                 ModifiedBy:@Session["userid"].ToString(),
             };
@@ -1294,6 +1788,8 @@ connectToSortable: '#droppable',
                     } else {
                         templateid = result.id;
                         $("a.preview").css("display", "inline");
+                        window.location.href = '/careplan/modifytemplate?TemplateId=' + result.id + '&ProgramId=' +@ViewBag.ProgramId+'&Template=' + result.TemplateName;
+
                     }
                     toastr.success("Draft Saved successfully.");
                 }
@@ -1534,7 +2030,7 @@ connectToSortable: '#droppable',
                     contentType: 'application/json; charset=UTF-8',
                     dataType: "json",
                     success: function (response) {
-                        if (response != "") {
+                        if (response != "" && response != null) {
                             if (response.IsActive) {
                                 $(".btndraft").css("display", "none");
                             } else {
@@ -1547,6 +2043,60 @@ connectToSortable: '#droppable',
                 });
 
             });
+        }
+        function CheckColumnType(e) {
+            if ($(e).val() == "int") {
+                $("#colsize").val("50");
+                $("#colsize").attr("disabled", "disabled");
+            } else {
+                $("#colsize").removeAttr("disabled");
+            }
+        }
+        function isColumnNameValid(colname, controlid) {
+            var isvalid = true;
+            $("#droppable").find("input,select,textarea").each(function (index, item) {
+                if ($(item).attr("data-column") == colname && $(item).attr("id") != controlid) {
+                    var labelName = '';
+                    if ($(item).is("input")) {
+                        switch ($(item).attr("type")) {
+                            case "text":
+                            case "date":
+                            case "number":
+                            case "file":
+                                var id = $(item).attr("id");
+                                labelName = $("#" + id).prev().html();
+                                break;
+                            case "radio":
+                                var id = $(item).parent().parent().attr("id");
+                                labelName = $("#" + id).find(".radiobox-group").html();
+                                break;
+                            case "checkbox":
+                                var id = $(item).parent().parent().attr("id");
+                                labelName = $("#" + id).find(".checkbox-group").html();
+                                break;
+                        }
+
+                    } else if ($(item).is("select")) {
+                        var id = $(item).attr("id");
+                        labelName = $("#" + id).prev().html();
+                    } else if ($(item).is("textarea")) {
+                        var id = $(item).attr("id");
+                        labelName = $("#" + id).prev().html();
+                    } 
+                    toastr.error("", "Column name already used for " + labelName, { progressBar: true });
+                    isvalid = false;
+                }
+            });
+            return isvalid;
+        }
+
+        function ValidateColumn(name) {
+            var columnname = new RegExp("^[a-zA-Z0-9_]*$");
+            if (columnname.test(name)) {
+                return true;
+            } else {
+                return false;
+            }
         }
     </script>
 }
