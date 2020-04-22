@@ -20,6 +20,7 @@ namespace RootsOfHealth.Controllers
         }
         public JsonResult SaveFormTemplate(string htmlTemplate, CarePlantemplateBO Model,string ProgramName)
         {
+            ProgramName = ProgramName.Replace(" ", "");
             string TemplateName = ProgramName + "_CarePlan" + DateTime.Now.ToString("dd_MM_yyyy_hh_mm_ss");
             var dataFile = Server.MapPath("~/App_Data/"+ TemplateName + ".html");
             System.IO.File.WriteAllText(@dataFile, htmlTemplate);
@@ -45,7 +46,8 @@ namespace RootsOfHealth.Controllers
                     {
                         return Json(new {
                             id=data,
-                            tablename= Model.TemplateTable
+                            tablename= Model.TemplateTable,
+                            TemplateName=Model.TemplatePath
                         });
                     }
                     
@@ -55,6 +57,7 @@ namespace RootsOfHealth.Controllers
         }
         public JsonResult SaveFormDraftTemplate(string htmlTemplate, CarePlantemplateBO Model, string ProgramName)
         {
+            ProgramName = ProgramName.Replace(" ", "");
             string TemplateName = ProgramName + "_CarePlan" + DateTime.Now.ToString("dd_MM_yyyy_hh_mm_ss");
             var dataFile = Server.MapPath("~/App_Data/" + TemplateName + ".html");
             System.IO.File.WriteAllText(@dataFile, htmlTemplate);
@@ -81,7 +84,8 @@ namespace RootsOfHealth.Controllers
                         return Json(new
                         {
                             id = data,
-                            tablename = Model.TemplateTable
+                            tablename = Model.TemplateTable,
+                            TemplateName = Model.TemplatePath
                         });
                     }
 
