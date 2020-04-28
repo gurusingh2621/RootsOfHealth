@@ -4,25 +4,28 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
-
 <style>
     .invalid-field {
         border: 2px solid #c10000;
-        padding:5px !important;
+        padding: 5px !important;
     }
+
     .required-asterisk {
         position: relative;
     }
-    .required-asterisk:after {
-        content: "*";
-        position: absolute;
-        color: #c10000;
-        margin-left: 5px;
-    }
+
+        .required-asterisk:after {
+            content: "*";
+            position: absolute;
+            color: #c10000;
+            margin-left: 5px;
+        }
+
     a.preview {
         margin-left: 8px;
-        display:none;
+        display: none;
     }
+
     slide-placeholder {
         background: #DADADA;
         position: relative;
@@ -337,10 +340,27 @@
         font-weight: 500;
         text-transform: uppercase;
     }
+
         span.careplancaption span {
             color: #22baa0;
         }
+
+    .vertical .custom-control {
+        display: block !important;
+    }
+    /*27-04-2020*/
+    .label-left {
+        background: transparent !important;
+        margin: 0 20px 0px 0 !important;
+    }
+
+    .f-g-left {
+        display: flex !important;
+        align-items: center !important;
+    }
 </style>
+
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
 
 <section id="content" class="responsive-container pt-0">
 
@@ -352,7 +372,7 @@
                 <div class="detail-heading d-flex">
                     <h2><span class="careplancaption">Careplan template for <span>@ViewBag.ProgramName</span> </span></h2>
 
-                    
+
 
                     <div class="detail-button ml-auto">
                         <a href="/careplan/list" class="btn btn-success mr-0 backlist"> <i class="fa fa-arrow-left"></i> Back to list</a>
@@ -389,8 +409,7 @@
                             <div class="tab-content">
                                 <div class="tab-pane active container" id="htmlTab">
                                     <ul id="control-box" class="frmb-control">
-                                        <li data-type="label"><span><i class="fa fa-tasks" aria-hidden="true"></i>Label</span></li>
-                                        <li id="btn" data-type="button" style="display:none;"><span><i class="fa fa-tasks" aria-hidden="true"></i>Button</span></li>
+                                        <li data-type="label"><span><i class="fa fa-tasks" aria-hidden="true"></i>Html</span></li>
                                         <li data-type="checkbox-group"><span><i class="fa fa-check-square" aria-hidden="true"></i>Checkbox</span></li>
                                         <li data-type="date"><span><i class="fa fa-calendar" aria-hidden="true"></i>Date Field</span></li>
                                         <li data-type="file"><span><i class="fa fa-file" aria-hidden="true"></i>File Upload</span></li>
@@ -449,28 +468,20 @@
                 </button>
             </div>
             <div class="modal-body">
-
                 <div class="modal-row">
-                    <label>Label</label>
-                    <input type="text" class="form-control" />
+                    <label>Label Text</label>
+                    <textarea control-id="label1" class="form-control lbltext" value="">Html</textarea>
                 </div>
-
                 <div class="modal-row">
-                    <label>Options</label>
-                    <div class="option-block">
-                        <div class="option-fields">
-                            <input type="text" placeholder="Key" class="form-control" />
-                            <input type="text" placeholder="Value" class="form-control"  />
-                        </div>
-
-                        <div class="popup-event-btn">
-                            <button class="event-btn file-edit"><i class="fas fa-plus"></i></button>
-                            <button class="event-btn file-remove"><i class="fa fa-minus-circle" aria-hidden="true"></i></button>
-                        </div>
-
+                    <label class="control-label"> Input Size </label>
+                    <div class="form-group">
+                        <select class="form-control" id="inputsize">
+                            <option value="col-md-4"> Small</option>
+                            <option value="col-md-6">Medium</option>
+                            <option value="col-md-12" selected="">Large</option>
+                        </select>
                     </div>
                 </div>
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="validatepopup(this)" hidden>Close</button>
@@ -481,6 +492,7 @@
 </div>
 @section scripts{
     <script src="~/Scripts/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.js"></script>
     <script>
         var new_id = 0;
         var templateid =@ViewBag.TemplateId;
@@ -491,19 +503,19 @@
         function validatepopup(e) {
             //var ControlID = $(e).parent().next().find(".lbltext").attr("control-id");
             //var colname = $("#" + ControlID).attr("data-column");
-            //if (typeof colname !== typeof undefined && colname !== false) {              
+            //if (typeof colname !== typeof undefined && colname !== false) {
             //} else {
             //    $("#" + ControlID).closest(".dragresize").remove();
             //}
             //var isInvalid = false;
             //if ($(".lbltext").val().trim() == "") {
             //    isInvalid = true;
-            //} 
+            //}
             //if ($(".lblcolname").val().trim() == "") {
             //    isInvalid = true;
             //}
             //if (isInvalid) {
-            //    toastr.error("", "Label text or column name is required", { progressBar: true });  
+            //    toastr.error("", "Label text or column name is required", { progressBar: true });
             //    $(e).removeAttr("data-dismiss");
             //    return;
             //} else {
@@ -511,23 +523,23 @@
             //    return;
             //}
         }
-        $(function () {
-           
+        $(document).ready(function () {
+
         @if (ViewBag.TemplatePath!=null && ViewBag.TemplatePath.Contains(ViewBag.ProgramName)==true)
         {
             <text>$(".preview").css("display", "inline");</text>
         }
-           
+
             $('#control-box li').draggable({
-connectToSortable: '#droppable',
+                connectToSortable: '#droppable',
                 helper: function () {
-        var cloned = $(this).clone();
-        cloned.attr('id', (++new_id).toString());
-        return cloned;
-    },
+                    var cloned = $(this).clone();
+                    cloned.attr('id', (++new_id).toString());
+                    return cloned;
+                },
             });
             $("#droppable").sortable({
-                    connectWith: "#control-box",
+                connectWith: "#control-box",
                 containment: "#droppable",
                 placeholder: "highlight",
                 start: function (e, ui) {
@@ -553,21 +565,14 @@ connectToSortable: '#droppable',
                         } else {
                             break;
                         }
-                    }                  
+                    }
                     switch (draggableId) {
                         case "label":
-                            var str = '<div  class="dragresize col-md-12"><div class="frmbtn" style="border: 0;"><div class="form-group"><label id="' + newid + '" class="editable">Label</label></div>' +
+                            var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group"><label id="' + newid + '" class="editable">Html</label><div class="html-content"></div></div>' +
                                 '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                                 '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
                                 '</div>';
-                            $(this).find("li").replaceWith(str);
-                            break;
-                        case "button":
-                            var str = '<div class="dragresize col-md-12"><div class="frmbtn"><button id="' + newid + '"  type="submit" class="btn btn-primary">Button</button>' +
-                                '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
-                                '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
-                                '</div> ';
-                            $(this).find("li").replaceWith(str);
+                            $(this).find("li[data-type='label']").replaceWith(str);
                             break;
                         case "checkbox-group":
                             var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group" id="' + newid + '">' +
@@ -582,7 +587,7 @@ connectToSortable: '#droppable',
                                 '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                                 '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
                                 '</div>';
-                            $(this).find("li").replaceWith(str);
+                            $(this).find("li[data-type='checkbox-group']").replaceWith(str);
                             break;
                         case "date":
                             var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
@@ -592,7 +597,7 @@ connectToSortable: '#droppable',
                                 '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                                 '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
                                 '</div> ';
-                            $(this).find("li").replaceWith(str);
+                            $(this).find("li[data-type='date']").replaceWith(str);
                             break;
                         case "file":
                             var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
@@ -603,7 +608,7 @@ connectToSortable: '#droppable',
                                 '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
                                 '</div>';
 
-                            $(this).find("li").replaceWith(str);
+                            $(this).find("li[data-type='file']").replaceWith(str);
                             break;
                         case "number":
                             var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
@@ -613,7 +618,7 @@ connectToSortable: '#droppable',
                                 '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                                 '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
                                 '</div>';
-                            $(this).find("li").replaceWith(str);
+                            $(this).find("li[data-type='number']").replaceWith(str);
                             break;
                         case "radio-group":
                             var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group"  id="' + newid + '">' +
@@ -628,7 +633,7 @@ connectToSortable: '#droppable',
                                 '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                                 '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
                                 '</div>';
-                            $(this).find("li").replaceWith(str);
+                            $(this).find("li[data-type='radio-group']").replaceWith(str);
                             break;
                         case "select":
                             var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
@@ -643,7 +648,7 @@ connectToSortable: '#droppable',
                                 '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                                 '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
                                 '</div>';
-                            $(this).find("li").replaceWith(str);
+                            $(this).find("li[data-type='select']").replaceWith(str);
                             break;
                         case "text":
                             var str = '<div class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
@@ -653,7 +658,7 @@ connectToSortable: '#droppable',
                                 '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                                 '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
                                 '</div>';
-                            $(this).find("li").replaceWith(str);
+                            $(this).find("li[data-type='text']").replaceWith(str);
                             break;
                         case "textarea":
                             var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
@@ -663,8 +668,9 @@ connectToSortable: '#droppable',
                                 '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                                 '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
                                 '</div>';
-                            $(this).find("li").replaceWith(str);
+                            $(this).find("li[data-type='textarea']").replaceWith(str);
                             break;
+
                     }
 
 
@@ -685,47 +691,51 @@ connectToSortable: '#droppable',
 
                 }
 
-            }).disableSelection();
+            });
 
         GetFormByTemplatePath('@ViewBag.TemplatePath');
         });
         function EditHtml(type, ID) {
-            var popupString = '';            
-            var isdatacolexist = $("#" + ID).attr("data-column");
+            var popupString = '';
+            var isdatacolexist = $("#" + ID).attr("data-columnold");
+            
             $(".modal-body").html("");
             switch (type) {
                 case "label":
                     popupString = '<div class="modal-row">' +
-                        '<label>Label Text</label>' +
-                        '<textarea   control-id="' + ID + '" class="form-control lbltext"  value="' + $("#" + ID).html() + '"/>' +
+                        '<label></label>' +
+                        '<textarea   control-id="' + ID + '" class="form-control lbltext"  value="">' + $("#" + ID).next().html() + '</textarea>' +
                         '</div>';
-                   
-                    
-                    var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
-                    var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
-                    var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
-                    popupString += '<div class="modal-row">' +
-                            '<label class="control-label"> Input Size </label>' +
-                            '<div class="form-group">' +
-                        '<select class="form-control"  id="inputsize">' +
-                        '<option value="col-md-4"' + ismd4+' > Small</option > ' +
-                        '<option value="col-md-6"' + ismd6 +'>Medium</option>' +
-                        '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
-                            '</select></div></div>';
-                    popupString += '</div>';
+
+
+                    //var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
+                    //var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
+                    //var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
+                    //popupString += '<div class="modal-row">' +
+                    //        '<label class="control-label"> Input Size </label>' +
+                    //        '<div class="form-group">' +
+                    //    '<select class="form-control" style="max-width: 300px;"  id="inputsize">' +
+                    //    '<option value="col-md-4"' + ismd4+' > Small</option > ' +
+                    //    '<option value="col-md-6"' + ismd6 +'>Medium</option>' +
+                    //    '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
+                    //        '</select></div></div>';
+                    //popupString += '</div>';
                     $("#btnSave").unbind();
                     $("#btnSave").bind("click", function () {
-                        if ($(".lbltext").val() == "") {
-                            toastr.error("", "Label text is required", { progressBar: true });
+                        
+                        if ($('.lbltext').summernote('isEmpty')) {
+                            toastr.error("", "Editor content is empty", { progressBar: true });
                             return;
                         }
-                                                   
-                            $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
-                            $("#" + ID).html($(".lbltext").val()); 
+                        var markupStr = $('.lbltext').summernote('code');
+                        $("#" + ID).next(".html-content").html("");
+                        $("#" + ID).next(".html-content").html(markupStr);
+                        $('.lbltext').summernote('destroy');
+                        //$("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
                             $("#exampleModalCenter").modal("hide");
-                        
+
                     });
-                    break;              
+                    break;
                 case "checkbox-group":
                     var isrequired = $("#" + ID).find(".required-asterisk");
                     popupString = `<div class="modal-row custom-control custom-checkbox">`;
@@ -735,11 +745,19 @@ connectToSortable: '#droppable',
                         popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" >'
                     }
                     popupString += `<label class="custom-control-label" for="required-input">Required</label></div>`;
+                    popupString += `<div class="modal-row"><label>Label position: </label><div class="custom-control custom-radio d-inline-block mr-2">
+    <input type="radio" class="custom-control-input labeltop" id="label-top" name="radio-position" value="top" ${ $("#" + ID).hasClass("f-g-left") ? "" : "checked"}>
+    <label class="custom-control-label" for="label-top">top</label></div>
+    <div class="custom-control custom-radio d-inline-block mr-2">
+    <input type="radio" class="custom-control-input labelleft" id="label-left" name="radio-position" value="left"  ${ $("#" + ID).hasClass("f-g-left") ? "checked" : ""}>
+    <label class="custom-control-label" for="label-left">left</label></div>
+    </div>`;
                     popupString += '<div class="modal-row">' +
                         '<label>Label Text</label>' +
                         '<input  type="text" control-id="' + ID + '" class="form-control lbltext"  onkeyup="ValidateColumnName(this)" value="' + $("#" + ID).find(".checkbox-group").html() + '"/>' +
                         '</div>';
                     var isdatacolexistcheckbox = $("#" + ID).find("input").first().attr("data-column");
+                    
                     if (typeof isdatacolexistcheckbox !== typeof undefined && isdatacolexistcheckbox !== false) {
                         popupString += '<div class="modal-row"><label>Column Name</label><input type="text" class="form-control lblcolname" value="' + $("#" + ID).find("input").first().attr("data-column") + '"></div>';
 
@@ -759,6 +777,13 @@ connectToSortable: '#droppable',
                         '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
                         '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
                         '</select></div></div>';
+                    popupString += `<div class="modal-row"><div class="custom-control custom-radio d-inline-block mr-2">
+    <input type="radio" class="custom-control-input checkhorizontal" id="radio-horizontal" name="radio" value="horizontal" ${ $("#" + ID).hasClass("vertical") ? "" : "checked"}>
+    <label class="custom-control-label" for="radio-horizontal">Horizontal</label></div>
+    <div class="custom-control custom-radio d-inline-block mr-2">
+    <input type="radio" class="custom-control-input checkvertical" id="radio-vertical" name="radio" value="vertical"  ${ $("#" + ID).hasClass("vertical") ? "checked" : ""}>
+    <label class="custom-control-label" for="radio-vertical">Vertical</label></div>
+    </div>`;
                     popupString += '<div class="modal-row">' +
                         '<label>Options</label>';
                     $('.dragresize  #' + ID + " [type=checkbox]").each(function () {
@@ -790,6 +815,43 @@ connectToSortable: '#droppable',
                         if (isColumnNameValid($(".lblcolname").val(), $("#" + ID).find("input").first().attr("id"))) {
                             $(".dragresize  [id=" + ID + "]").html("");
                             $(".dragresize  [id=" + ID + "]").html("<label class='checkbox-group'>Checkbox(Multiple)</label>");
+
+                            var allTextArray = $('.option-block').map(function () {
+                                if ($(this).find("[placeholder=Key]").val() != '')
+
+                                    return $(this).find("[placeholder=Key]").val()
+                            }).get();
+                            var duplicateTextArray = allTextArray.filter(function (element, pos) {
+                                if (allTextArray.indexOf(element) != pos) {
+                                    return true;
+                                }
+                                else {
+                                    return false;
+                                }
+
+                            });
+                            var allValueArray = $('.option-block').map(function () {
+                                if ($(this).find("[placeholder=Value]").val() != '')
+
+                                    return $(this).find("[placeholder=Value]").val()
+                            }).get();
+                            var duplicateValueArray = allValueArray.filter(function (element, pos) {
+                                if (allValueArray.indexOf(element) != pos) {
+                                    return true;
+                                }
+                                else {
+                                    return false;
+                                }
+
+                            });
+                            if (duplicateValueArray.length != 0) {
+                                toastr.error("", "Option value can not be duplicate", { progressBar: true });
+                                return;
+                            }
+                            if (duplicateTextArray.length != 0) {
+                                toastr.error("", "Option text can not be duplicate", { progressBar: true });
+                                return;
+                            }
                             $(".option-block").each(function (index) {
                                 var option_data = `<div class="custom-control custom-checkbox  d-inline-block mr-2">
     <input  type="checkbox" class="custom-control-input" id="${ID + index}"  name="radio"  value="${$(this).find("[placeholder = Value]").val()}">
@@ -810,6 +872,18 @@ connectToSortable: '#droppable',
                             }
                             $("#" + ID).find(".checkbox-group").html($(".lbltext").val());
                             $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
+                            if ($(".checkhorizontal").prop("checked")) {
+                                $("#" + ID).removeClass("vertical");
+                            } else if ($(".checkvertical").prop("checked")) {
+                                $("#" + ID).addClass("vertical");
+                            }
+                            if ($(".labeltop").prop("checked")) {
+                                $("#" + ID).removeClass("f-g-left");
+                                $("#" + ID).find('label:first-child').removeClass("label-left");
+                            } else if ($(".labelleft").prop("checked")) {
+                                $("#" + ID).addClass("f-g-left");
+                                $("#" + ID).find('label:first-child').addClass("label-left");
+                            }
                             $("#exampleModalCenter").modal("hide");
                         }
                     });
@@ -823,6 +897,13 @@ connectToSortable: '#droppable',
                         popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" >'
                     }
                     popupString += `<label class="custom-control-label" for="required-input">Required</label></div>`;
+                    popupString += `<div class="modal-row"><label>Label position: </label><div class="custom-control custom-radio d-inline-block mr-2">
+    <input type="radio" class="custom-control-input labeltop" id="label-top" name="radio-position" value="top" ${ $("#" + ID).closest(".form-group").hasClass("f-g-left") ? "" : "checked"}>
+    <label class="custom-control-label" for="label-top">top</label></div>
+    <div class="custom-control custom-radio d-inline-block mr-2">
+    <input type="radio" class="custom-control-input labelleft" id="label-left" name="radio-position" value="left"  ${ $("#" + ID).closest(".form-group").hasClass("f-g-left") ? "checked" : ""}>
+    <label class="custom-control-label" for="label-left">left</label></div>
+    </div>`;
                     popupString += '<div class="modal-row">' +
                         '<label>Label Text</label>' +
                         '<input  type="text" control-id="' + ID + '" class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + $("#" + ID).prev().html() + '"/>' +
@@ -833,16 +914,31 @@ connectToSortable: '#droppable',
                     } else {
                         popupString += '<div class="modal-row"><label>Column Name</label><input type="text" class="form-control lblcolname" value=""></div>';
                     }
+                    var isfieldmd4 = $("#" + ID).hasClass("col-md-4") ? "selected" : "";
+                    var isfieldmd6 = $("#" + ID).hasClass("col-md-6") ? "selected" : "";
+                    var isfieldmd12 = $("#" + ID).hasClass("col-md-12") ? "selected" : "";
+                    if (isfieldmd4 == "" && isfieldmd6 == "" && isfieldmd12 == "") isfieldmd12 = "selected";
+
+
                     var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
                     var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
                     var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
                     popupString += '<div class="modal-row">' +
+                        '<label class="control-label"> Field Size </label>' +
+                        '<div class="form-group">' +
+                        '<select class="form-control"  id="inputsize" onchange="CheckFieldSize(this)">' +
+                        '<option value="col-md-4" ' + ismd4 + '>Small</option>' +
+                        '<option value="col-md-6" ' + ismd6 + '>Medium</option>' +
+                        '<option value="col-md-12" ' + ismd12 + '>Large</option>' +
+                        '</select></div></div>';
+
+                    popupString += '<div class="modal-row">' +
                         '<label class="control-label"> Input Size </label>' +
                         '<div class="form-group">' +
-                        '<select class="form-control"  id="inputsize">' +
-                        '<option value="col-md-4" ' + ismd4 +'>Small</option>' +
-                        '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
-                        '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
+                        '<select class="form-control"  id="fieldsize">' +
+                        '<option value="col-md-4" ' + isfieldmd4 + '>Small</option>' +
+                        '<option value="col-md-6" ' + isfieldmd6 + '>Medium</option>' +
+                        '<option value="" ' + isfieldmd12 + '>Large</option>' +
                         '</select></div></div>';
                     popupString += '</div>';
                     $("#btnSave").unbind();
@@ -873,6 +969,14 @@ connectToSortable: '#droppable',
                             } else {
                                 $("#" + ID).prev().removeClass("required-asterisk");
                             }
+                            if ($(".labeltop").prop("checked")) {
+                                $("#" + ID).closest(".form-group").removeClass("f-g-left");
+                                $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
+                            } else if ($(".labelleft").prop("checked")) {
+                                $("#" + ID).closest(".form-group").addClass("f-g-left");
+                                $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
+                            }
+                            $("#" + ID).removeClass("col-md-4 col-md-6 col-md-12").addClass($("#fieldsize").val());
                             $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
                             $("#exampleModalCenter").modal("hide");
                         }
@@ -887,7 +991,13 @@ connectToSortable: '#droppable',
                         popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" >'
                     }
                     popupString += `<label class="custom-control-label" for="required-input">Required</label></div>`;
-
+                    popupString += `<div class="modal-row"><label>Label position: </label><div class="custom-control custom-radio d-inline-block mr-2">
+    <input type="radio" class="custom-control-input labeltop" id="label-top" name="radio-position" value="top" ${ $("#" + ID).closest(".form-group").hasClass("f-g-left") ? "" : "checked"}>
+    <label class="custom-control-label" for="label-top">top</label></div>
+    <div class="custom-control custom-radio d-inline-block mr-2">
+    <input type="radio" class="custom-control-input labelleft" id="label-left" name="radio-position" value="left"  ${ $("#" + ID).closest(".form-group").hasClass("f-g-left") ? "checked" : ""}>
+    <label class="custom-control-label" for="label-left">left</label></div>
+    </div>`;
                     popupString += '<div class="modal-row">' +
                         '<label>Label Text</label>' +
                         '<input  type="text" control-id="' + ID + '" class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + $("#" + ID).prev().html() + '"/>' +
@@ -937,6 +1047,13 @@ connectToSortable: '#droppable',
                             } else {
                                 $("#" + ID).prev().removeClass("required-asterisk");
                             }
+                            if ($(".labeltop").prop("checked")) {
+                                $("#" + ID).closest(".form-group").removeClass("f-g-left");
+                                $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
+                            } else if ($(".labelleft").prop("checked")) {
+                                $("#" + ID).closest(".form-group").addClass("f-g-left");
+                                $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
+                            }
                             $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
                             $("#exampleModalCenter").modal("hide");
                         }
@@ -951,7 +1068,13 @@ connectToSortable: '#droppable',
                         popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" >'
                     }
                     popupString += `<label class="custom-control-label" for="required-input">Required</label></div>`;
-
+                    popupString += `<div class="modal-row"><label>Label position: </label><div class="custom-control custom-radio d-inline-block mr-2">
+    <input type="radio" class="custom-control-input labeltop" id="label-top" name="radio-position" value="top" ${ $("#" + ID).closest(".form-group").hasClass("f-g-left") ? "" : "checked"}>
+    <label class="custom-control-label" for="label-top">top</label></div>
+    <div class="custom-control custom-radio d-inline-block mr-2">
+    <input type="radio" class="custom-control-input labelleft" id="label-left" name="radio-position" value="left"  ${ $("#" + ID).closest(".form-group").hasClass("f-g-left") ? "checked" : ""}>
+    <label class="custom-control-label" for="label-left">left</label></div>
+    </div>`;
                     popupString += '<div class="modal-row">' +
                         '<label>Label Text</label>' +
                         '<input  type="text" control-id="' + ID + '" class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + $("#" + ID).prev().html() + '"/>' +
@@ -962,17 +1085,34 @@ connectToSortable: '#droppable',
                     } else {
                         popupString += '<div class="modal-row"><label>Column Name</label><input type="text" class="form-control lblcolname" value=""></div>';
                     }
+                    var isfieldmd4 = $("#" + ID).hasClass("col-md-4") ? "selected" : "";
+                    var isfieldmd6 = $("#" + ID).hasClass("col-md-6") ? "selected" : "";
+                    var isfieldmd12 = $("#" + ID).hasClass("col-md-12") ? "selected" : "";
+
+                    if (isfieldmd4 == "" && isfieldmd6 == "" && isfieldmd12 == "") isfieldmd12 = "selected";
+
+
                     var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
                     var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
                     var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
                     popupString += '<div class="modal-row">' +
+                        '<label class="control-label"> Field Size </label>' +
+                        '<div class="form-group">' +
+                        '<select class="form-control"  id="inputsize" onchange="CheckFieldSize(this)">' +
+                        '<option value="col-md-4" ' + ismd4 + '>Small</option>' +
+                        '<option value="col-md-6" ' + ismd6 + '>Medium</option>' +
+                        '<option value="col-md-12" ' + ismd12 + '>Large</option>' +
+                        '</select></div></div>';
+
+                    popupString += '<div class="modal-row">' +
                         '<label class="control-label"> Input Size </label>' +
                         '<div class="form-group">' +
-                        '<select class="form-control"  id="inputsize">' +
-                        '<option value="col-md-4" ' + ismd4 +'>Small</option>' +
-                        '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
-                        '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
+                        '<select class="form-control"  id="fieldsize">' +
+                        '<option value="col-md-4" ' + isfieldmd4 + '>Small</option>' +
+                        '<option value="col-md-6" ' + isfieldmd6 + '>Medium</option>' +
+                        '<option value="col-md-12" ' + isfieldmd12 + '>Large</option>' +
                         '</select></div></div>';
+
                     popupString += '</div>';
                     $("#btnSave").unbind();
                     $("#btnSave").bind("click", function () {
@@ -1001,6 +1141,14 @@ connectToSortable: '#droppable',
                             } else {
                                 $("#" + ID).prev().removeClass("required-asterisk");
                             }
+                            if ($(".labeltop").prop("checked")) {
+                                $("#" + ID).closest(".form-group").removeClass("f-g-left");
+                                $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
+                            } else if ($(".labelleft").prop("checked")) {
+                                $("#" + ID).closest(".form-group").addClass("f-g-left");
+                                $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
+                            }
+                            $("#" + ID).removeClass("col-md-4 col-md-6 col-md-12").addClass($("#fieldsize").val());
                             $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
                             $("#exampleModalCenter").modal("hide");
                         }
@@ -1015,14 +1163,21 @@ connectToSortable: '#droppable',
                         popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" >'
                     }
                     popupString += `<label class="custom-control-label" for="required-input">Required</label></div>`;
-                   
+                    popupString += `<div class="modal-row"><label>Label position: </label><div class="custom-control custom-radio d-inline-block mr-2">
+    <input type="radio" class="custom-control-input labeltop" id="label-top" name="radio-position" value="top" ${ $("#" + ID).hasClass("f-g-left") ? "" : "checked"}>
+    <label class="custom-control-label" for="label-top">top</label></div>
+    <div class="custom-control custom-radio d-inline-block mr-2">
+    <input type="radio" class="custom-control-input labelleft" id="label-left" name="radio-position" value="left"  ${ $("#" + ID).hasClass("f-g-left") ? "checked" : ""}>
+    <label class="custom-control-label" for="label-left">left</label></div>
+    </div>`;
                     popupString += '<div class="modal-row">' +
                         '<label>Label Text</label>' +
                         '<input  type="text" control-id="' + ID + '" class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + $("#" + ID).find(".radiobox-group").html() + '"/>' +
                         '</div>';
-                    var isdatacolexistradio = $("#" + ID).find("input").attr("data-column");
+                    var isdatacolexistradio = $("#" + ID).find("input").first().attr("data-column");
+                    
                     if (typeof isdatacolexistradio !== typeof undefined && isdatacolexistradio !== false) {
-                        popupString += '<div class="modal-row"><label>Column Name</label><input type="text" class="form-control lblcolname" value="' + $("#" + ID).find("input").attr("data-column") + '"></div>';
+                        popupString += '<div class="modal-row"><label>Column Name</label><input type="text" class="form-control lblcolname" value="' + $("#" + ID).find("input").first().attr("data-column") + '"></div>';
 
                     } else {
                         popupString += '<div class="modal-row"><label>Column Name</label><input type="text" class="form-control lblcolname" value=""></div>';
@@ -1038,6 +1193,13 @@ connectToSortable: '#droppable',
                         '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
                         '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
                         '</select></div></div>';
+     popupString += `<div class="modal-row"><div class="custom-control custom-radio d-inline-block mr-2">
+    <input type="radio" class="custom-control-input radiohorizontal" id="radio-horizontal" name="radio" value="horizontal" ${ $("#" + ID).hasClass("vertical") ? "" : "checked"}>
+    <label class="custom-control-label" for="radio-horizontal">Horizontal</label></div>
+    <div class="custom-control custom-radio d-inline-block mr-2">
+    <input type="radio" class="custom-control-input radiovertical" id="radio-vertical" name="radio" value="vertical"  ${ $("#" + ID).hasClass("vertical") ? "checked" : ""}>
+    <label class="custom-control-label" for="radio-vertical">Vertical</label></div>
+    </div>`;
                     popupString += '<div class="modal-row">' +
                         '<label>Options</label>';
                     $('.dragresize  #' + ID + " [type=radio]").each(function () {
@@ -1069,7 +1231,43 @@ connectToSortable: '#droppable',
                         if (isColumnNameValid($(".lblcolname").val(), $("#" + ID).find("[type=radio]").attr("id"))) {
                             $(".dragresize  [id=" + ID + "]").html("");
                             $(".dragresize  [id=" + ID + "]").html("<label class='radiobox-group'>Radio</label>");
-                           
+
+                            var allTextArray = $('.option-block').map(function () {
+                                if ($(this).find("[placeholder=Key]").val() != '')
+
+                                    return $(this).find("[placeholder=Key]").val()
+                            }).get();
+                            var duplicateTextArray = allTextArray.filter(function (element, pos) {
+                                if (allTextArray.indexOf(element) != pos) {
+                                    return true;
+                                }
+                                else {
+                                    return false;
+                                }
+
+                            });
+                            var allValueArray = $('.option-block').map(function () {
+                                if ($(this).find("[placeholder=Value]").val() != '')
+
+                                    return $(this).find("[placeholder=Value]").val()
+                            }).get();
+                            var duplicateValueArray = allValueArray.filter(function (element, pos) {
+                                if (allValueArray.indexOf(element) != pos) {
+                                    return true;
+                                }
+                                else {
+                                    return false;
+                                }
+
+                            });
+                            if (duplicateValueArray.length != 0) {
+                                toastr.error("", "Option value can not be duplicate", { progressBar: true });
+                                return;
+                            }
+                            if (duplicateTextArray.length != 0) {
+                                toastr.error("", "Option text can not be duplicate", { progressBar: true });
+                                return;
+                            }
                             $(".option-block").each(function (index) {
                                 var option_data = `<div class="custom-control custom-radio d-inline-block mr-2">
     <input  type="radio" class="custom-control-input" id="${ID + index}"  name="radio"  value="${$(this).find("[placeholder = Value]").val()}">
@@ -1090,6 +1288,18 @@ connectToSortable: '#droppable',
                                 $("#" + ID).find('label:first-child').removeClass("required-asterisk");
                             }
                             $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
+                            if ($(".radiohorizontal").prop("checked")) {
+                                $("#" + ID).removeClass("vertical");
+                            } else if ($(".radiovertical").prop("checked")) {
+                                $("#" + ID).addClass("vertical");
+                            }
+                            if ($(".labeltop").prop("checked")) {
+                                $("#" + ID).removeClass("f-g-left");
+                                $("#" + ID).find('label:first-child').removeClass("label-left");
+                            } else if ($(".labelleft").prop("checked")) {
+                                $("#" + ID).addClass("f-g-left");
+                                $("#" + ID).find('label:first-child').addClass("label-left");
+                            }
                             $("#exampleModalCenter").modal("hide");
                         }
                     });
@@ -1103,6 +1313,13 @@ connectToSortable: '#droppable',
                         popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" >'
                     }
                     popupString += `<label class="custom-control-label" for="required-input">Required</label></div>`;
+                    popupString += `<div class="modal-row"><label>Label position: </label><div class="custom-control custom-radio d-inline-block mr-2">
+    <input type="radio" class="custom-control-input labeltop" id="label-top" name="radio-position" value="top" ${ $("#" + ID).closest(".form-group").hasClass("f-g-left") ? "" : "checked"}>
+    <label class="custom-control-label" for="label-top">top</label></div>
+    <div class="custom-control custom-radio d-inline-block mr-2">
+    <input type="radio" class="custom-control-input labelleft" id="label-left" name="radio-position" value="left"  ${ $("#" + ID).closest(".form-group").hasClass("f-g-left") ? "checked" : ""}>
+    <label class="custom-control-label" for="label-left">left</label></div>
+    </div>`;
                     popupString += '<div class="modal-row">' +
                         '<label>Label Text</label>' +
                         '<input  type="text" control-id="' + ID + '" class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + $("#" + ID).prev().html() + '"/>' +
@@ -1163,7 +1380,45 @@ connectToSortable: '#droppable',
                             }
                             $("#" + ID).attr("data-column", $(".lblcolname").val());
                             $("#" + ID).html("");
+
+                            var allTextArray = $('.option-block').map(function () {
+                                if ($(this).find("[placeholder=Key]").val() != '')
+
+                                    return $(this).find("[placeholder=Key]").val()
+                            }).get();
+                            var duplicateTextArray = allTextArray.filter(function (element, pos) {
+                                if (allTextArray.indexOf(element) != pos) {
+                                    return true;
+                                }
+                                else {
+                                    return false;
+                                }
+
+                            });
+                            var allValueArray = $('.option-block').map(function () {
+                                if ($(this).find("[placeholder=Value]").val() != '')
+
+                                    return $(this).find("[placeholder=Value]").val()
+                            }).get();
+                            var duplicateValueArray = allValueArray.filter(function (element, pos) {
+                                if (allValueArray.indexOf(element) != pos) {
+                                    return true;
+                                }
+                                else {
+                                    return false;
+                                }
+
+                            });
+                            if (duplicateValueArray.length != 0) {
+                                toastr.error("", "Option value can not be duplicate", { progressBar: true });
+                                return;
+                            }
+                            if (duplicateTextArray.length != 0) {
+                                toastr.error("", "Option text can not be duplicate", { progressBar: true });
+                                return;
+                            }
                             $(".option-block").each(function (index) {
+
                                 var option_data = "<option value=" + $(this).find("[placeholder=Value]").val() + ">" + $(this).find("[placeholder=Key]").val() + "</option>";
                                 $(option_data).appendTo('#' + ID);
                             });
@@ -1171,6 +1426,13 @@ connectToSortable: '#droppable',
                                 $("#" + ID).prev().addClass("required-asterisk");
                             } else {
                                 $("#" + ID).prev().removeClass("required-asterisk");
+                            }
+                            if ($(".labeltop").prop("checked")) {
+                                $("#" + ID).closest(".form-group").removeClass("f-g-left");
+                                $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
+                            } else if ($(".labelleft").prop("checked")) {
+                                $("#" + ID).closest(".form-group").addClass("f-g-left");
+                                $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
                             }
                             $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
                             $("#exampleModalCenter").modal("hide");
@@ -1181,6 +1443,7 @@ connectToSortable: '#droppable',
                     var selectedvarcharcol = false;
                     var selectedcolsize = "";
                     var isrequired = $("#" + ID).prev().hasClass("required-asterisk");
+
                     popupString = `<div class="modal-row custom-control custom-checkbox">`;
                     if (isrequired) {
                         popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" checked>';
@@ -1188,6 +1451,14 @@ connectToSortable: '#droppable',
                         popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" >'
                     }
                     popupString += `<label class="custom-control-label" for="required-input">Required</label></div>`;
+
+                    popupString += `<div class="modal-row"><label>Label position: </label><div class="custom-control custom-radio d-inline-block mr-2">
+    <input type="radio" class="custom-control-input labeltop" id="label-top" name="radio-position" value="top" ${ $("#" + ID).closest(".form-group").hasClass("f-g-left") ? "" : "checked"}>
+    <label class="custom-control-label" for="label-top">top</label></div>
+    <div class="custom-control custom-radio d-inline-block mr-2">
+    <input type="radio" class="custom-control-input labelleft" id="label-left" name="radio-position" value="left"  ${ $("#" + ID).closest(".form-group").hasClass("f-g-left") ? "checked" : ""}>
+    <label class="custom-control-label" for="label-left">left</label></div>
+    </div>`;
 
                     popupString += '<div class="modal-row">' +
                         '<label>Label Text</label>' +
@@ -1224,7 +1495,7 @@ connectToSortable: '#droppable',
                                     </select>
                                     </div>`
                     }
-                   
+
                     popupString += `<div class="form-group col-md-6">
                                     <label class="control-label"> Size </label>`
                     if ($("#" + ID).attr("data-columntype")) {
@@ -1418,16 +1689,31 @@ connectToSortable: '#droppable',
                             break;
 
                     }
+                    var isfieldmd4 = $("#" + ID).hasClass("col-md-4") ? "selected" : "";
+                    var isfieldmd6 = $("#" + ID).hasClass("col-md-6") ? "selected" : "";
+                    var isfieldmd12 = $("#" + ID).hasClass("col-md-12") ? "selected" : "";
+                    if (isfieldmd4 == "" && isfieldmd6 == "" && isfieldmd12 == "") isfieldmd12 = "selected";
+                   
+
                     var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
                     var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
                     var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
                     popupString += '<div class="modal-row">' +
+                        '<label class="control-label"> Field Size </label>' +
+                        '<div class="form-group">' +
+                        '<select class="form-control"  id="inputsize" onchange="CheckFieldSize(this)">' +
+                        '<option value="col-md-4" ' + ismd4 + '>Small</option>' +
+                        '<option value="col-md-6" ' + ismd6 + '>Medium</option>' +
+                        '<option value="col-md-12" ' + ismd12 + '>Large</option>' +
+                        '</select></div></div>'; 
+
+                    popupString += '<div class="modal-row">' +
                         '<label class="control-label"> Input Size </label>' +
                         '<div class="form-group">' +
-                        '<select class="form-control"  id="inputsize">' +
-                        '<option value="col-md-4" ' + ismd4 +'>Small</option>' +
-                        '<option value="col-md-6" ' + ismd6 +'>Medium</option>' +
-                        '<option value="col-md-12" ' + ismd12 +'>Large</option>' +
+                        '<select class="form-control"  id="fieldsize">' +
+                        '<option value="col-md-4" ' + isfieldmd4 + '>Small</option>' +
+                        '<option value="col-md-6" ' + isfieldmd6 + '>Medium</option>' +
+                        '<option value="col-md-12" ' + isfieldmd12 + '>Large</option>' +
                         '</select></div></div>';
                     popupString += '</div>';
                     $("#btnSave").unbind();
@@ -1468,6 +1754,14 @@ connectToSortable: '#droppable',
                                     break;
                             }
                             $("#" + ID).attr("data-columntype", coltype);
+                            if ($(".labeltop").prop("checked")) {
+                                $("#" + ID).closest(".form-group").removeClass("f-g-left");
+                                $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
+                            } else if ($(".labelleft").prop("checked")) {
+                                $("#" + ID).closest(".form-group").addClass("f-g-left");
+                                $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
+                            }
+                            $("#" + ID).removeClass("col-md-4 col-md-6 col-md-12").addClass($("#fieldsize").val());
                             $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
                             $("#exampleModalCenter").modal("hide");
                         }
@@ -1483,7 +1777,13 @@ connectToSortable: '#droppable',
                         popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" >'
                     }
                     popupString += `<label class="custom-control-label" for="required-input">Required</label></div>`;
-                    
+                    popupString += `<div class="modal-row"><label>Label position: </label><div class="custom-control custom-radio d-inline-block mr-2">
+    <input type="radio" class="custom-control-input labeltop" id="label-top" name="radio-position" value="top" ${ $("#" + ID).closest(".form-group").hasClass("f-g-left") ? "" : "checked"}>
+    <label class="custom-control-label" for="label-top">top</label></div>
+    <div class="custom-control custom-radio d-inline-block mr-2">
+    <input type="radio" class="custom-control-input labelleft" id="label-left" name="radio-position" value="left"  ${ $("#" + ID).closest(".form-group").hasClass("f-g-left") ? "checked" : ""}>
+    <label class="custom-control-label" for="label-left">left</label></div>
+    </div>`;
                     popupString += '<div class="modal-row">' +
                         '<label>Label Text</label>' +
                         '<input  type="text" control-id="' + ID + '" class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + $("#" + ID).prev().html() + '"/>' +
@@ -1534,6 +1834,13 @@ connectToSortable: '#droppable',
                             } else {
                                 $("#" + ID).prev().removeClass("required-asterisk");
                             }
+                            if ($(".labeltop").prop("checked")) {
+                                $("#" + ID).closest(".form-group").removeClass("f-g-left");
+                                $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
+                            } else if ($(".labelleft").prop("checked")) {
+                                $("#" + ID).closest(".form-group").addClass("f-g-left");
+                                $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
+                            }
                             $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
                             $("#exampleModalCenter").modal("hide");
                         }
@@ -1558,6 +1865,17 @@ connectToSortable: '#droppable',
                     break;
             }
             $(".modal-body").html(popupString);
+            if (type == "label") {
+                $('.lbltext').summernote({
+                    placeholder: 'Type here ',
+                    height: 300,
+                    focus: true
+
+                });
+                $(".modal-dialog").css("max-width", "80%");
+            } else {
+                $(".modal-dialog").removeAttr("style");
+            }
             $("#exampleModalCenter").modal("show");
         }
         function RemoveOption(obj) {
@@ -1594,7 +1912,7 @@ connectToSortable: '#droppable',
                 return;
             }
             var isvalid = true;
-            $("#droppable").find("input,select,textarea,").each(function (index, item) {
+            $("#droppable").find("input,select,textarea").each(function (index, item) {
                 var colname = $(item).attr("data-column");
                 if (typeof colname !== typeof undefined && colname !== false) {
                 }
@@ -1614,10 +1932,10 @@ connectToSortable: '#droppable',
                                 $(item).closest(".dragresize").addClass("invalid-field");
                                 isvalid = false;
                                 break;
-                          
+
                         }
                     }
-                    
+
                 }
             });
             if (!isvalid) {
@@ -1627,8 +1945,9 @@ connectToSortable: '#droppable',
             }
             $("#droppable [readonly=readonly]").each(function (i, e) {
                 return;
-            })
+            });
             var gethtml = $("#droppable").html();
+
               var model = {
                 TemplateID: '@ViewBag.TemplateId',
                 ProgramID: '@ViewBag.ProgramId',
@@ -1654,7 +1973,7 @@ connectToSortable: '#droppable',
             }).done(function (result) {
                 if (result != "0") {
                     var models = [];
-                    
+
                     $("#droppable [type=text]").each(function (index, item) {
                         if ($(item).attr("readonly")) return;
                         models.push({ ColDataType: $(item).attr("data-columntype"), ColoumnName: $(item).attr("data-column"), PreviousColoumnName: $(item).attr("data-columnold") });
@@ -1686,7 +2005,7 @@ connectToSortable: '#droppable',
                     });
 
                     var UniqueItems = models.reduce(function (item, e1) {
-                       
+
                         var matches = item.filter(function (e2) { return e1.ColoumnName == e2.ColoumnName });
                         if (matches.length == 0) {
                             item.push(e1);
@@ -1724,7 +2043,7 @@ connectToSortable: '#droppable',
             //$("#droppable .form-group label:first-child").each(function (index, item) {
             //    if ($(item).text() == "Label" || $(item).text() == "Check Box (Multiple)" || $(item).text() == "Radio" || $(item).text() == "Select" || $(item).text() == "Textarea") {
             //        invalidcount += 1;
-                   
+
             //    }
             //});
             //if (invalidcount > 0) {
@@ -1733,7 +2052,7 @@ connectToSortable: '#droppable',
             //    return;
             //}
             var isvalid = true;
-            $("#droppable").find("input,select,textarea").each(function (index, item) {              
+            $("#droppable").find("input,select,textarea").each(function (index, item) {
                 var colname = $(item).attr("data-column");
                 if (typeof colname !== typeof undefined && colname !== false) {
                 } else {
@@ -1766,13 +2085,13 @@ connectToSortable: '#droppable',
             }
             $("#droppable [readonly=readonly]").each(function (i, e) {
                 return;
-            })          
+            })
             var gethtml = $("#droppable").html();
               var model = {
                 TemplateID: '@ViewBag.TemplateId',
                 ProgramID: '@ViewBag.ProgramId',
                 IsSavedDraft: 1,
-                CreatedBy: @Session["userid"].ToString(),
+                CreatedBy:@Session["userid"].ToString(),
                 ModifiedBy:@Session["userid"].ToString(),
             };
             $.ajax({
@@ -2021,7 +2340,7 @@ connectToSortable: '#droppable',
                 contentType: 'application/json; charset=UTF-8',
                 dataType: "json",
                 success: function (result) {
-                    
+
                 },
             }).done(function (result) {
                 $.ajax({
@@ -2036,7 +2355,7 @@ connectToSortable: '#droppable',
                             } else {
                                 $(".btndraft").css("display", "inline");
                             }
-                            
+
                         }
                         $("#droppable").html(result.html);
                     }
@@ -2050,6 +2369,32 @@ connectToSortable: '#droppable',
                 $("#colsize").attr("disabled", "disabled");
             } else {
                 $("#colsize").removeAttr("disabled");
+            }
+        }
+        function CheckFieldSize(e) {
+            switch ($(e).val()) {
+                case "col-md-4":
+                    $(e).parent().parent().next().find("select[id='fieldsize'] option").each(function (index, value) {
+                        if (index > 0) {
+                            $(this).attr('disabled', true);
+                        }
+                    });
+                    break;
+                case "col-md-6":
+                    $(e).parent().parent().next().find("select[id='fieldsize'] option").each(function (index, value) {
+                        if (index > 1) {
+                            $(this).attr('disabled', true);
+                        }
+                    });
+                    break;
+                case "col-md-12":
+                    $(e).parent().parent().next().find("select[id='fieldsize'] option").each(function (index, value) {
+                        $(this).attr('disabled', false);                       
+                    });
+                    break;
+                default:
+
+                    break;
             }
         }
         function isColumnNameValid(colname, controlid) {
@@ -2082,8 +2427,8 @@ connectToSortable: '#droppable',
                     } else if ($(item).is("textarea")) {
                         var id = $(item).attr("id");
                         labelName = $("#" + id).prev().html();
-                    } 
-                    toastr.error("", "Column name already used for " + labelName, { progressBar: true });
+                    }
+                    toastr.error("", colname+" already exist", { progressBar: true });
                     isvalid = false;
                 }
             });
