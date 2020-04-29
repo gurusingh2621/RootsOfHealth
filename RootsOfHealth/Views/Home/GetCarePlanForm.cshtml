@@ -78,6 +78,19 @@
         background-size: 12px;
         background-position: 98% 5px;
     }
+    .vertical .custom-control {
+        display: block !important;
+    }
+
+    .label-left {
+        background: transparent !important;
+        margin: 0 20px 0px 0 !important;
+    }
+
+    .f-g-left {
+        display: flex !important;
+        align-items: center !important;
+    }
 </style>
 <section id="content" class="responsive-container pt-0">
 
@@ -142,6 +155,11 @@
                     console.log(tableName);
                     $(".renderform").html(result.html);
                     $(".renderform .event-btn-right").remove();
+                    $(".html-content").prev().css("display", "none");
+                    $(".html-content").parent().parent().css({ "border": "0", "margin": "0px"});
+                    $(".renderform .f-g-left").each(function (index, item) {
+                        $(item).parent().css({ "border": "0", "padding": "0", "margin": "10px"});
+                    })
                     $('.renderform textarea').bind('copy paste cut',function(e) {
     e.preventDefault();
   });
