@@ -42,6 +42,13 @@
         height: calc(100vh - 160px);
         overflow:hidden;
     }
+    #content .profile-tabs .paitent-detail-left .nav-tabs {
+        border-bottom:0px;
+    }
+    .paitent-detail-left .profile-tabs .nav-tabs:hover, #content .profile-tabs .paitent-detail-left .nav-tabs:hover {
+        overflow-x: hidden !important;
+    }
+
 </style>
 <!-- Content start here -->
 <section id="content" class="responsive-container">
@@ -150,15 +157,15 @@
         <!--Recent Patient Modal start here-->
         <div class="modal fade" id="recentpatientModal" tabindex="-1" role="dialog" aria-labelledby="recentpatientModalLabel"
              aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content" style="width:800px;">
+            <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:80%;">
+                <div class="modal-content" >
                     <div class="modal-header">
                         <h5 class="modal-title" id="recentpatientModalLabel">Recent Client</h5>
                         <button type="button" data-dismiss="modal" class="close"  aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body" style="width:800px;">
+                    <div class="modal-body">
 
                         <div class="inner-content mt-0" id="recent-p">
                             <div class="row" style="margin-top: -50px;">
