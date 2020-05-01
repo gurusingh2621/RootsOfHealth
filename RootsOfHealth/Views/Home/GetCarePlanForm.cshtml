@@ -11,15 +11,15 @@
         align-content: baseline;
     }
 
-   
 
-    .renderform .form-control {
-        height: 23px;
-        font-size: 13px;
-        border: 1px solid #e2e2e2;
-        border-radius: 0px;
-        padding: 0 15px;
-    }
+
+        .renderform .form-control {
+            height: 23px;
+            font-size: 13px;
+            border: 1px solid #e2e2e2;
+            border-radius: 0px;
+            padding: 0 15px;
+        }
         .renderform select {
             height: 23px !important;
         }
@@ -29,59 +29,62 @@
             height: auto;
         }
 
-    .renderform textarea.form-control {
-        height: 50px;
-    }
+        .renderform textarea.form-control {
+            height: 50px;
+        }
 
-    .renderform .form-control:focus {
-        box-shadow: none;
-        outline: none;
-    }
+        .renderform .form-control:focus {
+            box-shadow: none;
+            outline: none;
+        }
 
-    .renderform .event-btn-right {
-        position: absolute;
-        bottom: auto;
-        right: -1px;
-        z-index: 9;
-        top: -3px;
-    }
+        .renderform .event-btn-right {
+            position: absolute;
+            bottom: auto;
+            right: -1px;
+            z-index: 9;
+            top: -3px;
+        }
 
-    .renderform .frmbtn .form-group label:first-child {
-        background: #e2e2e2;
-        display: block;
-        margin: -11px -11px 10px;
-        padding: 4px 10px;
-        font-size: 14px;
-        color: #343434;
-        font-weight: 500;
-        line-height: normal;
-        vertical-align: middle;
-    }
+        .renderform .frmbtn .form-group label:first-child {
+            background: #e2e2e2;
+            display: block;
+            margin: -11px -11px 10px;
+            padding: 4px 10px;
+            font-size: 14px;
+            color: #343434;
+            font-weight: 500;
+            line-height: normal;
+            vertical-align: middle;
+        }
 
-    .renderform .frmbtn .form-group {
-        margin: 0;
-    }
+        .renderform .frmbtn .form-group {
+            margin: 0;
+        }
 
-    .renderform .frmbtn {
-        border: 1px solid #e2e2e2;
-        padding: 10px;
-        position: relative;
-        margin: 0 0 20px 0;
-    }
+        .renderform .frmbtn {
+            border: 1px solid #e2e2e2;
+            padding: 10px;
+            position: relative;
+            margin: 0 0 20px 0;
+        }
 
-    .renderform .frmbtn select.form-control {
-        padding: 0 15px;
-        background: url(../images/chevron-arrow-down.svg) no-repeat 0 0;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        -ms-appearance: none;
-        background-size: 12px;
-        background-position: 98% 5px;
-    }
+            .renderform .frmbtn select.form-control {
+                padding: 0 15px;
+                background: url(../images/chevron-arrow-down.svg) no-repeat 0 0;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                -ms-appearance: none;
+                background-size: 12px;
+                background-position: 98% 5px;
+            }
+
     .vertical .custom-control {
         display: block !important;
     }
-
+    .vertical {
+        align-items: flex-start !important;
+    }
     .label-left {
         background: transparent !important;
         margin: 0 20px 0px 0 !important;
@@ -89,7 +92,20 @@
 
     .f-g-left {
         display: flex !important;
-        align-items: center !important;
+        align-items: center;
+    }
+
+    .database-field {
+        border: 0px !important;
+        background: none !important;
+    }
+
+        .left-control .frmbtn {
+            border: 0;
+            padding: 0;
+        }
+    .left-control .form-group label {
+        padding-left: 0 !important;
     }
 </style>
 <section id="content" class="responsive-container pt-0">
@@ -108,15 +124,15 @@
                             Save
                         </a>
                         @*<a href="javascript:{}" onclick="return saveTemplateField();" class="btn btn-success mr-0">
-                            <i class="far fa-save"></i>
-                            Save
-                        </a>*@
+                                <i class="far fa-save"></i>
+                                Save
+                            </a>*@
                     </div>
                 </div>
                 <div class="renderform">
 
                 </div>
-               
+
             </div>
         </div>
     </div>
@@ -127,7 +143,7 @@
          var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
         var ItemNames;
         var tableName;
-       
+
         function GetDropDownName() {
             $.ajax({
                 type: "GET",
@@ -156,230 +172,33 @@
                     $(".renderform").html(result.html);
                     $(".renderform .event-btn-right").remove();
                     $(".html-content").prev().css("display", "none");
-                    $(".html-content").parent().parent().css({ "border": "0", "margin": "0px"});
+                    $(".html-content").parent().parent().parent().addClass("left-control");
                     $(".renderform .f-g-left").each(function (index, item) {
-                        $(item).parent().css({ "border": "0", "padding": "0", "margin": "10px"});
+                        $(item).parent().parent().addClass("left-control");
                     })
                     $('.renderform textarea').bind('copy paste cut',function(e) {
-    e.preventDefault();
-  });
+                       e.preventDefault();
+                     });
                     $('.renderform textarea').keypress(function (e) {
-    var regex = new RegExp("^[a-zA-Z0-9]+$");
-    var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
-    if (regex.test(str)) {
-        return true;
-    }
+                    var regex = new RegExp("^[a-zA-Z0-9]+$");
+                       var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+                   if (regex.test(str)) {
+                     return true;
+                     }
+                  e.preventDefault();
+                  return false;
+                   });
 
-    e.preventDefault();
-    return false;
-});
-                    //$(".renderform .form-group").next().remove();
-                    //$(".renderform .form-group").next().remove();
-                    //$(".renderform .form-group").next().remove();
-                    //$(".renderform .form-group").parent().removeClass().addClass("dragresize");
-                    if ($(".renderform  [readonly=readonly]").length) {
-                        $.ajax({
-                            type: "GET",
-                            url: Apipath + '/api/PatientMain/GetDetailOfPatient?patientid='+'@ViewBag.PatientID',
-                            contentType: 'application/json; charset=UTF-8',
-                            dataType: "json",
-                            success: function (result) {
-                                console.log(ItemNames);
-                                $(".renderform  [readonly=readonly]").each(function (i, e) {
-                                    var key = $(this).attr("id").substring(0, $(this).attr("id").lastIndexOf("_"));
-                                    var Index = $(this).attr("data-index");
-                                    if (Object.keys(result)[0].length && Index != "PatientScore") {
-                                        var keyValue = result.PatientDetail[Index][key];
-                                        switch (Index) {
-                                            case "PatientMain":
-                                                if (result.PatientDetail[Index].hasOwnProperty(key)) {
-                                                    this.value = keyValue;
-                                                }
-                                                break;
-                                            case "PatientHousing":
-                                                if (result.PatientDetail[Index].hasOwnProperty(key) && ItemNames.length) {
-                                                    if (key == "PlaceLiveNow") {
-
-                                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 1 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                                    } else if (key == "EmergencyShelter") {
-                                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 2 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                                    }
-                                                    this.value = keyValue;
-                                                }
-                                                break;
-                                            case "PatientFinancialSecurity":
-                                                if (result.PatientDetail[Index].hasOwnProperty(key) && ItemNames.length) {
-                                                    if (key == "DifficultiesInPayingBills") {
-                                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 3 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                                    } else if (key == "SkipMeals") {
-                                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 4 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                                    }
-                                                    this.value = keyValue;
-                                                }
-                                                break;
-                                            case "PatientEmploymentEducation":
-                                                if (result.PatientDetail[Index].hasOwnProperty(key) && ItemNames.length) {
-                                                    if (key == "LevelofEducation") {
-                                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 5 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                                    } else if (key == "WorkSituation") {
-                                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 6 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                                    } else if (key == "ParticipatingInEducationalOrTrainingProgram") {
-                                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 7 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                                    }
-                                                    this.value = keyValue;
-                                                }
-                                                break;
-                                            case "PatientCommunicationAndMobility":
-                                                if (result.PatientDetail[Index].hasOwnProperty(key) && ItemNames.length) {
-                                                    if (key == "DifficultyGoingPlaces") {
-                                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 8 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                                    } else if (key == "ModesOfTransportation") {
-                                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 9 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                                    }
-                                                    this.value = keyValue;
-                                                }
-                                                break;
-                                            case "PatientHealthcare":
-                                                if (result.PatientDetail[Index].hasOwnProperty(key) && ItemNames.length) {
-                                                    if (key == "PastMonthPoorPhysicalHealth") {
-                                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 13 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                                    } else if (key == "YourHealthIs") {
-                                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 12 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                                    } else if (key == "PerWeekStrenuousExercise") {
-                                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 14 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                                    } else if (key == "PerDayStrenuousExercise") {
-                                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 15 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                                    } else if (key == "PastYearEmergency") {
-                                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 16 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                                    }
-                                                    this.value = keyValue;
-                                                }
-                                                break;
-                                            case "PatientSocialSupport":
-                                                if (result.PatientDetail[Index].hasOwnProperty(key) && ItemNames.length) {
-                                                    if (key == "FinancialSecurity") {
-                                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 19 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                                    } else if (key == "FeelSafeNeighborhood") {
-                                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 42 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                                    } else if (key == "PlaceToStay") {
-                                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 20 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                                    }
-                                                    this.value = keyValue;
-                                                }
-                                                break;
-                                            case "PatientLegalStatus":
-                                                if (result.PatientDetail[Index].hasOwnProperty(key)) {
-                                                    this.value = keyValue;
-                                                }
-                                                break;
-                                            case "Dast":
-                                                if (result.PatientDetail[Index].hasOwnProperty(key)) {
-                                                    this.value = keyValue;
-                                                }
-                                                break;
-                                            case "Audit":
-                                                if (result.PatientDetail[Index].hasOwnProperty(key) && ItemNames.length) {
-                                                    if (key == "DrinkContainingAlcohol") {
-                                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 25 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                                    } else if (key == "HowManyDrinks") {
-                                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 26 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                                    } else if (key == "NotAbleToStopDrinking") {
-                                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 28 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                                    }
-                                                    if (key == "FailedWhatWasExpected") {
-                                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 29 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                                    } else if (key == "SixOrMoreDrink") {
-                                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 27 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                                    } else if (key == "FirstDrinkMorning") {
-                                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 30 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                                    }
-                                                    if (key == "FeelingOfGuilt") {
-                                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 31 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                                    } else if (key == "UnableToRemember") {
-                                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 32 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                                    } else if (key == "InjuredOfYourDrinking") {
-                                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 33 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                                    } else if (key == "FriendsSuggestedYouCutDown") {
-                                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 34 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                                    }
-                                                    this.value = keyValue;
-                                                }
-                                                break;
-                                            case "PHQ9":
-                                                if (result.PatientDetail[Index].hasOwnProperty(key)) {
-                                                    this.value = keyValue;
-                                                }
-                                                break;
-
-                                            case "PatientMentalHealth":
-                                                if (result.PatientDetail[Index].hasOwnProperty(key)) {
-                                                    this.value = keyValue;
-                                                }
-                                                break;
-
-                                            case "PatientFoodAccess":
-                                                if (result.PatientDetail[Index].hasOwnProperty(key) && ItemNames.length) {
-                                                    if (key == "PortionsOfVegetables") {
-                                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 36 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                                    } else if (key == "ServingsOfFruit") {
-                                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 35 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                                    } else if (key == "MajorityOfFood") {
-                                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 37 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                                    }
-                                                    this.value = keyValue;
-                                                }
-                                                break;
-                                        }
-                                    }
-                                    if (Object.keys(result)[1].length && Index == "PatientScore") {
-                                        if (result.PatientScore.hasOwnProperty(key)) {
-                                            $(this).val(result.PatientScore[key]);
-                                        }
-                                    }
-                                });
-
-                            },
-                        });
-                    }
-                }
+                 }
             }).done(function (result) {
-                if (result.IsActive != true) return;
-                $.ajax({
-                    type: "GET",
-                    url: Apipath+'/api/PatientMain/GetCarePlanTemplateValueByID?TemplateID=' + ID,
-                    contentType: 'application/json; charset=UTF-8',
-                    dataType: "json",
-                    success: function (result) {
-                        
-                        console.log(result[0]);
-                        if (result.length) {
-                            $("#templateid").val(result[0].ID);
-                            $(".renderform [type=text],[type=number],[type=file],[type=date]").each(function (i, e) {
-                                this.value = result[0][$(this).attr("data-column")];
-                            });
-
-                            $(".renderform select").each(function (i, e) {
-                                this.value = result[0][$(this).attr("data-column")];
-                            });
-                            $(".renderform [type=radio],[type=checkbox]").each(function (i, e) {
-                                if (this.value == result[0][$(this).attr("data-column")]) {
-                                    $(this).prop("checked", true);
-                                }
-                            });
-                            $(".renderform  textarea").each(function (i, e) {
-                                this.value = result[0][$(this).attr("data-column")];
-                            });
-                        }
-                        }
-                }).done(function () {
-                    if ($(".renderform  [readonly=readonly]").length) {
+                if ($(".renderform  .database-field").length && '@ViewBag.PatientID'!='0') {
                         $.ajax({
                             type: "GET",
                             url: Apipath + '/api/PatientMain/GetDetailOfPatient?patientid='+'@ViewBag.PatientID',
                             contentType: 'application/json; charset=UTF-8',
                             dataType: "json",
                             success: function (result) {
-                                $(".renderform  [readonly=readonly]").each(function (i, e) {
+                                $(".renderform  .database-field").each(function (i, e) {
                                     var key = $(this).attr("id").substring(0, $(this).attr("id").lastIndexOf("_"));
                                     var Index = $(this).attr("data-index");
                                     if (Object.keys(result)[0].length && Index != "PatientScore") {
@@ -535,7 +354,37 @@
                             },
                         });
                     }
-                })
+                }).done(function (result) {
+                      if (result.IsActive != true) return;
+                      $.ajax({
+                          type: "GET",
+                          url: Apipath + '/api/PatientMain/GetCarePlanTemplateValueByID?TemplateID=' + ID,
+                          contentType: 'application/json; charset=UTF-8',
+                          dataType: "json",
+                          success: function (result) {
+
+                              console.log(result[0]);
+                              if (result.length) {
+                                  $("#templateid").val(result[0].ID);
+                                  $(".renderform [type=text],[type=number],[type=file],[type=date]").each(function (i, e) {
+                                      this.value = result[0][$(this).attr("data-column")];
+                                  });
+
+                                  $(".renderform select").each(function (i, e) {
+                                      this.value = result[0][$(this).attr("data-column")];
+                                  });
+                                  $(".renderform [type=radio],[type=checkbox]").each(function (i, e) {
+                                      if (this.value == result[0][$(this).attr("data-column")]) {
+                                          $(this).prop("checked", true);
+                                      }
+                                  });
+                                  $(".renderform  textarea").each(function (i, e) {
+                                      this.value = result[0][$(this).attr("data-column")];
+                                  });
+                              }
+                          }
+                      })
+
                 });
         }
 
