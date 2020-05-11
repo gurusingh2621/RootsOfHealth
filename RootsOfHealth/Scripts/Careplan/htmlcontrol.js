@@ -1,7 +1,6 @@
 ﻿var new_id = 0;
 $(function () {
     HtmlControlDragnDrop();
-
     ShowPreviewButton();
     GetFormByTemplatePath(templatePath);   
 })
@@ -176,7 +175,7 @@ function EditHtml(type, ID) {
     var popupString = '';
     var isdatacolexist = $("#" + ID).attr("data-columnold");
 
-    $(".modal-body").html("");
+    $(".edithtml-body").html("");
     switch (type) {
         case "label":
             popupString = '<div class="modal-row">' +
@@ -1335,7 +1334,7 @@ function EditHtml(type, ID) {
             });
             break;
     }
-    $(".modal-body").html(popupString);
+    $(".edithtml-body").html(popupString);
     if (type == "label") {
         $('.lbltext').summernote({
             placeholder: 'Type here ',
@@ -1343,9 +1342,9 @@ function EditHtml(type, ID) {
             focus: true
 
         });
-        $(".modal-dialog").css("max-width", "80%");
+        $(".edithtml-dialog").css("max-width", "80%");
     } else {
-        $(".modal-dialog").removeAttr("style");
+        $(".edithtml-dialog").removeAttr("style");
     }
     $("#exampleModalCenter").modal("show");
 }
