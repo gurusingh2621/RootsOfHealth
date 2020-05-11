@@ -79,12 +79,12 @@
         list-style-type: none;
         background: #ffffff;
         min-height: 570px;
-        border: 3px dashed #ccc;
+        border: 1.3px dashed #ccc;
         width: 100%;
         display: flex;
         align-items: flex-start;
         flex-wrap: wrap;
-        padding: 10px 0;
+        padding: 5px 5px;
         align-content: baseline;
     }
 
@@ -399,7 +399,7 @@
 
         <div class="container-fluid pl-0 pr-0">
 
-            <div class="appointment scroll">
+            <div class="appointment">
                 <div class="detail-heading d-flex">
                     <h2><span class="careplancaption">Careplan template for <span>@ViewBag.ProgramName</span> </span></h2>
 
@@ -407,15 +407,18 @@
 
                     <div class="detail-button ml-auto">
                         <a href="/careplan/list" class="btn btn-success mr-0 backlist"> <i class="fa fa-arrow-left"></i> Back to list</a>
+                        <a href="javascript:{}" class="btn btn-success mr-0 backlist" data-toggle="modal" data-target="#NeedModal" style="display:none"> <i class="far fa-save"></i> Needs & Goals</a>
+                        
                         <a href="javascript:{}" onclick="return PreviewForm();" class="btn btn-success mr-0 preview">
                             <i class="far fa-save"></i>
                             Preview
                         </a>
+
                         <a href="javascript:{}" onclick="return saveDraftHtml();" class="btn btn-success mr-0 btndraft" style="margin-left:8px;">
                             <i class="far fa-save"></i>
                             Save as draft
                         </a>
-                        <a href="javascript:{}" onclick="return saveHtml();" class="btn btn-success mr-0">
+                        <a href="javascript:{}" onclick="return saveHtml();" class="btn btn-success mr-0 savehtml">
                             <i class="far fa-save"></i>
                             Save
                         </a>
@@ -478,7 +481,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-9">
+                    <div class="col-md-9 scroll" style="height:570px">
                         <div class="row">
 
                             <div id="droppable" class="draggablediv">
@@ -520,6 +523,28 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="validatepopup(this)" hidden>Close</button>
                 <button type="button" class="btn btn-primary" id="btnSave">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="NeedModal" tabindex="-1" role="dialog" aria-labelledby="NeedModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> NEED & GOALS</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                
+                
+
+            </div>
+            <div class="modal-footer">
+
             </div>
         </div>
     </div>

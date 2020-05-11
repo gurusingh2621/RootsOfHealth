@@ -52,7 +52,6 @@
                     <h2>Care Plan Templates</h2>
                 </div>
                 <table id="tblCarePlanTemplateList" class="table table-striped border">
-                    <tr class="table-secondary">
                     <tr class="table-active">
                         <th>PROGRAM</th>
                         <th>STATUS</th>
@@ -115,6 +114,7 @@
             GetCarePlanTemplateList();
         });
         function GetCarePlanTemplateList() {
+            $(".loaderOverlay").css("display", "flex");
             $.ajax({
                 type: "GET",
                 url: Apipath + '/api/PatientMain/gettemplatelist',
@@ -157,6 +157,7 @@
                         careplans += `<tr><td colspan="4"><p class="text-center">No data found.</p></td></tr>`;
                         careplanlist.html("").append(careplans);
                     }
+                    $(".loaderOverlay").hide();
                 },
                 error: function (e) {
                     toastr.error("Something Happen Wrong");

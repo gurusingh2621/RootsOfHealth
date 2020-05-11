@@ -1522,6 +1522,7 @@ function saveHtml() {
         CreatedBy: userId,
         ModifiedBy: userId,
     };
+    $(".loaderOverlay").css("display", "flex");
     $.ajax({
         type: "POST",
         url: '/CarePlan/SaveFormTemplate',
@@ -1531,6 +1532,7 @@ function saveHtml() {
         success: function (result) {
             if (result == "0") {
                 toastr.error("Program Already Exist.");
+                $(".loaderOverlay").hide();
                 return false;
             } else {
                 templateId = result.id;
@@ -1662,6 +1664,7 @@ function saveDraftHtml() {
         CreatedBy: userId,
         ModifiedBy: userId,
     };
+    $(".loaderOverlay").css("display", "flex");
     $.ajax({
         type: "POST",
         url: '/CarePlan/SaveFormDraftTemplate',
@@ -1671,6 +1674,7 @@ function saveDraftHtml() {
         success: function (result) {
             if (result == "0") {
                 toastr.error("Program Already Exist.");
+                $(".loaderOverlay").hide();
                 return false;
             } else {
                 templateId = result.id;
@@ -1684,13 +1688,14 @@ function saveDraftHtml() {
 }
 //GetFormByTemplatePath=>use to get template by template name
 function GetFormByTemplatePath(path) {
+    $(".loaderOverlay").css("display", "flex");
     $.ajax({
         type: "GET",
         url: '/careplan/getformhtmlbypath?PathName=' + path,
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
-
+            $(".loaderOverlay").hide();
         },
     }).done(function (result) {
         $.ajax({
@@ -1708,6 +1713,8 @@ function GetFormByTemplatePath(path) {
 
                 }
                 $("#droppable").html(result.html);
+
+                $(".loaderOverlay").hide();
             }
         });
 
