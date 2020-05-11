@@ -280,6 +280,7 @@
     <Content Include="Scripts\bootstrap_multiselect.js" />
     <Content Include="Scripts\Careplan\databasecontrol.js" />
     <Content Include="Scripts\Careplan\htmlcontrol.js" />
+    <Content Include="Scripts\Careplan\NeedAndGoal.js" />
     <Content Include="Scripts\chartjs-plugin-labels.min.js" />
     <Content Include="Scripts\fullcalendar.min.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -317,8 +318,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Patient\Add.cshtml" />
     <Content Include="Views\DashBoard\Index.cshtml" />
@@ -365,7 +364,6 @@
     <Content Include="Views\Patient\NotesTemplateField.cshtml" />
     <Content Include="Views\DashBoard\Display.cshtml" />
     <Content Include="Views\Shared\Patient\_LookupOptionList.cshtml" />
-    <Content Include="Views\Home\UploadExcel.cshtml" />
     <Content Include="Views\CarePlan\CreateCareForm.cshtml" />
     <Content Include="Views\CarePlan\DynamicCareForm.cshtml" />
     <Content Include="Views\Home\GetCarePlanForm.cshtml" />

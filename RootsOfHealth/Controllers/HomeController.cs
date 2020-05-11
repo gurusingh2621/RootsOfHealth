@@ -13,7 +13,7 @@ using System.Net.Http.Headers;
 using RootsOfHealth.Models;
 
 namespace RootsOfHealth.Controllers
-{[Authorize]
+{   [Authorize]
     public class HomeController : Controller
     {
         string WebApiKey = WebConfigurationManager.AppSettings["WebApi"];
@@ -22,22 +22,6 @@ namespace RootsOfHealth.Controllers
         {
             return View();
         }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
-
-
         [HttpGet]
         public JsonResult GetFormHtml(int Id)
         {

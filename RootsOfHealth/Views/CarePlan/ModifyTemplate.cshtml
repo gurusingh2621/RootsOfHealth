@@ -389,6 +389,285 @@
             box-shadow: 0 0 0;
             border-bottom: 1px solid rgba(255,255,255,0.2);
         }
+
+
+    /*needs popup style*/
+    .needModal_wrap .modal-dialog {
+        max-width: 696px;
+    }
+
+    .needModal_wrap .modal-header {
+        padding: 20px 30px;
+    }
+
+    .needModal_wrap .modal-body {
+        padding: 20px 30px 30px;
+    }
+
+    .nav-tabs.tab_rounded .nav-link {
+        border: 0;
+        padding: 8px 20px;
+        border-radius: 50px;
+        display: block;
+        color: #666;
+        font-size: 14px;
+        text-transform: uppercase;
+    }
+
+        .nav-tabs.tab_rounded .nav-link.active {
+            background: #fff;
+            color: #222;
+            font-weight: 500;
+            box-shadow: 0 0 12px rgba(0,0,0,0.2) !important;
+        }
+
+    .nav-tabs.tab_rounded {
+        border: 0;
+        margin: 0 0 20px;
+        justify-content:center;
+    }
+
+        .nav-tabs.tab_rounded li.nav-item {
+            margin-right: 10px;
+        }
+
+    .tab_heading {
+        display: flex;
+        justify-content: space-between;
+        margin: 0 0 10px;
+    }
+
+        .tab_heading h5 {
+            font-size: 18px;
+            color: #555;
+            margin: 0px;
+        }
+
+        .tab_heading a.addNewNeed {
+            font-size: 18px;
+            color: #555;
+            background: #22baa0;
+            color: #fff;
+            font-size: 14px;
+            border: 0;
+            padding: 7px 12px;
+            border-radius: 6px;
+            margin-left: auto;
+            position: absolute;
+            right: 0;
+            top: 1px;
+        }
+    ul.needsList {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        font-size: 14px;
+        color: #666;
+    }
+
+        ul.needsList li ul {
+            padding: 0;
+            list-style: none;
+        }
+
+        ul.needsList li ul {
+            padding: 0 0 0 30px;
+            list-style: none;
+            /*border-top: 1px solid #ddd;*/
+        }
+    
+
+    .needItem {
+        padding: 10px 25px 10px 10px;
+        border-top: 1px solid #ddd;
+        position: relative;
+        cursor: pointer;
+        transition: all ease 0.4s;
+    }
+        .needItem:hover {
+            background: #F3F4F4;
+        }
+
+    .statusDiv {
+        display: inline-block;
+        color: #f79d01;
+        padding: 3px 10px;
+        background: rgba(247, 157, 1, 0.12);
+        border-radius: 50px;
+        line-height: 1;
+        font-size: 13px;
+        margin: 4px 0 0;
+    }
+
+    .needItem i.down_arrow {
+        position: absolute;
+        right: 8px;
+        color: #a1a1a1;
+        top: 10px;
+        transition: all ease 0.4s;
+        -webkit-transition: all ease 0.4s;
+    }
+
+    .needsList > li > .needItem {
+        border-bottom: 1px solid #ddd;
+    }
+
+    ul.needsList > li:first-child > .needItem {
+        border-top: 0;
+    }
+
+    ul.needsList > li.hasChild > .needItem {
+        /*border-bottom: 0;*/
+    }
+
+    ul.needsList li ul > li:first-child .needItem {
+        border-top: 0;
+    }
+
+    ul.needsList li.opened .needItem i.down_arrow {
+        transform: rotate(180deg);
+        -webkit-transform: rotate(180deg);
+    }
+    .hide_down_arrow{
+        display:none;
+    }
+    ul.needsList > li > .addNewNeedGoal {
+        border-top: 1px solid #ddd;
+    }
+
+    ul.needsList > li > ul .addNewNeedGoal {
+        border-top: 1px solid #ddd;
+    }
+
+    .addNewNeedGoal {
+        padding: 10px 0;
+        display: flex;
+        align-items: center;
+    }
+
+        .addNewNeedGoal .plusIcon {
+            border: 1px solid #ddd;
+            width: 22px;
+            border-radius: 50%;
+            display: flex;
+            height: 22px;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            color: #ccc;
+        }
+
+        .addNewNeedGoal input, textarea {
+            border: 0;
+            padding: 0 10px;
+            font-size: 14px;
+            width: calc(100% - 22px);
+            color: #555;
+            height: 21px;
+            outline: none;
+            resize: none;
+            overflow: auto;
+            background: transparent;
+        }
+
+    .itemHoverActions {
+        position: absolute;
+        right: 0;
+        padding: 8px 8px;
+        background: #fff;
+        box-shadow: 0 0 12px rgba(0,0,0,0.2);
+        -webkit-box-shadow: 0 0 12px rgba(0,0,0,0.2);
+        border-radius: 6px;
+        -webkit-border-radius: 6px;
+        display: flex;
+        top: 95%;
+        display: none;
+        z-index: 9;
+    }
+
+    .needItem:hover .itemHoverActions {
+        display: flex;
+    }
+
+    .itemHoverActions a {
+        color: #818181;
+        padding: 0px 10px;
+        display: block;
+        border-right: 1px solid #cdd;
+        font-size: 16px;
+    }
+
+        .itemHoverActions a.delete_item {
+            color: #fe6464;
+        }
+
+        .itemHoverActions a:last-child {
+            border: 0;
+        }
+
+    .needModal_wrap .modal-header h5.modal-title {
+        font-size: 18px;
+        color: #555;
+    }
+    .searchBoxWrap {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        align-content: center;
+        justify-content: center;
+        position: relative;
+    }
+        .searchBoxWrap .searchbox {
+            margin-right: 15px;
+            border: 1px solid #ddd;
+            border-radius: 50px;
+            max-width: initial;
+        }
+    .searchBoxWrap .searchbox input {
+        border: 0;
+        padding: 5px 15px;
+        background: transparent;
+    }
+    .searchBoxWrap .searchbox button {
+        border: 0;
+        background: transparent;
+        padding: 5px 15px;
+    }
+    .needItem textarea.txtGoal {
+        border: 0;
+        height: 20px;
+        min-height: initial;
+        resize: none;
+        width: 100%;
+        padding: 0;
+        display: block;
+        outline: none;
+    }
+    ul.needsList.scroll {
+        padding:0 30px;
+        max-height: 355px;
+    }
+    .needListOuter {
+        margin: 0 -30px;
+    }
+    .itemHoverActions a .fa-level-up-alt {
+        transform: rotate(90deg);
+    }
+    .needItem .dragIcon {
+        position: absolute;
+        left: -15px;
+        top: 10px;
+        margin: 0px;
+        color: #c4c4c4;
+        opacity: 0;
+        cursor: move;
+    }
+    .needItem:hover a.dragIcon {
+        opacity: 1;
+        
+    }
+    /*needs popup style closed*/
+
 </style>
 
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
@@ -406,8 +685,8 @@
 
 
                     <div class="detail-button ml-auto">
-                        <a href="/careplan/list" class="btn btn-success mr-0 backlist"> <i class="fa fa-arrow-left"></i> Back to list</a>
-                        <a href="javascript:{}" class="btn btn-success mr-0 backlist" data-toggle="modal" data-target="#NeedModal" style="display:none"> <i class="far fa-save"></i> Needs & Goals</a>
+                        <a href="/careplan/list" class="btn btn-success mr-10 backlist"> <i class="fa fa-arrow-left"></i> Back to list</a>
+                        <a href="javascript:{}" onclick="GetNeedAndGoalList()" class="btn btn-success mr-0 backlist" > <i class="far fa-save"></i> Needs & Goals</a>
                         
                         <a href="javascript:{}" onclick="return PreviewForm();" class="btn btn-success mr-0 preview">
                             <i class="far fa-save"></i>
@@ -496,7 +775,7 @@
     </div>
 </section>
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered edithtml-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLongTitle">Edit Field</h5>
@@ -504,7 +783,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body edithtml-body">
                 <div class="modal-row">
                     <label>Label Text</label>
                     <textarea control-id="label1" class="form-control lbltext" value="">Html</textarea>
@@ -527,40 +806,114 @@
         </div>
     </div>
 </div>
-
-<div class="modal fade" id="NeedModal" tabindex="-1" role="dialog" aria-labelledby="NeedModalLabel"
-     aria-hidden="true">
+<div class="modal fade needModal_wrap" id="NeedModal" tabindex="-1" role="dialog" aria-labelledby="NeedModalLabel">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"> NEED & GOALS</h5>
+                <h5 class="modal-title">ADD DEFAULT NEEDS & GOALS</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true">×</span>
                 </button>
             </div>
             <div class="modal-body">
-                
-                
+                <div class="needModalContent">
+                    <div class="tab_heading">
+                        <div class="searchBoxWrap">
+                            <div class="searchbox">
+                                <input type="text" placeholder="Search..." onkeyup="SearchNeedAndGoal(this)" autocomplete="off">
+                                <button type="submit"><i class="fas fa-search"></i></button>
+                            </div>
+                            <a class="addNewNeed" href="javascript:{}" onclick="NeedFocus()"><i class="fa fa-plus"></i></a>
+                        </div>
+
+                    </div>
+                    <div class="needListOuter">
+                        <div class="text-center"></div>
+                        <ul class="needsList scroll">
+                            <li class="hasChild opened">
+                                <div class="needItem">
+                                    <div>This is the first Need. Please do it asap.</div>
+
+                                    <i class="down_arrow fa fa-chevron-down"></i>
+                                    <div class="itemHoverActions">
+                                        <a href="#"><i class="fas fa-level-up-alt"></i></a>
+                                        <a href="#" class="delete_item"><i class="fa fa-trash"></i></a>
+                                    </div>
+                                </div>
+                                <ul class="goalsList">
+                                    <li>
+                                        <div class="needItem">
+                                            <div>This is the first Goal. Please do it asap.</div>
+
+                                            <div class="itemHoverActions">
+                                                <a href="#"><i class="fa fa-clipboard-check"></i></a>
+                                                <a href="#" class="delete_item"><i class="fa fa-trash"></i></a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="needItem">
+                                            <div>This is the first Goal. Please do it asap.</div>
+
+                                            <div class="itemHoverActions">
+                                                <a href="#"><i class="fa fa-clipboard-check"></i></a>
+                                                <a href="#" class="delete_item"><i class="fa fa-trash"></i></a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="addNewNeedGoal">
+                                            <div class="plusIcon"><i class="fa fa-plus"></i></div>
+                                            <input type="text" name="Add New Need" placeholder="Add New Goal...">
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <div class="needItem">
+                                    <div>This is the first Need. Please do it asap.</div>
+                                    <i class="down_arrow fa fa-chevron-down"></i>
+                                    <div class="itemHoverActions">
+                                        <a href="#"><i class="fa fa-clipboard-check"></i></a>
+                                        <a href="#" class="delete_item"><i class="fa fa-trash"></i></a>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="last-child">
+                                <div class="addNewNeedGoal">
+                                    <div class="plusIcon"><i class="fa fa-plus"></i></div>
+                                    <textarea class="txtNeed" placeholder="add need" onkeyup="textAreaAdjust(this)"></textarea>
+                                </div>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+                        
+                  
 
             </div>
-            <div class="modal-footer">
-
-            </div>
+            
         </div>
     </div>
 </div>
+
+
+
 @section scripts{
     <script src="~/Scripts/jquery-ui.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.js"></script>
     <script src="~/Scripts/Careplan/htmlcontrol.js"></script>
     <script src="~/Scripts/Careplan/databasecontrol.js"></script>
+    <script src="~/Scripts/Careplan/NeedAndGoal.js"></script>
     <script>
         var templateId =@ViewBag.TemplateId;
         var templatePath = '@ViewBag.TemplatePath';
         var programName = '@ViewBag.ProgramName';
         var programId = '@ViewBag.ProgramId';
         var userId = '@Session["userid"]';
-        
+       
     </script>
 }
 
