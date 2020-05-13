@@ -97,7 +97,7 @@ function SaveNeed(e) {
                 $(".needsList").sortable({
                     items: "li.hasChild",
                     cursor: 'move',
-                    opacity: 0.6,
+                    opacity: 0.8,
                     containment: ".needListOuter",
                     update: function () {
                         needSendOrderToServer();
@@ -150,7 +150,7 @@ function SaveGoal(e) {
                 $(".goalsList").sortable({
                     items: "li",
                     cursor: 'move',
-                    opacity: 0.6,
+                    opacity: 0.8,
                     containment: ".needsList",
                     update: function () {
                         goalSendOrderToServer();
@@ -175,60 +175,94 @@ function GetNeedAndGoalList() {
             NeedsGoals(result);
 
             if (result.length == 0) {
-                $(".needsList").prev().html("no default need exist for " + programName)
+                var emptyText = "no default need exist for " + programName;
+                $(".needsList").prev().html(emptyText.toUpperCase());
             }               
             $("#NeedModal").modal('show');
         }
     })
 }
 
-
 function DeleteNeed(obj) {
-    var needModel = {
-        NeedID: $(obj).closest("li").attr("data-needid"),
-        ModifiedBy: userId
-    }
-    $.ajax({
-        type: "POST",
-        url: Apipath + '/api/PatientMain/removeneed',
-        data: JSON.stringify(needModel),
-        contentType: 'application/json; charset=UTF-8',
-        dataType: "json",
-        success: function (result) {
-            $(obj).closest("li").remove();
-            toastr.success("", "Changes saved sucessfully", { progressBar: true });
+    $.confirm({
+        icon: 'fas fa-exclamation-triangle',
+        title: 'Confirm',
+        content: 'Are you sure you want to delete!',
+        type: 'red',
+        typeAnimated: true,
+        buttons: {
+            confirm: {
+                btnClass: 'btn-danger',
+                action: function () {
+                    var needModel = {
+                        NeedID: $(obj).closest("li").attr("data-needid"),
+                        ModifiedBy: userId
+                    }
+                    $.ajax({
+                        type: "POST",
+                        url: Apipath + '/api/PatientMain/removeneed',
+                        data: JSON.stringify(needModel),
+                        contentType: 'application/json; charset=UTF-8',
+                        dataType: "json",
+                        success: function (result) {
+                            $(obj).closest("li").remove();
+                            toastr.success("", "Changes saved sucessfully", { progressBar: true });
+                        }
+                    })
+                }
+
+            },
+            cancel: function () {
+
+            }
         }
-    })
+    });
+    
 }
 
 function DeleteGoal(obj) {
+    $.confirm({
+        icon: 'fas fa-exclamation-triangle',
+        title: 'Confirm',
+        content: 'Are you sure you want to delete!',
+        type: 'red',
+        typeAnimated: true,
+        buttons: {
+            confirm: {
+                btnClass: 'btn-danger',
+                action: function () {
+                    var goalModel = {
+                        GoalID: $(obj).closest("li").attr("data-goalid"),
+                        ModifiedBy: userId
+                    }
+                    $.ajax({
+                        type: "POST",
+                        url: Apipath + '/api/PatientMain/removegoal',
+                        data: JSON.stringify(goalModel),
+                        contentType: 'application/json; charset=UTF-8',
+                        dataType: "json",
+                        success: function (result) {
+                            var goalCount = $(obj).closest("li").siblings().length;
+                            if (goalCount == 0) {
+                                $(obj).closest(".goalsList").prev().find("i.down_arrow").addClass("hide_down_arrow");
+                            }
+                            $(obj).closest("li").remove();
 
-    var goalModel = {
-        GoalID: $(obj).closest("li").attr("data-goalid"),
-        ModifiedBy: userId
-    }
-    $.ajax({
-        type: "POST",
-        url: Apipath + '/api/PatientMain/removegoal',
-        data: JSON.stringify(goalModel),
-        contentType: 'application/json; charset=UTF-8',
-        dataType: "json",
-        success: function (result) {
-            var goalCount=$(obj).closest("li").siblings().length;
-            if (goalCount== 0){
-                $(obj).closest(".goalsList").prev().find("i.down_arrow").addClass("hide_down_arrow");
+                            toastr.success("", "Changes saved sucessfully", { progressBar: true });
+
+                        }
+
+
+                    })
+                },
+            },
+            cancel: function () {
+
             }
-            $(obj).closest("li").remove();
-
-            toastr.success("", "Changes saved sucessfully", { progressBar: true });
-           
         }
-                    
-
     })
+    
 }
-
-
 
 function AddNewGoalFromNeed(e) {
     var goalString = `<li><div class="addNewNeedGoal"><div class="plusIcon"><i class="fa fa-plus"></i></div><textarea class="txtGoal" placeholder="add goal" onkeyup="textAreaAdjust(this)"></textarea></div></li>`;
@@ -245,10 +279,10 @@ function AddNewGoalFromNeed(e) {
         var keycode = event.keyCode || event.which;
         if (keycode == '13' && !event.shiftKey) {
             SaveGoal(this);
+            event.preventDefault();
         }
     });
 }   
-
 
 function NeedFocus() {
     var txtneed = document.getElementsByClassName("txtNeed");
@@ -319,17 +353,6 @@ function textAreaAdjust(o) {
 
 }
 
-function moveCursorToEnd(obj) {
-        obj.style.height = "21px";
-        obj.style.height = (obj.scrollHeight+1) + "px";
-    if (!(obj.updating)) {
-        obj.updating = true;
-        var oldValue = obj.value;
-        obj.value = '';
-        obj.value = oldValue; obj.updating = false;
-
-    }
-}
 function ExpandCollapse(o) {
     $(o).parent().parent().toggleClass("opened");
     $(o).parent().next('ul').slideToggle();
@@ -337,32 +360,20 @@ function ExpandCollapse(o) {
 
 function EditGoal(o) {
     var item = $(o).html();
-    var goalDiv = `<textarea class="txtGoal">${item}</textarea>`;
+    var goalDiv = `<textarea class="txtGoal" onfocus="goalOrNeedFocus(this)">${item}</textarea>`;
     $(o).hide();
     $(o).after(goalDiv);
-    $(".txtGoal").focus(function () {
-        var obj = this;
-        obj.style.height = "21px";
-        obj.style.height = (obj.scrollHeight + 1) + "px";
-        if (!(obj.updating)) {
-            obj.updating = true;
-            var oldValue = obj.value;
-            obj.value = '';
-            obj.value = oldValue; obj.updating = false;
-        }
-    })
-    
-    $(".txtGoal").keyup(function () {      
+    $(".txtGoal").keyup(function () {
         var o = this;
         o.style.height = "1px";
 
         if (o.scrollHeight > 20) {
-            o.style.height = (o.scrollHeight +1) + "px";
+            o.style.height = (o.scrollHeight + 1) + "px";
         }
         else {
             o.style.height = "20px";
         }
-    })
+    });
     $(".txtGoal").keypress(function (event) {
         var keycode = event.keyCode || event.which;
         if (keycode == '13' && !event.shiftKey) {
@@ -375,27 +386,15 @@ function EditGoal(o) {
         $(this).prev().show();
         $(this).remove();
 
-    })   
-
+    })
     $(".txtGoal").focus();
 }
 
 function EditNeed(o) {
     var item = $(o).html();
-    var goalDiv = `<textarea class="txtneed">${item}</textarea>`;
+    var goalDiv = `<textarea class="txtneed"  onfocus="goalOrNeedFocus(this)">${item}</textarea>`;
     $(o).hide();
     $(o).after(goalDiv);
-    $(".txtneed").focus(function () {
-        var obj = this;
-        obj.style.height = "21px";
-        obj.style.height = (obj.scrollHeight + 1) + "px";
-        if (!(obj.updating)) {
-            obj.updating = true;
-            var oldValue = obj.value;
-            obj.value = '';
-            obj.value = oldValue; obj.updating = false;
-        }
-    });
     $(".txtneed").keyup(function () {
         var o = this;
         o.style.height = "1px";
@@ -414,12 +413,12 @@ function EditNeed(o) {
             event.preventDefault();
         }
     });
-
     $(".txtneed").focusout(function () {
         $(this).prev().show();
         $(this).remove();
 
-    }) 
+    })
+    $(".txtneed").focus();
 }
 
 function SearchNeedAndGoal(obj) {
@@ -434,6 +433,17 @@ function SearchNeedAndGoal(obj) {
                 NeedsGoals(result);
             }
         });
+    }
+}
+
+function goalOrNeedFocus(obj) {
+    obj.style.height = "20px";
+    obj.style.height = (obj.scrollHeight + 1) + "px";
+    if (!(obj.updating)) {
+        obj.updating = true;
+        var oldValue = obj.value;
+        obj.value = '';
+        obj.value = oldValue; obj.updating = false;
     }
 }
 
