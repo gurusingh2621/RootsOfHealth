@@ -3686,7 +3686,7 @@ h2.lfttext {
     flex-wrap: nowrap;
     position: fixed;
     /* max-width: 5000px; */
-    overflow-x: hidden;
+    overflow-x: scroll;
     overflow-y: hidden;
     /* flex: 0 0 5000px; */
     top: 60px;
