@@ -1,6 +1,6 @@
 ﻿@model RootsOfHealth.Models.PatientMentalHealthBO
 
-<div class="tab-pane fade" id="MentalHealth" role="tabpanel" aria-labelledby="MentalHealth-tab">
+<div class="tab-pane fade @Html.Raw(ViewBag.CurrentTab=="MentalHealth-tab"?"show active":"")" id="MentalHealth" role="tabpanel" aria-labelledby="MentalHealth-tab">
     <div class="inner-content">
         <div class="paitent-detail">
             <div class="row" style="margin-right:0px;">
@@ -13,7 +13,7 @@
                                     <i class="far fa-save"></i>
                                     Save
                                 </a>
-                                <a href="/Patient/Add?PatientID=@ViewBag.PatientId"
+                                <a href="javascript:{}" onclick="ActivateTab(@ViewBag.PatientId,'MentalHealth-tab')"
                                    class="btn btn-success label-fields">
                                     <i class="far fa-edit"></i>
                                     Edit

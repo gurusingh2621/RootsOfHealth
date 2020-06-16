@@ -543,7 +543,6 @@ aside.sidebar-menu.sidebar-res ul li {
   transition: all 0.5s;
 }
     #content .profile-tabs .paitent-detail-left .nav-tabs {
-        border-bottom: 3px solid #34425a;
         height: auto;
         position: relative;
         left: 0;

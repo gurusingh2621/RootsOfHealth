@@ -1,6 +1,6 @@
 ﻿@model RootsOfHealth.Models.PatientFinancialSecurityBO
 
-<div class="tab-pane fade" id="Financial" role="tabpanel" aria-labelledby="Financial-tab">
+<div class="tab-pane fade @Html.Raw(ViewBag.CurrentTab=="Financial-tab"?"show active":"")" id="Financial" role="tabpanel" aria-labelledby="Financial-tab">
     <div class="inner-content">
         <div class="paitent-detail">
             <div class="row">
@@ -9,7 +9,7 @@
                         <div class="detail-heading d-flex">
                             <h2>Client Financial Security</h2>
                             <div class="detail-button ml-auto">
-                                <a href="/Patient/Add?PatientID=@ViewBag.PatientId"
+                                <a href="javascript:{0}" onclick="ActivateTab(@ViewBag.PatientId,'Financial-tab')"
                                    class="btn btn-success label-fields">
                                     <i class="far fa-edit"></i>
                                     Edit

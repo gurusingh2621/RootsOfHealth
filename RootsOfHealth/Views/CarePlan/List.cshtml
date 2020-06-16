@@ -30,8 +30,7 @@
             box-shadow: 0 0 0 !important;
             outline:none !important;
         }
-
-    #CarePlanModal .modal-body {
+    #CreateCarePlanModal .modal-body {
         padding: 30px 15px;
     }
     .hide{
@@ -40,6 +39,7 @@
     .templatelist h2{
         text-transform:uppercase;
     }
+    
 </style>
 <section id="content" class="responsive-container pt-0">
 
@@ -51,11 +51,14 @@
                 <div class="detail-heading d-flex templatelist">
                     <h2>Care Plan Templates</h2>
                 </div>
+                <a href="javascript:void(0)" class="btn btn-success mb-2" onclick="checkTemplateCount()" data-toggle="modal" data-target="#CreateCarePlanModal">Create Template</a>
                 <table id="tblCarePlanTemplateList" class="table table-striped border">
                     <tr class="table-active">
+                        <th>NAME</th>
                         <th>PROGRAM</th>
                         <th>STATUS</th>
-                        <th>Modified DATE</th>
+                        <th>MODIFIED DATE</th>
+                        <th>ACTIVE</th>
                         <th>ACTION</th>
                     </tr>
                     <tbody class="careplanlist">
@@ -67,51 +70,81 @@
             </div>
         </div>
     </section>
-<div class="modal fade" id="CarePlanModal" tabindex="-1" role="dialog" aria-labelledby="CarePlanModalLabel"
+<div class="modal fade" id="CreateCarePlanModal" tabindex="-1" role="dialog" aria-labelledby="CreateCarePlanModal"
      aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:56%">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"> Choose Template</h5>
+                <h5 class="modal-title"> Create Template</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <div class="radiobuttonWrap">
-                    <div class="custom-control custom-radio">
-                        <input type="radio" class="custom-control-input" id="radio01" name="radio">
-                        <label class="custom-control-label" for="radio01">Add new template</label>
+                <div class="form createtemplate">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="templateName">Template name</label>
+                            <input type="text" class="form-control form-control-sm" id="templateName">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="ddlProgram">Select program</label>
+                            <select class="form-control form-control-sm" id="ddlProgram">
+                                <option value="1">Clinic</option>
+                                <option value="2">Dream</option>
+                                <option value="3">OU</option>
+                                <option value="4">Peralta College</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="custom-control custom-radio">
-                        <input type="radio" class="custom-control-input" id="radio02" name="radio">
-                        <label class="custom-control-label" for="radio02">Select from existing template</label>
-                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <div class="radiobuttonWrap">
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input" id="radioScratch" name="radio" checked>
+                                    <label class="custom-control-label" for="radioScratch">Create from scratch</label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input" id="radioExistTemplate" name="radio" onchange="getTemplates(this)">
+                                    <label class="custom-control-label" for="radioExistTemplate">Copy from existing template</label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input" id="radioBaseTemplate" name="radio">
+                                    <label class="custom-control-label" for="radioBaseTemplate">Use base template</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <div class="templateDiv form-group hide">
+                                <label for="templatedropdown">Select template</label>
+                                <select class="form-control form-control-sm" id="ddlTemplate">
+                                    <option value="0">Select Template</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>  
                 </div>
-                <div class="customselect hide">                  
-                    <select class="form-control" id="templatedropdown">
-                        <option value="0">Select Template</option>
-                    </select>
+                <div class="notemplate" style="display:none">
+                    <p class="text-center">No programs available for careplan creation.</p>
+
                 </div>
-                
             </div>
             <div class="modal-footer">
-                <a href='javascript:{}' class="btn btn-success label-fields" onclick="ProceedToTemplate()">Proceed</a>
+                <a href='javascript:{}' class="btn btn-success label-fields btnProceed" onclick="Proceed()">Proceed</a>
 
             </div>
         </div>
     </div>
 </div>
-<div hidden>
-    <input type="hidden" id="ModalTemplateId" />
-    <input type="hidden" id="ModalProgramId" />
-</div>
+
 @section scripts{
     <script>
         var ModalTemplateId = "";
         var ModalProgramId = "";
         $(function () {
             GetCarePlanTemplateList();
+            getPrograms();
+            sessionStorage.clear();
         });
         function GetCarePlanTemplateList() {
             $(".loaderOverlay").css("display", "flex");
@@ -136,13 +169,15 @@
                             var ishidepopup = false;
                             if (item.IsSavedDraft || item.IsActive) ishidepopup = true;
                             careplans += `<tr>
-                         <td width="20%">${item.ProgramsName}</td>
-                         <td width="20%">${item.IsActive ? "Saved" : item.IsSavedDraft ? "Saved as draft" : "Not Saved"}</td>
-                         <td width="30%">${item.ModifiedDate != null ? item.ModifiedDate.split("T")[0] : ""}</td>
-                         <td width="30%"><div>`
+                         <td width="20%">${item.TemplateName}</td>
+                         <td width="15%">${item.ProgramsName}</td>
+                         <td width="12%">${item.IsActive ? "Saved" : item.IsSavedDraft ? "Saved as draft" : "In Progress"}</td>
+                         <td width="15%">${item.ModifiedDate != null ? item.ModifiedDate.split("T")[0] : ""}</td>
+                        <td width="15%">${item.IsActive == 1 ? item.Isactivated==1?"Yes":"No":""}</td>
+                            <td width="23%"><div>`
                             if (istemplateExist) {
                                 if (ishidepopup) {
-                                    careplans += `<a href="/careplan/modifytemplate?TemplateId=${item.TemplateID}&ProgramId=${item.ProgramsID}&Template=${item.TemplatePath}"  class="btn btn-success text-white" style="cursor:pointer;">MODIFY</a>`
+                                    careplans += `<a href="/careplan/modifytemplate?TemplateID=${item.TemplateID}&TemplateName=${item.TemplateName}&ProgramID=${item.ProgramsID}&IsModify=${true}"  class="btn btn-success text-white" style="cursor:pointer;">MODIFY</a>`
                                 } else {
                                     careplans += `<a href="" data-toggle="modal" data-target="#CarePlanModal" data-TemplateId=${item.TemplateID} data-ProgramId=${item.ProgramsID}  class="btn btn-success text-white" style="cursor:pointer;">MODIFY</a>`
                                 }
@@ -150,11 +185,19 @@
                             } else {
                                 careplans += `<a href="/careplan/modifytemplate?TemplateId=${item.TemplateID}&ProgramId=${item.ProgramsID}"  class="btn btn-success text-white" style="cursor:pointer;">SET</a>`
                             }
+                            if (item.IsActive == 1) {
+                                if (item.Isactivated == 1) {
+                                    careplans += `<a href="javascript:void(0)" onclick="SetTemplateStatus(${item.TemplateID},${false})"  class="btn btn-success text-white" style="cursor:pointer;">DEACTIVATE</a>`;
+                                } else if (item.Isactivated == 0) {
+                                    careplans += `<a href="javascript:void(0)" onclick="SetTemplateStatus(${item.TemplateID},${true})"  class="btn btn-success text-white" style="cursor:pointer;">ACTIVATE</a>`;
+                                }
+                            } 
+                            
                             careplans += `</div></td></tr>`;
                         });
                         careplanlist.html("").append(careplans);
                     } else {
-                        careplans += `<tr><td colspan="4"><p class="text-center">No data found.</p></td></tr>`;
+                        careplans += `<tr><td colspan="6"><p class="text-center">No data found.</p></td></tr>`;
                         careplanlist.html("").append(careplans);
                     }
                     $(".loaderOverlay").hide();
@@ -164,36 +207,39 @@
                 }
             });
         }
-
-        function ProceedToTemplate() {
-            if (!$(' input[id="radio01"]:checked').val() && !$(' input[id="radio02"]:checked').val()) {
-                toastr.error("Select at least one option");
-                return;
+        $("#radioBaseTemplate,#radioScratch").change(function () {
+            if ($(this).prop("checked")) {
+                $(".templateDiv").addClass("hide");
             }
-            if ($("#radio01").prop("checked")) {
-                $("#radio01").prop("checked", false);
-                window.location.href = "/careplan/modifytemplate?TemplateId="+$("#ModalTemplateId").val() + "&ProgramId="+$("#ModalProgramId").val();
-            }
-            if ($("#radio02").prop("checked")) {
-
-                if ($("#templatedropdown").val()=="0") {
-                    toastr.error("Select template");
-                    return;
-                }
-
-                $("#radio02").prop("checked", false);
-                window.location.href = "/careplan/modifytemplate?TemplateId=" + $("#ModalTemplateId").val() + "&ProgramId=" + $("#ModalProgramId").val() + "&Template=" + $("#templatedropdown").val();
-            }
+        });
+        function SetTemplateStatus(Templateid, Status) {
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/updatecareplantemplatestatus?Templateid=' + Templateid + '&status=' + Status,
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                success: function (result) {
+                    GetCarePlanTemplateList();
+                },
+            });
         }
-        $("#radio01").change(function () {
-
-            if ($(this).prop("checked")) {
-                $(".customselect").addClass("hide");
-            } 
-        })
-        $("#radio02").change(function () {
-
-            if ($(this).prop("checked")) {
+        function getPrograms() {
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/getprogrambynavigator?Createdby=' + '@Session["userid"]',
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                success: function (result) {
+                    if (result.length) {
+                        for (var i = 0; i < result.length; i++) {
+                            $("#ddlProgram option[value='" + result[i].ProgramsID + "']").remove();
+                        }
+                    }
+                },
+            });
+        }
+        function getTemplates(obj) {
+           if ($(obj).prop("checked")) {
                 $.ajax({
                     type: "GET",
                     url: Apipath + '/api/PatientMain/gettemplatedropdownlist',
@@ -201,26 +247,62 @@
                     dataType: "json",
                     success: function (result) {
                         if (result.length) {
-                            var templatedrop = $("#templatedropdown");
-                            templatedrop.html("");
-                            templatedrop.append("<option value=0>Select Template</option>");
+                            var templates = $("#ddlTemplate");
+                            templates.html("");
                             $.each(result, function (data, value) {
-                                templatedrop.append($("<option></option>").val(value.TemplatePath).html(value.ProgramsName));
+                                templates.append($("<option></option>").val(value.TemplateID).html(value.TemplateName));
                             });
-                            $(".customselect").removeClass("hide");
+                            $(".templateDiv").removeClass("hide");
+                        } else {
+                            toastr.error("", "No careplan template available.", { progressBar: true });                          
                         }
                     },
                 });
                 
             } else {
-                $(".customselect").addClass("hide");
+               $(".templateDiv").addClass("hide");
             }
-        })
-        $('#CarePlanModal').on('show.bs.modal', function (e) {
-            $("#ModalTemplateId").val($(e.relatedTarget).data('templateid'));
-            $("#ModalProgramId").val( $(e.relatedTarget).data('programid'));
-           
-        });
+        }
+        function Proceed() {
+            let templateName = $("#templateName").val().trim();
+            let programid = $("#ddlProgram").val();
+            let templateid = $("#radioExistTemplate").prop("checked") ? $("#ddlTemplate").val() : 0;
+            if (templateName == '') {
+                toastr.error("", "Template name is required", { progressBar: true });
+                return;
+            }
+            let model = {
+                TemplateName:templateName,
+                ProgramID:programid ,
+                TemplateID:templateid
+            }
+            $.ajax({
+                type: "POST",
+                url: '/CarePlan/GetTemplateData',
+                data: JSON.stringify(model),
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                success: function (result) {
+                    if (result.isRedirect) {
+                        sessionStorage.clear();
+                        window.location.href = result.redirectUrl;
+                    }
+                },
+            });
+        }
 
+        function checkTemplateCount() {
+            if ($("#ddlProgram").val() == null) {
+                $(".createtemplate").hide();
+                $(".notemplate").css("display", "block");
+                $(".btnProceed").hide();
+            } else {
+                $(".createtemplate").show();
+                $(".notemplate").css("display", "none");
+                $(".btnProceed").show();
+            }
+
+            $("#templateName").val('');
+        }
     </script>
     }

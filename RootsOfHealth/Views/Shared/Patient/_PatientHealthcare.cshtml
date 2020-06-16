@@ -1,6 +1,6 @@
 ﻿@model RootsOfHealth.Models.PatientHealthcareBO
 
-<div class="tab-pane fade" id="Healthcare" role="tabpanel" aria-labelledby="Healthcare-tab">
+<div class="tab-pane fade @Html.Raw(ViewBag.CurrentTab=="Healthcare-tab"?"show active":"")" id="Healthcare" role="tabpanel" aria-labelledby="Healthcare-tab">
     <div class="inner-content">
         <div class="paitent-detail">
             <div class="row">
@@ -10,7 +10,7 @@
                             <h2>Client Healthcare</h2>
 
                             <div class="detail-button ml-auto">
-                                <a href="/Patient/Add?PatientID=@ViewBag.PatientId"
+                                <a href="javascript:{}" onclick="ActivateTab(@ViewBag.PatientId,'Healthcare-tab')"
                                    class="btn btn-success label-fields">
                                     <i class="far fa-edit"></i>
                                     Edit
@@ -113,7 +113,7 @@
                                                     <div class="bootom-form-row d-flex ">
                                                         <div class="one-columns">
                                                             <label class="label-fields">@Model.PlanName</label>
-                                                            <input tabindex="3" type="text" id="txtPlanName" name="PlanName" class="form-control"
+                                                            <input tabindex="3" type="text" id="txtPlanName" name="PlanName" class="form-control" maxlength="20"
                                                                    placeholder="" value="@Model.PlanName">
                                                         </div>
                                                     </div>
@@ -130,7 +130,7 @@
                                                     <div class="bootom-form-row d-flex">
                                                         <div class="one-columns">
                                                             <label class="label-fields">@Model.PolicyNumber</label>
-                                                            <input tabindex="4" type="text" id="txtPolicyNumber" name="PolicyNumber" class="form-control"
+                                                            <input tabindex="4" type="text" id="txtPolicyNumber" name="PolicyNumber" class="form-control" maxlength="20"
                                                                    placeholder="" value="@Model.PolicyNumber">
                                                         </div>
                                                     </div>
@@ -147,7 +147,7 @@
                                                     <div class="bootom-form-row d-flex">
                                                         <div class="one-columns">
                                                             <label class="label-fields" id="lblssn">@Model.SSN</label>
-                                                            <input tabindex="5" disabled="disabled" type="text" id="txtSSN" name="SSN" class="form-control"
+                                                            <input tabindex="5" disabled="disabled" type="text" id="txtSSN" name="SSN" class="form-control" maxlength="20"
                                                                    placeholder="" value="@Model.SSN">
                                                         </div>
                                                     </div>
@@ -238,7 +238,7 @@
                                                     <div class="bootom-form-row d-flex">
                                                         <div class="one-columns">
                                                             <label class="label-fields">@Model.NameOfDoctor</label>
-                                                            <input tabindex="9" type="text" id="txtNameOfDoctor" name="NameOfDoctor" class="form-control"
+                                                            <input tabindex="9" type="text" id="txtNameOfDoctor" name="NameOfDoctor" class="form-control" maxlength="20"
                                                                    placeholder="" value="@Model.NameOfDoctor">
                                                         </div>
                                                     </div>
@@ -255,7 +255,7 @@
                                                     <div class="bootom-form-row d-flex">
                                                         <div class="one-columns">
                                                             <label class="label-fields">@Model.DoctorLocation</label>
-                                                            <input tabindex="10" type="text" id="txtDoctorLocation" name="DoctorLocation" class="form-control"
+                                                            <input tabindex="10" type="text" id="txtDoctorLocation" name="DoctorLocation" class="form-control" maxlength="50"
                                                                    placeholder="" value="@Model.DoctorLocation">
                                                         </div>
                                                     </div>
@@ -353,7 +353,7 @@
                                                     <div class="bootom-form-row d-flex">
                                                         <div class="one-columns">
                                                             <label class="label-fields">@Model.NameOfDentist</label>
-                                                            <input tabindex="14" type="text" id="txtNameOfDentist" name="NameOfDentist" class="form-control"
+                                                            <input tabindex="14" type="text" id="txtNameOfDentist" name="NameOfDentist" class="form-control" maxlength="20"
                                                                    placeholder="" value="@Model.NameOfDentist">
                                                         </div>
                                                     </div>
@@ -370,7 +370,7 @@
                                                     <div class="bootom-form-row d-flex">
                                                         <div class="one-columns">
                                                             <label class="label-fields">@Model.DentistLocation</label>
-                                                            <input tabindex="15" type="text" id="txtDentistLocation" name="DentistLocation" class="form-control"
+                                                            <input tabindex="15" type="text" id="txtDentistLocation" name="DentistLocation" class="form-control" maxlength="50"
                                                                    placeholder="" value="@Model.DentistLocation">
                                                         </div>
                                                     </div>
@@ -431,7 +431,7 @@
                                                     <div class="bootom-form-row d-flex">
                                                         <div class="one-columns">
                                                             <label class="label-fields">@Model.TherapistsName</label>
-                                                            <input tabindex="18" type="text" id="txtTherapistsName" name="TherapistsName" class="form-control"
+                                                            <input tabindex="18" type="text" id="txtTherapistsName" name="TherapistsName" class="form-control" maxlength="20"
                                                                    placeholder="" value="@Model.TherapistsName">
                                                         </div>
                                                     </div>
@@ -448,7 +448,7 @@
                                                     <div class="bootom-form-row d-flex">
                                                         <div class="one-columns">
                                                             <label class="label-fields">@Model.TherapistsLocation</label>
-                                                            <input tabindex="19" type="text" id="txtTherapistsLocation" name="TherapistsLocation" class="form-control"
+                                                            <input tabindex="19" type="text" id="txtTherapistsLocation" name="TherapistsLocation" class="form-control" maxlength="50"
                                                                    placeholder="" value="@Model.TherapistsLocation">
                                                         </div>
                                                     </div>
@@ -510,7 +510,7 @@
                                                                 <div class="one-columns">
                                                                     <label class="label-fields">@Model.CaseManagerName</label>
                                                                     <input tabindex="22" type="text" id="txtCaseManagerName"
-                                                                           class="form-control"
+                                                                           class="form-control" maxlength="20"
                                                                            name="CaseManagerName" placeholder="" value="@Model.CaseManagerName">
                                                                 </div>
                                                             </div>
@@ -528,7 +528,7 @@
                                                                 <div class="one-columns">
                                                                     <label class="label-fields">@Model.CaseManagerLocation</label>
                                                                     <input tabindex="23" type="text" id="txtCaseManagerLocation"
-                                                                           name="CaseManagerLocation" class="form-control"
+                                                                           name="CaseManagerLocation" class="form-control" maxlength="50"
                                                                            placeholder="" value="@Model.CaseManagerLocation">
                                                                 </div>
                                                             </div>

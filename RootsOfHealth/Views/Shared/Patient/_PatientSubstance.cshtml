@@ -1,6 +1,13 @@
 ﻿@model RootsOfHealth.Models.PatientSubstanceUseBO
-
-<div class="tab-pane fade" id="AlcoholDisorder" role="tabpanel" aria-labelledby="Alcohol-tab">
+<style>
+    #AlcoholDisorder .nav-tabs {
+        border-bottom: none;
+    }
+        #AlcoholDisorder .nav-tabs:hover {
+            overflow-x: hidden !important;
+        }
+</style>
+<div class="tab-pane fade @Html.Raw(ViewBag.CurrentTab=="Dast-tab"?"show active":ViewBag.CurrentTab=="Audit-tab"?"show active":"")" id="AlcoholDisorder" role="tabpanel" aria-labelledby="Alcohol-tab">
     <div class="inner-content">
         <div class="paitent-detail">
             <div class="row" style="margin-right:0px;">
@@ -9,91 +16,92 @@
 
                         <ul class="nav nav-tabs">
                             <li class="nav-item">
-                                <a class="nav-link active" id="Dast-tab" data-toggle="tab" href="#DAST">DAST<span class="" id="DastNot" style="display:none"></span><span class="check"><i class="fas fa-check-circle"></i></span></a>
+                                <a class="nav-link @Html.Raw(ViewBag.CurrentTab=="Dast-tab"?"show active":string.IsNullOrWhiteSpace(ViewBag.CurrentTab)?"show active":"")" id="Dast-tab" data-toggle="tab" href="#DAST">DAST<span class="" id="DastNot" style="display:none"></span><span class="check"><i class="fas fa-check-circle"></i></span></a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="Audit-tab" data-toggle="tab" href="#AUDIT">AUDIT<span class="" id="AuditNot" style="display:none"></span><span class="check"><i class="fas fa-check-circle"></i></span></a>
+                                <a class="nav-link @Html.Raw(ViewBag.CurrentTab=="Audit-tab"?"show active":"")" id="Audit-tab" data-toggle="tab" href="#AUDIT">AUDIT<span class="" id="AuditNot" style="display:none"></span><span class="check"><i class="fas fa-check-circle"></i></span></a>
                             </li>
 
                         </ul>
                       
-                        <div class="inner-main-content scroll" style="margin-top:0px">
-                            <div class="top-image-row d-flex">
-                                <div class="top-image-left">
-
-                                    <div class="form-row-first label-fields mt-0">
-                                        <div class="top-form-row d-flex height-auto">
-                                            <div class="two-columns">
-
-                                                <label class="label-fields">
-                                                    Score
-                                                </label>
-                                            </div>
-                                            <div class="two-columns">
-
-                                                <label class="label-fields">
-                                                    Status
-                                                </label>
-                                            </div>
-
-                                        </div>
-                                        <div class="bootom-form-row d-flex">
-                                            <div class="two-columns">
-
-                                                <label id="txtsubtscore" class="label-fields"></label>
-
-                                            </div>
-
-                                            <div class="two-columns">
-
-                                                <label id="txtsubtstatus" class="label-fields"></label>
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div class="PatientName">
-                                    <div class="Patient-row">
-                                        <label>Client Name:</label>
-                                        <label id="PFirstName"></label>
-
-                                    </div>
-
-                                    <div class="Patient-row">
-                                        <label>Date of Birth:</label>
-                                        <label id="PDOB"></label>
-
-                                    </div>
-                                </div>
-
-                               
-                            </div>
+                        <div class="inner-main-content" style="margin-top:0px">
+                            
                             <div class="tab-content">
-                                <div class="tab-pane container active" id="DAST">
-                                    <form id="frmDast">
+                                <div class="tab-pane fade @Html.Raw(ViewBag.CurrentTab=="Dast-tab"?"show active":string.IsNullOrWhiteSpace(ViewBag.CurrentTab)?"show active":"")" id="DAST">
+                                    <div class="dastHeading mt-3" style="display:flex;">
+                                        <h2>DAST</h2>
+                                        <div class="detail-button ml-auto">
+
+                                            <a tabindex="1" href="javascript:{}" onclick="return DastSave();" id="btnDast" class="btn btn-success">
+                                                <i class="far fa-save"></i>
+                                                Save
+                                            </a>
+
+
+                                            <a href="javascript:{}" onclick="ActivateTab(@ViewBag.PatientId,'Dast-tab')"
+                                               class="btn btn-success label-fields">
+                                                <i class="far fa-edit"></i>
+                                                Edit
+                                            </a>
+
+                                        </div>
+                                    </div>
+                                    <form id="frmDast" class="detail-patient-form scroll" style="height:calc(100vh - 290px);">
                                         <div class="dastContent">
                                             <div class="detail-heading d-flex mt-4 align-items-start">
-                                                <div class="drug-protect">
-                                                    <div class="dastHeading" style="display:flex;">
-                                                    <h2>DAST</h2>
-                                                    <div class="detail-button ml-auto">
+                                                <div class="drug-protect">                                                    
+                                                    <div class="top-image-row d-flex">
+                                                        <div class="top-image-left">
 
-                                                        <a tabindex="1" href="javascript:{}" onclick="return DastSave();" id="btnDast" class="btn btn-success">
-                                                            <i class="far fa-save"></i>
-                                                            Save
-                                                        </a>
-                                                        
+                                                            <div class="form-row-first label-fields mt-0">
+                                                                <div class="top-form-row d-flex height-auto">
+                                                                    <div class="two-columns">
 
-                                                            <a href="/Patient/Add?PatientID=@ViewBag.PatientId"
-                                                               class="btn btn-success label-fields">
-                                                                <i class="far fa-edit"></i>
-                                                                Edit
-                                                            </a>
-                                                       
+                                                                        <label class="label-fields">
+                                                                            Score
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="two-columns">
+
+                                                                        <label class="label-fields">
+                                                                            Status
+                                                                        </label>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="bootom-form-row d-flex">
+                                                                    <div class="two-columns">
+
+                                                                        <label id="txtsubtscore" class="label-fields"></label>
+
+                                                                    </div>
+
+                                                                    <div class="two-columns">
+
+                                                                        <label id="txtsubtstatus" class="label-fields"></label>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="PatientName">
+                                                            <div class="Patient-row">
+                                                                <label>Client Name:</label>
+                                                                <label id="PFirstName" style="width:auto;"></label>
+
+                                                            </div>
+
+                                                            <div class="Patient-row">
+                                                                <label>Date of Birth:</label>
+                                                                <label id="PDOB"></label>
+
+                                                            </div>
+                                                        </div>
+
+
                                                     </div>
-                                    </div>
                                                     <div class="drug-radibtns">
                                                         <div class="row">
                                                             <div class="col-lg-6 col-md-6 col-sm-6 col-12">
@@ -262,7 +270,7 @@
                                                                     <input tabindex="1" type="text"
                                                                            class="Add"
                                                                            name="OtherDrug"
-                                                                           value="@Model.Dast.OtherDrug" />
+                                                                           value="@Model.Dast.OtherDrug" maxlength="20" />
 
                                                                 </div>
                                                             </div>
@@ -813,12 +821,12 @@
 
                                     </form>
                                 </div>
-                                <div class="tab-pane fade" id="AUDIT">
+                                <div class="tab-pane fade @Html.Raw(ViewBag.CurrentTab=="Audit-tab"?"show active":"")" id="AUDIT">
                                     <div class="dastHeading mt-3" style="display:flex;">
                                         <h2>AUDIT</h2>
                                         <div class="detail-button ml-auto">
 
-                                            <a href="/Patient/Add?PatientID=@ViewBag.PatientId"
+                                            <a href="javascript:{}" onclick="ActivateTab(@ViewBag.PatientId,'Audit-tab')"
                                                class="btn btn-success label-fields">
                                                 <i class="far fa-edit"></i>
                                                 Edit
@@ -828,8 +836,8 @@
                                                 Save
                                             </a>
                                         </div>
-                                    </div>
-                                    <form class="detail-patient-form" id="frmAudit">
+                                    </div>                                   
+                                    <form class="detail-patient-form scroll" id="frmAudit" style="height:calc(100vh - 290px);">
                                         <div class="form-row-first">
                                             <div class="top-form-row d-flex height-auto">
                                                 <div class="two-columns">
@@ -850,7 +858,7 @@
                                                 <div class="two-columns">
 
                                                     @if (Model.Audit.DrinkContainingAlcohol != null)
-                                                {<label class="label-fields" id="txtDrinkContainingAlcohol">@(Model.ddlDrinkAlcohol.Where(p => p.Value == Model.Audit.DrinkContainingAlcohol.ToString()).FirstOrDefault().Text)</label>}
+                                                    {<label class="label-fields" id="txtDrinkContainingAlcohol">@(Model.ddlDrinkAlcohol.Where(p => p.Value == Model.Audit.DrinkContainingAlcohol.ToString()).FirstOrDefault().Text)</label>}
 
                                                     @Html.DropDownListFor(m => m.Audit.DrinkContainingAlcohol, new SelectList(Model.ddlDrinkAlcohol, "Value", "Text", Model.Audit.DrinkContainingAlcohol), new { @class = "form-control", @Id = "ddDrinkContainingAlcohol", @Name = "DrinkContainingAlcohol", @tabindex = "1" })
 
@@ -859,9 +867,9 @@
                                                 <div class="two-columns">
 
                                                     @if (Model.Audit.HowManyDrinks != null)
-                                                {
-                                                <label class="label-fields" id="txtHowManyDrinks">@(Model.ddlHowManyDrinks.Where(p => p.Value == Model.Audit.HowManyDrinks.ToString()).FirstOrDefault().Text)</label>
-                                                }
+                                                    {
+                                                        <label class="label-fields" id="txtHowManyDrinks">@(Model.ddlHowManyDrinks.Where(p => p.Value == Model.Audit.HowManyDrinks.ToString()).FirstOrDefault().Text)</label>
+                                                    }
 
                                                     @Html.DropDownListFor(m => m.Audit.HowManyDrinks, new SelectList(Model.ddlHowManyDrinks, "Value", "Text", Model.Audit.HowManyDrinks), new { @class = "form-control", @Id = "ddHowManyDrinks", @Name = "HowManyDrinks", @tabindex = "1" })
 
@@ -882,9 +890,9 @@
                                             <div class="bootom-form-row d-flex">
                                                 <div class="three-columns">
                                                     @if (Model.Audit.SixOrMoreDrink != null)
-                                                {
-                                                <label class="label-fields" id="txtSixOrMoreDrink">@(Model.ddlSixOrMoreDrink.Where(p => p.Value == Model.Audit.SixOrMoreDrink.ToString()).FirstOrDefault().Text)</label>
-                                                }
+                                                    {
+                                                        <label class="label-fields" id="txtSixOrMoreDrink">@(Model.ddlSixOrMoreDrink.Where(p => p.Value == Model.Audit.SixOrMoreDrink.ToString()).FirstOrDefault().Text)</label>
+                                                    }
                                                     @Html.DropDownListFor(m => m.Audit.SixOrMoreDrink, new SelectList(Model.ddlSixOrMoreDrink, "Value", "Text", Model.Audit.SixOrMoreDrink), new { @class = "form-control", @Id = "ddSixOrMoreDrink", @Name = "SixOrMoreDrink", @tabindex = "1" })
 
 
@@ -908,9 +916,9 @@
                                                 <div class="three-columns">
 
                                                     @if (Model.Audit.NotAbleToStopDrinking != null)
-                                                {
-                                                <label class="label-fields">@(Model.ddlNotAbleToStopDrinking.Where(p => p.Value == Model.Audit.NotAbleToStopDrinking.ToString()).FirstOrDefault().Text)</label>
-                                                }
+                                                    {
+                                                        <label class="label-fields">@(Model.ddlNotAbleToStopDrinking.Where(p => p.Value == Model.Audit.NotAbleToStopDrinking.ToString()).FirstOrDefault().Text)</label>
+                                                    }
 
                                                     @Html.DropDownListFor(m => m.Audit.NotAbleToStopDrinking, new SelectList(Model.ddlNotAbleToStopDrinking, "Value", "Text", Model.Audit.NotAbleToStopDrinking), new { @class = "form-control", @Name = "NotAbleToStopDrinking", @tabindex = "1" })
 
@@ -931,9 +939,9 @@
                                             <div class="bootom-form-row d-flex">
                                                 <div class="three-columns">
                                                     @if (Model.Audit.FailedWhatWasExpected != null)
-                                                {
-                                                <label class="label-fields">@(Model.ddlFailedWhatWasExpected.Where(p => p.Value == Model.Audit.FailedWhatWasExpected.ToString()).FirstOrDefault().Text)</label>
-                                                }
+                                                    {
+                                                        <label class="label-fields">@(Model.ddlFailedWhatWasExpected.Where(p => p.Value == Model.Audit.FailedWhatWasExpected.ToString()).FirstOrDefault().Text)</label>
+                                                    }
                                                     @Html.DropDownListFor(m => m.Audit.FailedWhatWasExpected, new SelectList(Model.ddlFailedWhatWasExpected, "Value", "Text", Model.Audit.FailedWhatWasExpected), new { @class = "form-control", @Name = "FailedWhatWasExpected", @tabindex = "1" })
 
 
@@ -956,9 +964,9 @@
                                                 <div class="three-columns">
 
                                                     @if (Model.Audit.FirstDrinkMorning != null)
-                                                {
-                                                <label class="label-fields">@(Model.ddlFirstDrinkMorning.Where(p => p.Value == Model.Audit.FirstDrinkMorning.ToString()).FirstOrDefault().Text)</label>
-                                                }
+                                                    {
+                                                        <label class="label-fields">@(Model.ddlFirstDrinkMorning.Where(p => p.Value == Model.Audit.FirstDrinkMorning.ToString()).FirstOrDefault().Text)</label>
+                                                    }
                                                     @Html.DropDownListFor(m => m.Audit.FirstDrinkMorning, new SelectList(Model.ddlFirstDrinkMorning, "Value", "Text", Model.Audit.FirstDrinkMorning), new { @class = "form-control", @Name = "FirstDrinkMorning", @tabindex = "1" })
 
                                                 </div>
@@ -978,9 +986,9 @@
                                             <div class="bootom-form-row d-flex">
                                                 <div class="three-columns">
                                                     @if (Model.Audit.FeelingOfGuilt != null)
-                                                {
-                                                <label class="label-fields">@(Model.ddlFeelingOfGuilt.Where(p => p.Value == Model.Audit.FeelingOfGuilt.ToString()).FirstOrDefault().Text)</label>
-                                                }
+                                                    {
+                                                        <label class="label-fields">@(Model.ddlFeelingOfGuilt.Where(p => p.Value == Model.Audit.FeelingOfGuilt.ToString()).FirstOrDefault().Text)</label>
+                                                    }
                                                     @Html.DropDownListFor(m => m.Audit.FeelingOfGuilt, new SelectList(Model.ddlFeelingOfGuilt, "Value", "Text", Model.Audit.FeelingOfGuilt), new { @class = "form-control", @Name = "FeelingOfGuilt", @tabindex = "1" })
 
                                                 </div>
@@ -1001,9 +1009,9 @@
                                             <div class="bootom-form-row d-flex">
                                                 <div class="three-columns">
                                                     @if (Model.Audit.UnableToRemember != null)
-                                                {
-                                                <label class="label-fields">@(Model.ddlUnableToRemember.Where(p => p.Value == Model.Audit.UnableToRemember.ToString()).FirstOrDefault().Text)</label>
-                                                }
+                                                    {
+                                                        <label class="label-fields">@(Model.ddlUnableToRemember.Where(p => p.Value == Model.Audit.UnableToRemember.ToString()).FirstOrDefault().Text)</label>
+                                                    }
                                                     @Html.DropDownListFor(m => m.Audit.UnableToRemember, new SelectList(Model.ddlUnableToRemember, "Value", "Text", Model.Audit.UnableToRemember), new { @class = "form-control", @Name = "UnableToRemember", @tabindex = "1" })
 
                                                 </div>
@@ -1022,9 +1030,9 @@
                                                 <div class="three-columns">
 
                                                     @if (Model.Audit.InjuredOfYourDrinking != null)
-                                                {
-                                                <label class="label-fields" id="txtInjuredDrinking">@(Model.ddlInjuredOfYourDrinking.Where(p => p.Value == Model.Audit.InjuredOfYourDrinking.ToString()).FirstOrDefault().Text)</label>
-                                                }
+                                                    {
+                                                        <label class="label-fields" id="txtInjuredDrinking">@(Model.ddlInjuredOfYourDrinking.Where(p => p.Value == Model.Audit.InjuredOfYourDrinking.ToString()).FirstOrDefault().Text)</label>
+                                                    }
                                                     @Html.DropDownListFor(m => m.Audit.InjuredOfYourDrinking, new SelectList(Model.ddlInjuredOfYourDrinking, "Value", "Text", Model.Audit.InjuredOfYourDrinking), new { @class = "form-control", @Id = "ddInjuredDrinking", @Name = "InjuredOfYourDrinking", @tabindex = "1" })
 
                                                 </div>
@@ -1046,9 +1054,9 @@
                                                 <div class="three-columns">
 
                                                     @if (Model.Audit.FriendsSuggestedYouCutDown != null)
-                                                {
-                                                <label class="label-fields" id="txtFriendsSuggested">@(Model.ddlFriendsSuggestedYouCutDown.Where(p => p.Value == Model.Audit.FriendsSuggestedYouCutDown.ToString()).FirstOrDefault().Text)</label>
-                                                }
+                                                    {
+                                                        <label class="label-fields" id="txtFriendsSuggested">@(Model.ddlFriendsSuggestedYouCutDown.Where(p => p.Value == Model.Audit.FriendsSuggestedYouCutDown.ToString()).FirstOrDefault().Text)</label>
+                                                    }
                                                     @Html.DropDownListFor(m => m.Audit.FriendsSuggestedYouCutDown, new SelectList(Model.ddlFriendsSuggestedYouCutDown, "Value", "Text", Model.Audit.FriendsSuggestedYouCutDown), new { @class = "form-control", @Id = "ddFriendsSuggested", @Name = "FriendsSuggestedYouCutDown", @tabindex = "1" })
 
                                                 </div>
@@ -1056,25 +1064,25 @@
                                         </div>
 
                                         @*<div class="form-row-first">
-                            <div class="top-form-row d-flex height-auto">
-                                <div class="one-columns">
-                                    <label>
-                                        Based on AUDIT interpretation leading to
-                                        categorization in the following groups
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="bootom-form-row d-flex">
-                                <div class="three-columns">
-                                    <select name="" class="form-control">
-                                        <option>Low Risk Use</option>
-                                        <option>At Risk Use</option>
-                                        <option>High Risk Use</option>
-                                        <option>Very High Risk</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>*@
+                <div class="top-form-row d-flex height-auto">
+                    <div class="one-columns">
+                        <label>
+                            Based on AUDIT interpretation leading to
+                            categorization in the following groups
+                        </label>
+                    </div>
+                </div>
+                <div class="bootom-form-row d-flex">
+                    <div class="three-columns">
+                        <select name="" class="form-control">
+                            <option>Low Risk Use</option>
+                            <option>At Risk Use</option>
+                            <option>High Risk Use</option>
+                            <option>Very High Risk</option>
+                        </select>
+                    </div>
+                </div>
+            </div>*@
 
 
 
@@ -1084,7 +1092,7 @@
                                             <input type="hidden" name="ModifiedDate" />
                                             <input type="hidden" id="hdfPatientID" name="PatientID" value="@Model.Audit.PatientID" />
                                             <input type="hidden" id="hdfAuditID" name="AuditID" value="@Model.Audit.AuditID" />
-                                           
+
                                         </div>
 
 
@@ -1289,7 +1297,3 @@
     </div>
 </div>
 
-<script>
-
-  
-</script>

@@ -1,6 +1,6 @@
 ﻿@model RootsOfHealth.Models.PatientFoodAccessBO
 
-<div class="tab-pane fade" id="FoodAccess" role="tabpanel" aria-labelledby="FoodAccess-tab">
+<div class="tab-pane fade @Html.Raw(ViewBag.CurrentTab=="FoodAccess-tab"?"show active":"")" id="FoodAccess" role="tabpanel" aria-labelledby="FoodAccess-tab">
     <div class="inner-content">
         <div class="paitent-detail">
             <div class="row" style="margin-right:0px;">
@@ -15,7 +15,7 @@
                                     Save
                                 </a>
 
-                                <a href="/Patient/Add?PatientID=@ViewBag.PatientId"
+                                <a href="javascript:{}" onclick="ActivateTab(@ViewBag.PatientId,'FoodAccess-tab')"
                                    class="btn btn-success label-fields">
                                     <i class="far fa-edit"></i>
                                     Edit

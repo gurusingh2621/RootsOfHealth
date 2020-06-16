@@ -1,6 +1,8 @@
 ﻿@{
     ViewBag.Title = "Care Plan";
 }
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
+
 <style>
     .renderform {
         width: 100%;
@@ -20,9 +22,11 @@
             border-radius: 0px;
             padding: 0 15px;
         }
+
         .renderform select {
             height: 23px !important;
         }
+
         .renderform .form-control[type="file"] {
             border: 0;
             padding: 0;
@@ -82,9 +86,11 @@
     .vertical .custom-control {
         display: block !important;
     }
+
     .vertical {
         align-items: flex-start !important;
     }
+
     .label-left {
         background: transparent !important;
         margin: 0 20px 0px 0 !important;
@@ -100,12 +106,41 @@
         background: none !important;
     }
 
-        .left-control .frmbtn {
-            border: 0;
-            padding: 0;
-        }
+    .left-control .frmbtn {
+        border: 0;
+        padding: 0;
+    }
+
     .left-control .form-group label {
         padding-left: 0 !important;
+    }
+
+    span.tooltipicon i {
+        margin: 0px;
+    }
+
+    .required-asterisk {
+        position: relative;
+    }
+
+        .required-asterisk:after {
+            content: "*";
+            position: absolute;
+            color: #c10000;
+            margin-left: 5px;
+        }
+
+    span.tooltipicon {
+        outline: none;
+        margin-left: 5px;
+    }
+    .ck-editor {
+        width: 100%;
+    }
+
+    label.label-left {
+        flex: 0 0 150px;
+        max-width: 150px;
     }
 </style>
 <section id="content" class="responsive-container pt-0">
@@ -139,11 +174,19 @@
 </section>
 <input hidden="hidden" type="text" id="templateid" value="0" />
 @section scripts{
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.js"></script>
     <script>
          var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
         var ItemNames;
         var tableName;
-
+        function toogleToolTip() {
+            $('.tooltipicon').tooltip({
+                trigger: "click"
+            });
+            $('.tooltipicon').on('show.bs.tooltip', function () {
+                $('.tooltipicon').not(this).tooltip('hide');
+            });
+        }
         function GetDropDownName() {
             $.ajax({
                 type: "GET",
@@ -169,8 +212,9 @@
                 success: function (result) {
                     tableName = result.tableName;
                     console.log(tableName);
-                    $(".renderform").html(result.html);
+                    $(".renderform").html(result.html);                   
                     $(".renderform .event-btn-right").remove();
+                    $(".renderform .ck-editor-header").remove();
                     $(".html-content").prev().css("display", "none");
                     $(".html-content").parent().parent().parent().addClass("left-control");
                     $(".renderform .f-g-left").each(function (index, item) {
@@ -189,6 +233,12 @@
                   return false;
                    });
 
+                    toogleToolTip();
+                    $("textarea.form-control").summernote({
+                        toolbar: [
+                            ['para', ['ul', 'ol', 'paragraph']],
+                        ]
+                    });
                  }
             }).done(function (result) {
                 if ($(".renderform  .database-field").length && '@ViewBag.PatientID'!='0') {
