@@ -1,6 +1,6 @@
 ﻿@model RootsOfHealth.Models.PatientLegalStatuBO
 
-<div class="tab-pane fade" id="LegalStatus" role="tabpanel" aria-labelledby="LegalStatus-tab">
+<div class="tab-pane fade  @Html.Raw(ViewBag.CurrentTab=="LegalStatus-tab"?"show active":"")" id="LegalStatus" role="tabpanel" aria-labelledby="LegalStatus-tab">
     <div class="inner-content">
         <div class="paitent-detail">
             <div class="row">
@@ -11,7 +11,7 @@
 
                             <div class="detail-button ml-auto">
 
-                                <a href="/Patient/Add?PatientID=@ViewBag.PatientId"
+                                <a href="javascript:{}" onclick="ActivateTab(@ViewBag.PatientId,'LegalStatus-tab')"
                                    class="btn btn-success label-fields">
                                     <i class="far fa-edit"></i>
                                     Edit
@@ -218,7 +218,7 @@
                                                     <div class="bootom-form-row d-flex">
                                                         <div class="one-columns">
                                                             <label class="label-fields">@Model.CDCAndPFNNumber</label>
-                                                            <input tabindex="1" type="text" id="txtCDC" name="CDCAndPFNNumber" class="form-control"
+                                                            <input tabindex="1" type="text" id="txtCDC" name="CDCAndPFNNumber" class="form-control" maxlength="20"
                                                                    placeholder="" value="@Model.CDCAndPFNNumber">
                                                         </div>
                                                     </div>
@@ -308,7 +308,7 @@
                                                     <div class="bootom-form-row d-flex ">
                                                         <div class="one-columns">
                                                             <label class="label-fields">@Model.HowMuchOwe</label>
-                                                            <input tabindex="1" type="text" id="txtHowMuchOwe" name="HowMuchOwe" placeholder=""
+                                                            <input tabindex="1" type="text" id="txtHowMuchOwe" name="HowMuchOwe" placeholder="" maxlength="20"
                                                                    class="form-control" value="@Model.HowMuchOwe">
                                                         </div>
                                                     </div>
@@ -398,7 +398,7 @@
                                                 <div class="bootom-form-row d-flex ">
                                                     <div class="one-columns">
                                                         <label class="label-fields">@Model.ParoleProbationEnd</label>
-                                                        <input tabindex="1" type="text" id="txtProbParoleEnd" name="ParoleProbationEnd" placeholder="" value="@Model.ParoleProbationEnd" class="form-control date">
+                                                        <input tabindex="1" type="text" id="txtProbParoleEnd" name="ParoleProbationEnd" placeholder="" value="@Model.ParoleProbationEnd" class="form-control date" maxlength="50">
                                                     </div>
                                                 </div>
                                             </div>

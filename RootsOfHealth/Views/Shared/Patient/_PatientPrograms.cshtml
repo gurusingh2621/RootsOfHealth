@@ -1,6 +1,12 @@
 ﻿@model RootsOfHealth.Models.PatientProgramBO
 
 <style>
+    #Programs .nav-tabs{
+        border-bottom:none;
+    }
+    #Programs .nav-tabs:hover {
+        overflow-x: hidden !important;
+    }
     [draggable] {
         -moz-user-select: none;
         -khtml-user-select: none;
@@ -46,28 +52,28 @@
 
 </style>
 
-<div class="tab-pane fade" id="Programs" role="tabpanel" aria-labelledby="Programs-tab">
+<div class="tab-pane fade @Html.Raw(ViewBag.CurrentTab=="aclinic"?"show active":ViewBag.CurrentTab=="adream"?"show active":ViewBag.CurrentTab=="aou"?"show active":ViewBag.CurrentTab=="aPeraltaColleges"?"show active":"")" id="Programs" role="tabpanel" aria-labelledby="Programs-tab">
     <div class="inner-content">
         <div class="paitent-detail">
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="paitent-detail-left">
                         <ul class="nav nav-tabs">
-                            <li class="nav-item" id="Clinic" style="display:none">
-                                <a id="aclinic" class="nav-link active" data-toggle="tab"
+                            <li class="nav-item" id="Clinic"  style="display:none">
+                                <a id="aclinic" class="nav-link @Html.Raw(ViewBag.CurrentTab=="aclinic"?"show active":string.IsNullOrWhiteSpace(ViewBag.CurrentTab)?"show active":"")" data-toggle="tab"
                                    href="#ClinicOnly">Clinic<span class="check"><i class="fas fa-check-circle"></i></span></a>
                             </li>
-                            <li class="nav-item" id="Dream" style="display:none">
-                                <a id="adream" class="nav-link" data-toggle="tab" href="#DreamOnly">
+                            <li class="nav-item" id="Dream"  style="display:none">
+                                <a id="adream" class="nav-link @Html.Raw(ViewBag.CurrentTab=="adream"?"show active":"")" data-toggle="tab" href="#DreamOnly">
                                     Dream<span class="check"><i class="fas fa-check-circle"></i></span>
                                     
                                 </a>
                             </li>
-                            <li class="nav-item" id="OU" style="display:none">
-                                <a id="aou" class="nav-link" data-toggle="tab" href="#OUOnly">OU<span class="check"><i class="fas fa-check-circle"></i></span></a>
+                            <li class="nav-item" id="OU"  style="display:none">
+                                <a id="aou" class="nav-link @Html.Raw(ViewBag.CurrentTab=="aou"?"show active":"")" data-toggle="tab" href="#OUOnly">OU<span class="check"><i class="fas fa-check-circle"></i></span></a>
                             </li>
-                            <li class="nav-item" id="Peralta" style="display:none">
-                                <a id="aPeraltaColleges" class="nav-link" data-toggle="tab" href="#PeraltaColleges">Peralta Colleges<span class="check"><i class="fas fa-check-circle"></i></span></a>
+                            <li class="nav-item" id="Peralta"  style="display:none">
+                                <a id="aPeraltaColleges" class="nav-link @Html.Raw(ViewBag.CurrentTab=="aPeraltaColleges"?"show active":"")" data-toggle="tab" href="#PeraltaColleges">Peralta Colleges<span class="check"><i class="fas fa-check-circle"></i></span></a>
                             </li>
 
                         </ul>
@@ -75,12 +81,17 @@
                       
 
                         <!-- Tab panes -->
-                        <div class="tab-content scroll">
-                            <div class="tab-pane container active" id="ClinicOnly">
+                        <div class="tab-content">
+                            <div class="tab-pane fade @Html.Raw(ViewBag.CurrentTab=="aclinic"?"show active":string.IsNullOrWhiteSpace(ViewBag.CurrentTab)?"show active":"")" id="ClinicOnly">
                                 <div>
-                                    <div class="d-flex">
-                                        <div class="detail-button ml-auto" style="margin-top: 10px;">
-                                            <a href="/Patient/Add?PatientID=@ViewBag.PatientId"
+                                    <div class="detail-heading d-flex">
+                                        <h2 style="padding-top:10px">Clinic</h2>
+                                        <div class="detail-button ml-auto">
+                                            <a href="javascript:{}" onclick="return ClinicOnlySave();" id="btnClinic" class="btn btn-success ml-auto">
+                                                <i class="far fa-save"></i>
+                                                Save
+                                            </a>
+                                            <a href="javascript:{}" onclick="ActivateTab(@ViewBag.PatientId,'aclinic')"
                                                class="btn btn-success label-fields">
                                                 <i class="far fa-edit"></i>
                                                 Edit
@@ -88,14 +99,7 @@
                                         </div>
                                     </div>
 
-                                    <form id="frmClinic">
-                                        <div class="d-flex">
-                                            <a href="javascript:{}" onclick="return ClinicOnlySave();" id="btnClinic" class="btn btn-success ml-auto">
-                                                <i class="far fa-save"></i>
-                                                Save
-                                            </a>
-                                        </div>
-                                       
+                                    <form id="frmClinic" style="height:calc(100vh - 290px)" class="detail-patient-form scroll">                                                                            
                                         <div class="dastContent">
                                             <div class="form-row-first">
                                                 <div class="top-form-row d-flex height-auto">
@@ -121,7 +125,7 @@
                                 <option>Severe</option>
                             </select>*@
                                                         <label class="label-fields">@Model.ClinicOnly.PrescriptionAndNonPrescriptionMedications</label>
-                                                        <input type="text" tabindex="1" class="form-control" name="PrescriptionAndNonPrescriptionMedications" placeholder="" value="@Model.ClinicOnly.PrescriptionAndNonPrescriptionMedications">
+                                                        <input type="text" tabindex="1" class="form-control" name="PrescriptionAndNonPrescriptionMedications" placeholder="" value="@Model.ClinicOnly.PrescriptionAndNonPrescriptionMedications" maxlength="100">
 
                                                     </div>
                                                     <div class="two-columns">
@@ -132,7 +136,7 @@
                                 <option>Severe</option>
                             </select>*@
                                                         <label class="label-fields">@Model.ClinicOnly.AllergiesMedications</label>
-                                                        <input type="text" tabindex="2" class="form-control" name="AllergiesMedications" value="@Model.ClinicOnly.AllergiesMedications" placeholder="">
+                                                        <input type="text" tabindex="2" class="form-control" name="AllergiesMedications" value="@Model.ClinicOnly.AllergiesMedications" placeholder="" maxlength="100">
                                                     </div>
                                                 </div>
                                             </div>
@@ -159,7 +163,7 @@
                                                                         <label class="label-fields">@Model.ClinicOnly.NameOfSurgeries</label>
                                                                         <input type="text" tabindex="3"
                                                                                class="form-control" name="NameOfSurgeries"
-                                                                               value="@Model.ClinicOnly.NameOfSurgeries" placeholder="">
+                                                                               value="@Model.ClinicOnly.NameOfSurgeries" placeholder="" maxlength="50">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -176,7 +180,7 @@
                                                                     <div class="one-columns">
                                                                         <label class="label-fields">@Model.ClinicOnly.DateOfSurgeries</label>
                                                                         <input type="text" tabindex="4"
-                                                                               name="DateOfSurgeries" id="txtDateOfSurgeries" value="@Model.ClinicOnly.DateOfSurgeries" class="form-control"
+                                                                               name="DateOfSurgeries" id="txtDateOfSurgeries" value="@Model.ClinicOnly.DateOfSurgeries" class="form-control" maxlength="50"
                                                                                placeholder="">
                                                                     </div>
                                                                 </div>
@@ -216,7 +220,7 @@
                                                                     <div class="one-columns">
                                                                         <label class="label-fields">@Model.ClinicOnly.FamilyMembersMedicalConditions</label>
                                                                         <input type="text" tabindex="5"
-                                                                               name="FamilyMembersMedicalConditions" value="@Model.ClinicOnly.FamilyMembersMedicalConditions" class="form-control"
+                                                                               name="FamilyMembersMedicalConditions" value="@Model.ClinicOnly.FamilyMembersMedicalConditions" class="form-control" maxlength="100"
                                                                                placeholder="">
                                                                     </div>
                                                                 </div>
@@ -239,7 +243,7 @@
 
                                                 </div>
                                                 <div class="bootom-form-row d-flex">
-                                                    <div class="two-columns">
+                                                    <div class="two-columns divAnyVaccinations">
                                                         @*<select name="" class="form-control">
                                 <option>Tetanus</option>
                                 <option>Flu</option>
@@ -248,14 +252,28 @@
                             </select>*@
                                                         @if (Model.ClinicOnly.AnyVaccinations != null)
                                                         {
-                                                            <label class="label-fields">@(Model.ddlAnyVaccinations.Where(p => p.Value == Model.ClinicOnly.AnyVaccinations.ToString()).FirstOrDefault().Text)</label>
+
+                                                            string AnyVaccinationsString = "";
+                                                            var itemArray = Model.ClinicOnly.AnyVaccinations.Split(',');
+                                                            if (itemArray!=null && itemArray[0]!="")
+                                                            {
+                                                                foreach (var Vaccinationval in itemArray)
+                                                                {
+                                                                    AnyVaccinationsString += Model.ddlAnyVaccinations.Where(p => p.Value == Vaccinationval).FirstOrDefault().Text + ",";
+                                                                }
+                                                                AnyVaccinationsString = AnyVaccinationsString.TrimEnd(',');
+                                                            }
+                                                                <label class="label-fields">@(AnyVaccinationsString)</label>
                                                         }
 
-
-
-
-                                                        @Html.DropDownListFor(m => m.ClinicOnly.AnyVaccinations, new SelectList(Model.ddlAnyVaccinations, "Value", "Text", Model.ClinicOnly.AnyVaccinations), new { @class = "form-control", @Name = "AnyVaccinations", @tabindex = "6" })
-                                                    </div>
+                                                            <select id="ClinicOnly_AnyVaccinations" class="form-control" tabindex="6" multiple>
+                                                                @foreach (var item in Model.ddlAnyVaccinations)
+                                                                {
+                                                                    <option value="@item.Value">@item.Text</option>
+                                                                }
+                                                               </select>
+                                                                @*@Html.DropDownListFor(m => m.ClinicOnly.AnyVaccinations, new SelectList(Model.ddlAnyVaccinations, "Value", "Text", Model.ClinicOnly.AnyVaccinations), new { @class = "form-control", @Name = "AnyVaccinations", @tabindex = "6" })*@
+                                                </div>
 
                                                 </div>
                                             </div>
@@ -330,7 +348,7 @@
                                                                                         <div class="one-columns">
                                                                                             <label class="label-fields">@Model.ClinicOnly.ReceivePrenatalCare</label>
                                                                                             <input type="text" name="ReceivePrenatalCare"
-                                                                                                   value="@Model.ClinicOnly.ReceivePrenatalCare" class="form-control"
+                                                                                                   value="@Model.ClinicOnly.ReceivePrenatalCare" class="form-control" maxlength="50"
                                                                                                    placeholder="">
                                                                                         </div>
                                                                                     </div>
@@ -351,7 +369,7 @@
                                                                                         <div class="one-columns">
                                                                                             <label class="label-fields">@Model.ClinicOnly.DueDateOfPrenatalCare</label>
                                                                                             <input type="text" name="DueDateOfPrenatalCare" id="txtDueDate"
-                                                                                                   value="@Model.ClinicOnly.DueDateOfPrenatalCare" class="form-control"
+                                                                                                   value="@Model.ClinicOnly.DueDateOfPrenatalCare" class="form-control" maxlength="50"
                                                                                                    placeholder="">
                                                                                         </div>
                                                                                     </div>
@@ -414,7 +432,7 @@
                                                                     <div class="one-columns">
                                                                         <label class="label-fields">@Model.ClinicOnly.MenstrualPeriod</label>
                                                                         <input type="text" name="MenstrualPeriod" tabindex="10"
-                                                                               value="@Model.ClinicOnly.MenstrualPeriod" class="form-control"
+                                                                               value="@Model.ClinicOnly.MenstrualPeriod" class="form-control" maxlength="50"
                                                                                placeholder="">
                                                                     </div>
                                                                 </div>
@@ -470,7 +488,7 @@
                                                                                         <div class="one-columns">
                                                                                             <label class="label-fields">@Model.ClinicOnly.CurrentMethodOfBirthControl</label>
                                                                                             <input type="text" name="CurrentMethodOfBirthControl"
-                                                                                                   value="@Model.ClinicOnly.CurrentMethodOfBirthControl" class="form-control"
+                                                                                                   value="@Model.ClinicOnly.CurrentMethodOfBirthControl" class="form-control" maxlength="50"
                                                                                                    placeholder="">
                                                                                         </div>
                                                                                     </div>
@@ -598,19 +616,19 @@
                                                                         <div class="bootom-form-row d-flex mb-3">
                                                                             <div class="three-columns border-bottom-none">
                                                                                 <label class="label-fields">@Model.ClinicOnly.NoOfPregnancies</label>
-                                                                                <input type="text" name="NoOfPregnancies" class="form-control" placeholder="" value="@Model.ClinicOnly.NoOfPregnancies">
+                                                                                <input type="text" name="NoOfPregnancies" class="form-control" placeholder="" value="@Model.ClinicOnly.NoOfPregnancies" min="0" max="50">
                                                                             </div>
                                                                             <div class="three-columns border-bottom-none">
                                                                                 <label class="label-fields">@Model.ClinicOnly.NoOflivingchildren</label>
-                                                                                <input type="text" name="NoOflivingchildren" class="form-control" placeholder="" value="@Model.ClinicOnly.NoOflivingchildren">
+                                                                                <input type="text" name="NoOflivingchildren" class="form-control" placeholder="" value="@Model.ClinicOnly.NoOflivingchildren" min="0" max="50">
                                                                             </div>
                                                                             <div class="three-columns border-bottom-none">
                                                                                 <label class="label-fields">@Model.ClinicOnly.NoOfabortions</label>
-                                                                                <input type="text" name="NoOfabortions" class="form-control" placeholder="" value="@Model.ClinicOnly.NoOfabortions">
+                                                                                <input type="text" name="NoOfabortions" class="form-control" placeholder="" value="@Model.ClinicOnly.NoOfabortions" min="0" max="50">
                                                                             </div>
                                                                             <div class="three-columns border-bottom-none">
                                                                                 <label class="label-fields">@Model.ClinicOnly.NoOfmiscarriages</label>
-                                                                                <input type="text" name="NoOfmiscarriages" class="form-control" placeholder="" value="@Model.ClinicOnly.NoOfmiscarriages">
+                                                                                <input type="text" name="NoOfmiscarriages" class="form-control" placeholder="" value="@Model.ClinicOnly.NoOfmiscarriages" min="0" max="50">
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -696,7 +714,7 @@
                                                         <div class="bootom-form-row d-flex mb-3">
                                                             <div class="three-columns border-bottom-none">
                                                                 <label class="label-fields">@Model.ClinicOnly.YearOflastScreening</label>
-                                                                <input type="text" id="txtYearOflastScreening" name="YearOflastScreening" class="form-control" placeholder="" value="@Model.ClinicOnly.YearOflastScreening">
+                                                                <input type="text" id="txtYearOflastScreening" name="YearOflastScreening" class="form-control" placeholder="" value="@Model.ClinicOnly.YearOflastScreening" maxlength="20">
                                                             </div>
 
                                                         </div>
@@ -985,7 +1003,7 @@
                                         <div class="detail-button mt-3 w-100 text-center">
                                             <input type="hidden" name="CreatedDate" />
                                             <input type="hidden" name="ModifiedDate" />
-
+                                            <input id="hdfAnyVaccinations" type="hidden" name="AnyVaccinations" />
                                             <input id="hdfPregnant" type="hidden" name="Pregnant" value="@(Model.ClinicOnly.Pregnant == null ? "" : Model.ClinicOnly.Pregnant.ToString())" />
                                             <input id="hdfBirthControl" type="hidden" name="BirthControl" value="@(Model.ClinicOnly.BirthControl == null ? "" : Model.ClinicOnly.BirthControl.ToString())" />
                                             <input id="hdfEmergencyContraception" type="hidden" name="EmergencyContraception" value="@(Model.ClinicOnly.EmergencyContraception == null ? "" : Model.ClinicOnly.EmergencyContraception.ToString())" />
@@ -1002,33 +1020,27 @@
                                             <input id="hdfPreventativeScreeningTests" type="hidden" name="PreventativeScreeningTests" />
                                             <input type="hidden" id="hdfPatientID" name="PatientID" value="@Model.ClinicOnly.PatientID" />
                                             <input type="hidden" id="hdfClinicOnlyID" name="ClinicOnlyID" value="@Model.ClinicOnly.ClinicOnlyID" />
-                                            
+
                                         </div>
-
-
-
-
-
-
                                     </form>
                                 </div>
                             </div>
+                            <div class="tab-pane fade @Html.Raw(ViewBag.CurrentTab=="adream"?"show active":"")" id="DreamOnly">
+                                <div class="detail-heading d-flex">
+                                    <h2 style="padding-top:10px">Dream</h2>
+                                    <div class="detail-button ml-auto">
 
-                            <div class="tab-pane fade" id="DreamOnly">
-
-                                <div class="detail-button ml-auto" style="margin-top: 10px;">
-
-                                    <a href="/Patient/Add?PatientID=@ViewBag.PatientId"
-                                       class="btn btn-success label-fields">
-                                        <i class="far fa-edit"></i>
-                                        Edit
-                                    </a>
-                                    <a href="javascript:{}" onclick="return DreamOnlySave();" id="btnDream" class="btn btn-success">
-                                        <i class="far fa-save"></i>
-                                        Save
-                                    </a>
+                                        <a href="javascript:{}" onclick="ActivateTab(@ViewBag.PatientId,'adream')"
+                                           class="btn btn-success label-fields">
+                                            <i class="far fa-edit"></i>
+                                            Edit
+                                        </a>
+                                        <a href="javascript:{}" onclick="return DreamOnlySave();" id="btnDream" class="btn btn-success">
+                                            <i class="far fa-save"></i>
+                                            Save
+                                        </a>
+                                    </div>
                                 </div>
-
 
                                 <form class="detail-patient-form" id="frmDream">
 
@@ -1075,1081 +1087,1083 @@
 
                                         <input type="hidden" id="hdfPatientID" name="PatientID" value="@Model.DreamOnly.PatientID" />
                                         <input type="hidden" id="hdfDreamOnlyID" name="DreamOnlyID" value="@Model.DreamOnly.DreamOnlyID" />
-                                       
+
                                     </div>
 
                                 </form>
                             </div>
-                            <div class="tab-pane fade" id="OUOnly">
+                            <div class="tab-pane fade @Html.Raw(ViewBag.CurrentTab=="aou"?"show active":"")" id="OUOnly">
                                 <div  style="margin-top:0px">
-                                
-                                    <div class="detail-button ml-auto" style="margin-top: 10px;">
+                                    <div class="detail-heading d-flex">
+                                        <h2 style="padding-top:10px">OU</h2>
+                                        <div class="detail-button ml-auto">
 
-                                        <a href="/Patient/Add?PatientID=@ViewBag.PatientId"
-                                           class="btn btn-success label-fields">
-                                            <i class="far fa-edit"></i>
-                                            Edit
-                                        </a>
-                                        <a href="javascript:{}" onclick="return OUOnlySave();" id="btnOUOnly" class="btn btn-success">
-                                            <i class="far fa-save"></i>
-                                            Save
-                                        </a>
+                                            <a href="javascript:{}" onclick="ActivateTab(@ViewBag.PatientId,'aou')"
+                                               class="btn btn-success label-fields">
+                                                <i class="far fa-edit"></i>
+                                                Edit
+                                            </a>
+                                            <a href="javascript:{}" onclick="return OUOnlySave();" id="btnOUOnly" class="btn btn-success">
+                                                <i class="far fa-save"></i>
+                                                Save
+                                            </a>
+                                        </div>
                                     </div>
 
-                                
-                                <form class="detail-patient-form" id="frmOU">
-    <div class="form-row-first">
-        <div class="top-form-row d-flex height-auto">
-            <div class="two-columns">
-                <label>Referral Source</label>
-            </div>
+                                        <form class="detail-patient-form scroll" id="frmOU" style="height:calc(100vh - 290px)">
+                                            <div class="form-row-first">
+                                                <div class="top-form-row d-flex height-auto">
+                                                    <div class="two-columns">
+                                                        <label>Referral Source</label>
+                                                    </div>
 
-        </div>
-        <div class="bootom-form-row d-flex">
-            <div class="three-columns">
-                @*<select class="form-control">
-                        <option>Friend</option>
-                        <option>Call-in</option>
-                        <option>Custom Notification</option>
-                        <option>OSO</option>
-                        <option>Probation/Parole</option>
-                        <option>Local</option>
-                        <option>Correction</option>
-                        <option>Facility</option>
+                                                </div>
+                                                <div class="bootom-form-row d-flex">
+                                                    <div class="three-columns">
+                                                        @*<select class="form-control">
+                            <option>Friend</option>
+                            <option>Call-in</option>
+                            <option>Custom Notification</option>
+                            <option>OSO</option>
+                            <option>Probation/Parole</option>
+                            <option>Local</option>
+                            <option>Correction</option>
+                            <option>Facility</option>
 
-                    </select>*@
+                        </select>*@
 
-                @if (Model.OUOnly.ReferralSource != null)
-                {
-                    <label class="label-fields">@(Model.ddlReferralSource.Where(p => p.Value == Model.OUOnly.ReferralSource.ToString()).FirstOrDefault().Text)</label>
-                }
-
-
-                @Html.DropDownListFor(m => m.OUOnly.ReferralSource, new SelectList(Model.ddlReferralSource, "Value", "Text", Model.OUOnly.ReferralSource), new { @class = "form-control", @Name = "ReferralSource", @tabindex = "1" })
-
-            </div>
-        </div>
-    </div>
-    <div class="form-row-first">
-        <div class="top-form-row d-flex height-auto">
-            <div class="one-columns">
-                <label>
-                    Are there any areas of the City that are
-                    unsafe for you?
-                </label>
-            </div>
-
-        </div>
-        <div class="bootom-form-row">
-            <div class="three-columns">
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <label class="label-fields">@Html.Raw(Model.OUOnly.UnsafeCity == true ? "Yes" : "No")</label>
-                    <input type="radio" class="custom-control-input"
-                           id="unsafeRadioYes" name="frmOU_radio1"
-                           value="True" tabindex="2" onclick="Radio()">
-                    <label class="custom-control-label"
-                           for="unsafeRadioYes">Yes</label>
-                </div>
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <input type="radio" class="custom-control-input"
-                           id="unsafeRadioNo" name="frmOU_radio1"
-                           value="False" tabindex="3" onclick="Radio()">
-                    <label class="custom-control-label"
-                           for="unsafeRadioNo">No</label>
-                </div>
-                <div class="form-row-first" id="divNeighborhoods" style="display:none">
-                    <div class="top-form-row d-flex">
-                        <div class="one-columns">
-                            <label>which neighborhoods?</label>
-                        </div>
-
-                    </div>
-                    <div class="bootom-form-row d-flex ">
-                        <div class="one-columns">
-                            <label class="label-fields">@Model.OUOnly.Neighborhoods</label>
-                            <input type="text" class="form-control"
-                                   name="Neighborhoods" value="@Model.OUOnly.Neighborhoods" placeholder="">
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-    <div class="form-row-first">
-        <div class="top-form-row d-flex height-auto">
-            <div class="one-columns">
-
-                <label>
-                    Safety – of the items below, please rank
-                    based on your needs
-                </label>
-            </div>
-
-        </div>
-
-        <div class="bootom-form-row d-flex">
-            <div>
-
-                <ul class="columns safety-options">
-
-                    @foreach (var s in Model.safetyoptions)
-                    {
-                        <li class="column" draggable="true" tabindex="4">@s</li>
-                    }
-
-                </ul>
+                                                        @if (Model.OUOnly.ReferralSource != null)
+                                                        {
+                                                            <label class="label-fields">@(Model.ddlReferralSource.Where(p => p.Value == Model.OUOnly.ReferralSource.ToString()).FirstOrDefault().Text)</label>
+                                                        }
 
 
+                                                        @Html.DropDownListFor(m => m.OUOnly.ReferralSource, new SelectList(Model.ddlReferralSource, "Value", "Text", Model.OUOnly.ReferralSource), new { @class = "form-control", @Name = "ReferralSource", @tabindex = "1" })
 
-            </div>
-        </div>
-    </div>
-    <div class="form-row-first">
-        <div class="top-form-row d-flex height-auto">
-            <div class="one-columns">
-                <label>
-                    Can you pass a drug test at this time?
-                    (Please note: many employers now test saliva and
-                    hair)
-                </label>
-            </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row-first">
+                                                <div class="top-form-row d-flex height-auto">
+                                                    <div class="one-columns">
+                                                        <label>
+                                                            Are there any areas of the City that are
+                                                            unsafe for you?
+                                                        </label>
+                                                    </div>
 
-        </div>
-        <div class="bootom-form-row d-flex">
-            <div class="three-columns">
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <label class="label-fields">@Html.Raw(Model.OUOnly.DrugTest == true ? "Yes" : "No")</label>
-                    <input tabindex="5" type="radio" class="custom-control-input"
-                           id="drugRadioYes" name="frmOU_radio2"
-                           value="True">
-                    <label class="custom-control-label"
-                           for="drugRadioYes">Yes</label>
-                </div>
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <input type="radio" class="custom-control-input"
-                           id="drugRadioNo" name="frmOU_radio2"
-                           value="False" tabindex="6">
-                    <label class="custom-control-label"
-                           for="drugRadioNo">No</label>
-                </div>
+                                                </div>
+                                                <div class="bootom-form-row">
+                                                    <div class="three-columns">
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <label class="label-fields">@Html.Raw(Model.OUOnly.UnsafeCity == true ? "Yes" : "No")</label>
+                                                            <input type="radio" class="custom-control-input"
+                                                                   id="unsafeRadioYes" name="frmOU_radio1"
+                                                                   value="True" tabindex="2" onclick="Radio()">
+                                                            <label class="custom-control-label"
+                                                                   for="unsafeRadioYes">Yes</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <input type="radio" class="custom-control-input"
+                                                                   id="unsafeRadioNo" name="frmOU_radio1"
+                                                                   value="False" tabindex="3" onclick="Radio()">
+                                                            <label class="custom-control-label"
+                                                                   for="unsafeRadioNo">No</label>
+                                                        </div>
+                                                        <div class="form-row-first" id="divNeighborhoods" style="display:none">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>which neighborhoods?</label>
+                                                                </div>
 
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex ">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields">@Model.OUOnly.Neighborhoods</label>
+                                                                    <input type="text" class="form-control"  maxlength="50"
+                                                                           name="Neighborhoods" value="@Model.OUOnly.Neighborhoods" placeholder="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
 
-            </div>
-        </div>
-    </div>
-    <div class="form-row-first">
-        <div class="top-form-row d-flex height-auto">
-            <div class="one-columns">
-                <label>What is your dream job or career?</label>
-            </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row-first">
+                                                <div class="top-form-row d-flex height-auto">
+                                                    <div class="one-columns">
 
-        </div>
-        <div class="bootom-form-row d-flex">
-            <div class="three-columns">
-                <label class="label-fields">@Model.OUOnly.DreamJob</label>
-                <input tabindex="7" type="text" class="form-control" name="DreamJob" value="@Model.OUOnly.DreamJob"
-                       placeholder="">
-            </div>
-        </div>
-    </div>
-    <div class="form-row-first">
-        <div class="top-form-row d-flex height-auto">
-            <div class="one-columns">
-                <label>
-                    Employment – of the items below, please rank
-                    based on your needs (Priority 1, 2, 3)
-                </label>
-            </div>
+                                                        <label>
+                                                            Safety – of the items below, please rank
+                                                            based on your needs
+                                                        </label>
+                                                    </div>
 
-        </div>
-        <div class="bootom-form-row d-flex">
-            <div class="three-columns">
+                                                </div>
 
-                <ul class="columns employement-options">
-                    @foreach (var s in Model.employmentoptions)
-                    {
-                        <li class="column" draggable="true" tabindex="8">@s</li>
-                    }
+                                                <div class="bootom-form-row d-flex">
+                                                    <div>
 
-                </ul>
+                                                        <ul class="columns safety-options">
 
+                                                            @foreach (var s in Model.safetyoptions)
+                                                            {
+                                                                <li class="column" draggable="true" tabindex="4">@s</li>
+                                                            }
 
-            </div>
-        </div>
-    </div>
-    <div class="form-row-first">
-        <div class="top-form-row d-flex height-auto">
-            <div class="one-columns">
-                <label>Current Living Situation</label>
-            </div>
-
-        </div>
-        <div class="bootom-form-row d-flex">
-            <div class="three-columns">
-                @*<label class="label-fields">@Model.OUOnly.LivingSituation</label>*@
-                @if (Model.OUOnly.LivingSituation != null)
-                {
-                    <label class="label-fields">@(Model.ddlCurrentLivingSituation.Where(p => p.Value == Model.OUOnly.LivingSituation.ToString()).FirstOrDefault().Text)</label>
-                }
-                @Html.DropDownListFor(m => m.OUOnly.LivingSituation, new SelectList(Model.ddlCurrentLivingSituation, "Value", "Text", Model.OUOnly.LivingSituation), new { @class = "form-control", @Name = "LivingSituation", @tabindex = "9" })
-            </div>
-        </div>
-    </div>
-    <div class="form-row-first">
-        <div class="top-form-row d-flex height-auto">
-            <div class="one-columns">
-                <label>
-                    Housing/Shelter – Of the items below, please
-                    rank based on your needs (Priority 1, 2,
-                    3)
-                </label>
-            </div>
-        </div>
-        <div class="bootom-form-row d-flex">
-            <div class="three-columns">
-                <ul class="columns housingshelter-options">
-                    @foreach (var s in Model.housingshelteroptions)
-                    {
-                        <li class="column" draggable="true" tabindex="10">@s</li>
-                    }
-
-                </ul>
-            </div>
-        </div>
-    </div>
+                                                        </ul>
 
 
-    <div class="form-row-first">
-        <div class="top-form-row d-flex height-auto">
-            <div class="one-columns">
-                <label>
-                    Do you have any physical or learning
-                    disabilities?
-                </label>
-            </div>
 
-        </div>
-        <div class="bootom-form-row d-flex">
-            <div class="three-columns">
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <label class="label-fields">@Html.Raw(Model.OUOnly.LearningDisabilities == true ? "Yes" : "No")</label>
-                    <input type="radio" class="custom-control-input"
-                           id="disabilitiesRadioYes" name="frmOU_radio3"
-                           value="True" tabindex="11">
-                    <label class="custom-control-label"
-                           for="disabilitiesRadioYes">Yes</label>
-                </div>
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <input type="radio" class="custom-control-input"
-                           id="disabilitiesRadioNo" name="frmOU_radio3"
-                           value="False" tabindex="12">
-                    <label class="custom-control-label"
-                           for="disabilitiesRadioNo">No</label>
-                </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row-first">
+                                                <div class="top-form-row d-flex height-auto">
+                                                    <div class="one-columns">
+                                                        <label>
+                                                            Can you pass a drug test at this time?
+                                                            (Please note: many employers now test saliva and
+                                                            hair)
+                                                        </label>
+                                                    </div>
+
+                                                </div>
+                                                <div class="bootom-form-row d-flex">
+                                                    <div class="three-columns">
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <label class="label-fields">@Html.Raw(Model.OUOnly.DrugTest == true ? "Yes" : "No")</label>
+                                                            <input tabindex="5" type="radio" class="custom-control-input"
+                                                                   id="drugRadioYes" name="frmOU_radio2"
+                                                                   value="True">
+                                                            <label class="custom-control-label"
+                                                                   for="drugRadioYes">Yes</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <input type="radio" class="custom-control-input"
+                                                                   id="drugRadioNo" name="frmOU_radio2"
+                                                                   value="False" tabindex="6">
+                                                            <label class="custom-control-label"
+                                                                   for="drugRadioNo">No</label>
+                                                        </div>
 
 
-            </div>
-        </div>
-    </div>
-    <div class="form-row-first">
-        <div class="top-form-row d-flex height-auto">
-            <div class="one-columns">
-                <label>
-                    Education – of the items below, please rank
-                    based on your needs (Priority 1, 2, 3)
-                </label>
-            </div>
-        </div>
-        <div class="bootom-form-row d-flex">
-            <div class="three-columns">
-                <ul class="columns education-options">
-                    @foreach (var s in Model.educationoptions)
-                    {
-                        <li class="column" draggable="true" tabindex="13">@s</li>
-                    }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row-first">
+                                                <div class="top-form-row d-flex height-auto">
+                                                    <div class="one-columns">
+                                                        <label>What is your dream job or career?</label>
+                                                    </div>
 
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="form-row-first">
-        <div class="top-form-row d-flex height-auto">
-            <div class="one-columns">
-                <label>Do you have any pending court dates?</label>
-            </div>
+                                                </div>
+                                                <div class="bootom-form-row d-flex">
+                                                    <div class="three-columns">
+                                                        <label class="label-fields">@Model.OUOnly.DreamJob</label>
+                                                        <input tabindex="7" type="text" class="form-control" name="DreamJob" value="@Model.OUOnly.DreamJob"
+                                                         maxlength="50" placeholder="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row-first">
+                                                <div class="top-form-row d-flex height-auto">
+                                                    <div class="one-columns">
+                                                        <label>
+                                                            Employment – of the items below, please rank
+                                                            based on your needs (Priority 1, 2, 3)
+                                                        </label>
+                                                    </div>
 
-        </div>
-        <div class="bootom-form-row d-flex">
-            <div class="three-columns">
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <label class="label-fields">@Html.Raw(Model.OUOnly.AnyPendingCourtDates == true ? "Yes" : "No")</label>
-                    <input type="radio" class="custom-control-input"
-                           id="courtRadioYes" name="frmOU_radio4"
-                           value="True" onclick="Radio()" tabindex="14">
-                    <label class="custom-control-label"
-                           for="courtRadioYes">Yes</label>
-                </div>
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <input type="radio" class="custom-control-input"
-                           id="courtRadioNo" name="frmOU_radio4"
-                           value="False" onclick="Radio()" tabindex="15">
-                    <label class="custom-control-label"
-                           for="courtRadioNo">No</label>
-                </div>
-                <div class="form-row-first" id="divPendingDate" style="display:none">
-                    <div class="top-form-row d-flex">
-                        <div class="one-columns">
-                            <label>Dates</label>
-                        </div>
+                                                </div>
+                                                <div class="bootom-form-row d-flex">
+                                                    <div class="three-columns">
 
-                    </div>
-                    <div class="bootom-form-row d-flex ">
-                        <div class="one-columns">
-                            <label class="label-fields">@Model.OUOnly.PendingCourtDates</label>
-                            <input type="text" id="txtPendingDate" class="form-control" name="PendingCourtDates"
-                                   value="@Model.OUOnly.PendingCourtDates" placeholder="">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="form-row-first">
-        <div class="top-form-row d-flex height-auto">
-            <div class="one-columns">
-                <label>
-                    Have you ever been convicted of any
-                    offense?
-                </label>
-            </div>
+                                                        <ul class="columns employement-options">
+                                                            @foreach (var s in Model.employmentoptions)
+                                                            {
+                                                                <li class="column" draggable="true" tabindex="8">@s</li>
+                                                            }
 
-        </div>
-        <div class="bootom-form-row d-flex">
-            <div class="three-columns">
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <label class="label-fields" id="lblConvicted">@Html.Raw(Model.OUOnly.ConvictedOfAnyOffense == true ? "Yes" : "No")</label>
-                    <input type="radio" class="custom-control-input"
-                           id="convictedRadioYes" name="frmOU_radio5"
-                           value="True" onclick="Radio()" tabindex="16">
-                    <label class="custom-control-label"
-                           for="convictedRadioYes">Yes</label>
-                </div>
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <input type="radio" class="custom-control-input"
-                           id="convictedRadioNo" name="frmOU_radio5"
-                           value="False" onclick="Radio()" tabindex="17">
-                    <label class="custom-control-label"
-                           for="convictedRadioNo">No</label>
-                </div>
-                <div class="form-row-first" id="divMisdemeanor" style="display:none">
-                    <div class="top-form-row d-flex">
-                        <div class="one-columns">
-                            <label>misdemeanor? </label>
-                        </div>
+                                                        </ul>
 
-                    </div>
-                    <div class="bootom-form-row d-flex ">
-                        <div class="one-columns">
-                            <div class="custom-control custom-radio d-inline-block mr-2">
-                                <label class="label-fields" id="lblMisdemeanor">@Html.Raw(Model.OUOnly.Misdemeanor == true ? "Yes" : "No")</label>
-                                <input type="radio"
-                                       class="custom-control-input"
-                                       id="misdemeanorRadioYes"
-                                       name="frmOU_radio6"
-                                       value="True" onclick="Radio()">
-                                <label class="custom-control-label"
-                                       for="misdemeanorRadioYes">Yes</label>
-                            </div>
-                            <div class="custom-control custom-radio d-inline-block mr-2">
-                                <input type="radio"
-                                       class="custom-control-input"
-                                       id="misdemeanorRadioNo"
-                                       name="frmOU_radio6"
-                                       value="False" onclick="Radio()">
-                                <label class="custom-control-label"
-                                       for="misdemeanorRadioNo">No</label>
-                            </div>
-                            <div class="form-row-first" id="divMisdemeanorDates" style="display:none">
-                                <div class="top-form-row d-flex">
-                                    <div class="one-columns">
-                                        <label>Dates</label>
-                                    </div>
 
-                                </div>
-                                <div class="bootom-form-row d-flex ">
-                                    <div class="one-columns">
-                                        <label class="label-fields">@Model.OUOnly.MisdemeanorDate</label>
-                                        <input type="text" id="txtMisdemeanor" name="MisdemeanorDate"
-                                               value="@Model.OUOnly.MisdemeanorDate"
-                                               class="form-control"
-                                               placeholder="">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-row-first" id="divFelony" style="display:none">
-                    <div class="top-form-row d-flex">
-                        <div class="one-columns">
-                            <label>Felony? </label>
-                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row-first">
+                                                <div class="top-form-row d-flex height-auto">
+                                                    <div class="one-columns">
+                                                        <label>Current Living Situation</label>
+                                                    </div>
 
-                    </div>
-                    <div class="bootom-form-row d-flex ">
-                        <div class="one-columns">
-                            <div class="custom-control custom-radio d-inline-block mr-2">
-                                <label class="label-fields" id="lblFelony">@Html.Raw(Model.OUOnly.Felony == true ? "Yes" : "No")</label>
-                                <input type="radio"
-                                       class="custom-control-input"
-                                       id="FelonyRadioYes"
-                                       name="frmOU_radio7"
-                                       value="True" onclick="Radio()">
-                                <label class="custom-control-label"
-                                       for="FelonyRadioYes">Yes</label>
-                            </div>
-                            <div class="custom-control custom-radio d-inline-block mr-2">
-                                <input type="radio"
-                                       class="custom-control-input"
-                                       id="FelonyRadioNo"
-                                       name="frmOU_radio7"
-                                       value="False" onclick="Radio()">
-                                <label class="custom-control-label"
-                                       for="FelonyRadioNo">No</label>
-                            </div>
-                            <div class="form-row-first" id="divFelonyDates" style="display:none">
-                                <div class="top-form-row d-flex">
-                                    <div class="one-columns">
-                                        <label>Dates</label>
-                                    </div>
+                                                </div>
+                                                <div class="bootom-form-row d-flex">
+                                                    <div class="three-columns">
+                                                        @*<label class="label-fields">@Model.OUOnly.LivingSituation</label>*@
+                                                        @if (Model.OUOnly.LivingSituation != null)
+                                                        {
+                                                            <label class="label-fields">@(Model.ddlCurrentLivingSituation.Where(p => p.Value == Model.OUOnly.LivingSituation.ToString()).FirstOrDefault().Text)</label>
+                                                        }
+                                                        @Html.DropDownListFor(m => m.OUOnly.LivingSituation, new SelectList(Model.ddlCurrentLivingSituation, "Value", "Text", Model.OUOnly.LivingSituation), new { @class = "form-control", @Name = "LivingSituation", @tabindex = "9" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row-first">
+                                                <div class="top-form-row d-flex height-auto">
+                                                    <div class="one-columns">
+                                                        <label>
+                                                            Housing/Shelter – Of the items below, please
+                                                            rank based on your needs (Priority 1, 2,
+                                                            3)
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="bootom-form-row d-flex">
+                                                    <div class="three-columns">
+                                                        <ul class="columns housingshelter-options">
+                                                            @foreach (var s in Model.housingshelteroptions)
+                                                            {
+                                                                <li class="column" draggable="true" tabindex="10">@s</li>
+                                                            }
 
-                                </div>
-                                <div class="bootom-form-row d-flex ">
-                                    <div class="one-columns">
-                                        <label class="label-fields">@Model.OUOnly.FelonyDate</label>
-                                        <input type="text" id="txtFelony"
-                                               name="FelonyDate"
-                                               value="@Model.OUOnly.FelonyDate" class="form-control"
-                                               placeholder="">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-            </div>
-        </div>
-    </div>
-    <div class="form-row-first">
-        <div class="top-form-row d-flex height-auto">
-            <div class="one-columns">
-                <label>
-                    Do you have active stay away/restraining
-                    orders?
-                </label>
-            </div>
 
-        </div>
-        <div class="bootom-form-row d-flex">
-            <div class="one-columns">
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <label class="label-fields" id="lblRestrainingOrders">@Html.Raw(Model.OUOnly.RestrainingOrders == true ? "Yes" : "No")</label>
-                    <input type="radio" class="custom-control-input"
-                           id="stayRadioYes" name="frmOU_radio8"
-                           value="True" onclick="Radio()" tabindex="18">
-                    <label class="custom-control-label"
-                           for="stayRadioYes">Yes</label>
-                </div>
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <input type="radio" class="custom-control-input"
-                           id="stayRadioNo" name="frmOU_radio8"
-                           value="False" onclick="Radio()" tabindex="19">
-                    <label class="custom-control-label"
-                           for="stayRadioNo">No</label>
-                </div>
-                <div class="form-row-first" id="divRestrictions" style="display:none">
-                    <div class="top-form-row d-flex">
-                        <div class="one-columns">
-                            <label>
-                                What are your
-                                restrictions (include both
-                                areas/neighborhoods and
-                                individuals)?
-                            </label>
-                        </div>
+                                            <div class="form-row-first">
+                                                <div class="top-form-row d-flex height-auto">
+                                                    <div class="one-columns">
+                                                        <label>
+                                                            Do you have any physical or learning
+                                                            disabilities?
+                                                        </label>
+                                                    </div>
 
-                    </div>
-                    <div class="bootom-form-row d-flex ">
-                        <div class="three-columns">
-                            <label class="label-fields">@Model.OUOnly.Restrictions</label>
-                            <input type="text" class="form-control" name="Restrictions"
-                                   value="@Model.OUOnly.Restrictions" placeholder="">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                                                </div>
+                                                <div class="bootom-form-row d-flex">
+                                                    <div class="three-columns">
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <label class="label-fields">@Html.Raw(Model.OUOnly.LearningDisabilities == true ? "Yes" : "No")</label>
+                                                            <input type="radio" class="custom-control-input"
+                                                                   id="disabilitiesRadioYes" name="frmOU_radio3"
+                                                                   value="True" tabindex="11">
+                                                            <label class="custom-control-label"
+                                                                   for="disabilitiesRadioYes">Yes</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <input type="radio" class="custom-control-input"
+                                                                   id="disabilitiesRadioNo" name="frmOU_radio3"
+                                                                   value="False" tabindex="12">
+                                                            <label class="custom-control-label"
+                                                                   for="disabilitiesRadioNo">No</label>
+                                                        </div>
 
-    <div class="form-row-first">
-        <div class="top-form-row d-flex height-auto">
-            <div class="one-columns">
-                <label>
-                    Legal – of the items below, please rank based
-                    on your needs (Priority 1, 2, 3)
-                </label>
-            </div>
-        </div>
-        <div class="bootom-form-row">
-            <div class="three-columns">
-                <ul class="columns legal-options">
-                    @foreach (var s in Model.legaloptions)
-                    {
-                        <li class="column" draggable="true" tabindex="20">@s</li>
-                    }
 
-                </ul>
-            </div>
-            <div class="form-row-first mb-3">
-                <div class="top-form-row d-flex">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row-first">
+                                                <div class="top-form-row d-flex height-auto">
+                                                    <div class="one-columns">
+                                                        <label>
+                                                            Education – of the items below, please rank
+                                                            based on your needs (Priority 1, 2, 3)
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="bootom-form-row d-flex">
+                                                    <div class="three-columns">
+                                                        <ul class="columns education-options">
+                                                            @foreach (var s in Model.educationoptions)
+                                                            {
+                                                                <li class="column" draggable="true" tabindex="13">@s</li>
+                                                            }
+
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row-first">
+                                                <div class="top-form-row d-flex height-auto">
+                                                    <div class="one-columns">
+                                                        <label>Do you have any pending court dates?</label>
+                                                    </div>
+
+                                                </div>
+                                                <div class="bootom-form-row d-flex">
+                                                    <div class="three-columns">
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <label class="label-fields">@Html.Raw(Model.OUOnly.AnyPendingCourtDates == true ? "Yes" : "No")</label>
+                                                            <input type="radio" class="custom-control-input"
+                                                                   id="courtRadioYes" name="frmOU_radio4"
+                                                                   value="True" onclick="Radio()" tabindex="14">
+                                                            <label class="custom-control-label"
+                                                                   for="courtRadioYes">Yes</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <input type="radio" class="custom-control-input"
+                                                                   id="courtRadioNo" name="frmOU_radio4"
+                                                                   value="False" onclick="Radio()" tabindex="15">
+                                                            <label class="custom-control-label"
+                                                                   for="courtRadioNo">No</label>
+                                                        </div>
+                                                        <div class="form-row-first" id="divPendingDate" style="display:none">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>Dates</label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex ">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields">@Model.OUOnly.PendingCourtDates</label>
+                                                                    <input type="text" id="txtPendingDate" class="form-control" name="PendingCourtDates"
+                                                                          maxlength="50"  value="@Model.OUOnly.PendingCourtDates" placeholder="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row-first">
+                                                <div class="top-form-row d-flex height-auto">
+                                                    <div class="one-columns">
+                                                        <label>
+                                                            Have you ever been convicted of any
+                                                            offense?
+                                                        </label>
+                                                    </div>
+
+                                                </div>
+                                                <div class="bootom-form-row d-flex">
+                                                    <div class="three-columns">
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <label class="label-fields" id="lblConvicted">@Html.Raw(Model.OUOnly.ConvictedOfAnyOffense == true ? "Yes" : "No")</label>
+                                                            <input type="radio" class="custom-control-input"
+                                                                   id="convictedRadioYes" name="frmOU_radio5"
+                                                                   value="True" onclick="Radio()" tabindex="16">
+                                                            <label class="custom-control-label"
+                                                                   for="convictedRadioYes">Yes</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <input type="radio" class="custom-control-input"
+                                                                   id="convictedRadioNo" name="frmOU_radio5"
+                                                                   value="False" onclick="Radio()" tabindex="17">
+                                                            <label class="custom-control-label"
+                                                                   for="convictedRadioNo">No</label>
+                                                        </div>
+                                                        <div class="form-row-first" id="divMisdemeanor" style="display:none">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>misdemeanor? </label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex ">
+                                                                <div class="one-columns">
+                                                                    <div class="custom-control custom-radio d-inline-block mr-2">
+                                                                        <label class="label-fields" id="lblMisdemeanor">@Html.Raw(Model.OUOnly.Misdemeanor == true ? "Yes" : "No")</label>
+                                                                        <input type="radio"
+                                                                               class="custom-control-input"
+                                                                               id="misdemeanorRadioYes"
+                                                                               name="frmOU_radio6"
+                                                                               value="True" onclick="Radio()">
+                                                                        <label class="custom-control-label"
+                                                                               for="misdemeanorRadioYes">Yes</label>
+                                                                    </div>
+                                                                    <div class="custom-control custom-radio d-inline-block mr-2">
+                                                                        <input type="radio"
+                                                                               class="custom-control-input"
+                                                                               id="misdemeanorRadioNo"
+                                                                               name="frmOU_radio6"
+                                                                               value="False" onclick="Radio()">
+                                                                        <label class="custom-control-label"
+                                                                               for="misdemeanorRadioNo">No</label>
+                                                                    </div>
+                                                                    <div class="form-row-first" id="divMisdemeanorDates" style="display:none">
+                                                                        <div class="top-form-row d-flex">
+                                                                            <div class="one-columns">
+                                                                                <label>Dates</label>
+                                                                            </div>
+
+                                                                        </div>
+                                                                        <div class="bootom-form-row d-flex ">
+                                                                            <div class="one-columns">
+                                                                                <label class="label-fields">@Model.OUOnly.MisdemeanorDate</label>
+                                                                                <input type="text" id="txtMisdemeanor" name="MisdemeanorDate"
+                                                                                       value="@Model.OUOnly.MisdemeanorDate"
+                                                                                       class="form-control"  maxlength="50"
+                                                                                       placeholder="">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-row-first" id="divFelony" style="display:none">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>Felony? </label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex ">
+                                                                <div class="one-columns">
+                                                                    <div class="custom-control custom-radio d-inline-block mr-2">
+                                                                        <label class="label-fields" id="lblFelony">@Html.Raw(Model.OUOnly.Felony == true ? "Yes" : "No")</label>
+                                                                        <input type="radio"
+                                                                               class="custom-control-input"
+                                                                               id="FelonyRadioYes"
+                                                                               name="frmOU_radio7"
+                                                                               value="True" onclick="Radio()">
+                                                                        <label class="custom-control-label"
+                                                                               for="FelonyRadioYes">Yes</label>
+                                                                    </div>
+                                                                    <div class="custom-control custom-radio d-inline-block mr-2">
+                                                                        <input type="radio"
+                                                                               class="custom-control-input"
+                                                                               id="FelonyRadioNo"
+                                                                               name="frmOU_radio7"
+                                                                               value="False" onclick="Radio()">
+                                                                        <label class="custom-control-label"
+                                                                               for="FelonyRadioNo">No</label>
+                                                                    </div>
+                                                                    <div class="form-row-first" id="divFelonyDates" style="display:none">
+                                                                        <div class="top-form-row d-flex">
+                                                                            <div class="one-columns">
+                                                                                <label>Dates</label>
+                                                                            </div>
+
+                                                                        </div>
+                                                                        <div class="bootom-form-row d-flex ">
+                                                                            <div class="one-columns">
+                                                                                <label class="label-fields">@Model.OUOnly.FelonyDate</label>
+                                                                                <input type="text" id="txtFelony"
+                                                                                       name="FelonyDate"
+                                                                                       value="@Model.OUOnly.FelonyDate" class="form-control"  maxlength="50"
+                                                                                       placeholder="">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row-first">
+                                                <div class="top-form-row d-flex height-auto">
+                                                    <div class="one-columns">
+                                                        <label>
+                                                            Do you have active stay away/restraining
+                                                            orders?
+                                                        </label>
+                                                    </div>
+
+                                                </div>
+                                                <div class="bootom-form-row d-flex">
+                                                    <div class="one-columns">
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <label class="label-fields" id="lblRestrainingOrders">@Html.Raw(Model.OUOnly.RestrainingOrders == true ? "Yes" : "No")</label>
+                                                            <input type="radio" class="custom-control-input"
+                                                                   id="stayRadioYes" name="frmOU_radio8"
+                                                                   value="True" onclick="Radio()" tabindex="18">
+                                                            <label class="custom-control-label"
+                                                                   for="stayRadioYes">Yes</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <input type="radio" class="custom-control-input"
+                                                                   id="stayRadioNo" name="frmOU_radio8"
+                                                                   value="False" onclick="Radio()" tabindex="19">
+                                                            <label class="custom-control-label"
+                                                                   for="stayRadioNo">No</label>
+                                                        </div>
+                                                        <div class="form-row-first" id="divRestrictions" style="display:none">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>
+                                                                        What are your
+                                                                        restrictions (include both
+                                                                        areas/neighborhoods and
+                                                                        individuals)?
+                                                                    </label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex ">
+                                                                <div class="three-columns">
+                                                                    <label class="label-fields">@Model.OUOnly.Restrictions</label>
+                                                                    <input type="text" class="form-control" name="Restrictions"
+                                                                        maxlength="50"    value="@Model.OUOnly.Restrictions" placeholder="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-row-first">
+                                                <div class="top-form-row d-flex height-auto">
+                                                    <div class="one-columns">
+                                                        <label>
+                                                            Legal – of the items below, please rank based
+                                                            on your needs (Priority 1, 2, 3)
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="bootom-form-row">
+                                                    <div class="three-columns">
+                                                        <ul class="columns legal-options">
+                                                            @foreach (var s in Model.legaloptions)
+                                                            {
+                                                                <li class="column" draggable="true" tabindex="20">@s</li>
+                                                            }
+
+                                                        </ul>
+                                                    </div>
+                                                    <div class="form-row-first mb-3">
+                                                        <div class="top-form-row d-flex">
+                                                            <div class="one-columns">
+                                                                <label>
+                                                                    Describe the nature of your
+                                                                    treatment (if receiving treatment) i.e.
+                                                                    daily medication, medical appointments,
+                                                                    etc.
+                                                                </label>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="bootom-form-row d-flex ">
+                                                            <div class="three-columns">
+                                                                <label class="label-fields">@Model.OUOnly.NatureOfTreatment</label>
+                                                                <input type="text" class="form-control" name="NatureOfTreatment"
+                                                                       maxlength="50" value="@Model.OUOnly.NatureOfTreatment" placeholder="" tabindex="21">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row-first">
+                                                <div class="top-form-row d-flex height-auto">
+                                                    <div class="one-columns">
+                                                        <label>
+                                                            Have you participated in programs for anger
+                                                            management or substance use?
+                                                        </label>
+                                                    </div>
+
+                                                </div>
+                                                <div class="bootom-form-row d-flex">
+                                                    <div class="one-columns">
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <label class="label-fields" id="lblAngerManagement">@Html.Raw(Model.OUOnly.AngerManagement == true ? "Yes" : "No")</label>
+                                                            <input type="radio" class="custom-control-input"
+                                                                   id="participatedRadioYes" name="frmOU_radio9"
+                                                                   value="True" onclick="Radio()" tabindex="22">
+                                                            <label class="custom-control-label"
+                                                                   for="participatedRadioYes">Yes</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <input type="radio" class="custom-control-input"
+                                                                   id="participatedRadioNo" name="frmOU_radio9"
+                                                                   value="False" onclick="Radio()" tabindex="23">
+                                                            <label class="custom-control-label"
+                                                                   for="participatedRadioNo">No</label>
+                                                        </div>
+                                                        <div class="form-row-first" id="divAngerPY" style="display:none">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>Which programs</label>
+                                                                </div>
+                                                                <div class="one-columns">
+                                                                    <label>What year</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex ">
+                                                                <div class="two-columns">
+                                                                    <label class="label-fields">@Model.OUOnly.AngerPrograms</label>
+                                                                    <input type="text" class="form-control" name="AngerPrograms"  maxlength="50"
+                                                                           value="@Model.OUOnly.AngerPrograms" placeholder="">
+                                                                </div>
+                                                                <div class="two-columns">
+                                                                    <label class="label-fields">@Model.OUOnly.AngerYear</label>
+                                                                    <input type="text" class="form-control" name="AngerYear"  maxlength="50"
+                                                                           value="@Model.OUOnly.AngerYear" placeholder="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row-first">
+                                                <div class="top-form-row d-flex height-auto">
+                                                    <div class="one-columns">
+                                                        <label>
+                                                            Social/Recreational – of the items below,
+                                                            please rank based on your needs (Priority 1, 2,
+                                                            3)
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="bootom-form-row d-flex">
+                                                    <div class="three-columns">
+                                                        <ul class="columns socialrecreational-options">
+                                                            @foreach (var s in Model.socialrecreationaloptions)
+                                                            {
+                                                                <li class="column" draggable="true" tabindex="24">@s</li>
+                                                            }
+
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            @*<div class="form-row-first">
+                <div class="top-form-row d-flex height-auto">
                     <div class="one-columns">
                         <label>
-                            Describe the nature of your
-                            treatment (if receiving treatment) i.e.
-                            daily medication, medical appointments,
-                            etc.
+                            Other – Please include additional items not
+                            previously listed below (Priority 1, 2,
+                            3)
                         </label>
                     </div>
 
                 </div>
-                <div class="bootom-form-row d-flex ">
+                <div class="bootom-form-row d-flex">
                     <div class="three-columns">
-                        <label class="label-fields">@Model.OUOnly.NatureOfTreatment</label>
-                        <input type="text" class="form-control" name="NatureOfTreatment"
-                               value="@Model.OUOnly.NatureOfTreatment" placeholder="" tabindex="21">
+                        <select name="" class="form-control">
+                            <option>A</option>
+                            <option>B</option>
+                            <option>C</option>
+                        </select>
                     </div>
+
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="form-row-first">
-        <div class="top-form-row d-flex height-auto">
-            <div class="one-columns">
-                <label>
-                    Have you participated in programs for anger
-                    management or substance use?
-                </label>
-            </div>
+            </div>*@
 
-        </div>
-        <div class="bootom-form-row d-flex">
-            <div class="one-columns">
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <label class="label-fields" id="lblAngerManagement">@Html.Raw(Model.OUOnly.AngerManagement == true ? "Yes" : "No")</label>
-                    <input type="radio" class="custom-control-input"
-                           id="participatedRadioYes" name="frmOU_radio9"
-                           value="True" onclick="Radio()" tabindex="22">
-                    <label class="custom-control-label"
-                           for="participatedRadioYes">Yes</label>
-                </div>
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <input type="radio" class="custom-control-input"
-                           id="participatedRadioNo" name="frmOU_radio9"
-                           value="False" onclick="Radio()" tabindex="23">
-                    <label class="custom-control-label"
-                           for="participatedRadioNo">No</label>
-                </div>
-                <div class="form-row-first" id="divAngerPY" style="display:none">
-                    <div class="top-form-row d-flex">
-                        <div class="one-columns">
-                            <label>Which programs</label>
-                        </div>
-                        <div class="one-columns">
-                            <label>What year</label>
-                        </div>
-                    </div>
-                    <div class="bootom-form-row d-flex ">
-                        <div class="two-columns">
-                            <label class="label-fields">@Model.OUOnly.AngerPrograms</label>
-                            <input type="text" class="form-control" name="AngerPrograms"
-                                   value="@Model.OUOnly.AngerPrograms" placeholder="">
-                        </div>
-                        <div class="two-columns">
-                            <label class="label-fields">@Model.OUOnly.AngerYear</label>
-                            <input type="text" class="form-control" name="AngerYear"
-                                   value="@Model.OUOnly.AngerYear" placeholder="">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="form-row-first">
-        <div class="top-form-row d-flex height-auto">
-            <div class="one-columns">
-                <label>
-                    Social/Recreational – of the items below,
-                    please rank based on your needs (Priority 1, 2,
-                    3)
-                </label>
-            </div>
-        </div>
-        <div class="bootom-form-row d-flex">
-            <div class="three-columns">
-                <ul class="columns socialrecreational-options">
-                    @foreach (var s in Model.socialrecreationaloptions)
-                    {
-                        <li class="column" draggable="true" tabindex="24">@s</li>
-                    }
+                                            <div class="form-row-first">
+                                                <div class="top-form-row d-flex height-auto">
+                                                    <div class="one-columns">
+                                                        <label>
+                                                            Are you on probation or parole for a violent
+                                                            offense?
+                                                        </label>
+                                                    </div>
 
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    @*<div class="form-row-first">
-            <div class="top-form-row d-flex height-auto">
-                <div class="one-columns">
-                    <label>
-                        Other – Please include additional items not
-                        previously listed below (Priority 1, 2,
-                        3)
-                    </label>
-                </div>
-
-            </div>
-            <div class="bootom-form-row d-flex">
-                <div class="three-columns">
-                    <select name="" class="form-control">
-                        <option>A</option>
-                        <option>B</option>
-                        <option>C</option>
-                    </select>
-                </div>
-
-            </div>
-        </div>*@
-
-    <div class="form-row-first">
-        <div class="top-form-row d-flex height-auto">
-            <div class="one-columns">
-                <label>
-                    Are you on probation or parole for a violent
-                    offense?
-                </label>
-            </div>
-
-        </div>
-        <div class="bootom-form-row d-flex">
-            <div class="three-columns">
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <label class="label-fields" id="lblViolentOffense">@Html.Raw(Model.OUOnly.ViolentOffense == true ? "Yes" : "No")</label>
-                    <input type="radio" class="custom-control-input"
-                           id="offenseRadioYes" name="frmOU_radio16"
-                           value="True" onclick="Radio()" tabindex="25">
-                    <label class="custom-control-label"
-                           for="offenseRadioYes">Yes</label>
-                </div>
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <input type="radio" class="custom-control-input"
-                           id="offenseRadioNo" name="frmOU_radio16"
-                           value="False" onclick="Radio()" tabindex="26">
-                    <label class="custom-control-label"
-                           for="offenseRadioNo">No</label>
-                </div>
+                                                </div>
+                                                <div class="bootom-form-row d-flex">
+                                                    <div class="three-columns">
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <label class="label-fields" id="lblViolentOffense">@Html.Raw(Model.OUOnly.ViolentOffense == true ? "Yes" : "No")</label>
+                                                            <input type="radio" class="custom-control-input"
+                                                                   id="offenseRadioYes" name="frmOU_radio16"
+                                                                   value="True" onclick="Radio()" tabindex="25">
+                                                            <label class="custom-control-label"
+                                                                   for="offenseRadioYes">Yes</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <input type="radio" class="custom-control-input"
+                                                                   id="offenseRadioNo" name="frmOU_radio16"
+                                                                   value="False" onclick="Radio()" tabindex="26">
+                                                            <label class="custom-control-label"
+                                                                   for="offenseRadioNo">No</label>
+                                                        </div>
 
 
-            </div>
-        </div>
-    </div>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-    <div class="form-row-first" id="divProbation" style="display:none">
-        <div class="top-form-row d-flex height-auto">
-            <div class="one-columns">
-                <label>
-                    Are you in compliance with terms of
-                    probation/parole?
-                </label>
-            </div>
+                                            <div class="form-row-first" id="divProbation" style="display:none">
+                                                <div class="top-form-row d-flex height-auto">
+                                                    <div class="one-columns">
+                                                        <label>
+                                                            Are you in compliance with terms of
+                                                            probation/parole?
+                                                        </label>
+                                                    </div>
 
-        </div>
-        <div class="bootom-form-row d-flex">
-            <div class="three-columns">
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <label class="label-fields">@Model.OUOnly.TermsOfProbation</label>
-                    <input type="radio" class="custom-control-input"
-                           id="paroleRadioYes" name="frmOU_radio10"
-                           value="Yes">
-                    <label class="custom-control-label"
-                           for="paroleRadioYes">Yes</label>
-                </div>
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <input type="radio" class="custom-control-input"
-                           id="paroleRadioNo" name="frmOU_radio10"
-                           value="No">
-                    <label class="custom-control-label"
-                           for="paroleRadioNo">No</label>
-                </div>
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <input type="radio" class="custom-control-input"
-                           id="paroleRadioUnsure" name="frmOU_radio10"
-                           value="Unsure">
-                    <label class="custom-control-label"
-                           for="paroleRadioUnsure">Unsure</label>
-                </div>
+                                                </div>
+                                                <div class="bootom-form-row d-flex">
+                                                    <div class="three-columns">
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <label class="label-fields">@Model.OUOnly.TermsOfProbation</label>
+                                                            <input type="radio" class="custom-control-input"
+                                                                   id="paroleRadioYes" name="frmOU_radio10"
+                                                                   value="Yes">
+                                                            <label class="custom-control-label"
+                                                                   for="paroleRadioYes">Yes</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <input type="radio" class="custom-control-input"
+                                                                   id="paroleRadioNo" name="frmOU_radio10"
+                                                                   value="No">
+                                                            <label class="custom-control-label"
+                                                                   for="paroleRadioNo">No</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <input type="radio" class="custom-control-input"
+                                                                   id="paroleRadioUnsure" name="frmOU_radio10"
+                                                                   value="Unsure">
+                                                            <label class="custom-control-label"
+                                                                   for="paroleRadioUnsure">Unsure</label>
+                                                        </div>
 
 
-            </div>
-        </div>
-    </div>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-    <div class="form-row-first">
-        <div class="top-form-row d-flex height-auto">
-            <div class="one-columns">
-                <label>Are you eligible for employment?</label>
-            </div>
-        </div>
-        <div class="bootom-form-row d-flex">
-            <div class="three-columns">
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <label class="label-fields">@Html.Raw(Model.OUOnly.EligibleForEmployment == true ? "Yes" : "No")</label>
-                    <input type="radio" class="custom-control-input" onclick="Radio()"
-                           id="eligibleforemploymentYes" name="frmOU_radio20" value="True" tabindex="27">
-                    <label class="custom-control-label" for="eligibleforemploymentYes">Yes</label>
-                </div>
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <input type="radio" class="custom-control-input" onclick="Radio()"
-                           id="eligibleforemploymentNo" name="frmOU_radio20" value="False" tabindex="28">
-                    <label class="custom-control-label" for="eligibleforemploymentNo">No</label>
-                </div>
+                                            <div class="form-row-first">
+                                                <div class="top-form-row d-flex height-auto">
+                                                    <div class="one-columns">
+                                                        <label>Are you eligible for employment?</label>
+                                                    </div>
+                                                </div>
+                                                <div class="bootom-form-row d-flex">
+                                                    <div class="three-columns">
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <label class="label-fields">@Html.Raw(Model.OUOnly.EligibleForEmployment == true ? "Yes" : "No")</label>
+                                                            <input type="radio" class="custom-control-input" onclick="Radio()"
+                                                                   id="eligibleforemploymentYes" name="frmOU_radio20" value="True" tabindex="27">
+                                                            <label class="custom-control-label" for="eligibleforemploymentYes">Yes</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <input type="radio" class="custom-control-input" onclick="Radio()"
+                                                                   id="eligibleforemploymentNo" name="frmOU_radio20" value="False" tabindex="28">
+                                                            <label class="custom-control-label" for="eligibleforemploymentNo">No</label>
+                                                        </div>
 
 
 
-            </div>
-        </div>
-        <div class="col-lg-12 col-md-12 col-sm-12 col-12" id="divSSN" style="display:none">
-            <div class="form-row-first">
-                <div class="top-form-row d-flex">
-                    <div class="three-columns">
-                        <label>Have SSN?</label>
-                    </div>
-                    <div class="three-columns">
-                        <label>Have State issued photo ID?</label>
-                    </div>
-                    <div class="three-columns">
-                        <label>Have I-9?</label>
-                    </div>
-                </div>
-                <div class="bootom-form-row d-flex mb-3">
-                    <div class="three-columns">
-                        <div class="custom-control custom-radio d-inline-block mr-2">
-                            <label class="label-fields">@Html.Raw(Model.OUOnly.HaveSSN == true ? "Yes" : "No")</label>
-                            <input type="radio" class="custom-control-input" id="haveSSNYes" name="frmOU_radio17" value="True">
-                            <label class="custom-control-label" for="haveSSNYes">Yes</label>
-                        </div>
-                        <div class="custom-control custom-radio d-inline-block mr-2">
-                            <input type="radio" class="custom-control-input" id="haveSSNNo" name="frmOU_radio17" value="False">
-                            <label class="custom-control-label" for="haveSSNNo">No</label>
-                        </div>
-                    </div>
-                    <div class="three-columns">
-                        <div class="custom-control custom-radio d-inline-block mr-2">
-                            <label class="label-fields">@Html.Raw(Model.OUOnly.HaveStateIssuedPhotoID == true ? "Yes" : "No")</label>
-                            <input type="radio" class="custom-control-input" id="haveStateIssuedPhotoIDYes" name="frmOU_radio18" value="True">
-                            <label class="custom-control-label" for="haveStateIssuedPhotoIDYes">Yes</label>
-                        </div>
-                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-12" id="divSSN" style="display:none">
+                                                    <div class="form-row-first">
+                                                        <div class="top-form-row d-flex">
+                                                            <div class="three-columns">
+                                                                <label>Have SSN?</label>
+                                                            </div>
+                                                            <div class="three-columns">
+                                                                <label>Have State issued photo ID?</label>
+                                                            </div>
+                                                            <div class="three-columns">
+                                                                <label>Have I-9?</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="bootom-form-row d-flex mb-3">
+                                                            <div class="three-columns">
+                                                                <div class="custom-control custom-radio d-inline-block mr-2">
+                                                                    <label class="label-fields">@Html.Raw(Model.OUOnly.HaveSSN == true ? "Yes" : "No")</label>
+                                                                    <input type="radio" class="custom-control-input" id="haveSSNYes" name="frmOU_radio17" value="True">
+                                                                    <label class="custom-control-label" for="haveSSNYes">Yes</label>
+                                                                </div>
+                                                                <div class="custom-control custom-radio d-inline-block mr-2">
+                                                                    <input type="radio" class="custom-control-input" id="haveSSNNo" name="frmOU_radio17" value="False">
+                                                                    <label class="custom-control-label" for="haveSSNNo">No</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="three-columns">
+                                                                <div class="custom-control custom-radio d-inline-block mr-2">
+                                                                    <label class="label-fields">@Html.Raw(Model.OUOnly.HaveStateIssuedPhotoID == true ? "Yes" : "No")</label>
+                                                                    <input type="radio" class="custom-control-input" id="haveStateIssuedPhotoIDYes" name="frmOU_radio18" value="True">
+                                                                    <label class="custom-control-label" for="haveStateIssuedPhotoIDYes">Yes</label>
+                                                                </div>
+                                                                <div class="custom-control custom-radio d-inline-block mr-2">
 
-                            <input type="radio" class="custom-control-input" id="haveStateIssuedPhotoIDNo" name="frmOU_radio18" value="False">
-                            <label class="custom-control-label" for="haveStateIssuedPhotoIDNo">No</label>
-                        </div>
-                    </div>
-                    <div class="three-columns">
-                        <div class="custom-control custom-radio d-inline-block mr-2">
-                            <label class="label-fields">@Html.Raw(Model.OUOnly.HaveI9 == true ? "Yes" : "No")</label>
-                            <input type="radio" class="custom-control-input" id="I9Yes" name="frmOU_radio19" value="True">
-                            <label class="custom-control-label" for="I9Yes">Yes</label>
-                        </div>
-                        <div class="custom-control custom-radio d-inline-block mr-2">
-                            <input type="radio" class="custom-control-input" id="I9No" name="frmOU_radio19" value="False">
-                            <label class="custom-control-label" for="I9No">No</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                                                                    <input type="radio" class="custom-control-input" id="haveStateIssuedPhotoIDNo" name="frmOU_radio18" value="False">
+                                                                    <label class="custom-control-label" for="haveStateIssuedPhotoIDNo">No</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="three-columns">
+                                                                <div class="custom-control custom-radio d-inline-block mr-2">
+                                                                    <label class="label-fields">@Html.Raw(Model.OUOnly.HaveI9 == true ? "Yes" : "No")</label>
+                                                                    <input type="radio" class="custom-control-input" id="I9Yes" name="frmOU_radio19" value="True">
+                                                                    <label class="custom-control-label" for="I9Yes">Yes</label>
+                                                                </div>
+                                                                <div class="custom-control custom-radio d-inline-block mr-2">
+                                                                    <input type="radio" class="custom-control-input" id="I9No" name="frmOU_radio19" value="False">
+                                                                    <label class="custom-control-label" for="I9No">No</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-    <div class="form-row-first">
-        <div class="top-form-row d-flex height-auto">
-            <div class="one-columns">
-                <label>
-                    Do you have a history of, or are you at
-                    high-risk of, engaging in gun-involved
-                    activity?
-                </label>
-            </div>
+                                            <div class="form-row-first">
+                                                <div class="top-form-row d-flex height-auto">
+                                                    <div class="one-columns">
+                                                        <label>
+                                                            Do you have a history of, or are you at
+                                                            high-risk of, engaging in gun-involved
+                                                            activity?
+                                                        </label>
+                                                    </div>
 
-        </div>
-        <div class="bootom-form-row d-flex">
-            <div class="three-columns">
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <label class="label-fields">@Html.Raw(Model.OUOnly.GunInvolvedActivity == true ? "Yes" : "No")</label>
-                    <input type="radio" class="custom-control-input"
-                           id="historyRadioYes" name="frmOU_radio11"
-                           value="True" tabindex="29">
-                    <label class="custom-control-label"
-                           for="historyRadioYes">Yes</label>
-                </div>
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <input type="radio" class="custom-control-input"
-                           id="historyRadioNo" name="frmOU_radio11"
-                           value="False" tabindex="30">
-                    <label class="custom-control-label"
-                           for="historyRadioNo">No</label>
-                </div>
-
-
-            </div>
-        </div>
-    </div>
-
-    <div class="form-row-first">
-        <div class="top-form-row d-flex height-auto">
-            <div class="one-columns">
-                <label>
-                    Have you been shot and/or seriously injured
-                    due to turf/group/gang-related street
-                    violence?
-                </label>
-            </div>
-
-        </div>
-        <div class="bootom-form-row d-flex">
-            <div class="three-columns">
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <label class="label-fields">@Html.Raw(Model.OUOnly.GangRelatedStreetViolence == true ? "Yes" : "No")</label>
-                    <input type="radio" class="custom-control-input"
-                           id="injuredRadioYes" name="frmOU_radio12"
-                           value="True" tabindex="31">
-                    <label class="custom-control-label"
-                           for="injuredRadioYes">Yes</label>
-                </div>
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <input type="radio" class="custom-control-input"
-                           id="injuredRadioNo" name="frmOU_radio12"
-                           value="False" tabindex="32">
-                    <label class="custom-control-label"
-                           for="injuredRadioNo">No</label>
-                </div>
+                                                </div>
+                                                <div class="bootom-form-row d-flex">
+                                                    <div class="three-columns">
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <label class="label-fields">@Html.Raw(Model.OUOnly.GunInvolvedActivity == true ? "Yes" : "No")</label>
+                                                            <input type="radio" class="custom-control-input"
+                                                                   id="historyRadioYes" name="frmOU_radio11"
+                                                                   value="True" tabindex="29">
+                                                            <label class="custom-control-label"
+                                                                   for="historyRadioYes">Yes</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <input type="radio" class="custom-control-input"
+                                                                   id="historyRadioNo" name="frmOU_radio11"
+                                                                   value="False" tabindex="30">
+                                                            <label class="custom-control-label"
+                                                                   for="historyRadioNo">No</label>
+                                                        </div>
 
 
-            </div>
-        </div>
-    </div>
-    <div class="form-row-first">
-        <div class="top-form-row d-flex height-auto">
-            <div class="one-columns">
-                <label>
-                    Have you had a close peer, friend, or family
-                    member shot and/or killed due to turf, group,
-                    gang-related street violence in the last 3
-                    years?
-                </label>
-            </div>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-        </div>
-        <div class="bootom-form-row d-flex">
-            <div class="three-columns">
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <label class="label-fields">@Html.Raw(Model.OUOnly.KilledDueToTurf == true ? "Yes" : "No")</label>
-                    <input type="radio" class="custom-control-input"
-                           id="turfRadioYes" name="frmOU_radio13"
-                           value="True" tabindex="33">
-                    <label class="custom-control-label"
-                           for="turfRadioYes">Yes</label>
-                </div>
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <input type="radio" class="custom-control-input"
-                           id="turfRadioNo" name="frmOU_radio13"
-                           value="False" tabindex="34">
-                    <label class="custom-control-label"
-                           for="turfRadioNo">No</label>
-                </div>
+                                            <div class="form-row-first">
+                                                <div class="top-form-row d-flex height-auto">
+                                                    <div class="one-columns">
+                                                        <label>
+                                                            Have you been shot and/or seriously injured
+                                                            due to turf/group/gang-related street
+                                                            violence?
+                                                        </label>
+                                                    </div>
 
-
-            </div>
-        </div>
-    </div>
-    <div class="form-row-first">
-        <div class="top-form-row d-flex height-auto">
-            <div class="one-columns">
-                <label>
-                    Do you live in or hang out in a designated
-                    target “hot-spot” area?
-                </label>
-            </div>
-
-        </div>
-        <div class="bootom-form-row d-flex">
-            <div class="three-columns">
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <label class="label-fields">@Html.Raw(Model.OUOnly.HotSpotArea == true ? "Yes" : "No")</label>
-                    <input type="radio" class="custom-control-input"
-                           id="spotRadioYes" name="frmOU_radio14"
-                           value="True" tabindex="35">
-                    <label class="custom-control-label"
-                           for="spotRadioYes">Yes</label>
-                </div>
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <input type="radio" class="custom-control-input"
-                           id="spotRadioNo" name="frmOU_radio14"
-                           value="False" tabindex="36">
-                    <label class="custom-control-label"
-                           for="spotRadioNo">No</label>
-                </div>
+                                                </div>
+                                                <div class="bootom-form-row d-flex">
+                                                    <div class="three-columns">
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <label class="label-fields">@Html.Raw(Model.OUOnly.GangRelatedStreetViolence == true ? "Yes" : "No")</label>
+                                                            <input type="radio" class="custom-control-input"
+                                                                   id="injuredRadioYes" name="frmOU_radio12"
+                                                                   value="True" tabindex="31">
+                                                            <label class="custom-control-label"
+                                                                   for="injuredRadioYes">Yes</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <input type="radio" class="custom-control-input"
+                                                                   id="injuredRadioNo" name="frmOU_radio12"
+                                                                   value="False" tabindex="32">
+                                                            <label class="custom-control-label"
+                                                                   for="injuredRadioNo">No</label>
+                                                        </div>
 
 
-            </div>
-        </div>
-    </div>
-    <div class="form-row-first">
-        <div class="top-form-row d-flex height-auto">
-            <div class="one-columns">
-                <label>
-                    Do you associate closely with known turfs,
-                    groups, or gangs involved in violent
-                    activity?
-                </label>
-            </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row-first">
+                                                <div class="top-form-row d-flex height-auto">
+                                                    <div class="one-columns">
+                                                        <label>
+                                                            Have you had a close peer, friend, or family
+                                                            member shot and/or killed due to turf, group,
+                                                            gang-related street violence in the last 3
+                                                            years?
+                                                        </label>
+                                                    </div>
 
-        </div>
-        <div class="bootom-form-row d-flex">
-            <div class="three-columns">
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <label class="label-fields">@Html.Raw(Model.OUOnly.AssociateWithTurfs == true ? "Yes" : "No")</label>
-                    <input type="radio" class="custom-control-input"
-                           id="gangsRadioYes" name="frmOU_radio15"
-                           value="True" tabindex="37">
-                    <label class="custom-control-label"
-                           for="gangsRadioYes">Yes</label>
-                </div>
-                <div class="custom-control custom-radio d-inline-block mr-2">
-                    <input type="radio" class="custom-control-input"
-                           id="gangsRadioNo" name="frmOU_radio15"
-                           value="False" tabindex="38">
-                    <label class="custom-control-label"
-                           for="gangsRadioNo">No</label>
-                </div>
-
-
-            </div>
-        </div>
-    </div>
+                                                </div>
+                                                <div class="bootom-form-row d-flex">
+                                                    <div class="three-columns">
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <label class="label-fields">@Html.Raw(Model.OUOnly.KilledDueToTurf == true ? "Yes" : "No")</label>
+                                                            <input type="radio" class="custom-control-input"
+                                                                   id="turfRadioYes" name="frmOU_radio13"
+                                                                   value="True" tabindex="33">
+                                                            <label class="custom-control-label"
+                                                                   for="turfRadioYes">Yes</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <input type="radio" class="custom-control-input"
+                                                                   id="turfRadioNo" name="frmOU_radio13"
+                                                                   value="False" tabindex="34">
+                                                            <label class="custom-control-label"
+                                                                   for="turfRadioNo">No</label>
+                                                        </div>
 
 
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row-first">
+                                                <div class="top-form-row d-flex height-auto">
+                                                    <div class="one-columns">
+                                                        <label>
+                                                            Do you live in or hang out in a designated
+                                                            target “hot-spot” area?
+                                                        </label>
+                                                    </div>
 
-    <div class="form-row-first">
-        <div class="top-form-row d-flex height-auto">
-            <div class="one-columns">
-                <label>
-                    Upload spot for paper copy of Program Consent
-                    form (e-signature not accepted)
-                </label>
-            </div>
+                                                </div>
+                                                <div class="bootom-form-row d-flex">
+                                                    <div class="three-columns">
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <label class="label-fields">@Html.Raw(Model.OUOnly.HotSpotArea == true ? "Yes" : "No")</label>
+                                                            <input type="radio" class="custom-control-input"
+                                                                   id="spotRadioYes" name="frmOU_radio14"
+                                                                   value="True" tabindex="35">
+                                                            <label class="custom-control-label"
+                                                                   for="spotRadioYes">Yes</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <input type="radio" class="custom-control-input"
+                                                                   id="spotRadioNo" name="frmOU_radio14"
+                                                                   value="False" tabindex="36">
+                                                            <label class="custom-control-label"
+                                                                   for="spotRadioNo">No</label>
+                                                        </div>
 
-        </div>
-        <div class="bootom-form-row d-flex">
-            <div class="two-columns">
-                <div class="custom-file mt-2">
-                    <div class="paitent-img">
-                        @*<img class="img-fluid" id="patientpic" src="images/paitent-img.png" alt="">*@
-                        @if (!string.IsNullOrWhiteSpace(Model.OUOnly.ProgramConsentForm))
-                        {
-                            <img class="img-fluid" id="ProgramConsentPic" src="~/Files/@Model.OUOnly.ProgramConsentForm" alt="">
-                        }
-                        @*<img class="img-fluid" id="eSignaturePic" alt="">*@
-                    </div>
-                    <input type="file" class="Add"
-                           tabindex="39" id="ProgramConsentImg" name="ProgramConsentImg">
-                    @*<label class="custom-file-label"
-                               for="customFile">
-                            Choose
-                            file
-                        </label>*@
-                </div>
 
-            </div>
-        </div>
-    </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row-first">
+                                                <div class="top-form-row d-flex height-auto">
+                                                    <div class="one-columns">
+                                                        <label>
+                                                            Do you associate closely with known turfs,
+                                                            groups, or gangs involved in violent
+                                                            activity?
+                                                        </label>
+                                                    </div>
 
-    <div class="detail-button mt-3 w-100 text-center">
-        <input type="hidden" name="CreatedDate" />
-        <input type="hidden" name="ModifiedDate" />
+                                                </div>
+                                                <div class="bootom-form-row d-flex">
+                                                    <div class="three-columns">
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <label class="label-fields">@Html.Raw(Model.OUOnly.AssociateWithTurfs == true ? "Yes" : "No")</label>
+                                                            <input type="radio" class="custom-control-input"
+                                                                   id="gangsRadioYes" name="frmOU_radio15"
+                                                                   value="True" tabindex="37">
+                                                            <label class="custom-control-label"
+                                                                   for="gangsRadioYes">Yes</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                                            <input type="radio" class="custom-control-input"
+                                                                   id="gangsRadioNo" name="frmOU_radio15"
+                                                                   value="False" tabindex="38">
+                                                            <label class="custom-control-label"
+                                                                   for="gangsRadioNo">No</label>
+                                                        </div>
 
-        <input id="hdfUnsafeCity" type="hidden" name="UnsafeCity" value="@(Model.OUOnly.UnsafeCity == null ? "" : Model.OUOnly.UnsafeCity.ToString())" />
-        <input id="hdfDrugTest" type="hidden" name="DrugTest" value="@(Model.OUOnly.DrugTest == null ? "" : Model.OUOnly.DrugTest.ToString())" />
-        <input id="hdfLearningDisabilities" type="hidden" name="LearningDisabilities" value="@(Model.OUOnly.LearningDisabilities == null ? "" : Model.OUOnly.LearningDisabilities.ToString())" />
-        <input id="hdfAnyPendingCourtDates" type="hidden" name="AnyPendingCourtDates" value="@(Model.OUOnly.AnyPendingCourtDates == null ? "" : Model.OUOnly.AnyPendingCourtDates.ToString())" />
-        <input id="hdfConvictedOfAnyOffense" type="hidden" name="ConvictedOfAnyOffense" value="@(Model.OUOnly.ConvictedOfAnyOffense == null ? "" : Model.OUOnly.ConvictedOfAnyOffense.ToString())" />
-        <input id="hdfMisdemeanor" type="hidden" name="Misdemeanor" value="@(Model.OUOnly.Misdemeanor == null ? "" : Model.OUOnly.Misdemeanor.ToString())" />
-        <input id="hdfFelony" type="hidden" name="Felony" value="@(Model.OUOnly.Felony == null ? "" : Model.OUOnly.Felony.ToString())" />
 
-        <input id="hdfRestrainingOrders" type="hidden" name="RestrainingOrders" value="@(Model.OUOnly.RestrainingOrders == null ? "" : Model.OUOnly.RestrainingOrders.ToString())" />
+                                                    </div>
+                                                </div>
+                                            </div>
 
-        <input id="hdfAngerManagement" type="hidden" name="AngerManagement" value="@(Model.OUOnly.AngerManagement == null ? "" : Model.OUOnly.AngerManagement.ToString())" />
-        <input id="hdfGunInvolvedActivity" type="hidden" name="GunInvolvedActivity" value="@(Model.OUOnly.GunInvolvedActivity == null ? "" : Model.OUOnly.GunInvolvedActivity.ToString())" />
-        <input id="hdfGangRelatedStreetViolence" type="hidden" name="GangRelatedStreetViolence" value="@(Model.OUOnly.GangRelatedStreetViolence == null ? "" : Model.OUOnly.GangRelatedStreetViolence.ToString())" />
-        <input id="hdfKilledDueToTurf" type="hidden" dirname="OneDrugAtATime" name="KilledDueToTurf" value="@(Model.OUOnly.KilledDueToTurf == null ? "" : Model.OUOnly.KilledDueToTurf.ToString())" />
-        <input id="hdfHotSpotArea" type="hidden" name="HotSpotArea" value="@(Model.OUOnly.HotSpotArea == null ? "" : Model.OUOnly.HotSpotArea.ToString())" />
-        <input id="hdfAssociateWithTurfs" type="hidden" name="AssociateWithTurfs" value="@(Model.OUOnly.AssociateWithTurfs == null ? "" : Model.OUOnly.AssociateWithTurfs.ToString())" />
-        <input id="hdfViolentOffense" type="hidden" name="ViolentOffense" value="@(Model.OUOnly.ViolentOffense == null ? "" : Model.OUOnly.ViolentOffense.ToString())" />
-        <input id="hdfTermsOfProbation" type="hidden" name="TermsOfProbation" value="@Model.OUOnly.TermsOfProbation" />
 
-        <input type="hidden" id="hdfPatientID" name="PatientID" value="@Model.OUOnly.PatientID" />
-        <input type="hidden" id="hdfOUOnlyID" name="OUOnlyID" value="@Model.OUOnly.OUOnlyID" />
 
-        <input type="hidden" id="hdfSafety" name="Safety" value="@Model.OUOnly.Safety" />
-        <input type="hidden" id="hdfEmployment" name="Employment" value="@Model.OUOnly.Employment" />
-        <input type="hidden" id="hdfHousingShelter" name="HousingShelter" value="@Model.OUOnly.HousingShelter" />
-        <input type="hidden" id="hdfEducation" name="Education" value="@Model.OUOnly.Education" />
-        <input type="hidden" id="hdfLegal" name="Legal" value="@Model.OUOnly.Legal" />
-        <input type="hidden" id="hdfSocialRecreational" name="SocialRecreational" value="@Model.OUOnly.SocialRecreational" />
+                                            <div class="form-row-first">
+                                                <div class="top-form-row d-flex height-auto">
+                                                    <div class="one-columns">
+                                                        <label>
+                                                            Upload spot for paper copy of Program Consent
+                                                            form (e-signature not accepted)
+                                                        </label>
+                                                    </div>
 
-        <input type="hidden" id="hdfHaveSSN" name="HaveSSN" value="@(Model.OUOnly.HaveSSN == null ? "" : Model.OUOnly.HaveSSN.ToString())" />
-        <input type="hidden" id="hdfHaveStateIssuedPhotoID" name="HaveStateIssuedPhotoID" value="@(Model.OUOnly.HaveStateIssuedPhotoID == null ? "" : Model.OUOnly.HaveStateIssuedPhotoID.ToString())" />
-        <input type="hidden" id="hdfHaveI9" name="HaveI9" value="@(Model.OUOnly.HaveI9 == null ? "" : Model.OUOnly.HaveI9.ToString())" />
+                                                </div>
+                                                <div class="bootom-form-row d-flex">
+                                                    <div class="two-columns">
+                                                        <div class="custom-file mt-2">
+                                                            <div class="paitent-img">
+                                                                @*<img class="img-fluid" id="patientpic" src="images/paitent-img.png" alt="">*@
+                                                                @if (!string.IsNullOrWhiteSpace(Model.OUOnly.ProgramConsentForm))
+                                                                {
+                                                                    <img class="img-fluid" id="ProgramConsentPic" src="~/Files/@Model.OUOnly.ProgramConsentForm" alt="">
+                                                                }
+                                                                @*<img class="img-fluid" id="eSignaturePic" alt="">*@
+                                                            </div>
+                                                            <input type="file" class="Add"
+                                                                   tabindex="39" id="ProgramConsentImg" name="ProgramConsentImg">
+                                                            @*<label class="custom-file-label"
+                                   for="customFile">
+                                Choose
+                                file
+                            </label>*@
+                                                        </div>
 
-        <input type="hidden" id="hdfEligibleForEmployment" name="EligibleForEmployment" value="@(Model.OUOnly.EligibleForEmployment == null ? "" : Model.OUOnly.EligibleForEmployment.ToString())" />
+                                                    </div>
+                                                </div>
+                                            </div>
 
-        <input id="hdfProgramConsentForm" type="hidden" name="ProgramConsentForm" value="@Model.OUOnly.ProgramConsentForm" />
+                                            <div class="detail-button mt-3 w-100 text-center">
+                                                <input type="hidden" name="CreatedDate" />
+                                                <input type="hidden" name="ModifiedDate" />
 
-        
-    </div>
+                                                <input id="hdfUnsafeCity" type="hidden" name="UnsafeCity" value="@(Model.OUOnly.UnsafeCity == null ? "" : Model.OUOnly.UnsafeCity.ToString())" />
+                                                <input id="hdfDrugTest" type="hidden" name="DrugTest" value="@(Model.OUOnly.DrugTest == null ? "" : Model.OUOnly.DrugTest.ToString())" />
+                                                <input id="hdfLearningDisabilities" type="hidden" name="LearningDisabilities" value="@(Model.OUOnly.LearningDisabilities == null ? "" : Model.OUOnly.LearningDisabilities.ToString())" />
+                                                <input id="hdfAnyPendingCourtDates" type="hidden" name="AnyPendingCourtDates" value="@(Model.OUOnly.AnyPendingCourtDates == null ? "" : Model.OUOnly.AnyPendingCourtDates.ToString())" />
+                                                <input id="hdfConvictedOfAnyOffense" type="hidden" name="ConvictedOfAnyOffense" value="@(Model.OUOnly.ConvictedOfAnyOffense == null ? "" : Model.OUOnly.ConvictedOfAnyOffense.ToString())" />
+                                                <input id="hdfMisdemeanor" type="hidden" name="Misdemeanor" value="@(Model.OUOnly.Misdemeanor == null ? "" : Model.OUOnly.Misdemeanor.ToString())" />
+                                                <input id="hdfFelony" type="hidden" name="Felony" value="@(Model.OUOnly.Felony == null ? "" : Model.OUOnly.Felony.ToString())" />
 
-</form></div>
+                                                <input id="hdfRestrainingOrders" type="hidden" name="RestrainingOrders" value="@(Model.OUOnly.RestrainingOrders == null ? "" : Model.OUOnly.RestrainingOrders.ToString())" />
+
+                                                <input id="hdfAngerManagement" type="hidden" name="AngerManagement" value="@(Model.OUOnly.AngerManagement == null ? "" : Model.OUOnly.AngerManagement.ToString())" />
+                                                <input id="hdfGunInvolvedActivity" type="hidden" name="GunInvolvedActivity" value="@(Model.OUOnly.GunInvolvedActivity == null ? "" : Model.OUOnly.GunInvolvedActivity.ToString())" />
+                                                <input id="hdfGangRelatedStreetViolence" type="hidden" name="GangRelatedStreetViolence" value="@(Model.OUOnly.GangRelatedStreetViolence == null ? "" : Model.OUOnly.GangRelatedStreetViolence.ToString())" />
+                                                <input id="hdfKilledDueToTurf" type="hidden" dirname="OneDrugAtATime" name="KilledDueToTurf" value="@(Model.OUOnly.KilledDueToTurf == null ? "" : Model.OUOnly.KilledDueToTurf.ToString())" />
+                                                <input id="hdfHotSpotArea" type="hidden" name="HotSpotArea" value="@(Model.OUOnly.HotSpotArea == null ? "" : Model.OUOnly.HotSpotArea.ToString())" />
+                                                <input id="hdfAssociateWithTurfs" type="hidden" name="AssociateWithTurfs" value="@(Model.OUOnly.AssociateWithTurfs == null ? "" : Model.OUOnly.AssociateWithTurfs.ToString())" />
+                                                <input id="hdfViolentOffense" type="hidden" name="ViolentOffense" value="@(Model.OUOnly.ViolentOffense == null ? "" : Model.OUOnly.ViolentOffense.ToString())" />
+                                                <input id="hdfTermsOfProbation" type="hidden" name="TermsOfProbation" value="@Model.OUOnly.TermsOfProbation" />
+
+                                                <input type="hidden" id="hdfPatientID" name="PatientID" value="@Model.OUOnly.PatientID" />
+                                                <input type="hidden" id="hdfOUOnlyID" name="OUOnlyID" value="@Model.OUOnly.OUOnlyID" />
+
+                                                <input type="hidden" id="hdfSafety" name="Safety" value="@Model.OUOnly.Safety" />
+                                                <input type="hidden" id="hdfEmployment" name="Employment" value="@Model.OUOnly.Employment" />
+                                                <input type="hidden" id="hdfHousingShelter" name="HousingShelter" value="@Model.OUOnly.HousingShelter" />
+                                                <input type="hidden" id="hdfEducation" name="Education" value="@Model.OUOnly.Education" />
+                                                <input type="hidden" id="hdfLegal" name="Legal" value="@Model.OUOnly.Legal" />
+                                                <input type="hidden" id="hdfSocialRecreational" name="SocialRecreational" value="@Model.OUOnly.SocialRecreational" />
+
+                                                <input type="hidden" id="hdfHaveSSN" name="HaveSSN" value="@(Model.OUOnly.HaveSSN == null ? "" : Model.OUOnly.HaveSSN.ToString())" />
+                                                <input type="hidden" id="hdfHaveStateIssuedPhotoID" name="HaveStateIssuedPhotoID" value="@(Model.OUOnly.HaveStateIssuedPhotoID == null ? "" : Model.OUOnly.HaveStateIssuedPhotoID.ToString())" />
+                                                <input type="hidden" id="hdfHaveI9" name="HaveI9" value="@(Model.OUOnly.HaveI9 == null ? "" : Model.OUOnly.HaveI9.ToString())" />
+
+                                                <input type="hidden" id="hdfEligibleForEmployment" name="EligibleForEmployment" value="@(Model.OUOnly.EligibleForEmployment == null ? "" : Model.OUOnly.EligibleForEmployment.ToString())" />
+
+                                                <input id="hdfProgramConsentForm" type="hidden" name="ProgramConsentForm" value="@Model.OUOnly.ProgramConsentForm" />
+
+
+                                            </div>
+
+                                        </form>
+                                    </div>
                                 
                             </div>
 
                             <!---programs start-->
+                            <div class="tab-pane fade @Html.Raw(ViewBag.CurrentTab=="aPeraltaColleges"?"show active":"")" id="PeraltaColleges">
+                                <div class="detail-heading d-flex">
+                                    <h2 style="padding-top:10px">PeraltaColleges</h2>
+                                    <div class="detail-button ml-auto">
 
-                            <div class="tab-pane fade" id="PeraltaColleges">
-
-                                <div class="detail-button ml-auto" style="margin-top: 10px;">
-
-                                    <a href="/Patient/Add?PatientID=@ViewBag.PatientId"
-                                       class="btn btn-success label-fields">
-                                        <i class="far fa-edit"></i>
-                                        Edit
-                                    </a>
-                                    <a href="javascript:{}" onclick="return PeraltaCollegesSave();" id="btnPeralta" class="btn btn-success">
-                                        <i class="far fa-save"></i>
-                                        Save
-                                    </a>
+                                        <a href="javascript:{}" onclick="ActivateTab(@ViewBag.PatientId,'aPeraltaColleges')"
+                                           class="btn btn-success label-fields">
+                                            <i class="far fa-edit"></i>
+                                            Edit
+                                        </a>
+                                        <a href="javascript:{}" onclick="return PeraltaCollegesSave();" id="btnPeralta" class="btn btn-success">
+                                            <i class="far fa-save"></i>
+                                            Save
+                                        </a>
+                                    </div>
                                 </div>
-
 
                                 <form class="detail-patient-form" id="frmPeraltaColleges">
 
@@ -2192,7 +2206,7 @@
                                         <div class="bootom-form-row d-flex">
                                             <div class="three-columns">
                                                 <label class="label-fields" id="lblStudentID">@Model.PeraltaCollege.StudentID</label>
-                                                <input type="text" class="form-control" name="StudentID" id="txtStudentID" value="@Model.PeraltaCollege.StudentID" placeholder="">
+                                                <input type="text" class="form-control" name="StudentID" id="txtStudentID" value="@Model.PeraltaCollege.StudentID" placeholder="" min="1" maxlength="10">
                                             </div>
                                         </div>
                                     </div>
@@ -2208,7 +2222,6 @@
 
                                 </form>
                             </div>
-
                             <!---programs start-->
                         </div>
                     </div>

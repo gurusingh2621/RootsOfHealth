@@ -18,7 +18,7 @@ namespace RootsOfHealth.Controllers
 
 
         // GET: RootsOfHealth
-        public ActionResult Add(string patientId = "0")
+        public ActionResult Add(string patientId = "0", string CurrentTab=null)
         {
             double sub;
             Common objCommon = new Common();
@@ -878,6 +878,7 @@ namespace RootsOfHealth.Controllers
             objCommon.BindDropDowns(ref patientdetailobj);
 
             ViewBag.PatientID = patientId;
+            ViewBag.CurrentTab = CurrentTab;
             Response.Cookies["patientid"].Value = patientId.ToString();
             Response.Cookies["patientid"].Expires = DateTime.Now.AddDays(1);
             return View(patientdetailobj);

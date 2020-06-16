@@ -110,7 +110,7 @@
                 </li>
 
                 <li class="nav-item " style="display:block">
-                    <a class="nav-link" href="#" data-toggle="modal" data-target="#recentpatientModal" >Recent Clients</a>
+                    <a class="nav-link" id="RecentClient-tab" href="#" data-toggle="modal" data-target="#recentpatientModal" >Recent Clients</a>
                 </li>
             </ul>
         </div> 
@@ -234,7 +234,6 @@
         //});
 
     $(document).ready(function () {
-       
             $(".loaderOverlay").css("display","flex");
             var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]'
 
@@ -515,7 +514,12 @@
             $('.close').click();
 
 
-        }
+    }
+
+    function ActivateTab(PatientId, Tab) {
+        window.location.href = '/Patient/Add?PatientID=' + PatientId + '&CurrentTab=' + Tab;
+
+    }
 </script>
 
 

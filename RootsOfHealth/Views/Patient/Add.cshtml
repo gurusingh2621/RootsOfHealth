@@ -30,6 +30,7 @@
     .showHidecontent {
         padding-top: 0px !important;
     }
+
     .inner-main-content {
         height: calc(100vh - 240px);
     }
@@ -41,30 +42,114 @@
     /*.row {
         margin-right: 0px;
     }*/
+
+    .divAnyVaccinations button.multiselect {
+        background-color: transparent;
+        color: #999;
+        background: url(../images/chevron-arrow-down.svg) no-repeat;
+        background-position: 95% 13px;
+        background-size: 12px;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        line-height: normal;
+        /* color: #818181; */
+        width: 100% !important;
+        padding: 5px 20px 5px 10px;
+        border-radius: 0;
+        border: 1px solid #e2e2e2;
+        border-radius: 0;
+        font-size: 14px;
+        height: 42px;
+        text-align: left;
+    }
+
+    .divAnyVaccinations ul.multiselect-container.dropdown-menu.show {
+        padding: 8px 2px;
+        width: 100%;
+    }
+
+        .divAnyVaccinations ul.multiselect-container.dropdown-menu.show li a {
+            /* padding: 0px 8px; */
+            font-style: normal;
+            font-weight: normal;
+            font-size: 12px;
+            line-height: normal;
+            color: #5d5d5d;
+            height: 23px;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            padding: .25rem .5rem;
+        }
+
+    .divAnyVaccinations ul.multiselect-container li label {
+        margin-bottom: 0px;
+    }
+
+        .divAnyVaccinations ul.multiselect-container li label input[type="checkbox"] {
+            position: absolute;
+            left: 10px;
+            width: 18px;
+            height: 18px;
+            opacity: 0;
+        }
+
+        .divAnyVaccinations ul.multiselect-container li label input[type="checkbox"] {
+            position: absolute;
+            left: 10px;
+            width: 18px;
+            height: 18px;
+            opacity: 0;
+        }
+
+    .divAnyVaccinations .dropdown-menu li.active span:before {
+        content: "";
+        background: url(../images/checkbox.svg) no-repeat center #22baa0;
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        vertical-align: middle;
+        border-radius: 3px;
+        text-align: center;
+        float: left;
+        padding: 4px 7px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        background-size: 15px;
+    }
+
+    .divAnyVaccinations a {
+        text-decoration: none;
+    }
 </style>
 <!-- Content start here -->
-<section id="content" class="responsive-container">
+<section id="content" class="responsive-container ">
     <div class="profile-tabs">
         <div class="tabs-scroll">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="Profile-tab" data-toggle="tab" href="#Profile" role="tab"
+                    <a class="nav-link @Html.Raw(ViewBag.CurrentTab=="Profile-tab"?"show active":string.IsNullOrWhiteSpace(ViewBag.CurrentTab)?"show active":"")" id="Profile-tab" data-toggle="tab" href="#Profile" role="tab"
                        aria-controls="Profile" aria-selected="true">Profile</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link disabled-li1" onclick="ErrorTab()" id="Housing-tab" data-toggle="" href="#Housing" role="tab"
+                    <a class="nav-link disabled-li1 @Html.Raw(ViewBag.CurrentTab=="Housing-tab"?"show active":"")" onclick="ErrorTab()" id="Housing-tab" data-toggle="" href="#Housing" role="tab"
                        aria-controls="Housing" aria-selected="false">Housing<span class="notCount" id="HouNot" style="display:none"> </span><span class="check" style="display:none"><i class="fas fa-check-circle"></i></span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link disabled-li1" onclick="ErrorTab()" id="Financial-tab" data-toggle="" href="#Financial" role="tab"
+                    <a class="nav-link disabled-li1 @Html.Raw(ViewBag.CurrentTab=="Financial-tab"?"show active":"")" onclick="ErrorTab()" id="Financial-tab" data-toggle="" href="#Financial" role="tab"
                        aria-controls="Financial" aria-selected="false">Financial Security<span class="notCount" id="FincNot" style="display:none"></span><span class="check" style="display:none"><i class="fas fa-check-circle"></i></span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link disabled-li1" onclick="ErrorTab()" id="Employment-tab" data-toggle="" href="#Employment" role="tab"
+                    <a class="nav-link disabled-li1 @Html.Raw(ViewBag.CurrentTab=="Employment-tab"?"show active":"")" onclick="ErrorTab()" id="Employment-tab" data-toggle="" href="#Employment" role="tab"
                        aria-controls="Employment" aria-selected="false">Employment/Education<span class="notCount" id="EmpNot" style="display:none"></span><span class="check" style="display:none"><i class="fas fa-check-circle"></i></span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link disabled-li1" onclick="ErrorTab()" id="Communication-tab" data-toggle="" href="#Communication"
+                    <a class="nav-link disabled-li1 @Html.Raw(ViewBag.CurrentTab=="Communication-tab"?"show active":"")" onclick="ErrorTab()" id="Communication-tab" data-toggle="" href="#Communication"
                        role="tab" aria-controls="Communication" aria-selected="false">
                         Communication &
                         Mobility
@@ -72,11 +157,11 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link disabled-li1" onclick="ErrorTab()" id="Healthcare-tab" data-toggle="" href="#Healthcare" role="tab"
+                    <a class="nav-link disabled-li1 @Html.Raw(ViewBag.CurrentTab=="Healthcare-tab"?"show active":"")" onclick="ErrorTab()" id="Healthcare-tab" data-toggle="" href="#Healthcare" role="tab"
                        aria-controls="Healthcare" aria-selected="false">Healthcare<span class="notCount" id="HealthNot" style="display:none"></span><span class="check" style="display:none"><i class="fas fa-check-circle"></i></span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link disabled-li1" onclick="ErrorTab()" id="SocialSupports-tab" data-toggle="" href="#SocialSupports"
+                    <a class="nav-link disabled-li1 @Html.Raw(ViewBag.CurrentTab=="SocialSupports-tab"?"show active":"")" onclick="ErrorTab()" id="SocialSupports-tab" data-toggle="" href="#SocialSupports"
                        role="tab" aria-controls="SocialSupports" aria-selected="false">
                         Social Supports and
                         Safety
@@ -84,25 +169,25 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link disabled-li1" onclick="ErrorTab()" id="LegalStatus-tab" data-toggle="" href="#LegalStatus" role="tab"
+                    <a class="nav-link disabled-li1 @Html.Raw(ViewBag.CurrentTab=="LegalStatus-tab"?"show active":"")" onclick="ErrorTab()" id="LegalStatus-tab" data-toggle="" href="#LegalStatus" role="tab"
                        aria-controls="LegalStatus" aria-selected="false">Legal Status<span class="notCount" id="LegalNot" style="display:none"></span><span class="check" style="display:none"><i class="fas fa-check-circle"></i></span></a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link disabled-li1" onclick="ErrorTab()" id="Alcohol-tab" data-toggle="" href="#AlcoholDisorder" role="tab"
+                    <a class="nav-link disabled-li1 @Html.Raw(ViewBag.CurrentTab=="Dast-tab"?"show active":ViewBag.CurrentTab=="Audit-tab"?"show active":"")" onclick="ErrorTab()" id="Alcohol-tab" data-toggle="" href="#AlcoholDisorder" role="tab"
                        aria-controls="AlcoholDisorder" aria-selected="false">Substance Use<span class="notCount" id="SubNot" style="display:none"></span><span class="check" style="display:none"><i class="fas fa-check-circle"></i></span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link disabled-li1" onclick="ErrorTab()" id="MentalHealth-tab" data-toggle="" href="#MentalHealth" role="tab"
+                    <a class="nav-link disabled-li1 @Html.Raw(ViewBag.CurrentTab=="MentalHealth-tab"?"show active":"")" onclick="ErrorTab()" id="MentalHealth-tab" data-toggle="" href="#MentalHealth" role="tab"
                        aria-controls="MentalHealth" aria-selected="false">Mental Health<span class="notCount" id="MentalNot" style="display:none"></span><span class="check" style="display:none"><i class="fas fa-check-circle"></i></span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link disabled-li1" onclick="ErrorTab()" id="FoodAccess-tab" data-toggle="" href="#FoodAccess" role="tab"
+                    <a class="nav-link disabled-li1 @Html.Raw(ViewBag.CurrentTab=="FoodAccess-tab"?"show active":"")" onclick="ErrorTab()" id="FoodAccess-tab" data-toggle="" href="#FoodAccess" role="tab"
                        aria-controls="FoodAccess" aria-selected="false">Food Access<span class="notCount" id="FoodNot" style="display:none"></span><span class="check" style="display:none"><i class="fas fa-check-circle"></i></span></a>
                 </li>
 
                 <li class="nav-item clearfix" id="programtbs" style="display:none">
-                    <a class="nav-link" id="Programs-tab" data-toggle="tab" href="#Programs" role="tab"
+                    <a class="nav-link @Html.Raw(ViewBag.CurrentTab=="aclinic"?"show active":ViewBag.CurrentTab=="adream"?"show active":ViewBag.CurrentTab=="aou"?"show active":ViewBag.CurrentTab=="aPeraltaColleges"?"show active":"")" id="Programs-tab" data-toggle="tab" href="#Programs" role="tab"
                        aria-controls="Programs" aria-selected="false">Programs<span class="check" style="display:none"><i class="fas fa-check-circle"></i></span></a>
                 </li>
             </ul>
@@ -332,20 +417,10 @@
             });
         }
         var patientPrograms = [];
+        function showNotificationCount()
+        {
 
-    $(document).ready(function () {
-        $('.date').datepicker(
-            {
-                uiLibrary: 'bootstrap',
-                changeYear: true,
-                changeMonth: true
-            }
-
-        );
-            $(".open-eye").css("display", "block");
-            $(".ssn-label").css("display", "none");
-
-            //------notification changes start here
+              //------notification changes start here
              @if (Model.ScheduleDate.IsHousingDue=="Red")
         {
             @: $("#HouNot").attr('class', 'notCountR');
@@ -961,7 +1036,7 @@
 
                if (Model.PatientProgram.ClinicOnly.ClinicOnlyID == 0)
                {
-                   @:$("aclinic").find('span').css('display', 'none');
+                   @:$("#aclinic").find('span').css('display', 'none');
                }
                else
                {
@@ -998,23 +1073,50 @@
                }
 
            }
+        }
+        $(document).ready(function () {
+            var currenttab ='@ViewBag.CurrentTab';
+            if (currenttab != '') {
+                if (currenttab != 'Dast-tab' && currenttab != 'Audit-tab') {
+                    $("a#Dast-tab").addClass("show active");
+                    $("div#DAST").addClass("show active");
+                }
+                if (currenttab != 'aclinic' && currenttab != 'adream' && currenttab != 'aou' && currenttab != 'aPeraltaColleges') {
+                    $("a#aclinic").addClass("show active");
+                    $("div#ClinicOnly").addClass("show active");
+                }
 
+            }
+        $('.date').datepicker(
+            {
+                uiLibrary: 'bootstrap',
+                changeYear: true,
+                changeMonth: true,
+            }
 
+        );
+        $("#ClinicOnly_AnyVaccinations").multiselect({
+            includeSelectAllOption: true,
+            nonSelectedText: 'Nothing selected',
+            buttonWidth: '100%',
+            maxHeight: 300
+        });
+        $("#ClinicOnly_AnyVaccinations").closest('div').find('label').append('<span></span>');
+        var selectedVaccinations = '@Model.PatientProgram.ClinicOnly.AnyVaccinations';
+        $("#ClinicOnly_AnyVaccinations").val(selectedVaccinations.split(','));
+        $("#ClinicOnly_AnyVaccinations").multiselect("refresh");
+        $(".open-eye").css("display", "block");
+        $(".ssn-label").css("display", "none");
+        showNotificationCount();
         AddDate();
 
         $('.date').mask('00/00/0000');
         $('#txtHomePhone').mask('(000) 000-0000');
         $('#txtCellPhone').mask('(000) 000-0000');
         $('#txtSocialSecNo').mask('AAA-AA-AAAA', options);
-
-
-
         $("input[type=hidden][name=PatientID]").val('@ViewBag.PatientID');
-
         var pid = '@ViewBag.PatientID';
-
             GetPatientPrograms();
-
         if (pid != undefined && pid != '' && pid != '0') {
 
             $('#btnaddprogram').css('display', 'block');
@@ -1057,11 +1159,9 @@
 
         $("#ddRace").val(lblRaceArray);
         $('.selectboxmultiple button[data-id="ddRace"]').find('.filter-option-inner-inner').html(lblRace);
-
-
-
-        var lblLanguages = $('#lblLanguages').html();
-            var lblLanguagesArray = lblLanguages != undefined?lblLanguages.split(','):'';
+            var lblLanguages = $('#lblLanguages').html();
+            var lblLanguagesArray = lblLanguages != undefined ? lblLanguages.split(',') : '';
+           
         $("#ddLanguages").val(lblLanguagesArray);
         $('.selectboxmultiple button[data-id="ddLanguages"]').find('.filter-option-inner-inner').html(lblLanguages);
 
@@ -1105,7 +1205,7 @@
             $('#divPermanentAddress').show();
         }
 
-
+            
         var lblContact = $('#lblContact').html();
         $('#ddWayToContact').val('' + lblContact);
         if (lblContact == "Other") {
@@ -1157,8 +1257,7 @@
         //var lblSkipMeals = $('#lblSkipMeals').html();
         //$('#ddSkipMeals').val('' + lblSkipMeals);
 
-
-        var lblCalRec = $('#lblCalRec').html().replace(/&amp;/g, '&');
+            var lblCalRec = $('#lblCalRec').html().replace(/&amp;/g, '&').trim();
         $("input[name=Calworks][value='" + lblCalRec + "']").prop('checked', true);
 
         var lblSSRec = $('#lblSSRec').html().replace(/&amp;/g, '&');
@@ -2823,7 +2922,7 @@
                 $('#txtStudentID').val('');
             }
 
-
+     
 
     });
 
@@ -3946,8 +4045,6 @@
         $(".loaderOverlay").css("display", "flex");
 
         AddDate();
-
-        debugger;
         var ddl = $("#ddMentalHealth").val();
         var mentalhealthdata = "";
         for (var i = 0; i < ddl.length; i++)
@@ -4112,9 +4209,8 @@
         $('#hdfTBdiseaseAtAnyTime').val(radio8);
         $('#hdfWeakenedImmuneSystem').val(radio9);
         $('#hdfElevatedRateOfTB').val(radio10);
-
         $('#hdfVolunteerOfHighRisk').val(radio11);
-
+        $("#hdfAnyVaccinations").val($("#ClinicOnly_AnyVaccinations").val());
 
 
 
@@ -4340,8 +4436,7 @@
 
         }
 
-    function openTab(ele) {
-
+        function openTab(ele) {
         $('#'+ ele).click();
     }
 

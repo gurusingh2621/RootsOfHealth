@@ -141,7 +141,7 @@
         padding-right: 15px;
     }
 </style>
-<div onscroll="abc()" class="tab-pane fade show active test" id="Profile" role="tabpanel" aria-labelledby="Profile-tab">
+<div onscroll="abc()" class="tab-pane fade test @Html.Raw(ViewBag.CurrentTab=="Profile-tab"?"show active":string.IsNullOrWhiteSpace(ViewBag.CurrentTab)?"show active":"")" id="Profile" role="tabpanel" aria-labelledby="Profile-tab">
     <!-- Inner content start here  -->
     <div class="inner-content">
         <div class="paitent-detail">
@@ -165,7 +165,7 @@
                                     Notes
                                 </a>
 
-                                <a href='' onclick="this.href='/Patient/Add?PatientID='+@Model.PatientID"
+                                <a href='javaScript:void(0)' onclick="ActivateTab(@Model.PatientID,'Profile-tab')"
                                    id="btnProfileEdit" class="btn btn-success label-fields">
                                     <i class="far fa-edit"></i>
                                     Edit
@@ -276,17 +276,17 @@
                                     <div class="bootom-form-row d-flex">
                                         <div class="three-columns border-bottom-none">
                                             <label class="label-fields">@Model.FirstName</label>
-                                            <input tabindex="2" type="text" id="txtFirstName" name="FirstName" class="form-control"
+                                            <input tabindex="2" type="text" id="txtFirstName" name="FirstName" class="form-control" maxlength="50"
                                                    value="@Model.FirstName" placeholder="" required>
                                         </div>
                                         <div class="three-columns border-bottom-none">
                                             <label class="label-fields">@Model.MiddleName</label>
-                                            <input tabindex="3" type="text" id="txtMiddleName" name="MiddleName" class="form-control"
+                                            <input tabindex="3" type="text" id="txtMiddleName" name="MiddleName" class="form-control" maxlength="50"
                                                    value="@Model.MiddleName" placeholder="">
                                         </div>
                                         <div class="three-columns border-bottom-none">
                                             <label class="label-fields">@Model.LastName</label>
-                                            <input tabindex="4" type="text" id="txtLastName" name="LastName" class="form-control"
+                                            <input tabindex="4" type="text" id="txtLastName" name="LastName" class="form-control" maxlength="50"
                                                    placeholder="" value="@Model.LastName">
                                         </div>
                                     </div>
@@ -303,7 +303,7 @@
                                             <div class="bootom-form-row d-flex">
                                                 <div class="one-columns">
                                                     <label class="label-fields">@Model.NickName</label>
-                                                    <input tabindex="5" type="text" id="txtNickName" name="NickName" class="form-control"
+                                                    <input tabindex="5" type="text" id="txtNickName" name="NickName" class="form-control" maxlength="50"
                                                            placeholder="" value="@Model.NickName">
                                                 </div>
                                             </div>
@@ -353,7 +353,7 @@
                                                     <div class="bootom-form-row d-flex">
                                                         <div class="one-columns">
                                                             <label class="label-fields">@Model.OtherGender</label>
-                                                            <input tabindex="7" type="text" id="txtOtherGender" name="OtherGender" class="form-control"
+                                                            <input tabindex="7" type="text" id="txtOtherGender" name="OtherGender" class="form-control" maxlength="200"
                                                                    placeholder="" value="@Model.OtherGender">
                                                         </div>
                                                     </div>
@@ -379,7 +379,7 @@
                                         <div class="two-columns">
 
                                             <label class="label-fields">@Model.DateOfBirth</label>
-                                            <input tabindex="8" type="text" id="txtDOB" name="DateOfBirth" class="form-control date"
+                                            <input tabindex="8" type="text" id="txtDOB" name="DateOfBirth" class="form-control date" maxlength="50"
                                                    placeholder="" value="@Model.DateOfBirth" style="width:100px">
                                         </div>
                                         <div class="two-columns">
@@ -395,7 +395,7 @@
                                                     </div>
 
                                                 </div>
-                                                <input tabindex="9" type="password" id="txtSocialSecNo" name="SocialSecurityNumber" class="form-control"
+                                                <input tabindex="9" type="password" id="txtSocialSecNo" name="SocialSecurityNumber" class="form-control" maxlength="50"
                                                        placeholder="000-00-0000" value="@Model.SocialSecurityNumber">
                                                 <div class="ssn-icon-eye">
                                                     <i class="fa fa-eye open-eye" style="display:none" onclick="showSSn()"></i>
@@ -451,7 +451,7 @@
                                                     <div class="bootom-form-row d-flex">
                                                         <div class="one-columns">
                                                             <label class="label-fields" id="lblOtherRace">@Model.OtherRace</label>
-                                                            <input tabindex="11" type="text" id="txtOtherRace" name="OtherRace" class="form-control"
+                                                            <input tabindex="11" type="text" id="txtOtherRace" name="OtherRace" class="form-control" maxlength="500"
                                                                    placeholder="" value="@Model.OtherRace">
                                                         </div>
                                                     </div>
@@ -478,7 +478,7 @@
                                             <div class="bootom-form-row d-flex">
                                                 <div class="two-columns">
                                                     <label class="label-fields">@Model.Address</label>
-                                                    <input tabindex="12" type="text" id="txtAddress" name="Address" class="form-control"
+                                                    <input tabindex="12" type="text" id="txtAddress" name="Address" class="form-control" maxlength="200"
                                                            placeholder="" value="@Model.Address">
                                                 </div>
                                                 <div class="two-columns">
@@ -507,17 +507,17 @@
                                                     <div class="bootom-form-row d-flex mb-1">
                                                         <div class="three-columns border-bottom-none">
                                                             <label class="label-fields">@Model.City</label>
-                                                            <input tabindex="14" type="text" id="txtCity" name="City" class="form-control"
+                                                            <input tabindex="14" type="text" id="txtCity" name="City" class="form-control" maxlength="50"
                                                                    placeholder="" value="@Model.City">
                                                         </div>
                                                         <div class="three-columns border-bottom-none">
                                                             <label class="label-fields">@Model.State</label>
-                                                            <input tabindex="15" type="text" id="txtState" name="State" class="form-control"
+                                                            <input tabindex="15" type="text" id="txtState" name="State" class="form-control" maxlength="50"
                                                                    placeholder="" value="@Model.State">
                                                         </div>
                                                         <div class="three-columns border-bottom-none">
                                                             <label class="label-fields">@Model.Zip</label>
-                                                            <input tabindex="16" type="text" id="txtZip" name="Zip" class="form-control"
+                                                            <input tabindex="16" type="text" id="txtZip" name="Zip" class="form-control" maxlength="20"
                                                                    placeholder="" value="@Model.Zip">
                                                         </div>
                                                     </div>
@@ -536,7 +536,7 @@
                                                     <div class="bootom-form-row d-flex">
                                                         <div class="one-columns">
                                                             <label class="label-fields">@Model.PermanentAddress</label>
-                                                            <input tabindex="17" type="text" id="txtPermanentAddress" name="PermanentAddress" class="form-control"
+                                                            <input tabindex="17" type="text" id="txtPermanentAddress" name="PermanentAddress" class="form-control" maxlength="200"
                                                                    placeholder="" value="@Model.PermanentAddress">
                                                         </div>
                                                     </div>
@@ -563,17 +563,17 @@
                                     <div class="bootom-form-row d-flex">
                                         <div class="three-columns border-bottom-none">
                                             <label class="label-fields">@Model.EmailAddress</label>
-                                            <input tabindex="18" type="text" id="txtEmailAddress" name="EmailAddress" class="form-control"
+                                            <input tabindex="18" type="text" id="txtEmailAddress" name="EmailAddress" class="form-control" maxlength="50"
                                                    placeholder="" value="@Model.EmailAddress">
                                         </div>
                                         <div class="three-columns border-bottom-none">
                                             <label class="label-fields">@Model.HomePhone</label>
-                                            <input tabindex="19" type="text" id="txtHomePhone" name="HomePhone" class="form-control"
+                                            <input tabindex="19" type="text" id="txtHomePhone" name="HomePhone" class="form-control" maxlength="20"
                                                    placeholder="(000) 000-0000" value="@Model.HomePhone">
                                         </div>
                                         <div class="three-columns border-bottom-none">
                                             <label class="label-fields">@Model.CellPhone</label>
-                                            <input tabindex="20" type="text" id="txtCellPhone" name="CellPhone" class="form-control"
+                                            <input tabindex="20" type="text" id="txtCellPhone" name="CellPhone" class="form-control" maxlength="20"
                                                    placeholder="(000) 000-0000" value="@Model.CellPhone">
                                         </div>
                                     </div>
@@ -610,7 +610,7 @@
                                             <div class="bootom-form-row d-flex">
                                                 <div class="one-columns">
                                                     <label class="label-fields">@Model.OtherContact</label>
-                                                    <input tabindex="22" type="text" id="txtOtherContact" name="OtherContact" class="form-control"
+                                                    <input tabindex="22" type="text" id="txtOtherContact" name="OtherContact" class="form-control" maxlength="50"
                                                            placeholder="" value="@Model.OtherContact">
                                                 </div>
                                             </div>
@@ -640,7 +640,7 @@
                                                 <div class="three-columns">
                                                     <label class="label-fields" id="lblNumChildren">@Model.PatientChildren</label>
                                                     <label class="label-fields" id="lblAgeChildren" hidden="hidden">@Model.PatientChildrensAges</label>
-                                                    <input tabindex="23" type="number" id="txtChildren" name="PatientChildren" class="form-control"
+                                                    <input tabindex="23" type="number" id="txtChildren" name="PatientChildren" class="form-control" maxlength="50"
                                                            placeholder="" value="@Model.PatientChildren">
                                                     @*<input  type="button" id="btnchildren" value="submit"/>*@
                                                 </div>
@@ -789,7 +789,7 @@
                                                             <div class="bootom-form-row d-flex ">
                                                                 <div class="one-columns">
                                                                     <label class="label-fields">@Model.EmergencyContact1Name</label>
-                                                                    <input tabindex="24" type="text" id="txtEmergencyContact1Name" name="EmergencyContact1Name"
+                                                                    <input tabindex="24" type="text" id="txtEmergencyContact1Name" name="EmergencyContact1Name" maxlength="50"
                                                                            class="form-control"
                                                                            placeholder="" value="@Model.EmergencyContact1Name">
                                                                 </div>
@@ -808,7 +808,7 @@
                                                             <div class="bootom-form-row d-flex">
                                                                 <div class="one-columns">
                                                                     <label class="label-fields">@Model.EmergencyContact1EmailAddress</label>
-                                                                    <input tabindex="25" type="text" id="txtEmergencyContact1EmailAddress" name="EmergencyContact1EmailAddress"
+                                                                    <input tabindex="25" type="text" id="txtEmergencyContact1EmailAddress" name="EmergencyContact1EmailAddress" maxlength="200"
                                                                            class="form-control"
                                                                            placeholder="" value="@Model.EmergencyContact1EmailAddress">
                                                                 </div>
@@ -828,7 +828,7 @@
                                                             <div class="bootom-form-row d-flex">
                                                                 <div class="one-columns">
                                                                     <label class="label-fields">@Model.EmergencyContact1Relationship</label>
-                                                                    <input tabindex="26" type="text" id="txtEmergencyContact1Relationship" name="EmergencyContact1Relationship"
+                                                                    <input tabindex="26" type="text" id="txtEmergencyContact1Relationship" name="EmergencyContact1Relationship" maxlength="50"
                                                                            class="form-control"
                                                                            placeholder="" value="@Model.EmergencyContact1Relationship">
                                                                 </div>
@@ -847,7 +847,7 @@
                                                             <div class="bootom-form-row d-flex">
                                                                 <div class="one-columns">
                                                                     <label class="label-fields">@Model.EmergencyContact1Address</label>
-                                                                    <input tabindex="27" type="text" id="txtEmergencyContact1Address" name="EmergencyContact1Address"
+                                                                    <input tabindex="27" type="text" id="txtEmergencyContact1Address" name="EmergencyContact1Address" maxlength="200"
                                                                            class="form-control"
                                                                            placeholder="" value="@Model.EmergencyContact1Address">
                                                                 </div>
@@ -871,17 +871,17 @@
                                                                     <div class="bootom-form-row d-flex ">
                                                                         <div class="three-columns border-bottom-none">
                                                                             <label class="label-fields">@Model.EmergencyContact1City</label>
-                                                                            <input tabindex="28" type="text" id="txtEmergencyContact1City" name="EmergencyContact1City" class="form-control"
+                                                                            <input tabindex="28" type="text" id="txtEmergencyContact1City" name="EmergencyContact1City" class="form-control" maxlength="50"
                                                                                    placeholder="" value="@Model.EmergencyContact1City">
                                                                         </div>
                                                                         <div class="three-columns border-bottom-none">
                                                                             <label class="label-fields">@Model.EmergencyContact1State</label>
-                                                                            <input tabindex="29" type="text" id="txtEmergencyContact1State" name="EmergencyContact1State" class="form-control"
+                                                                            <input tabindex="29" type="text" id="txtEmergencyContact1State" name="EmergencyContact1State" class="form-control" maxlength="50"
                                                                                    placeholder="" value="@Model.EmergencyContact1State">
                                                                         </div>
                                                                         <div class="three-columns border-bottom-none">
                                                                             <label class="label-fields">@Model.EmergencyContact1Zip</label>
-                                                                            <input tabindex="30" type="text" id="txtEmergencyContact1Zip" name="EmergencyContact1Zip" class="form-control"
+                                                                            <input tabindex="30" type="text" id="txtEmergencyContact1Zip" name="EmergencyContact1Zip" class="form-control" maxlength="20"
                                                                                    placeholder="" value="@Model.EmergencyContact1Zip">
                                                                         </div>
                                                                     </div>
@@ -923,7 +923,7 @@
                                                             <div class="bootom-form-row d-flex ">
                                                                 <div class="one-columns">
                                                                     <label class="label-fields">@Model.EmergencyContact2Name</label>
-                                                                    <input tabindex="31" type="text" id="txtEmergencyContact2Name" name="EmergencyContact2Name"
+                                                                    <input tabindex="31" type="text" id="txtEmergencyContact2Name" name="EmergencyContact2Name" maxlength="50"
                                                                            class="form-control"
                                                                            placeholder="" value="@Model.EmergencyContact2Name">
                                                                 </div>
@@ -942,7 +942,7 @@
                                                             <div class="bootom-form-row d-flex">
                                                                 <div class="one-columns">
                                                                     <label class="label-fields">@Model.EmergencyContact2EmailAddress</label>
-                                                                    <input tabindex="32" type="text" id="txtEmergencyContact2EmailAddress" name="EmergencyContact2EmailAddress"
+                                                                    <input tabindex="32" type="text" id="txtEmergencyContact2EmailAddress" name="EmergencyContact2EmailAddress" maxlength="50"
                                                                            class="form-control"
                                                                            placeholder="" value="@Model.EmergencyContact2EmailAddress">
                                                                 </div>
@@ -962,7 +962,7 @@
                                                             <div class="bootom-form-row d-flex">
                                                                 <div class="one-columns">
                                                                     <label class="label-fields">@Model.EmergencyContact2Relationship</label>
-                                                                    <input tabindex="33" type="text" id="txtEmergencyContact2Relationship" name="EmergencyContact2Relationship"
+                                                                    <input tabindex="33" type="text" id="txtEmergencyContact2Relationship" name="EmergencyContact2Relationship" maxlength="50"
                                                                            class="form-control"
                                                                            placeholder="" value="@Model.EmergencyContact2Relationship">
                                                                 </div>
@@ -981,7 +981,7 @@
                                                             <div class="bootom-form-row d-flex">
                                                                 <div class="one-columns">
                                                                     <label class="label-fields">@Model.EmergencyContact2Address</label>
-                                                                    <input tabindex="34" type="text" id="txtEmergencyContact2Address" name="EmergencyContact2Address"
+                                                                    <input tabindex="34" type="text" id="txtEmergencyContact2Address" name="EmergencyContact2Address" maxlength="200"
                                                                            class="form-control"
                                                                            placeholder="" value="@Model.EmergencyContact2Address">
                                                                 </div>
@@ -1006,17 +1006,17 @@
                                                                     <div class="bootom-form-row d-flex">
                                                                         <div class="three-columns border-bottom-none">
                                                                             <label class="label-fields">@Model.EmergencyContact2City</label>
-                                                                            <input tabindex="35" type="text" id="txtEmergencyContact2City" name="EmergencyContact2City" class="form-control"
+                                                                            <input tabindex="35" type="text" id="txtEmergencyContact2City" name="EmergencyContact2City" class="form-control" maxlength="50"
                                                                                    placeholder="" value="@Model.EmergencyContact2City">
                                                                         </div>
                                                                         <div class="three-columns border-bottom-none">
                                                                             <label class="label-fields">@Model.EmergencyContact2State</label>
-                                                                            <input tabindex="36" type="text" id="txtEmergencyContact2State" name="EmergencyContact2State" class="form-control"
+                                                                            <input tabindex="36" type="text" id="txtEmergencyContact2State" name="EmergencyContact2State" class="form-control" maxlength="50"
                                                                                    placeholder="" value="@Model.EmergencyContact2State">
                                                                         </div>
                                                                         <div class="three-columns border-bottom-none">
                                                                             <label class="label-fields">@Model.EmergencyContact2Zip</label>
-                                                                            <input tabindex="37" type="text" id="txtEmergencyContact2Zip" name="EmergencyContact2Zip" class="form-control"
+                                                                            <input tabindex="37" type="text" id="txtEmergencyContact2Zip" name="EmergencyContact2Zip" class="form-control" maxlength="20"
                                                                                    placeholder="" value="@Model.EmergencyContact2Zip">
                                                                         </div>
                                                                     </div>
@@ -1083,7 +1083,7 @@
                                                             <div class="bootom-form-row d-flex ">
                                                                 <div class="one-columns">
                                                                     <label class="label-fields">@Model.ChildrenUnder18</label>
-                                                                    <input tabindex="38" type="number" id="txtChildrenUnder18" name="ChildrenUnder18"
+                                                                    <input tabindex="38" type="number" id="txtChildrenUnder18" name="ChildrenUnder18" maxlength="10"
                                                                            class="form-control"
                                                                            placeholder="" value="@Model.ChildrenUnder18">
                                                                 </div>
@@ -1101,7 +1101,7 @@
                                                             <div class="bootom-form-row d-flex">
                                                                 <div class="one-columns">
                                                                     <label class="label-fields">@Model.Adults18to65</label>
-                                                                    <input tabindex="39" type="number" id="txtAdults18to65" name="Adults18to65"
+                                                                    <input tabindex="39" type="number" id="txtAdults18to65" name="Adults18to65" maxlength="10"
                                                                            class="form-control"
                                                                            placeholder="" value="@Model.Adults18to65">
                                                                 </div>
@@ -1119,7 +1119,7 @@
                                                             <div class="bootom-form-row d-flex">
                                                                 <div class="one-columns">
                                                                     <label class="label-fields">@Model.Adults65Plus</label>
-                                                                    <input tabindex="40" type="number" id="Adults65Plus" name="Adults65Plus"
+                                                                    <input tabindex="40" type="number" id="Adults65Plus" name="Adults65Plus" maxlength="50"
                                                                            class="form-control"
                                                                            placeholder="" value="@Model.Adults65Plus">
                                                                 </div>
@@ -1155,7 +1155,7 @@
                                                             <div class="bootom-form-row d-flex">
                                                                 <div class="one-columns">
                                                                     <label class="label-fields">@Model.PreferredPharmacyName</label>
-                                                                    <input tabindex="41" type="text" id="txtPharmacyName" name="PreferredPharmacyName"
+                                                                    <input tabindex="41" type="text" id="txtPharmacyName" name="PreferredPharmacyName" maxlength="200"
                                                                            class="form-control"
                                                                            placeholder="" value="@Model.PreferredPharmacyName">
                                                                 </div>
@@ -1173,7 +1173,7 @@
                                                             <div class="bootom-form-row d-flex">
                                                                 <div class="one-columns">
                                                                     <label class="label-fields">@Model.PreferredPharmacyLocation</label>
-                                                                    <input tabindex="42" type="text" id="txtPharmacyLocation" name="PreferredPharmacyLocation"
+                                                                    <input tabindex="42" type="text" id="txtPharmacyLocation" name="PreferredPharmacyLocation" maxlength="200"
                                                                            class="form-control"
                                                                            placeholder="" value="@Model.PreferredPharmacyLocation">
                                                                 </div>
@@ -1259,7 +1259,7 @@
                                                                 <div class="bootom-form-row d-flex">
                                                                     <div class="one-columns">
                                                                         <label class="label-fields">@Model.OtherMaritalStatus</label>
-                                                                        <input tabindex="46" type="text" id="txtOtherMarital" name="OtherMaritalStatus"
+                                                                        <input tabindex="46" type="text" id="txtOtherMarital" name="OtherMaritalStatus" maxlength="50"
                                                                                class="form-control"
                                                                                placeholder="" value="@Model.OtherMaritalStatus">
                                                                     </div>
@@ -1295,7 +1295,7 @@
                                                                 <div class="bootom-form-row d-flex">
                                                                     <div class="one-columns">
                                                                         <label class="label-fields" id="lblOtherLang">@Model.OtherLanguageSpeak</label>
-                                                                        <input tabindex="48" type="text" id="txtOtherLanguage" name="OtherLanguageSpeak"
+                                                                        <input tabindex="48" type="text" id="txtOtherLanguage" name="OtherLanguageSpeak" maxlength="20"
                                                                                class="form-control"
                                                                                placeholder="" value="@Model.OtherLanguageSpeak">
                                                                     </div>
@@ -1530,7 +1530,7 @@
                                                                 <div class="bootom-form-row d-flex">
                                                                     <div class="one-columns">
                                                                         <label class="label-fields">@Model.SmokingQuitDate</label>
-                                                                        <input tabindex="52" type="text" autocomplete="off" id="txtQuitDate" name="SmokingQuitDate" class="form-control date"
+                                                                        <input tabindex="52" type="text" autocomplete="off" id="txtQuitDate" name="SmokingQuitDate" class="form-control date" maxlength="50"
                                                                                placeholder="" value="@Model.SmokingQuitDate" style="width:100px">
                                                                     </div>
                                                                 </div>
@@ -1586,7 +1586,7 @@
                                                             <div class="bootom-form-row d-flex">
                                                                 <div class="one-columns">
                                                                     <label class="label-fields">@Model.OtherPronouns</label>
-                                                                    <input tabindex="54" type="text" id="txtOtherPronouns" name="OtherPronouns"
+                                                                    <input tabindex="54" type="text" id="txtOtherPronouns" name="OtherPronouns" maxlength="50"
                                                                            class="form-control"
                                                                            placeholder="" value="@Model.OtherPronouns">
                                                                 </div>
@@ -1635,7 +1635,7 @@
                                                             <div class="bootom-form-row d-flex">
                                                                 <div class="one-columns">
                                                                     <label class="label-fields">@Model.OtherThinkYourselfAs</label>
-                                                                    <input tabindex="56" type="text" id="txtOtherThinkYourself" name="OtherThinkYourselfAs"
+                                                                    <input tabindex="56" type="text" id="txtOtherThinkYourself" name="OtherThinkYourselfAs" maxlength="50"
                                                                            class="form-control"
                                                                            placeholder="" value="@Model.OtherThinkYourselfAs">
                                                                 </div>

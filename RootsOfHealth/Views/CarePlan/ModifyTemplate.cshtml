@@ -5,6 +5,9 @@
 
 }
 <style>
+    .modal-row label:first-child{
+        margin-right:.5rem;
+    }
     .invalid-field {
         border: 2px solid #c10000;
         padding: 5px !important;
@@ -145,8 +148,8 @@
 
     .option-fields {
         display: flex;
-        flex: 0 0 81%;
-        max-width: 81%;
+        flex: 0 0 90%;
+        max-width: 90%;
     }
 
         .option-fields input:last-child {
@@ -242,7 +245,6 @@
         background: #3e4e6a;
         color: #fff;
         border: 1px solid rgba(255,255,255,0.2);
-        display:none;
     }
 
     div#droppable .form-control {
@@ -301,7 +303,7 @@
 
         .draggablediv .frmbtn select.form-control {
             padding: 0 15px;
-            background: url(../images/chevron-arrow-down.svg) no-repeat 0 0;
+            background: url(/images/chevron-arrow-down.svg) no-repeat 0 0;
             -webkit-appearance: none;
             -moz-appearance: none;
             -ms-appearance: none;
@@ -350,6 +352,7 @@
     .vertical .custom-control {
         display: block !important;
     }
+
     .vertical {
         align-items: flex-start !important;
     }
@@ -363,25 +366,30 @@
         display: flex !important;
         align-items: center;
     }
+
     .database-field {
         border: 0px !important;
         background: none !important;
     }
+
     .databseSelectControl select {
         background: #3e4e6a !important;
         color: #fff !important;
         font-size: 14px;
     }
+
     .controlsTabWrap.profile-tabs .tab-content {
         min-height: 530px;
     }
+
     .databseSelectControl ul#database-control-box {
         padding: 0;
         border-radius: 0 !important;
-        overflow-y:scroll;
-        min-height:0;
-        max-height:400px;
+        overflow-y: auto;
+        min-height: 0;
+        max-height: 400px;
     }
+
         .databseSelectControl ul#database-control-box li {
             border-radius: 0;
             background: transparent;
@@ -426,7 +434,7 @@
     .nav-tabs.tab_rounded {
         border: 0;
         margin: 0 0 20px;
-        justify-content:center;
+        justify-content: center;
     }
 
         .nav-tabs.tab_rounded li.nav-item {
@@ -446,7 +454,6 @@
         }
 
         .tab_heading a.addNewNeed {
-            font-size: 18px;
             color: #555;
             background: #22baa0;
             color: #fff;
@@ -454,11 +461,12 @@
             border: 0;
             padding: 7px 12px;
             border-radius: 6px;
-            margin-left: auto;
-            position: absolute;
-            right: 0;
-            top: 1px;
+            /*margin-left: auto;*/
+            /*position: absolute;*/
+            /*right: 0;*/
+            /*top: 1px;*/
         }
+
     ul.needsList {
         list-style: none;
         padding: 0;
@@ -477,7 +485,7 @@
             list-style: none;
             /*border-top: 1px solid #ddd;*/
         }
-    
+
 
     .needItem {
         padding: 10px 25px 10px 10px;
@@ -486,6 +494,7 @@
         cursor: pointer;
         transition: all ease 0.4s;
     }
+
         .needItem:hover {
             background: #F3F4F4;
         }
@@ -530,9 +539,11 @@
         transform: rotate(180deg);
         -webkit-transform: rotate(180deg);
     }
-    .hide_down_arrow{
-        display:none;
+
+    .hide_down_arrow {
+        display: none;
     }
+
     ul.needsList > li > .addNewNeedGoal {
         border-top: 1px solid #ddd;
     }
@@ -611,33 +622,40 @@
         font-size: 18px;
         color: #555;
     }
+
     .searchBoxWrap {
         display: flex;
-        align-items: center;
+        /* align-items: center; */
         width: 100%;
-        align-content: center;
+        /* align-content: center; */
         justify-content: center;
-        position: relative;
+        /* position: relative; */
+        justify-content: space-between;
+        margin: 0px 0px 10px;
     }
+
         .searchBoxWrap .searchbox {
             margin-right: 15px;
             border: 1px solid #ddd;
             border-radius: 50px;
             max-width: initial;
         }
-    .searchBoxWrap .searchbox input {
-        border: 0;
-        padding: 5px 15px;
-        background: transparent;
-    }
-    .searchBoxWrap .searchbox button {
-        border: 0;
-        background: transparent;
-        padding: 5px 15px;
-    }
+
+            .searchBoxWrap .searchbox input {
+                border: 0;
+                padding: 5px 15px;
+                background: transparent;
+            }
+
+            .searchBoxWrap .searchbox button {
+                border: 0;
+                background: transparent;
+                padding: 5px 15px;
+            }
+
     .needItem textarea.txtGoal {
         border: 0;
-        height: 20px;
+        height: 21px;
         min-height: initial;
         resize: none;
         width: 100%;
@@ -645,16 +663,17 @@
         display: block;
         outline: none;
     }
-    ul.needsList.scroll {
-        padding:0 30px;
-        max-height: 355px;
+
+    .needListOuter.scroll {
+        max-height: 450px;
+        overflow-y: auto;
+        padding: 0 30px;
     }
-    .needListOuter {
-        margin: 0 -30px;
-    }
+
     .itemHoverActions a .fa-level-up-alt {
         transform: rotate(90deg);
     }
+
     .needItem .dragIcon {
         position: absolute;
         left: -15px;
@@ -664,12 +683,165 @@
         opacity: 0;
         cursor: move;
     }
+
     .needItem:hover a.dragIcon {
         opacity: 1;
-        
     }
     /*needs popup style closed*/
+    /*multiselect css start*/
+    .divFiletype button.multiselect {
+        background-color: transparent;
+        color: #999;
+        background: url(../images/chevron-arrow-down.svg) no-repeat;
+        background-position: 95% 13px;
+        background-size: 12px;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        line-height: normal;
+        /* color: #818181; */
+        width: 100% !important;
+        padding: 5px 20px 5px 10px;
+        border-radius: 0;
+        border: 1px solid #e2e2e2;
+        border-radius: 0;
+        font-size: 14px;
+        height: 42px;
+        text-align: left;
+    }
 
+    .divFiletype ul.multiselect-container.dropdown-menu.show {
+        padding: 8px 2px;
+        width: 100%;
+    }
+
+        .divFiletype ul.multiselect-container.dropdown-menu.show li a {
+            /* padding: 0px 8px; */
+            font-style: normal;
+            font-weight: normal;
+            font-size: 12px;
+            line-height: normal;
+            color: #5d5d5d;
+            height: 23px;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            padding: .25rem .5rem;
+        }
+
+    .divFiletype ul.multiselect-container li label {
+        margin-bottom: 0px;
+    }
+
+        .divFiletype ul.multiselect-container li label input[type="checkbox"] {
+            position: absolute;
+            left: 10px;
+            width: 18px;
+            height: 18px;
+            opacity: 0;
+        }
+
+        .divFiletype ul.multiselect-container li label input[type="checkbox"] {
+            position: absolute;
+            left: 10px;
+            width: 18px;
+            height: 18px;
+            opacity: 0;
+        }
+
+    .divFiletype .dropdown-menu li.active span:before {
+        content: "";
+        background: url(../images/checkbox.svg) no-repeat center #22baa0;
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        vertical-align: middle;
+        border-radius: 3px;
+        text-align: center;
+        float: left;
+        padding: 4px 7px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        background-size: 15px;
+    }
+
+    .divFiletype a {
+        text-decoration: none;
+    }
+    /*multiselect css end*/
+    .needItem .dragIcon {
+        font-size: 18px;
+    }
+
+    span.countgoal {
+        width: 22px;
+        height: 22px;
+        background: #EBA11E;
+        float: left;
+        text-align: center;
+        color: #fff;
+        line-height: 22px;
+        border-radius: 50%;
+        margin-right: 5px;
+        font-size: 11px;
+        display:none;
+    }  
+    span.tooltipicon {
+        outline: none;
+        margin-left: 5px;
+    }
+        span.tooltipicon i {
+            margin: 0px;
+        }
+/*Textarea css start*/
+    .ck-editor-header ul {
+        display: flex;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+        .ck-editor-header ul li {
+            padding: 5px 8px;
+            background: #fff;
+            margin-right: 5px;
+            border: 1px solid #ccc;
+            font-size: 13px;
+        }
+
+    .ck-editor-header {
+        background: #f5f5f5;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-bottom:0;
+    }
+
+    .ck-editor {
+        width: 100%;
+    }
+
+    label.label-left {
+        flex: 0 0 150px;
+        max-width: 150px;
+    }
+    span.addoptions {
+        display: inline-block;
+        width: 25px;
+        height: 25px;
+        font-size: 14px;
+        background: #2ecc71;
+        color: #fff;
+        margin: 0 0 0 5px;
+        border-radius: 3px;
+        border: 0;
+        padding: 5px 5px;
+        line-height: normal;
+        transition: all .30s ease-out;
+        cursor: pointer;
+    }
 </style>
 
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
@@ -688,8 +860,8 @@
 
                     <div class="detail-button ml-auto">
                         <a href="/careplan/list" class="btn btn-success mr-10 backlist"> <i class="fa fa-arrow-left"></i> Back to list</a>
-                        <a href="javascript:{}" onclick="GetNeedAndGoalList()" class="btn btn-success mr-0 backlist" > <i class="far fa-save"></i> Needs & Goals</a>
-                        
+                        <a href="javascript:{}" onclick="GetNeedAndGoalList()" class="btn btn-success mr-0 backlist"> <i class="far fa-save"></i> Needs & Goals</a>
+
                         <a href="javascript:{}" onclick="return PreviewForm();" class="btn btn-success mr-0 preview">
                             <i class="far fa-save"></i>
                             Preview
@@ -731,8 +903,8 @@
                                         <li data-type="number"><span><i class="fa fa-list-ol" aria-hidden="true"></i>Number</span></li>
                                         <li data-type="radio-group"><span><i class="fa fa-stop-circle" aria-hidden="true"></i>Radio</span></li>
                                         <li data-type="select"><span><i class="fa fa-text-width" aria-hidden="true"></i>Select</span></li>
-                                        <li data-type="text"><span><i class="fa fa-text-width" aria-hidden="true"></i>Text Field</span></li>
-                                        <li data-type="textarea"><span><i class="fa fa-text-width" aria-hidden="true"></i>Text Area</span></li>
+                                        <li data-type="text"><span><i class="fa fa-text-width" aria-hidden="true"></i>Short Text</span></li>
+                                        <li data-type="textarea"><span><i class="fa fa-text-width" aria-hidden="true"></i>Long Text</span></li>
                                     </ul>
                                 </div>
                                 <div class="tab-pane container" id="databaseTab">
@@ -753,16 +925,14 @@
                                             <option value="11">Client Health Questionnaire (PHQ-9)</option>
                                             <option value="12">Client Food Access</option>
                                         </select>
-                                        <ul id="database-control-box" class="scroll">
-                                           
-                                        </ul>
+                                        <ul id="database-control-box" class="scroll"></ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-md-9 scroll" style="height:570px">
+                    <div class="col-md-9 scroll" style="height:570px;overflow-y:auto;">
                         <div class="row">
 
                             <div id="droppable" class="draggablediv">
@@ -774,6 +944,10 @@
 
             </div>
         </div>
+    </div>
+
+    <div hidden="hidden">
+        <input type="text" hidden="hidden" id="hdnTemplateId" value="@Html.Raw(ViewBag.IsModify?ViewBag.TemplateId:0)" />
     </div>
 </section>
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -809,8 +983,8 @@
     </div>
 </div>
 <div class="modal fade needModal_wrap" id="NeedModal" tabindex="-1" role="dialog" aria-labelledby="NeedModalLabel">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 80%;height:90%">
+        <div class="modal-content" style="height:90%">
             <div class="modal-header">
                 <h5 class="modal-title">ADD DEFAULT NEEDS & GOALS</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -821,6 +995,7 @@
                 <div class="needModalContent">
                     <div class="tab_heading">
                         <div class="searchBoxWrap">
+                            <h5> Needs (<span class="needCount">0</span>)</h5>
                             <div class="searchbox">
                                 <input type="text" placeholder="Search..." onkeyup="SearchNeedAndGoal(this)" autocomplete="off">
                                 <button type="submit"><i class="fas fa-search"></i></button>
@@ -829,9 +1004,9 @@
                         </div>
 
                     </div>
-                    <div class="needListOuter">
+                    <div class="needListOuter scroll">
                         <div class="text-center"></div>
-                        <ul class="needsList scroll">
+                        <ul class="needsList">
                             <li class="hasChild opened">
                                 <div class="needItem">
                                     <div>This is the first Need. Please do it asap.</div>
@@ -892,11 +1067,11 @@
 
                     </div>
                 </div>
-                        
-                  
+
+
 
             </div>
-            
+
         </div>
     </div>
 </div>
@@ -904,18 +1079,18 @@
 
 
 @section scripts{
-    <script src="~/Scripts/jquery-ui.min.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.js"></script>
     <script src="~/Scripts/Careplan/htmlcontrol.js"></script>
     <script src="~/Scripts/Careplan/databasecontrol.js"></script>
     <script src="~/Scripts/Careplan/NeedAndGoal.js"></script>
     <script>
         var templateId =@ViewBag.TemplateId;
-        var templatePath = '@ViewBag.TemplatePath';
+        var isModify = '@ViewBag.IsModify';
         var programName = '@ViewBag.ProgramName';
         var programId = '@ViewBag.ProgramId';
         var userId = '@Session["userid"]';
-       
+        var templateName = '@ViewBag.TemplateName';
     </script>
 }
 

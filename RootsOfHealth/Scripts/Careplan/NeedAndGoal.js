@@ -9,13 +9,14 @@ $(".txtNeed").keypress(function (event) {
 
 function NeedsGoals(result) {
     if (result.length) {
+        $("span.needCount").html("").append(result.length);
         var needList = $(".needsList");
         needList.prev().html("");
         var needstring = '';
         for (var i = 0; i < result.length; i++) {
             needstring += `<li class="hasChild ${result[i].GoalHtml.length ? "opened" : ""}" data-needid="${result[i].NeedID}">
                                 <div class="needItem">
-                                 <div onclick="EditNeed(this)">${result[i].NeedDesc}</div>
+                                 <div onclick="EditNeed(this)"><span class="countgoal">0</span>${result[i].NeedDesc}</div>
                                <i onclick="ExpandCollapse(this)" class="down_arrow fa fa-chevron-down ${result[i].GoalHtml.length ? "" : "hide_down_arrow"}"></i>
                                <div class="itemHoverActions">
                                <a href="javascript:{}" onclick="AddNewGoalFromNeed(this)"><i class="fas fa-level-up-alt"></i></a>
@@ -179,6 +180,7 @@ function GetNeedAndGoalList() {
                 $(".needsList").prev().html(emptyText.toUpperCase());
             }               
             $("#NeedModal").modal('show');
+            NeedFocus();
         }
     })
 }
@@ -206,7 +208,9 @@ function DeleteNeed(obj) {
                         dataType: "json",
                         success: function (result) {
                             $(obj).closest("li").remove();
+                            $("span.needCount").html("").append($("ul.needsList").find("li.hasChild").length);
                             toastr.success("", "Changes saved sucessfully", { progressBar: true });
+
                         }
                     })
                 }
@@ -344,11 +348,11 @@ function needSendOrderToServer() {
 function textAreaAdjust(o) {
     o.style.height = "1px";
 
-    if (o.scrollHeight > 20) {
-        o.style.height = (o.scrollHeight) + "px";
+    if (o.scrollHeight > 21) {
+        o.style.height = (o.scrollHeight+1) + "px";
     }
     else {
-        o.style.height = "20px";
+        o.style.height = "21px";
     }
 
 }
@@ -360,7 +364,7 @@ function ExpandCollapse(o) {
 
 function EditGoal(o) {
     var item = $(o).html();
-    var goalDiv = `<textarea class="txtGoal" onfocus="goalOrNeedFocus(this)">${item}</textarea>`;
+    var goalDiv = `<textarea class="txtGoal" spellcheck="false" style="padding:0px !important;" onfocus="goalOrNeedFocus(this)">${item}</textarea>`;
     $(o).hide();
     $(o).after(goalDiv);
     $(".txtGoal").keyup(function () {
@@ -392,9 +396,9 @@ function EditGoal(o) {
 
 function EditNeed(o) {
     var item = $(o).html();
-    var goalDiv = `<textarea class="txtneed"  onfocus="goalOrNeedFocus(this)">${item}</textarea>`;
+    var needDiv = `<textarea class="txtneed" spellcheck="false" style="padding:0px !important;"  onfocus="goalOrNeedFocus(this)">${item}</textarea>`;
     $(o).hide();
-    $(o).after(goalDiv);
+    $(o).after(needDiv);
     $(".txtneed").keyup(function () {
         var o = this;
         o.style.height = "1px";
@@ -437,13 +441,14 @@ function SearchNeedAndGoal(obj) {
 }
 
 function goalOrNeedFocus(obj) {
-    obj.style.height = "20px";
-    obj.style.height = (obj.scrollHeight + 1) + "px";
+    obj.style.height = "21px";
+    obj.style.height = (obj.scrollHeight+1) + "px";
     if (!(obj.updating)) {
         obj.updating = true;
         var oldValue = obj.value;
         obj.value = '';
-        obj.value = oldValue; obj.updating = false;
+        obj.value = oldValue;
+        obj.updating = false;
     }
 }
 

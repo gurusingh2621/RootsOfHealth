@@ -1,6 +1,6 @@
 ﻿@model RootsOfHealth.Models.PatientCommunicationAndMobilityBO
 
-<div class="tab-pane fade" id="Communication" role="tabpanel" aria-labelledby="Communication-tab">
+<div class="tab-pane fade @Html.Raw(ViewBag.CurrentTab=="Communication-tab"?"show active":"")" id="Communication" role="tabpanel" aria-labelledby="Communication-tab">
     <div class="inner-content">
         <div class="paitent-detail">
             <div class="row">
@@ -12,7 +12,7 @@
                             </h2>
 
                             <div class="detail-button ml-auto">
-                                <a href="/Patient/Add?PatientID=@ViewBag.PatientId"
+                                <a href="javascript:{0}" onclick="ActivateTab(@ViewBag.PatientId,'Communication-tab')"
                                    class="btn btn-success label-fields">
                                     <i class="far fa-edit"></i>
                                     Edit
@@ -234,7 +234,7 @@
                                                             @Model.OtherTransportation
                                                         </label>
 
-                                                        <input tabindex="5" type="text" id="txtOtherTransportation" name="OtherTransportation" value="@Model.OtherTransportation" class="form-control" placeholder="">
+                                                        <input tabindex="5" type="text" id="txtOtherTransportation" name="OtherTransportation" value="@Model.OtherTransportation" class="form-control" placeholder="" maxlength="50">
                                                     </div>
                                                 </div>
                                             </div>

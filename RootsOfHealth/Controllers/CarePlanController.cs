@@ -102,10 +102,19 @@ namespace RootsOfHealth.Controllers
         {
             return View();
         }
-        public ActionResult ModifyTemplate(int TemplateId,int ProgramId,string Template=null)
+        [HttpPost]
+        public JsonResult GetTemplateData(CarePlantemplateBO Model)
+        {          
+            return Json(new
+            {
+                redirectUrl = Url.Action("ModifyTemplate", "CarePlan",new {Model.TemplateID,Model.TemplateName,Model.ProgramID,Model.IsModify }),
+                isRedirect = true
+            });
+        }
+        public ActionResult ModifyTemplate(CarePlantemplateBO data)
         {
             string ProgramName = "";
-            switch (ProgramId)
+            switch (data.ProgramID)
             {
                 case 1:
                     ProgramName = "Clinic";
@@ -121,27 +130,65 @@ namespace RootsOfHealth.Controllers
                     break;
 
             }
-            ViewBag.ProgramId = ProgramId;
+            ViewBag.ProgramId = data.ProgramID;
             ViewBag.ProgramName = ProgramName;
-            ViewBag.TemplateId = TemplateId;
-            ViewBag.TemplatePath = Template;
+            ViewBag.TemplateId = data.TemplateID;
+            ViewBag.IsModify = data.IsModify;
+            ViewBag.TemplateName = data.TemplateName;
             return View();
         }
 
         [HttpGet]
-        public JsonResult GetFormHtmlByPath(string PathName)
+        public JsonResult GetFormHtmlById(int Id)
         {
-            if (PathName != "")
+            if (Id == 0)
+            {
+                return Json(new
+                {
+                    html = "",
+                    IsActive = 0
+                }, JsonRequestBehavior.AllowGet);
+            }
+            string PathName = string.Empty;
+            CarePlantemplateBO data = new CarePlantemplateBO();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                //HTTP GET
+                var responseTask = client.GetAsync("/api/PatientMain/GetCarePlanTemplateByID?ID=" + Id);
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<CarePlantemplateBO>();
+                    readTask.Wait();
+                    data = readTask.Result;
+                }
+                else //web api sent error response 
+                {
+                    //log response status here..
+
+
+                }
+            }
+            PathName = data.TemplatePath;
+            if (PathName != "" && PathName!= "null")
             {
                 var gethtml = System.IO.File.ReadAllText(Server.MapPath("~/App_Data/" + PathName + ".html"));
                 var jsonResult = new
                 {
                     html = gethtml,
+                    IsActive=data.IsActive
                 };
                 return Json(jsonResult, JsonRequestBehavior.AllowGet);
             }
             //var gethtml=   System.IO.File.ReadAllText(Server.MapPath("~/App_Data/data.html"));
-            return Json("", JsonRequestBehavior.AllowGet);
+            return Json(new
+            {
+                html ="",
+                IsActive = 0
+            }, JsonRequestBehavior.AllowGet);
         }
     }
 }
