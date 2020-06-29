@@ -20,12 +20,29 @@ namespace RootsOfHealth.Controllers
         }
         public JsonResult SaveFormTemplate(string htmlTemplate, CarePlantemplateBO Model,string ProgramName)
         {
-            ProgramName = ProgramName.Replace(" ", "");
-            string TemplateName = ProgramName + "_CarePlan" + DateTime.Now.ToString("dd_MM_yyyy_hh_mm_ss");
-            var dataFile = Server.MapPath("~/App_Data/"+ TemplateName + ".html");
-            System.IO.File.WriteAllText(@dataFile, htmlTemplate);
-            Model.TemplatePath = TemplateName;
-            Model.TemplateTable ="tbl_"+ProgramName+ "_CarePlan";
+            string TemplateName = "";
+            string dataFile = "";
+            if (Model.ProgramID == 0)
+            {
+                ProgramName = "BaseTemplate";
+                TemplateName=ProgramName + DateTime.Now.ToString("dd_MM_yyyy_hh_mm_ss");
+                dataFile = Server.MapPath("~/App_Data/" + TemplateName + ".html");
+                System.IO.File.WriteAllText(@dataFile, htmlTemplate);
+                Model.TemplatePath = TemplateName;
+                Model.TemplateTable = "tbl_" + ProgramName;
+                Model.IsBaseTemplate = true;
+            }
+            else
+            {
+                ProgramName = ProgramName.Replace(" ", "");
+                TemplateName = ProgramName + "_CarePlan" + DateTime.Now.ToString("dd_MM_yyyy_hh_mm_ss");
+                dataFile = Server.MapPath("~/App_Data/" + TemplateName + ".html");
+                System.IO.File.WriteAllText(@dataFile, htmlTemplate);
+                Model.TemplatePath = TemplateName;
+                Model.TemplateTable = "tbl_" + ProgramName + "_CarePlan";
+            }
+            
+            
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(WebApiKey);
@@ -107,7 +124,7 @@ namespace RootsOfHealth.Controllers
         {          
             return Json(new
             {
-                redirectUrl = Url.Action("ModifyTemplate", "CarePlan",new {Model.TemplateID,Model.TemplateName,Model.ProgramID,Model.IsModify }),
+                redirectUrl = Url.Action("ModifyTemplate", "CarePlan",new {Model.TemplateID,Model.TemplateName,Model.ProgramID,Model.IsBaseTemplate,Model.IsModify }),
                 isRedirect = true
             });
         }
@@ -135,6 +152,7 @@ namespace RootsOfHealth.Controllers
             ViewBag.TemplateId = data.TemplateID;
             ViewBag.IsModify = data.IsModify;
             ViewBag.TemplateName = data.TemplateName;
+            ViewBag.IsBaseTemplate = data.IsBaseTemplate;
             return View();
         }
 
@@ -173,7 +191,7 @@ namespace RootsOfHealth.Controllers
                 }
             }
             PathName = data.TemplatePath;
-            if (PathName != "" && PathName!= "null")
+            if (PathName != "" && PathName!= null)
             {
                 var gethtml = System.IO.File.ReadAllText(Server.MapPath("~/App_Data/" + PathName + ".html"));
                 var jsonResult = new
@@ -189,6 +207,12 @@ namespace RootsOfHealth.Controllers
                 html ="",
                 IsActive = 0
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult BaseTemplate(int templateid)
+        {
+            ViewBag.TemplateId = templateid;
+            return View();
         }
     }
 }

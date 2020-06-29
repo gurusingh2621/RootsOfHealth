@@ -278,6 +278,7 @@
     <Content Include="css\_variables.scss" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\bootstrap_multiselect.js" />
+    <Content Include="Scripts\Careplan\basetemplatecontrolhtml.js" />
     <Content Include="Scripts\Careplan\databasecontrol.js" />
     <Content Include="Scripts\Careplan\htmlcontrol.js" />
     <Content Include="Scripts\Careplan\NeedAndGoal.js" />
@@ -371,6 +372,7 @@
     <Content Include="Views\Patient\EditLookUpOption.cshtml" />
     <Content Include="Views\CarePlan\List.cshtml" />
     <Content Include="Views\CarePlan\ModifyTemplate.cshtml" />
+    <Content Include="Views\CarePlan\BaseTemplate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

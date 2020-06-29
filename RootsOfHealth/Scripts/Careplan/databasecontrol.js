@@ -1,6 +1,11 @@
 ﻿var newdatabaseid = 0
+var connectdatabase = '#droppable';
 function CheckSortableDatabase() {
-
+    if ($("#droppable").find(".basecontentarea").length > 0 && programId == '0') {
+        connectdatabase = ".baseheader,.basefooter";
+    } else if ($("#droppable").find(".basecontentarea").length > 0 && programId != '0') {
+        connectdatabase = ".contentarea1,.contentarea2,.contentarea3";
+    }
     DatabaseFormFields();
 }
 //use to add list inside database-control-box based on selected form and make list item darag and drop on right side area
@@ -203,7 +208,7 @@ function DatabaseFormFields() {
             }
             $("#database-control-box").html(databasecontrol_li);
             $('#database-control-box li').draggable({
-                connectToSortable: '#droppable',
+                connectToSortable: connectdatabase,
                 helper: function () { 
                     var cloned = $(this).clone();
                     cloned.attr('id', (++newdatabaseid).toString());
@@ -211,7 +216,7 @@ function DatabaseFormFields() {
                 },
                 revert: "invalid",
             });
-            $("#droppable").sortable({
+    $(connectdatabase).sortable({
                 connectWith: "#database-control-box",
                 containment: "#droppable",
                 placeholder: "highlight",
