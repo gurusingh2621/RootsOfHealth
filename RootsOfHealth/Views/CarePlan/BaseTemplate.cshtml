@@ -1,17 +1,19 @@
 ﻿
 @{
-    ViewBag.Title = "ModifyTemplate";
+    ViewBag.Title = "BaseTemplate";
     Layout = "~/Views/Shared/_Layout.cshtml";
-
 }
+
+
 <style>
-    .modal-row label:first-child{
-        margin-right:.5rem;
+    .modal-row label:first-child {
+        margin-right: .5rem;
     }
+
     .invalid-field {
         border: 2px solid #c10000;
         padding: 5px !important;
-         margin: 2px 0px;
+        margin: 2px 0px;
     }
 
     .required-asterisk {
@@ -72,18 +74,11 @@
         padding: 0px 5px;
     }
 
-    .frmbtn {
-        border: 1px dashed #ccc;
-        padding: 10px;
-        position: relative;
-        margin: 0 0 30px 0;
-    }
-
     #droppable {
+        border:1.3px dashed #ccc;
         list-style-type: none;
         background: #ffffff;
         min-height: 570px;
-        border:1.3px dashed #ccc;
         width: 100%;
         display: flex;
         align-items: flex-start;
@@ -299,7 +294,7 @@
         border: 1px solid #e2e2e2;
         padding: 10px;
         position: relative;
-        margin:5px 0 10px 0;
+        margin: 5px 0 10px 0;
     }
 
         .draggablediv .frmbtn select.form-control {
@@ -582,7 +577,6 @@
             resize: none;
             overflow: auto;
             background: transparent;
-           word-break: break-all;
         }
 
     .itemHoverActions {
@@ -610,7 +604,6 @@
         display: block;
         border-right: 1px solid #cdd;
         font-size: 16px;
-        cursor: pointer;
     }
 
         .itemHoverActions a.delete_item {
@@ -656,7 +649,7 @@
                 padding: 5px 15px;
             }
 
-    .needItem textarea.txtGoal,textarea.edittxtGoal {
+    .needItem textarea.txtGoal {
         border: 0;
         height: 21px;
         min-height: initial;
@@ -665,7 +658,6 @@
         padding: 0;
         display: block;
         outline: none;
-        word-break: break-all;
     }
 
     .needListOuter.scroll {
@@ -792,23 +784,25 @@
         border-radius: 50%;
         margin-right: 5px;
         font-size: 11px;
-    flex:0 0 22px;
-    max-width:22px;
+        display: none;
     }
+
     span.tooltipicon {
         outline: none;
         margin-left: 5px;
     }
+
         span.tooltipicon i {
             margin: 0px;
         }
-/*Textarea css start*/
+    /*Textarea css start*/
     .ck-editor-header ul {
         display: flex;
         list-style-type: none;
         padding: 0;
         margin: 0;
     }
+
         .ck-editor-header ul li {
             padding: 5px 8px;
             background: #fff;
@@ -821,7 +815,7 @@
         background: #f5f5f5;
         padding: 8px;
         border: 1px solid #ddd;
-        border-bottom:0;
+        border-bottom: 0;
     }
 
     .ck-editor {
@@ -832,6 +826,7 @@
         flex: 0 0 150px;
         max-width: 150px;
     }
+
     span.addoptions {
         display: inline-block;
         width: 25px;
@@ -847,10 +842,12 @@
         transition: all .30s ease-out;
         cursor: pointer;
     }
-    .frmbtn.contentbtn {
-        padding: 0 !important;
-        border: 0 !important;
+
+    .draggablediv .contentbtn {
+        padding: 0;
+        border: 0;
         position: relative;
+        margin: 0 0 20px 0;
     }
 
     .basecontentarea {
@@ -861,7 +858,7 @@
         display: flex;
         align-items: flex-start;
         flex-wrap: wrap;
-    }
+    }   
     span.basecontentspan {
         top: 50%;
         position: absolute;
@@ -869,28 +866,7 @@
         transform: translate(-50%, -50%);
         color: #ccc;
         font-size: 14px;
-    }
-    .event-btn-right.hidden {
-    display: none;
-}
-    .editNeed {
-    display: flex;
-    align-items: flex-start;
-}
-    span.needDesc {
-    word-break: break-all;
-}
-    .movable-placeholder {
-        background: #34425a;
-        width: 100%;
-        height: 20px;
-        display: block;
-        padding: 20px;
-        margin: 0 0 15px 0;
-        border-style: dashed;
-        border-width: 1px;
-        border-color: #000;
-    }
+    }  
 </style>
 
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
@@ -903,23 +879,12 @@
 
             <div class="appointment">
                 <div class="detail-heading d-flex">
-                    <h2><span class="careplancaption">Careplan template for <span>@ViewBag.ProgramName</span> </span></h2>
+                    <h2><span class="careplancaption">Careplan template for <span>BASE TEMPLATE</span> </span></h2>
 
 
 
                     <div class="detail-button ml-auto">
-                        <a href="/careplan/list" class="btn btn-success mr-10 backlist"> <i class="fa fa-arrow-left"></i> Back to list</a>
-                        <a href="javascript:{}" onclick="GetNeedAndGoalList()" class="btn btn-success mr-0 backlist"> <i class="far fa-save"></i> Needs & Goals</a>
-
-                        <a href="javascript:{}" onclick="return PreviewForm();" class="btn btn-success mr-0 preview">
-                            <i class="far fa-save"></i>
-                            Preview
-                        </a>
-
-                        <a href="javascript:{}" onclick="return saveDraftHtml();" class="btn btn-success mr-0 btndraft" style="margin-left:8px;">
-                            <i class="far fa-save"></i>
-                            Save as draft
-                        </a>
+                        <a href="/careplan/list" class="btn btn-success mr-10 backlist"> <i class="fa fa-arrow-left"></i> Back to list</a>                                            
                         <a href="javascript:{}" onclick="return saveHtml();" class="btn btn-success mr-0 savehtml">
                             <i class="far fa-save"></i>
                             Save
@@ -953,7 +918,7 @@
                                         <li data-type="radio-group"><span><i class="fa fa-stop-circle" aria-hidden="true"></i>Radio</span></li>
                                         <li data-type="select"><span><i class="fa fa-text-width" aria-hidden="true"></i>Select</span></li>
                                         <li data-type="text"><span><i class="fa fa-text-width" aria-hidden="true"></i>Short Text</span></li>
-                                        <li data-type="textarea"><span><i class="fa fa-text-width" aria-hidden="true"></i>Long Text</span></li>
+                                        <li data-type="textarea"><span><i class="fa fa-text-width" aria-hidden="true"></i>Long Text</span></li>                                      
                                     </ul>
                                 </div>
                                 <div class="tab-pane container" id="databaseTab">
@@ -985,7 +950,38 @@
                         <div class="row">
 
                             <div id="droppable" class="draggablediv rounded">
-
+                                <input id="hdnbasetempid" hidden="hidden" class="basecontrol-id" type="text" value="0" />
+                                <div class="dragresize col-md-12">
+                                    <div class="contentbtn">
+                                        <div class="basecontentarea contentarea1"></div>
+                                        <span class="basecontentspan">Content area, you can not drop here</span>                                       
+                                        </div>
+                                        </div>
+                                   <div class="dragresize col-md-12">
+                                    <div class="contentbtn">
+                                        <div class="baseheader basecontentarea"></div>
+                                        <span class="basecontentspan">Base header, you can drop content here</span>
+                                    </div>
+                                </div>
+                                <div class="dragresize col-md-12">
+                                    <div class="contentbtn">
+                                        <div  class="basecontentarea contentarea2"></div>
+                                        <span class="basecontentspan">Content area, you can not drop here</span>                                       
+                                        </div>
+                                    </div>
+                                <div class="dragresize col-md-12">
+                                    <div class="contentbtn">
+                                        <div class="basefooter basecontentarea"></div>
+                                        <span class="basecontentspan">Base footer, you can drop content here</span>
+                                    </div>
+                                </div>
+                                <div class="dragresize col-md-12">
+                                    <div class="contentbtn">
+                                        <div  class="basecontentarea contentarea3"></div>
+                                        <span class="basecontentspan">Content area, you can not drop here</span>
+                                    </div>
+                                </div>                           
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -993,10 +989,9 @@
 
             </div>
         </div>
-    </div>
 
     <div hidden="hidden">
-        <input type="text" hidden="hidden" id="hdnTemplateId" value="@Html.Raw(ViewBag.IsModify?ViewBag.TemplateId:0)" />
+        <input type="text" hidden="hidden" id="hdnTemplateId" value="@Html.Raw(ViewBag.TemplateId)" />
     </div>
 </section>
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -1031,117 +1026,17 @@
         </div>
     </div>
 </div>
-<div class="modal fade needModal_wrap" id="NeedModal" tabindex="-1" role="dialog" aria-labelledby="NeedModalLabel">
-    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 80%;height:90%">
-        <div class="modal-content" style="height:90%">
-            <div class="modal-header">
-                <h5 class="modal-title">ADD DEFAULT NEEDS & GOALS</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="needModalContent">
-                    <div class="tab_heading">
-                        <div class="searchBoxWrap">
-                            <h5> Needs (<span class="needCount">0</span>)</h5>
-                            <div class="searchbox">
-                                <input type="text" placeholder="Search..." onkeyup="SearchNeedAndGoal(this)" autocomplete="off">
-                                <button type="submit"><i class="fas fa-search"></i></button>
-                            </div>
-                            <a class="addNewNeed" href="javascript:{}" onclick="NeedFocus()"><i class="fa fa-plus"></i></a>
-                        </div>
-
-                    </div>
-                    <div class="needListOuter scroll">
-                        <div class="text-center"></div>
-                        <ul class="needsList">
-                            <li class="hasChild opened">
-                                <div class="needItem">
-                                    <div>This is the first Need. Please do it asap.</div>
-
-                                    <i class="down_arrow fa fa-chevron-down"></i>
-                                    <div class="itemHoverActions">
-                                        <a href="#"><i class="fas fa-level-up-alt"></i></a>
-                                        <a href="#" class="delete_item"><i class="fa fa-trash"></i></a>
-                                    </div>
-                                </div>
-                                <ul class="goalsList">
-                                    <li>
-                                        <div class="needItem">
-                                            <div>This is the first Goal. Please do it asap.</div>
-
-                                            <div class="itemHoverActions">
-                                                <a href="#"><i class="fa fa-clipboard-check"></i></a>
-                                                <a href="#" class="delete_item"><i class="fa fa-trash"></i></a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="needItem">
-                                            <div>This is the first Goal. Please do it asap.</div>
-
-                                            <div class="itemHoverActions">
-                                                <a href="#"><i class="fa fa-clipboard-check"></i></a>
-                                                <a href="#" class="delete_item"><i class="fa fa-trash"></i></a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="addNewNeedGoal">
-                                            <div class="plusIcon"><i class="fa fa-plus"></i></div>
-                                            <input type="text" name="Add New Need" placeholder="Add New Goal...">
-                                        </div>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <div class="needItem">
-                                    <div>This is the first Need. Please do it asap.</div>
-                                    <i class="down_arrow fa fa-chevron-down"></i>
-                                    <div class="itemHoverActions">
-                                        <a href="#"><i class="fa fa-clipboard-check"></i></a>
-                                        <a href="#" class="delete_item"><i class="fa fa-trash"></i></a>
-                                    </div>
-                                </div>
-                            </li>
-
-                            <li class="last-child">
-                                <div class="addNewNeedGoal">
-                                    <div class="plusIcon"><i class="fa fa-plus"></i></div>
-                                    <textarea class="txtNeed"  maxlength="1000" placeholder="add need" onkeyup="textAreaAdjust(this)"></textarea>
-                                </div>
-                            </li>
-                        </ul>
-
-                    </div>
-                </div>
-
-
-
-            </div>
-
-        </div>
-    </div>
-</div>
-
-
-
 @section scripts{
     <script src="~/Scripts/jquery-ui.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.js"></script>
-    <script src="~/Scripts/Careplan/htmlcontrol.js"></script>
+    <script src="~/Scripts/Careplan/basetemplatecontrolhtml.js"></script>
     <script src="~/Scripts/Careplan/databasecontrol.js"></script>
-    <script src="~/Scripts/Careplan/NeedAndGoal.js"></script>
     <script>
-        var templateId =@ViewBag.TemplateId;
-        var isModify = '@ViewBag.IsModify';
-        var programName = '@ViewBag.ProgramName';
-        var programId = '@ViewBag.ProgramId';
-        var userId = '@Session["userid"]';
-        var templateName = '@ViewBag.TemplateName';
-        var isBaseTemplate='@ViewBag.IsBaseTemplate';
-
+        var templateId =@ViewBag.TemplateId;       
+        var userId = '@Session["userid"]';     
+        var programId = '0';
+        var programName = '';
+        var templateName = 'Base Template';
     </script>
 }
 

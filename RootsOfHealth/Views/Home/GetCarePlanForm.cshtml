@@ -4,16 +4,22 @@
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
 
 <style>
-    .renderform {
+    .renderform{
         width: 100%;
         display: flex;
         align-items: flex-start;
         flex-wrap: wrap;
-        padding: 10px 0;
+        padding: 5px 0;
         align-content: baseline;
     }
 
-
+    .basecontentarea {
+        width: 100%;
+        display: flex;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        align-content: baseline;
+    }
 
         .renderform .form-control {
             height: 23px;
@@ -142,6 +148,9 @@
         flex: 0 0 150px;
         max-width: 150px;
     }
+    span.basecontentspan {
+        display: none;
+    }
 </style>
 <section id="content" class="responsive-container pt-0">
 
@@ -187,6 +196,7 @@
                 $('.tooltipicon').not(this).tooltip('hide');
             });
         }
+        
         function GetDropDownName() {
             $.ajax({
                 type: "GET",
@@ -212,7 +222,10 @@
                 success: function (result) {
                     tableName = result.tableName;
                     console.log(tableName);
-                    $(".renderform").html(result.html);                   
+                    $(".renderform").html(result.html); 
+                    if ($(".renderform").find(".basecontentarea").length > 0) {
+                        getHeaderAndFooter();
+                    }
                     $(".renderform .event-btn-right").remove();
                     $(".renderform .ck-editor-header").remove();
                     $(".html-content").prev().css("display", "none");
@@ -506,6 +519,42 @@
                     toastr.error("Error while adding field");
                 }
             });
+        }
+        function getHeaderAndFooter() {
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/getbasetemplateid',
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                async: false,
+                success: function (result) {
+                    switch (result) {
+                        case -1:
+                            break;
+                        default:
+                            $.ajax({
+                                type: "GET",
+                                url: '/careplan/GetFormHtmlById?Id=' + result,
+                                contentType: 'application/json; charset=UTF-8',
+                                dataType: "json",
+                                async: false,
+                                success: function (result) {
+                                    var baseHtml = parseHTML(result.html);
+                                    var baseHeader = $(baseHtml).find(".baseheader").html();
+                                    var baseFooter = $(baseHtml).find(".basefooter").html();
+                                    $(".renderform").find(".baseheader").html("").append(baseHeader);
+                                    $(".renderform").find(".basefooter").html("").append(baseFooter);
+                                }
+                            });
+                            break;
+                    }
+                }
+            });
+        }
+        function parseHTML(htmlstr) {
+            var t = document.createElement('template');
+            t.innerHTML = htmlstr;
+            return t.content.cloneNode(true);
         }
     </script>
 }

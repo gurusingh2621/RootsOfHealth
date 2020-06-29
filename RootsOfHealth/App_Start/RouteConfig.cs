@@ -14,7 +14,7 @@ namespace RootsOfHealth
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.MapRoute(
                    name: "CarePlan",
-                   url: "{controller}/{action}/{TemplateID}/{TemplateName}/{ProgramID}/{IsModify}",
+                   url: "{controller}/{action}/{TemplateID}/{TemplateName}/{ProgramID}/{IsBaseTemplate}/{IsModify}",
                    defaults: new { controller = "Home2", action = "Index" }
             );
             routes.MapRoute(

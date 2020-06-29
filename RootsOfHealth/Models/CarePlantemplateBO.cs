@@ -21,6 +21,7 @@ namespace RootsOfHealth.Models
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
         public bool Isactivated { get; set; }
+        public bool IsBaseTemplate { get; set; }
         [NotMapped]
         public bool IsModify { get; set; }
 

@@ -1,32 +1,30 @@
 ﻿var new_id = 0;
-var connect = '#droppable';
 $(function () {
+    HtmlControlDragnDrop();
     if (sessionStorage.getItem("Id") === null) {
         GetFormHtmlById(templateId);
     } else {
         GetFormHtmlById(sessionStorage.getItem("Id"));
         $("#hdnTemplateId").val(sessionStorage.getItem("Id"));
     }
-    ShowPreviewButton();
-
-});
+})
 function CheckSortableHtml() {
-    $("#ddlform").val("0");   
-        HtmlControlDragnDrop();   
+    $("#ddlform").val("0");
+    HtmlControlDragnDrop();
 }
 //HtmlControlDragnDrop=>use for drag html control from left list and drop on right dropable area
 function HtmlControlDragnDrop() {
-    
+
     $('#control-box li').draggable({
-        connectToSortable: connect,
-        helper: function () { 
+        connectToSortable: '.baseheader,.basefooter',
+        helper: function () {
             var cloned = $(this).clone();
             cloned.attr('id', (++new_id).toString());
             return cloned;
         },
         revert: "invalid"
     });
-    $(connect).sortable({
+    $(".baseheader,.basefooter").sortable({
         connectWith: "#control-box",
         containment: "#droppable",
         placeholder: "highlight",
@@ -62,7 +60,7 @@ function HtmlControlDragnDrop() {
                     $(this).find("li[data-type='label']").replaceWith(str);
                     break;
                 case "checkbox-group":
-                    var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group" id="' + newid + '">' +
+                    var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group base-control" id="' + newid + '">' +
                         '<label class="checkbox-group "><span class="title">Check Box (Multiple)</span></label>' +
                         '<div class="custom-control custom-checkbox  d-inline-block mr-2">' +
                         '<input  type="checkbox" class="custom-control-input" name="checkbox" value="true" id="checkbox1">' +
@@ -79,7 +77,7 @@ function HtmlControlDragnDrop() {
                 case "date":
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
                         '<label class=""><span class="title">Label</span></label>' +
-                        '<input id="' + newid + '"  type="date" class="form-control" id="">' +
+                        '<input id="' + newid + '"  type="date" class="form-control base-control" id="">' +
                         '</div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
@@ -89,7 +87,7 @@ function HtmlControlDragnDrop() {
                 case "file":
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
                         '<label class=""><span class="title">Label</span></label >' +
-                        '<input id="' + newid + '"  type="file" class="form-control" id="">' +
+                        '<input id="' + newid + '"  type="file" class="form-control base-control" id="">' +
                         '</div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
@@ -100,7 +98,7 @@ function HtmlControlDragnDrop() {
                 case "number":
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
                         '<label class=""><span class="title">Label</span></label>' +
-                        '<input id="' + newid + '"  type="number" class="form-control" id="">' +
+                        '<input id="' + newid + '"  type="number" class="form-control base-control" id="">' +
                         '</div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
@@ -108,7 +106,7 @@ function HtmlControlDragnDrop() {
                     $(this).find("li[data-type='number']").replaceWith(str);
                     break;
                 case "radio-group":
-                    var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group"  id="' + newid + '">' +
+                    var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group base-control"  id="' + newid + '">' +
                         '<label class="radiobox-group "><span class="title">Radio</span></label>' +
                         '<div class="custom-control custom-radio d-inline-block mr-2">' +
                         '<input  type="radio" class="custom-control-input" name="radio" value="true" id="radio1">' +
@@ -125,7 +123,7 @@ function HtmlControlDragnDrop() {
                 case "select":
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
                         '<label class=""><span class="title">Select</span></label>' +
-                        ' <select id="' + newid + '" class="form-control">' +
+                        ' <select id="' + newid + '" class="form-control base-control">' +
                         ' <option value="0">Select Option</option>' +
                         '<option  value="1">1</option>' +
                         '<option  value="2">2</option>' +
@@ -140,7 +138,7 @@ function HtmlControlDragnDrop() {
                 case "text":
                     var str = '<div class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
                         '<label class=""><span class="title">Label</span></label>' +
-                        '<input id="' + newid + '"  type="text" class="form-control" id="">' +
+                        '<input id="' + newid + '"  type="text" class="form-control base-control" id="">' +
                         '</div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
@@ -149,18 +147,17 @@ function HtmlControlDragnDrop() {
                     break;
                 case "textarea":
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
-                        '<label class=""><span class="title">Textarea</span></label>' +   
-                        '<div class="ck-editor">'+
-                        '<div class="ck-editor-header"><ul><li><i class="fa fa-list-ul" aria-hidden="true"></i></li><li><i class="fa fa-list-ol" aria-hidden="true"></i></li><li><i class="fa fa-align-left" aria-hidden="true"></i></li></ul></div>' +                
-                        '<textarea id="' + newid + '"  class="form-control" name="my-textarea"></textarea>' +                        
+                        '<label class=""><span class="title">Textarea</span></label>' +
+                        '<div class="ck-editor">' +
+                        '<div class="ck-editor-header"><ul><li><i class="fa fa-list-ul" aria-hidden="true"></i></li><li><i class="fa fa-list-ol" aria-hidden="true"></i></li><li><i class="fa fa-align-left" aria-hidden="true"></i></li></ul></div>' +
+                        '<textarea id="' + newid + '"  class="form-control base-control" name="my-textarea"></textarea>' +
                         '</div></div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
                         '</div>';
-                    $(this).find("li[data-type='textarea']").replaceWith(str);    
-                   
-                    break;
+                    $(this).find("li[data-type='textarea']").replaceWith(str);
 
+                    break;               
             }
         },
         stop: function (event, ui) {
@@ -172,18 +169,20 @@ function HtmlControlDragnDrop() {
                 setTimeout(function () {
                     $checkbox.removeAttr('checked');
                 }, 0);
+
                 event.preventDefault();
                 event.stopPropagation();
             });
-           
-            if ($(".contentarea1").find(".dragresize").length > 0) {
-                $(".contentarea1").next("span.basecontentspan").hide();
+            if ($(".baseheader").find(".dragresize").length == 0) {
+                $(".baseheader").next("span.basecontentspan").show();
+            } else {
+                $(".baseheader").next("span.basecontentspan").hide();
             }
-            if ($(".contentarea2").find(".dragresize").length > 0) {
-                $(".contentarea2").next("span.basecontentspan").hide();
-            }
-            if ($(".contentarea3").find(".dragresize").length > 0) {
-                $(".contentarea3").next("span.basecontentspan").hide();
+
+            if ($(".basefooter").find(".dragresize").length == 0) {
+                $(".basefooter").next("span.basecontentspan").show();
+            } else {
+                $(".basefooter").next("span.basecontentspan").hide();
             }
         }
     });
@@ -217,7 +216,7 @@ function EditHtml(type, ID) {
         case "checkbox-group":
             var isrequired = $("#" + ID).find(".required-asterisk");
             var tooltiptext = $("#" + ID).find("label").first().find("span.tooltipicon").attr("title");
-            tooltiptext = tooltiptext === undefined ? "" : tooltiptext == '' ? $("#" + ID).find("label").first().find("span.tooltipicon").attr("data-original-title"): tooltiptext;
+            tooltiptext = tooltiptext === undefined ? "" : tooltiptext == '' ? $("#" + ID).find("label").first().find("span.tooltipicon").attr("data-original-title") : tooltiptext;
             var labelText = $("#" + ID).find(".checkbox-group").find("span.title").html();
             if (labelText == "Check Box (Multiple)") {
                 labelText = "";
@@ -241,9 +240,9 @@ function EditHtml(type, ID) {
                 '<label class="required-asterisk">Label Text</label>' +
                 '<input  type="text" control-id="' + ID + '" class="form-control lbltext"  onkeyup="ValidateColumnName(this)" value="' + labelText + '"/>' +
                 '</div>';
-            
 
-            if (tooltiptext!='') {
+
+            if (tooltiptext != '') {
                 popupString += `<div class="modal-row custom-control custom-checkbox">
                             <input type="checkbox" class="custom-control-input" id="help-input" name="checkbox" checked="">
                             <label class="custom-control-label" for="help-input">Enable help text</label></div>`;
@@ -270,7 +269,7 @@ function EditHtml(type, ID) {
                 '<option value="col-md-4" ' + ismd4 + '>Small</option>' +
                 '<option value="col-md-6" ' + ismd6 + '>Medium</option>' +
                 '<option value="col-md-12" ' + ismd12 + '>Large</option>' +
-                '</select></div></div>';           
+                '</select></div></div>';
             popupString += `<div class="modal-row"><div class="custom-control custom-radio d-inline-block mr-2">
     <input type="radio" class="custom-control-input checkhorizontal" id="radio-horizontal" name="radio" value="horizontal" ${ $("#" + ID).hasClass("vertical") ? "" : "checked"}>
     <label class="custom-control-label" for="radio-horizontal">Horizontal</label></div>
@@ -286,7 +285,7 @@ function EditHtml(type, ID) {
                     ' <input type="text" placeholder="Key" class="form-control"  value="' + $(this).next().text() + '"/>' +
                     ' <input type="text" placeholder="Value" class="form-control"  value="' + $(this).attr("value") + '"/>' +
                     '</div>' +
-                    '<div class="popup-event-btn">' +                   
+                    '<div class="popup-event-btn">' +
                     '<button class="event-btn file-remove" onclick="RemoveOption(this)"> <i class="fa fa-minus-circle" aria-hidden="true"></i></button > ' +
                     '</div></div>'
             });
@@ -302,7 +301,7 @@ function EditHtml(type, ID) {
                     return;
                 }
                 if (isLabelNameExist($(".lbltext").val(), $("#" + ID).find("input").first().attr("id"))) {
-                   return;
+                    return;
                 }
                 var breakout = false;
                 $('.option-block').each(function () {
@@ -315,8 +314,8 @@ function EditHtml(type, ID) {
                     breakout = false;
                     toastr.error("", "Options can not be empty", { progressBar: true });
                     return false;
-                } 
-               
+                }
+
                 var colname = $(".lbltext").val().trim();
                 colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
@@ -325,92 +324,92 @@ function EditHtml(type, ID) {
                         var randomNumber = Math.floor((Math.random() * 100) + 1);
                         colname = colname + randomNumber;
                     }
-                    
+
                 }
-                    $(".dragresize  [id=" + ID + "]").html("");
+                $(".dragresize  [id=" + ID + "]").html("");
                 $(".dragresize  [id=" + ID + "]").html("<label class='checkbox-group'><span class='title'>Check Box (Multiple)</span></label>");
-                
+
                 var allTextArray = $('.option-block').map(function () {
                     if ($(this).find("[placeholder=Key]").val().trim() != '')
 
                         return $(this).find("[placeholder=Key]").val().trim()
-                    }).get();
-                    var duplicateTextArray = allTextArray.filter(function (element, pos) {
-                        if (allTextArray.indexOf(element) != pos) {
-                            return true;
-                        }
-                        else {
-                            return false;
-                        }
+                }).get();
+                var duplicateTextArray = allTextArray.filter(function (element, pos) {
+                    if (allTextArray.indexOf(element) != pos) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
 
-                    });
+                });
                 var allValueArray = $('.option-block').map(function () {
                     if ($(this).find("[placeholder=Value]").val().trim() != '')
 
                         return $(this).find("[placeholder=Value]").val().trim()
-                    }).get();
-                    var duplicateValueArray = allValueArray.filter(function (element, pos) {
-                        if (allValueArray.indexOf(element) != pos) {
-                            return true;
-                        }
-                        else {
-                            return false;
-                        }
+                }).get();
+                var duplicateValueArray = allValueArray.filter(function (element, pos) {
+                    if (allValueArray.indexOf(element) != pos) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
 
-                    });
-                    if (duplicateValueArray.length != 0) {
-                        toastr.error("", "Option value can not be duplicate", { progressBar: true });
-                        return;
-                    }
-                    if (duplicateTextArray.length != 0) {
-                        toastr.error("", "Option text can not be duplicate", { progressBar: true });
-                        return;
-                    }
-                    var option_data = "<div class='checkbox-html'>";
-                    $(".option-block").each(function (index) {
-                        option_data += `<div class="custom-control custom-checkbox  d-inline-block mr-2">
+                });
+                if (duplicateValueArray.length != 0) {
+                    toastr.error("", "Option value can not be duplicate", { progressBar: true });
+                    return;
+                }
+                if (duplicateTextArray.length != 0) {
+                    toastr.error("", "Option text can not be duplicate", { progressBar: true });
+                    return;
+                }
+                var option_data = "<div class='checkbox-html'>";
+                $(".option-block").each(function (index) {
+                    option_data += `<div class="custom-control custom-checkbox  d-inline-block mr-2">
                      <input  type="checkbox" class="custom-control-input" id="${ID + index}"  name="${ID}"  value="${$(this).find("[placeholder = Value]").val().trim()}">
                      <label class="custom-control-label" for="${ID + index}">${$(this).find("[placeholder = Key]").val().trim()}</label></div>
-                     `; 
-                    });
-                    option_data += "</div>";
-                    //$(option_data).appendTo(".dragresize  [id=" + ID + "]");
-                    $("#" + ID).find("div").html("");
-                $("#" + ID).append(option_data);   
+                     `;
+                });
+                option_data += "</div>";
+                //$(option_data).appendTo(".dragresize  [id=" + ID + "]");
+                $("#" + ID).find("div").html("");
+                $("#" + ID).append(option_data);
                 if (columnName != undefined) {
 
                     $("#" + ID).find("input.custom-control-input").first().attr("data-column", columnName);
                 } else {
                     $("#" + ID).find("input.custom-control-input").first().attr("data-column", colname);
                 }
-                    if($("#required-input").prop("checked")) {
-                        $("#" + ID).find('label:first-child').addClass("required-asterisk");
-                    } else {
-                        $("#" + ID).find('label:first-child').removeClass("required-asterisk");
-                    }
-                    if($("#help-input").prop("checked")) {
-                        $("#" + ID).find("label").first().append('<span data-toggle="tooltip"  data-placement="top"  title="' + $(".lblhelptext").val() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
-                        toogleToolTip();
+                if ($("#required-input").prop("checked")) {
+                    $("#" + ID).find('label:first-child').addClass("required-asterisk");
+                } else {
+                    $("#" + ID).find('label:first-child').removeClass("required-asterisk");
+                }
+                if ($("#help-input").prop("checked")) {
+                    $("#" + ID).find("label").first().append('<span data-toggle="tooltip"  data-placement="top"  title="' + $(".lblhelptext").val() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
+                    toogleToolTip();
 
-                    } else {
-                        $("#" + ID).find("label").first().find("span.tooltipicon").remove();
+                } else {
+                    $("#" + ID).find("label").first().find("span.tooltipicon").remove();
                 }
                 $("#" + ID).find(".checkbox-group").find("span.title").html("").append($(".lbltext").val().trim());
-                    $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
-                    if ($(".checkhorizontal").prop("checked")) {
-                        $("#" + ID).removeClass("vertical");
-                    } else if ($(".checkvertical").prop("checked")) {
-                        $("#" + ID).addClass("vertical");
-                    }
-                    if ($(".labeltop").prop("checked")) {
-                        $("#" + ID).removeClass("f-g-left");
-                        $("#" + ID).find('label:first-child').removeClass("label-left");
-                    } else if ($(".labelleft").prop("checked")) {
-                        $("#" + ID).addClass("f-g-left");
-                        $("#" + ID).find('label:first-child').addClass("label-left");
-                    }
-                    $("#exampleModalCenter").modal("hide");
-                
+                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
+                if ($(".checkhorizontal").prop("checked")) {
+                    $("#" + ID).removeClass("vertical");
+                } else if ($(".checkvertical").prop("checked")) {
+                    $("#" + ID).addClass("vertical");
+                }
+                if ($(".labeltop").prop("checked")) {
+                    $("#" + ID).removeClass("f-g-left");
+                    $("#" + ID).find('label:first-child').removeClass("label-left");
+                } else if ($(".labelleft").prop("checked")) {
+                    $("#" + ID).addClass("f-g-left");
+                    $("#" + ID).find('label:first-child').addClass("label-left");
+                }
+                $("#exampleModalCenter").modal("hide");
+
             });
             break;
         case "date":
@@ -439,7 +438,7 @@ function EditHtml(type, ID) {
                 '<label class="required-asterisk">Label Text</label>' +
                 '<input  type="text" control-id="' + ID + '" class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + labelText + '"/>' +
                 '</div>';
-            
+
             if (tooltiptext != '') {
                 popupString += `<div class="modal-row custom-control custom-checkbox">
                             <input type="checkbox" class="custom-control-input" id="help-input" name="checkbox" checked="">
@@ -489,7 +488,7 @@ function EditHtml(type, ID) {
                 if ($(".lbltext").val().trim() == "") {
                     toastr.error("", "Label text is required", { progressBar: true });
                     return;
-                }    
+                }
                 if ($("#help-input").prop("checked") && $(".lblhelptext").val().trim() == "") {
                     toastr.error("", "Help text is required", { progressBar: true });
                     return;
@@ -498,7 +497,7 @@ function EditHtml(type, ID) {
                     return;
                 }
                 var colname = $(".lbltext").val().trim();
-                colname = colname.split(" ").join("").replace(/[_\W]+/g, "");   
+                colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $("#" + ID).attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -507,35 +506,35 @@ function EditHtml(type, ID) {
                     }
                     $("#" + ID).attr("data-column", colname);
                 }
-                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span>`);                   
-                   
+                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span>`);
 
-                    if ($("#required-input").prop("checked")) {
-                        $("#" + ID).prev().addClass("required-asterisk");
-                    } else {
-                        $("#" + ID).prev().removeClass("required-asterisk");
-                    }
-                    if ($("#help-input").prop("checked")) {
-                        $("#" + ID).prev().append('<span  data-toggle="tooltip"  data-placement="top"   title="' + $(".lblhelptext").val() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
-                        toogleToolTip();
 
-                    } else {
-                        $("#" + ID).prev().find("span.tooltipicon").remove();
-                    }
+                if ($("#required-input").prop("checked")) {
+                    $("#" + ID).prev().addClass("required-asterisk");
+                } else {
+                    $("#" + ID).prev().removeClass("required-asterisk");
+                }
+                if ($("#help-input").prop("checked")) {
+                    $("#" + ID).prev().append('<span  data-toggle="tooltip"  data-placement="top"   title="' + $(".lblhelptext").val() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
+                    toogleToolTip();
 
-                    if ($(".labeltop").prop("checked")) {
-                        $("#" + ID).closest(".form-group").removeClass("f-g-left");
-                        $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
-                    } else if ($(".labelleft").prop("checked")) {
-                        $("#" + ID).closest(".form-group").addClass("f-g-left");
-                        $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
-                    }
-                    $("#" + ID).removeClass("col-md-4 col-md-6 col-md-12").addClass($("#fieldsize").val());
-                    $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
-                    if ($("#inputsize").val() == "col-md-12") {
-                        $("#" + ID).removeClass("col-md-12");
-                    }
-                    $("#exampleModalCenter").modal("hide");               
+                } else {
+                    $("#" + ID).prev().find("span.tooltipicon").remove();
+                }
+
+                if ($(".labeltop").prop("checked")) {
+                    $("#" + ID).closest(".form-group").removeClass("f-g-left");
+                    $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
+                } else if ($(".labelleft").prop("checked")) {
+                    $("#" + ID).closest(".form-group").addClass("f-g-left");
+                    $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
+                }
+                $("#" + ID).removeClass("col-md-4 col-md-6 col-md-12").addClass($("#fieldsize").val());
+                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
+                if ($("#inputsize").val() == "col-md-12") {
+                    $("#" + ID).removeClass("col-md-12");
+                }
+                $("#exampleModalCenter").modal("hide");
             });
             break;
         case "file":
@@ -565,10 +564,10 @@ function EditHtml(type, ID) {
                              <input type="radio" class="custom-control-input labelleft" id="label-left" name="radio-position" value="left"  ${ $("#" + ID).closest(".form-group").hasClass("f-g-left") ? "checked" : ""}>
                              <label class="custom-control-label" for="label-left">left</label></div>
                              </div>`;
-           popupString +=   '<div class="modal-row">' +
-                            '<label class="required-asterisk">Label Text</label>' +
-               '<input  type="text" control-id="' + ID + '" class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + labelText + '"/>' +
-                            '</div>';
+            popupString += '<div class="modal-row">' +
+                '<label class="required-asterisk">Label Text</label>' +
+                '<input  type="text" control-id="' + ID + '" class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + labelText + '"/>' +
+                '</div>';
             if (tooltiptext != '') {
                 popupString += `<div class="modal-row custom-control custom-checkbox">
                             <input type="checkbox" class="custom-control-input" id="help-input" name="checkbox" checked="">
@@ -582,13 +581,13 @@ function EditHtml(type, ID) {
                             <input type="checkbox" class="custom-control-input" id="help-input" name="checkbox">
                             <label class="custom-control-label" for="help-input">Enable help text</label></div>`;
                 popupString += '<div class="modal-row">' +
-                               '<label>Help Text</label>' +
-                               '<input  type="text" class="form-control lblhelptext" onkeyup="ValidateColumnName(this)"/>' +
-                               '</div>';
+                    '<label>Help Text</label>' +
+                    '<input  type="text" class="form-control lblhelptext" onkeyup="ValidateColumnName(this)"/>' +
+                    '</div>';
             }
             var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
             var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
-            var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";          
+            var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
 
             popupString += `<div class="modal-row divFiletype"><label class="control-label required-asterisk"> Available file format</label>
              <div class="form-group">
@@ -605,14 +604,14 @@ function EditHtml(type, ID) {
              </select>
              </div></div>`;
             popupString += `<div class="modal-row"><label>Allow multiple files:  </label><div class="custom-control custom-radio d-inline-block mr-2">
-    <input type="radio" class="custom-control-input" id="label-multiple-yes" name="radio-multiple" value="yes"  ${allowMultiple != undefined ?"checked":""}>
+    <input type="radio" class="custom-control-input" id="label-multiple-yes" name="radio-multiple" value="yes"  ${allowMultiple != undefined ? "checked" : ""}>
     <label class="custom-control-label" for="label-multiple-yes">Yes</label></div>
     <div class="custom-control custom-radio d-inline-block mr-2">
     <input type="radio" class="custom-control-input" id="label-multiple-no" name="radio-multiple" value="no" ${allowMultiple === undefined ? "checked" : ""}>
     <label class="custom-control-label" for="label-multiple-no">No</label></div>
     </div>`;
             popupString += `<div class="modal-row"><label class="required-asterisk">File Size(in kb)</label><input type="text" onkeyup="validateFileSize(this)" class="form-control lblfilesize" value="${fileSize}" onkeyup="ValidateColumnName(this)"></div>`;
-            
+
             popupString += '<div class="modal-row">' +
                 '<label class="control-label"> Input Size </label>' +
                 '<div class="form-group">' +
@@ -627,13 +626,13 @@ function EditHtml(type, ID) {
                 if ($(".lbltext").val().trim() == "") {
                     toastr.error("", "Label text is required", { progressBar: true });
                     return;
-                }   
+                }
                 if ($("#help-input").prop("checked") && $(".lblhelptext").val().trim() == "") {
                     toastr.error("", "Help text is required", { progressBar: true });
                     return;
                 }
                 var filetypes = $("#filetype").val();
-                if (filetypes.length==0) {
+                if (filetypes.length == 0) {
                     toastr.error("", "Please select file format", { progressBar: true });
                     return;
                 }
@@ -645,7 +644,7 @@ function EditHtml(type, ID) {
                     return;
                 }
                 var colname = $(".lbltext").val().trim();
-                colname = colname.split(" ").join("").replace(/[_\W]+/g, ""); 
+                colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $("#" + ID).attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -654,38 +653,38 @@ function EditHtml(type, ID) {
                     }
                     $("#" + ID).attr("data-column", colname);
                 }
-                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span>`);                   
-                   
-                    $("#" + ID).attr("data-filetype", $("#filetype").val());
-                    $("#" + ID).attr("data-filesize", $(".lblfilesize").val());
-                    if ($("#required-input").prop("checked")) {
-                        $("#" + ID).prev().addClass("required-asterisk");
-                    } else {
-                        $("#" + ID).prev().removeClass("required-asterisk");
-                    }
-                    if ($("#help-input").prop("checked")) {
-                        $("#" + ID).prev().append('<span  data-toggle="tooltip"  data-placement="top"   title="' + $(".lblhelptext").val() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
-                        
-                        toogleToolTip();
+                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span>`);
 
-                    } else {
-                        $("#" + ID).prev().find("span.tooltipicon").remove();
-                    }
-                    if ($("#label-multiple-yes").prop("checked")) {
-                        $("#" + ID).attr("multiple",'');
-                    } else {
-                        $("#" + ID).removeAttr("multiple");
-                    }
-                    if ($(".labeltop").prop("checked")) {
-                        $("#" + ID).closest(".form-group").removeClass("f-g-left");
-                        $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
-                    } else if ($(".labelleft").prop("checked")) {
-                        $("#" + ID).closest(".form-group").addClass("f-g-left");
-                        $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
-                    }
-                    $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
-                    $("#exampleModalCenter").modal("hide");
-                
+                $("#" + ID).attr("data-filetype", $("#filetype").val());
+                $("#" + ID).attr("data-filesize", $(".lblfilesize").val());
+                if ($("#required-input").prop("checked")) {
+                    $("#" + ID).prev().addClass("required-asterisk");
+                } else {
+                    $("#" + ID).prev().removeClass("required-asterisk");
+                }
+                if ($("#help-input").prop("checked")) {
+                    $("#" + ID).prev().append('<span  data-toggle="tooltip"  data-placement="top"   title="' + $(".lblhelptext").val() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
+
+                    toogleToolTip();
+
+                } else {
+                    $("#" + ID).prev().find("span.tooltipicon").remove();
+                }
+                if ($("#label-multiple-yes").prop("checked")) {
+                    $("#" + ID).attr("multiple", '');
+                } else {
+                    $("#" + ID).removeAttr("multiple");
+                }
+                if ($(".labeltop").prop("checked")) {
+                    $("#" + ID).closest(".form-group").removeClass("f-g-left");
+                    $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
+                } else if ($(".labelleft").prop("checked")) {
+                    $("#" + ID).closest(".form-group").addClass("f-g-left");
+                    $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
+                }
+                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
+                $("#exampleModalCenter").modal("hide");
+
             });
             break;
         case "number":
@@ -713,8 +712,8 @@ function EditHtml(type, ID) {
             popupString += '<div class="modal-row">' +
                 '<label class="required-asterisk">Label Text</label>' +
                 '<input  type="text" control-id="' + ID + '" class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + labelText + '"/>' +
-                '</div>';           
-           
+                '</div>';
+
             if (tooltiptext != '') {
                 popupString += `<div class="modal-row custom-control custom-checkbox">
                             <input type="checkbox" class="custom-control-input" id="help-input" name="checkbox" checked="">
@@ -742,7 +741,7 @@ function EditHtml(type, ID) {
             var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
             var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
             var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
-           
+
             popupString += '<div class="modal-row">' +
                 '<label class="control-label"> Field Size </label>' +
                 '<div class="form-group">' +
@@ -785,39 +784,39 @@ function EditHtml(type, ID) {
                     }
                     $("#" + ID).attr("data-column", colname);
                 }
-                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span>`);                                      
-                    if ($("#required-input").prop("checked")) {
-                        $("#" + ID).prev().addClass("required-asterisk");
-                    } else {
-                        $("#" + ID).prev().removeClass("required-asterisk");
-                    }
-                    if ($("#help-input").prop("checked")) {
-                        $("#" + ID).prev().append('<span  data-toggle="tooltip"  data-placement="top"   title="' + $(".lblhelptext").val() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
-                        toogleToolTip();
+                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span>`);
+                if ($("#required-input").prop("checked")) {
+                    $("#" + ID).prev().addClass("required-asterisk");
+                } else {
+                    $("#" + ID).prev().removeClass("required-asterisk");
+                }
+                if ($("#help-input").prop("checked")) {
+                    $("#" + ID).prev().append('<span  data-toggle="tooltip"  data-placement="top"   title="' + $(".lblhelptext").val() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
+                    toogleToolTip();
 
-                    } else {
-                        $("#" + ID).prev().find("span.tooltipicon").remove();
-                    }
-                    if ($(".labeltop").prop("checked")) {
-                        $("#" + ID).closest(".form-group").removeClass("f-g-left");
-                        $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
-                    } else if ($(".labelleft").prop("checked")) {
-                        $("#" + ID).closest(".form-group").addClass("f-g-left");
-                        $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
-                    }
-                    $("#" + ID).removeClass("col-md-4 col-md-6 col-md-12").addClass($("#fieldsize").val());
-                    $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
-                    if ($("#inputsize").val() == "col-md-12") {
-                        $("#" + ID).removeClass("col-md-12");
-                    }
-                    $("#exampleModalCenter").modal("hide");
-                
+                } else {
+                    $("#" + ID).prev().find("span.tooltipicon").remove();
+                }
+                if ($(".labeltop").prop("checked")) {
+                    $("#" + ID).closest(".form-group").removeClass("f-g-left");
+                    $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
+                } else if ($(".labelleft").prop("checked")) {
+                    $("#" + ID).closest(".form-group").addClass("f-g-left");
+                    $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
+                }
+                $("#" + ID).removeClass("col-md-4 col-md-6 col-md-12").addClass($("#fieldsize").val());
+                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
+                if ($("#inputsize").val() == "col-md-12") {
+                    $("#" + ID).removeClass("col-md-12");
+                }
+                $("#exampleModalCenter").modal("hide");
+
             });
             break;
         case "radio-group":
             var isrequired = $("#" + ID).find(".required-asterisk");
             var tooltiptext = $("#" + ID).find("label").first().find("span.tooltipicon").attr("title");
-            tooltiptext = tooltiptext === undefined ? "" : tooltiptext == '' ? $("#" + ID).find("label").first().find("span.tooltipicon").attr("data-original-title") : tooltiptext;           
+            tooltiptext = tooltiptext === undefined ? "" : tooltiptext == '' ? $("#" + ID).find("label").first().find("span.tooltipicon").attr("data-original-title") : tooltiptext;
             var labelText = $("#" + ID).find(".radiobox-group").find("span.title").html();
             if (labelText == "Radio") {
                 labelText = "";
@@ -840,7 +839,7 @@ function EditHtml(type, ID) {
             popupString += '<div class="modal-row">' +
                 '<label class="required-asterisk">Label Text</label>' +
                 '<input  type="text" control-id="' + ID + '" class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + labelText + '"/>' +
-                           '</div>';
+                '</div>';
             if (tooltiptext != '') {
                 popupString += `<div class="modal-row custom-control custom-checkbox">
                             <input type="checkbox" class="custom-control-input" id="help-input" name="checkbox" checked="">
@@ -858,7 +857,7 @@ function EditHtml(type, ID) {
                     '<input  type="text" class="form-control lblhelptext" onkeyup="ValidateColumnName(this)"/>' +
                     '</div>';
             }
-           
+
             var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
             var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
             var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
@@ -914,64 +913,64 @@ function EditHtml(type, ID) {
                     breakout = false;
                     toastr.error("", "Options can not be empty", { progressBar: true });
                     return false;
-                } 
+                }
                 var colname = $(".lbltext").val().trim();
-                colname = colname.split(" ").join("").replace(/[_\W]+/g, ""); 
+                colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $("#" + ID).find("input.custom-control-input").first().attr("data-column") == undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
                         var randomNumber = Math.floor((Math.random() * 100) + 1);
                         colname = colname + randomNumber;
                     }
-                } 
-                    $(".dragresize  [id=" + ID + "]").html("");
-                    $(".dragresize  [id=" + ID + "]").html("<label class='radiobox-group'><span class='title'>Radio</span></label>");
+                }
+                $(".dragresize  [id=" + ID + "]").html("");
+                $(".dragresize  [id=" + ID + "]").html("<label class='radiobox-group'><span class='title'>Radio</span></label>");
 
-                    var allTextArray = $('.option-block').map(function () {
-                        if ($(this).find("[placeholder=Key]").val() != '')
+                var allTextArray = $('.option-block').map(function () {
+                    if ($(this).find("[placeholder=Key]").val() != '')
 
-                            return $(this).find("[placeholder=Key]").val()
-                    }).get();
-                    var duplicateTextArray = allTextArray.filter(function (element, pos) {
-                        if (allTextArray.indexOf(element) != pos) {
-                            return true;
-                        }
-                        else {
-                            return false;
-                        }
-
-                    });
-                    var allValueArray = $('.option-block').map(function () {
-                        if ($(this).find("[placeholder=Value]").val() != '')
-
-                            return $(this).find("[placeholder=Value]").val()
-                    }).get();
-                    var duplicateValueArray = allValueArray.filter(function (element, pos) {
-                        if (allValueArray.indexOf(element) != pos) {
-                            return true;
-                        }
-                        else {
-                            return false;
-                        }
-
-                    });
-                    if (duplicateValueArray.length != 0) {
-                        toastr.error("", "Option value can not be duplicate", { progressBar: true });
-                        return;
+                        return $(this).find("[placeholder=Key]").val()
+                }).get();
+                var duplicateTextArray = allTextArray.filter(function (element, pos) {
+                    if (allTextArray.indexOf(element) != pos) {
+                        return true;
                     }
-                    if (duplicateTextArray.length != 0) {
-                        toastr.error("", "Option text can not be duplicate", { progressBar: true });
-                        return;
+                    else {
+                        return false;
                     }
-                    var option_data = "<div class='radio-html'>";
-                    $(".option-block").each(function (index) {
-                         option_data += `<div class="custom-control custom-radio d-inline-block mr-2">
+
+                });
+                var allValueArray = $('.option-block').map(function () {
+                    if ($(this).find("[placeholder=Value]").val() != '')
+
+                        return $(this).find("[placeholder=Value]").val()
+                }).get();
+                var duplicateValueArray = allValueArray.filter(function (element, pos) {
+                    if (allValueArray.indexOf(element) != pos) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+
+                });
+                if (duplicateValueArray.length != 0) {
+                    toastr.error("", "Option value can not be duplicate", { progressBar: true });
+                    return;
+                }
+                if (duplicateTextArray.length != 0) {
+                    toastr.error("", "Option text can not be duplicate", { progressBar: true });
+                    return;
+                }
+                var option_data = "<div class='radio-html'>";
+                $(".option-block").each(function (index) {
+                    option_data += `<div class="custom-control custom-radio d-inline-block mr-2">
     <input  type="radio" class="custom-control-input" id="${ID + index}"  name="${ID}"  value="${$(this).find("[placeholder = Value]").val()}">
     <label class="custom-control-label" for="${ID + index}">${$(this).find("[placeholder = Key]").val()}</label></div>
     `;
-                    });
-                    option_data += "</div>";
-                    $("#" + ID).find("div").html("");
+                });
+                option_data += "</div>";
+                $("#" + ID).find("div").html("");
                 $("#" + ID).append(option_data);
                 if (columnName != undefined) {
 
@@ -979,36 +978,36 @@ function EditHtml(type, ID) {
                 } else {
                     $("#" + ID).find("input.custom-control-input").first().attr("data-column", colname);
                 }
-                              
-                    $("#" + ID).find(".radiobox-group").find("span.title").html("").append($(".lbltext").val().trim());
-                    if ($("#required-input").prop("checked")) {
-                        $("#" + ID).find('label:first-child').addClass("required-asterisk");
-                    } else {
-                        $("#" + ID).find('label:first-child').removeClass("required-asterisk");
-                    }
-                    if ($("#help-input").prop("checked")) {
-                        $("#" + ID).find("label").first().append('<span tabindex="0" data-toggle="tooltip"  data-placement="top"  title="' + $(".lblhelptext").val() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
-                        toogleToolTip();
 
-                    } else {
-                        $("#" + ID).find("label").first().find("span.tooltipicon").remove();
-                    }
-                    $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
-                    if ($(".radiohorizontal").prop("checked")) {
-                        $("#" + ID).removeClass("vertical");
-                    } else if ($(".radiovertical").prop("checked")) {
-                        $("#" + ID).addClass("vertical");
-                    }
-                    if ($(".labeltop").prop("checked")) {
-                        $("#" + ID).removeClass("f-g-left");
-                        $("#" + ID).find('label:first-child').removeClass("label-left");
-                    } else if ($(".labelleft").prop("checked")) {
-                        $("#" + ID).addClass("f-g-left");
-                        $("#" + ID).find('label:first-child').addClass("label-left");
-                    }
-                   
-                    $("#exampleModalCenter").modal("hide");
-                
+                $("#" + ID).find(".radiobox-group").find("span.title").html("").append($(".lbltext").val().trim());
+                if ($("#required-input").prop("checked")) {
+                    $("#" + ID).find('label:first-child').addClass("required-asterisk");
+                } else {
+                    $("#" + ID).find('label:first-child').removeClass("required-asterisk");
+                }
+                if ($("#help-input").prop("checked")) {
+                    $("#" + ID).find("label").first().append('<span tabindex="0" data-toggle="tooltip"  data-placement="top"  title="' + $(".lblhelptext").val() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
+                    toogleToolTip();
+
+                } else {
+                    $("#" + ID).find("label").first().find("span.tooltipicon").remove();
+                }
+                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
+                if ($(".radiohorizontal").prop("checked")) {
+                    $("#" + ID).removeClass("vertical");
+                } else if ($(".radiovertical").prop("checked")) {
+                    $("#" + ID).addClass("vertical");
+                }
+                if ($(".labeltop").prop("checked")) {
+                    $("#" + ID).removeClass("f-g-left");
+                    $("#" + ID).find('label:first-child').removeClass("label-left");
+                } else if ($(".labelleft").prop("checked")) {
+                    $("#" + ID).addClass("f-g-left");
+                    $("#" + ID).find('label:first-child').addClass("label-left");
+                }
+
+                $("#exampleModalCenter").modal("hide");
+
             });
             break;
         case "select":
@@ -1053,7 +1052,7 @@ function EditHtml(type, ID) {
                     '<label>Help Text</label>' +
                     '<input  type="text" class="form-control lblhelptext" onkeyup="ValidateColumnName(this)"/>' +
                     '</div>';
-            }           
+            }
             var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
             var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
             var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
@@ -1098,7 +1097,7 @@ function EditHtml(type, ID) {
                 if ($(".lbltext").val().trim() == "") {
                     toastr.error("", "Label text is required", { progressBar: true });
                     return;
-                }   
+                }
                 if ($("#help-input").prop("checked") && $(".lblhelptext").val().trim() == "") {
                     toastr.error("", "Help text is required", { progressBar: true });
                     return;
@@ -1117,9 +1116,9 @@ function EditHtml(type, ID) {
                     breakout = false;
                     toastr.error("", "Options can not be empty", { progressBar: true });
                     return false;
-                } 
+                }
                 var colname = $(".lbltext").val().trim();
-                colname = colname.split(" ").join("").replace(/[_\W]+/g, ""); 
+                colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $("#" + ID).attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -1128,79 +1127,79 @@ function EditHtml(type, ID) {
                     }
                     $("#" + ID).attr("data-column", colname);
                 }
-                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span>`);                 
-                    
-                    $("#" + ID).html("");
-                    var allTextArray = $('.option-block').map(function () {
-                        if ($(this).find("[placeholder=Key]").val() != '')
+                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span>`);
 
-                            return $(this).find("[placeholder=Key]").val()
-                    }).get();
-                    var duplicateTextArray = allTextArray.filter(function (element, pos) {
-                        if (allTextArray.indexOf(element) != pos) {
-                            return true;
-                        }
-                        else {
-                            return false;
-                        }
+                $("#" + ID).html("");
+                var allTextArray = $('.option-block').map(function () {
+                    if ($(this).find("[placeholder=Key]").val() != '')
 
-                    });
-                    var allValueArray = $('.option-block').map(function () {
-                        if ($(this).find("[placeholder=Value]").val() != '')
+                        return $(this).find("[placeholder=Key]").val()
+                }).get();
+                var duplicateTextArray = allTextArray.filter(function (element, pos) {
+                    if (allTextArray.indexOf(element) != pos) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
 
-                            return $(this).find("[placeholder=Value]").val()
-                    }).get();
-                    var duplicateValueArray = allValueArray.filter(function (element, pos) {
-                        if (allValueArray.indexOf(element) != pos) {
-                            return true;
-                        }
-                        else {
-                            return false;
-                        }
+                });
+                var allValueArray = $('.option-block').map(function () {
+                    if ($(this).find("[placeholder=Value]").val() != '')
 
-                    });
-                    if (duplicateValueArray.length != 0) {
-                        toastr.error("", "Option value can not be duplicate", { progressBar: true });
-                        return;
+                        return $(this).find("[placeholder=Value]").val()
+                }).get();
+                var duplicateValueArray = allValueArray.filter(function (element, pos) {
+                    if (allValueArray.indexOf(element) != pos) {
+                        return true;
                     }
-                    if (duplicateTextArray.length != 0) {
-                        toastr.error("", "Option text can not be duplicate", { progressBar: true });
-                        return;
+                    else {
+                        return false;
                     }
-                    $(".option-block").each(function (index) {
 
-                        var option_data = "<option value=" + $(this).find("[placeholder=Value]").val() + ">" + $(this).find("[placeholder=Key]").val() + "</option>";
-                        $(option_data).appendTo('#' + ID);
-                    });
-                    if ($("#required-input").prop("checked")) {
-                        $("#" + ID).prev().addClass("required-asterisk");
-                    } else {
-                        $("#" + ID).prev().removeClass("required-asterisk");
-                    }
-                    if ($("#help-input").prop("checked")) {
-                        $("#" + ID).prev().append('<span  data-toggle="tooltip"  data-placement="top"   title="' + $(".lblhelptext").val() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
-                        toogleToolTip();
+                });
+                if (duplicateValueArray.length != 0) {
+                    toastr.error("", "Option value can not be duplicate", { progressBar: true });
+                    return;
+                }
+                if (duplicateTextArray.length != 0) {
+                    toastr.error("", "Option text can not be duplicate", { progressBar: true });
+                    return;
+                }
+                $(".option-block").each(function (index) {
 
-                    } else {
-                        $("#" + ID).prev().find("span.tooltipicon").remove();
-                    }
-                    if ($(".labeltop").prop("checked")) {
-                        $("#" + ID).closest(".form-group").removeClass("f-g-left");
-                        $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
-                    } else if ($(".labelleft").prop("checked")) {
-                        $("#" + ID).closest(".form-group").addClass("f-g-left");
-                        $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
-                    }
-                    $("#" + ID).removeClass("col-md-4 col-md-6 col-md-12").addClass($("#fieldsize").val());
-                    $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
-                    if ($("#inputsize").val() == "col-md-12") {
-                        $("#" + ID).removeClass("col-md-12");
-                    }
-                    $("#exampleModalCenter").modal("hide");
-                
+                    var option_data = "<option value=" + $(this).find("[placeholder=Value]").val() + ">" + $(this).find("[placeholder=Key]").val() + "</option>";
+                    $(option_data).appendTo('#' + ID);
+                });
+                if ($("#required-input").prop("checked")) {
+                    $("#" + ID).prev().addClass("required-asterisk");
+                } else {
+                    $("#" + ID).prev().removeClass("required-asterisk");
+                }
+                if ($("#help-input").prop("checked")) {
+                    $("#" + ID).prev().append('<span  data-toggle="tooltip"  data-placement="top"   title="' + $(".lblhelptext").val() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
+                    toogleToolTip();
+
+                } else {
+                    $("#" + ID).prev().find("span.tooltipicon").remove();
+                }
+                if ($(".labeltop").prop("checked")) {
+                    $("#" + ID).closest(".form-group").removeClass("f-g-left");
+                    $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
+                } else if ($(".labelleft").prop("checked")) {
+                    $("#" + ID).closest(".form-group").addClass("f-g-left");
+                    $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
+                }
+                $("#" + ID).removeClass("col-md-4 col-md-6 col-md-12").addClass($("#fieldsize").val());
+                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
+                if ($("#inputsize").val() == "col-md-12") {
+                    $("#" + ID).removeClass("col-md-12");
+                }
+                $("#exampleModalCenter").modal("hide");
+
             });
             break;
-        case "text":          
+        case "text":
             var isrequired = $("#" + ID).prev().hasClass("required-asterisk");
             var tooltiptext = $("#" + ID).prev().find("span.tooltipicon").attr("data-original-title");
             tooltiptext = tooltiptext === undefined ? "" : tooltiptext;
@@ -1278,10 +1277,10 @@ function EditHtml(type, ID) {
                     toastr.error("", "Label text is required", { progressBar: true });
                     return;
                 }
-                if ($("#help-input").prop("checked") && $(".lblhelptext").val().trim()=="") {
+                if ($("#help-input").prop("checked") && $(".lblhelptext").val().trim() == "") {
                     toastr.error("", "Help text is required", { progressBar: true });
                     return;
-                }      
+                }
                 if (isLabelNameExist($(".lbltext").val(), ID)) {
                     return;
                 }
@@ -1296,35 +1295,35 @@ function EditHtml(type, ID) {
                     }
                     $("#" + ID).attr("data-column", colname);
                 }
-                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span>`);                   
-                              
-                    if ($("#required-input").prop("checked")) {
-                        $("#" + ID).prev().addClass("required-asterisk");
-                    } else {
-                        $("#" + ID).prev().removeClass("required-asterisk");
-                    }
-                    if ($("#help-input").prop("checked")) {
-                        $("#" + ID).prev().append('<span  data-toggle="tooltip"  data-placement="top"   title="' + $(".lblhelptext").val() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
-                        toogleToolTip();
+                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span>`);
 
-                    } else {
-                        $("#" + ID).prev().find("span.tooltipicon").remove();
-                    }
-                    //$("#" + ID).attr("data-columntype", coltype);
-                    if ($(".labeltop").prop("checked")) {
-                        $("#" + ID).closest(".form-group").removeClass("f-g-left");
-                        $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
-                    } else if ($(".labelleft").prop("checked")) {
-                        $("#" + ID).closest(".form-group").addClass("f-g-left");
-                        $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
-                    }
-                    $("#" + ID).removeClass("col-md-4 col-md-6 col-md-12").addClass($("#fieldsize").val());
-                    $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
-                    if ($("#inputsize").val() == "col-md-12") {
-                        $("#" + ID).removeClass("col-md-12");
-                    }
-                    $("#exampleModalCenter").modal("hide");
-                
+                if ($("#required-input").prop("checked")) {
+                    $("#" + ID).prev().addClass("required-asterisk");
+                } else {
+                    $("#" + ID).prev().removeClass("required-asterisk");
+                }
+                if ($("#help-input").prop("checked")) {
+                    $("#" + ID).prev().append('<span  data-toggle="tooltip"  data-placement="top"   title="' + $(".lblhelptext").val() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
+                    toogleToolTip();
+
+                } else {
+                    $("#" + ID).prev().find("span.tooltipicon").remove();
+                }
+                //$("#" + ID).attr("data-columntype", coltype);
+                if ($(".labeltop").prop("checked")) {
+                    $("#" + ID).closest(".form-group").removeClass("f-g-left");
+                    $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
+                } else if ($(".labelleft").prop("checked")) {
+                    $("#" + ID).closest(".form-group").addClass("f-g-left");
+                    $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
+                }
+                $("#" + ID).removeClass("col-md-4 col-md-6 col-md-12").addClass($("#fieldsize").val());
+                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
+                if ($("#inputsize").val() == "col-md-12") {
+                    $("#" + ID).removeClass("col-md-12");
+                }
+                $("#exampleModalCenter").modal("hide");
+
             });
             break;
         case "textarea":
@@ -1352,25 +1351,25 @@ function EditHtml(type, ID) {
             popupString += '<div class="modal-row">' +
                 '<label class="required-asterisk">Label Text</label>' +
                 '<input  type="text" control-id="' + ID + '" class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + labelText + '"/>' +
-                           '</div>';
+                '</div>';
 
             if (tooltiptext != '') {
                 popupString += `<div class="modal-row custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="help-input" name="checkbox" checked="">
                                 <label class="custom-control-label" for="help-input">Enable help text</label></div>`;
                 popupString += '<div class="modal-row">' +
-                                '<label>Help Text</label>' +
-                                '<input  type="text" class="form-control lblhelptext" onkeyup="ValidateColumnName(this)" value="' + tooltiptext + '"/>' +
-                                '</div>';
+                    '<label>Help Text</label>' +
+                    '<input  type="text" class="form-control lblhelptext" onkeyup="ValidateColumnName(this)" value="' + tooltiptext + '"/>' +
+                    '</div>';
             } else {
                 popupString += `<div class="modal-row custom-control custom-checkbox">
                                <input type="checkbox" class="custom-control-input" id="help-input" name="checkbox">
                                <label class="custom-control-label" for="help-input">Enable help text</label></div>`;
                 popupString += '<div class="modal-row">' +
-                               '<label>Help Text</label>' +
-                               '<input  type="text" class="form-control lblhelptext" onkeyup="ValidateColumnName(this)"/>' +
-                               '</div>';
-            }            
+                    '<label>Help Text</label>' +
+                    '<input  type="text" class="form-control lblhelptext" onkeyup="ValidateColumnName(this)"/>' +
+                    '</div>';
+            }
 
             var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
             var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
@@ -1410,7 +1409,7 @@ function EditHtml(type, ID) {
                     return;
                 }
                 var colname = $(".lbltext").val().trim();
-                colname = colname.split(" ").join("").replace(/[_\W]+/g, "");  
+                colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $("#" + ID).attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -1419,34 +1418,34 @@ function EditHtml(type, ID) {
                     }
                     $("#" + ID).attr("data-column", colname);
                 }
-                $("#" + ID).parent().prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span>`);                   
-                    
-                    if ($("#required-input").prop("checked")) {
-                        $("#" + ID).parent().prev().addClass("required-asterisk");
-                    } else {
-                        $("#" + ID).parent().prev().removeClass("required-asterisk");
-                    }
-                    if ($("#help-input").prop("checked")) {
-                        $("#" + ID).parent().prev().append('<span  data-toggle="tooltip"  data-placement="top"   title="' + $(".lblhelptext").val() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
-                        toogleToolTip();
+                $("#" + ID).parent().prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span>`);
 
-                    } else {
-                        $("#" + ID).parent().prev().find("span.tooltipicon").remove();
-                    }
-                    if ($(".labeltop").prop("checked")) {
-                        $("#" + ID).closest(".form-group").removeClass("f-g-left");
-                        $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
-                    } else if ($(".labelleft").prop("checked")) {
-                        $("#" + ID).closest(".form-group").addClass("f-g-left");
-                        $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
-                    }
-                    $("#" + ID).closest(".ck-editor").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#fieldsize").val());
-                    $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
-                    if ($("#inputsize").val() == "col-md-12") {
-                        $("#" + ID).closest(".ck-editor").removeClass("col-md-12");
-                    }
-                    $("#exampleModalCenter").modal("hide");
-                
+                if ($("#required-input").prop("checked")) {
+                    $("#" + ID).parent().prev().addClass("required-asterisk");
+                } else {
+                    $("#" + ID).parent().prev().removeClass("required-asterisk");
+                }
+                if ($("#help-input").prop("checked")) {
+                    $("#" + ID).parent().prev().append('<span  data-toggle="tooltip"  data-placement="top"   title="' + $(".lblhelptext").val() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
+                    toogleToolTip();
+
+                } else {
+                    $("#" + ID).parent().prev().find("span.tooltipicon").remove();
+                }
+                if ($(".labeltop").prop("checked")) {
+                    $("#" + ID).closest(".form-group").removeClass("f-g-left");
+                    $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
+                } else if ($(".labelleft").prop("checked")) {
+                    $("#" + ID).closest(".form-group").addClass("f-g-left");
+                    $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
+                }
+                $("#" + ID).closest(".ck-editor").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#fieldsize").val());
+                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
+                if ($("#inputsize").val() == "col-md-12") {
+                    $("#" + ID).closest(".ck-editor").removeClass("col-md-12");
+                }
+                $("#exampleModalCenter").modal("hide");
+
             });
             break;
         default:
@@ -1457,7 +1456,7 @@ function EditHtml(type, ID) {
                 '<label class="control-label"> Field Size </label>' +
                 '<div class="form-group">' +
                 '<select class="form-control"  id="inputsize">' +
-                '<option value="col-md-4" ' + ismd4 + '>Small</option>' + 
+                '<option value="col-md-4" ' + ismd4 + '>Small</option>' +
                 '<option value="col-md-6" ' + ismd6 + '>Medium</option>' +
                 '<option value="col-md-12"  ' + ismd12 + '>Large</option>' +
                 '</select></div>';
@@ -1495,10 +1494,10 @@ function EditHtml(type, ID) {
             $("#filetype").multiselect("refresh");
         }
     }
-    
+
 
     $("#exampleModalCenter").modal("show");
-  
+
 }
 //RemoveOption=>use to remove option of select,radio,checkbox inside popup
 function RemoveOption(obj) {
@@ -1508,11 +1507,9 @@ function RemoveOption(obj) {
 };
 //RemoveControl=>use to remove control from dropable section
 function RemoveControl(obj) {
-    if (isBaseTemplate == 'True' || $("#droppable").find(".basecontentarea").length > 0) {
-        var controls = $(obj).closest(".basecontentarea");
-        if (controls.find(".dragresize").length == 1) {
-            controls.next("span.basecontentspan").show();
-        }
+    var controls = $(obj).closest(".basecontentarea");
+    if (controls.find(".dragresize").length == 1) {
+        controls.next("span.basecontentspan").show();
     }
     obj.closest(".dragresize").remove();
 }
@@ -1533,20 +1530,6 @@ function parseHTML(htmlstr) {
     var t = document.createElement('template');
     t.innerHTML = htmlstr;
     return t.content.cloneNode(true);
-}
-//PreviewForm=>use to redirect on preview form page
-function PreviewForm() {
-    if ($("#hdnTemplateId").val() == "0") return;
-    window.location.href = `/home/GetCarePlanForm?Id=${$("#hdnTemplateId").val()}&patientid=0`;
-}
-//CheckColumnType=>use to check column type for text field inside popup
-function CheckColumnType(e) {
-    if ($(e).val() == "int") {
-        $("#colsize").val("50");
-        $("#colsize").attr("disabled", "disabled");
-    } else {
-        $("#colsize").removeAttr("disabled");
-    }
 }
 //CheckFieldSize=>use to set field width accroding to input container width
 function CheckFieldSize(e) {
@@ -1578,66 +1561,34 @@ function CheckFieldSize(e) {
 //isLabelNameExist=>use to validate duplicate column name
 function isLabelNameExist(LabelName, controlid) {
     var isvalid = false;
-    if (isBaseTemplate == 'True' || $("#droppable").find(".basecontentarea").length > 0) {
-        $("#droppable").find("input.form-control,input.custom-control-input,select.form-control,textarea.form-control").not(".base-control").each(function (index, item) {
-            var lbl = '';
-            if ($(item).is("input")) {
-                switch ($(item).attr("type")) {
-                    case "radio":
-                    case "checkbox":
-                        if ($(item).attr("data-column") === undefined) break;     
-                        if ($(item).closest(".form-group").hasClass("base-control")) break;
-                        lbl = $(item).parent().parent().prev().find("span.title").html();
-                        break;
-                    default:
-                        if ($(item).hasClass("database-field")) break;
-                        lbl = $(item).prev().find("span.title").html();
-                        break;
-                }
+    $("#droppable").find("input.form-control,input.custom-control-input,select.form-control,textarea.form-control").each(function (index, item) {
+        var lbl = '';
+        if ($(item).is("input")) {
+            switch ($(item).attr("type")) {
+                case "radio":
+                case "checkbox":
+                    if ($(item).attr("data-column") === undefined) break;
+                    lbl = $(item).parent().parent().prev().find("span.title").html();
+                    break;
+                default:
+                    if ($(item).hasClass("database-field")) break;
+                    lbl = $(item).prev().find("span.title").html();
+                    break;
             }
-            if ($(item).is("select")) {
-                lbl = $(item).prev().find("span.title").html();
-            }
-            if ($(item).is("textarea")) {
-                lbl = $(item).parent().prev().find("span.title").html();
-            }
+        }
+        if ($(item).is("select")) {
+            lbl = $(item).prev().find("span.title").html();
+        }
+        if ($(item).is("textarea")) {
+            lbl = $(item).parent().prev().find("span.title").html();
+        }
 
-            if (lbl == LabelName && $(item).attr("id") != controlid) {
-                toastr.error("", LabelName + " already exist", { progressBar: true });
-                isvalid = true;
-                return isvalid;
-            }
-        });
-    } else {
-        $("#droppable").find("input.form-control,input.custom-control-input,select.form-control,textarea.form-control").each(function (index, item) {
-            var lbl = '';
-            if ($(item).is("input")) {
-                switch ($(item).attr("type")) {
-                    case "radio":
-                    case "checkbox":
-                        if ($(item).attr("data-column") === undefined) break;
-                        lbl = $(item).parent().parent().prev().find("span.title").html();
-                        break;
-                    default:
-                        if ($(item).hasClass("database-field")) break;
-                        lbl = $(item).prev().find("span.title").html();
-                        break;
-                }
-            }
-            if ($(item).is("select")) {
-                lbl = $(item).prev().find("span.title").html();
-            }
-            if ($(item).is("textarea")) {
-                lbl = $(item).parent().prev().find("span.title").html();
-            }
-
-            if (lbl == LabelName && $(item).attr("id") != controlid) {
-                toastr.error("", LabelName + " already exist", { progressBar: true });
-                isvalid = true;
-                return isvalid;
-            }
-        });
-    }
+        if (lbl == LabelName && $(item).attr("id") != controlid) {
+            toastr.error("", LabelName + " already exist", { progressBar: true });
+            isvalid = true;
+            return isvalid;
+        }
+    });
     return isvalid;
 }
 //ValidateColumn=>use to enter only alphabat for column name
@@ -1649,89 +1600,48 @@ function ValidateColumn(name) {
         return false;
     }
 }
-//ShowPreviewButton=>use to show preview button on page
-function ShowPreviewButton() {
-    if ($("#hdnTemplateId").val()!="0") {
-        $(".preview").css("display", "inline");
-    }
-}
+
 //saveHtml=>use to save template and create table in database for program
 function saveHtml() {
-        if ($("#droppable .dragresize").length == 0) {
-            return;
-        }    
-    var isvalid = true;
-    if (isBaseTemplate == 'True' || $("#droppable").find(".basecontentarea").length > 0) {
-        $("#droppable").find("input.form-control,input.custom-control-input,select.form-control,textarea.form-control").not(".base-control").each(function (index, item) {
-            var colname = $(item).attr("data-column");
-            if (typeof colname !== typeof undefined && colname !== false) {
-            } else {
-                if ($(item).is("input")) {
-                    switch ($(item).attr("type")) {
-                        case "radio":
-                        case "checkbox":
-                            var datacol = $(item).parent().parent().find("input").first().attr("data-column");
-                            if (typeof datacol !== typeof undefined && datacol !== false) {
-                            } else {
-                                $(item).closest(".dragresize").addClass("invalid-field");
-                                isvalid = false;
-                            }
-                            break;
-                        default:
-                            if ($(item).hasClass("database-field")) return;
-                            $(item).closest(".dragresize").addClass("invalid-field");
-                            isvalid = false;
-                            break;
-
-                    }
-                }
-                if ($(item).is("select")) {
-                    $(item).closest(".dragresize").addClass("invalid-field");
-                    isvalid = false;
-                }
-                if ($(item).is("textarea")) {
-                    $(item).closest(".dragresize").addClass("invalid-field");
-                    isvalid = false;
-                }
-            }
-
-        });
-    } else {
-        $("#droppable").find("input.form-control,input.custom-control-input,select.form-control,textarea.form-control").each(function (index, item) {
-            var colname = $(item).attr("data-column");
-            if (typeof colname !== typeof undefined && colname !== false) {
-            } else {
-                if ($(item).is("input")) {
-                    switch ($(item).attr("type")) {
-                        case "radio":
-                        case "checkbox":
-                            var datacol = $(item).parent().parent().find("input").first().attr("data-column");
-                            if (typeof datacol !== typeof undefined && datacol !== false) {
-                            } else {
-                                $(item).closest(".dragresize").addClass("invalid-field");
-                                isvalid = false;
-                            }
-                            break;
-                        default:
-                            if ($(item).hasClass("database-field")) return;
-                            $(item).closest(".dragresize").addClass("invalid-field");
-                            isvalid = false;
-                            break;
-
-                    }
-                }
-                if ($(item).is("select")) {
-                    $(item).closest(".dragresize").addClass("invalid-field");
-                    isvalid = false;
-                }
-                if ($(item).is("textarea")) {
-                    $(item).closest(".dragresize").addClass("invalid-field");
-                    isvalid = false;
-                }
-            }
-
-        });
+    if ($("#droppable").find(".dragresize").length == 0) {
+        toastr.error("", "Please drag field here", { progressBar: true });
+        return;
     }
+    var isvalid = true;
+    $("#droppable").find("input.form-control,input.custom-control-input,select.form-control,textarea.form-control").each(function (index, item) {
+        var colname = $(item).attr("data-column");
+        if (typeof colname !== typeof undefined && colname !== false) {
+        }
+        else {
+            if ($(item).is("input")) {
+                switch ($(item).attr("type")) {
+                    case "radio":
+                    case "checkbox":
+                        var datacol = $(item).parent().parent().find("input").first().attr("data-column");
+                        if (typeof datacol !== typeof undefined && datacol !== false) {
+                        } else {
+                            $(item).closest(".dragresize").addClass("invalid-field");
+                            isvalid = false;
+                        }
+                        break;
+                    default:
+                        if ($(item).hasClass("database-field")) return;
+                        $(item).closest(".dragresize").addClass("invalid-field");
+                        isvalid = false;
+                        break;
+
+                }
+            }
+            if ($(item).is("select")) {
+                $(item).closest(".dragresize").addClass("invalid-field");
+                isvalid = false;
+            }
+            if ($(item).is("textarea")) {
+                $(item).closest(".dragresize").addClass("invalid-field");
+                isvalid = false;
+            }
+        }
+    });
     if (!isvalid) {
 
         toastr.error("", "Enter required fields for controls", { progressBar: true });
@@ -1739,7 +1649,7 @@ function saveHtml() {
     }
     $("#droppable .database-field").each(function (i, e) {
         return;
-    });  
+    });
     var gethtml = $("#droppable").html();
 
     var model = {
@@ -1763,9 +1673,9 @@ function saveHtml() {
                 $(".loaderOverlay").hide();
                 return false;
             } else {
-                
+                //templateId = result.id;
                 $("#hdnTemplateId").val(result.id);
-               
+
             }
 
         }
@@ -1774,36 +1684,31 @@ function saveHtml() {
             var models = [];
 
             $("#droppable [type=text]").each(function (index, item) {
-                if ($(item).hasClass("database-field") || $(item).hasClass("base-control") || $(item).hasClass("basecontrol-id")) return;
+                if ($(item).hasClass("database-field")) return;
                 models.push({ ColDataType: "varchar(max)", ColumnName: $(item).attr("data-column") });
             });
             $("#droppable [type=number],[type=file],[type=date]").each(function (index, item) {
-                if ($(item).hasClass("base-control")) return;
                 models.push({ ColDataType: "varchar(max)", ColumnName: $(item).attr("data-column") });
             });
             $("#droppable select").each(function (index, item) {
-                if ($(item).hasClass("base-control")) return;
                 models.push({ ColDataType: "varchar(max)", ColumnName: $(item).attr("data-column") });
             });
             $("#droppable [type=radio]").each(function (index, item) {
                 var radioitem = $(item).attr("data-column");
                 if (typeof radioitem !== typeof undefined && radioitem !== false) {
-                    if ($(item).closest(".form-group").hasClass("base-control")) return;
                     models.push({ ColDataType: "varchar(max)", ColumnName: $(item).attr("data-column") });
                 }
             });
             $("#droppable [type=checkbox]").each(function (index, item) {
                 var checkitem = $(item).attr("data-column");
                 if (typeof checkitem !== typeof undefined && checkitem !== false) {
-                    if ($(item).closest(".form-group").hasClass("base-control")) return;
                     models.push({ ColDataType: "varchar(max)", ColumnName: $(item).attr("data-column") });
                 }
             });
             $("#droppable textarea").each(function (index, item) {
-                if ($(item).hasClass("base-control")) return;
                 models.push({ ColDataType: "varchar(max)", ColumnName: $(item).attr("data-column") });
             });
-            console.log(models);
+
             var UniqueItems = models.reduce(function (item, e1) {
                 var matches = item.filter(function (e2) { return e1.ColumnName == e2.ColumnName });
                 if (matches.length == 0) {
@@ -1814,7 +1719,7 @@ function saveHtml() {
 
             var model = {
                 TableName: result.tablename,
-                ColumnData:UniqueItems
+                ColumnData: UniqueItems
             }
             $.ajax({
                 type: "POST",
@@ -1828,128 +1733,8 @@ function saveHtml() {
                     $("a.btndraft").css("display", "none");
                     sessionStorage.setItem("Id", result.id);
                     $(".loaderOverlay").hide();
-                    //window.location.href = '/careplan/modifytemplate?TemplateId=' + result.id + '&ProgramId=' + programId + '&Template=' + result.TemplateName;
                 },
             });
-        }
-    });
-}
-//saveHtml=>use to save template in careplantemplate
-function saveDraftHtml() {
-        if ($("#droppable .dragresize ").length == 0) {
-            return;
-        }
-    var isvalid = true;
-    if (isBaseTemplate == 'True' || $("#droppable").find(".basecontentarea").length > 0) {
-        $("#droppable").find("input.form-control,input.custom-control-input,select.form-control,textarea.form-control").not(".base-control").each(function (index, item) {
-            var colname = $(item).attr("data-column");
-            if (typeof colname !== typeof undefined && colname !== false) {
-            } else {
-                if ($(item).is("input")) {
-                    switch ($(item).attr("type")) {
-                        case "radio":
-                        case "checkbox":
-                            var datacol = $(item).parent().parent().find("input").first().attr("data-column");
-                            if (typeof datacol !== typeof undefined && datacol !== false) {
-                            } else {
-                                $(item).closest(".dragresize").addClass("invalid-field");
-                                isvalid = false;
-                            }
-                            break;
-                        default:
-                            if ($(item).hasClass("database-field")) return;
-                            $(item).closest(".dragresize").addClass("invalid-field");
-                            isvalid = false;
-                            break;
-
-                    }
-                }
-                if ($(item).is("select")) {
-                    $(item).closest(".dragresize").addClass("invalid-field");
-                    isvalid = false;
-                }
-                if ($(item).is("textarea")) {
-                    $(item).closest(".dragresize").addClass("invalid-field");
-                    isvalid = false;
-                }
-            }
-
-        });
-    } else {
-        $("#droppable").find("input.form-control,input.custom-control-input,select.form-control,textarea.form-control").each(function (index, item) {
-            var colname = $(item).attr("data-column");
-            if (typeof colname !== typeof undefined && colname !== false) {
-            } else {
-                if ($(item).is("input")) {
-                    switch ($(item).attr("type")) {
-                        case "radio":
-                        case "checkbox":
-                            var datacol = $(item).parent().parent().find("input").first().attr("data-column");
-                            if (typeof datacol !== typeof undefined && datacol !== false) {
-                            } else {
-                                $(item).closest(".dragresize").addClass("invalid-field");
-                                isvalid = false;
-                            }
-                            break;
-                        default:
-                            if ($(item).hasClass("database-field")) return;
-                            $(item).closest(".dragresize").addClass("invalid-field");
-                            isvalid = false;
-                            break;
-
-                    }
-                }
-                if ($(item).is("select")) {
-                    $(item).closest(".dragresize").addClass("invalid-field");
-                    isvalid = false;
-                }
-                if ($(item).is("textarea")) {
-                    $(item).closest(".dragresize").addClass("invalid-field");
-                    isvalid = false;
-                }
-            }
-
-        });
-    }
-    if (!isvalid) {
-
-        toastr.error("", "Enter required fields for controls", { progressBar: true });
-        return;
-    }
-    $("#droppable").find(".database-field,.base-control").each(function (i, e) {
-        return;
-    });  
-    var gethtml = $("#droppable").html();
-    var model = {
-        TemplateID: $("#hdnTemplateId").val(),
-        TemplateName: templateName,
-        ProgramID: programId,
-        IsSavedDraft: 1,
-        CreatedBy: userId,
-        ModifiedBy: userId,
-    };
-    $(".loaderOverlay").css("display", "flex");
-    $.ajax({
-        type: "POST",
-        url: '/CarePlan/SaveFormDraftTemplate',
-        data: JSON.stringify({ htmlTemplate: gethtml, Model: model, ProgramName: programName }),
-        contentType: 'application/json; charset=UTF-8',
-        dataType: "json",
-        success: function (result) {
-            if(result == "0") {
-                toastr.error("Program Already Exist.");
-                $(".loaderOverlay").hide();
-                return false;
-            } else {
-                //templateId = result.id;
-                $("#hdnTemplateId").val(result.id);
-                $("a.preview").css("display", "inline");
-                $(".loaderOverlay").hide();
-                sessionStorage.setItem("Id", result.id);
-                //window.location.href = '/careplan/modifytemplate?TemplateId=' + result.id + '&ProgramId=' + programId + '&Template=' + result.TemplateName;
-
-            }
-            toastr.success("Draft Saved successfully.");
         }
     });
 }
@@ -1962,35 +1747,12 @@ function GetFormHtmlById(Id) {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
-            $("#droppable").html(result.html);
-            
-            if (isBaseTemplate == 'True' || $("#droppable").find(".basecontentarea").length > 0) {
-                getHeaderAndFooter();
-                $("#droppable").find("span.basecontentspan").html("").append("Content area, you can drop control here");
-                $(".baseheader,.basefooter").css("border", "none").find(".event-btn-right").css("pointer-events", "none").addClass("hidden");
-                connect = ".contentarea1,.contentarea2,.contentarea3";
-                
-                
+            if (result.html != "") {
+                $("#droppable").html(result.html);
+                HtmlControlDragnDrop();
             }
-            HtmlControlDragnDrop();
-            if (isBaseTemplate == 'True' && sessionStorage.getItem("Id") === null) {              
-                $("#hdnbasetempid").attr("value", templateId);
-            }
-            if (isModify == 'True') {
-                if (result.IsActive) {
-                    $(".btndraft").css("display", "none");
-                } else {
-                    $(".btndraft").css("display", "inline");
-                }
-            } else if (isModify !='True') {
-                if (result.IsActive && sessionStorage.getItem("Id") !== null) {
-                    $(".btndraft").css("display", "none");
-                } else {
-                    $(".btndraft").css("display", "inline");
-                }
-            }
-            toogleToolTip();            
-            $(".loaderOverlay").hide();           
+                toogleToolTip();
+            $(".loaderOverlay").hide();
         }
     });
 }
@@ -2044,6 +1806,9 @@ function validateFileSize(obj) {
 function IsColumnNameExist(colname) {
     var tableName = '';
     switch (programId) {
+        case "0":
+            tableName = 'tbl_BaseTemplate';
+            break;
         case "1":
             tableName = 'tbl_Clinic_CarePlan';
             break;
@@ -2068,35 +1833,3 @@ function IsColumnNameExist(colname) {
         }
     });
 }
-function getHeaderAndFooter() {
-    $.ajax({
-        type: "GET",
-        url: Apipath + '/api/PatientMain/getbasetemplateid',
-        contentType: 'application/json; charset=UTF-8',
-        dataType: "json",
-        async: false,
-        success: function (result) {
-            switch (result) {
-                case -1:
-                    break;
-                default:
-                    $.ajax({
-                        type: "GET",
-                        url: '/careplan/GetFormHtmlById?Id=' + result,
-                        contentType: 'application/json; charset=UTF-8',
-                        dataType: "json",
-                        async: false,
-                        success: function (result) {
-                            var baseHtml = parseHTML(result.html);
-                            var baseHeader = $(baseHtml).find(".baseheader").html();
-                            var baseFooter = $(baseHtml).find(".basefooter").html();                           
-                            $("#droppable").find(".baseheader").html("").append(baseHeader);
-                            $("#droppable").find(".basefooter").html("").append(baseFooter);
-                        }
-                    });
-                    break;
-            }
-        }
-    });
-}
-

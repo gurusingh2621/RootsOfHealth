@@ -1,4 +1,4 @@
-﻿
+﻿let tempId = 0;
 $(".txtNeed").keypress(function (event) {
     var keycode = event.keyCode || event.which;
     if (keycode == '13' && !event.shiftKey) {
@@ -14,9 +14,12 @@ function NeedsGoals(result) {
         needList.prev().html("");
         var needstring = '';
         for (var i = 0; i < result.length; i++) {
+            var goals = parseHTML(result[i].GoalHtml);
+            
+
             needstring += `<li class="hasChild ${result[i].GoalHtml.length ? "opened" : ""}" data-needid="${result[i].NeedID}">
                                 <div class="needItem">
-                                 <div onclick="EditNeed(this)"><span class="countgoal">0</span>${result[i].NeedDesc}</div>
+                                 <div class="editNeed" onclick="EditNeed(this)"><span class="countgoal">${$(goals).find("li").length}</span><span class="needDesc">${result[i].NeedDesc}</span></div>
                                <i onclick="ExpandCollapse(this)" class="down_arrow fa fa-chevron-down ${result[i].GoalHtml.length ? "" : "hide_down_arrow"}"></i>
                                <div class="itemHoverActions">
                                <a href="javascript:{}" onclick="AddNewGoalFromNeed(this)"><i class="fas fa-level-up-alt"></i></a>
@@ -35,25 +38,44 @@ function NeedsGoals(result) {
         $(".needsList").sortable({
             items: "li.hasChild",
             cursor: 'move',
-            opacity: 0.8,
-            containment: ".needListOuter",
+            opacity: 0.7,
+            revert: 300,
+            delay: 150,
+            placeholder: "movable-placeholder",
+            containment: ".needModalContent",
+            start: function (e, ui) {
+            
+                ui.placeholder.height(ui.helper.outerHeight());
+            },
             update: function () {
                 needSendOrderToServer();
-            }
+            },
+            
 
         });
         $(".goalsList").sortable({
             items: "li",
+            //handle: '.handle,.dragIcon',
             cursor: 'move',
-            opacity: 0.8,
-            containment: ".needsList",
+            cancel: ".newGoal",
+            opacity: 0.7,
+            revert: 300,
+            delay: 150,
+            placeholder: "movable-placeholder",
+            containment: ".needModalContent",
+            start: function (e, ui) {
+                ui.placeholder.height(ui.helper.outerHeight());
+            },
             update: function () {
                 goalSendOrderToServer();
+
             }
 
         });
+
     }
 }
+
 function SaveNeed(e) {
     if ($(e).val().trim() == "") {
         toastr.error("", "Need is required", { progressBar: true });
@@ -62,7 +84,7 @@ function SaveNeed(e) {
     var needModel = {
         NeedID: $(e).closest("li").attr("data-needid"),
         NeedDesc: $(e).val(),
-        TemplateID: templateId,
+        TemplateID: tempId,
         PatientID: null,
         CreatedBy: userId,
         ModifiedBy: userId
@@ -77,7 +99,7 @@ function SaveNeed(e) {
             if ($(e).closest("li").attr("data-needid") == undefined) {
                 var needString = `<li class="hasChild" data-needid="${result}">
                                 <div class="needItem">
-                                 <div onclick="EditNeed(this)">${$(e).val()}</div>
+                                 <div class="editNeed" onclick="EditNeed(this)"><span class="countgoal">0</span><span class="needDesc">${$(e).val()}</span></div>
                                <i class="down_arrow fa fa-chevron-down hide_down_arrow" onclick="ExpandCollapse(this)"></i>
                                <div class="itemHoverActions">
                                <a href="javascript:{}" onclick="AddNewGoalFromNeed(this)"><i class="fas fa-level-up-alt"></i></a>
@@ -88,18 +110,26 @@ function SaveNeed(e) {
                 $(".needsList").find("li.last-child").before(needString);
                 $(".txtNeed").val("").css("height", "21px");
                 $(".needsList").prev().html("");
+                var needCount = parseInt($("span.needCount").html());
+                $("span.needCount").html("").append(needCount + 1);
             } else {
                 $(e).prev().html($(e).val());
                 $(e).prev().show();
                 $(e).remove();
             }
-
+           
             if (!$(".needsList").hasClass('ui-sortable')) {
                 $(".needsList").sortable({
                     items: "li.hasChild",
                     cursor: 'move',
-                    opacity: 0.8,
-                    containment: ".needListOuter",
+                    opacity: 0.7,
+                    revert: 300,
+                    delay: 150,
+                    placeholder: "movable-placeholder",
+                    containment: ".needModalContent",
+                    start: function (e, ui) {                       
+                        ui.placeholder.height(ui.helper.outerHeight());
+                    },
                     update: function () {
                         needSendOrderToServer();
                     }
@@ -136,8 +166,10 @@ function SaveGoal(e) {
 <div class="itemHoverActions"> <a href="javascript:{}" class="delete_item" onclick="DeleteGoal(this)"><i class="fa fa-trash"></i></a> </div>
 <a class="dragIcon" href="#!"><i class="fas fa-grip-vertical"></i></a>
 </div> </li>`;
-                $(e).parent().parent().remove();
-                goalList.append(goalString);
+                goalList.prepend(goalString);
+                $(e).val("").focus().css("height","21px");
+                var goalCount = parseInt($(e).parent().parent().parent().prev().find(".countgoal").html());
+                $(e).parent().parent().parent().prev().find(".countgoal").html("").append(goalCount + 1);
             } else {
                 $(e).prev().html($(e).val());
                 $(e).prev().show();
@@ -150,11 +182,20 @@ function SaveGoal(e) {
             if (!goalList.hasClass('ui-sortable')) {
                 $(".goalsList").sortable({
                     items: "li",
+                    //handle: '.handle,.dragIcon',
                     cursor: 'move',
-                    opacity: 0.8,
-                    containment: ".needsList",
+                    cancel: ".newGoal",
+                    opacity: 0.7,
+                    revert: 300,
+                    delay: 150,
+                    placeholder: "movable-placeholder",
+                    containment: ".needModalContent",
+                    start: function (e, ui) {
+                        ui.placeholder.height(ui.helper.outerHeight());
+                    },
                     update: function () {
                         goalSendOrderToServer();
+
                     }
 
                 });
@@ -166,9 +207,10 @@ function SaveGoal(e) {
 }
 
 function GetNeedAndGoalList() {
+    tempId = sessionStorage.getItem("Id") === null ? templateId : sessionStorage.getItem("Id")
     $.ajax({
         type: "GET",
-        url: Apipath + '/api/PatientMain/getneedbytemplateid?TemplateId=' + templateId,
+        url: Apipath + '/api/PatientMain/getneedbytemplateid?TemplateId=' + tempId,
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
@@ -209,8 +251,7 @@ function DeleteNeed(obj) {
                         success: function (result) {
                             $(obj).closest("li").remove();
                             $("span.needCount").html("").append($("ul.needsList").find("li.hasChild").length);
-                            toastr.success("", "Changes saved sucessfully", { progressBar: true });
-
+                            toastr.success("", "Changes saved successfully", { progressBar: true });                            
                         }
                     })
                 }
@@ -246,13 +287,15 @@ function DeleteGoal(obj) {
                         contentType: 'application/json; charset=UTF-8',
                         dataType: "json",
                         success: function (result) {
+                            var objClone = $(obj).clone();
                             var goalCount = $(obj).closest("li").siblings().length;
                             if (goalCount == 0) {
                                 $(obj).closest(".goalsList").prev().find("i.down_arrow").addClass("hide_down_arrow");
                             }
-                            $(obj).closest("li").remove();
-
-                            toastr.success("", "Changes saved sucessfully", { progressBar: true });
+                            var goalCount = parseInt($(obj).closest(".goalsList").prev().find(".countgoal").html());
+                            $(obj).closest(".goalsList").prev().find(".countgoal").html("").append(goalCount - 1);
+                            $(obj).closest("li").remove();                          
+                            toastr.success("", "Changes saved successfully", { progressBar: true });
 
                         }
 
@@ -269,16 +312,21 @@ function DeleteGoal(obj) {
 }
 
 function AddNewGoalFromNeed(e) {
-    var goalString = `<li><div class="addNewNeedGoal"><div class="plusIcon"><i class="fa fa-plus"></i></div><textarea class="txtGoal" placeholder="add goal" onkeyup="textAreaAdjust(this)"></textarea></div></li>`;
+    $(e).closest("ul.needsList").find("ul.goalsList").not($(e).parent().parent().next()).each(function (index, item) {
+        $(item).find("li.newGoal").remove();
+    });
+    if ($(e).parent().parent().next().find("li").last().hasClass("newGoal")) {
+        $(".txtGoal").focus();
+        return;
+    }
+    var goalString = `<li class="newGoal"><div class="addNewNeedGoal"><div class="plusIcon"><i class="fa fa-plus"></i></div><textarea maxlength="1000" class="txtGoal" placeholder="add goal" onkeyup="textAreaAdjust(this)"></textarea></div></li>`;
 
     var isgoalulExist = $(e).parent().parent().next().is("ul");
     if (isgoalulExist) {
         $(e).parent().parent().next().append(goalString);
     } else {
-        $(e).parent().parent().after('<ul class="goalsList"><li><div class="addNewNeedGoal"><div class="plusIcon"><i class="fa fa-plus"></i></div><textarea class="txtGoal" placeholder="add goal" onkeyup="textAreaAdjust(this)"></textarea></div></li></ul>');
+        $(e).parent().parent().after('<ul class="goalsList"><li  class="newGoal"><div class="addNewNeedGoal"><div class="plusIcon"><i class="fa fa-plus"></i></div><textarea maxlength="1000" class="txtGoal" placeholder="add goal" onkeyup="textAreaAdjust(this)"></textarea></div></li></ul>');
     }
-   
-
     $(".txtGoal").keypress(function (event) {
         var keycode = event.keyCode || event.which;
         if (keycode == '13' && !event.shiftKey) {
@@ -286,6 +334,7 @@ function AddNewGoalFromNeed(e) {
             event.preventDefault();
         }
     });
+    $(".txtGoal").focus();
 }   
 
 function NeedFocus() {
@@ -309,7 +358,7 @@ function goalSendOrderToServer() {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
-            toastr.success("", "Changes saved sucessfully", { progressBar: true });
+            toastr.success("", "Changes saved successfully", { progressBar: true });
         },
         error: function () {
 
@@ -335,7 +384,7 @@ function needSendOrderToServer() {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
-            toastr.success("", "Changes saved sucessfully", { progressBar: true });
+            toastr.success("", "Changes saved successfully", { progressBar: true });
         },
         error: function () {
 
@@ -362,12 +411,13 @@ function ExpandCollapse(o) {
     $(o).parent().next('ul').slideToggle();
 }
 
+
 function EditGoal(o) {
     var item = $(o).html();
-    var goalDiv = `<textarea class="txtGoal" spellcheck="false" style="padding:0px !important;" onfocus="goalOrNeedFocus(this)">${item}</textarea>`;
+    var goalDiv = `<textarea maxlength="1000" class="edittxtGoal" spellcheck="false" style="padding:0px !important;margin:0px !important" onfocus="goalOrNeedFocus(this)">${item}</textarea>`;
     $(o).hide();
     $(o).after(goalDiv);
-    $(".txtGoal").keyup(function () {
+    $(".edittxtGoal").keyup(function () {
         var o = this;
         o.style.height = "1px";
 
@@ -378,7 +428,7 @@ function EditGoal(o) {
             o.style.height = "20px";
         }
     });
-    $(".txtGoal").keypress(function (event) {
+    $(".edittxtGoal").keypress(function (event) {
         var keycode = event.keyCode || event.which;
         if (keycode == '13' && !event.shiftKey) {
             SaveGoal(this);
@@ -386,19 +436,19 @@ function EditGoal(o) {
         }
     });
 
-    $(".txtGoal").focusout(function () {
+    $(".edittxtGoal").focusout(function () {
         $(this).prev().show();
         $(this).remove();
 
     })
-    $(".txtGoal").focus();
+    $(".edittxtGoal").focus();
 }
 
 function EditNeed(o) {
-    var item = $(o).html();
-    var needDiv = `<textarea class="txtneed" spellcheck="false" style="padding:0px !important;"  onfocus="goalOrNeedFocus(this)">${item}</textarea>`;
-    $(o).hide();
-    $(o).after(needDiv);
+    var item = $(o).find("span.needDesc").html();
+    var needDiv = `<textarea maxlength="1000" class="txtneed" spellcheck="false" style="padding:0px !important;"  onfocus="goalOrNeedFocus(this)">${item}</textarea>`;
+    $(o).find("span.needDesc").hide();
+    $(o).find("span.needDesc").after(needDiv);
     $(".txtneed").keyup(function () {
         var o = this;
         o.style.height = "1px";
@@ -430,7 +480,7 @@ function SearchNeedAndGoal(obj) {
     if (keyword == '') { GetNeedAndGoalList() } else {
         $.ajax({
             type: "GET",
-            url: Apipath + '/api/PatientMain/searchneedandgoal?TemplateId=' + templateId + '&keyword=' + keyword,
+            url: Apipath + '/api/PatientMain/searchneedandgoal?TemplateId=' + tempId + '&keyword=' + keyword,
             contentType: 'application/json; charset=UTF-8',
             dataType: "json",
             success: function (result) {
@@ -451,4 +501,5 @@ function goalOrNeedFocus(obj) {
         obj.updating = false;
     }
 }
+
 
