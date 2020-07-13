@@ -17,16 +17,16 @@ function NeedsGoals(result) {
             var goals = parseHTML(result[i].GoalHtml);
             
 
-            needstring += `<li class="hasChild ${result[i].GoalHtml.length ? "opened" : ""}" data-needid="${result[i].NeedID}">
+            needstring += `<li class="hasChild" data-needid="${result[i].NeedID}">
                                 <div class="needItem">
-                                 <div class="editNeed" onclick="EditNeed(this)"><span class="countgoal">${$(goals).find("li").length}</span><span class="needDesc">${result[i].NeedDesc}</span></div>
+                                 <div class="editNeed"><span class="countgoal" onclick="ExpandCollapseFromGoalCount(this)">${$(goals).find("li").length}</span><span onclick="EditNeed(this)" class="needDesc">${result[i].NeedDesc}</span></div>
                                <i onclick="ExpandCollapse(this)" class="down_arrow fa fa-chevron-down ${result[i].GoalHtml.length ? "" : "hide_down_arrow"}"></i>
                                <div class="itemHoverActions">
                                <a href="javascript:{}" onclick="AddNewGoalFromNeed(this)"><i class="fas fa-level-up-alt"></i></a>
                                <a href="javascript:{}" class="delete_item" onclick="DeleteNeed(this)"><i class="fa fa-trash"></i></a>
                                </div><a class="dragIcon" href="#!"><i class="fas fa-grip-vertical"></i></a></div>`;
             if (result[i].GoalHtml.length) {
-                needstring += `<ul class="goalsList">
+                needstring += `<ul class="goalsList" style="display: none;">
                                 ${result[i].GoalHtml}
                                  </ul>
                                   `;
@@ -40,7 +40,7 @@ function NeedsGoals(result) {
             cursor: 'move',
             opacity: 0.7,
             revert: 300,
-            delay: 150,
+            delay: 150,            
             placeholder: "movable-placeholder",
             containment: ".needModalContent",
             start: function (e, ui) {
@@ -97,9 +97,9 @@ function SaveNeed(e) {
         dataType: "json",
         success: function (result) {
             if ($(e).closest("li").attr("data-needid") == undefined) {
-                var needString = `<li class="hasChild" data-needid="${result}">
+                var needString = `<li class="hasChild opened" data-needid="${result}">
                                 <div class="needItem">
-                                 <div class="editNeed" onclick="EditNeed(this)"><span class="countgoal">0</span><span class="needDesc">${$(e).val()}</span></div>
+                                 <div class="editNeed"><span class="countgoal" onclick="ExpandCollapseFromGoalCount(this)">0</span><span onclick="EditNeed(this)" class="needDesc">${$(e).val()}</span></div>
                                <i class="down_arrow fa fa-chevron-down hide_down_arrow" onclick="ExpandCollapse(this)"></i>
                                <div class="itemHoverActions">
                                <a href="javascript:{}" onclick="AddNewGoalFromNeed(this)"><i class="fas fa-level-up-alt"></i></a>
@@ -112,12 +112,14 @@ function SaveNeed(e) {
                 $(".needsList").prev().html("");
                 var needCount = parseInt($("span.needCount").html());
                 $("span.needCount").html("").append(needCount + 1);
+                $(".txtNeed").blur();
+                NeedFocus();
             } else {
                 $(e).prev().html($(e).val());
                 $(e).prev().show();
                 $(e).remove();
             }
-           
+            
             if (!$(".needsList").hasClass('ui-sortable')) {
                 $(".needsList").sortable({
                     items: "li.hasChild",
@@ -136,6 +138,7 @@ function SaveNeed(e) {
 
                 });
             }
+            
         }
     })
 }
@@ -166,7 +169,7 @@ function SaveGoal(e) {
 <div class="itemHoverActions"> <a href="javascript:{}" class="delete_item" onclick="DeleteGoal(this)"><i class="fa fa-trash"></i></a> </div>
 <a class="dragIcon" href="#!"><i class="fas fa-grip-vertical"></i></a>
 </div> </li>`;
-                goalList.prepend(goalString);
+                goalList.find("li.newGoal").before(goalString);
                 $(e).val("").focus().css("height","21px");
                 var goalCount = parseInt($(e).parent().parent().parent().prev().find(".countgoal").html());
                 $(e).parent().parent().parent().prev().find(".countgoal").html("").append(goalCount + 1);
@@ -287,7 +290,7 @@ function DeleteGoal(obj) {
                         contentType: 'application/json; charset=UTF-8',
                         dataType: "json",
                         success: function (result) {
-                            var objClone = $(obj).clone();
+                            debugger;
                             var goalCount = $(obj).closest("li").siblings().length;
                             if (goalCount == 0) {
                                 $(obj).closest(".goalsList").prev().find("i.down_arrow").addClass("hide_down_arrow");
@@ -316,6 +319,11 @@ function AddNewGoalFromNeed(e) {
         $(item).find("li.newGoal").remove();
     });
     if ($(e).parent().parent().next().find("li").last().hasClass("newGoal")) {
+        if (!$(e).closest("li.hasChild ").hasClass("opened")) {
+            $(e).closest("li.hasChild ").addClass("opened");
+            $(e).closest("div.needItem").next().css("display", "block");
+            $(".txtGoal").focus();
+        }
         $(".txtGoal").focus();
         return;
     }
@@ -335,6 +343,11 @@ function AddNewGoalFromNeed(e) {
         }
     });
     $(".txtGoal").focus();
+    if (!$(e).closest("li.hasChild ").hasClass("opened")) {
+        $(e).closest("li.hasChild ").addClass("opened");
+        $(e).closest("div.needItem").next().css("display", "block");
+        $(".txtGoal").focus();
+    }
 }   
 
 function NeedFocus() {
@@ -410,7 +423,10 @@ function ExpandCollapse(o) {
     $(o).parent().parent().toggleClass("opened");
     $(o).parent().next('ul').slideToggle();
 }
-
+function ExpandCollapseFromGoalCount(o) {
+    $(o).closest("li.hasChild").toggleClass("opened");
+    $(o).closest("div.needItem").next('ul.goalsList').slideToggle();
+}
 
 function EditGoal(o) {
     var item = $(o).html();
@@ -445,10 +461,10 @@ function EditGoal(o) {
 }
 
 function EditNeed(o) {
-    var item = $(o).find("span.needDesc").html();
+    var item = $(o).html();
     var needDiv = `<textarea maxlength="1000" class="txtneed" spellcheck="false" style="padding:0px !important;"  onfocus="goalOrNeedFocus(this)">${item}</textarea>`;
-    $(o).find("span.needDesc").hide();
-    $(o).find("span.needDesc").after(needDiv);
+    $(o).hide();
+    $(o).after(needDiv);
     $(".txtneed").keyup(function () {
         var o = this;
         o.style.height = "1px";

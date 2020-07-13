@@ -121,7 +121,8 @@ namespace RootsOfHealth.Controllers
         }
         [HttpPost]
         public JsonResult GetTemplateData(CarePlantemplateBO Model)
-        {          
+        {
+            Model.TemplateName= Model.TemplateName.TrimEnd();
             return Json(new
             {
                 redirectUrl = Url.Action("ModifyTemplate", "CarePlan",new {Model.TemplateID,Model.TemplateName,Model.ProgramID,Model.IsBaseTemplate,Model.IsModify }),
@@ -164,7 +165,8 @@ namespace RootsOfHealth.Controllers
                 return Json(new
                 {
                     html = "",
-                    IsActive = 0
+                    IsActive = 0,
+                    Isactivated = 0
                 }, JsonRequestBehavior.AllowGet);
             }
             string PathName = string.Empty;
@@ -197,7 +199,8 @@ namespace RootsOfHealth.Controllers
                 var jsonResult = new
                 {
                     html = gethtml,
-                    IsActive=data.IsActive
+                    IsActive=data.IsActive,
+                    Isactivated = data.Isactivated
                 };
                 return Json(jsonResult, JsonRequestBehavior.AllowGet);
             }
@@ -205,7 +208,8 @@ namespace RootsOfHealth.Controllers
             return Json(new
             {
                 html ="",
-                IsActive = 0
+                IsActive = 0,
+                Isactivated=0
             }, JsonRequestBehavior.AllowGet);
         }
 

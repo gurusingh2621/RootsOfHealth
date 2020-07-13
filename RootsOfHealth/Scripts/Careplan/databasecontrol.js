@@ -1,11 +1,12 @@
 ﻿var newdatabaseid = 0
+var newid = "";
 var connectdatabase = '#droppable';
 function CheckSortableDatabase() {
     if ($("#droppable").find(".basecontentarea").length > 0 && programId == '0') {
         connectdatabase = ".baseheader,.basefooter";
     } else if ($("#droppable").find(".basecontentarea").length > 0 && programId != '0') {
         connectdatabase = ".contentarea1,.contentarea2,.contentarea3";
-    }
+    }  
     DatabaseFormFields();
 }
 //use to add list inside database-control-box based on selected form and make list item darag and drop on right side area
@@ -49,11 +50,11 @@ function DatabaseFormFields() {
                     databasecontrol_li += '<li data-type="EmergencyContact2City" data-index="PatientMain" class="databasecontrol"><span>Emergency Contact #2 City</span></li>';
                     databasecontrol_li += '<li data-type="EmergencyContact2State" data-index="PatientMain" class="databasecontrol"><span>Emergency Contact #2 State</span></li>';
                     databasecontrol_li += '<li data-type="EmergencyContact2Zip" data-index="PatientMain" class="databasecontrol"><span>Emergency Contact #2 Zip</span></li>';
-                    databasecontrol_li += '<li data-type="ChildrenUnder18" data-index="PatientMain" class="databasecontrol"><span>Children under 18</span></li>';
-                    databasecontrol_li += '<li data-type="Adults18to65" data-index="PatientMain" class="databasecontrol"><span>Adults 18-65</span></li>';
-                    databasecontrol_li += '<li data-type="Adults65Plus" data-index="PatientMain" class="databasecontrol"><span>Adults 65+</span></li>';
-                    databasecontrol_li += '<li data-type="PreferredPharmacyName" data-index="PatientMain" class="databasecontrol"><span>Preferred Pharmacy Name</span></li>';
-                    databasecontrol_li += '<li data-type="PreferredPharmacyLocation" data-index="PatientMain" class="databasecontrol"><span>Preferred Pharmacy Location</span></li>';
+                    databasecontrol_li += '<li data-type="ChildrenUnder18" data-index="PatientMain" class="databasecontrol"><span>People in household having -> Children under 18</span></li>';
+                    databasecontrol_li += '<li data-type="Adults18to65" data-index="PatientMain" class="databasecontrol"><span>People in household having -> Adults 18-65</span></li>';
+                    databasecontrol_li += '<li data-type="Adults65Plus" data-index="PatientMain" class="databasecontrol"><span>People in household having -> Adults 65+</span></li>';
+                    databasecontrol_li += '<li data-type="PreferredPharmacyName" data-index="PatientMain" class="databasecontrol"><span>Preferred Pharmacy-> Name</span></li>';
+                    databasecontrol_li += '<li data-type="PreferredPharmacyLocation" data-index="PatientMain" class="databasecontrol"><span>Preferred Pharmacy-> Location</span></li>';
                     databasecontrol_li += '<li data-type="EverMemberOfUSArmedForces" data-index="PatientMain" class="databasecontrol"><span>U.S. Armed Forces</span></li>';
                     databasecontrol_li += '<li data-type="MaritalStatus" data-index="PatientMain" class="databasecontrol"><span>Marital status</span></li>';
                     databasecontrol_li += '<li data-type="LanguagesSpeak" data-index="PatientMain" class="databasecontrol"><span>Languages</span></li>';
@@ -77,13 +78,13 @@ function DatabaseFormFields() {
                         ' expenses.</span></li>';
                     databasecontrol_li += '<li data-type="SkipMeals" data-index="PatientFinancialSecurity" class="databasecontrol"><span>Over the 3 months, you ever cut the size of your' +
                         ' meals or skip meals because there wasn"\ t enough money for food? </span></li>';
-                    databasecontrol_li += '<li data-type="CalworksBenefits" data-index="PatientFinancialSecurity" class="databasecontrol"><span>Calworks Benefits (TANF)</span></li>';
-                    databasecontrol_li += '<li data-type="SocialSecurityDisabilityInsurance" data-index="PatientFinancialSecurity" class="databasecontrol"><span>Social Security Disability Insurance (SSI)</span></li>';
-                    databasecontrol_li += '<li data-type="GeneralAssistance" data-index="PatientFinancialSecurity" class="databasecontrol"><span>General Assistance (GA)</span></li>';
-                    databasecontrol_li += '<li data-type="WomenInfantChildrenBenefits" data-index="PatientFinancialSecurity" class="databasecontrol"><span>Women, Infant & Children Benefits (WIC)</span></li>';
-                    databasecontrol_li += '<li data-type="UnemploymentBenefits" data-index="PatientFinancialSecurity" class="databasecontrol"><span>Unemployment Benefits</span></li>';
-                    databasecontrol_li += '<li data-type="StateDisabilityInsuranceBenefits" data-index="PatientFinancialSecurity" class="databasecontrol"><span>State Disability Insurance Benefits (SDI)</span></li>';
-                    databasecontrol_li += '<li data-type="RentalAssistanceBenefits" data-index="PatientFinancialSecurity" class="databasecontrol"><span>Rental Assistance Benefits (e.g. Section 8 housing)</span></li>';
+                    databasecontrol_li += '<li data-type="CalworksBenefits" data-index="PatientFinancialSecurity" class="databasecontrol"><span>You receive benefits or cash assistance from-> Calworks Benefits (TANF)</span></li>';
+                    databasecontrol_li += '<li data-type="SocialSecurityDisabilityInsurance" data-index="PatientFinancialSecurity" class="databasecontrol"><span>You receive benefits or cash assistance from-> Social Security Disability Insurance (SSI)</span></li>';
+                    databasecontrol_li += '<li data-type="GeneralAssistance" data-index="PatientFinancialSecurity" class="databasecontrol"><span>You receive benefits or cash assistance from-> General Assistance (GA)</span></li>';
+                    databasecontrol_li += '<li data-type="WomenInfantChildrenBenefits" data-index="PatientFinancialSecurity" class="databasecontrol"><span>You receive benefits or cash assistance from-> Women, Infant & Children Benefits (WIC)</span></li>';
+                    databasecontrol_li += '<li data-type="UnemploymentBenefits" data-index="PatientFinancialSecurity" class="databasecontrol"><span>You receive benefits or cash assistance from-> Unemployment Benefits</span></li>';
+                    databasecontrol_li += '<li data-type="StateDisabilityInsuranceBenefits" data-index="PatientFinancialSecurity" class="databasecontrol"><span>You receive benefits or cash assistance from-> State Disability Insurance Benefits (SDI)</span></li>';
+                    databasecontrol_li += '<li data-type="RentalAssistanceBenefits" data-index="PatientFinancialSecurity" class="databasecontrol"><span>You receive benefits or cash assistance from-> Rental Assistance Benefits (e.g. Section 8 housing)</span></li>';
                     break;
                 case "4":
                     databasecontrol_li += '<li data-type="employmentscore" data-index="PatientScore" class="databasecontrol"><span>Score</span></li>';
@@ -149,7 +150,15 @@ function DatabaseFormFields() {
                 case "9":
                     databasecontrol_li += '<li data-type="substancescore" data-index="PatientScore" class="databasecontrol"><span>Score</span></li>';
                     databasecontrol_li += '<li data-type="substancestatus" data-index="PatientScore" class="databasecontrol"><span>Status</span></li>';
-       
+
+                    databasecontrol_li += '<li data-type="DrugsContaining1" data-index="Dast" class="databasecontrol"><span> methamphetamines(speed, crystal)</span></li>';
+                    databasecontrol_li += '<li data-type="DrugsContaining2" data-index="Dast" class="databasecontrol"><span> cannabis (marijuana, pot)</span></li>';
+                    databasecontrol_li += '<li data-type="DrugsContaining3" data-index="Dast" class="databasecontrol"><span> inhalants (paint thinner, aerosol, glue)</span></li>';
+                    databasecontrol_li += '<li data-type="DrugsContaining4" data-index="Dast" class="databasecontrol"><span> tranquilizers (valium)</span></li>';
+                    databasecontrol_li += '<li data-type="DrugsContaining5" data-index="Dast" class="databasecontrol"><span> cocaine</span></li>';
+                    databasecontrol_li += '<li data-type="DrugsContaining6" data-index="Dast" class="databasecontrol"><span> narcotics (heroin, oxycodone, methadone, etc.)</span></li>';
+                    databasecontrol_li += '<li data-type="DrugsContaining7" data-index="Dast" class="databasecontrol"><span> hallucinogens (LSD, mushrooms)</span></li>';
+                    databasecontrol_li += '<li data-type="DrugsContaining8" data-index="Dast" class="databasecontrol"><span> Others</span></li>';
                     databasecontrol_li += '<li data-type="HowOftenUse" data-index="Dast" class="databasecontrol"><span>How often have you used these drugs?</span></li>';
                     databasecontrol_li += '<li data-type="UsedDrugsForMedicalReasons" data-index="Dast" class="databasecontrol"><span>Have you used drugs other than those required for medical reasons?</span></li>';
                     databasecontrol_li += '<li data-type="OneDrugAtATime" data-index="Dast" class="databasecontrol"><span>Do you abuse more than one drug at a time?</span></li>';
@@ -183,15 +192,15 @@ function DatabaseFormFields() {
                 case "11":
                     databasecontrol_li += '<li data-type="mentalhealthscore" data-index="PatientScore" class="databasecontrol"><span>Score</span></li>';
                     databasecontrol_li += '<li data-type="mentalhealthstatus" data-index="PatientScore" class="databasecontrol"><span>Status</span></li>';
-                    databasecontrol_li += '<li data-type="LittleInterest" data-index="PHQ9" class="databasecontrol"><span>Little interest or pleasure in doing things</span></li>';
-                    databasecontrol_li += '<li data-type="FeelingDown" data-index="PHQ9" class="databasecontrol"><span>Feeling down, depressed, or hopless</span></li>';
-                    databasecontrol_li += '<li data-type="TroubleFalling" data-index="PHQ9" class="databasecontrol"><span>Trouble falling/staying asleep, sleeping too much</span></li>';
-                    databasecontrol_li += '<li data-type="FeelingTired" data-index="PHQ9" class="databasecontrol"><span>Feeling tired or having little energy</span></li>';
-                    databasecontrol_li += '<li data-type="PoorAppetite" data-index="PHQ9" class="databasecontrol"><span>Poor appetite or overeating</span></li>';
-                    databasecontrol_li += '<li data-type="FeelingBad" data-index="PHQ9" class="databasecontrol"><span>Feeling bad about youself or that you are a failure or have let yourself or your family down</span></li>';
-                    databasecontrol_li += '<li data-type="TroubleConcentraiting" data-index="PHQ9" class="databasecontrol"><span>Trouble concentraiting on things, such as reading the newspaper or watching television.</span></li>';
-                    databasecontrol_li += '<li data-type="restless" data-index="PHQ9" class="databasecontrol"><span>Moving or speaking so slowly that other people could have noticed. Or the opposite, being so fidgety or restless that you have been moving around a lot more than usual.</span></li>';
-                    databasecontrol_li += '<li data-type="HurtingYourself" data-index="PHQ9" class="databasecontrol"><span>Thoughts that you would be better off dead or of hurting yourself in some way</span></li>';
+                    databasecontrol_li += '<li data-type="LittleInterest" data-index="PHQ9" class="databasecontrol"><span>Over the last 2 weeks, how often have you been bothered by-> Little interest or pleasure in doing things</span></li>';
+                    databasecontrol_li += '<li data-type="FeelingDown" data-index="PHQ9" class="databasecontrol"><span>Over the last 2 weeks, how often have you been bothered by-> Feeling down, depressed, or hopless</span></li>';
+                    databasecontrol_li += '<li data-type="TroubleFalling" data-index="PHQ9" class="databasecontrol"><span>Over the last 2 weeks, how often have you been bothered by-> Trouble falling/staying asleep, sleeping too much</span></li>';
+                    databasecontrol_li += '<li data-type="FeelingTired" data-index="PHQ9" class="databasecontrol"><span>Over the last 2 weeks, how often have you been bothered by-> Feeling tired or having little energy</span></li>';
+                    databasecontrol_li += '<li data-type="PoorAppetite" data-index="PHQ9" class="databasecontrol"><span>Over the last 2 weeks, how often have you been bothered by-> Poor appetite or overeating</span></li>';
+                    databasecontrol_li += '<li data-type="FeelingBad" data-index="PHQ9" class="databasecontrol"><span>Over the last 2 weeks, how often have you been bothered by-> Feeling bad about youself or that you are a failure or have let yourself or your family down</span></li>';
+                    databasecontrol_li += '<li data-type="TroubleConcentraiting" data-index="PHQ9" class="databasecontrol"><span>Over the last 2 weeks, how often have you been bothered by-> Trouble concentraiting on things, such as reading the newspaper or watching television.</span></li>';
+                    databasecontrol_li += '<li data-type="restless" data-index="PHQ9" class="databasecontrol"><span>Over the last 2 weeks, how often have you been bothered by->  Moving or speaking so slowly that other people could have noticed. Or the opposite, being so fidgety or restless that you have been moving around a lot more than usual.</span></li>';
+                    databasecontrol_li += '<li data-type="HurtingYourself" data-index="PHQ9" class="databasecontrol"><span>Over the last 2 weeks, how often have you been bothered by-> Thoughts that you would be better off dead or of hurting yourself in some way</span></li>';
                     databasecontrol_li += '<li data-type="ProblemsMade" data-index="PHQ9" class="databasecontrol"><span>if you checked off any problem on this questionnaire so far, how difficult have problems made it for you to do your work, take care of things at home, or get along with other people?</span></li>';
 
                     databasecontrol_li += '<li data-type="MentalHealthConditions" data-index="PatientMentalHealth" class="databasecontrol"><span>Have you ever been diagnosed with any of the following mental health conditions?</span></li>';
@@ -233,18 +242,95 @@ function DatabaseFormFields() {
                 },
                 receive: function (event, ui) {
                     var draggableType = ui.item.attr("data-type");
-                    var responseIndex = ui.item.attr("data-index");
-                    var newid = draggableType + "_" + $(ui.helper).clone().attr('id');
+                    var responseIndex = ui.item.attr("data-index");      
+                    var currentid = $(ui.helper).clone().attr('id');
+                     newid = draggableType + "_" + $(ui.helper).clone().attr('id'); 
+                    while (true) {
+                        if ($(document.getElementById(newid)).length) {
+                            currentid = parseInt(currentid) + 1;
+                            newid = draggableType + "_" + currentid;
+                        } else {
+                            break;
+                        }
+                    }
                     var lblValue = $("[data-type=" + draggableType + "] span").html();
-                    var str = `<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">
+                    var databaseStr = ``;
+                    switch (draggableType) {
+                        case "ChildrenUnder18":
+                        case "Adults18to65":
+                        case "Adults65Plus":
+                        case "PreferredPharmacyName":
+                        case "PreferredPharmacyLocation":
+                        case "CalworksBenefits":
+                        case "SocialSecurityDisabilityInsurance":
+                        case "GeneralAssistance":
+                        case "WomenInfantChildrenBenefits":
+                        case "UnemploymentBenefits":
+                        case "StateDisabilityInsuranceBenefits":
+                        case "RentalAssistanceBenefits":
+                        case "LittleInterest":
+                        case "FeelingDown":
+                        case "TroubleFalling":
+                        case "FeelingTired":
+                        case "PoorAppetite":
+                        case "FeelingBad":
+                        case "TroubleConcentraiting":
+                        case "restless":
+                        case "HurtingYourself": 
+                            databaseStr = `<div  class="dragresize data-frmbtn col-md-12">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-0">
+                                           <div class="top-form-row d-flex question-container">
+                                           <div class="one-columns">
+                                           <label class="Add">${lblValue.split("-&gt;")[0]}</label>                                                                                             
+                                           </div>
+                                           </div>
+                                           <div class="bootom-form-row mb-2">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-1 data-frm-btn">
+                                           <div class="top-form-row d-flex">
+                                            <div class="one-columns">
+                                            <label>${lblValue.split("-&gt;")[1]}</label>
+                                            </div>
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                             <div class="one-columns">                                                                    
+                                              <input id="${newid}"  type="text" class="form-control database-field"  placeholder="{{ Value }}" data-index="${responseIndex}" disabled>                                           
+                                              </div>                                     
+                                               </div>
+                                       <div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml('${draggableType}','${newid}')"><i class="fas fa-edit"></i></button>
+                                       <button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div>
+                                                </div>
+                                      
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                          `;
+                            break;                                                  
+                        default:
+                             databaseStr = `<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">
                         <label class="">${lblValue}</label>
                         <input id="${newid}"  type="text" class="form-control database-field"  placeholder="{{ Value }}" data-index="${responseIndex}" disabled>
                         </div>
                         <div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml('${draggableType}','${newid}')"><i class="fas fa-edit"></i></button>
                         <button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>
                         </div> `;
-                    $(this).find("li.databasecontrol").first().replaceWith(str);
+                            break;
+                    }
+                   
+                    $(this).find("li.databasecontrol").first().replaceWith(databaseStr);
 
-                }
+        },
+        stop: function (event, ui) {
+             if(ui.item.hasClass("ui-draggable") && ui.item.attr("data-index") !== undefined) {
+        EditHtml(ui.item.attr("data-type"), newid);
+    }
+        }
             });
 }

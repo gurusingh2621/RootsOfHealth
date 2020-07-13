@@ -218,8 +218,11 @@
     <Content Include="Content\script\jquery.timeselector.js" />
     <Content Include="css\all.min.css" />
     <Content Include="css\bootstrap.min.css" />
+    <Content Include="css\careplanlist.css" />
+    <Content Include="css\careplantemplate.css" />
     <Content Include="css\fullcalendar.min.css" />
     <Content Include="css\jquery-ui.css" />
+    <Content Include="css\previewinpopup.css" />
     <Content Include="css\responsive.css" />
     <Content Include="css\select2.min.css" />
     <Content Include="css\style.css" />
@@ -279,6 +282,7 @@
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\bootstrap_multiselect.js" />
     <Content Include="Scripts\Careplan\basetemplatecontrolhtml.js" />
+    <Content Include="Scripts\Careplan\careplanlist.js" />
     <Content Include="Scripts\Careplan\databasecontrol.js" />
     <Content Include="Scripts\Careplan\htmlcontrol.js" />
     <Content Include="Scripts\Careplan\NeedAndGoal.js" />

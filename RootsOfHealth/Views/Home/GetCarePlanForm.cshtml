@@ -22,7 +22,7 @@
     }
 
         .renderform .form-control {
-            height: 23px;
+            height: 46px;
             font-size: 13px;
             border: 1px solid #e2e2e2;
             border-radius: 0px;
@@ -56,17 +56,17 @@
             top: -3px;
         }
 
-        .renderform .frmbtn .form-group label:first-child {
-            background: #e2e2e2;
-            display: block;
-            margin: -11px -11px 10px;
-            padding: 4px 10px;
-            font-size: 14px;
-            color: #343434;
-            font-weight: 500;
-            line-height: normal;
-            vertical-align: middle;
-        }
+    .renderform .frmbtn .form-group label:first-child {
+        background: #f0f0f0;
+        display: block;
+        margin: -11px -11px 10px;
+        padding: 4px 10px;
+        font-size: 14px;
+        color: #343434;
+        font-weight: 500;
+        line-height: normal;
+        vertical-align: middle;
+    }
 
         .renderform .frmbtn .form-group {
             margin: 0;
@@ -151,6 +151,12 @@
     span.basecontentspan {
         display: none;
     }
+    .tooltip-inner a {
+        color: #ffffff;
+    }
+    .data-frmbtn {
+        margin: 5px 0px 15px 0px;
+    }
 </style>
 <section id="content" class="responsive-container pt-0">
 
@@ -190,7 +196,9 @@
         var tableName;
         function toogleToolTip() {
             $('.tooltipicon').tooltip({
-                trigger: "click"
+                trigger: "click",
+                html: true,
+                container: 'body'
             });
             $('.tooltipicon').on('show.bs.tooltip', function () {
                 $('.tooltipicon').not(this).tooltip('hide');
@@ -221,13 +229,15 @@
                 dataType: "json",
                 success: function (result) {
                     tableName = result.tableName;
-                    console.log(tableName);
                     $(".renderform").html(result.html); 
                     if ($(".renderform").find(".basecontentarea").length > 0) {
                         getHeaderAndFooter();
                     }
                     $(".renderform .event-btn-right").remove();
                     $(".renderform .ck-editor-header").remove();
+                    $(".renderform").find(".question-container").parent().css("border", "none");
+                    $(".renderform").find(".dragresize").find(".question-container").remove();
+                    $(".renderform").find(".dragresize").find(".bootom-form-row").css({ "padding": "7px 0px", "margin": "0" });
                     $(".html-content").prev().css("display", "none");
                     $(".html-content").parent().parent().parent().addClass("left-control");
                     $(".renderform .f-g-left").each(function (index, item) {
@@ -247,10 +257,21 @@
                    });
 
                     toogleToolTip();
-                    $("textarea.form-control").summernote({
+                    $("textarea.form-control").summernote({                        
                         toolbar: [
                             ['para', ['ul', 'ol', 'paragraph']],
-                        ]
+                            ['style', ['bold', 'italic', 'underline', 'clear']],
+                            ['font', ['strikethrough', 'superscript', 'subscript']],
+                        ],                      
+                        placeholder: "Type here",
+                        callbacks: {
+                            onInit: function (e) {
+                                this.placeholder
+                                    ? e.editingArea.find(".note-placeholder").html(this.placeholder)
+                                    : e.editingArea.remove(".note-placeholder")
+                            }
+                        },
+                        height: 150,
                     });
                  }
             }).done(function (result) {

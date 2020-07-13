@@ -1,4 +1,5 @@
 ﻿var new_id = 0;
+var newid = ""; 
 var connect = '#droppable';
 $(function () {
     if (sessionStorage.getItem("Id") === null) {
@@ -11,15 +12,15 @@ $(function () {
 
 });
 function CheckSortableHtml() {
-    $("#ddlform").val("0");   
-        HtmlControlDragnDrop();   
+    $("#ddlform").val("0");
+    HtmlControlDragnDrop();
 }
 //HtmlControlDragnDrop=>use for drag html control from left list and drop on right dropable area
 function HtmlControlDragnDrop() {
-    
+
     $('#control-box li').draggable({
         connectToSortable: connect,
-        helper: function () { 
+        helper: function () {
             var cloned = $(this).clone();
             cloned.attr('id', (++new_id).toString());
             return cloned;
@@ -44,7 +45,7 @@ function HtmlControlDragnDrop() {
         receive: function (event, ui) {
             var draggableId = ui.item.attr("data-type");
             var currentid = $(ui.helper).clone().attr('id')
-            var newid = draggableId + currentid;
+            newid = draggableId + currentid;
             while (true) {
                 if ($(document.getElementById(newid)).length) {
                     currentid = parseInt(currentid) + 1;
@@ -149,16 +150,16 @@ function HtmlControlDragnDrop() {
                     break;
                 case "textarea":
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
-                        '<label class=""><span class="title">Textarea</span></label>' +   
-                        '<div class="ck-editor">'+
-                        '<div class="ck-editor-header"><ul><li><i class="fa fa-list-ul" aria-hidden="true"></i></li><li><i class="fa fa-list-ol" aria-hidden="true"></i></li><li><i class="fa fa-align-left" aria-hidden="true"></i></li></ul></div>' +                
-                        '<textarea id="' + newid + '"  class="form-control" name="my-textarea"></textarea>' +                        
+                        '<label class=""><span class="title">Textarea</span></label>' +
+                        '<div class="ck-editor">' +
+                        '<div class="ck-editor-header"><ul><li><i class="fa fa-list-ul" aria-hidden="true"></i></li><li><i class="fa fa-list-ol" aria-hidden="true"></i></li><li><i class="fa fa-align-left" aria-hidden="true"></i></li><li><i class="fa fa-bold" aria-hidden="true"></i></li><li><i class="fa fa-italic" aria-hidden="true"></i></li><li><i class="fa fa-underline" aria-hidden="true"></i></li><li><i class="fa fa-eraser" aria-hidden="true"></i></li></ul></div>' +
+                        '<textarea id="' + newid + '"  class="form-control" name="my-textarea"></textarea>' +
                         '</div></div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
                         '</div>';
-                    $(this).find("li[data-type='textarea']").replaceWith(str);    
-                   
+                    $(this).find("li[data-type='textarea']").replaceWith(str);
+
                     break;
 
             }
@@ -167,7 +168,7 @@ function HtmlControlDragnDrop() {
             $('#droppable').find("input.form-control,textarea.form-control").on('input', function (e) {
                 $(this).val('');
             });
-            $('input[type="checkbox"],input[type="radio"]').click(function (event) {
+            $('#droppable').find('input[type="checkbox"],input[type="radio"]').click(function (event) {
                 var $checkbox = $(this);
                 setTimeout(function () {
                     $checkbox.removeAttr('checked');
@@ -175,7 +176,7 @@ function HtmlControlDragnDrop() {
                 event.preventDefault();
                 event.stopPropagation();
             });
-           
+
             if ($(".contentarea1").find(".dragresize").length > 0) {
                 $(".contentarea1").next("span.basecontentspan").hide();
             }
@@ -185,6 +186,10 @@ function HtmlControlDragnDrop() {
             if ($(".contentarea3").find(".dragresize").length > 0) {
                 $(".contentarea3").next("span.basecontentspan").hide();
             }
+            if (ui.item.hasClass("ui-draggable") && ui.item.attr("data-index") === undefined) {
+                EditHtml(ui.item.attr("data-type"), newid);
+            } 
+
         }
     });
 }
@@ -201,7 +206,6 @@ function EditHtml(type, ID) {
                 '</div>';
             $("#btnSave").unbind();
             $("#btnSave").bind("click", function () {
-
                 if ($('.lbltext').summernote('isEmpty')) {
                     toastr.error("", "Editor content is empty", { progressBar: true });
                     return;
@@ -211,13 +215,19 @@ function EditHtml(type, ID) {
                 $("#" + ID).next(".html-content").html(markupStr);
                 $('.lbltext').summernote('destroy');
                 $("#exampleModalCenter").modal("hide");
-
             });
             break;
         case "checkbox-group":
             var isrequired = $("#" + ID).find(".required-asterisk");
             var tooltiptext = $("#" + ID).find("label").first().find("span.tooltipicon").attr("title");
-            tooltiptext = tooltiptext === undefined ? "" : tooltiptext == '' ? $("#" + ID).find("label").first().find("span.tooltipicon").attr("data-original-title"): tooltiptext;
+            tooltiptext = tooltiptext === undefined ? "" : tooltiptext == '' ? $("#" + ID).find("label").first().find("span.tooltipicon").attr("data-original-title") : tooltiptext;
+            if (tooltiptext.indexOf("_blank") != -1) {
+                var tooltipHtml = parseHTML(tooltiptext);
+                $(tooltipHtml).find("a").replaceWith(function () {
+                    return $("<span>" + $(this).html() + "</span>");
+                });
+                tooltiptext = tooltipHtml.textContent;
+            }
             var labelText = $("#" + ID).find(".checkbox-group").find("span.title").html();
             if (labelText == "Check Box (Multiple)") {
                 labelText = "";
@@ -241,15 +251,15 @@ function EditHtml(type, ID) {
                 '<label class="required-asterisk">Label Text</label>' +
                 '<input  type="text" control-id="' + ID + '" class="form-control lbltext"  onkeyup="ValidateColumnName(this)" value="' + labelText + '"/>' +
                 '</div>';
-            
 
-            if (tooltiptext!='') {
+
+            if (tooltiptext != '') {
                 popupString += `<div class="modal-row custom-control custom-checkbox">
                             <input type="checkbox" class="custom-control-input" id="help-input" name="checkbox" checked="">
                             <label class="custom-control-label" for="help-input">Enable help text</label></div>`;
                 popupString += '<div class="modal-row">' +
                     '<label>Help Text</label>' +
-                    '<input  type="text" class="form-control lblhelptext" onkeyup="ValidateColumnName(this)" value="' + tooltiptext + '"/>' +
+                    '<textarea class="form-control lblhelptext">' + tooltiptext + '</textarea>' +
                     '</div>';
             } else {
                 popupString += `<div class="modal-row custom-control custom-checkbox">
@@ -257,7 +267,7 @@ function EditHtml(type, ID) {
                             <label class="custom-control-label" for="help-input">Enable help text</label></div>`;
                 popupString += '<div class="modal-row">' +
                     '<label>Help Text</label>' +
-                    '<input  type="text" class="form-control lblhelptext" onkeyup="ValidateColumnName(this)"/>' +
+                    '<textarea class="form-control lblhelptext"></textarea>' +
                     '</div>';
             }
             var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
@@ -270,7 +280,7 @@ function EditHtml(type, ID) {
                 '<option value="col-md-4" ' + ismd4 + '>Small</option>' +
                 '<option value="col-md-6" ' + ismd6 + '>Medium</option>' +
                 '<option value="col-md-12" ' + ismd12 + '>Large</option>' +
-                '</select></div></div>';           
+                '</select></div></div>';
             popupString += `<div class="modal-row"><div class="custom-control custom-radio d-inline-block mr-2">
     <input type="radio" class="custom-control-input checkhorizontal" id="radio-horizontal" name="radio" value="horizontal" ${ $("#" + ID).hasClass("vertical") ? "" : "checked"}>
     <label class="custom-control-label" for="radio-horizontal">Horizontal</label></div>
@@ -286,7 +296,7 @@ function EditHtml(type, ID) {
                     ' <input type="text" placeholder="Key" class="form-control"  value="' + $(this).next().text() + '"/>' +
                     ' <input type="text" placeholder="Value" class="form-control"  value="' + $(this).attr("value") + '"/>' +
                     '</div>' +
-                    '<div class="popup-event-btn">' +                   
+                    '<div class="popup-event-btn">' +
                     '<button class="event-btn file-remove" onclick="RemoveOption(this)"> <i class="fa fa-minus-circle" aria-hidden="true"></i></button > ' +
                     '</div></div>'
             });
@@ -302,7 +312,7 @@ function EditHtml(type, ID) {
                     return;
                 }
                 if (isLabelNameExist($(".lbltext").val(), $("#" + ID).find("input").first().attr("id"))) {
-                   return;
+                    return;
                 }
                 var breakout = false;
                 $('.option-block').each(function () {
@@ -315,8 +325,8 @@ function EditHtml(type, ID) {
                     breakout = false;
                     toastr.error("", "Options can not be empty", { progressBar: true });
                     return false;
-                } 
-               
+                }
+
                 var colname = $(".lbltext").val().trim();
                 colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
@@ -325,98 +335,105 @@ function EditHtml(type, ID) {
                         var randomNumber = Math.floor((Math.random() * 100) + 1);
                         colname = colname + randomNumber;
                     }
-                    
+
                 }
-                    $(".dragresize  [id=" + ID + "]").html("");
+                $(".dragresize  [id=" + ID + "]").html("");
                 $(".dragresize  [id=" + ID + "]").html("<label class='checkbox-group'><span class='title'>Check Box (Multiple)</span></label>");
-                
+
                 var allTextArray = $('.option-block').map(function () {
                     if ($(this).find("[placeholder=Key]").val().trim() != '')
 
                         return $(this).find("[placeholder=Key]").val().trim()
-                    }).get();
-                    var duplicateTextArray = allTextArray.filter(function (element, pos) {
-                        if (allTextArray.indexOf(element) != pos) {
-                            return true;
-                        }
-                        else {
-                            return false;
-                        }
+                }).get();
+                var duplicateTextArray = allTextArray.filter(function (element, pos) {
+                    if (allTextArray.indexOf(element) != pos) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
 
-                    });
+                });
                 var allValueArray = $('.option-block').map(function () {
                     if ($(this).find("[placeholder=Value]").val().trim() != '')
 
                         return $(this).find("[placeholder=Value]").val().trim()
-                    }).get();
-                    var duplicateValueArray = allValueArray.filter(function (element, pos) {
-                        if (allValueArray.indexOf(element) != pos) {
-                            return true;
-                        }
-                        else {
-                            return false;
-                        }
+                }).get();
+                var duplicateValueArray = allValueArray.filter(function (element, pos) {
+                    if (allValueArray.indexOf(element) != pos) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
 
-                    });
-                    if (duplicateValueArray.length != 0) {
-                        toastr.error("", "Option value can not be duplicate", { progressBar: true });
-                        return;
-                    }
-                    if (duplicateTextArray.length != 0) {
-                        toastr.error("", "Option text can not be duplicate", { progressBar: true });
-                        return;
-                    }
-                    var option_data = "<div class='checkbox-html'>";
-                    $(".option-block").each(function (index) {
-                        option_data += `<div class="custom-control custom-checkbox  d-inline-block mr-2">
+                });
+                if (duplicateValueArray.length != 0) {
+                    toastr.error("", "Option value can not be duplicate", { progressBar: true });
+                    return;
+                }
+                if (duplicateTextArray.length != 0) {
+                    toastr.error("", "Option text can not be duplicate", { progressBar: true });
+                    return;
+                }
+                var option_data = "<div class='checkbox-html'>";
+                $(".option-block").each(function (index) {
+                    option_data += `<div class="custom-control custom-checkbox  d-inline-block mr-2">
                      <input  type="checkbox" class="custom-control-input" id="${ID + index}"  name="${ID}"  value="${$(this).find("[placeholder = Value]").val().trim()}">
                      <label class="custom-control-label" for="${ID + index}">${$(this).find("[placeholder = Key]").val().trim()}</label></div>
-                     `; 
-                    });
-                    option_data += "</div>";
-                    //$(option_data).appendTo(".dragresize  [id=" + ID + "]");
-                    $("#" + ID).find("div").html("");
-                $("#" + ID).append(option_data);   
+                     `;
+                });
+                option_data += "</div>";
+                //$(option_data).appendTo(".dragresize  [id=" + ID + "]");
+                $("#" + ID).find("div").html("");
+                $("#" + ID).append(option_data);
                 if (columnName != undefined) {
 
                     $("#" + ID).find("input.custom-control-input").first().attr("data-column", columnName);
                 } else {
                     $("#" + ID).find("input.custom-control-input").first().attr("data-column", colname);
                 }
-                    if($("#required-input").prop("checked")) {
-                        $("#" + ID).find('label:first-child').addClass("required-asterisk");
-                    } else {
-                        $("#" + ID).find('label:first-child').removeClass("required-asterisk");
-                    }
-                    if($("#help-input").prop("checked")) {
-                        $("#" + ID).find("label").first().append('<span data-toggle="tooltip"  data-placement="top"  title="' + $(".lblhelptext").val() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
-                        toogleToolTip();
+                if ($("#required-input").prop("checked")) {
+                    $("#" + ID).find('label:first-child').addClass("required-asterisk");
+                } else {
+                    $("#" + ID).find('label:first-child').removeClass("required-asterisk");
+                }
+                if ($("#help-input").prop("checked")) {
+                    $("#" + ID).find("label").first().append('<span data-toggle="tooltip"  data-placement="top"  title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
+                    toogleToolTip();
 
-                    } else {
-                        $("#" + ID).find("label").first().find("span.tooltipicon").remove();
+                } else {
+                    $("#" + ID).find("label").first().find("span.tooltipicon").remove();
                 }
                 $("#" + ID).find(".checkbox-group").find("span.title").html("").append($(".lbltext").val().trim());
-                    $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
-                    if ($(".checkhorizontal").prop("checked")) {
-                        $("#" + ID).removeClass("vertical");
-                    } else if ($(".checkvertical").prop("checked")) {
-                        $("#" + ID).addClass("vertical");
-                    }
-                    if ($(".labeltop").prop("checked")) {
-                        $("#" + ID).removeClass("f-g-left");
-                        $("#" + ID).find('label:first-child').removeClass("label-left");
-                    } else if ($(".labelleft").prop("checked")) {
-                        $("#" + ID).addClass("f-g-left");
-                        $("#" + ID).find('label:first-child').addClass("label-left");
-                    }
-                    $("#exampleModalCenter").modal("hide");
-                
+                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
+                if ($(".checkhorizontal").prop("checked")) {
+                    $("#" + ID).removeClass("vertical");
+                } else if ($(".checkvertical").prop("checked")) {
+                    $("#" + ID).addClass("vertical");
+                }
+                if ($(".labeltop").prop("checked")) {
+                    $("#" + ID).removeClass("f-g-left");
+                    $("#" + ID).find('label:first-child').removeClass("label-left");
+                } else if ($(".labelleft").prop("checked")) {
+                    $("#" + ID).addClass("f-g-left");
+                    $("#" + ID).find('label:first-child').addClass("label-left");
+                }
+                $("#exampleModalCenter").modal("hide");
+
             });
             break;
         case "date":
             var isrequired = $("#" + ID).prev().hasClass("required-asterisk");
             var tooltiptext = $("#" + ID).prev().find("span.tooltipicon").attr("title");
             tooltiptext = tooltiptext === undefined ? "" : tooltiptext == '' ? $("#" + ID).prev().find("span.tooltipicon").attr("data-original-title") : tooltiptext;
+            if (tooltiptext.indexOf("_blank") != -1) {
+                var tooltipHtml = parseHTML(tooltiptext);
+                $(tooltipHtml).find("a").replaceWith(function () {
+                    return $("<span>" + $(this).html() + "</span>");
+                });
+                tooltiptext = tooltipHtml.textContent;
+            }
             var labelText = $("#" + ID).prev().find("span.title").html();
             if (labelText == "Label") {
                 labelText = "";
@@ -439,14 +456,14 @@ function EditHtml(type, ID) {
                 '<label class="required-asterisk">Label Text</label>' +
                 '<input  type="text" control-id="' + ID + '" class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + labelText + '"/>' +
                 '</div>';
-            
+
             if (tooltiptext != '') {
                 popupString += `<div class="modal-row custom-control custom-checkbox">
                             <input type="checkbox" class="custom-control-input" id="help-input" name="checkbox" checked="">
                             <label class="custom-control-label" for="help-input">Enable help text</label></div>`;
                 popupString += '<div class="modal-row">' +
                     '<label>Help Text</label>' +
-                    '<input  type="text" class="form-control lblhelptext" onkeyup="ValidateColumnName(this)" value="' + tooltiptext + '"/>' +
+                    '<textarea class="form-control lblhelptext">' + tooltiptext + '</textarea>' +
                     '</div>';
             } else {
                 popupString += `<div class="modal-row custom-control custom-checkbox">
@@ -454,7 +471,7 @@ function EditHtml(type, ID) {
                             <label class="custom-control-label" for="help-input">Enable help text</label></div>`;
                 popupString += '<div class="modal-row">' +
                     '<label>Help Text</label>' +
-                    '<input  type="text" class="form-control lblhelptext" onkeyup="ValidateColumnName(this)"/>' +
+                    '<textarea class="form-control lblhelptext"></textarea>' +
                     '</div>';
             }
             var isfieldmd4 = $("#" + ID).hasClass("col-md-4") ? "selected" : "";
@@ -489,7 +506,7 @@ function EditHtml(type, ID) {
                 if ($(".lbltext").val().trim() == "") {
                     toastr.error("", "Label text is required", { progressBar: true });
                     return;
-                }    
+                }
                 if ($("#help-input").prop("checked") && $(".lblhelptext").val().trim() == "") {
                     toastr.error("", "Help text is required", { progressBar: true });
                     return;
@@ -498,7 +515,7 @@ function EditHtml(type, ID) {
                     return;
                 }
                 var colname = $(".lbltext").val().trim();
-                colname = colname.split(" ").join("").replace(/[_\W]+/g, "");   
+                colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $("#" + ID).attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -507,41 +524,48 @@ function EditHtml(type, ID) {
                     }
                     $("#" + ID).attr("data-column", colname);
                 }
-                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span>`);                   
-                   
+                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span>`);
 
-                    if ($("#required-input").prop("checked")) {
-                        $("#" + ID).prev().addClass("required-asterisk");
-                    } else {
-                        $("#" + ID).prev().removeClass("required-asterisk");
-                    }
-                    if ($("#help-input").prop("checked")) {
-                        $("#" + ID).prev().append('<span  data-toggle="tooltip"  data-placement="top"   title="' + $(".lblhelptext").val() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
-                        toogleToolTip();
 
-                    } else {
-                        $("#" + ID).prev().find("span.tooltipicon").remove();
-                    }
+                if ($("#required-input").prop("checked")) {
+                    $("#" + ID).prev().addClass("required-asterisk");
+                } else {
+                    $("#" + ID).prev().removeClass("required-asterisk");
+                }
+                if ($("#help-input").prop("checked")) {
+                    $("#" + ID).prev().append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
+                    toogleToolTip();
 
-                    if ($(".labeltop").prop("checked")) {
-                        $("#" + ID).closest(".form-group").removeClass("f-g-left");
-                        $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
-                    } else if ($(".labelleft").prop("checked")) {
-                        $("#" + ID).closest(".form-group").addClass("f-g-left");
-                        $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
-                    }
-                    $("#" + ID).removeClass("col-md-4 col-md-6 col-md-12").addClass($("#fieldsize").val());
-                    $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
-                    if ($("#inputsize").val() == "col-md-12") {
-                        $("#" + ID).removeClass("col-md-12");
-                    }
-                    $("#exampleModalCenter").modal("hide");               
+                } else {
+                    $("#" + ID).prev().find("span.tooltipicon").remove();
+                }
+
+                if ($(".labeltop").prop("checked")) {
+                    $("#" + ID).closest(".form-group").removeClass("f-g-left");
+                    $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
+                } else if ($(".labelleft").prop("checked")) {
+                    $("#" + ID).closest(".form-group").addClass("f-g-left");
+                    $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
+                }
+                $("#" + ID).removeClass("col-md-4 col-md-6 col-md-12").addClass($("#fieldsize").val());
+                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
+                if ($("#inputsize").val() == "col-md-12") {
+                    $("#" + ID).removeClass("col-md-12");
+                }
+                $("#exampleModalCenter").modal("hide");
             });
             break;
         case "file":
             var isrequired = $("#" + ID).prev().hasClass("required-asterisk");
             var tooltiptext = $("#" + ID).prev().find("span.tooltipicon").attr("data-original-title");
             tooltiptext = tooltiptext === undefined ? "" : tooltiptext;
+            if (tooltiptext.indexOf("_blank") != -1) {
+                var tooltipHtml = parseHTML(tooltiptext);
+                $(tooltipHtml).find("a").replaceWith(function () {
+                    return $("<span>" + $(this).html() + "</span>");
+                });
+                tooltiptext = tooltipHtml.textContent;
+            }
             var allowMultiple = $("#" + ID).attr("multiple");
             var fileSize = $("#" + ID).attr("data-filesize");
             if (fileSize === undefined) {
@@ -565,30 +589,30 @@ function EditHtml(type, ID) {
                              <input type="radio" class="custom-control-input labelleft" id="label-left" name="radio-position" value="left"  ${ $("#" + ID).closest(".form-group").hasClass("f-g-left") ? "checked" : ""}>
                              <label class="custom-control-label" for="label-left">left</label></div>
                              </div>`;
-           popupString +=   '<div class="modal-row">' +
-                            '<label class="required-asterisk">Label Text</label>' +
-               '<input  type="text" control-id="' + ID + '" class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + labelText + '"/>' +
-                            '</div>';
+            popupString += '<div class="modal-row">' +
+                '<label class="required-asterisk">Label Text</label>' +
+                '<input  type="text" control-id="' + ID + '" class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + labelText + '"/>' +
+                '</div>';
             if (tooltiptext != '') {
                 popupString += `<div class="modal-row custom-control custom-checkbox">
                             <input type="checkbox" class="custom-control-input" id="help-input" name="checkbox" checked="">
                             <label class="custom-control-label" for="help-input">Enable help text</label></div>`;
                 popupString += '<div class="modal-row">' +
                     '<label>Help Text</label>' +
-                    '<input  type="text" class="form-control lblhelptext" onkeyup="ValidateColumnName(this)" value="' + tooltiptext + '"/>' +
+                    '<textarea class="form-control lblhelptext">' + tooltiptext + '</textarea>' +
                     '</div>';
             } else {
                 popupString += `<div class="modal-row custom-control custom-checkbox">
                             <input type="checkbox" class="custom-control-input" id="help-input" name="checkbox">
                             <label class="custom-control-label" for="help-input">Enable help text</label></div>`;
                 popupString += '<div class="modal-row">' +
-                               '<label>Help Text</label>' +
-                               '<input  type="text" class="form-control lblhelptext" onkeyup="ValidateColumnName(this)"/>' +
-                               '</div>';
+                    '<label>Help Text</label>' +
+                    '<textarea class="form-control lblhelptext"></textarea>' +
+                    '</div>';
             }
             var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
             var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
-            var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";          
+            var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
 
             popupString += `<div class="modal-row divFiletype"><label class="control-label required-asterisk"> Available file format</label>
              <div class="form-group">
@@ -600,19 +624,20 @@ function EditHtml(type, ID) {
              <option value=".docx">docx</option>
              <option value=".pdf">pdf</option>           
               <option value=".xls">xls</option>
+              <option value=".xlsx">xlsx</option>
               <option value=".rtf">rtf</option>
               <option value=".txt">txt</option>
              </select>
              </div></div>`;
             popupString += `<div class="modal-row"><label>Allow multiple files:  </label><div class="custom-control custom-radio d-inline-block mr-2">
-    <input type="radio" class="custom-control-input" id="label-multiple-yes" name="radio-multiple" value="yes"  ${allowMultiple != undefined ?"checked":""}>
+    <input type="radio" class="custom-control-input" id="label-multiple-yes" name="radio-multiple" value="yes"  ${allowMultiple != undefined ? "checked" : ""}>
     <label class="custom-control-label" for="label-multiple-yes">Yes</label></div>
     <div class="custom-control custom-radio d-inline-block mr-2">
     <input type="radio" class="custom-control-input" id="label-multiple-no" name="radio-multiple" value="no" ${allowMultiple === undefined ? "checked" : ""}>
     <label class="custom-control-label" for="label-multiple-no">No</label></div>
     </div>`;
-            popupString += `<div class="modal-row"><label class="required-asterisk">File Size(in kb)</label><input type="text" onkeyup="validateFileSize(this)" class="form-control lblfilesize" value="${fileSize}" onkeyup="ValidateColumnName(this)"></div>`;
-            
+            popupString += `<div class="modal-row"><label class="required-asterisk">Individual file size(in kb)</label><input type="text" onkeyup="validateFileSize(this)" class="form-control lblfilesize" value="${fileSize}" onkeyup="ValidateColumnName(this)"></div>`;
+
             popupString += '<div class="modal-row">' +
                 '<label class="control-label"> Input Size </label>' +
                 '<div class="form-group">' +
@@ -627,13 +652,13 @@ function EditHtml(type, ID) {
                 if ($(".lbltext").val().trim() == "") {
                     toastr.error("", "Label text is required", { progressBar: true });
                     return;
-                }   
+                }
                 if ($("#help-input").prop("checked") && $(".lblhelptext").val().trim() == "") {
                     toastr.error("", "Help text is required", { progressBar: true });
                     return;
                 }
                 var filetypes = $("#filetype").val();
-                if (filetypes.length==0) {
+                if (filetypes.length == 0) {
                     toastr.error("", "Please select file format", { progressBar: true });
                     return;
                 }
@@ -645,7 +670,7 @@ function EditHtml(type, ID) {
                     return;
                 }
                 var colname = $(".lbltext").val().trim();
-                colname = colname.split(" ").join("").replace(/[_\W]+/g, ""); 
+                colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $("#" + ID).attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -654,44 +679,51 @@ function EditHtml(type, ID) {
                     }
                     $("#" + ID).attr("data-column", colname);
                 }
-                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span>`);                   
-                   
-                    $("#" + ID).attr("data-filetype", $("#filetype").val());
-                    $("#" + ID).attr("data-filesize", $(".lblfilesize").val());
-                    if ($("#required-input").prop("checked")) {
-                        $("#" + ID).prev().addClass("required-asterisk");
-                    } else {
-                        $("#" + ID).prev().removeClass("required-asterisk");
-                    }
-                    if ($("#help-input").prop("checked")) {
-                        $("#" + ID).prev().append('<span  data-toggle="tooltip"  data-placement="top"   title="' + $(".lblhelptext").val() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
-                        
-                        toogleToolTip();
+                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span>`);
 
-                    } else {
-                        $("#" + ID).prev().find("span.tooltipicon").remove();
-                    }
-                    if ($("#label-multiple-yes").prop("checked")) {
-                        $("#" + ID).attr("multiple",'');
-                    } else {
-                        $("#" + ID).removeAttr("multiple");
-                    }
-                    if ($(".labeltop").prop("checked")) {
-                        $("#" + ID).closest(".form-group").removeClass("f-g-left");
-                        $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
-                    } else if ($(".labelleft").prop("checked")) {
-                        $("#" + ID).closest(".form-group").addClass("f-g-left");
-                        $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
-                    }
-                    $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
-                    $("#exampleModalCenter").modal("hide");
-                
+                $("#" + ID).attr("data-filetype", $("#filetype").val());
+                $("#" + ID).attr("data-filesize", $(".lblfilesize").val());
+                if ($("#required-input").prop("checked")) {
+                    $("#" + ID).prev().addClass("required-asterisk");
+                } else {
+                    $("#" + ID).prev().removeClass("required-asterisk");
+                }
+                if ($("#help-input").prop("checked")) {
+                    $("#" + ID).prev().append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
+
+                    toogleToolTip();
+
+                } else {
+                    $("#" + ID).prev().find("span.tooltipicon").remove();
+                }
+                if ($("#label-multiple-yes").prop("checked")) {
+                    $("#" + ID).attr("multiple", '');
+                } else {
+                    $("#" + ID).removeAttr("multiple");
+                }
+                if ($(".labeltop").prop("checked")) {
+                    $("#" + ID).closest(".form-group").removeClass("f-g-left");
+                    $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
+                } else if ($(".labelleft").prop("checked")) {
+                    $("#" + ID).closest(".form-group").addClass("f-g-left");
+                    $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
+                }
+                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
+                $("#exampleModalCenter").modal("hide");
+
             });
             break;
         case "number":
             var isrequired = $("#" + ID).prev().hasClass("required-asterisk");
             var tooltiptext = $("#" + ID).prev().find("span.tooltipicon").attr("data-original-title");
             tooltiptext = tooltiptext === undefined ? "" : tooltiptext;
+            if (tooltiptext.indexOf("_blank") != -1) {
+                var tooltipHtml = parseHTML(tooltiptext);
+                $(tooltipHtml).find("a").replaceWith(function () {
+                    return $("<span>" + $(this).html() + "</span>");
+                });
+                tooltiptext = tooltipHtml.textContent;
+            }
             var labelText = $("#" + ID).prev().find("span.title").html();
             if (labelText == "Label") {
                 labelText = "";
@@ -713,15 +745,15 @@ function EditHtml(type, ID) {
             popupString += '<div class="modal-row">' +
                 '<label class="required-asterisk">Label Text</label>' +
                 '<input  type="text" control-id="' + ID + '" class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + labelText + '"/>' +
-                '</div>';           
-           
+                '</div>';
+
             if (tooltiptext != '') {
                 popupString += `<div class="modal-row custom-control custom-checkbox">
                             <input type="checkbox" class="custom-control-input" id="help-input" name="checkbox" checked="">
                             <label class="custom-control-label" for="help-input">Enable help text</label></div>`;
                 popupString += '<div class="modal-row">' +
                     '<label>Help Text</label>' +
-                    '<input  type="text" class="form-control lblhelptext" onkeyup="ValidateColumnName(this)" value="' + tooltiptext + '"/>' +
+                    '<textarea class="form-control lblhelptext">' + tooltiptext + '</textarea>' +
                     '</div>';
             } else {
                 popupString += `<div class="modal-row custom-control custom-checkbox">
@@ -729,7 +761,7 @@ function EditHtml(type, ID) {
                             <label class="custom-control-label" for="help-input">Enable help text</label></div>`;
                 popupString += '<div class="modal-row">' +
                     '<label>Help Text</label>' +
-                    '<input  type="text" class="form-control lblhelptext" onkeyup="ValidateColumnName(this)"/>' +
+                    '<textarea class="form-control lblhelptext"></textarea>' +
                     '</div>';
             }
             var isfieldmd4 = $("#" + ID).hasClass("col-md-4") ? "selected" : "";
@@ -742,7 +774,7 @@ function EditHtml(type, ID) {
             var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
             var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
             var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
-           
+
             popupString += '<div class="modal-row">' +
                 '<label class="control-label"> Field Size </label>' +
                 '<div class="form-group">' +
@@ -785,39 +817,46 @@ function EditHtml(type, ID) {
                     }
                     $("#" + ID).attr("data-column", colname);
                 }
-                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span>`);                                      
-                    if ($("#required-input").prop("checked")) {
-                        $("#" + ID).prev().addClass("required-asterisk");
-                    } else {
-                        $("#" + ID).prev().removeClass("required-asterisk");
-                    }
-                    if ($("#help-input").prop("checked")) {
-                        $("#" + ID).prev().append('<span  data-toggle="tooltip"  data-placement="top"   title="' + $(".lblhelptext").val() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
-                        toogleToolTip();
+                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span>`);
+                if ($("#required-input").prop("checked")) {
+                    $("#" + ID).prev().addClass("required-asterisk");
+                } else {
+                    $("#" + ID).prev().removeClass("required-asterisk");
+                }
+                if ($("#help-input").prop("checked")) {
+                    $("#" + ID).prev().append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
+                    toogleToolTip();
 
-                    } else {
-                        $("#" + ID).prev().find("span.tooltipicon").remove();
-                    }
-                    if ($(".labeltop").prop("checked")) {
-                        $("#" + ID).closest(".form-group").removeClass("f-g-left");
-                        $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
-                    } else if ($(".labelleft").prop("checked")) {
-                        $("#" + ID).closest(".form-group").addClass("f-g-left");
-                        $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
-                    }
-                    $("#" + ID).removeClass("col-md-4 col-md-6 col-md-12").addClass($("#fieldsize").val());
-                    $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
-                    if ($("#inputsize").val() == "col-md-12") {
-                        $("#" + ID).removeClass("col-md-12");
-                    }
-                    $("#exampleModalCenter").modal("hide");
-                
+                } else {
+                    $("#" + ID).prev().find("span.tooltipicon").remove();
+                }
+                if ($(".labeltop").prop("checked")) {
+                    $("#" + ID).closest(".form-group").removeClass("f-g-left");
+                    $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
+                } else if ($(".labelleft").prop("checked")) {
+                    $("#" + ID).closest(".form-group").addClass("f-g-left");
+                    $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
+                }
+                $("#" + ID).removeClass("col-md-4 col-md-6 col-md-12").addClass($("#fieldsize").val());
+                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
+                if ($("#inputsize").val() == "col-md-12") {
+                    $("#" + ID).removeClass("col-md-12");
+                }
+                $("#exampleModalCenter").modal("hide");
+
             });
             break;
         case "radio-group":
             var isrequired = $("#" + ID).find(".required-asterisk");
             var tooltiptext = $("#" + ID).find("label").first().find("span.tooltipicon").attr("title");
-            tooltiptext = tooltiptext === undefined ? "" : tooltiptext == '' ? $("#" + ID).find("label").first().find("span.tooltipicon").attr("data-original-title") : tooltiptext;           
+            tooltiptext = tooltiptext === undefined ? "" : tooltiptext == '' ? $("#" + ID).find("label").first().find("span.tooltipicon").attr("data-original-title") : tooltiptext;
+            if (tooltiptext.indexOf("_blank") != -1) {
+                var tooltipHtml = parseHTML(tooltiptext);
+                $(tooltipHtml).find("a").replaceWith(function () {
+                    return $("<span>" + $(this).html() + "</span>");
+                });
+                tooltiptext = tooltipHtml.textContent;
+            }
             var labelText = $("#" + ID).find(".radiobox-group").find("span.title").html();
             if (labelText == "Radio") {
                 labelText = "";
@@ -840,14 +879,14 @@ function EditHtml(type, ID) {
             popupString += '<div class="modal-row">' +
                 '<label class="required-asterisk">Label Text</label>' +
                 '<input  type="text" control-id="' + ID + '" class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + labelText + '"/>' +
-                           '</div>';
+                '</div>';
             if (tooltiptext != '') {
                 popupString += `<div class="modal-row custom-control custom-checkbox">
                             <input type="checkbox" class="custom-control-input" id="help-input" name="checkbox" checked="">
                             <label class="custom-control-label" for="help-input">Enable help text</label></div>`;
                 popupString += '<div class="modal-row">' +
                     '<label>Help Text</label>' +
-                    '<input  type="text" class="form-control lblhelptext" onkeyup="ValidateColumnName(this)" value="' + tooltiptext + '"/>' +
+                    '<textarea class="form-control lblhelptext">' + tooltiptext + '</textarea>' +
                     '</div>';
             } else {
                 popupString += `<div class="modal-row custom-control custom-checkbox">
@@ -855,10 +894,10 @@ function EditHtml(type, ID) {
                             <label class="custom-control-label" for="help-input">Enable help text</label></div>`;
                 popupString += '<div class="modal-row">' +
                     '<label>Help Text</label>' +
-                    '<input  type="text" class="form-control lblhelptext" onkeyup="ValidateColumnName(this)"/>' +
+                    '<textarea class="form-control lblhelptext"></textarea>' +
                     '</div>';
             }
-           
+
             var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
             var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
             var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
@@ -914,64 +953,64 @@ function EditHtml(type, ID) {
                     breakout = false;
                     toastr.error("", "Options can not be empty", { progressBar: true });
                     return false;
-                } 
+                }
                 var colname = $(".lbltext").val().trim();
-                colname = colname.split(" ").join("").replace(/[_\W]+/g, ""); 
+                colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $("#" + ID).find("input.custom-control-input").first().attr("data-column") == undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
                         var randomNumber = Math.floor((Math.random() * 100) + 1);
                         colname = colname + randomNumber;
                     }
-                } 
-                    $(".dragresize  [id=" + ID + "]").html("");
-                    $(".dragresize  [id=" + ID + "]").html("<label class='radiobox-group'><span class='title'>Radio</span></label>");
+                }
+                $(".dragresize  [id=" + ID + "]").html("");
+                $(".dragresize  [id=" + ID + "]").html("<label class='radiobox-group'><span class='title'>Radio</span></label>");
 
-                    var allTextArray = $('.option-block').map(function () {
-                        if ($(this).find("[placeholder=Key]").val() != '')
+                var allTextArray = $('.option-block').map(function () {
+                    if ($(this).find("[placeholder=Key]").val() != '')
 
-                            return $(this).find("[placeholder=Key]").val()
-                    }).get();
-                    var duplicateTextArray = allTextArray.filter(function (element, pos) {
-                        if (allTextArray.indexOf(element) != pos) {
-                            return true;
-                        }
-                        else {
-                            return false;
-                        }
-
-                    });
-                    var allValueArray = $('.option-block').map(function () {
-                        if ($(this).find("[placeholder=Value]").val() != '')
-
-                            return $(this).find("[placeholder=Value]").val()
-                    }).get();
-                    var duplicateValueArray = allValueArray.filter(function (element, pos) {
-                        if (allValueArray.indexOf(element) != pos) {
-                            return true;
-                        }
-                        else {
-                            return false;
-                        }
-
-                    });
-                    if (duplicateValueArray.length != 0) {
-                        toastr.error("", "Option value can not be duplicate", { progressBar: true });
-                        return;
+                        return $(this).find("[placeholder=Key]").val()
+                }).get();
+                var duplicateTextArray = allTextArray.filter(function (element, pos) {
+                    if (allTextArray.indexOf(element) != pos) {
+                        return true;
                     }
-                    if (duplicateTextArray.length != 0) {
-                        toastr.error("", "Option text can not be duplicate", { progressBar: true });
-                        return;
+                    else {
+                        return false;
                     }
-                    var option_data = "<div class='radio-html'>";
-                    $(".option-block").each(function (index) {
-                         option_data += `<div class="custom-control custom-radio d-inline-block mr-2">
+
+                });
+                var allValueArray = $('.option-block').map(function () {
+                    if ($(this).find("[placeholder=Value]").val() != '')
+
+                        return $(this).find("[placeholder=Value]").val()
+                }).get();
+                var duplicateValueArray = allValueArray.filter(function (element, pos) {
+                    if (allValueArray.indexOf(element) != pos) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+
+                });
+                if (duplicateValueArray.length != 0) {
+                    toastr.error("", "Option value can not be duplicate", { progressBar: true });
+                    return;
+                }
+                if (duplicateTextArray.length != 0) {
+                    toastr.error("", "Option text can not be duplicate", { progressBar: true });
+                    return;
+                }
+                var option_data = "<div class='radio-html'>";
+                $(".option-block").each(function (index) {
+                    option_data += `<div class="custom-control custom-radio d-inline-block mr-2">
     <input  type="radio" class="custom-control-input" id="${ID + index}"  name="${ID}"  value="${$(this).find("[placeholder = Value]").val()}">
     <label class="custom-control-label" for="${ID + index}">${$(this).find("[placeholder = Key]").val()}</label></div>
     `;
-                    });
-                    option_data += "</div>";
-                    $("#" + ID).find("div").html("");
+                });
+                option_data += "</div>";
+                $("#" + ID).find("div").html("");
                 $("#" + ID).append(option_data);
                 if (columnName != undefined) {
 
@@ -979,42 +1018,49 @@ function EditHtml(type, ID) {
                 } else {
                     $("#" + ID).find("input.custom-control-input").first().attr("data-column", colname);
                 }
-                              
-                    $("#" + ID).find(".radiobox-group").find("span.title").html("").append($(".lbltext").val().trim());
-                    if ($("#required-input").prop("checked")) {
-                        $("#" + ID).find('label:first-child').addClass("required-asterisk");
-                    } else {
-                        $("#" + ID).find('label:first-child').removeClass("required-asterisk");
-                    }
-                    if ($("#help-input").prop("checked")) {
-                        $("#" + ID).find("label").first().append('<span tabindex="0" data-toggle="tooltip"  data-placement="top"  title="' + $(".lblhelptext").val() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
-                        toogleToolTip();
 
-                    } else {
-                        $("#" + ID).find("label").first().find("span.tooltipicon").remove();
-                    }
-                    $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
-                    if ($(".radiohorizontal").prop("checked")) {
-                        $("#" + ID).removeClass("vertical");
-                    } else if ($(".radiovertical").prop("checked")) {
-                        $("#" + ID).addClass("vertical");
-                    }
-                    if ($(".labeltop").prop("checked")) {
-                        $("#" + ID).removeClass("f-g-left");
-                        $("#" + ID).find('label:first-child').removeClass("label-left");
-                    } else if ($(".labelleft").prop("checked")) {
-                        $("#" + ID).addClass("f-g-left");
-                        $("#" + ID).find('label:first-child').addClass("label-left");
-                    }
-                   
-                    $("#exampleModalCenter").modal("hide");
-                
+                $("#" + ID).find(".radiobox-group").find("span.title").html("").append($(".lbltext").val().trim());
+                if ($("#required-input").prop("checked")) {
+                    $("#" + ID).find('label:first-child').addClass("required-asterisk");
+                } else {
+                    $("#" + ID).find('label:first-child').removeClass("required-asterisk");
+                }
+                if ($("#help-input").prop("checked")) {
+                    $("#" + ID).find("label").first().append('<span tabindex="0" data-toggle="tooltip"  data-placement="top"  title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
+                    toogleToolTip();
+
+                } else {
+                    $("#" + ID).find("label").first().find("span.tooltipicon").remove();
+                }
+                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
+                if ($(".radiohorizontal").prop("checked")) {
+                    $("#" + ID).removeClass("vertical");
+                } else if ($(".radiovertical").prop("checked")) {
+                    $("#" + ID).addClass("vertical");
+                }
+                if ($(".labeltop").prop("checked")) {
+                    $("#" + ID).removeClass("f-g-left");
+                    $("#" + ID).find('label:first-child').removeClass("label-left");
+                } else if ($(".labelleft").prop("checked")) {
+                    $("#" + ID).addClass("f-g-left");
+                    $("#" + ID).find('label:first-child').addClass("label-left");
+                }
+
+                $("#exampleModalCenter").modal("hide");
+
             });
             break;
         case "select":
             var isrequired = $("#" + ID).prev().hasClass("required-asterisk");
             var tooltiptext = $("#" + ID).prev().find("span.tooltipicon").attr("data-original-title");
             tooltiptext = tooltiptext === undefined ? "" : tooltiptext;
+            if (tooltiptext.indexOf("_blank") != -1) {
+                var tooltipHtml = parseHTML(tooltiptext);
+                $(tooltipHtml).find("a").replaceWith(function () {
+                    return $("<span>" + $(this).html() + "</span>");
+                });
+                tooltiptext = tooltipHtml.textContent;
+            }
             var labelText = $("#" + ID).prev().find("span.title").html();
             if (labelText == "Select") {
                 labelText = "";
@@ -1043,7 +1089,7 @@ function EditHtml(type, ID) {
                             <label class="custom-control-label" for="help-input">Enable help text</label></div>`;
                 popupString += '<div class="modal-row">' +
                     '<label>Help Text</label>' +
-                    '<input  type="text" class="form-control lblhelptext" onkeyup="ValidateColumnName(this)" value="' + tooltiptext + '"/>' +
+                    '<textarea class="form-control lblhelptext">' + tooltiptext + '</textarea>' +
                     '</div>';
             } else {
                 popupString += `<div class="modal-row custom-control custom-checkbox">
@@ -1051,9 +1097,9 @@ function EditHtml(type, ID) {
                             <label class="custom-control-label" for="help-input">Enable help text</label></div>`;
                 popupString += '<div class="modal-row">' +
                     '<label>Help Text</label>' +
-                    '<input  type="text" class="form-control lblhelptext" onkeyup="ValidateColumnName(this)"/>' +
+                    '<textarea class="form-control lblhelptext"></textarea>' +
                     '</div>';
-            }           
+            }
             var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
             var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
             var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
@@ -1098,7 +1144,7 @@ function EditHtml(type, ID) {
                 if ($(".lbltext").val().trim() == "") {
                     toastr.error("", "Label text is required", { progressBar: true });
                     return;
-                }   
+                }
                 if ($("#help-input").prop("checked") && $(".lblhelptext").val().trim() == "") {
                     toastr.error("", "Help text is required", { progressBar: true });
                     return;
@@ -1117,9 +1163,9 @@ function EditHtml(type, ID) {
                     breakout = false;
                     toastr.error("", "Options can not be empty", { progressBar: true });
                     return false;
-                } 
+                }
                 var colname = $(".lbltext").val().trim();
-                colname = colname.split(" ").join("").replace(/[_\W]+/g, ""); 
+                colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $("#" + ID).attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -1128,85 +1174,97 @@ function EditHtml(type, ID) {
                     }
                     $("#" + ID).attr("data-column", colname);
                 }
-                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span>`);                 
-                    
-                    $("#" + ID).html("");
-                    var allTextArray = $('.option-block').map(function () {
-                        if ($(this).find("[placeholder=Key]").val() != '')
+                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span>`);
 
-                            return $(this).find("[placeholder=Key]").val()
-                    }).get();
-                    var duplicateTextArray = allTextArray.filter(function (element, pos) {
-                        if (allTextArray.indexOf(element) != pos) {
-                            return true;
-                        }
-                        else {
-                            return false;
-                        }
+                $("#" + ID).html("");
+                var allTextArray = $('.option-block').map(function () {
+                    if ($(this).find("[placeholder=Key]").val() != '')
 
-                    });
-                    var allValueArray = $('.option-block').map(function () {
-                        if ($(this).find("[placeholder=Value]").val() != '')
+                        return $(this).find("[placeholder=Key]").val()
+                }).get();
+                var duplicateTextArray = allTextArray.filter(function (element, pos) {
+                    if (allTextArray.indexOf(element) != pos) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
 
-                            return $(this).find("[placeholder=Value]").val()
-                    }).get();
-                    var duplicateValueArray = allValueArray.filter(function (element, pos) {
-                        if (allValueArray.indexOf(element) != pos) {
-                            return true;
-                        }
-                        else {
-                            return false;
-                        }
+                });
+                var allValueArray = $('.option-block').map(function () {
+                    if ($(this).find("[placeholder=Value]").val() != '')
 
-                    });
-                    if (duplicateValueArray.length != 0) {
-                        toastr.error("", "Option value can not be duplicate", { progressBar: true });
-                        return;
+                        return $(this).find("[placeholder=Value]").val()
+                }).get();
+                var duplicateValueArray = allValueArray.filter(function (element, pos) {
+                    if (allValueArray.indexOf(element) != pos) {
+                        return true;
                     }
-                    if (duplicateTextArray.length != 0) {
-                        toastr.error("", "Option text can not be duplicate", { progressBar: true });
-                        return;
+                    else {
+                        return false;
                     }
-                    $(".option-block").each(function (index) {
 
-                        var option_data = "<option value=" + $(this).find("[placeholder=Value]").val() + ">" + $(this).find("[placeholder=Key]").val() + "</option>";
-                        $(option_data).appendTo('#' + ID);
-                    });
-                    if ($("#required-input").prop("checked")) {
-                        $("#" + ID).prev().addClass("required-asterisk");
-                    } else {
-                        $("#" + ID).prev().removeClass("required-asterisk");
-                    }
-                    if ($("#help-input").prop("checked")) {
-                        $("#" + ID).prev().append('<span  data-toggle="tooltip"  data-placement="top"   title="' + $(".lblhelptext").val() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
-                        toogleToolTip();
+                });
+                if (duplicateValueArray.length != 0) {
+                    toastr.error("", "Option value can not be duplicate", { progressBar: true });
+                    return;
+                }
+                if (duplicateTextArray.length != 0) {
+                    toastr.error("", "Option text can not be duplicate", { progressBar: true });
+                    return;
+                }
+                $(".option-block").each(function (index) {
 
-                    } else {
-                        $("#" + ID).prev().find("span.tooltipicon").remove();
-                    }
-                    if ($(".labeltop").prop("checked")) {
-                        $("#" + ID).closest(".form-group").removeClass("f-g-left");
-                        $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
-                    } else if ($(".labelleft").prop("checked")) {
-                        $("#" + ID).closest(".form-group").addClass("f-g-left");
-                        $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
-                    }
-                    $("#" + ID).removeClass("col-md-4 col-md-6 col-md-12").addClass($("#fieldsize").val());
-                    $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
-                    if ($("#inputsize").val() == "col-md-12") {
-                        $("#" + ID).removeClass("col-md-12");
-                    }
-                    $("#exampleModalCenter").modal("hide");
-                
+                    var option_data = "<option value=" + $(this).find("[placeholder=Value]").val() + ">" + $(this).find("[placeholder=Key]").val() + "</option>";
+                    $(option_data).appendTo('#' + ID);
+                });
+                if ($("#required-input").prop("checked")) {
+                    $("#" + ID).prev().addClass("required-asterisk");
+                } else {
+                    $("#" + ID).prev().removeClass("required-asterisk");
+                }
+                if ($("#help-input").prop("checked")) {
+                    $("#" + ID).prev().append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
+                    toogleToolTip();
+
+                } else {
+                    $("#" + ID).prev().find("span.tooltipicon").remove();
+                }
+                if ($(".labeltop").prop("checked")) {
+                    $("#" + ID).closest(".form-group").removeClass("f-g-left");
+                    $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
+                } else if ($(".labelleft").prop("checked")) {
+                    $("#" + ID).closest(".form-group").addClass("f-g-left");
+                    $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
+                }
+                $("#" + ID).removeClass("col-md-4 col-md-6 col-md-12").addClass($("#fieldsize").val());
+                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
+                if ($("#inputsize").val() == "col-md-12") {
+                    $("#" + ID).removeClass("col-md-12");
+                }
+                $("#exampleModalCenter").modal("hide");
+
             });
             break;
-        case "text":          
+        case "text":
             var isrequired = $("#" + ID).prev().hasClass("required-asterisk");
             var tooltiptext = $("#" + ID).prev().find("span.tooltipicon").attr("data-original-title");
             tooltiptext = tooltiptext === undefined ? "" : tooltiptext;
+            if (tooltiptext.indexOf("_blank") != -1) {
+                var tooltipHtml = parseHTML(tooltiptext);
+                $(tooltipHtml).find("a").replaceWith(function () {
+                    return $("<span>" + $(this).html() + "</span>");
+                });
+                tooltiptext = tooltipHtml.textContent;
+            }
+
             var labelText = $("#" + ID).prev().find("span.title").html();
             if (labelText == "Label") {
                 labelText = "";
+            }
+            var lbldescriptionText = $("#" + ID).attr("placeholder");
+            if (lbldescriptionText == undefined) {
+                lbldescriptionText = "";
             }
             popupString = `<div class="modal-row custom-control custom-checkbox">`;
             if (isrequired) {
@@ -1234,7 +1292,7 @@ function EditHtml(type, ID) {
                             <label class="custom-control-label" for="help-input">Enable help text</label></div>`;
                 popupString += '<div class="modal-row">' +
                     '<label>Help Text</label>' +
-                    '<input  type="text" class="form-control lblhelptext" onkeyup="ValidateColumnName(this)" value="' + tooltiptext + '"/>' +
+                    '<textarea class="form-control lblhelptext">' + tooltiptext + '</textarea>' +
                     '</div>';
             } else {
                 popupString += `<div class="modal-row custom-control custom-checkbox">
@@ -1242,9 +1300,13 @@ function EditHtml(type, ID) {
                             <label class="custom-control-label" for="help-input">Enable help text</label></div>`;
                 popupString += '<div class="modal-row">' +
                     '<label>Help Text</label>' +
-                    '<input  type="text" class="form-control lblhelptext" onkeyup="ValidateColumnName(this)"/>' +
+                    '<textarea class="form-control lblhelptext"></textarea>' +
                     '</div>';
             }
+            popupString += '<div class="modal-row">' +
+                '<label>Description</label>' +
+                '<textarea class="form-control lbldescription">' + lbldescriptionText + '</textarea>' +
+                '</div>';
             var isfieldmd4 = $("#" + ID).hasClass("col-md-4") ? "selected" : "";
             var isfieldmd6 = $("#" + ID).hasClass("col-md-6") ? "selected" : "";
             var isfieldmd12 = $("#" + ID).hasClass("col-md-12") ? "selected" : "";
@@ -1278,17 +1340,16 @@ function EditHtml(type, ID) {
                     toastr.error("", "Label text is required", { progressBar: true });
                     return;
                 }
-                if ($("#help-input").prop("checked") && $(".lblhelptext").val().trim()=="") {
+                if ($("#help-input").prop("checked") && $(".lblhelptext").val().trim() == "") {
                     toastr.error("", "Help text is required", { progressBar: true });
                     return;
-                }      
+                }
                 if (isLabelNameExist($(".lbltext").val(), ID)) {
                     return;
                 }
                 var colname = $(".lbltext").val().trim();
                 colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
-                debugger;
                 if (colname != labelText && $("#" + ID).attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
                         var randomNumber = Math.floor((Math.random() * 100) + 1);
@@ -1296,44 +1357,55 @@ function EditHtml(type, ID) {
                     }
                     $("#" + ID).attr("data-column", colname);
                 }
-                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span>`);                   
-                              
-                    if ($("#required-input").prop("checked")) {
-                        $("#" + ID).prev().addClass("required-asterisk");
-                    } else {
-                        $("#" + ID).prev().removeClass("required-asterisk");
-                    }
-                    if ($("#help-input").prop("checked")) {
-                        $("#" + ID).prev().append('<span  data-toggle="tooltip"  data-placement="top"   title="' + $(".lblhelptext").val() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
-                        toogleToolTip();
+                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span>`);
 
-                    } else {
-                        $("#" + ID).prev().find("span.tooltipicon").remove();
-                    }
-                    //$("#" + ID).attr("data-columntype", coltype);
-                    if ($(".labeltop").prop("checked")) {
-                        $("#" + ID).closest(".form-group").removeClass("f-g-left");
-                        $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
-                    } else if ($(".labelleft").prop("checked")) {
-                        $("#" + ID).closest(".form-group").addClass("f-g-left");
-                        $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
-                    }
-                    $("#" + ID).removeClass("col-md-4 col-md-6 col-md-12").addClass($("#fieldsize").val());
-                    $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
-                    if ($("#inputsize").val() == "col-md-12") {
-                        $("#" + ID).removeClass("col-md-12");
-                    }
-                    $("#exampleModalCenter").modal("hide");
-                
+                if ($("#required-input").prop("checked")) {
+                    $("#" + ID).prev().addClass("required-asterisk");
+                } else {
+                    $("#" + ID).prev().removeClass("required-asterisk");
+                }
+                if ($("#help-input").prop("checked")) {
+                    $("#" + ID).prev().append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
+                    toogleToolTip();
+
+                } else {
+                    $("#" + ID).prev().find("span.tooltipicon").remove();
+                }
+                $("#" + ID).attr("placeholder", $(".lbldescription").val());
+                if ($(".labeltop").prop("checked")) {
+                    $("#" + ID).closest(".form-group").removeClass("f-g-left");
+                    $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
+                } else if ($(".labelleft").prop("checked")) {
+                    $("#" + ID).closest(".form-group").addClass("f-g-left");
+                    $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
+                }
+                $("#" + ID).removeClass("col-md-4 col-md-6 col-md-12").addClass($("#fieldsize").val());
+                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
+                if ($("#inputsize").val() == "col-md-12") {
+                    $("#" + ID).removeClass("col-md-12");
+                }
+                $("#exampleModalCenter").modal("hide");
+
             });
             break;
         case "textarea":
             var isrequired = $("#" + ID).parent().prev().hasClass("required-asterisk");
             var tooltiptext = $("#" + ID).parent().prev().find("span.tooltipicon").attr("data-original-title");
             tooltiptext = tooltiptext === undefined ? "" : tooltiptext;
+            if (tooltiptext.indexOf("_blank") != -1) {
+                var tooltipHtml = parseHTML(tooltiptext);
+                $(tooltipHtml).find("a").replaceWith(function () {
+                    return $("<span>" + $(this).html() + "</span>");
+                });
+                tooltiptext = tooltipHtml.textContent;
+            }
             var labelText = $("#" + ID).parent().prev().find("span.title").html();
             if (labelText == "Textarea") {
                 labelText = "";
+            }
+            var lbldescriptionText = $("#" + ID).attr("placeholder");
+            if (lbldescriptionText == undefined) {
+                lbldescriptionText = "";
             }
             popupString = `<div class="modal-row custom-control custom-checkbox">`;
             if (isrequired) {
@@ -1352,26 +1424,29 @@ function EditHtml(type, ID) {
             popupString += '<div class="modal-row">' +
                 '<label class="required-asterisk">Label Text</label>' +
                 '<input  type="text" control-id="' + ID + '" class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + labelText + '"/>' +
-                           '</div>';
+                '</div>';
 
             if (tooltiptext != '') {
                 popupString += `<div class="modal-row custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="help-input" name="checkbox" checked="">
                                 <label class="custom-control-label" for="help-input">Enable help text</label></div>`;
                 popupString += '<div class="modal-row">' +
-                                '<label>Help Text</label>' +
-                                '<input  type="text" class="form-control lblhelptext" onkeyup="ValidateColumnName(this)" value="' + tooltiptext + '"/>' +
-                                '</div>';
+                    '<label>Help Text</label>' +
+                    '<textarea class="form-control lblhelptext">' + tooltiptext + '</textarea>' +
+                    '</div>';
             } else {
                 popupString += `<div class="modal-row custom-control custom-checkbox">
                                <input type="checkbox" class="custom-control-input" id="help-input" name="checkbox">
                                <label class="custom-control-label" for="help-input">Enable help text</label></div>`;
                 popupString += '<div class="modal-row">' +
-                               '<label>Help Text</label>' +
-                               '<input  type="text" class="form-control lblhelptext" onkeyup="ValidateColumnName(this)"/>' +
-                               '</div>';
-            }            
-
+                    '<label>Help Text</label>' +
+                    '<textarea class="form-control lblhelptext"></textarea>' +
+                    '</div>';
+            }
+            popupString += '<div class="modal-row">' +
+                '<label>Description</label>' +
+                '<textarea class="form-control lbldescription">' + lbldescriptionText + '</textarea>' +
+                '</div>';
             var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
             var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
             var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
@@ -1398,7 +1473,7 @@ function EditHtml(type, ID) {
             popupString += '</div>';
             $("#btnSave").unbind();
             $("#btnSave").bind("click", function () {
-                if ($(".lbltext").val() == "") {
+                if ($(".lbltext").val().trim() == "") {
                     toastr.error("", "Label text is required", { progressBar: true });
                     return;
                 }
@@ -1410,7 +1485,7 @@ function EditHtml(type, ID) {
                     return;
                 }
                 var colname = $(".lbltext").val().trim();
-                colname = colname.split(" ").join("").replace(/[_\W]+/g, "");  
+                colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $("#" + ID).attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -1419,51 +1494,112 @@ function EditHtml(type, ID) {
                     }
                     $("#" + ID).attr("data-column", colname);
                 }
-                $("#" + ID).parent().prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span>`);                   
-                    
-                    if ($("#required-input").prop("checked")) {
-                        $("#" + ID).parent().prev().addClass("required-asterisk");
-                    } else {
-                        $("#" + ID).parent().prev().removeClass("required-asterisk");
-                    }
-                    if ($("#help-input").prop("checked")) {
-                        $("#" + ID).parent().prev().append('<span  data-toggle="tooltip"  data-placement="top"   title="' + $(".lblhelptext").val() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
-                        toogleToolTip();
+                $("#" + ID).parent().prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span>`);
 
-                    } else {
-                        $("#" + ID).parent().prev().find("span.tooltipicon").remove();
-                    }
-                    if ($(".labeltop").prop("checked")) {
-                        $("#" + ID).closest(".form-group").removeClass("f-g-left");
-                        $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
-                    } else if ($(".labelleft").prop("checked")) {
-                        $("#" + ID).closest(".form-group").addClass("f-g-left");
-                        $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
-                    }
-                    $("#" + ID).closest(".ck-editor").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#fieldsize").val());
-                    $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
-                    if ($("#inputsize").val() == "col-md-12") {
-                        $("#" + ID).closest(".ck-editor").removeClass("col-md-12");
-                    }
-                    $("#exampleModalCenter").modal("hide");
-                
+                if ($("#required-input").prop("checked")) {
+                    $("#" + ID).parent().prev().addClass("required-asterisk");
+                } else {
+                    $("#" + ID).parent().prev().removeClass("required-asterisk");
+                }
+                if ($("#help-input").prop("checked")) {
+                    $("#" + ID).parent().prev().append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
+                    toogleToolTip();
+
+                } else {
+                    $("#" + ID).parent().prev().find("span.tooltipicon").remove();
+                }
+                $("#" + ID).attr("placeholder", $(".lbldescription").val());
+                if ($(".labeltop").prop("checked")) {
+                    $("#" + ID).closest(".form-group").removeClass("f-g-left");
+                    $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
+                } else if ($(".labelleft").prop("checked")) {
+                    $("#" + ID).closest(".form-group").addClass("f-g-left");
+                    $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
+                }
+                $("#" + ID).closest(".ck-editor").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#fieldsize").val());
+                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
+                if ($("#inputsize").val() == "col-md-12") {
+                    $("#" + ID).closest(".ck-editor").removeClass("col-md-12");
+                }
+                $("#exampleModalCenter").modal("hide");
+
             });
             break;
-        default:
+        case "ChildrenUnder18":
+        case "Adults18to65":
+        case "Adults65Plus":
+        case "PreferredPharmacyName":
+        case "PreferredPharmacyLocation":
+        case "CalworksBenefits":
+        case "SocialSecurityDisabilityInsurance":
+        case "GeneralAssistance":
+        case "WomenInfantChildrenBenefits":
+        case "UnemploymentBenefits":
+        case "StateDisabilityInsuranceBenefits":
+        case "RentalAssistanceBenefits":
+        case "LittleInterest":
+        case "FeelingDown":
+        case "TroubleFalling":
+        case "FeelingTired":
+        case "PoorAppetite":
+        case "FeelingBad":
+        case "TroubleConcentraiting":
+        case "restless":
+        case "HurtingYourself":
+            var labelText = $("#" + ID).parent().parent().prev().find("label").html();
+            popupString = '<div class="modal-row">' +
+                '<label class="required-asterisk">Label Text</label>' +            
+                '<input  type="text" control-id="' + ID + '" class="form-control database-labeltext"  value="' + labelText + '"/>' +
+                '</div>';
             var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
             var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
             var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
-            popupString = '<div class="modal-row">' +
+            popupString += '<div class="modal-row">' +
                 '<label class="control-label"> Field Size </label>' +
                 '<div class="form-group">' +
                 '<select class="form-control"  id="inputsize">' +
-                '<option value="col-md-4" ' + ismd4 + '>Small</option>' + 
+                '<option value="col-md-4" ' + ismd4 + '>Small</option>' +
                 '<option value="col-md-6" ' + ismd6 + '>Medium</option>' +
                 '<option value="col-md-12"  ' + ismd12 + '>Large</option>' +
                 '</select></div>';
             popupString += '</div>';
             $("#btnSave").unbind();
             $("#btnSave").bind("click", function () {
+                if ($(".database-labeltext").val().trim() == "") {
+                    toastr.error("", "Label text is required", { progressBar: true });
+                    return;
+                }
+                $("#" + ID).parent().parent().prev().find("label").html("").append($(".database-labeltext").val());
+                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
+                $("#exampleModalCenter").modal("hide");
+            });
+            break;
+        default:
+            var labelText = $("#" + ID).prev().html();
+            popupString = '<div class="modal-row">' +
+                '<label class="required-asterisk">Label Text</label>' +
+                '<input  type="text" control-id="' + ID + '" class="form-control database-labeltext"  value="' + labelText + '"/>' +
+                '</div>';
+            var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
+            var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
+            var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
+            popupString += '<div class="modal-row">' +
+                '<label class="control-label"> Field Size </label>' +
+                '<div class="form-group">' +
+                '<select class="form-control"  id="inputsize">' +
+                '<option value="col-md-4" ' + ismd4 + '>Small</option>' +
+                '<option value="col-md-6" ' + ismd6 + '>Medium</option>' +
+                '<option value="col-md-12"  ' + ismd12 + '>Large</option>' +
+                '</select></div>';
+            popupString += '</div>';
+
+            $("#btnSave").unbind();
+            $("#btnSave").bind("click", function () {
+                if ($(".database-labeltext").val().trim() == "") {
+                    toastr.error("", "Label text is required", { progressBar: true });
+                    return;
+                }
+                $("#" + ID).prev().html("").append($(".database-labeltext").val());
                 $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
                 $("#exampleModalCenter").modal("hide");
             });
@@ -1495,10 +1631,10 @@ function EditHtml(type, ID) {
             $("#filetype").multiselect("refresh");
         }
     }
-    
+
 
     $("#exampleModalCenter").modal("show");
-  
+
 }
 //RemoveOption=>use to remove option of select,radio,checkbox inside popup
 function RemoveOption(obj) {
@@ -1508,13 +1644,31 @@ function RemoveOption(obj) {
 };
 //RemoveControl=>use to remove control from dropable section
 function RemoveControl(obj) {
-    if (isBaseTemplate == 'True' || $("#droppable").find(".basecontentarea").length > 0) {
-        var controls = $(obj).closest(".basecontentarea");
-        if (controls.find(".dragresize").length == 1) {
-            controls.next("span.basecontentspan").show();
+    $.confirm({
+        icon: 'fas fa-exclamation-triangle',
+        title: 'Confirm',
+        content: 'Are you sure you want to remove this control',
+        type: 'red',
+        typeAnimated: true,
+        buttons: {
+            yes: {
+                btnClass: 'btn-danger',
+                action: function () {
+                    if (isBaseTemplate == 'True' || $("#droppable").find(".basecontentarea").length > 0) {
+                        var controls = $(obj).closest(".basecontentarea");
+                        if (controls.find(".dragresize").length == 1) {
+                            controls.next("span.basecontentspan").show();
+                        }
+                    }
+                    obj.closest(".dragresize").remove();
+                }
+            },
+            no: {
+
+            }
         }
-    }
-    obj.closest(".dragresize").remove();
+    });
+    
 }
 //addoption=>use to add new option for select,radio,checkbox inside popup
 function addoption(obj) {
@@ -1585,7 +1739,7 @@ function isLabelNameExist(LabelName, controlid) {
                 switch ($(item).attr("type")) {
                     case "radio":
                     case "checkbox":
-                        if ($(item).attr("data-column") === undefined) break;     
+                        if ($(item).attr("data-column") === undefined) break;
                         if ($(item).closest(".form-group").hasClass("base-control")) break;
                         lbl = $(item).parent().parent().prev().find("span.title").html();
                         break;
@@ -1651,15 +1805,19 @@ function ValidateColumn(name) {
 }
 //ShowPreviewButton=>use to show preview button on page
 function ShowPreviewButton() {
-    if ($("#hdnTemplateId").val()!="0") {
-        $(".preview").css("display", "inline");
+    if ($("#hdnTemplateId").val() != "0") {
+        //$(".preview").css("display", "inline");
     }
 }
 //saveHtml=>use to save template and create table in database for program
 function saveHtml() {
-        if ($("#droppable .dragresize").length == 0) {
-            return;
-        }    
+    if ($(".templatename-input").val().trim() == "") {
+        toastr.error("", "Template name is required", { progressBar: true });
+        return;
+    }
+    if ($("#droppable .dragresize").length == 0) {
+        return;
+    }
     var isvalid = true;
     if (isBaseTemplate == 'True' || $("#droppable").find(".basecontentarea").length > 0) {
         $("#droppable").find("input.form-control,input.custom-control-input,select.form-control,textarea.form-control").not(".base-control").each(function (index, item) {
@@ -1739,14 +1897,47 @@ function saveHtml() {
     }
     $("#droppable .database-field").each(function (i, e) {
         return;
-    });  
-    var gethtml = $("#droppable").html();
+    });
+    if ($("#checkbox-finalize").prop("checked")) {
+        if ($("#checkbox-finalize").attr("disabled") != undefined) {
+            saveTemplate(1);
+        } else {
+            $.confirm({
+                icon: 'fas fa-exclamation-triangle',
+                title: 'Confirm',
+                content: 'Template will be finalized and ready to be activated. Do you want to finalize?',
+                type: 'green',
+                typeAnimated: true,
+                buttons: {
+                    yes: {
+                        btnClass: 'btn-green',
+                        action: function () {
+                            saveTemplate(1);
+                        }
+                    },
+                    no: {
+                        action: function () {
+                            saveTemplate(0);
+                        }
+                    },
+                    cancel: {
+                        btnClass: 'btn-danger',
+                    }
+                },
 
+            });
+        }
+    } else {
+        saveTemplate(0);
+    }
+}
+function saveTemplate(isactive) {
+    var gethtml = $("#droppable").html();
     var model = {
         TemplateID: $("#hdnTemplateId").val(),
-        TemplateName: templateName,
+        TemplateName: $(".templatename-input").val(),
         ProgramID: programId,
-        IsActive: 1,
+        IsActive: isactive,
         CreatedBy: userId,
         ModifiedBy: userId,
     };
@@ -1763,9 +1954,9 @@ function saveHtml() {
                 $(".loaderOverlay").hide();
                 return false;
             } else {
-                
+
                 $("#hdnTemplateId").val(result.id);
-               
+
             }
 
         }
@@ -1803,7 +1994,6 @@ function saveHtml() {
                 if ($(item).hasClass("base-control")) return;
                 models.push({ ColDataType: "varchar(max)", ColumnName: $(item).attr("data-column") });
             });
-            console.log(models);
             var UniqueItems = models.reduce(function (item, e1) {
                 var matches = item.filter(function (e2) { return e1.ColumnName == e2.ColumnName });
                 if (matches.length == 0) {
@@ -1814,7 +2004,7 @@ function saveHtml() {
 
             var model = {
                 TableName: result.tablename,
-                ColumnData:UniqueItems
+                ColumnData: UniqueItems
             }
             $.ajax({
                 type: "POST",
@@ -1824,8 +2014,8 @@ function saveHtml() {
                 dataType: "json",
                 success: function (res) {
                     toastr.success("Saved successfully.");
-                    $("a.preview").css("display", "inline");
-                    $("a.btndraft").css("display", "none");
+                    //$("a.preview").css("display", "inline");
+                    // $("a.btndraft").css("display", "none");
                     sessionStorage.setItem("Id", result.id);
                     $(".loaderOverlay").hide();
                     //window.location.href = '/careplan/modifytemplate?TemplateId=' + result.id + '&ProgramId=' + programId + '&Template=' + result.TemplateName;
@@ -1836,9 +2026,13 @@ function saveHtml() {
 }
 //saveHtml=>use to save template in careplantemplate
 function saveDraftHtml() {
-        if ($("#droppable .dragresize ").length == 0) {
-            return;
-        }
+    if ($(".templatename-input").val().trim() == "") {
+        toastr.error("", "Template name is required", { progressBar: true });
+        return;
+    }
+    if ($("#droppable .dragresize ").length == 0) {
+        return;
+    }
     var isvalid = true;
     if (isBaseTemplate == 'True' || $("#droppable").find(".basecontentarea").length > 0) {
         $("#droppable").find("input.form-control,input.custom-control-input,select.form-control,textarea.form-control").not(".base-control").each(function (index, item) {
@@ -1918,11 +2112,11 @@ function saveDraftHtml() {
     }
     $("#droppable").find(".database-field,.base-control").each(function (i, e) {
         return;
-    });  
+    });
     var gethtml = $("#droppable").html();
     var model = {
         TemplateID: $("#hdnTemplateId").val(),
-        TemplateName: templateName,
+        TemplateName: $(".templatename-input").val(),
         ProgramID: programId,
         IsSavedDraft: 1,
         CreatedBy: userId,
@@ -1936,14 +2130,14 @@ function saveDraftHtml() {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
-            if(result == "0") {
+            if (result == "0") {
                 toastr.error("Program Already Exist.");
                 $(".loaderOverlay").hide();
                 return false;
             } else {
                 //templateId = result.id;
                 $("#hdnTemplateId").val(result.id);
-                $("a.preview").css("display", "inline");
+                //$("a.preview").css("display", "inline");
                 $(".loaderOverlay").hide();
                 sessionStorage.setItem("Id", result.id);
                 //window.location.href = '/careplan/modifytemplate?TemplateId=' + result.id + '&ProgramId=' + programId + '&Template=' + result.TemplateName;
@@ -1962,35 +2156,45 @@ function GetFormHtmlById(Id) {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
+            if (result.Isactivated && isModify == 'True') {
+                $("#droppable").html("");
+                toastr.error("", "Deactiavte this template to modify.", { progressBar: true });
+                setTimeout(function () { window.location.href = '/careplan/list'; }, 2000);
+                return;
+            }
             $("#droppable").html(result.html);
-            
+
             if (isBaseTemplate == 'True' || $("#droppable").find(".basecontentarea").length > 0) {
                 getHeaderAndFooter();
                 $("#droppable").find("span.basecontentspan").html("").append("Content area, you can drop control here");
                 $(".baseheader,.basefooter").css("border", "none").find(".event-btn-right").css("pointer-events", "none").addClass("hidden");
                 connect = ".contentarea1,.contentarea2,.contentarea3";
-                
-                
+
+
             }
             HtmlControlDragnDrop();
-            if (isBaseTemplate == 'True' && sessionStorage.getItem("Id") === null) {              
+            if (isBaseTemplate == 'True' && sessionStorage.getItem("Id") === null) {
                 $("#hdnbasetempid").attr("value", templateId);
             }
+
             if (isModify == 'True') {
                 if (result.IsActive) {
-                    $(".btndraft").css("display", "none");
+                    //$(".btndraft").css("display", "none");
                 } else {
-                    $(".btndraft").css("display", "inline");
+                    //$(".btndraft").css("display", "inline");
                 }
-            } else if (isModify !='True') {
+            } else if (isModify != 'True') {
                 if (result.IsActive && sessionStorage.getItem("Id") !== null) {
-                    $(".btndraft").css("display", "none");
+                    //$(".btndraft").css("display", "none");
                 } else {
-                    $(".btndraft").css("display", "inline");
+                    //$(".btndraft").css("display", "inline");
                 }
             }
-            toogleToolTip();            
-            $(".loaderOverlay").hide();           
+            if (result.IsActive && isModify == 'True') {
+                $("#checkbox-finalize").prop("checked", true).attr("disabled","disabled");
+            }
+            toogleToolTip();
+            $(".loaderOverlay").hide();
         }
     });
 }
@@ -2024,6 +2228,8 @@ function validatepopup(e) {
 function toogleToolTip() {
     $('.tooltipicon').tooltip({
         trigger: "click",
+        html: true,
+        container: 'body'
     });
     $('.tooltipicon').on('show.bs.tooltip', function () {
         $('.tooltipicon').not(this).tooltip('hide');
@@ -2089,7 +2295,7 @@ function getHeaderAndFooter() {
                         success: function (result) {
                             var baseHtml = parseHTML(result.html);
                             var baseHeader = $(baseHtml).find(".baseheader").html();
-                            var baseFooter = $(baseHtml).find(".basefooter").html();                           
+                            var baseFooter = $(baseHtml).find(".basefooter").html();
                             $("#droppable").find(".baseheader").html("").append(baseHeader);
                             $("#droppable").find(".basefooter").html("").append(baseFooter);
                         }
@@ -2099,4 +2305,88 @@ function getHeaderAndFooter() {
         }
     });
 }
+function getHeaderAndFooterIn_PreviewPopup() {
+    $.ajax({
+        type: "GET",
+        url: Apipath + '/api/PatientMain/getbasetemplateid',
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        async: false,
+        success: function (result) {
+            switch (result) {
+                case -1:
+                    break;
+                default:
+                    $.ajax({
+                        type: "GET",
+                        url: '/careplan/GetFormHtmlById?Id=' + result,
+                        contentType: 'application/json; charset=UTF-8',
+                        dataType: "json",
+                        async: false,
+                        success: function (result) {
+                            var baseHtml = parseHTML(result.html);
+                            var baseHeader = $(baseHtml).find(".baseheader").html();
+                            var baseFooter = $(baseHtml).find(".basefooter").html();
+                            $(".preview-body").find(".baseheader").html("").append(baseHeader);
+                            $(".preview-body").find(".basefooter").html("").append(baseFooter);
+                        }
+                    });
+                    break;
+            }
+        }
+    });
+}
+function convertToUrl() {
+    var text = $(".lblhelptext").val();
+    var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+    var text1 = text.replace(exp, "<a href='$1' target='_blank'>$1</a>");
+    var exp2 = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+    return text1.replace(exp2, '$1<a target="_blank" href="http://$2">$2</a>');
+}
+function PreviewInPopUp() {
+    $(".preview-body").html("").append($("#droppable").html());
+    if ($(".preview-body").find(".basecontentarea").length > 0) {
+        getHeaderAndFooterIn_PreviewPopup();
+    }
+    $(".preview-body .event-btn-right").remove();
+    $(".preview-body .ck-editor-header").remove();
+    $(".preview-body").find(".question-container").parent().css("border", "none");
+    $(".preview-body").find(".dragresize").find(".question-container").remove();
+    $(".preview-body").find(".dragresize").find(".bootom-form-row").css({ "padding": "0", "margin": "0" });
+    $(".preview-body .html-content").prev().css("display", "none");
+    $(".preview-body .html-content").parent().parent().parent().addClass("left-control");
+    $(".preview-body .f-g-left").each(function (index, item) {
+        $(item).parent().parent().addClass("left-control");
+    });
+    $('.preview-body textarea').bind('copy paste cut', function (e) {
+        e.preventDefault();
+    });
+    $('.preview-body textarea').keypress(function (e) {
+        var regex = new RegExp("^[a-zA-Z0-9]+$");
+        var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+        if (regex.test(str)) {
+            return true;
+        }
+        e.preventDefault();
+        return false;
+    });
 
+    toogleToolTip();
+    $(".preview-body textarea.form-control").summernote({
+        toolbar: [
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['font', ['strikethrough', 'superscript', 'subscript']],
+        ],
+        height: 150,
+        placeholder: "Type here",
+        callbacks: {
+            onInit: function (e) {
+                this.placeholder
+                    ? e.editingArea.find(".note-placeholder").html(this.placeholder)
+                    : e.editingArea.remove(".note-placeholder")
+            }
+        },
+    });
+    $("#PreviewModal").modal('show');
+}
