@@ -1,5 +1,6 @@
 ﻿var new_id = 0;
 var newid = "";
+var clonedHtml = "";
 $(function () {
     HtmlControlDragnDrop();
     if (sessionStorage.getItem("Id") === null) {
@@ -1995,7 +1996,9 @@ function convertToUrl() {
     return text1.replace(exp2, '$1<a target="_blank" href="http://$2">$2</a>');
 }
 function PreviewInPopUp() {
-    $(".preview-body").html("").append($("#droppable").html());  
+    clonedHtml = $("#droppable").clone();
+    $(".preview-body").html("").append(clonedHtml.html());  
+    $("#droppable").html("");
     $(".preview-body .event-btn-right").remove();
     $(".preview-body .ck-editor-header").remove();
     $(".preview-body").find(".question-container").parent().css("border", "none");
@@ -2036,5 +2039,14 @@ function PreviewInPopUp() {
             }
         },
     });
-    $("#PreviewModal").modal('show');
+    $("#PreviewModal").modal({
+        show: true,
+        keyboard: false,
+        backdrop: 'static'
+    });
+}
+function closePreview() {
+    $("#droppable").html("").append(clonedHtml.html());
+    clonedHtml = "";
+    HtmlControlDragnDrop();
 }

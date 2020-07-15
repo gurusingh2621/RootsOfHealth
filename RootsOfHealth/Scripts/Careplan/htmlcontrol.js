@@ -1,6 +1,7 @@
 ﻿var new_id = 0;
 var newid = ""; 
 var connect = '#droppable';
+var clonedHtml = "";
 $(function () {
     if (sessionStorage.getItem("Id") === null) {
         GetFormHtmlById(templateId);
@@ -169,6 +170,7 @@ function HtmlControlDragnDrop() {
                 $(this).val('');
             });
             $('#droppable').find('input[type="checkbox"],input[type="radio"]').click(function (event) {
+                debugger;
                 var $checkbox = $(this);
                 setTimeout(function () {
                     $checkbox.removeAttr('checked');
@@ -2344,7 +2346,9 @@ function convertToUrl() {
     return text1.replace(exp2, '$1<a target="_blank" href="http://$2">$2</a>');
 }
 function PreviewInPopUp() {
-    $(".preview-body").html("").append($("#droppable").html());
+     clonedHtml = $("#droppable").clone();
+    $(".preview-body").html("").append(clonedHtml.html());
+    $("#droppable").html("");
     if ($(".preview-body").find(".basecontentarea").length > 0) {
         getHeaderAndFooterIn_PreviewPopup();
     }
@@ -2388,5 +2392,15 @@ function PreviewInPopUp() {
             }
         },
     });
-    $("#PreviewModal").modal('show');
+    
+    $("#PreviewModal").modal({
+        show: true,
+        keyboard: false,
+        backdrop: 'static'
+    });
+}
+function closePreview() {
+    $("#droppable").html("").append(clonedHtml.html());
+    clonedHtml = "";
+    HtmlControlDragnDrop();
 }

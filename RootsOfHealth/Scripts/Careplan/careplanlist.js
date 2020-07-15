@@ -32,10 +32,12 @@ function GetCarePlanTemplateList() {
                     }
                     if (item.IsActive == 1 && item.IsBaseTemplate == false) {
                         if (item.Isactivated == true) {
-                            careplans += `<a href="javascript:void(0)" onclick="SetTemplateStatus(${item.TemplateID},${false})"  class="btn btn-success text-white" style="cursor:pointer;">DEACTIVATE</a>`;
+                            careplans += `<a href="javascript:void(0)"  onclick="SetTemplateStatus(${item.TemplateID},${false})"  class="btn btn-success text-white" style="cursor:pointer;">DEACTIVATE</a>`;
                         } else if (item.Isactivated == 0) {
                             careplans += `<a href="javascript:void(0)" onclick="SetTemplateStatus(${item.TemplateID},${true})"  class="btn btn-success text-white" style="cursor:pointer;">ACTIVATE</a>`;
                         }
+                    } else if (item.IsActive == 0 && item.IsBaseTemplate == false){
+                        careplans += `<a href="javascript:void(0)" onclick="alertInprogressStatus()"  class="btn btn-success text-white" style="cursor:pointer;">ACTIVATE</a>`;
                     }
 
                     careplans += `</div></td></tr>`;
@@ -198,5 +200,13 @@ function GetBaseTemplateId() {
             }
 
         }
+    });
+}
+function alertInprogressStatus() {
+    $.alert({
+        icon: 'fas fa-exclamation-triangle',
+        title: 'Alert',
+        type:  'red',
+        content: 'Template can not activate until status is complete',
     });
 }
