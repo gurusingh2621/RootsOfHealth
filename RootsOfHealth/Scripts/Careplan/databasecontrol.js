@@ -10,7 +10,7 @@ function CheckSortableDatabase() {
     DatabaseFormFields();
 }
 //use to add list inside database-control-box based on selected form and make list item darag and drop on right side area
-function DatabaseFormFields() {  
+function DatabaseFormFields() {
             var selectedForm = $('#ddlform').val();
             var databasecontrol_li = ''
             $("#database-control-box").html("");
@@ -328,6 +328,15 @@ function DatabaseFormFields() {
 
         },
         stop: function (event, ui) {
+            if ($(".contentarea1").find(".dragresize").length > 0) {
+                $(".contentarea1").next("span.basecontentspan").hide();
+            }
+            if ($(".contentarea2").find(".dragresize").length > 0) {
+                $(".contentarea2").next("span.basecontentspan").hide();
+            }
+            if ($(".contentarea3").find(".dragresize").length > 0) {
+                $(".contentarea3").next("span.basecontentspan").hide();
+            }
              if(ui.item.hasClass("ui-draggable") && ui.item.attr("data-index") !== undefined) {
         EditHtml(ui.item.attr("data-type"), newid);
     }

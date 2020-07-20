@@ -18,7 +18,6 @@ function CheckSortableHtml() {
 }
 //HtmlControlDragnDrop=>use for drag html control from left list and drop on right dropable area
 function HtmlControlDragnDrop() {
-
     $('#control-box li').draggable({
         connectToSortable: connect,
         helper: function () {
@@ -26,6 +25,7 @@ function HtmlControlDragnDrop() {
             cloned.attr('id', (++new_id).toString());
             return cloned;
         },
+        containment:"#droppable",
         revert: "invalid"
     });
     $(connect).sortable({
@@ -2400,7 +2400,12 @@ function PreviewInPopUp() {
     });
 }
 function closePreview() {
+    debugger;
     $("#droppable").html("").append(clonedHtml.html());
     clonedHtml = "";
+    if ($(connect).data("ui-sortable")) {
+        $(connect).sortable("destroy");
+    }
     HtmlControlDragnDrop();
+    DatabaseFormFields();
 }
