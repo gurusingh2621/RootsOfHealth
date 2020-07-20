@@ -2048,5 +2048,9 @@ function PreviewInPopUp() {
 function closePreview() {
     $("#droppable").html("").append(clonedHtml.html());
     clonedHtml = "";
+    if ($(".baseheader,.basefooter").data("ui-sortable")) {
+        $(".baseheader,.basefooter").sortable("destroy");
+    }
     HtmlControlDragnDrop();
+    DatabaseFormFields();
 }
