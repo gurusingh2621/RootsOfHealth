@@ -191,3 +191,9 @@ span.basecontentspan {
         height: auto
     }
 }
+.preview-body .frmbtn .form-group label span.desc {
+    display: block;
+    margin: 3px 0 0;
+    color: #777;
+    font-weight: normal;
+}

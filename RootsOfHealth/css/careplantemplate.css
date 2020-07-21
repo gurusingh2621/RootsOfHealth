@@ -9,16 +9,27 @@
     margin: 2px 0px;
 }
 
-.required-asterisk {
+label.required-asterisk {
     position: relative;
 }
-
-    .required-asterisk:after {
-        content: "*";
-        position: absolute;
-        color: #c10000;
-        margin-left: 5px;
+label.required-asterisk span.title {
+    position: relative;
+    display:inline-block;
+}
+    label.required-asterisk:after {
+        display:none;
     }
+.modal-row label:first-child:after{
+    display:inline-block;
+}
+label.required-asterisk span.title:after {
+    content: "*";
+    position: absolute;
+    color: #c10000;
+    margin-left: 5px;
+    right: -10px;
+    top: -3px;
+}
 
 a.preview {
     margin-left: 8px;
@@ -976,3 +987,78 @@ span.finializewrap {
     height: 500px;
     overflow-y: auto;
 }
+
+
+.carePlansWrap .col-md-9.scroll {
+    max-height: calc(100vh - 200px);
+    height: auto !important;
+}
+
+.carePlansWrap #droppable {
+    min-height: 450px;
+}
+.carePlansWrap .controlsTabWrap.profile-tabs .tab-content {
+    height: calc(100vh - 243px);
+    /*overflow: auto;*/
+    min-height:initial;
+}
+.draggablediv .frmbtn .form-group label span.desc {
+    display: block;
+    margin: 3px 0 0;
+    color: #777;
+    font-weight: normal;
+}
+.draggablediv .frmbtn .form-group label.label-left {
+    position: relative;
+    padding-right: 18px;
+}
+.controlsTabWrap ul#control-box {
+    max-height: calc(100vh - 358px);
+    overflow: auto;
+}
+.databseSelectControl ul#database-control-box {
+    overflow-y: auto;
+    max-height: calc(100vh - 370px);
+}
+
+@media screen and (min-width: 1200px) {
+    .carePlansWrap div#frmb-cb-wrap {
+        min-width: 320px;
+        max-width: 320px;
+    }
+    .carePlansWrap .col-md-9.scroll {
+        width: calc(100% - 320px);
+        flex: none;
+        max-width:100%;
+    }
+}
+
+@media screen and (max-width: 1400PX) {
+    .carePlansWrap .controlsTabWrap.profile-tabs .tab-content {
+        height: calc(100vh - 273px);
+    }
+    .carePlansWrap .col-md-9.scroll {
+        max-height: calc(100vh - 230px);
+    }
+}
+
+    @media screen and (max-width: 1199px) {
+        #content .controlsTabWrap.profile-tabs .nav-tabs {
+            display: block;
+        }
+
+            #content .controlsTabWrap.profile-tabs .nav-tabs li {
+                margin: 0;
+                width: 100%;
+                display: block;
+            }
+    .carePlansWrap .controlsTabWrap.profile-tabs .tab-content {
+        height: calc(100vh - 335px);
+    }
+    .carePlansWrap .col-md-9.scroll {
+        max-height: calc(100vh - 250px);
+    }
+    .databseSelectControl ul#database-control-box {
+        max-height: calc(100vh - 440px);
+    }
+    }

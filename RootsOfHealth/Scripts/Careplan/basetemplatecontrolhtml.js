@@ -62,8 +62,8 @@ function HtmlControlDragnDrop() {
                     $(this).find("li[data-type='label']").replaceWith(str);
                     break;
                 case "checkbox-group":
-                    var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group base-control" id="' + newid + '">' +
-                        '<label class="checkbox-group "><span class="title">Check Box (Multiple)</span></label>' +
+                    var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group" id="' + newid + '">' +
+                        '<label class="checkbox-group "><span class="title">Check Box (Multiple)</span><span class="desc"> Description here</span></label>' +
                         '<div class="custom-control custom-checkbox  d-inline-block mr-2">' +
                         '<input  type="checkbox" class="custom-control-input" name="checkbox" value="true" id="checkbox1">' +
                         '<label class="custom-control-label" for="checkbox1" value="true">Yes</label></div>' +
@@ -78,8 +78,8 @@ function HtmlControlDragnDrop() {
                     break;
                 case "date":
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
-                        '<label class=""><span class="title">Label</span></label>' +
-                        '<input id="' + newid + '"  type="date" class="form-control base-control" id="">' +
+                        '<label class=""><span class="title">Label</span><span class="desc"> Description here</span></label>' +
+                        '<input id="' + newid + '"  type="date" class="form-control" id="">' +
                         '</div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
@@ -88,8 +88,8 @@ function HtmlControlDragnDrop() {
                     break;
                 case "file":
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
-                        '<label class=""><span class="title">Label</span></label >' +
-                        '<input id="' + newid + '"  type="file" class="form-control base-control" id="">' +
+                        '<label class=""><span class="title">Label</span><span class="desc"> Description here</span></label >' +
+                        '<input id="' + newid + '"  type="file" class="form-control" id="">' +
                         '</div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
@@ -99,8 +99,8 @@ function HtmlControlDragnDrop() {
                     break;
                 case "number":
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
-                        '<label class=""><span class="title">Label</span></label>' +
-                        '<input id="' + newid + '"  type="number" class="form-control base-control" id="">' +
+                        '<label class=""><span class="title">Label</span><span class="desc"> Description here</span></label>' +
+                        '<input id="' + newid + '"  type="number" class="form-control" id="">' +
                         '</div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
@@ -108,8 +108,8 @@ function HtmlControlDragnDrop() {
                     $(this).find("li[data-type='number']").replaceWith(str);
                     break;
                 case "radio-group":
-                    var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group base-control"  id="' + newid + '">' +
-                        '<label class="radiobox-group "><span class="title">Radio</span></label>' +
+                    var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group"  id="' + newid + '">' +
+                        '<label class="radiobox-group "><span class="title">Radio</span><span class="desc"> Description here</span></label>' +
                         '<div class="custom-control custom-radio d-inline-block mr-2">' +
                         '<input  type="radio" class="custom-control-input" name="radio" value="true" id="radio1">' +
                         '<label class="custom-control-label" for="radio1" value="true">Yes</label></div>' +
@@ -124,8 +124,8 @@ function HtmlControlDragnDrop() {
                     break;
                 case "select":
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
-                        '<label class=""><span class="title">Select</span></label>' +
-                        ' <select id="' + newid + '" class="form-control base-control">' +
+                        '<label class=""><span class="title">Select</span><span class="desc"> Description here</span></label>' +
+                        ' <select id="' + newid + '" class="form-control">' +
                         ' <option value="0">Select Option</option>' +
                         '<option  value="1">1</option>' +
                         '<option  value="2">2</option>' +
@@ -139,8 +139,9 @@ function HtmlControlDragnDrop() {
                     break;
                 case "text":
                     var str = '<div class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
-                        '<label class=""><span class="title">Label</span></label>' +
-                        '<input id="' + newid + '"  type="text" class="form-control base-control" id="">' +
+                        '<label class=""><span class="title">Label</span><span class="desc"> Description here</span ></label>' +
+
+                        '<input id="' + newid + '"  type="text" class="form-control" id="">' +
                         '</div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
@@ -149,17 +150,18 @@ function HtmlControlDragnDrop() {
                     break;
                 case "textarea":
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
-                        '<label class=""><span class="title">Textarea</span></label>' +
+                        '<label class=""><span class="title">Textarea</span><span class="desc"> Description here</span ></label>' +
                         '<div class="ck-editor">' +
                         '<div class="ck-editor-header"><ul><li><i class="fa fa-list-ul" aria-hidden="true"></i></li><li><i class="fa fa-list-ol" aria-hidden="true"></i></li><li><i class="fa fa-align-left" aria-hidden="true"></i></li><li><i class="fa fa-bold" aria-hidden="true"></i></li><li><i class="fa fa-italic" aria-hidden="true"></i></li><li><i class="fa fa-underline" aria-hidden="true"></i></li><li><i class="fa fa-eraser" aria-hidden="true"></i></li></ul></div>' +
-                        '<textarea id="' + newid + '"  class="form-control base-control" name="my-textarea"></textarea>' +
+                        '<textarea id="' + newid + '"  class="form-control" name="my-textarea"></textarea>' +
                         '</div></div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
                         '</div>';
                     $(this).find("li[data-type='textarea']").replaceWith(str);
 
-                    break;               
+                    break;
+
             }
         },
         stop: function (event, ui) {
@@ -227,11 +229,15 @@ function EditHtml(type, ID) {
                 });
                 tooltiptext = tooltipHtml.textContent;
             }
-            var labelText = $("#" + ID).find(".checkbox-group").find("span.title").html();
+            var labelText = $("#" + ID).find(".checkbox-group").find("span.title").text();
             if (labelText == "Check Box (Multiple)") {
                 labelText = "";
             }
             var columnName = $("#" + ID).find("input.custom-control-input").first().attr("data-column");
+            var lbldescriptionText = $("#" + ID).find(".checkbox-group").find("span.desc").text();
+            if (lbldescriptionText == undefined) {
+                lbldescriptionText = "";
+            }
             popupString = `<div class="modal-row custom-control custom-checkbox">`;
             if (isrequired.length) {
                 popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" checked>';
@@ -269,6 +275,10 @@ function EditHtml(type, ID) {
                     '<textarea class="form-control lblhelptext"></textarea>' +
                     '</div>';
             }
+            popupString += '<div class="modal-row">' +
+                '<label>Description</label>' +
+                '<textarea class="form-control lbldescription">' + lbldescriptionText + '</textarea>' +
+                '</div>';
             var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
             var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
             var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
@@ -337,7 +347,7 @@ function EditHtml(type, ID) {
 
                 }
                 $(".dragresize  [id=" + ID + "]").html("");
-                $(".dragresize  [id=" + ID + "]").html("<label class='checkbox-group'><span class='title'>Check Box (Multiple)</span></label>");
+                $(".dragresize  [id=" + ID + "]").html("<label class='checkbox-group'><span class='title'>Check Box (Multiple)</span><span class='desc'></span></label>");
 
                 var allTextArray = $('.option-block').map(function () {
                     if ($(this).find("[placeholder=Key]").val().trim() != '')
@@ -386,6 +396,7 @@ function EditHtml(type, ID) {
                 //$(option_data).appendTo(".dragresize  [id=" + ID + "]");
                 $("#" + ID).find("div").html("");
                 $("#" + ID).append(option_data);
+                $("#" + ID).find(".checkbox-group").find("span.title").html("").append($(".lbltext").val().trim());
                 if (columnName != undefined) {
 
                     $("#" + ID).find("input.custom-control-input").first().attr("data-column", columnName);
@@ -398,13 +409,14 @@ function EditHtml(type, ID) {
                     $("#" + ID).find('label:first-child').removeClass("required-asterisk");
                 }
                 if ($("#help-input").prop("checked")) {
-                    $("#" + ID).find("label").first().append('<span data-toggle="tooltip"  data-placement="top"  title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
+                    $("#" + ID).find(".checkbox-group").find("span.title").append('<span data-toggle="tooltip"  data-placement="top"  title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
                     toogleToolTip();
 
                 } else {
                     $("#" + ID).find("label").first().find("span.tooltipicon").remove();
                 }
-                $("#" + ID).find(".checkbox-group").find("span.title").html("").append($(".lbltext").val().trim());
+
+                $("#" + ID).find(".checkbox-group").find("span.desc").html("").append($(".lbldescription").val());
                 $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
                 if ($(".checkhorizontal").prop("checked")) {
                     $("#" + ID).removeClass("vertical");
@@ -433,9 +445,13 @@ function EditHtml(type, ID) {
                 });
                 tooltiptext = tooltipHtml.textContent;
             }
-            var labelText = $("#" + ID).prev().find("span.title").html();
+            var labelText = $("#" + ID).prev().find("span.title").text();
             if (labelText == "Label") {
                 labelText = "";
+            }
+            var lbldescriptionText = $("#" + ID).prev().find("span.desc").text();
+            if (lbldescriptionText == undefined) {
+                lbldescriptionText = "";
             }
             popupString = `<div class="modal-row custom-control custom-checkbox">`;
             if (isrequired) {
@@ -473,6 +489,10 @@ function EditHtml(type, ID) {
                     '<textarea class="form-control lblhelptext"></textarea>' +
                     '</div>';
             }
+            popupString += '<div class="modal-row">' +
+                '<label>Description</label>' +
+                '<textarea class="form-control lbldescription">' + lbldescriptionText + '</textarea>' +
+                '</div>';
             var isfieldmd4 = $("#" + ID).hasClass("col-md-4") ? "selected" : "";
             var isfieldmd6 = $("#" + ID).hasClass("col-md-6") ? "selected" : "";
             var isfieldmd12 = $("#" + ID).hasClass("col-md-12") ? "selected" : "";
@@ -523,7 +543,7 @@ function EditHtml(type, ID) {
                     }
                     $("#" + ID).attr("data-column", colname);
                 }
-                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span>`);
+                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span><span class="desc"></span>`);
 
 
                 if ($("#required-input").prop("checked")) {
@@ -532,13 +552,13 @@ function EditHtml(type, ID) {
                     $("#" + ID).prev().removeClass("required-asterisk");
                 }
                 if ($("#help-input").prop("checked")) {
-                    $("#" + ID).prev().append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
+                    $("#" + ID).prev().find("span.title").append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
                     toogleToolTip();
 
                 } else {
                     $("#" + ID).prev().find("span.tooltipicon").remove();
                 }
-
+                $("#" + ID).prev().find("span.desc").html("").append($(".lbldescription").val());
                 if ($(".labeltop").prop("checked")) {
                     $("#" + ID).closest(".form-group").removeClass("f-g-left");
                     $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
@@ -570,9 +590,13 @@ function EditHtml(type, ID) {
             if (fileSize === undefined) {
                 fileSize = '';
             }
-            var labelText = $("#" + ID).prev().find("span.title").html();
+            var labelText = $("#" + ID).prev().find("span.title").text();
             if (labelText == "Label") {
                 labelText = "";
+            }
+            var lbldescriptionText = $("#" + ID).prev().find("span.desc").text();
+            if (lbldescriptionText == undefined) {
+                lbldescriptionText = "";
             }
             popupString = `<div class="modal-row custom-control custom-checkbox">`;
             if (isrequired) {
@@ -609,6 +633,10 @@ function EditHtml(type, ID) {
                     '<textarea class="form-control lblhelptext"></textarea>' +
                     '</div>';
             }
+            popupString += '<div class="modal-row">' +
+                '<label>Description</label>' +
+                '<textarea class="form-control lbldescription">' + lbldescriptionText + '</textarea>' +
+                '</div>';
             var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
             var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
             var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
@@ -678,7 +706,7 @@ function EditHtml(type, ID) {
                     }
                     $("#" + ID).attr("data-column", colname);
                 }
-                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span>`);
+                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span><span class="desc"></span>`);
 
                 $("#" + ID).attr("data-filetype", $("#filetype").val());
                 $("#" + ID).attr("data-filesize", $(".lblfilesize").val());
@@ -688,13 +716,12 @@ function EditHtml(type, ID) {
                     $("#" + ID).prev().removeClass("required-asterisk");
                 }
                 if ($("#help-input").prop("checked")) {
-                    $("#" + ID).prev().append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
-
+                    $("#" + ID).prev().find("span.title").append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
                     toogleToolTip();
-
                 } else {
                     $("#" + ID).prev().find("span.tooltipicon").remove();
                 }
+                $("#" + ID).prev().find("span.desc").html("").append($(".lbldescription").val());
                 if ($("#label-multiple-yes").prop("checked")) {
                     $("#" + ID).attr("multiple", '');
                 } else {
@@ -723,9 +750,13 @@ function EditHtml(type, ID) {
                 });
                 tooltiptext = tooltipHtml.textContent;
             }
-            var labelText = $("#" + ID).prev().find("span.title").html();
+            var labelText = $("#" + ID).prev().find("span.title").text();
             if (labelText == "Label") {
                 labelText = "";
+            }
+            var lbldescriptionText = $("#" + ID).prev().find("span.desc").text();
+            if (lbldescriptionText == undefined) {
+                lbldescriptionText = "";
             }
             popupString = `<div class="modal-row custom-control custom-checkbox">`;
             if (isrequired) {
@@ -763,6 +794,10 @@ function EditHtml(type, ID) {
                     '<textarea class="form-control lblhelptext"></textarea>' +
                     '</div>';
             }
+            popupString += '<div class="modal-row">' +
+                '<label>Description</label>' +
+                '<textarea class="form-control lbldescription">' + lbldescriptionText + '</textarea>' +
+                '</div>';
             var isfieldmd4 = $("#" + ID).hasClass("col-md-4") ? "selected" : "";
             var isfieldmd6 = $("#" + ID).hasClass("col-md-6") ? "selected" : "";
             var isfieldmd12 = $("#" + ID).hasClass("col-md-12") ? "selected" : "";
@@ -816,19 +851,20 @@ function EditHtml(type, ID) {
                     }
                     $("#" + ID).attr("data-column", colname);
                 }
-                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span>`);
+                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span><span class="desc"></span>`);
                 if ($("#required-input").prop("checked")) {
                     $("#" + ID).prev().addClass("required-asterisk");
                 } else {
                     $("#" + ID).prev().removeClass("required-asterisk");
                 }
                 if ($("#help-input").prop("checked")) {
-                    $("#" + ID).prev().append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
+                    $("#" + ID).prev().find("span.title").append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
                     toogleToolTip();
 
                 } else {
                     $("#" + ID).prev().find("span.tooltipicon").remove();
                 }
+                $("#" + ID).prev().find("span.desc").html("").append($(".lbldescription").val());
                 if ($(".labeltop").prop("checked")) {
                     $("#" + ID).closest(".form-group").removeClass("f-g-left");
                     $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
@@ -856,11 +892,15 @@ function EditHtml(type, ID) {
                 });
                 tooltiptext = tooltipHtml.textContent;
             }
-            var labelText = $("#" + ID).find(".radiobox-group").find("span.title").html();
+            var labelText = $("#" + ID).find(".radiobox-group").find("span.title").text();
             if (labelText == "Radio") {
                 labelText = "";
             }
             var columnName = $("#" + ID).find("input.custom-control-input").first().attr("data-column");
+            var lbldescriptionText = $("#" + ID).find(".radiobox-group").find("span.desc").text();
+            if (lbldescriptionText == undefined) {
+                lbldescriptionText = "";
+            }
             popupString = `<div class="modal-row custom-control custom-checkbox">`;
             if (isrequired.length) {
                 popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" checked>';
@@ -896,7 +936,10 @@ function EditHtml(type, ID) {
                     '<textarea class="form-control lblhelptext"></textarea>' +
                     '</div>';
             }
-
+            popupString += '<div class="modal-row">' +
+                '<label>Description</label>' +
+                '<textarea class="form-control lbldescription">' + lbldescriptionText + '</textarea>' +
+                '</div>';
             var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
             var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
             var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
@@ -963,7 +1006,7 @@ function EditHtml(type, ID) {
                     }
                 }
                 $(".dragresize  [id=" + ID + "]").html("");
-                $(".dragresize  [id=" + ID + "]").html("<label class='radiobox-group'><span class='title'>Radio</span></label>");
+                $(".dragresize  [id=" + ID + "]").html("<label class='radiobox-group'><span class='title'>Radio</span><span class='desc'></span></label>");
 
                 var allTextArray = $('.option-block').map(function () {
                     if ($(this).find("[placeholder=Key]").val() != '')
@@ -1019,13 +1062,14 @@ function EditHtml(type, ID) {
                 }
 
                 $("#" + ID).find(".radiobox-group").find("span.title").html("").append($(".lbltext").val().trim());
+                $("#" + ID).find(".radiobox-group").find("span.desc").html("").append($(".lbldescription").val());
                 if ($("#required-input").prop("checked")) {
                     $("#" + ID).find('label:first-child').addClass("required-asterisk");
                 } else {
                     $("#" + ID).find('label:first-child').removeClass("required-asterisk");
                 }
                 if ($("#help-input").prop("checked")) {
-                    $("#" + ID).find("label").first().append('<span tabindex="0" data-toggle="tooltip"  data-placement="top"  title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
+                    $("#" + ID).find("label").first().find("span.title").append('<span tabindex="0" data-toggle="tooltip"  data-placement="top"  title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
                     toogleToolTip();
 
                 } else {
@@ -1060,10 +1104,15 @@ function EditHtml(type, ID) {
                 });
                 tooltiptext = tooltipHtml.textContent;
             }
-            var labelText = $("#" + ID).prev().find("span.title").html();
+            var labelText = $("#" + ID).prev().find("span.title").text();
             if (labelText == "Select") {
                 labelText = "";
             }
+            var lbldescriptionText = $("#" + ID).prev().find("span.desc").text();
+            if (lbldescriptionText == undefined) {
+                lbldescriptionText = "";
+            }
+
             popupString = `<div class="modal-row custom-control custom-checkbox">`;
             if (isrequired) {
                 popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" checked>';
@@ -1099,6 +1148,10 @@ function EditHtml(type, ID) {
                     '<textarea class="form-control lblhelptext"></textarea>' +
                     '</div>';
             }
+            popupString += '<div class="modal-row">' +
+                '<label>Description</label>' +
+                '<textarea class="form-control lbldescription">' + lbldescriptionText + '</textarea>' +
+                '</div>';
             var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
             var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
             var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
@@ -1173,7 +1226,7 @@ function EditHtml(type, ID) {
                     }
                     $("#" + ID).attr("data-column", colname);
                 }
-                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span>`);
+                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span><span class="desc"></span>`);
 
                 $("#" + ID).html("");
                 var allTextArray = $('.option-block').map(function () {
@@ -1223,12 +1276,13 @@ function EditHtml(type, ID) {
                     $("#" + ID).prev().removeClass("required-asterisk");
                 }
                 if ($("#help-input").prop("checked")) {
-                    $("#" + ID).prev().append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
+                    $("#" + ID).prev().find("span.title").append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
                     toogleToolTip();
 
                 } else {
                     $("#" + ID).prev().find("span.tooltipicon").remove();
                 }
+                $("#" + ID).prev().find("span.desc").html("").append($(".lbldescription").val());
                 if ($(".labeltop").prop("checked")) {
                     $("#" + ID).closest(".form-group").removeClass("f-g-left");
                     $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
@@ -1257,11 +1311,11 @@ function EditHtml(type, ID) {
                 tooltiptext = tooltipHtml.textContent;
             }
 
-            var labelText = $("#" + ID).prev().find("span.title").html();
+            var labelText = $("#" + ID).prev().find("span.title").text();
             if (labelText == "Label") {
                 labelText = "";
             }
-            var lbldescriptionText = $("#" + ID).attr("placeholder");
+            var lbldescriptionText = $("#" + ID).prev().find("span.desc").html();
             if (lbldescriptionText == undefined) {
                 lbldescriptionText = "";
             }
@@ -1356,7 +1410,7 @@ function EditHtml(type, ID) {
                     }
                     $("#" + ID).attr("data-column", colname);
                 }
-                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span>`);
+                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span><span class="desc"></span>`);
 
                 if ($("#required-input").prop("checked")) {
                     $("#" + ID).prev().addClass("required-asterisk");
@@ -1364,13 +1418,13 @@ function EditHtml(type, ID) {
                     $("#" + ID).prev().removeClass("required-asterisk");
                 }
                 if ($("#help-input").prop("checked")) {
-                    $("#" + ID).prev().append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
+                    $("#" + ID).prev().find("span.title").append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
                     toogleToolTip();
 
                 } else {
                     $("#" + ID).prev().find("span.tooltipicon").remove();
                 }
-                $("#" + ID).attr("placeholder", $(".lbldescription").val());
+                $("#" + ID).prev().find("span.desc").html("").append($(".lbldescription").val());
                 if ($(".labeltop").prop("checked")) {
                     $("#" + ID).closest(".form-group").removeClass("f-g-left");
                     $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
@@ -1398,11 +1452,11 @@ function EditHtml(type, ID) {
                 });
                 tooltiptext = tooltipHtml.textContent;
             }
-            var labelText = $("#" + ID).parent().prev().find("span.title").html();
+            var labelText = $("#" + ID).parent().prev().find("span.title").text();
             if (labelText == "Textarea") {
                 labelText = "";
             }
-            var lbldescriptionText = $("#" + ID).attr("placeholder");
+            var lbldescriptionText = $("#" + ID).parent().prev().find("span.desc").text();
             if (lbldescriptionText == undefined) {
                 lbldescriptionText = "";
             }
@@ -1493,7 +1547,7 @@ function EditHtml(type, ID) {
                     }
                     $("#" + ID).attr("data-column", colname);
                 }
-                $("#" + ID).parent().prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span>`);
+                $("#" + ID).parent().prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span><span class="desc"></span>`);
 
                 if ($("#required-input").prop("checked")) {
                     $("#" + ID).parent().prev().addClass("required-asterisk");
@@ -1501,13 +1555,13 @@ function EditHtml(type, ID) {
                     $("#" + ID).parent().prev().removeClass("required-asterisk");
                 }
                 if ($("#help-input").prop("checked")) {
-                    $("#" + ID).parent().prev().append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
+                    $("#" + ID).parent().prev().find("span.title").append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
                     toogleToolTip();
 
                 } else {
                     $("#" + ID).parent().prev().find("span.tooltipicon").remove();
                 }
-                $("#" + ID).attr("placeholder", $(".lbldescription").val());
+                $("#" + ID).parent().prev().find("span.desc").html("").append($(".lbldescription").val());
                 if ($(".labeltop").prop("checked")) {
                     $("#" + ID).closest(".form-group").removeClass("f-g-left");
                     $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
@@ -1721,19 +1775,19 @@ function isLabelNameExist(LabelName, controlid) {
                 case "radio":
                 case "checkbox":
                     if ($(item).attr("data-column") === undefined) break;
-                    lbl = $(item).parent().parent().prev().find("span.title").html();
+                    lbl = $(item).parent().parent().prev().find("span.title").text();
                     break;
                 default:
                     if ($(item).hasClass("database-field")) break;
-                    lbl = $(item).prev().find("span.title").html();
+                    lbl = $(item).prev().find("span.title").text();
                     break;
             }
         }
         if ($(item).is("select")) {
-            lbl = $(item).prev().find("span.title").html();
+            lbl = $(item).prev().find("span.title").text();
         }
         if ($(item).is("textarea")) {
-            lbl = $(item).parent().prev().find("span.title").html();
+            lbl = $(item).parent().prev().find("span.title").text();
         }
 
         if (lbl == LabelName && $(item).attr("id") != controlid) {
@@ -2048,9 +2102,10 @@ function PreviewInPopUp() {
 function closePreview() {
     $("#droppable").html("").append(clonedHtml.html());
     clonedHtml = "";
-    if ($(".baseheader,.basefooter").data("ui-sortable")) {
-        $(".baseheader,.basefooter").sortable("destroy");
-    }
+    //if ($(".baseheader,.basefooter").data("ui-sortable")) {
+    //    $(".baseheader,.basefooter").sortable("destroy");
+    //}
     HtmlControlDragnDrop();
     DatabaseFormFields();
+    $("#PreviewModal").modal('hide');
 }
