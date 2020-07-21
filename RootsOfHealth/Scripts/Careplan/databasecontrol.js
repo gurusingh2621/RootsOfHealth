@@ -254,6 +254,7 @@ function DatabaseFormFields() {
                         }
                     }
                     var lblValue = $("[data-type=" + draggableType + "] span").html();
+                   
                     var databaseStr = ``;
                     switch (draggableType) {
                         case "ChildrenUnder18":
