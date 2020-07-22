@@ -397,6 +397,12 @@ function DatabaseFormFields() {
 
         },
         stop: function (event, ui) {
+            if ($(".baseheader").find(".dragresize").length > 0) {
+                $(".baseheader").next("span.basecontentspan").hide();
+            }
+            if ($(".basefooter").find(".dragresize").length > 0) {
+                $(".basefooter").next("span.basecontentspan").hide();
+            }
             if ($(".contentarea1").find(".dragresize").length > 0) {
                 $(".contentarea1").next("span.basecontentspan").hide();
             }

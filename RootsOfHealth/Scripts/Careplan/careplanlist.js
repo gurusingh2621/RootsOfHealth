@@ -59,6 +59,12 @@ $("#radioBaseTemplate,#radioScratch").change(function () {
         $(".templateDiv").addClass("hide");
     }
 });
+$("#radioBaseTemplate").change(function () {
+    if ($(this).attr("data-baseid") == "-1") {
+        toastr.error("", "Base template not available until completed", { progressBar: true });
+        $(this).prop("checked", false);
+    }
+});
 function SetTemplateStatus(Templateid, Status) {
     $.confirm({
         icon: 'fas fa-exclamation-triangle',
@@ -191,9 +197,6 @@ function GetBaseTemplateId() {
         dataType: "json",
         success: function (result) {
             switch (result) {
-                case -1:
-                    $("#radioBaseTemplate").attr("disabled", "disabled");
-                    break;
                 default:
                     $("#radioBaseTemplate").attr("data-baseid", result);
                     break;
