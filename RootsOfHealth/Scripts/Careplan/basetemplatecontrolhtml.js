@@ -62,8 +62,8 @@ function HtmlControlDragnDrop() {
                     $(this).find("li[data-type='label']").replaceWith(str);
                     break;
                 case "checkbox-group":
-                    var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group" id="' + newid + '">' +
-                        '<label class="checkbox-group "><span class="title">Check Box (Multiple)</span><span class="desc"> Description here</span></label>' +
+                    var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group base-control" id="' + newid + '">' +
+                        '<label class="checkbox-group "><span class="title">Check Box (Multiple)</span><span class="desc"></span></label>' +
                         '<div class="custom-control custom-checkbox  d-inline-block mr-2">' +
                         '<input  type="checkbox" class="custom-control-input" name="checkbox" value="true" id="checkbox1">' +
                         '<label class="custom-control-label" for="checkbox1" value="true">Yes</label></div>' +
@@ -78,8 +78,8 @@ function HtmlControlDragnDrop() {
                     break;
                 case "date":
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
-                        '<label class=""><span class="title">Label</span><span class="desc"> Description here</span></label>' +
-                        '<input id="' + newid + '"  type="date" class="form-control" id="">' +
+                        '<label class=""><span class="title">Label</span><span class="desc"></span></label>' +
+                        '<div class="inputContent"><input id="' + newid + '"  type="date" class="form-control base-control" id=""></div>' +
                         '</div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
@@ -88,8 +88,8 @@ function HtmlControlDragnDrop() {
                     break;
                 case "file":
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
-                        '<label class=""><span class="title">Label</span><span class="desc"> Description here</span></label >' +
-                        '<input id="' + newid + '"  type="file" class="form-control" id="">' +
+                        '<label class=""><span class="title">Label</span><span class="desc"></span></label >' +
+                        '<div class="inputContent"><input id="' + newid + '"  type="file" class="form-control base-control" id=""></div>' +
                         '</div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
@@ -99,8 +99,8 @@ function HtmlControlDragnDrop() {
                     break;
                 case "number":
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
-                        '<label class=""><span class="title">Label</span><span class="desc"> Description here</span></label>' +
-                        '<input id="' + newid + '"  type="number" class="form-control" id="">' +
+                        '<label class=""><span class="title">Label</span><span class="desc"></span></label>' +
+                        '<div class="inputContent"><input id="' + newid + '"  type="number" class="form-control base-control" id=""></div>' +
                         '</div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
@@ -108,8 +108,8 @@ function HtmlControlDragnDrop() {
                     $(this).find("li[data-type='number']").replaceWith(str);
                     break;
                 case "radio-group":
-                    var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group"  id="' + newid + '">' +
-                        '<label class="radiobox-group "><span class="title">Radio</span><span class="desc"> Description here</span></label>' +
+                    var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group base-control"  id="' + newid + '">' +
+                        '<label class="radiobox-group "><span class="title">Radio</span><span class="desc"></span></label>' +
                         '<div class="custom-control custom-radio d-inline-block mr-2">' +
                         '<input  type="radio" class="custom-control-input" name="radio" value="true" id="radio1">' +
                         '<label class="custom-control-label" for="radio1" value="true">Yes</label></div>' +
@@ -124,8 +124,8 @@ function HtmlControlDragnDrop() {
                     break;
                 case "select":
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
-                        '<label class=""><span class="title">Select</span><span class="desc"> Description here</span></label>' +
-                        ' <select id="' + newid + '" class="form-control">' +
+                        '<label class=""><span class="title">Select</span><span class="desc"></span></label>' +
+                        '<div class="inputContent"> <select id="' + newid + '" class="form-control base-control"></div>' +
                         ' <option value="0">Select Option</option>' +
                         '<option  value="1">1</option>' +
                         '<option  value="2">2</option>' +
@@ -139,9 +139,9 @@ function HtmlControlDragnDrop() {
                     break;
                 case "text":
                     var str = '<div class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
-                        '<label class=""><span class="title">Label</span><span class="desc"> Description here</span ></label>' +
+                        '<label class=""><span class="title">Label</span><span class="desc"></span ></label>' +
 
-                        '<input id="' + newid + '"  type="text" class="form-control" id="">' +
+                        '<div class="inputContent"><input id="' + newid + '"  type="text" class="form-control base-control" id=""></div>' +
                         '</div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
@@ -150,11 +150,11 @@ function HtmlControlDragnDrop() {
                     break;
                 case "textarea":
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
-                        '<label class=""><span class="title">Textarea</span><span class="desc"> Description here</span ></label>' +
-                        '<div class="ck-editor">' +
+                        '<label class=""><span class="title">Textarea</span><span class="desc"></span ></label>' +
+                        '<div class="inputContent"><div class="ck-editor">' +
                         '<div class="ck-editor-header"><ul><li><i class="fa fa-list-ul" aria-hidden="true"></i></li><li><i class="fa fa-list-ol" aria-hidden="true"></i></li><li><i class="fa fa-align-left" aria-hidden="true"></i></li><li><i class="fa fa-bold" aria-hidden="true"></i></li><li><i class="fa fa-italic" aria-hidden="true"></i></li><li><i class="fa fa-underline" aria-hidden="true"></i></li><li><i class="fa fa-eraser" aria-hidden="true"></i></li></ul></div>' +
-                        '<textarea id="' + newid + '"  class="form-control" name="my-textarea"></textarea>' +
-                        '</div></div>' +
+                        '<textarea id="' + newid + '"  class="form-control base-control" name="my-textarea"></textarea>' +
+                        '</div></div></div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
                         '</div>';
@@ -285,7 +285,7 @@ function EditHtml(type, ID) {
             popupString += '<div class="modal-row">' +
                 '<label class="control-label"> Field Size </label>' +
                 '<div class="form-group">' +
-                '<select class="form-control"  id="inputsize">' +
+                '<select class="form-control"  id="fieldsize">' +
                 '<option value="col-md-4" ' + ismd4 + '>Small</option>' +
                 '<option value="col-md-6" ' + ismd6 + '>Medium</option>' +
                 '<option value="col-md-12" ' + ismd12 + '>Large</option>' +
@@ -299,7 +299,7 @@ function EditHtml(type, ID) {
     </div>`;
             popupString += '<div class="modal-row">' +
                 '<label>Options<span class="addoptions" onclick="addoption(this)"><i class="fas fa-plus"></i></span></label>';
-            $('.dragresize  #' + ID + " [type=checkbox]").each(function () {
+            $('.dragresize  #' + ID).find("input[type='checkbox']").each(function () {
                 popupString += '<div class="option-block">' +
                     '<div class="option-fields">' +
                     ' <input type="text" placeholder="Key" class="form-control"  value="' + $(this).next().text() + '"/>' +
@@ -385,14 +385,14 @@ function EditHtml(type, ID) {
                     toastr.error("", "Option text can not be duplicate", { progressBar: true });
                     return;
                 }
-                var option_data = "<div class='checkbox-html'>";
+                var option_data = "<div class='inputContent'><div class='checkbox-html'>";
                 $(".option-block").each(function (index) {
                     option_data += `<div class="custom-control custom-checkbox  d-inline-block mr-2">
                      <input  type="checkbox" class="custom-control-input" id="${ID + index}"  name="${ID}"  value="${$(this).find("[placeholder = Value]").val().trim()}">
                      <label class="custom-control-label" for="${ID + index}">${$(this).find("[placeholder = Key]").val().trim()}</label></div>
                      `;
                 });
-                option_data += "</div>";
+                option_data += "</div></div>";
                 //$(option_data).appendTo(".dragresize  [id=" + ID + "]");
                 $("#" + ID).find("div").html("");
                 $("#" + ID).append(option_data);
@@ -417,7 +417,7 @@ function EditHtml(type, ID) {
                 }
 
                 $("#" + ID).find(".checkbox-group").find("span.desc").html("").append($(".lbldescription").val());
-                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
+                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#fieldsize").val());
                 if ($(".checkhorizontal").prop("checked")) {
                     $("#" + ID).removeClass("vertical");
                 } else if ($(".checkvertical").prop("checked")) {
@@ -435,9 +435,9 @@ function EditHtml(type, ID) {
             });
             break;
         case "date":
-            var isrequired = $("#" + ID).prev().hasClass("required-asterisk");
-            var tooltiptext = $("#" + ID).prev().find("span.tooltipicon").attr("title");
-            tooltiptext = tooltiptext === undefined ? "" : tooltiptext == '' ? $("#" + ID).prev().find("span.tooltipicon").attr("data-original-title") : tooltiptext;
+            var isrequired = $("#" + ID).parent().prev().hasClass("required-asterisk");
+            var tooltiptext = $("#" + ID).parent().prev().find("span.tooltipicon").attr("title");
+            tooltiptext = tooltiptext === undefined ? "" : tooltiptext == '' ? $("#" + ID).parent().prev().find("span.tooltipicon").attr("data-original-title") : tooltiptext;
             if (tooltiptext.indexOf("_blank") != -1) {
                 var tooltipHtml = parseHTML(tooltiptext);
                 $(tooltipHtml).find("a").replaceWith(function () {
@@ -445,11 +445,11 @@ function EditHtml(type, ID) {
                 });
                 tooltiptext = tooltipHtml.textContent;
             }
-            var labelText = $("#" + ID).prev().find("span.title").text();
+            var labelText = $("#" + ID).parent().prev().find("span.title").text();
             if (labelText == "Label") {
                 labelText = "";
             }
-            var lbldescriptionText = $("#" + ID).prev().find("span.desc").text();
+            var lbldescriptionText = $("#" + ID).parent().prev().find("span.desc").text();
             if (lbldescriptionText == undefined) {
                 lbldescriptionText = "";
             }
@@ -505,7 +505,7 @@ function EditHtml(type, ID) {
             popupString += '<div class="modal-row">' +
                 '<label class="control-label"> Field Size </label>' +
                 '<div class="form-group">' +
-                '<select class="form-control"  id="inputsize" onchange="CheckFieldSize(this)">' +
+                '<select class="form-control"  id="fieldsize">' +
                 '<option value="col-md-4" ' + ismd4 + '>Small</option>' +
                 '<option value="col-md-6" ' + ismd6 + '>Medium</option>' +
                 '<option value="col-md-12" ' + ismd12 + '>Large</option>' +
@@ -514,7 +514,7 @@ function EditHtml(type, ID) {
             popupString += '<div class="modal-row">' +
                 '<label class="control-label"> Input Size </label>' +
                 '<div class="form-group">' +
-                '<select class="form-control"  id="fieldsize">' +
+                '<select class="form-control"  id="inputsize">' +
                 '<option value="col-md-4" ' + isfieldmd4 + '>Small</option>' +
                 '<option value="col-md-6" ' + isfieldmd6 + '>Medium</option>' +
                 '<option value="" ' + isfieldmd12 + '>Large</option>' +
@@ -543,22 +543,22 @@ function EditHtml(type, ID) {
                     }
                     $("#" + ID).attr("data-column", colname);
                 }
-                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span><span class="desc"></span>`);
+                $("#" + ID).parent().prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span><span class="desc"></span>`);
 
 
                 if ($("#required-input").prop("checked")) {
-                    $("#" + ID).prev().addClass("required-asterisk");
+                    $("#" + ID).parent().prev().addClass("required-asterisk");
                 } else {
-                    $("#" + ID).prev().removeClass("required-asterisk");
+                    $("#" + ID).parent().prev().removeClass("required-asterisk");
                 }
                 if ($("#help-input").prop("checked")) {
-                    $("#" + ID).prev().find("span.title").append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
+                    $("#" + ID).parent().prev().find("span.title").append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
                     toogleToolTip();
 
                 } else {
-                    $("#" + ID).prev().find("span.tooltipicon").remove();
+                    $("#" + ID).parent().prev().find("span.tooltipicon").remove();
                 }
-                $("#" + ID).prev().find("span.desc").html("").append($(".lbldescription").val());
+                $("#" + ID).parent().prev().find("span.desc").html("").append($(".lbldescription").val());
                 if ($(".labeltop").prop("checked")) {
                     $("#" + ID).closest(".form-group").removeClass("f-g-left");
                     $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
@@ -566,17 +566,17 @@ function EditHtml(type, ID) {
                     $("#" + ID).closest(".form-group").addClass("f-g-left");
                     $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
                 }
-                $("#" + ID).removeClass("col-md-4 col-md-6 col-md-12").addClass($("#fieldsize").val());
-                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
-                if ($("#inputsize").val() == "col-md-12") {
+                $("#" + ID).removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
+                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#fieldsize").val());
+                if ($("#fieldsize").val() == "col-md-12") {
                     $("#" + ID).removeClass("col-md-12");
                 }
                 $("#exampleModalCenter").modal("hide");
             });
             break;
         case "file":
-            var isrequired = $("#" + ID).prev().hasClass("required-asterisk");
-            var tooltiptext = $("#" + ID).prev().find("span.tooltipicon").attr("data-original-title");
+            var isrequired = $("#" + ID).parent().prev().hasClass("required-asterisk");
+            var tooltiptext = $("#" + ID).parent().prev().find("span.tooltipicon").attr("data-original-title");
             tooltiptext = tooltiptext === undefined ? "" : tooltiptext;
             if (tooltiptext.indexOf("_blank") != -1) {
                 var tooltipHtml = parseHTML(tooltiptext);
@@ -590,11 +590,11 @@ function EditHtml(type, ID) {
             if (fileSize === undefined) {
                 fileSize = '';
             }
-            var labelText = $("#" + ID).prev().find("span.title").text();
+            var labelText = $("#" + ID).parent().prev().find("span.title").text();
             if (labelText == "Label") {
                 labelText = "";
             }
-            var lbldescriptionText = $("#" + ID).prev().find("span.desc").text();
+            var lbldescriptionText = $("#" + ID).parent().prev().find("span.desc").text();
             if (lbldescriptionText == undefined) {
                 lbldescriptionText = "";
             }
@@ -666,9 +666,9 @@ function EditHtml(type, ID) {
             popupString += `<div class="modal-row"><label class="required-asterisk">Individual file size(in kb)</label><input type="text" onkeyup="validateFileSize(this)" class="form-control lblfilesize" value="${fileSize}" onkeyup="ValidateColumnName(this)"></div>`;
 
             popupString += '<div class="modal-row">' +
-                '<label class="control-label"> Input Size </label>' +
+                '<label class="control-label"> Field Size </label>' +
                 '<div class="form-group">' +
-                '<select class="form-control"  id="inputsize">' +
+                '<select class="form-control"  id="fieldsize">' +
                 '<option value="col-md-4" ' + ismd4 + '>Small</option>' +
                 '<option value="col-md-6" ' + ismd6 + '>Medium</option>' +
                 '<option value="col-md-12"' + ismd12 + '>Large</option>' +
@@ -706,22 +706,22 @@ function EditHtml(type, ID) {
                     }
                     $("#" + ID).attr("data-column", colname);
                 }
-                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span><span class="desc"></span>`);
+                $("#" + ID).parent().prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span><span class="desc"></span>`);
 
                 $("#" + ID).attr("data-filetype", $("#filetype").val());
                 $("#" + ID).attr("data-filesize", $(".lblfilesize").val());
                 if ($("#required-input").prop("checked")) {
-                    $("#" + ID).prev().addClass("required-asterisk");
+                    $("#" + ID).parent().prev().addClass("required-asterisk");
                 } else {
-                    $("#" + ID).prev().removeClass("required-asterisk");
+                    $("#" + ID).parent().prev().removeClass("required-asterisk");
                 }
                 if ($("#help-input").prop("checked")) {
-                    $("#" + ID).prev().find("span.title").append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
+                    $("#" + ID).parent().prev().find("span.title").append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
                     toogleToolTip();
                 } else {
-                    $("#" + ID).prev().find("span.tooltipicon").remove();
+                    $("#" + ID).parent().prev().find("span.tooltipicon").remove();
                 }
-                $("#" + ID).prev().find("span.desc").html("").append($(".lbldescription").val());
+                $("#" + ID).parent().prev().find("span.desc").html("").append($(".lbldescription").val());
                 if ($("#label-multiple-yes").prop("checked")) {
                     $("#" + ID).attr("multiple", '');
                 } else {
@@ -734,14 +734,14 @@ function EditHtml(type, ID) {
                     $("#" + ID).closest(".form-group").addClass("f-g-left");
                     $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
                 }
-                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
+                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#fieldsize").val());
                 $("#exampleModalCenter").modal("hide");
 
             });
             break;
         case "number":
-            var isrequired = $("#" + ID).prev().hasClass("required-asterisk");
-            var tooltiptext = $("#" + ID).prev().find("span.tooltipicon").attr("data-original-title");
+            var isrequired = $("#" + ID).parent().prev().hasClass("required-asterisk");
+            var tooltiptext = $("#" + ID).parent().prev().find("span.tooltipicon").attr("data-original-title");
             tooltiptext = tooltiptext === undefined ? "" : tooltiptext;
             if (tooltiptext.indexOf("_blank") != -1) {
                 var tooltipHtml = parseHTML(tooltiptext);
@@ -750,11 +750,11 @@ function EditHtml(type, ID) {
                 });
                 tooltiptext = tooltipHtml.textContent;
             }
-            var labelText = $("#" + ID).prev().find("span.title").text();
+            var labelText = $("#" + ID).parent().prev().find("span.title").text();
             if (labelText == "Label") {
                 labelText = "";
             }
-            var lbldescriptionText = $("#" + ID).prev().find("span.desc").text();
+            var lbldescriptionText = $("#" + ID).parent().prev().find("span.desc").text();
             if (lbldescriptionText == undefined) {
                 lbldescriptionText = "";
             }
@@ -812,7 +812,7 @@ function EditHtml(type, ID) {
             popupString += '<div class="modal-row">' +
                 '<label class="control-label"> Field Size </label>' +
                 '<div class="form-group">' +
-                '<select class="form-control"  id="inputsize" onchange="CheckFieldSize(this)">' +
+                '<select class="form-control"  id="fieldsize">' +
                 '<option value="col-md-4" ' + ismd4 + '>Small</option>' +
                 '<option value="col-md-6" ' + ismd6 + '>Medium</option>' +
                 '<option value="col-md-12" ' + ismd12 + '>Large</option>' +
@@ -851,20 +851,20 @@ function EditHtml(type, ID) {
                     }
                     $("#" + ID).attr("data-column", colname);
                 }
-                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span><span class="desc"></span>`);
+                $("#" + ID).parent().prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span><span class="desc"></span>`);
                 if ($("#required-input").prop("checked")) {
-                    $("#" + ID).prev().addClass("required-asterisk");
+                    $("#" + ID).parent().prev().addClass("required-asterisk");
                 } else {
-                    $("#" + ID).prev().removeClass("required-asterisk");
+                    $("#" + ID).parent().prev().removeClass("required-asterisk");
                 }
                 if ($("#help-input").prop("checked")) {
-                    $("#" + ID).prev().find("span.title").append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
+                    $("#" + ID).parent().prev().find("span.title").append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
                     toogleToolTip();
 
                 } else {
-                    $("#" + ID).prev().find("span.tooltipicon").remove();
+                    $("#" + ID).parent().prev().find("span.tooltipicon").remove();
                 }
-                $("#" + ID).prev().find("span.desc").html("").append($(".lbldescription").val());
+                $("#" + ID).parent().prev().find("span.desc").html("").append($(".lbldescription").val());
                 if ($(".labeltop").prop("checked")) {
                     $("#" + ID).closest(".form-group").removeClass("f-g-left");
                     $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
@@ -872,9 +872,9 @@ function EditHtml(type, ID) {
                     $("#" + ID).closest(".form-group").addClass("f-g-left");
                     $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
                 }
-                $("#" + ID).removeClass("col-md-4 col-md-6 col-md-12").addClass($("#fieldsize").val());
-                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
-                if ($("#inputsize").val() == "col-md-12") {
+                $("#" + ID).removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
+                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#fieldsize").val());
+                if ($("#fieldsize").val() == "col-md-12") {
                     $("#" + ID).removeClass("col-md-12");
                 }
                 $("#exampleModalCenter").modal("hide");
@@ -944,9 +944,9 @@ function EditHtml(type, ID) {
             var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
             var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
             popupString += '<div class="modal-row">' +
-                '<label class="control-label"> Input Size </label>' +
+                '<label class="control-label"> Field Size </label>' +
                 '<div class="form-group">' +
-                '<select class="form-control"  id="inputsize">' +
+                '<select class="form-control"  id="fieldsize">' +
                 '<option value="col-md-4" ' + ismd4 + '>Small</option>' +
                 '<option value="col-md-6" ' + ismd6 + '>Medium</option>' +
                 '<option value="col-md-12" ' + ismd12 + '>Large</option>' +
@@ -1044,14 +1044,14 @@ function EditHtml(type, ID) {
                     toastr.error("", "Option text can not be duplicate", { progressBar: true });
                     return;
                 }
-                var option_data = "<div class='radio-html'>";
+                var option_data = "<div class='inputContent'><div class='radio-html'>";
                 $(".option-block").each(function (index) {
                     option_data += `<div class="custom-control custom-radio d-inline-block mr-2">
     <input  type="radio" class="custom-control-input" id="${ID + index}"  name="${ID}"  value="${$(this).find("[placeholder = Value]").val()}">
     <label class="custom-control-label" for="${ID + index}">${$(this).find("[placeholder = Key]").val()}</label></div>
     `;
                 });
-                option_data += "</div>";
+                option_data += "</div></div>";
                 $("#" + ID).find("div").html("");
                 $("#" + ID).append(option_data);
                 if (columnName != undefined) {
@@ -1075,7 +1075,7 @@ function EditHtml(type, ID) {
                 } else {
                     $("#" + ID).find("label").first().find("span.tooltipicon").remove();
                 }
-                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
+                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#fieldsize").val());
                 if ($(".radiohorizontal").prop("checked")) {
                     $("#" + ID).removeClass("vertical");
                 } else if ($(".radiovertical").prop("checked")) {
@@ -1094,8 +1094,8 @@ function EditHtml(type, ID) {
             });
             break;
         case "select":
-            var isrequired = $("#" + ID).prev().hasClass("required-asterisk");
-            var tooltiptext = $("#" + ID).prev().find("span.tooltipicon").attr("data-original-title");
+            var isrequired = $("#" + ID).parent().prev().hasClass("required-asterisk");
+            var tooltiptext = $("#" + ID).parent().prev().find("span.tooltipicon").attr("data-original-title");
             tooltiptext = tooltiptext === undefined ? "" : tooltiptext;
             if (tooltiptext.indexOf("_blank") != -1) {
                 var tooltipHtml = parseHTML(tooltiptext);
@@ -1104,11 +1104,11 @@ function EditHtml(type, ID) {
                 });
                 tooltiptext = tooltipHtml.textContent;
             }
-            var labelText = $("#" + ID).prev().find("span.title").text();
+            var labelText = $("#" + ID).parent().prev().find("span.title").text();
             if (labelText == "Select") {
                 labelText = "";
             }
-            var lbldescriptionText = $("#" + ID).prev().find("span.desc").text();
+            var lbldescriptionText = $("#" + ID).parent().prev().find("span.desc").text();
             if (lbldescriptionText == undefined) {
                 lbldescriptionText = "";
             }
@@ -1158,7 +1158,7 @@ function EditHtml(type, ID) {
             popupString += '<div class="modal-row">' +
                 '<label class="control-label"> Field Size </label>' +
                 '<div class="form-group">' +
-                '<select class="form-control"  id="inputsize">' +
+                '<select class="form-control"  id="fieldsize">' +
                 '<option value="col-md-4" ' + ismd4 + '>Small</option>' +
                 '<option value="col-md-6" ' + ismd6 + '>Medium</option>' +
                 '<option value="col-md-12" ' + ismd12 + '>Large</option>' +
@@ -1170,7 +1170,7 @@ function EditHtml(type, ID) {
             popupString += '<div class="modal-row">' +
                 '<label class="control-label"> Input Size </label>' +
                 '<div class="form-group">' +
-                '<select class="form-control"  id="fieldsize">' +
+                '<select class="form-control"  id="inputsize">' +
                 '<option value="col-md-4" ' + isinputmd4 + '>Small</option>' +
                 '<option value="col-md-6" ' + isinputmd6 + '>Medium</option>' +
                 '<option value="col-md-12" ' + isinputmd12 + '>Large</option>' +
@@ -1226,7 +1226,7 @@ function EditHtml(type, ID) {
                     }
                     $("#" + ID).attr("data-column", colname);
                 }
-                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span><span class="desc"></span>`);
+                $("#" + ID).parent().prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span><span class="desc"></span>`);
 
                 $("#" + ID).html("");
                 var allTextArray = $('.option-block').map(function () {
@@ -1271,18 +1271,18 @@ function EditHtml(type, ID) {
                     $(option_data).appendTo('#' + ID);
                 });
                 if ($("#required-input").prop("checked")) {
-                    $("#" + ID).prev().addClass("required-asterisk");
+                    $("#" + ID).parent().prev().addClass("required-asterisk");
                 } else {
-                    $("#" + ID).prev().removeClass("required-asterisk");
+                    $("#" + ID).parent().prev().removeClass("required-asterisk");
                 }
                 if ($("#help-input").prop("checked")) {
-                    $("#" + ID).prev().find("span.title").append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
+                    $("#" + ID).parent().prev().find("span.title").append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
                     toogleToolTip();
 
                 } else {
-                    $("#" + ID).prev().find("span.tooltipicon").remove();
+                    $("#" + ID).parent().prev().find("span.tooltipicon").remove();
                 }
-                $("#" + ID).prev().find("span.desc").html("").append($(".lbldescription").val());
+                $("#" + ID).parent().prev().find("span.desc").html("").append($(".lbldescription").val());
                 if ($(".labeltop").prop("checked")) {
                     $("#" + ID).closest(".form-group").removeClass("f-g-left");
                     $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
@@ -1290,9 +1290,9 @@ function EditHtml(type, ID) {
                     $("#" + ID).closest(".form-group").addClass("f-g-left");
                     $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
                 }
-                $("#" + ID).removeClass("col-md-4 col-md-6 col-md-12").addClass($("#fieldsize").val());
-                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
-                if ($("#inputsize").val() == "col-md-12") {
+                $("#" + ID).removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
+                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#fieldsize").val());
+                if ($("#fieldsize").val() == "col-md-12") {
                     $("#" + ID).removeClass("col-md-12");
                 }
                 $("#exampleModalCenter").modal("hide");
@@ -1300,8 +1300,8 @@ function EditHtml(type, ID) {
             });
             break;
         case "text":
-            var isrequired = $("#" + ID).prev().hasClass("required-asterisk");
-            var tooltiptext = $("#" + ID).prev().find("span.tooltipicon").attr("data-original-title");
+            var isrequired = $("#" + ID).parent().prev().hasClass("required-asterisk");
+            var tooltiptext = $("#" + ID).parent().prev().find("span.tooltipicon").attr("data-original-title");
             tooltiptext = tooltiptext === undefined ? "" : tooltiptext;
             if (tooltiptext.indexOf("_blank") != -1) {
                 var tooltipHtml = parseHTML(tooltiptext);
@@ -1311,11 +1311,11 @@ function EditHtml(type, ID) {
                 tooltiptext = tooltipHtml.textContent;
             }
 
-            var labelText = $("#" + ID).prev().find("span.title").text();
+            var labelText = $("#" + ID).parent().prev().find("span.title").text();
             if (labelText == "Label") {
                 labelText = "";
             }
-            var lbldescriptionText = $("#" + ID).prev().find("span.desc").html();
+            var lbldescriptionText = $("#" + ID).parent().prev().find("span.desc").html();
             if (lbldescriptionText == undefined) {
                 lbldescriptionText = "";
             }
@@ -1372,7 +1372,7 @@ function EditHtml(type, ID) {
             popupString += '<div class="modal-row">' +
                 '<label class="control-label"> Field Size </label>' +
                 '<div class="form-group">' +
-                '<select class="form-control"  id="inputsize" onchange="CheckFieldSize(this)">' +
+                '<select class="form-control"  id="fieldsize">' +
                 '<option value="col-md-4" ' + ismd4 + '>Small</option>' +
                 '<option value="col-md-6" ' + ismd6 + '>Medium</option>' +
                 '<option value="col-md-12" ' + ismd12 + '>Large</option>' +
@@ -1381,7 +1381,7 @@ function EditHtml(type, ID) {
             popupString += '<div class="modal-row">' +
                 '<label class="control-label"> Input Size </label>' +
                 '<div class="form-group">' +
-                '<select class="form-control"  id="fieldsize">' +
+                '<select class="form-control"  id="inputsize">' +
                 '<option value="col-md-4" ' + isfieldmd4 + '>Small</option>' +
                 '<option value="col-md-6" ' + isfieldmd6 + '>Medium</option>' +
                 '<option value="col-md-12" ' + isfieldmd12 + '>Large</option>' +
@@ -1410,21 +1410,21 @@ function EditHtml(type, ID) {
                     }
                     $("#" + ID).attr("data-column", colname);
                 }
-                $("#" + ID).prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span><span class="desc"></span>`);
+                $("#" + ID).parent().prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span><span class="desc"></span>`);
 
                 if ($("#required-input").prop("checked")) {
-                    $("#" + ID).prev().addClass("required-asterisk");
+                    $("#" + ID).parent().prev().addClass("required-asterisk");
                 } else {
-                    $("#" + ID).prev().removeClass("required-asterisk");
+                    $("#" + ID).parent().prev().removeClass("required-asterisk");
                 }
                 if ($("#help-input").prop("checked")) {
-                    $("#" + ID).prev().find("span.title").append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
+                    $("#" + ID).parent().prev().find("span.title").append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
                     toogleToolTip();
 
                 } else {
-                    $("#" + ID).prev().find("span.tooltipicon").remove();
+                    $("#" + ID).parent().prev().find("span.tooltipicon").remove();
                 }
-                $("#" + ID).prev().find("span.desc").html("").append($(".lbldescription").val());
+                $("#" + ID).parent().prev().find("span.desc").html("").append($(".lbldescription").val());
                 if ($(".labeltop").prop("checked")) {
                     $("#" + ID).closest(".form-group").removeClass("f-g-left");
                     $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
@@ -1432,9 +1432,9 @@ function EditHtml(type, ID) {
                     $("#" + ID).closest(".form-group").addClass("f-g-left");
                     $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
                 }
-                $("#" + ID).removeClass("col-md-4 col-md-6 col-md-12").addClass($("#fieldsize").val());
-                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
-                if ($("#inputsize").val() == "col-md-12") {
+                $("#" + ID).removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
+                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#fieldsize").val());
+                if ($("#fieldsize").val() == "col-md-12") {
                     $("#" + ID).removeClass("col-md-12");
                 }
                 $("#exampleModalCenter").modal("hide");
@@ -1442,8 +1442,8 @@ function EditHtml(type, ID) {
             });
             break;
         case "textarea":
-            var isrequired = $("#" + ID).parent().prev().hasClass("required-asterisk");
-            var tooltiptext = $("#" + ID).parent().prev().find("span.tooltipicon").attr("data-original-title");
+            var isrequired = $("#" + ID).parent().parent().prev().hasClass("required-asterisk");
+            var tooltiptext = $("#" + ID).parent().parent().prev().find("span.tooltipicon").attr("data-original-title");
             tooltiptext = tooltiptext === undefined ? "" : tooltiptext;
             if (tooltiptext.indexOf("_blank") != -1) {
                 var tooltipHtml = parseHTML(tooltiptext);
@@ -1452,11 +1452,11 @@ function EditHtml(type, ID) {
                 });
                 tooltiptext = tooltipHtml.textContent;
             }
-            var labelText = $("#" + ID).parent().prev().find("span.title").text();
+            var labelText = $("#" + ID).parent().parent().prev().find("span.title").text();
             if (labelText == "Textarea") {
                 labelText = "";
             }
-            var lbldescriptionText = $("#" + ID).parent().prev().find("span.desc").text();
+            var lbldescriptionText = $("#" + ID).parent().parent().prev().find("span.desc").text();
             if (lbldescriptionText == undefined) {
                 lbldescriptionText = "";
             }
@@ -1506,7 +1506,7 @@ function EditHtml(type, ID) {
             popupString += '<div class="modal-row">' +
                 '<label class="control-label"> Field Size </label>' +
                 '<div class="form-group">' +
-                '<select class="form-control"  id="inputsize">' +
+                '<select class="form-control"  id="fieldsize">' +
                 '<option value="col-md-4" ' + ismd4 + '>Small</option>' +
                 '<option value="col-md-6" ' + ismd6 + '>Medium</option>' +
                 '<option value="col-md-12" ' + ismd12 + '>Large</option>' +
@@ -1518,7 +1518,7 @@ function EditHtml(type, ID) {
             popupString += '<div class="modal-row">' +
                 '<label class="control-label"> Input Size </label>' +
                 '<div class="form-group">' +
-                '<select class="form-control"  id="fieldsize">' +
+                '<select class="form-control"  id="inputsize">' +
                 '<option value="col-md-4" ' + isinputmd4 + '>Small</option>' +
                 '<option value="col-md-6" ' + isinputmd6 + '>Medium</option>' +
                 '<option value="col-md-12" ' + isinputmd12 + '>Large</option>' +
@@ -1547,21 +1547,21 @@ function EditHtml(type, ID) {
                     }
                     $("#" + ID).attr("data-column", colname);
                 }
-                $("#" + ID).parent().prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span><span class="desc"></span>`);
+                $("#" + ID).parent().parent().prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span><span class="desc"></span>`);
 
                 if ($("#required-input").prop("checked")) {
-                    $("#" + ID).parent().prev().addClass("required-asterisk");
+                    $("#" + ID).parent().parent().prev().addClass("required-asterisk");
                 } else {
-                    $("#" + ID).parent().prev().removeClass("required-asterisk");
+                    $("#" + ID).parent().parent().prev().removeClass("required-asterisk");
                 }
                 if ($("#help-input").prop("checked")) {
-                    $("#" + ID).parent().prev().find("span.title").append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
+                    $("#" + ID).parent().parent().prev().find("span.title").append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
                     toogleToolTip();
 
                 } else {
-                    $("#" + ID).parent().prev().find("span.tooltipicon").remove();
+                    $("#" + ID).parent().parent().prev().find("span.tooltipicon").remove();
                 }
-                $("#" + ID).parent().prev().find("span.desc").html("").append($(".lbldescription").val());
+                $("#" + ID).parent().parent().prev().find("span.desc").html("").append($(".lbldescription").val());
                 if ($(".labeltop").prop("checked")) {
                     $("#" + ID).closest(".form-group").removeClass("f-g-left");
                     $("#" + ID).closest(".form-group").find('label:first-child').removeClass("label-left");
@@ -1569,36 +1569,16 @@ function EditHtml(type, ID) {
                     $("#" + ID).closest(".form-group").addClass("f-g-left");
                     $("#" + ID).closest(".form-group").find('label:first-child').addClass("label-left");
                 }
-                $("#" + ID).closest(".ck-editor").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#fieldsize").val());
-                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#inputsize").val());
-                if ($("#inputsize").val() == "col-md-12") {
+                $("#" + ID).closest(".ck-editor").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
+                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12 invalid-field").addClass($("#fieldsize").val());
+                if ($("#fieldsize").val() == "col-md-12") {
                     $("#" + ID).closest(".ck-editor").removeClass("col-md-12");
                 }
                 $("#exampleModalCenter").modal("hide");
 
             });
             break;
-        case "ChildrenUnder18":
-        case "Adults18to65":
-        case "Adults65Plus":
-        case "PreferredPharmacyName":
-        case "PreferredPharmacyLocation":
-        case "CalworksBenefits":
-        case "SocialSecurityDisabilityInsurance":
-        case "GeneralAssistance":
-        case "WomenInfantChildrenBenefits":
-        case "UnemploymentBenefits":
-        case "StateDisabilityInsuranceBenefits":
-        case "RentalAssistanceBenefits":
-        case "LittleInterest":
-        case "FeelingDown":
-        case "TroubleFalling":
-        case "FeelingTired":
-        case "PoorAppetite":
-        case "FeelingBad":
-        case "TroubleConcentraiting":
-        case "restless":
-        case "HurtingYourself":
+        default:
             var labelText = $("#" + ID).parent().parent().prev().find("label").html();
             popupString = '<div class="modal-row">' +
                 '<label class="required-asterisk">Label Text</label>' +
@@ -1610,7 +1590,7 @@ function EditHtml(type, ID) {
             popupString += '<div class="modal-row">' +
                 '<label class="control-label"> Field Size </label>' +
                 '<div class="form-group">' +
-                '<select class="form-control"  id="inputsize">' +
+                '<select class="form-control"  id="fieldsize">' +
                 '<option value="col-md-4" ' + ismd4 + '>Small</option>' +
                 '<option value="col-md-6" ' + ismd6 + '>Medium</option>' +
                 '<option value="col-md-12"  ' + ismd12 + '>Large</option>' +
@@ -1623,39 +1603,10 @@ function EditHtml(type, ID) {
                     return;
                 }
                 $("#" + ID).parent().parent().prev().find("label").html("").append($(".database-labeltext").val());
-                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
+                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#fieldsize").val());
                 $("#exampleModalCenter").modal("hide");
             });
-            break;
-        default:
-            var labelText = $("#" + ID).prev().html();
-            popupString = '<div class="modal-row">' +
-                '<label class="required-asterisk">Label Text</label>' +
-                '<input  type="text" control-id="' + ID + '" class="form-control database-labeltext"  value="' + labelText + '"/>' +
-                '</div>';
-            var ismd4 = $("#" + ID).closest(".dragresize").hasClass("col-md-4") ? "selected" : "";
-            var ismd6 = $("#" + ID).closest(".dragresize").hasClass("col-md-6") ? "selected" : "";
-            var ismd12 = $("#" + ID).closest(".dragresize").hasClass("col-md-12") ? "selected" : "";
-            popupString += '<div class="modal-row">' +
-                '<label class="control-label"> Field Size </label>' +
-                '<div class="form-group">' +
-                '<select class="form-control"  id="inputsize">' +
-                '<option value="col-md-4" ' + ismd4 + '>Small</option>' +
-                '<option value="col-md-6" ' + ismd6 + '>Medium</option>' +
-                '<option value="col-md-12"  ' + ismd12 + '>Large</option>' +
-                '</select></div>';
-            popupString += '</div>';
 
-            $("#btnSave").unbind();
-            $("#btnSave").bind("click", function () {
-                if ($(".database-labeltext").val().trim() == "") {
-                    toastr.error("", "Label text is required", { progressBar: true });
-                    return;
-                }
-                $("#" + ID).prev().html("").append($(".database-labeltext").val());
-                $("#" + ID).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#inputsize").val());
-                $("#exampleModalCenter").modal("hide");
-            });
             break;
     }
     $(".edithtml-body").html(popupString);
@@ -1689,6 +1640,7 @@ function EditHtml(type, ID) {
     $("#exampleModalCenter").modal("show");
 
 }
+
 //RemoveOption=>use to remove option of select,radio,checkbox inside popup
 function RemoveOption(obj) {
     let len = $(obj).parent().parent().parent().find("div.option-block").length;

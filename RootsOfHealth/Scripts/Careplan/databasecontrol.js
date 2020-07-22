@@ -254,7 +254,45 @@ function DatabaseFormFields() {
                         }
                     }
                     var lblValue = $("[data-type=" + draggableType + "] span").html();
-                   
+                    var sectionName = "";
+                    switch (selectedForm) {
+                        case "1":
+                            sectionName = "Client profile";
+                            break;
+                        case "2":
+                            sectionName = "Client Housing";
+                            break;
+                        case "3":
+                            sectionName = "Client Financial Security";
+                            break;
+                        case "4":
+                            sectionName = "Client Employment/Education";
+                            break;
+                        case "5":
+                            sectionName = "Client Communication & Mobility";
+                            break;
+                        case "6":
+                            sectionName = "Client Healthcare";
+                            break;
+                        case "7":
+                            sectionName = "Client Social Supports and Safety";
+                            break;
+                        case "8":
+                            sectionName = "Client Legal Status";
+                            break;
+                        case "9":
+                            sectionName = "DAST";
+                            break;
+                        case "10":
+                            sectionName = "AUDIT";
+                            break;
+                        case "11":
+                            sectionName = "Client Health Questionnaire (PHQ-9)";
+                            break;
+                        case "12":
+                            sectionName = "Client Food Access";
+                            break;
+                    }
                     var databaseStr = ``;
                     switch (draggableType) {
                         case "ChildrenUnder18":
@@ -284,7 +322,7 @@ function DatabaseFormFields() {
                                            <div class="form-row-first mt-0">
                                            <div class="top-form-row d-flex question-container">
                                            <div class="one-columns">
-                                           <label class="Add">${lblValue.split("-&gt;")[0]}</label>                                                                                             
+                                           <label class="Add">${sectionName} :- ${lblValue.split("-&gt;")[0]}</label >                                                                                             
                                            </div>
                                            </div>
                                            <div class="bootom-form-row mb-2">
@@ -315,13 +353,43 @@ function DatabaseFormFields() {
                                                           `;
                             break;                                                  
                         default:
-                             databaseStr = `<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">
-                        <label class="">${lblValue}</label>
-                        <input id="${newid}"  type="text" class="form-control database-field"  placeholder="{{ Value }}" data-index="${responseIndex}" disabled>
-                        </div>
-                        <div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml('${draggableType}','${newid}')"><i class="fas fa-edit"></i></button>
-                        <button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>
-                        </div> `;
+                            databaseStr = `<div  class="dragresize data-frmbtn col-md-12">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-0">
+                                           <div class="top-form-row d-flex question-container">
+                                           <div class="one-columns">
+                                           <label class="Add">${sectionName}</label >                                                                                             
+                                           </div>
+                                           </div>
+                                           <div class="bootom-form-row mb-2">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-1 data-frm-btn">
+                                           <div class="top-form-row d-flex">
+                                            <div class="one-columns">
+                                            <label>${lblValue}</label>
+                                            </div>
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                             <div class="one-columns">                                                                    
+                                              <input id="${newid}"  type="text" class="form-control database-field"  placeholder="{{ Value }}" data-index="${responseIndex}" disabled>                                           
+                                              </div>                                     
+                                               </div>
+                                       <div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml('${draggableType}','${newid}')"><i class="fas fa-edit"></i></button>
+                                       <button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div>
+                                                </div>
+                                      
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                          `;
+
+                             
                             break;
                     }
                    
