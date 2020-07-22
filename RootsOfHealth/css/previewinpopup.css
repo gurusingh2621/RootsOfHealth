@@ -197,3 +197,18 @@ span.basecontentspan {
     color: #777;
     font-weight: normal;
 }
+.preview-body .frmbtn .form-group label.label-left {
+    max-width: 50%;
+    flex: 0 0 50%;
+    margin-right: 0 !important;
+    padding-left: 0;
+}
+
+.preview-body .frmbtn .form-group.f-g-left {
+    align-items: flex-start;
+}
+
+    .preview-body .frmbtn .form-group.f-g-left .inputContent {
+        max-width: 50%;
+        flex: 0 0 50%;
+    }

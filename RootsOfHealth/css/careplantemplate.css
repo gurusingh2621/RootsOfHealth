@@ -1013,13 +1013,34 @@ span.finializewrap {
     padding-right: 18px;
 }
 .controlsTabWrap ul#control-box {
-    max-height: calc(100vh - 358px);
+    max-height: calc(100vh - 290px);
     overflow: auto;
 }
 .databseSelectControl ul#database-control-box {
     overflow-y: auto;
     max-height: calc(100vh - 370px);
 }
+.draggablediv .frmbtn .form-group label.label-left {
+    max-width: 50%;
+    flex: 0 0 50%;
+    margin-right: 0 !important;
+    padding-left: 0;
+}
+.draggablediv .frmbtn .form-group.f-g-left {
+    align-items: flex-start;
+}
+.draggablediv .frmbtn .form-group.f-g-left .inputContent {
+    max-width: 50%;
+    flex: 0 0 50%;
+}
+.draggablediv .ck-editor-header ul {
+    flex-wrap: wrap;
+}
+    .draggablediv .ck-editor-header ul li {
+        margin-bottom: 3px;
+    }
+
+
 
 @media screen and (min-width: 1200px) {
     .carePlansWrap div#frmb-cb-wrap {
