@@ -683,9 +683,16 @@ ul.needsList > li > ul .addNewNeedGoal {
 }
 
 .needListOuter.scroll {
-    max-height: 450px;
+    max-height: calc(100% - 50px);
     overflow-y: auto;
     padding: 0 30px;
+}
+.needModal_wrap .modal-body .needModalContent {
+    height: 100%;
+}
+.needModal_wrap .modal-body {
+    padding: 20px 30px 30px;
+    height: calc(100% - 67px);
 }
 
 .goalcontent {
