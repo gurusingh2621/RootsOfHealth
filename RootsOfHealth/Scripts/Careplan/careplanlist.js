@@ -47,6 +47,12 @@ function GetCarePlanTemplateList() {
                 careplans += `<tr><td colspan="6"><p class="text-center">No data found.</p></td></tr>`;
                 careplanlist.html("").append(careplans);
             }
+            $('#tblCarePlanTemplateList').DataTable({
+                'columnDefs': [{
+                    'targets': [5],
+                    'orderable': false,
+                }]
+            });
             $(".loaderOverlay").hide();
         },
         error: function (e) {
