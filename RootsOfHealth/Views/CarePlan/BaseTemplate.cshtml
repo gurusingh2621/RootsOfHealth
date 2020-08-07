@@ -22,7 +22,12 @@
    span.basecontentspan {
         display:inline;
     }
-    
+    .baseheader,.basefooter {
+        border-color: #39be19;
+    }
+    .contentarea1,.contentarea2,.contentarea3 {
+        border-color: #df1e1e;
+    }
 </style>
 <section id="content" class="responsive-container pt-0">
 
@@ -37,7 +42,7 @@
 
 
                     <div class="detail-button ml-auto">
-                        <a href="/careplan/list" class="btn btn-success mr-10 backlist"> <i class="fa fa-arrow-left"></i> Back to list</a>
+                        <a href="javascript:{}" class="btn btn-success mr-10 backlist" onclick="backToList()"> <i class="fa fa-arrow-left"></i> Back to list</a>
                         <a href="javascript:{}" onclick="return PreviewInPopUp();" class="btn btn-success mr-10 preview-inpopup">
                             <i class="far fa-save"></i>
                             Preview
@@ -149,6 +154,7 @@
 
     <div hidden="hidden">
         <input type="text" hidden="hidden" id="hdnTemplateId" value="@Html.Raw(ViewBag.TemplateId)" />
+        <div hidden class="hiddenSavedHtml"></div>
     </div>
 </section>
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
