@@ -64,11 +64,11 @@ function HtmlControlDragnDrop() {
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group base-control" id="' + newid + '">' +
                         '<label class="checkbox-group "><span class="title">Check Box (Multiple)</span><span class="desc"></span></label>' +
                         '<div class="custom-control custom-checkbox  d-inline-block mr-2">' +
-                        '<input  type="checkbox" class="custom-control-input" name="checkbox" value="true" id="checkbox1">' +
-                        '<label class="custom-control-label" for="checkbox1" value="true">Yes</label></div>' +
+                        '<input  type="checkbox" class="custom-control-input" name="checkbox" value="1" id="checkbox1">' +
+                        '<label class="custom-control-label" for="checkbox1">option 1</label></div>' +
                         '<div class="custom-control custom-checkbox  d-inline-block mr-2">' +
-                        '<input type="checkbox" class="custom-control-input"  name="checkbox" value="false" id="checkbox2">' +
-                        '<label class="custom-control-label" for="checkbox2">No</label></div>' +
+                        '<input type="checkbox" class="custom-control-input"  name="checkbox" value="2" id="checkbox2">' +
+                        '<label class="custom-control-label" for="checkbox2">option 2</label></div>' +
                         '</div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
@@ -110,11 +110,11 @@ function HtmlControlDragnDrop() {
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group base-control"  id="' + newid + '">' +
                         '<label class="radiobox-group "><span class="title">Radio</span><span class="desc"></span></label>' +
                         '<div class="custom-control custom-radio d-inline-block mr-2">' +
-                        '<input  type="radio" class="custom-control-input" name="radio" value="true" id="radio1">' +
-                        '<label class="custom-control-label" for="radio1" value="true">Yes</label></div>' +
+                        '<input  type="radio" class="custom-control-input" name="radio" value="1" id="radio1">' +
+                        '<label class="custom-control-label" for="radio1">option 1</label></div>' +
                         '<div class="custom-control custom-radio d-inline-block mr-2">' +
-                        '<input type="radio" class="custom-control-input"  name="radio" value="false" id="radio2">' +
-                        '<label class="custom-control-label" for="radio2">No</label></div>' +
+                        '<input type="radio" class="custom-control-input"  name="radio" value="2" id="radio2">' +
+                        '<label class="custom-control-label" for="radio2">option 2</label></div>' +
                         '</div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
@@ -124,11 +124,9 @@ function HtmlControlDragnDrop() {
                 case "select":
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
                         '<label class=""><span class="title">Select</span><span class="desc"></span></label>' +
-                        '<div class="inputContent"> <select id="' + newid + '" class="form-control base-control"></div>' +
-                        ' <option value="0">Select Option</option>' +
-                        '<option  value="1">1</option>' +
-                        '<option  value="2">2</option>' +
-                        '<option  value="3">3</option>' +
+                        '<div class="inputContent"> <select id="' + newid + '" class="form-control base-control"></div>' +                       
+                        '<option  value="1">option 1</option>' +
+                        '<option  value="2">option 2</option>' +
                         ' </select>' +
                         '</div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
@@ -299,14 +297,15 @@ function EditHtml(type, ID) {
     </div>`;
             popupString += '<div class="modal-row">' +
                 '<label>Options<span class="addoptions" onclick="addoption(this)"><i class="fas fa-plus"></i></span></label>';
-            $(controlId).find("input[type='checkbox']").each(function () {
+            popupString += '<div class="optionHeading"><label>Text</label><label>Value</label></div>';
+            $(controlId).find("input[type='checkbox']").each(function (index,item) {
                 popupString += '<div class="option-block">' +
                     '<div class="option-fields">' +
-                    ' <input type="text" placeholder="Key" class="form-control"  value="' + $(this).next().text() + '"/>' +
-                    ' <input type="text" placeholder="Value" class="form-control"  value="' + $(this).attr("value") + '"/>' +
+                    ' <input type="text" placeholder="Text" class="form-control"  value="' + $(item).next().text() + '"/>' +
+                    ' <input type="text" placeholder="Value" class="form-control"  value="' + $(item).attr("value") + '"/>' +
                     '</div>' +
                     '<div class="popup-event-btn">' +
-                    '<button class="event-btn file-remove" onclick="RemoveOption(this)"> <i class="fa fa-minus-circle" aria-hidden="true"></i></button > ' +
+                    `<button class="event-btn file-remove" onclick="RemoveOption(this)" ${index==0?"disabled":""}><i class="fa fa-minus-circle" aria-hidden="true"></i></button >` +
                     '</div></div>'
             });
             popupString += '</div></div>';
@@ -325,7 +324,7 @@ function EditHtml(type, ID) {
                 }
                 var breakout = false;
                 $('.option-block').each(function () {
-                    if ($(this).find("[placeholder = Key]").val().trim() == '' || $(this).find("[placeholder = Value]").val().trim() == '') {
+                    if ($(this).find("[placeholder = Text]").val().trim() == '' || $(this).find("[placeholder = Value]").val().trim() == '') {
                         breakout = true;
                         return false;
                     }
@@ -350,9 +349,9 @@ function EditHtml(type, ID) {
                 $(controlId).html("<label class='checkbox-group'><span class='title'>Check Box (Multiple)</span><span class='desc'></span></label>");
 
                 var allTextArray = $('.option-block').map(function () {
-                    if ($(this).find("[placeholder=Key]").val().trim() != '')
+                    if ($(this).find("[placeholder=Text]").val().trim() != '')
 
-                        return $(this).find("[placeholder=Key]").val().trim()
+                        return $(this).find("[placeholder=Text]").val().trim()
                 }).get();
                 var duplicateTextArray = allTextArray.filter(function (element, pos) {
                     if (allTextArray.indexOf(element) != pos) {
@@ -389,7 +388,7 @@ function EditHtml(type, ID) {
                 $(".option-block").each(function (index) {
                     option_data += `<div class="custom-control custom-checkbox  d-inline-block mr-2">
                      <input  type="checkbox" class="custom-control-input" id="${ID + index}"  name="${ID}"  value="${$(this).find("[placeholder = Value]").val().trim()}">
-                     <label class="custom-control-label" for="${ID + index}">${$(this).find("[placeholder = Key]").val().trim()}</label></div>
+                     <label class="custom-control-label" for="${ID + index}">${$(this).find("[placeholder = Text]").val().trim()}</label></div>
                      `;
                 });
                 option_data += "</div></div>";
@@ -960,14 +959,15 @@ function EditHtml(type, ID) {
                             </div>`;
             popupString += '<div class="modal-row">' +
                 '<label>Options<span class="addoptions" onclick="addoption(this)"><i class="fas fa-plus"></i></span></label>';
-            $(controlId).find("input[type=radio]").each(function () {
+            popupString += '<div class="optionHeading"><label>Text</label><label>Value</label></div>';
+            $(controlId).find("input[type=radio]").each(function (index,item) {
                 popupString += '<div class="option-block">' +
                     '<div class="option-fields">' +
-                    ' <input type="text" placeholder="Key" class="form-control"  value="' + $(this).next().text() + '"/>' +
-                    ' <input type="text" placeholder="Value" class="form-control"  value="' + $(this).attr("value") + '"/>' +
+                    ' <input type="text" placeholder="Text" class="form-control"  value="' + $(item).next().text() + '"/>' +
+                    ' <input type="text" placeholder="Value" class="form-control"  value="' + $(item).attr("value") + '"/>' +
                     '</div>' +
                     '<div class="popup-event-btn">' +
-                    '<button class="event-btn file-remove" onclick="RemoveOption(this)"> <i class="fa fa-minus-circle" aria-hidden="true"></i></button > ' +
+                    `<button class="event-btn file-remove" onclick="RemoveOption(this)" ${index == 0 ? "disabled" : ""}> <i class="fa fa-minus-circle" aria-hidden="true"></i></button >` +
                     '</div></div>'
             });
             popupString += '</div></div> ';
@@ -986,7 +986,7 @@ function EditHtml(type, ID) {
                 }
                 var breakout = false;
                 $('.option-block').each(function () {
-                    if ($(this).find("[placeholder = Key]").val().trim() == '' || $(this).find("[placeholder = Value]").val().trim() == '') {
+                    if ($(this).find("[placeholder = Text]").val().trim() == '' || $(this).find("[placeholder = Value]").val().trim() == '') {
                         breakout = true;
                         return false;
                     }
@@ -1009,9 +1009,9 @@ function EditHtml(type, ID) {
                 $(controlId).html("<label class='radiobox-group'><span class='title'>Radio</span><span class='desc'></span></label>");
 
                 var allTextArray = $('.option-block').map(function () {
-                    if ($(this).find("[placeholder=Key]").val() != '')
+                    if ($(this).find("[placeholder=Text]").val() != '')
 
-                        return $(this).find("[placeholder=Key]").val()
+                        return $(this).find("[placeholder=Text]").val()
                 }).get();
                 var duplicateTextArray = allTextArray.filter(function (element, pos) {
                     if (allTextArray.indexOf(element) != pos) {
@@ -1048,7 +1048,7 @@ function EditHtml(type, ID) {
                 $(".option-block").each(function (index) {
                     option_data += `<div class="custom-control custom-radio d-inline-block mr-2">
     <input  type="radio" class="custom-control-input" id="${ID + index}"  name="${ID}"  value="${$(this).find("[placeholder = Value]").val()}">
-    <label class="custom-control-label" for="${ID + index}">${$(this).find("[placeholder = Key]").val()}</label></div>
+    <label class="custom-control-label" for="${ID + index}">${$(this).find("[placeholder = Text]").val()}</label></div>
     `;
                 });
                 option_data += "</div></div>";
@@ -1178,16 +1178,16 @@ function EditHtml(type, ID) {
 
             popupString += '<div class="modal-row">' +
                 '<label>Options<span class="addoptions" onclick="addoption(this)"><i class="fas fa-plus"></i></span></label>';
-
-            $(controlId).find('option').each(function () {
-                if ($(this).val() == 0) return;
+            popupString += '<div class="optionHeading"><label>Text</label><label>Value</label></div>';
+            $(controlId).find('option').each(function (index,item) {
+                if ($(item).val() == 0) return;
                 popupString += '<div class="option-block">' +
                     '<div class="option-fields">' +
-                    ' <input type="text" placeholder="Key" class="form-control"  value="' + $(this).text() + '"/>' +
-                    ' <input type="text" placeholder="Value" class="form-control"  value="' + $(this).val() + '"/>' +
+                    ' <input type="text" placeholder="Text" class="form-control"  value="' + $(item).text() + '"/>' +
+                    ' <input type="text" placeholder="Value" class="form-control"  value="' + $(item).val() + '"/>' +
                     '</div>' +
                     '<div class="popup-event-btn">' +
-                    '<button class="event-btn file-remove" onclick="RemoveOption(this)"> <i class="fa fa-minus-circle" aria-hidden="true"></i></button > ' +
+                    `<button class="event-btn file-remove" onclick="RemoveOption(this)" ${index == 0 ? "disabled" : ""}><i class="fa fa-minus-circle" aria-hidden="true"></i></button >` +
                     '</div></div>'
             });
             popupString += '</div></div> ';
@@ -1206,7 +1206,7 @@ function EditHtml(type, ID) {
                 }
                 var breakout = false;
                 $('.option-block').each(function () {
-                    if ($(this).find("[placeholder = Key]").val().trim() == '' || $(this).find("[placeholder = Value]").val().trim() == '') {
+                    if ($(this).find("[placeholder = Text]").val().trim() == '' || $(this).find("[placeholder = Value]").val().trim() == '') {
                         breakout = true;
                         return false;
                     }
@@ -1230,9 +1230,9 @@ function EditHtml(type, ID) {
 
                 $(controlId).html("");
                 var allTextArray = $('.option-block').map(function () {
-                    if ($(this).find("[placeholder=Key]").val() != '')
+                    if ($(this).find("[placeholder=Text]").val() != '')
 
-                        return $(this).find("[placeholder=Key]").val()
+                        return $(this).find("[placeholder=Text]").val()
                 }).get();
                 var duplicateTextArray = allTextArray.filter(function (element, pos) {
                     if (allTextArray.indexOf(element) != pos) {
@@ -1267,7 +1267,7 @@ function EditHtml(type, ID) {
                 }
                 $(".option-block").each(function (index) {
 
-                    var option_data = "<option value=" + $(this).find("[placeholder=Value]").val() + ">" + $(this).find("[placeholder=Key]").val() + "</option>";
+                    var option_data = "<option value=" + $(this).find("[placeholder=Value]").val() + ">" + $(this).find("[placeholder=Text]").val() + "</option>";
                     $(option_data).appendTo('#' + ID);
                 });
                 if ($("#required-input").prop("checked")) {
@@ -1674,10 +1674,11 @@ function RemoveControl(obj) {
 }
 //addoption=>use to add new option for select,radio,checkbox inside popup
 function addoption(obj) {
+    var optionvalue = parseInt($(obj).parent().siblings(".option-block").length) + 1;
     var popupString = '<div class="option-block">' +
         '<div class="option-fields">' +
-        ' <input type="text" placeholder="Key" class="form-control"/>' +
-        ' <input type="text" placeholder="Value" class="form-control"/>' +
+        ' <input type="text" placeholder="Text" class="form-control" value="option ' + optionvalue + '"/>' +
+        ' <input type="text" placeholder="Value" class="form-control" value="' + optionvalue + '"/>' +
         '</div>' +
         '<div class="popup-event-btn">' +
         '<button class="event-btn file-remove" onclick="RemoveOption(this)"> <i class="fa fa-minus-circle" aria-hidden="true"></i></button > ' +
@@ -2068,4 +2069,82 @@ function closePreview() {
         event.stopPropagation();
     });
     $("#PreviewModal").modal('hide');
+}
+function backToList() {
+    $.ajax({
+        type: "GET",
+        url: '/careplan/GetFormHtmlById?Id=' + templateId,
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        success: function (result) {
+            debugger;
+            $(".hiddenSavedHtml").html("").append(result.html);
+            $(".hiddenSavedHtml").find("div.dragresize").removeClass("ui-sortable-handle").removeAttr("style");
+            var savedHtml = result.html == "" ?`
+                                <input id="hdnbasetempid" hidden="hidden" class="basecontrol-id" type="text" value="0">
+                                <div class="dragresize col-md-12">
+                                    <div class="contentbtn">
+                                        <div class="basecontentarea contentarea1"></div>
+                                        <span class="basecontentspan">Content area, you can not drop here</span>
+                                    </div>
+                                </div>
+                                <div class="dragresize col-md-12">
+                                    <div class="contentbtn">
+                                        <div class="baseheader basecontentarea"></div>
+                                        <span class="basecontentspan">Base header, you can drop content here</span>
+                                    </div>
+                                </div>
+                                <div class="dragresize col-md-12">
+                                    <div class="contentbtn">
+                                        <div class="basecontentarea contentarea2"></div>
+                                        <span class="basecontentspan">Content area, you can not drop here</span>
+                                    </div>
+                                </div>
+                                <div class="dragresize col-md-12">
+                                    <div class="contentbtn">
+                                        <div class="basefooter basecontentarea"></div>
+                                        <span class="basecontentspan">Base footer, you can drop content here</span>
+                                    </div>
+                                </div>
+                                <div class="dragresize col-md-12">
+                                    <div class="contentbtn">
+                                        <div class="basecontentarea contentarea3"></div>
+                                        <span class="basecontentspan">Content area, you can not drop here</span>
+                                    </div>
+                                </div>
+                            `: $(".hiddenSavedHtml")[0].innerHTML;
+            var unsavedHtml = $("#droppable").clone();
+            $(unsavedHtml).find("div.dragresize").removeClass("ui-sortable-handle").removeAttr("style");
+            $(unsavedHtml).find(".baseheader,.basefooter").removeClass("ui-sortable");
+            $(unsavedHtml).find("span.basecontentspan").removeAttr("style"); 
+            unsavedHtml = unsavedHtml[0].innerHTML;
+            if (savedHtml === unsavedHtml) {
+                window.location.href = '/careplan/list';
+                $(".hiddenSavedHtml").html("");
+            } else {
+                $.confirm({
+                    icon: 'fas fa-exclamation-triangle',
+                    title: 'Confirm',
+                    content: 'You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?',
+                    type: 'red',
+                    columnClass: 'col-md-6 col-md-offset-3',
+                    typeAnimated: true,
+                    buttons: {
+                        stay: {
+                            btnClass: 'btn-green',
+
+                        },
+                        leave: {
+                            action: function () {
+                                window.location.href = '/careplan/list';
+                                $(".hiddenSavedHtml").html("");
+                            }
+                        }
+                    },
+
+                });
+            }
+
+        }
+    });
 }

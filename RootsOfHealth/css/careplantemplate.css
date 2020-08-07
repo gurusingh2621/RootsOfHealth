@@ -1090,3 +1090,15 @@ span.finializewrap {
         max-height: calc(100vh - 440px);
     }
     }
+.edithtml-body .optionHeading {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 5px;
+}
+.optionHeading label {
+    font-weight: 500;
+    font-size: 17px;
+    text-transform: uppercase;
+    text-decoration: underline;
+}
