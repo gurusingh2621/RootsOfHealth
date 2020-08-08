@@ -1835,7 +1835,7 @@ function saveHtml() {
             } else {
                 //templateId = result.id;
                 $("#hdnTemplateId").val(result.id);
-
+                $(".hiddenSavedHtml").html("").append(gethtml); 
             }
 
         }
@@ -1909,6 +1909,7 @@ function GetFormHtmlById(Id) {
         success: function (result) {
             if (result.html != "") {
                 $("#droppable").html(result.html);
+                $(".hiddenSavedHtml").html("").append(result.html); 
                 HtmlControlDragnDrop();
             }
                 toogleToolTip();
@@ -2071,16 +2072,11 @@ function closePreview() {
     $("#PreviewModal").modal('hide');
 }
 function backToList() {
-    $.ajax({
-        type: "GET",
-        url: '/careplan/GetFormHtmlById?Id=' + templateId,
-        contentType: 'application/json; charset=UTF-8',
-        dataType: "json",
-        success: function (result) {
-            debugger;
-            $(".hiddenSavedHtml").html("").append(result.html);
-            $(".hiddenSavedHtml").find("div.dragresize").removeClass("ui-sortable-handle").removeAttr("style");
-            var savedHtml = result.html == "" ?`
+    debugger;
+    $(".hiddenSavedHtml").find("div.dragresize").removeClass("ui-sortable-handle").removeAttr("style");
+    $(".hiddenSavedHtml").find(".baseheader,.basefooter").removeClass("ui-sortable");
+    $(".hiddenSavedHtml").find("span.basecontentspan").removeAttr("style");
+    var savedHtml = $(".hiddenSavedHtml").html() == "" ?`
                                 <input id="hdnbasetempid" hidden="hidden" class="basecontrol-id" type="text" value="0">
                                 <div class="dragresize col-md-12">
                                     <div class="contentbtn">
@@ -2116,8 +2112,8 @@ function backToList() {
             var unsavedHtml = $("#droppable").clone();
             $(unsavedHtml).find("div.dragresize").removeClass("ui-sortable-handle").removeAttr("style");
             $(unsavedHtml).find(".baseheader,.basefooter").removeClass("ui-sortable");
-            $(unsavedHtml).find("span.basecontentspan").removeAttr("style"); 
-            unsavedHtml = unsavedHtml[0].innerHTML;
+            $(unsavedHtml).find("span.basecontentspan").removeAttr("style");
+              unsavedHtml = unsavedHtml[0].innerHTML;
             if (savedHtml === unsavedHtml) {
                 window.location.href = '/careplan/list';
                 $(".hiddenSavedHtml").html("");
@@ -2144,7 +2140,58 @@ function backToList() {
 
                 });
             }
-
+}
+window.onbeforeunload = function (evt) {
+    var message = "";
+    $(".hiddenSavedHtml").find("div.dragresize").removeClass("ui-sortable-handle").removeAttr("style");
+    var savedHtml = $(".hiddenSavedHtml").html() == "" ? `
+                                <input id="hdnbasetempid" hidden="hidden" class="basecontrol-id" type="text" value="0">
+                                <div class="dragresize col-md-12">
+                                    <div class="contentbtn">
+                                        <div class="basecontentarea contentarea1"></div>
+                                        <span class="basecontentspan">Content area, you can not drop here</span>
+                                    </div>
+                                </div>
+                                <div class="dragresize col-md-12">
+                                    <div class="contentbtn">
+                                        <div class="baseheader basecontentarea"></div>
+                                        <span class="basecontentspan">Base header, you can drop content here</span>
+                                    </div>
+                                </div>
+                                <div class="dragresize col-md-12">
+                                    <div class="contentbtn">
+                                        <div class="basecontentarea contentarea2"></div>
+                                        <span class="basecontentspan">Content area, you can not drop here</span>
+                                    </div>
+                                </div>
+                                <div class="dragresize col-md-12">
+                                    <div class="contentbtn">
+                                        <div class="basefooter basecontentarea"></div>
+                                        <span class="basecontentspan">Base footer, you can drop content here</span>
+                                    </div>
+                                </div>
+                                <div class="dragresize col-md-12">
+                                    <div class="contentbtn">
+                                        <div class="basecontentarea contentarea3"></div>
+                                        <span class="basecontentspan">Content area, you can not drop here</span>
+                                    </div>
+                                </div>
+                            `: $(".hiddenSavedHtml")[0].innerHTML;
+    
+    var unsavedHtml = $("#droppable").clone();
+    $(unsavedHtml).find("div.dragresize").removeClass("ui-sortable-handle").removeAttr("style");
+    $(unsavedHtml).find(".baseheader,.basefooter").removeClass("ui-sortable");
+    $(unsavedHtml).find("span.basecontentspan").removeAttr("style");
+    unsavedHtml = unsavedHtml[0].innerHTML;
+    if (savedHtml !== unsavedHtml) {
+        message = 'You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?'
+        if (typeof evt == 'undefined') {
+            evt = window.event;
         }
-    });
+        if (evt) {
+            evt.returnValue = message;
+        }
+        return message
+    }
+
 }

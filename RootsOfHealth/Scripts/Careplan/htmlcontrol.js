@@ -1960,7 +1960,7 @@ function saveTemplate(isactive) {
             } else {
 
                 $("#hdnTemplateId").val(result.id);
-
+                $(".hiddenSavedHtml").html("").append(gethtml); 
             }
 
         }
@@ -2167,6 +2167,7 @@ function GetFormHtmlById(Id) {
                 return;
             }
             $("#droppable").html(result.html);
+            $(".hiddenSavedHtml").html("").append(result.html);
 
             if (isBaseTemplate == 'True' || $("#droppable").find(".basecontentarea").length > 0) {
                 getHeaderAndFooter();
@@ -2440,13 +2441,6 @@ function setInputSize(obj) {
     }
 }
 function backToList() {
-    $.ajax({
-        type: "GET",
-        url: '/careplan/GetFormHtmlById?Id=' + templateId,
-        contentType: 'application/json; charset=UTF-8',
-        dataType: "json",
-        success: function (result) {
-            $(".hiddenSavedHtml").html("").append(result.html);
             $(".hiddenSavedHtml").find("div.dragresize").removeClass("ui-sortable-handle").removeAttr("style");
             var savedHtml = $(".hiddenSavedHtml")[0].innerHTML;
             var unsavedHtml = $("#droppable").clone();
@@ -2478,7 +2472,27 @@ function backToList() {
 
                 });
             }
-
-        }
-    });
 }
+window.onbeforeunload = function (evt) {
+    var message = "";  
+            $(".hiddenSavedHtml").find("div.dragresize").removeClass("ui-sortable-handle").removeAttr("style");
+            var savedHtml = $(".hiddenSavedHtml")[0].innerHTML;
+            var unsavedHtml = $("#droppable").clone();
+            $(unsavedHtml).find("div.dragresize").removeClass("ui-sortable-handle").removeAttr("style");
+            unsavedHtml = unsavedHtml[0].innerHTML;
+            if (savedHtml !== unsavedHtml) {
+                message = 'You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?'
+                if (typeof evt == 'undefined') {
+                    evt = window.event;
+                }
+                if (evt) {
+                    evt.returnValue = message;
+                }
+
+                return message
+            }
+          
+        }
+
+
+    
