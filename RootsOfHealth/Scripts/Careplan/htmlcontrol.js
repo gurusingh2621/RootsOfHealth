@@ -301,7 +301,7 @@ function EditHtml(type, ID) {
             $(controlId).find("input[type=checkbox]").each(function (index,item) {
                 popupString += '<div class="option-block">' +
                     '<div class="option-fields">' +
-                    `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${$(item).next().text() == "option 1" || $(item).next().text() == "option 2"? "" : $(item).next().text()}"/>` +
+                    `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${($(item).next().text() == "option 1" || $(item).next().text() == "option 2") && $(controlId).find("input.custom-control-input").first().attr("data-column") === undefined? "" : $(item).next().text()}"/>` +
                     ' <input type="text" placeholder="Value" class="form-control option-value" disabled  value="' + $(item).attr("value") + '"/>' +
                     '</div>' +
                     '<div class="popup-event-btn">' +
@@ -961,7 +961,7 @@ function EditHtml(type, ID) {
             $(controlId).find("input[type=radio]").each(function (index,item) {
                 popupString += '<div class="option-block">' +
                     '<div class="option-fields">' +
-                    `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${$(item).next().text() == "option 1" || $(item).next().text() == "option 2" ? "" : $(item).next().text()}"/>` +
+                    `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${($(item).next().text() == "option 1" || $(item).next().text() == "option 2") && $(controlId).find("input.custom-control-input").first().attr("data-column") === undefined ? "" : $(item).next().text()}"/>` +
                     ' <input type="text" placeholder="Value" class="form-control option-value" disabled value="' + $(item).attr("value") + '"/>' +
                     '</div>' +
                     '<div class="popup-event-btn">' +
@@ -1181,7 +1181,7 @@ function EditHtml(type, ID) {
                 if ($(item).val() == 0) return;
                 popupString += '<div class="option-block">' +
                     '<div class="option-fields">' +
-                    `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${$(item).text() == "option 1" || $(item).text() == "option 2" ? "" : $(item).text()}"/>` +
+                    `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${($(item).text() == "option 1" || $(item).text() == "option 2") && $(controlId).attr("data-column") === undefined ? "" : $(item).text()}"/>` +
                     ' <input type="text" placeholder="Value" class="form-control option-value" disabled  value="' + $(item).val() + '"/>' +
                     '</div>' +
                     '<div class="popup-event-btn">' +
