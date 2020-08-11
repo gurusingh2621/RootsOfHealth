@@ -1092,13 +1092,22 @@ span.finializewrap {
     }
 .edithtml-body .optionHeading {
     display: flex;
-    justify-content: space-around;
+    justify-content: start;
     align-items: center;
     padding: 5px;
 }
 .optionHeading label {
     font-weight: 500;
     font-size: 17px;
-    text-transform: uppercase;
-    text-decoration: underline;
+    text-transform: capitalize;
+}
+
+input.form-control.option-text {
+    flex: 0 0 70%;
+    max-width: 70%;
+}
+
+.edithtml-body .optionHeading label:nth-child(1) {
+    flex: 0 0 65%;
+    max-width: 65%;
 }
