@@ -301,8 +301,8 @@ function EditHtml(type, ID) {
             $(controlId).find("input[type='checkbox']").each(function (index,item) {
                 popupString += '<div class="option-block">' +
                     '<div class="option-fields">' +
-                    ' <input type="text" placeholder="Text" class="form-control"  value="' + $(item).next().text() + '"/>' +
-                    ' <input type="text" placeholder="Value" class="form-control"  value="' + $(item).attr("value") + '"/>' +
+                    `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${$(item).next().text() == "option 1" || $(item).next().text() == "option 2"? "" : $(item).next().text()}"/>` +
+                    ' <input type="text" placeholder="Value" class="form-control option-value" disabled value="' + $(item).attr("value") + '"/>' +
                     '</div>' +
                     '<div class="popup-event-btn">' +
                     `<button class="event-btn file-remove" onclick="RemoveOption(this)" ${index==0?"disabled":""}><i class="fa fa-minus-circle" aria-hidden="true"></i></button >` +
@@ -324,7 +324,7 @@ function EditHtml(type, ID) {
                 }
                 var breakout = false;
                 $('.option-block').each(function () {
-                    if ($(this).find("[placeholder = Text]").val().trim() == '' || $(this).find("[placeholder = Value]").val().trim() == '') {
+                    if ($(this).find("input.option-text").val().trim() == '' || $(this).find("input.option-value").val().trim() == '') {
                         breakout = true;
                         return false;
                     }
@@ -345,13 +345,11 @@ function EditHtml(type, ID) {
                     }
 
                 }
-                $(controlId).html("");
-                $(controlId).html("<label class='checkbox-group'><span class='title'>Check Box (Multiple)</span><span class='desc'></span></label>");
-
+               
                 var allTextArray = $('.option-block').map(function () {
-                    if ($(this).find("[placeholder=Text]").val().trim() != '')
+                    if ($(this).find("input.option-text").val().trim() != '')
 
-                        return $(this).find("[placeholder=Text]").val().trim()
+                        return $(this).find("input.option-text").val().trim()
                 }).get();
                 var duplicateTextArray = allTextArray.filter(function (element, pos) {
                     if (allTextArray.indexOf(element) != pos) {
@@ -363,9 +361,9 @@ function EditHtml(type, ID) {
 
                 });
                 var allValueArray = $('.option-block').map(function () {
-                    if ($(this).find("[placeholder=Value]").val().trim() != '')
+                    if ($(this).find("input.option-value").val().trim() != '')
 
-                        return $(this).find("[placeholder=Value]").val().trim()
+                        return $(this).find("input.option-value").val().trim()
                 }).get();
                 var duplicateValueArray = allValueArray.filter(function (element, pos) {
                     if (allValueArray.indexOf(element) != pos) {
@@ -384,11 +382,13 @@ function EditHtml(type, ID) {
                     toastr.error("", "Option text can not be duplicate", { progressBar: true });
                     return;
                 }
+                $(controlId).html("");
+                $(controlId).html("<label class='checkbox-group'><span class='title'>Check Box (Multiple)</span><span class='desc'></span></label>");
                 var option_data = "<div class='inputContent'><div class='checkbox-html'>";
                 $(".option-block").each(function (index) {
                     option_data += `<div class="custom-control custom-checkbox  d-inline-block mr-2">
-                     <input  type="checkbox" class="custom-control-input" id="${ID + index}"  name="${ID}"  value="${$(this).find("[placeholder = Value]").val().trim()}">
-                     <label class="custom-control-label" for="${ID + index}">${$(this).find("[placeholder = Text]").val().trim()}</label></div>
+                     <input  type="checkbox" class="custom-control-input" id="${ID + index}"  name="${ID}"  value="${$(this).find("input.option-value").val().trim()}">
+                     <label class="custom-control-label" for="${ID + index}">${$(this).find("input.option-text").val().trim()}</label></div>
                      `;
                 });
                 option_data += "</div></div>";
@@ -963,8 +963,8 @@ function EditHtml(type, ID) {
             $(controlId).find("input[type=radio]").each(function (index,item) {
                 popupString += '<div class="option-block">' +
                     '<div class="option-fields">' +
-                    ' <input type="text" placeholder="Text" class="form-control"  value="' + $(item).next().text() + '"/>' +
-                    ' <input type="text" placeholder="Value" class="form-control"  value="' + $(item).attr("value") + '"/>' +
+                    `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${$(item).next().text() == "option 1" || $(item).next().text() == "option 2" ? "" : $(item).next().text()}"/>` +
+                    ' <input type="text" placeholder="Value" class="form-control option-value" disabled value="' + $(item).attr("value") + '"/>' +
                     '</div>' +
                     '<div class="popup-event-btn">' +
                     `<button class="event-btn file-remove" onclick="RemoveOption(this)" ${index == 0 ? "disabled" : ""}> <i class="fa fa-minus-circle" aria-hidden="true"></i></button >` +
@@ -986,7 +986,7 @@ function EditHtml(type, ID) {
                 }
                 var breakout = false;
                 $('.option-block').each(function () {
-                    if ($(this).find("[placeholder = Text]").val().trim() == '' || $(this).find("[placeholder = Value]").val().trim() == '') {
+                    if ($(this).find("input.option-text").val().trim() == '' || $(this).find("input.option-value").val().trim() == '') {
                         breakout = true;
                         return false;
                     }
@@ -1005,13 +1005,12 @@ function EditHtml(type, ID) {
                         colname = colname + randomNumber;
                     }
                 }
-                $(controlId).html("");
-                $(controlId).html("<label class='radiobox-group'><span class='title'>Radio</span><span class='desc'></span></label>");
+               
 
                 var allTextArray = $('.option-block').map(function () {
-                    if ($(this).find("[placeholder=Text]").val() != '')
+                    if ($(this).find("input.option-text").val() != '')
 
-                        return $(this).find("[placeholder=Text]").val()
+                        return $(this).find("input.option-text").val()
                 }).get();
                 var duplicateTextArray = allTextArray.filter(function (element, pos) {
                     if (allTextArray.indexOf(element) != pos) {
@@ -1023,9 +1022,9 @@ function EditHtml(type, ID) {
 
                 });
                 var allValueArray = $('.option-block').map(function () {
-                    if ($(this).find("[placeholder=Value]").val() != '')
+                    if ($(this).find("input.option-value").val() != '')
 
-                        return $(this).find("[placeholder=Value]").val()
+                        return $(this).find("input.option-value").val()
                 }).get();
                 var duplicateValueArray = allValueArray.filter(function (element, pos) {
                     if (allValueArray.indexOf(element) != pos) {
@@ -1044,11 +1043,13 @@ function EditHtml(type, ID) {
                     toastr.error("", "Option text can not be duplicate", { progressBar: true });
                     return;
                 }
+                $(controlId).html("");
+                $(controlId).html("<label class='radiobox-group'><span class='title'>Radio</span><span class='desc'></span></label>");
                 var option_data = "<div class='inputContent'><div class='radio-html'>";
                 $(".option-block").each(function (index) {
                     option_data += `<div class="custom-control custom-radio d-inline-block mr-2">
-    <input  type="radio" class="custom-control-input" id="${ID + index}"  name="${ID}"  value="${$(this).find("[placeholder = Value]").val()}">
-    <label class="custom-control-label" for="${ID + index}">${$(this).find("[placeholder = Text]").val()}</label></div>
+    <input  type="radio" class="custom-control-input" id="${ID + index}"  name="${ID}"  value="${$(this).find("input.option-value").val()}">
+    <label class="custom-control-label" for="${ID + index}">${$(this).find("input.option-text").val()}</label></div>
     `;
                 });
                 option_data += "</div></div>";
@@ -1183,8 +1184,8 @@ function EditHtml(type, ID) {
                 if ($(item).val() == 0) return;
                 popupString += '<div class="option-block">' +
                     '<div class="option-fields">' +
-                    ' <input type="text" placeholder="Text" class="form-control"  value="' + $(item).text() + '"/>' +
-                    ' <input type="text" placeholder="Value" class="form-control"  value="' + $(item).val() + '"/>' +
+                    `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${$(item).text() == "option 1" || $(item).text() == "option 2"? "" : $(item).text()}"/>` +
+                    ' <input type="text" placeholder="Value" class="form-control option-value" disabled value="' + $(item).val() + '"/>' +
                     '</div>' +
                     '<div class="popup-event-btn">' +
                     `<button class="event-btn file-remove" onclick="RemoveOption(this)" ${index == 0 ? "disabled" : ""}><i class="fa fa-minus-circle" aria-hidden="true"></i></button >` +
@@ -1206,7 +1207,7 @@ function EditHtml(type, ID) {
                 }
                 var breakout = false;
                 $('.option-block').each(function () {
-                    if ($(this).find("[placeholder = Text]").val().trim() == '' || $(this).find("[placeholder = Value]").val().trim() == '') {
+                    if ($(this).find("input.option-text").val().trim() == '' || $(this).find("input.option-value").val().trim() == '') {
                         breakout = true;
                         return false;
                     }
@@ -1226,13 +1227,11 @@ function EditHtml(type, ID) {
                     }
                     $(controlId).attr("data-column", colname);
                 }
-                $(controlId).parent().prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span><span class="desc"></span>`);
-
-                $(controlId).html("");
+                
                 var allTextArray = $('.option-block').map(function () {
-                    if ($(this).find("[placeholder=Text]").val() != '')
+                    if ($(this).find("input.option-text").val() != '')
 
-                        return $(this).find("[placeholder=Text]").val()
+                        return $(this).find("input.option-text").val()
                 }).get();
                 var duplicateTextArray = allTextArray.filter(function (element, pos) {
                     if (allTextArray.indexOf(element) != pos) {
@@ -1244,9 +1243,9 @@ function EditHtml(type, ID) {
 
                 });
                 var allValueArray = $('.option-block').map(function () {
-                    if ($(this).find("[placeholder=Value]").val() != '')
+                    if ($(this).find("input.option-value").val() != '')
 
-                        return $(this).find("[placeholder=Value]").val()
+                        return $(this).find("input.option-value").val()
                 }).get();
                 var duplicateValueArray = allValueArray.filter(function (element, pos) {
                     if (allValueArray.indexOf(element) != pos) {
@@ -1265,9 +1264,11 @@ function EditHtml(type, ID) {
                     toastr.error("", "Option text can not be duplicate", { progressBar: true });
                     return;
                 }
+                $(controlId).parent().prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span><span class="desc"></span>`);
+                $(controlId).html("");
                 $(".option-block").each(function (index) {
 
-                    var option_data = "<option value=" + $(this).find("[placeholder=Value]").val() + ">" + $(this).find("[placeholder=Text]").val() + "</option>";
+                    var option_data = "<option value=" + $(this).find("input.option-value").val() + ">" + $(this).find("input.option-text").val() + "</option>";
                     $(option_data).appendTo('#' + ID);
                 });
                 if ($("#required-input").prop("checked")) {
@@ -1677,13 +1678,14 @@ function addoption(obj) {
     var optionvalue = parseInt($(obj).parent().siblings(".option-block").length) + 1;
     var popupString = '<div class="option-block">' +
         '<div class="option-fields">' +
-        ' <input type="text" placeholder="Text" class="form-control" value="option ' + optionvalue + '"/>' +
-        ' <input type="text" placeholder="Value" class="form-control" value="' + optionvalue + '"/>' +
+        ' <input type="text" placeholder="Option Text" class="form-control option-text" />' +
+        ' <input type="text" placeholder="Value" class="form-control option-value" disabled value="' + optionvalue + '"/>' +
         '</div>' +
         '<div class="popup-event-btn">' +
         '<button class="event-btn file-remove" onclick="RemoveOption(this)"> <i class="fa fa-minus-circle" aria-hidden="true"></i></button > ' +
         '</div></div>';
     $(obj).parent().siblings().last().after(parseHTML(popupString));
+    $(obj).parent().siblings().last().find("input.option-text").focus();
 }
 //parseHTML=>use inside addoption function to add new block
 function parseHTML(htmlstr) {
