@@ -48,9 +48,12 @@ function GetCarePlanTemplateList() {
                 careplanlist.html("").append(careplans);
             }
             $('#tblCarePlanTemplateList').DataTable({
+                paging: false,
+                retrieve: true,
+                searching: false,
                 'columnDefs': [{
                     'targets': [5],
-                    'orderable': false,
+                    'orderable': false                  
                 }]
             });
             $(".loaderOverlay").hide();

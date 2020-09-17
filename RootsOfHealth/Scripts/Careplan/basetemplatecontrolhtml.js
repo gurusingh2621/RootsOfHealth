@@ -70,6 +70,7 @@ function HtmlControlDragnDrop() {
                         '<input type="checkbox" class="custom-control-input"  name="checkbox" value="2" id="checkbox2">' +
                         '<label class="custom-control-label" for="checkbox2">option 2</label></div>' +
                         '</div>' +
+                        '<label class="label-base"></label>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
                         '</div>';
@@ -78,7 +79,7 @@ function HtmlControlDragnDrop() {
                 case "date":
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
                         '<label class=""><span class="title">Label</span><span class="desc"></span></label>' +
-                        '<div class="inputContent"><input id="' + newid + '"  type="date" class="form-control base-control" id=""></div>' +
+                        '<div class="inputContent"><input id="' + newid + '"  type="date" class="form-control base-control" id=""/><label class="label-base"></label></div>' +
                         '</div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
@@ -88,8 +89,9 @@ function HtmlControlDragnDrop() {
                 case "file":
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
                         '<label class=""><span class="title">Label</span><span class="desc"></span></label >' +
-                        '<div class="inputContent"><input id="' + newid + '"  type="file" class="form-control base-control" id=""></div>' +
-                        '</div>' +
+                        '<div class="inputContent"><input id="' + newid + '" onchange="previewOnChange(this)"  type="file" class="form-control base-control" id=""/><label class="label-base"></label>' +
+                        '<div class="' + newid + '_files uploaded_filewrap"></div>' +
+                        '</div></div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
                         '</div>';
@@ -99,7 +101,7 @@ function HtmlControlDragnDrop() {
                 case "number":
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
                         '<label class=""><span class="title">Label</span><span class="desc"></span></label>' +
-                        '<div class="inputContent"><input id="' + newid + '"  type="number" class="form-control base-control" id=""></div>' +
+                        '<div class="inputContent"><input id="' + newid + '"  type="number" class="form-control base-control" id=""/><label class="label-base"></label></div>' +
                         '</div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
@@ -116,6 +118,7 @@ function HtmlControlDragnDrop() {
                         '<input type="radio" class="custom-control-input"  name="radio" value="2" id="radio2">' +
                         '<label class="custom-control-label" for="radio2">option 2</label></div>' +
                         '</div>' +
+                        '<label class="label-base"></label>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
                         '</div>';
@@ -124,10 +127,11 @@ function HtmlControlDragnDrop() {
                 case "select":
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
                         '<label class=""><span class="title">Select</span><span class="desc"></span></label>' +
-                        '<div class="inputContent"> <select id="' + newid + '" class="form-control base-control"></div>' +                       
+                        '<div class="inputContent"><select id="' + newid + '" class="form-control base-control"></div>' +                       
                         '<option  value="1">option 1</option>' +
                         '<option  value="2">option 2</option>' +
                         ' </select>' +
+                        '<label class="label-base"></label>'+
                         '</div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
@@ -138,7 +142,7 @@ function HtmlControlDragnDrop() {
                     var str = '<div class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
                         '<label class=""><span class="title">Label</span><span class="desc"></span ></label>' +
 
-                        '<div class="inputContent"><input id="' + newid + '"  type="text" class="form-control base-control" id=""></div>' +
+                        '<div class="inputContent"><input id="' + newid + '"  type="text" class="form-control base-control" id=""/><label class="label-base"></label></div>' +
                         '</div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
@@ -151,6 +155,7 @@ function HtmlControlDragnDrop() {
                         '<div class="inputContent"><div class="ck-editor">' +
                         '<div class="ck-editor-header"><ul><li><i class="fa fa-list-ul" aria-hidden="true"></i></li><li><i class="fa fa-list-ol" aria-hidden="true"></i></li><li><i class="fa fa-align-left" aria-hidden="true"></i></li><li><i class="fa fa-bold" aria-hidden="true"></i></li><li><i class="fa fa-italic" aria-hidden="true"></i></li><li><i class="fa fa-underline" aria-hidden="true"></i></li><li><i class="fa fa-eraser" aria-hidden="true"></i></li></ul></div>' +
                         '<textarea id="' + newid + '"  class="form-control base-control" name="my-textarea"></textarea>' +
+                        '<label class="label-base"></label>' +
                         '</div></div></div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
@@ -707,7 +712,7 @@ function EditHtml(type, ID) {
                 }
                 $(controlId).parent().prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span><span class="desc"></span>`);
 
-                $(controlId).attr("data-filetype", $("#filetype").val());
+                $(controlId).attr("accept", $("#filetype").val());
                 $(controlId).attr("data-filesize", $(".lblfilesize").val());
                 if ($("#required-input").prop("checked")) {
                     $(controlId).parent().prev().addClass("required-asterisk");
@@ -1630,7 +1635,7 @@ function EditHtml(type, ID) {
             maxHeight: 300
         });
         $("#filetype").closest('div').find('label').append('<span></span>');
-        var selectedfiletype = $(controlId).attr("data-filetype");
+        var selectedfiletype = $(controlId).attr("accept");
         if (selectedfiletype != undefined) {
             $("#filetype").val(selectedfiletype.split(','));
             $("#filetype").multiselect("refresh");
@@ -1847,28 +1852,28 @@ function saveHtml() {
 
             $("#droppable [type=text]").each(function (index, item) {
                 if ($(item).hasClass("database-field")) return;
-                models.push({ ColDataType: "varchar(max)", ColumnName: $(item).attr("data-column") });
+                models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column") });
             });
             $("#droppable [type=number],[type=file],[type=date]").each(function (index, item) {
-                models.push({ ColDataType: "varchar(max)", ColumnName: $(item).attr("data-column") });
+                models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column") });
             });
             $("#droppable select").each(function (index, item) {
-                models.push({ ColDataType: "varchar(max)", ColumnName: $(item).attr("data-column") });
+                models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column") });
             });
             $("#droppable [type=radio]").each(function (index, item) {
                 var radioitem = $(item).attr("data-column");
                 if (typeof radioitem !== typeof undefined && radioitem !== false) {
-                    models.push({ ColDataType: "varchar(max)", ColumnName: $(item).attr("data-column") });
+                    models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column") });
                 }
             });
             $("#droppable [type=checkbox]").each(function (index, item) {
                 var checkitem = $(item).attr("data-column");
                 if (typeof checkitem !== typeof undefined && checkitem !== false) {
-                    models.push({ ColDataType: "varchar(max)", ColumnName: $(item).attr("data-column") });
+                    models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column") });
                 }
             });
             $("#droppable textarea").each(function (index, item) {
-                models.push({ ColDataType: "varchar(max)", ColumnName: $(item).attr("data-column") });
+                models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column") });
             });
 
             var UniqueItems = models.reduce(function (item, e1) {
@@ -2146,6 +2151,8 @@ function backToList() {
 window.onbeforeunload = function (evt) {
     var message = "";
     $(".hiddenSavedHtml").find("div.dragresize").removeClass("ui-sortable-handle").removeAttr("style");
+    $(".hiddenSavedHtml").find(".baseheader,.basefooter").removeClass("ui-sortable");
+    $(".hiddenSavedHtml").find("span.basecontentspan").removeAttr("style");
     var savedHtml = $(".hiddenSavedHtml").html() == "" ? `
                                 <input id="hdnbasetempid" hidden="hidden" class="basecontrol-id" type="text" value="0">
                                 <div class="dragresize col-md-12">
@@ -2185,7 +2192,8 @@ window.onbeforeunload = function (evt) {
     $(unsavedHtml).find(".baseheader,.basefooter").removeClass("ui-sortable");
     $(unsavedHtml).find("span.basecontentspan").removeAttr("style");
     unsavedHtml = unsavedHtml[0].innerHTML;
-    if (savedHtml !== unsavedHtml) {
+    debugger;
+    if (savedHtml != unsavedHtml) {
         message = 'You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?'
         if (typeof evt == 'undefined') {
             evt = window.event;

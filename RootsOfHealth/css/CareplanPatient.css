@@ -1,0 +1,442 @@
+﻿
+/*
+Sidebar style
+--------------------------------------------------------------*/
+.right_sidebar {
+    position: fixed;
+    right: 0;
+    top: 0;
+    min-height: 100vh;
+    background: #fff;
+    width: 100%;
+    border-top: 8px solid #22baa0;
+    box-shadow: 0 0 20px rgba(0,0,0,0.15);
+    -webkit-box-shadow: 0 0 20px rgba(0,0,0,0.15);
+    max-width: 1000px;
+    transition: all ease 0.4s;
+    transform: translateX(130%);
+    -webkit-transform: translateX(130%);
+    z-index: 1039;
+}
+
+    .right_sidebar.opened {
+        transform: translateX(0%);
+        -webkit-transform: translateX(0%);
+    }
+
+.right_sidebar_head {
+    display: flex;
+    border-bottom: 1px solid #ddd;
+    margin: 0 0 0px;
+    padding: 20px 30px;
+    align-items: center;
+}
+
+.right_sidebar_body {
+    padding: 30px 30px;
+}
+
+.right_sidebar_head h3 {
+    font-size: 18px;
+    margin: 0;
+}
+
+.care_plans_table_wrap .table thead th {
+    background: #f8f8f8;
+    border-top: 0;
+    border-bottom: 3px solid #e1e1e1;
+    font-size: 14px;
+    text-transform: capitalize;
+    padding: 13px 20px;
+    color: #555;
+}
+
+.care_plans_table_wrap .table td {
+    color: #818181;
+    font-size: 14px;
+    padding: 15px 20px;
+}
+
+.right_sidebar_head a.btn {
+    margin-right: 15px;
+}
+
+.right_sidebar_head a.close_right_sidebar i {
+    color: #555;
+    font-size: 18px;
+}
+
+.status_value {
+    display: inline-block;
+    padding: 1px 10px;
+    border-radius: 50px;
+    background: rgba(141,141,141,0.2);
+    color: #8d8d8d;
+    min-width: 120px;
+}
+
+    .status_value.completed {
+        background: rgba(117,164,0,0.2);
+        color: #75a400;
+    }
+
+    .status_value.inProgress {
+        background: rgba(248,157,1,0.2);
+        color: #f89d01;
+    }
+
+    .status_value.asDraft {
+        background: rgba(255,113,113,0.2);
+        color: #ff7171;
+    }
+
+.rounded_tabs_list .nav-tabs, 
+#content .profile-tabs .rounded_tabs_list .nav-tabs {
+    border: 0;
+    margin: 0 0 10px;
+    position: static;
+    background: transparent;
+    padding: 0;
+    height: auto;
+    overflow: visible;
+}
+
+    .rounded_tabs_list .nav-tabs li a,
+    #content .profile-tabs .rounded_tabs_list .nav-tabs li a {
+        border: none;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 16px;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        color: #818181;
+        padding: 10px 15px;
+        border-radius: 50px;
+        position: relative;
+        background: transparent;
+        text-transform: uppercase;
+        height:auto;
+    }
+        .rounded_tabs_list .nav-tabs li,
+        #content .profile-tabs .rounded_tabs_list .nav-tabs li  {
+            margin:0;
+        }
+        .rounded_tabs_list .nav-tabs li a:after,
+        #content .profile-tabs .rounded_tabs_list .nav-tabs li a:after {
+            display:none;
+        }
+
+        .rounded_tabs_list .nav-tabs .nav-link.active, #content .profile-tabs .rounded_tabs_list .nav-tabs .nav-link.active {
+            background: #FFFFFF !important;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25) !important;
+            font-weight: 500;
+            color: #555;
+            width: auto;
+        }
+
+        .rounded_tabs_list .tab-content .tab-pane,
+        #content .profile-tabs .rounded_tabs_list .tab-content .tab-pane {
+            padding-top: 20px;
+        }
+.careplanlist tr {
+    cursor: pointer;
+}
+
+/*div#AddCarePlanModal {
+    z-index: 9999;
+}*/
+
+.render-basicform {
+    width: 100%;
+    display: flex !important;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding:0;
+    box-sizing:border-box;
+    align-content: baseline;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.render-basicform .basecontentarea {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    align-content: baseline;
+    border: none;
+    min-height: unset;
+    padding: 0px;
+}
+
+.render-basicform .form-control {
+    height: 50px;
+    font-size: 13px;
+    border: 1px solid #e2e2e2;
+    border-radius: 0px;
+    padding: 0 15px;
+}
+
+.render-basicform select {
+    height: 23px !important;
+}
+
+.render-basicform .form-control[type="file"] {
+    border: 0;
+    padding: 0;
+    height: auto;
+}
+
+.render-basicform textarea.form-control {
+    height: 50px;
+}
+
+.render-basicform .form-control:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+.render-basicform .event-btn-right {
+    position: absolute;
+    bottom: auto;
+    right: -1px;
+    z-index: 9;
+    top: -3px;
+}
+
+.render-basicform .frmbtn .form-group label:first-child {
+    background: #f0f0f0;
+    display: block;
+    margin: -11px -11px 10px;
+    padding: 4px 10px;
+    font-size: 14px;
+    color: #343434;
+    font-weight: 500;
+    line-height: normal;
+    vertical-align: middle;
+}
+
+.render-basicform .frmbtn .form-group {
+    margin: 0;
+}
+
+.render-basicform .frmbtn {
+    border: 1px solid #e2e2e2;
+    padding: 10px;
+    position: relative;
+    margin: 0 0 10px 0;
+}
+
+.render-basicform .frmbtn select.form-control {
+    padding: 0 15px;
+    background: url(../images/chevron-arrow-down.svg) no-repeat 0 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    background-size: 12px;
+    background-position: 98% 5px;
+}
+
+.render-basicform .data-frmbtn {
+    margin: 0 0 0px 0;
+}
+
+.vertical .custom-control {
+    display: block !important;
+}
+
+.vertical {
+    align-items: flex-start !important;
+}
+
+.label-left {
+    background: transparent !important;
+    margin: 0 20px 0px 0 !important;
+}
+
+.f-g-left {
+    display: flex !important;
+    align-items: center;
+}
+
+.preview-body .database-field {
+    border: 0px !important;
+    background: none !important;
+}
+
+.left-control .frmbtn {
+    border: 0;
+    padding: 0;
+}
+
+.left-control .form-group label {
+    padding-left: 0 !important;
+}
+
+span.tooltipicon i {
+    margin: 0px;
+}
+
+.required-asterisk {
+    position: relative;
+}
+label.required-asterisk span.title:after {
+    content: "*";
+    position: absolute;
+    color: #c10000;
+    margin-left: 5px;
+}
+
+span.tooltipicon {
+    outline: none;
+    margin-left: 5px;
+}
+
+.ck-editor {
+    width: 100%;
+}
+
+label.label-left {
+    flex: 0 0 150px;
+    max-width: 150px;
+}
+
+span.basecontentspan {
+    display: none;
+}
+
+.tooltip-inner a {
+    color: #ffffff;
+}
+
+.render-basicform .form-row-first {
+    border: 1px solid #e2e2e2;
+    background: #fff;
+    margin-top: 17px;
+}
+
+.render-basicform.form-row-first .top-form-row {
+    background: #f0f0f0;
+    padding: 0 10px;
+    border-bottom: 1px solid #e2e2e2;
+    height: auto;
+}
+
+.render-basicform .form-row-first .one-columns {
+    width: 100%;
+    padding: 0px 5px;
+}
+
+.render-basicform .bootom-form-row {
+    padding: 7px 10px;
+}
+
+.render-basicform .form-row-first .top-form-row label {
+    font-size: 14px;
+    color: #343434;
+    font-weight: 500;
+    margin: 0;
+    line-height: normal;
+    vertical-align: middle;
+}
+
+
+@media (max-width: 1024px) {
+    .preview-body .form-row-first .top-form-row {
+        height: auto
+    }
+}
+
+.render-basicform .frmbtn .form-group label span.desc {
+    display: block;
+    margin: 3px 0 0;
+    color: #777;
+    font-weight: normal;
+}
+
+.render-basicform .frmbtn .form-group label.label-left {
+    max-width: 50%;
+    flex: 0 0 50%;
+    margin-right: 0 !important;
+    padding-left: 0;
+}
+
+.render-basicform .frmbtn .form-group.f-g-left {
+    align-items: flex-start;
+}
+
+    .render-basicform .frmbtn .form-group.f-g-left .inputContent {
+        max-width: 50%;
+        flex: 0 0 50%;
+    }
+
+.basic-info-actions .btn-cancel {
+    background-color: #999;
+    border-color: #999;
+}
+.basic-info-actions .btn-cancel:hover {
+    background-color: #bbb;
+    border-color: #bbb;
+}
+/*.render-basicform.disable .form-control {
+    border-color: transparent;
+    background: #f9f9f9;
+    pointer-events: none;
+}
+
+.render-basicform.disable label.custom-control-label, .ck-editor {
+    pointer-events: none;
+}*/
+.basic-info-actions {
+    margin-top: 20px;
+}
+
+.label-base, .label-program {
+    display: none;
+}
+
+
+
+ul.file_uploaded_list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+ul.file_uploaded_list li {
+    margin: 0 0 6px;
+}
+
+ul.file_uploaded_list li input.form-control {
+    height: 32px;
+}
+.uploaded_filewrap {
+    display: block;
+    margin: 0;
+    padding: 10px 0 0;
+}
+ul.file_uploaded_list li {
+    align-items: center;
+    display: flex;
+}
+ul.file_uploaded_list li input,ul.file_uploaded_list li a {display: block;width: 50%;padding: 0 15px;word-break: break-all;line-height: 1;}
+ul.file_uploaded_list li a {
+    font-size: 14px;
+    color: #555;
+    text-decoration: underline;
+}
+ul.file_uploaded_list.onlylinkslist {
+    margin: -10px 0 0;
+}
+ul.file_uploaded_list.onlylinkslist li a {
+    padding: 0;
+    width: 100%;
+}
+/*My responsive style
+============================================================================================ */
+@media(min-width:1400px) {
+    div #addNewCarePlansSidebar {
+        max-width: 80%;
+    }
+}
