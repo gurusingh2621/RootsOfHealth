@@ -1,6 +1,9 @@
 ﻿@model RootsOfHealth.Models.PatientMainBO
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link href="~/Content/css/jquery.timeselector.css" rel="stylesheet" />
+<link href="~/css/CareplanPatient.css" rel="stylesheet" />
+
 <style>
     select#ddlProgramType {
         display: block !important;
@@ -141,7 +144,7 @@
         padding-right: 15px;
     }
 </style>
-<div onscroll="abc()" class="tab-pane fade test @Html.Raw(ViewBag.CurrentTab=="Profile-tab"?"show active":string.IsNullOrWhiteSpace(ViewBag.CurrentTab)?"show active":"")" id="Profile" role="tabpanel" aria-labelledby="Profile-tab">
+<div onscroll="abc()" class="tab-pane fade test @Html.Raw(ViewBag.CurrentTab == "Profile-tab" ? "show active" : string.IsNullOrWhiteSpace(ViewBag.CurrentTab) ? "show active" : "")" id="Profile" role="tabpanel" aria-labelledby="Profile-tab">
     <!-- Inner content start here  -->
     <div class="inner-content">
         <div class="paitent-detail">
@@ -151,17 +154,19 @@
                     <div class="paitent-detail-left">
                         <div class="detail-heading d-flex">
                             <h2>Client Profile</h2>
-
+                            
                             <div class="detail-button ml-auto">
-                                <a href='' onclick=""
+                                <a href='javaScript:void(0)' onclick=""
+                                   class="btn btn-success label-fields" data-toggle="carePlansSidebar">
+                                    Care Plans(<span class="careplanCount">0</span>)
+                                </a>
+                                <a href='javaScript:void(0)' onclick=""
                                    id="btnPatientAppointments" class="btn btn-success label-fields">
-
                                     Appointments
                                 </a>
 
-                                <a href='' onclick=""
+                                <a href='javaScript:void(0)' onclick=""
                                    id="btnPatientNotes" class="btn btn-success label-fields">
-
                                     Notes
                                 </a>
 
@@ -178,17 +183,17 @@
                                 </a>
 
                                 @*<a href="/Patient/Add" id="btnProfileEdit" class="btn btn-success">
-            <i class="far fa-edit"></i>
-            Edit
-        </a>*@
+                                        <i class="far fa-edit"></i>
+                                        Edit
+                                    </a>*@
                                 @*<a href="#!" id="btnProfileCancel" class="btn btn-info" style="display: none;">
-            <i class="far fa-edit"></i>
-            Cancel
-        </a>
-        <a href="#!" id="btnProfileSave" class="btn btn-success" style="display: none;">
-            <i class="far fa-save"></i>
-            Save
-        </a>*@
+                                        <i class="far fa-edit"></i>
+                                        Cancel
+                                    </a>
+                                    <a href="#!" id="btnProfileSave" class="btn btn-success" style="display: none;">
+                                        <i class="far fa-save"></i>
+                                        Save
+                                    </a>*@
                             </div>
 
 
@@ -640,7 +645,7 @@
                                                 <div class="three-columns">
                                                     <label class="label-fields" id="lblNumChildren">@Model.PatientChildren</label>
                                                     <label class="label-fields" id="lblAgeChildren" hidden="hidden">@Model.PatientChildrensAges</label>
-                                                    <input tabindex="23" type="number" id="txtChildren" name="PatientChildren" class="form-control" maxlength="50"
+                                                    <input tabindex="23" type="number" onchange="addChildrenDiv()" id="txtChildren" name="PatientChildren" class="form-control" maxlength="50"
                                                            placeholder="" value="@Model.PatientChildren">
                                                     @*<input  type="button" id="btnchildren" value="submit"/>*@
                                                 </div>
@@ -1467,7 +1472,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0" id="divQuit" style="display:none">
-                                                            <div class="form-row-first">
+                                                            <div class="form-row-first mt-1">
                                                                 <div class="top-form-row d-flex">
 
                                                                     <div class="one-columns">
@@ -1490,7 +1495,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-4 col-md-4 col-sm-12 col-12" id="divLastTimeYouSmoked" style="display:none">
-                                                            <div class="form-row-first">
+                                                            <div class="form-row-first mt-1">
                                                                 <div class="top-form-row d-flex">
                                                                     <div class="one-columns">
                                                                         <label class="Add">
@@ -1783,6 +1788,115 @@
                         </div>
                     </div>
                 </div>
+
+                <!--Sidebar html start-->
+                <div class="right_sidebar" id="carePlansSidebar">
+                    <div class="right_sidebar_head">
+                        <h3>Care Plans</h3>
+                        <div class="ml-auto">
+                            @*<a href="#" class="btn btn-success" data-toggle="addNewCarePlansSidebar">Add New</a>*@
+
+                            <a href="javascript:void(0);" class="btn btn-success" onclick="getCareProgramOptions()">Add New</a>
+                            <a class="close_right_sidebar" href="javascript:void(0);"><i class="fa fa-times"></i></a>
+                        </div>
+                    </div>
+                    <div class="right_sidebar_body">
+                        <div class="care_plans_table_wrap table-responsive">
+                            <table class="table table-hover careplanlist">
+                                <thead>
+                                    <tr>
+                                        <th>Care Plan</th>
+                                        <th>Programs</th>
+                                        <th class="text-center">Status</th>
+                                        <th class="text-right">Created On</th>
+                                        <th class="text-right">Modified On</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Care Plan Name</td>
+                                        <td>Personalized Injury Analysis</td>
+                                        <td class="text-center"><span class="status_value completed">Completed</span></td>
+                                        <td class="text-right">15-01-2020</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Care Plan Name</td>
+                                        <td>List of Most useful physioadvisor Resources</td>
+                                        <td class="text-center"><span class="status_value inProgress">In Progress</span></td>
+                                        <td class="text-right">15-01-2020</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Care Plan Name</td>
+                                        <td>PhysioAdvisor Membership</td>
+                                        <td class="text-center"><span class="status_value notStarted">Not Started</span></td>
+                                        <td class="text-right">15-01-2020</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Care Plan Name</td>
+                                        <td>Referral Advice</td>
+                                        <td class="text-center"><span class="status_value asDraft">Saved As Draft</span></td>
+                                        <td class="text-right">15-01-2020</td>
+                                    </tr>
+                                    <tr>
+
+
+                                        <td>Care Plan Name</td>
+                                        <td>Personalized Injury Analysis</td>
+                                        <td class="text-center"><span class="status_value notStarted">Not started</span></td>
+                                        <td class="text-right">15-01-2020</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Care Plan Name</td>
+                                        <td>Referral Advice</td>
+                                        <td class="text-center"><span class="status_value notStarted">Not started</span></td>
+                                        <td class="text-right">15-01-2020</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="right_sidebar" id="addNewCarePlansSidebar">
+                    <div class="right_sidebar_head">
+                        <h3>Add new care plan for 'Personalized Injury Analysis'</h3>
+                        <div class="ml-auto">
+                            <!-- <a href="#" class="btn btn-success">Add New</a> -->
+                            <a class="close_right_sidebar" onclick="getCarePlanList();" href="javascript:void(0);"><i class="fa fa-times"></i></a>
+                        </div>
+                    </div>
+                    <div class="right_sidebar_body">
+                        <div class="rounded_tabs_list">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item"><a class="nav-link active show" href="#a_p_basic_info" data-toggle="tab">Basic Information</a></li>
+                                <li class="nav-item"><a class="nav-link show" href="#a_p_needAndGoal" data-toggle="tab">Needs & Goals</a></li>
+                                <li class="nav-item"><a class="nav-link show" href="#a_p_plan_summery" data-toggle="tab">Plan Summary</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div id="a_p_basic_info" class="tab-pane active show ">
+                                    <div class="render-basicform scroll"></div>
+                                    <div class="basic-info-actions text-right">
+                                        <a href='javaScript:void(0)'
+                                           class="btn btn-success label-fields btn-cancel" onclick="closecarePlan()">
+                                            Cancel
+                                        </a>
+                                        <a href='javaScript:void(0)' onclick="saveBasicInfoAsDraft(2)"
+                                           class="btn btn-success label-fields btn-basicinfo">
+                                            Save As Draft
+                                        </a>
+                                        <a href='javaScript:void(0)' onclick="saveBasicInfo(1)"
+                                           class="btn btn-success label-fields btn-basicinfo">
+                                            Submit
+                                        </a>
+                                    </div>
+                                </div>
+                                <div id="a_p_needAndGoal" class="tab-pane show">@*Needs & Goals*@</div>
+                                <div id="a_p_plan_summery" class="tab-pane show">@*Plan Summary*@</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Sidebar html End-->
             </div>
         </div>
 
@@ -1955,11 +2069,47 @@
     </div>
 </div>
 <!-- Appointment Modal end here -->
-
-
-<script src="~/Content/script/jquery.timeselector.js"></script>
+<!--AddCarePlan Modal Starts Here-->
+<div class="modal fade" id="AddCarePlanModal" tabindex="-1" role="dialog" aria-labelledby="AddCarePlanModal"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> Add Care plan</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form createtemplate">
+                    <div class="form-group col-md-12">
+                        <label for="templateName">Care plan name</label>
+                        <input type="text" class="form-control form-control-sm" id="carePlanName">
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label for="ddlProgram">Select program</label>
+                        <select class="form-control form-control-sm" id="ddlProgram"></select>
+                    </div>
+                </div>
+                <div class="notemplate" style="display: block;">
+                    <p class="text-center">No programs available for careplan creation.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href='javascript:{}' class="btn btn-success label-fields btnCareplanProceed" onclick="saveCareplan()">Proceed</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- AddCarePlan Modal end here -->
 <script>
-
+    var userId = "@Session["userid"]";
+    var PatientId = "@Model.PatientID";
+</script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.js"></script>
+<script src="~/Content/script/jquery.timeselector.js"></script>
+<script src="~/Scripts/Careplan/CareplanPatient.js"></script>
+<script> 
     $(".scroll").scroll(function () {
         var sticky = $('.sidebar-right'),
             scroll = $(".scroll").scrollTop();
@@ -1990,16 +2140,6 @@
         $(".stardiv").show();
         $(".lbl-hide").hide();
     }
-
-
-
-
-
-
-
-
-
-
     $('._time_picker').timeselector({
         hours12: true
     });
@@ -2116,11 +2256,29 @@
         });
     }
 
-    
+
     $(document).ready(function () {
 
         GetTypeOfAppointments();
         GetLocationOfAppointments();
-        
+       
     });
+    function addChildrenDiv() {
+        $('.ChildrenAgeDiv').html('');
+
+        var val = $('#txtChildren').val();
+
+        var divhtml = '';
+
+        for (var i = 1; i <= parseInt(val); i++) {
+
+            var temp = $('.ChildrenAgeTemplate').html();
+            temp = temp.replace('#number', i);
+            temp = temp.replace('#yearid', 'child_year_' + i);
+            temp = temp.replace('#daysid', 'child_days_' + i);
+            divhtml = divhtml + temp;
+        }
+
+        $('.ChildrenAgeDiv').html(divhtml);
+    }
 </script>

@@ -1111,3 +1111,9 @@ input.form-control.option-text {
     flex: 0 0 65%;
     max-width: 65%;
 }
+label.label-program {
+    display: none;
+}
+label.label-base {
+    display: none;
+}

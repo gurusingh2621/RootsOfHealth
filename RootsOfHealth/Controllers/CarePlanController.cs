@@ -1,6 +1,7 @@
 ﻿using RootsOfHealth.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -13,7 +14,8 @@ namespace RootsOfHealth.Controllers
     {
         string WebApiKey = WebConfigurationManager.AppSettings["WebApi"];
         // GET: CarePlan
-       [Authorize(Roles = "navigator,supervisor")]
+        #region[CarePlanTemplate]
+        [Authorize(Roles = "navigator,supervisor")]
         public ActionResult CreateCareForm()
         {
             return View();
@@ -26,7 +28,7 @@ namespace RootsOfHealth.Controllers
             {
                 ProgramName = "BaseTemplate";
                 TemplateName=ProgramName + DateTime.Now.ToString("dd_MM_yyyy_hh_mm_ss");
-                dataFile = Server.MapPath("~/App_Data/" + TemplateName + ".html");
+                dataFile = Server.MapPath("~/App_Data/" + TemplateName + ".html");             
                 System.IO.File.WriteAllText(@dataFile, htmlTemplate);
                 Model.TemplatePath = TemplateName;
                 Model.TemplateTable = "tbl_" + ProgramName;
@@ -218,5 +220,159 @@ namespace RootsOfHealth.Controllers
             ViewBag.TemplateId = templateid;
             return View();
         }
+        #endregion
+
+        #region[PatientCarePlan]
+        [HttpGet]
+        public JsonResult GetCarePlanTemplateByProgramId(int ProgramId)
+        {
+            if (ProgramId == 0)
+            {
+                return Json(new
+                {
+                    html = "",
+                    tableName = "",
+                    TemplateId = ""
+                }, JsonRequestBehavior.AllowGet);
+            }
+            string PathName = string.Empty;
+            CarePlantemplateBO data = new CarePlantemplateBO();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                //HTTP GET
+                var responseTask = client.GetAsync("/api/PatientMain/getcareplantemplatebyprogramid?ProgramId=" + ProgramId);
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<CarePlantemplateBO>();
+                    readTask.Wait();
+                    data = readTask.Result;
+                }
+                else //web api sent error response 
+                {
+                    //log response status here..
+
+
+                }
+            }
+            PathName = data.TemplatePath;
+            if (PathName != "" && PathName != null)
+            {
+                var gethtml = System.IO.File.ReadAllText(Server.MapPath("~/App_Data/" + PathName + ".html"));
+                var jsonResult = new
+                {
+                    html = gethtml,
+                    tableName=data.TemplateTable,
+                    TemplateId = data.TemplateID
+                };
+                return Json(jsonResult, JsonRequestBehavior.AllowGet);
+            }
+            //var gethtml=   System.IO.File.ReadAllText(Server.MapPath("~/App_Data/data.html"));
+            return Json(new
+            {
+                html = "",
+                tableName="",
+                TemplateId = ""
+
+            }, JsonRequestBehavior.AllowGet);
+        }
+        [HttpGet]
+        public JsonResult GetCarePlanTemplateById(int TemplateId)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                var responseTask = client.GetAsync("api/PatientMain/patientcareplantemplatebyid?TemplateId=" + TemplateId);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var data = result.Content.ReadAsAsync<CarePlantemplateBO>();
+                    if (data.Result != null && data.Result.TemplatePath != null)
+                    {
+                        var gethtml = System.IO.File.ReadAllText(Server.MapPath("~/App_Data/" + data.Result.TemplatePath + ".html"));
+                        var jsonResult = new
+                        {
+                            html = gethtml,
+                            tableName = data.Result.TemplateTable
+                        };
+                        return Json(jsonResult, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        var jsonResult = new
+                        {
+                            html = "",
+                            tableName = ""
+                        };
+                        return Json(jsonResult, JsonRequestBehavior.AllowGet);
+                    }
+                }
+            };
+
+            //var gethtml=   System.IO.File.ReadAllText(Server.MapPath("~/App_Data/data.html"));
+            return Json("");
+        }
+        [HttpPost]
+        public ActionResult UploadFiles()
+        {
+            string path = Server.MapPath("~/Content/CarePlanUpload/");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            HttpFileCollectionBase files = Request.Files;
+            var Files = Request["Files"];
+            var filenames= Request["FileNames"];
+            var controlid = Request["ControlId"];
+            var carePlanId = Request["CarePlanId"];
+
+            for (int i = 0; i < files.Count; i++)
+            {
+                HttpPostedFileBase file = files[i];
+                file.SaveAs(path + file.FileName);
+            }
+            using (var client = new HttpClient())
+            {
+                CareplanFileBO model = new CareplanFileBO()
+                {
+                    CareplanId=Convert.ToInt32(carePlanId),
+                    ControlId= controlid,
+                    Files= Files,
+                    FileNames= filenames
+                };
+                client.BaseAddress = new Uri(WebApiKey);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                var responseTask = client.PostAsJsonAsync("api/PatientMain/savecareplanfiles", model);
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+
+                }
+            }
+                    return Json(files.Count + " Files Uploaded!");
+        }
+        [HttpPost]
+        public ActionResult GetFiles(string files)
+        {
+            List<string> Paths = new List<string>();
+            string path = "";
+            var filesArray = files.Split(',');
+            for(int i = 0; i < filesArray.Length; i++)
+            {
+             path=Path.Combine("/","Content/CarePlanUpload/" + filesArray[i]);
+             Paths.Add(path);
+            }           
+            return Json(Paths);
+        }
+        #endregion
     }
 }

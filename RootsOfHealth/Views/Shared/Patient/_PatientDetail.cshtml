@@ -2,10 +2,9 @@
 
 
 
-@{
-               
-                 Html.RenderPartial("~/Views/Shared/Patient/_PatientMain.cshtml", Model.PatientMain);
-            }
+@{              
+     Html.RenderPartial("~/Views/Shared/Patient/_PatientMain.cshtml", Model.PatientMain);
+}
 
 
 <!-- Housing tab start here  -->
@@ -73,7 +72,7 @@
 
 
 @*<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>*@
-<script src="~/Scripts/jquery-ui.min.js"></script>
+@*<script src="~/Scripts/jquery-ui.min.js"></script>*@
 <script>
     $('#datepicker').datepicker({
         uiLibrary: 'bootstrap'
@@ -2159,12 +2158,7 @@
 
         ApplyTickCross1($('#hdfWeakenedImmuneSystem').val(), $('#iSystemOne'), $('#iSystemTwo'));
         ApplyTickCross1($('#hdfElevatedRateOfTB').val(), $('#iElevatedOne'), $('#iElevatedTwo'));
-        ApplyTickCross1($('#hdfVolunteerOfHighRisk').val(), $('#iVolunteerOne'), $('#iVolunteerTwo'));
-
-
-
-
-
+        ApplyTickCross1($('#hdfVolunteerOfHighRisk').val(), $('#iVolunteerOne'), $('#iVolunteerTwo'));          
         function ApplyTickCross1(d, ele1, ele2) {
 
 
@@ -2177,18 +2171,7 @@
                 ele2.addClass('fa-check');
             }
 
-        }
-
-
-
-
-
-
-
-
-
-
-
+        }          
         var RadioPregnant = $('#lblpregnant').html();
         if (RadioPregnant == "Yes") {
             $('#divIsPregnant').show();
@@ -2219,6 +2202,7 @@
 
          //--------------------clinic only(program) end-----------------------------//
 
+          $(".createtemplate").find(".form-control,.custom-control-label,.custom-control-input").show();
     });
 
 
