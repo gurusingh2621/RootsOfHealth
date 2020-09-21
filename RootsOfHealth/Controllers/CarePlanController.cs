@@ -331,25 +331,40 @@ namespace RootsOfHealth.Controllers
             var filenames= Request["FileNames"];
             var controlid = Request["ControlId"];
             var carePlanId = Request["CarePlanId"];
-
+            var patientId= Request["PatientId"];
+            var IsBaseField= Convert.ToBoolean(Request["IsBaseField"]);
+            string guidName = "";
+            List<string> FilesGuid = new List<string>();
             for (int i = 0; i < files.Count; i++)
             {
                 HttpPostedFileBase file = files[i];
-                file.SaveAs(path + file.FileName);
+               guidName= Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                file.SaveAs(path + guidName);
+                FilesGuid.Add(guidName);
             }
             using (var client = new HttpClient())
             {
                 CareplanFileBO model = new CareplanFileBO()
                 {
-                    CareplanId=Convert.ToInt32(carePlanId),
-                    ControlId= controlid,
-                    Files= Files,
-                    FileNames= filenames
+                    CareplanId = Convert.ToInt32(carePlanId),
+                    ControlId = controlid,
+                    Files = String.Join(",", FilesGuid),
+                    FileNames= filenames,
+                    PatientId= Convert.ToInt32(patientId)                    
                 };
                 client.BaseAddress = new Uri(WebApiKey);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var responseTask = client.PostAsJsonAsync("api/PatientMain/savecareplanfiles", model);
+                var requestUrl = "";
+                if (IsBaseField)
+                {
+                    requestUrl = "api/PatientMain/savebasecareplanfiles";
+                }
+                else
+                {
+                    requestUrl = "api/PatientMain/savecareplanfiles";
+                }
+                var responseTask = client.PostAsJsonAsync(requestUrl, model);
                 responseTask.Wait();
 
                 var result = responseTask.Result;
@@ -358,7 +373,7 @@ namespace RootsOfHealth.Controllers
 
                 }
             }
-                    return Json(files.Count + " Files Uploaded!");
+             return Json(files.Count + " Files Uploaded!");
         }
         [HttpPost]
         public ActionResult GetFiles(string files)

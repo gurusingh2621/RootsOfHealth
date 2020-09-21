@@ -13,5 +13,7 @@ namespace RootsOfHealth.Models
         public string ControlId { get; set; }
         public Nullable<System.DateTime> UploadedDate { get; set; }
         public Nullable<int> CareplanId { get; set; }
+        public Nullable<int> PatientId { get; set; }
+        public Nullable<bool> IsBaseField { get; set; }
     }
 }

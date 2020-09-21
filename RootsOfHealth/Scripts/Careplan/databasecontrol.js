@@ -336,7 +336,7 @@ function DatabaseFormFields() {
                                             </div>
                                             <div class="bootom-form-row d-flex">
                                              <div class="one-columns">                                                                    
-                                              <input id="${newid}"  type="text" class="form-control database-field"  placeholder="{{ Value }}" data-index="${responseIndex}" disabled>                                           
+                                              <label id="${newid}"  class="database-field"  data-index="${responseIndex}">{{ Value }}</label>                                          
                                               </div>                                     
                                                </div>
                                        <div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml('${draggableType}','${newid}')"><i class="fas fa-edit"></i></button>
@@ -373,7 +373,7 @@ function DatabaseFormFields() {
                                             </div>
                                             <div class="bootom-form-row d-flex">
                                              <div class="one-columns">                                                                    
-                                              <input id="${newid}"  type="text" class="form-control database-field"  placeholder="{{ Value }}" data-index="${responseIndex}" disabled>                                           
+                                              <label id="${newid}"  class="database-field" data-index="${responseIndex}">{{ Value }}</label>                                          
                                               </div>                                     
                                                </div>
                                        <div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml('${draggableType}','${newid}')"><i class="fas fa-edit"></i></button>
