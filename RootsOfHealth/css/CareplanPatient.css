@@ -433,6 +433,10 @@ ul.file_uploaded_list.onlylinkslist li a {
     padding: 0;
     width: 100%;
 }
+.render-basicform label.database-field {
+    display: inline-block;
+    padding: 0 15px;
+}
 /*My responsive style
 ============================================================================================ */
 @media(min-width:1400px) {
