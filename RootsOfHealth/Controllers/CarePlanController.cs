@@ -13,6 +13,7 @@ namespace RootsOfHealth.Controllers
     public class CarePlanController : Controller
     {
         string WebApiKey = WebConfigurationManager.AppSettings["WebApi"];
+        string CarePlanUploadPath= WebConfigurationManager.AppSettings["CarePlanUploadPath"];
         // GET: CarePlan
         #region[CarePlanTemplate]
         [Authorize(Roles = "navigator,supervisor")]
@@ -321,7 +322,7 @@ namespace RootsOfHealth.Controllers
         [HttpPost]
         public ActionResult UploadFiles()
         {
-            string path = Server.MapPath("~/Content/CarePlanUpload/");
+            string path = Server.MapPath("~/"+ CarePlanUploadPath);
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
