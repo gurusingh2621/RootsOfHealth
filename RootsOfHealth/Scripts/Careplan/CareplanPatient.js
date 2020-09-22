@@ -247,7 +247,7 @@ function saveBasicInfo(status) {
             fieldmodel.push({ColumnName: $(item).attr("data-column"), FieldValue: $(item).val() });
         }
     });
-    if (fieldmodel.length < 8) return;
+    //if (fieldmodel.length < 8) return;
     if ($(".render-basicform").find("input[type='file']").length) {
         $(".render-basicform").find("input[type='file']").each(function (index, item) {
             if ($(item).hasClass("program-control") || $(item).hasClass("base-control")) {
@@ -431,8 +431,7 @@ function saveBaseFieldInfo() {
         PatientId: isupdateBaseField ? PatientId : 0,
         TableName: "tbl_BaseTemplate",
         carePlanCols: fieldmodel
-    }
-    console.log(model);
+    }   
     $(".loaderOverlay").show();
     $.ajax({
         type: "POST",
@@ -442,7 +441,7 @@ function saveBaseFieldInfo() {
         dataType: "json",
         async: false,
         success: function (res) {
-
+           
         },
         error: function (e) {
             toastr.error("Something Happen Wrong");
@@ -509,7 +508,7 @@ function getBaseFields() {
                                                 var selectedFiles = `<div class="label">File Names</div><ul class="file_uploaded_list file_uploaded_inputs">`;
                                                 for (var i = 0; i < filesArr.length; i++) {
                                                     selectedFiles += `<li><input class="form-control" type="text" value="${namesArr[i]}"/>`
-                                                    selectedFiles += '<a href="/Content/CarePlanUpload/' + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></li>';
+                                                    selectedFiles += '<a href="/' + careplanUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a><span onclick="removeUpload(this)" class="removeUploadFile"><i class="fa fa-times"></i></span></li>';
                                                 }
                                                 selectedFiles += "</ul>";
                                                 $(item).next().next().html("").append(selectedFiles);
@@ -597,7 +596,7 @@ function getBaseFieldData() {
                                                     var selectedFiles = `<div class="label">File Names</div><ul class="file_uploaded_list file_uploaded_inputs">`;
                                                     for (var i = 0; i < filesArr.length; i++) {
                                                         selectedFiles += `<li><input class="form-control" type="text" value="${namesArr[i]}"/>`
-                                                        selectedFiles += '<a href="/Content/CarePlanUpload/' + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></li>';
+                                                        selectedFiles += '<a href="/' + careplanUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a><span onclick="removeUpload(this)" class="removeUploadFile"><i class="fa fa-times"></i></span></li>';
                                                     }
                                                     selectedFiles += "</ul>";
                                                     $(item).next().next().html("").append(selectedFiles);
@@ -642,7 +641,7 @@ function getBaseFieldData() {
                         if (isupdateProgramFields) {
                             $(item).summernote('code', value);
                         } else {
-                            $(item).parent().find("label.label-program").html("").append(value).show();
+                            $(item).parent().find("label.label-base").html("").append(value).show();
                             $(item).next().hide();
                         }
                     }                    
@@ -785,7 +784,7 @@ function getBasicInfoByCareplanId(careplanid, templateid) {
                             case "radio":
                             case "checkbox":
                                 if ($(item).hasAttr("data-column") && $(item).closest("div.inputContent").parent().hasClass("program-control")) {
-                                    debugger;
+                                    
                                     value = fields[$(item).attr("data-column")];
                                     var valueArr = value.split(',');
                                     var valueTxt = "";
@@ -920,7 +919,7 @@ function checkbasefieldbypatientid() {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",   
         success: function (result) {
-            debugger;
+            
             if (result != 0) {
                 isupdateBaseField = true;
             } else {
@@ -939,8 +938,7 @@ function checkprogramfieldbyid(tempid,careplanid) {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         async: false,
-        success: function (result) {
-            debugger;
+        success: function (result) {        
             if (result != 0) {
                 isupdateProgramFields = true;
             } else {
@@ -954,6 +952,7 @@ function checkprogramfieldbyid(tempid,careplanid) {
 }
 function makeBasicInfoReadonly() {
     var value = "";
+    isupdateProgramFields = false;
     $(".render-basicform").find(".program-control,.base-control").each(function (index, item) {
         if ($(item).is("div")) {
             var selectedValues = $.map($(item).find("input:checked"), function (n, i) {
@@ -978,8 +977,13 @@ function makeBasicInfoReadonly() {
                    
                     break;
                 case "file":
-                    $(item).next().next().find("div.label").remove();
-                    $(item).next().next().find("input").remove();
+                    //$(item).next().next().find("div.label").remove();
+                    //$(item).next().next().find("input").remove();
+                    if ($(item).hasClass("base-control") && $(item).hasAttr("data-column")) {
+                        getBaseUploadedFile($(item).attr("id"));
+                    } else if ($(item).hasClass("program-control") && $(item).hasAttr("data-column")) {
+                        getUploadedFile(careplanid, $(item).attr("id"))
+                    }
                     $(item).hide();
                     break;
                 default:
@@ -1021,10 +1025,20 @@ function addZero(i) {
 function previewOnChange(obj) {
     if (obj.files.length) {
         var selectedFiles = `<div class="label">File Names</div><ul class="file_uploaded_list file_uploaded_inputs">`;
+        var iSize = "";
+        var maxSize = $(obj).attr("data-filesize");
         for (var i = 0; i < obj.files.length; i++) {
-            var file = URL.createObjectURL(obj.files[i]);
-            selectedFiles += `<li><input class="form-control" type="text" value="${obj.files[i].name.split(".").shift()}"/>`
-            selectedFiles += '<a href="' + file + '" target="_blank">' + obj.files[i].name + '</a></li>';
+            iSize = (obj.files[i].size / 1024);
+            iSize = (Math.round(iSize * 100) / 100);
+            if (iSize > maxSize) {
+                toastr.error(obj.files[i].name + " Size is exceeded than " + maxSize + "kb");
+                obj.value = "";
+                return false;
+            } else {
+                var file = URL.createObjectURL(obj.files[i]);
+                selectedFiles += `<li><input class="form-control" type="text" value="${obj.files[i].name.split(".").shift()}"/>`
+                selectedFiles += '<a href="' + file + '" target="_blank">' + obj.files[i].name + '</a><span onclick="removeUpload(this)" class="removeUploadFile"><i class="fa fa-times"></i></span></li>';
+            }
         }
         selectedFiles += "</ul>";
         $(obj).next().next().html("").append(selectedFiles);
@@ -1070,7 +1084,6 @@ function uploadFiles(Id) {
     });
 }
 function getUploadedFile(careid, Id) {
-    debugger;
     $.ajax({
         type: "GET",
         url: Apipath + '/api/PatientMain/getfilesbyCareplanid?Careplanid=' + careid +'&controlid='+Id,
@@ -1078,7 +1091,7 @@ function getUploadedFile(careid, Id) {
         dataType: "json",
         async: false,
         success: function (result) {
-            if (result != "") {
+            if (result != "" && result != null) {
                 var filesArr = result.Files.split(',');
                 var namesArr = result.FileNames.split(',');
                 var selectedFiles = "";
@@ -1086,25 +1099,27 @@ function getUploadedFile(careid, Id) {
                      selectedFiles = `<div class="label">File Names</div><ul class="file_uploaded_list file_uploaded_inputs">`;
                     for (var i = 0; i < filesArr.length; i++) {
                         selectedFiles += `<li><input class="form-control" type="text" value="${namesArr[i]}"/>`
-                        selectedFiles += '<a href="/Content/CarePlanUpload/' + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></li>';
+                        selectedFiles += '<a href="/' + careplanUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a><span onclick="removeUpload(this)" class="removeUploadFile"><i class="fa fa-times"></i></span></li>';
                     }
                     selectedFiles += "</ul>";                   
                 } else {
-                     selectedFiles = `<ul class="file_uploaded_list onlylinkslist">`;              
+                    selectedFiles = `<ul class="file_uploaded_list onlylinkslist">`; 
+                    var ext = "";
                     for (var i = 0; i < filesArr.length; i++) {
-                        var ext = filesArr[i].split('.').pop();
+                         ext = filesArr[i].split('.').pop();
                         switch (ext) {
                             case "png":
                             case "jpg":
-                            case "jpeg":                               
+                            case "jpeg":                                
+                                selectedFiles += '<li><img  src="/' + careplanUploadedPath + filesArr[i] + '" alt="Care Plan Upload"><span>' + namesArr[i] + '</span></li>';
                                 break;
                             default:
+                                selectedFiles += '<li><a href="/' + careplanUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></li>';
                                 break;
-
                         }
-                        selectedFiles += '<li><a href="/Content/CarePlanUpload/' + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></li>';
+                        
                     }
-                    selectedFiles += `</ul>`;                  
+                    selectedFiles += `</ul>`;                   
                 }
                 $("#" + Id).next().next().html("").append(selectedFiles);
                //getPaths(Id,result);            
@@ -1116,7 +1131,6 @@ function getUploadedFile(careid, Id) {
     });
 }
 function getBaseUploadedFile(Id) {
-    debugger;
     $.ajax({
         type: "GET",
         url: Apipath + '/api/PatientMain/getbasefilesbypatientid?PatientId=' + PatientId + '&controlid=' + Id,
@@ -1124,22 +1138,24 @@ function getBaseUploadedFile(Id) {
         dataType: "json",
         async: false,
         success: function (result) {
-            if (result != "") {
+            if (result != "" && result != null) {
                 var filesArr = result.Files.split(',');
                 var namesArr = result.FileNames.split(',');
                 var selectedFiles = `<ul class="file_uploaded_list onlylinkslist">`;
-                var name = "";
+                var ext = "";
                 for (var i = 0; i < filesArr.length; i++) {
-                    var ext = filesArr[i].split('.').pop();
+                     ext = filesArr[i].split('.').pop();
                     switch (ext) {
                         case "png":
                         case "jpg":
                         case "jpeg":
-                            console.log(ext);
+                            selectedFiles += '<li><img  src="/' + careplanUploadedPath + filesArr[i] + '" alt="Care Plan Upload"><span>' + namesArr[i] + '</span></li>';
                             break;
-
+                         default:
+                            selectedFiles += '<li><a href="/' + careplanUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></li>';
+                            break;
                     }
-                    selectedFiles += '<li><a href="/Content/CarePlanUpload/' + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></li>';
+                    
                 }
                 selectedFiles += `</ul>`;
                 $("#" + Id).next().next().html("").append(selectedFiles);
@@ -1151,32 +1167,32 @@ function getBaseUploadedFile(Id) {
         }
     });
 }
-function getPaths(Id, files) {
-    $.ajax({
-        type: "POST",
-        url: "/CarePlan/GetFiles",
-        contentType: 'application/json; charset=UTF-8',
-        dataType: "json",
-        data: JSON.stringify({ files: files }),
-        async: false,
-        success: function (result) {
-            if (result.length) {
-                var selectedFiles = `<ul class="file_uploaded_list onlylinkslist">`;
-                var name = "";
-                for (var i = 0; i < result.length; i++) {                  
-                    name = result[i].substring(result[i].lastIndexOf('/') + 1);
-                    selectedFiles += '<li><a href="' + result[i] + '" target="_blank">' + name + '</a></li>';
-                }
-                selectedFiles += `</ul>`;
-                $("#" + Id).next().next().html("").append(selectedFiles);
-            }
-        }, error: function (e) {
-            toastr.error("Something Happen Wrong");
-            $(".loaderOverlay").hide();
-        }
-    });
+//function getPaths(Id, files) {
+//    $.ajax({
+//        type: "POST",
+//        url: "/CarePlan/GetFiles",
+//        contentType: 'application/json; charset=UTF-8',
+//        dataType: "json",
+//        data: JSON.stringify({ files: files }),
+//        async: false,
+//        success: function (result) {
+//            if (result.length) {
+//                var selectedFiles = `<ul class="file_uploaded_list onlylinkslist">`;
+//                var name = "";
+//                for (var i = 0; i < result.length; i++) {                  
+//                    name = result[i].substring(result[i].lastIndexOf('/') + 1);
+//                    selectedFiles += '<li><a href="' + result[i] + '" target="_blank">' + name + '</a></li>';
+//                }
+//                selectedFiles += `</ul>`;
+//                $("#" + Id).next().next().html("").append(selectedFiles);
+//            }
+//        }, error: function (e) {
+//            toastr.error("Something Happen Wrong");
+//            $(".loaderOverlay").hide();
+//        }
+//    });
 
-}
+//}
 function saveBasicInfoAsDraft(status) {
     var fieldmodel = [];
     var isvalid = true;
@@ -1311,7 +1327,7 @@ function getDatabaseFieldValues() {
                         switch (Index) {
                             case "PatientMain":
                                 if (result.PatientDetail[Index].hasOwnProperty(key)) {
-                                    debugger;
+                                    
                                     if (key == "IsPermanentAddress") {
                                         if (keyValue) {
                                             keyValue = "Yes";
@@ -1482,7 +1498,7 @@ function getDatabaseFieldValues() {
                                 break;
 
                             case "PatientMentalHealth":
-                                debugger;
+                                
                                 if (result.PatientDetail[Index].hasOwnProperty(key)) {
                                     $(item).html("").append(keyValue);
                                 }
@@ -1525,4 +1541,11 @@ function GetDropDownName() {
             console.log(ItemNames);
         },
     });
+}
+function removeUpload(obj) {
+    if ($(obj).parent().parent().find("li").length == 1) {
+        $(obj).parent().parent().parent().html("");
+    } else {
+        $(obj).closest("li").remove();
+    }
 }

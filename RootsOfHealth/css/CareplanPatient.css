@@ -437,6 +437,23 @@ ul.file_uploaded_list.onlylinkslist li a {
     display: inline-block;
     padding: 0 15px;
 }
+ul.file_uploaded_list li img {
+    max-width: 90px;
+    margin-right: 10px;
+}
+ul.file_uploaded_list li .removeUploadFile i {
+    color: #555;
+    font-size: 12px;
+}
+ul.file_uploaded_list li .removeUploadFile {
+    display: block;
+    min-width: 20px;
+    cursor:pointer;
+    text-align: center;
+}
+#content .render-basicform .bootom-form-row.mb-2 {
+    padding-top: 0 !important;
+}
 /*My responsive style
 ============================================================================================ */
 @media(min-width:1400px) {
