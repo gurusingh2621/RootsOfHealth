@@ -23,9 +23,11 @@ function DatabaseFormFields() {
                     databasecontrol_li += '<li data-type="LastName" data-index="PatientMain" class="databasecontrol"><span>Last Name</span></li>';
                     databasecontrol_li += '<li data-type="NickName" data-index="PatientMain" class="databasecontrol"><span>Preferred Name/Nickname</span></li>';
                     databasecontrol_li += '<li data-type="Gender" data-index="PatientMain" class="databasecontrol"><span>Gender</span></li>';
+                    databasecontrol_li += '<li data-type="OtherGender" data-index="PatientMain" class="databasecontrol"><span>Other Gender</span></li>';
                     databasecontrol_li += '<li data-type="DateOfBirth" data-index="PatientMain" class="databasecontrol"><span>Date of Birth</span></li>';
                     databasecontrol_li += '<li data-type="SocialSecurityNumber" data-index="PatientMain" class="databasecontrol"><span>Social Security Number</span></li>';
                     databasecontrol_li += '<li data-type="RaceEthnicity" data-index="PatientMain" class="databasecontrol"><span>Race/Ethnicity</span></li>';
+                    databasecontrol_li += '<li data-type="OtherRace" data-index="PatientMain" class="databasecontrol"><span>Other Race/Ethnicity</span></li>';
                     databasecontrol_li += '<li data-type="Address" data-index="PatientMain" class="databasecontrol"><span>Address</span></li>';
                     databasecontrol_li += '<li data-type="IsPermanentAddress" data-index="PatientMain" class="databasecontrol"><span>IsPermanentAddress</span></li>';
                     databasecontrol_li += '<li data-type="City" data-index="PatientMain" class="databasecontrol"><span>City</span></li>';
@@ -35,6 +37,7 @@ function DatabaseFormFields() {
                     databasecontrol_li += '<li data-type="HomePhone" data-index="PatientMain" class="databasecontrol"><span>Home Phone</span></li>';
                     databasecontrol_li += '<li data-type="CellPhone" data-index="PatientMain" class="databasecontrol"><span>Cell Phone</span></li>';
                     databasecontrol_li += '<li data-type="WayToContact" data-index="PatientMain" class="databasecontrol"><span>Best way to contact you</span></li>';
+                    databasecontrol_li += '<li data-type="OtherContact" data-index="PatientMain" class="databasecontrol"><span>Other Contact</span></li>';
                     databasecontrol_li += '<li data-type="PatientChildren" data-index="PatientMain" class="databasecontrol"><span>Number Of Children</span></li>';
                     databasecontrol_li += '<li data-type="EmergencyContact1Name" data-index="PatientMain" class="databasecontrol"><span>Emergency Contact #1 Name</span></li>';
                     databasecontrol_li += '<li data-type="EmergencyContact1EmailAddress" data-index="PatientMain" class="databasecontrol"><span>Emergency Contact #1 Email Address</span></li>';
@@ -57,10 +60,17 @@ function DatabaseFormFields() {
                     databasecontrol_li += '<li data-type="PreferredPharmacyLocation" data-index="PatientMain" class="databasecontrol"><span>Preferred Pharmacy-> Location</span></li>';
                     databasecontrol_li += '<li data-type="EverMemberOfUSArmedForces" data-index="PatientMain" class="databasecontrol"><span>U.S. Armed Forces</span></li>';
                     databasecontrol_li += '<li data-type="MaritalStatus" data-index="PatientMain" class="databasecontrol"><span>Marital status</span></li>';
+                    databasecontrol_li += '<li data-type="OtherMaritalStatus" data-index="PatientMain" class="databasecontrol"><span>Other Marital status</span></li>';
                     databasecontrol_li += '<li data-type="LanguagesSpeak" data-index="PatientMain" class="databasecontrol"><span>Languages</span></li>';
+                    databasecontrol_li += '<li data-type="OtherLanguageSpeak" data-index="PatientMain" class="databasecontrol"><span>Other Language Speak</span></li>';
                     databasecontrol_li += '<li data-type="EverBeenSmoker" data-index="PatientMain" class="databasecontrol"><span>Smoker</span></li>';
-                    databasecontrol_li += '<li data-type="PreferredPronouns" data-index="PatientMain" class="databasecontrol"><span>PreferredPronouns</span></li>';
+                    databasecontrol_li += '<li data-type="QuitSmoking" data-index="PatientMain" class="databasecontrol"><span>Have you Quit?</span></li>';
+                    databasecontrol_li += '<li data-type="SmokingQuitDate" data-index="PatientMain" class="databasecontrol"><span>Quit Date</span></li>';
+                    databasecontrol_li += '<li data-type="LastTimeYouSmoked" data-index="PatientMain" class="databasecontrol"><span>When was the last time you smoked?</span></li>';
+                    databasecontrol_li += '<li data-type="PreferredPronouns" data-index="PatientMain" class="databasecontrol"><span>Preferred Pronouns</span></li>';
+                    databasecontrol_li += '<li data-type="OtherPronouns" data-index="PatientMain" class="databasecontrol"><span>Other Preferred Pronouns</span></li>';
                     databasecontrol_li += '<li data-type="ThinkYourselfAs" data-index="PatientMain" class="databasecontrol"><span>Think Yourself As</span></li>';
+                    databasecontrol_li += '<li data-type="OtherThinkYourselfAs" data-index="PatientMain" class="databasecontrol"><span>Other Think Yourself As</span></li>';
                     break;
                 case "2":
                     databasecontrol_li += '<li data-type="housingscore" data-index="PatientScore" class="databasecontrol"><span>Score</span></li>';
@@ -91,9 +101,14 @@ function DatabaseFormFields() {
                     databasecontrol_li += '<li data-type="employmentstatus" data-index="PatientScore" class="databasecontrol"><span>Status</span></li>';
                     databasecontrol_li += '<li data-type="LevelofEducation" data-index="PatientEmploymentEducation" class="databasecontrol"><span>What is the highest level of education you have completed?</span></li>';
                     databasecontrol_li += '<li data-type="WorkSituation" data-index="PatientEmploymentEducation" class="databasecontrol"><span>Which of the following best describes your work situation today?</span></li>';
-                    databasecontrol_li += '<li data-type="FullTimeNameLocation" data-index="PatientEmploymentEducation" class="databasecontrol"><span>what is the name and location(Full-Time) of where you work?</span></li>';
+                    databasecontrol_li += '<li data-type="OtherWorkSituation" data-index="PatientEmploymentEducation" class="databasecontrol"><span>Which of the following best describes your other work situation today?</span></li>';
+                    databasecontrol_li += '<li data-type="PartTimeNameLocation" data-index="PatientEmploymentEducation" class="databasecontrol"><span>What is the name and location(Part-Time) of where you work?</span></li>';
+                    databasecontrol_li += '<li data-type="FullTimeNameLocation" data-index="PatientEmploymentEducation" class="databasecontrol"><span>What is the name and location(Full-Time) of where you work?</span></li>';
                     databasecontrol_li += '<li data-type="ParticipatingInEducationalOrTrainingProgram" data-index="PatientEmploymentEducation" class="databasecontrol"><span>Are you currently participating in an educational or training program to improve your work opportunities?</span></li>';
-
+                    databasecontrol_li += '<li data-type="ParticipatingInEducationalOrTrainingProgram" data-index="PatientEmploymentEducation" class="databasecontrol"><span>Participating in</span></li>';
+                    databasecontrol_li += '<li data-type="ProgramName" data-index="PatientEmploymentEducation" class="databasecontrol"><span>Name Of Program</span></li>';
+                    databasecontrol_li += '<li data-type="SchoolName" data-index="PatientEmploymentEducation" class="databasecontrol"><span>Name Of School</span></li>';
+                    databasecontrol_li += '<li data-type="ProgramSchoolAndYearAttended" data-index="PatientEmploymentEducation" class="databasecontrol"><span>Name of Program/School and Year attended</span></li>';
                     break;
                 case "5":
                     databasecontrol_li += '<li data-type="communicationscore" data-index="PatientScore" class="databasecontrol"><span>Score</span></li>';
@@ -101,16 +116,29 @@ function DatabaseFormFields() {
                     databasecontrol_li += '<li data-type="PersonalPhone" data-index="PatientCommunicationAndMobility" class="databasecontrol"><span>Do you have a personal phone where we can easily reach you?</span></li>';
                     databasecontrol_li += '<li data-type="DifficultyGoingPlaces" data-index="PatientCommunicationAndMobility" class="databasecontrol"><span>Over the past year, did you ever have difficulty going to work, school, shopping, or an appointment, because the lack of convenient transportation?</span></li>';
                     databasecontrol_li += '<li data-type="ModesOfTransportation" data-index="PatientCommunicationAndMobility" class="databasecontrol"><span>Which of the following modes of transportation will you typically use to get to Root</span></li>';
-
+                    databasecontrol_li += '<li data-type="OtherTransportation" data-index="PatientCommunicationAndMobility" class="databasecontrol"><span>Other Transportation</span></li>';
                     break;
-                case "6":
+                case "6": 
                     databasecontrol_li += '<li data-type="healthcarescore" data-index="PatientScore" class="databasecontrol"><span>Score</span></li>';
                     databasecontrol_li += '<li data-type="healthcarestatus" data-index="PatientScore" class="databasecontrol"><span>Status</span></li>';
                     databasecontrol_li += '<li data-type="HealthInsurance" data-index="PatientHealthcare" class="databasecontrol"><span>Do you currently have health insurance?</span></li>';
+                    databasecontrol_li += '<li data-type="PlanName" data-index="PatientHealthcare" class="databasecontrol"><span>Plan Name</span></li>';
+                    databasecontrol_li += '<li data-type="PolicyNumber" data-index="PatientHealthcare" class="databasecontrol"><span>Policy Number</span></li>';
+                    databasecontrol_li += '<li data-type="SSN" data-index="PatientHealthcare" class="databasecontrol"><span>SSN</span></li>';
                     databasecontrol_li += '<li data-type="PrimaryCareDoctor" data-index="PatientHealthcare" class="databasecontrol"><span>Do you have a regular primary care doctor?</span></li>';
+                    databasecontrol_li += '<li data-type="LastSeeDoctor" data-index="PatientHealthcare" class="databasecontrol"><span>When did you last see your doctor?</span></li>';
+                    databasecontrol_li += '<li data-type="NameOfDoctor" data-index="PatientHealthcare" class="databasecontrol"><span>Name of Doctor</span></li>';
+                    databasecontrol_li += '<li data-type="DoctorLocation" data-index="PatientHealthcare" class="databasecontrol"><span>Location</span></li>';
                     databasecontrol_li += '<li data-type="RegularDentist" data-index="PatientHealthcare" class="databasecontrol"><span>Do you have a regular dentist?</span></li>';
+                    databasecontrol_li += '<li data-type="LastSeeDentist" data-index="PatientHealthcare" class="databasecontrol"><span>When did you last see your dentist?</span></li>';
+                    databasecontrol_li += '<li data-type="NameOfDentist" data-index="PatientHealthcare" class="databasecontrol"><span>Name of Dentist</span></li>';
+                    databasecontrol_li += '<li data-type="DentistLocation" data-index="PatientHealthcare" class="databasecontrol"><span>Location</span></li>';
                     databasecontrol_li += '<li data-type="OtherDoctorsTherapists" data-index="PatientHealthcare" class="databasecontrol"><span>Do you see any other doctors, therapists, counselors?</span></li>';
+                    databasecontrol_li += '<li data-type="TherapistsName" data-index="PatientHealthcare" class="databasecontrol"><span>Name of other doctors, therapists, counselors</span></li>';
+                    databasecontrol_li += '<li data-type="TherapistsLocation" data-index="PatientHealthcare" class="databasecontrol"><span>Location</span></li>';
                     databasecontrol_li += '<li data-type="CaseManager" data-index="PatientHealthcare" class="databasecontrol"><span>Do you have a case manager or social worker who helps you manage your healthcare?</span></li>';
+                    databasecontrol_li += '<li data-type="CaseManagerName" data-index="PatientHealthcare" class="databasecontrol"><span>Name of case manager or social worker</span></li>';
+                    databasecontrol_li += '<li data-type="CaseManagerLocation" data-index="PatientHealthcare" class="databasecontrol"><span>Location</span></li>';
                     databasecontrol_li += '<li data-type="YourHealthIs" data-index="PatientHealthcare" class="databasecontrol"><span>In general, would you say your health is:</span></li>';
                     databasecontrol_li += '<li data-type="PastMonthPoorPhysicalHealth" data-index="PatientHealthcare" class="databasecontrol"><span>During the past month, how often did poor physical health keep you from doing your usual activities, work, or recreation?</span></li>';
                     databasecontrol_li += '<li data-type="Diagnosed" data-index="PatientHealthcare" class="databasecontrol"><span>Have you ever been diagnosed with any of the following medical conditions? (check all that apply)</span></li>';
@@ -118,6 +146,8 @@ function DatabaseFormFields() {
                     databasecontrol_li += '<li data-type="PerDayStrenuousExercise" data-index="PatientHealthcare" class="databasecontrol"><span>On average, how many minutes per day do you engage in moderate to strenuous exercise (like walking fast, running, jogging, dancing, swimming, biking, or other activities that cause a light or heavy sweat)?</span></li>';
                     databasecontrol_li += '<li data-type="PastYearEmergency" data-index="PatientHealthcare" class="databasecontrol"><span>Over the past year, how many times did you go to the emergency room (regular or psych emergency)?</span></li>';
                     databasecontrol_li += '<li data-type="SmokeCigarettes" data-index="PatientHealthcare" class="databasecontrol"><span>Do you smoke cigarettes?</span></li>';
+                    databasecontrol_li += '<li data-type="SmokePerDay" data-index="PatientHealthcare" class="databasecontrol"><span>How many cigarettes do you smoke per day?</span></li>';
+                    databasecontrol_li += '<li data-type="FrequentlySmoke" data-index="PatientHealthcare" class="databasecontrol"><span>How frequently do you smoke?</span></li>';
                     databasecontrol_li += '<li data-type="TobaccoProducts" data-index="PatientHealthcare" class="databasecontrol"><span>Do you use any tobacco or nicotine products besides cigarettes, such as chewing tobacco, snuff, cigars, or e-cigarettes?</span></li>';
 
                     break;
@@ -138,14 +168,22 @@ function DatabaseFormFields() {
                     databasecontrol_li += '<li data-type="legalstatusscore" data-index="PatientScore" class="databasecontrol"><span>Score</span></li>';
                     databasecontrol_li += '<li data-type="legalstatusstatus" data-index="PatientScore" class="databasecontrol"><span>Status</span></li>';
                     databasecontrol_li += '<li data-type="EverBeenArrested" data-index="PatientLegalStatus" class="databasecontrol"><span>Have you ever been arrested?</span></li>';
+                    databasecontrol_li += '<li data-type="LastReleased" data-index="PatientLegalStatus" class="databasecontrol"><span>When were you last released?</span></li>';
+                    databasecontrol_li += '<li data-type="CDCAndPFNNumber" data-index="PatientLegalStatus" class="databasecontrol"><span>CDC/PFN #</span></li>';                   
                     databasecontrol_li += '<li data-type="OnGoingCriminalCase" data-index="PatientLegalStatus" class="databasecontrol"><span>Do you have an ongoing criminal case?</span></li>';
                     databasecontrol_li += '<li data-type="EverBeenInPrison" data-index="PatientLegalStatus" class="databasecontrol"><span>Have you ever been in prison or jail?</span></li>';
-                    databasecontrol_li += '<li data-type="ParoleProbation" data-index="PatientLegalStatus" class="databasecontrol"><span>Are you currently on parole or probation?</span></li>';
+                    databasecontrol_li += '<li data-type="InterestedInCriminalRecordClearing" data-index="PatientLegalStatus" class="databasecontrol"><span>Are you interested in criminal record clearing?</span></li>';
+                    databasecontrol_li += '<li data-type="OweRestitution" data-index="PatientLegalStatus" class="databasecontrol"><span>Do you owe restitution?</span></li>';
+                    databasecontrol_li += '<li data-type="HowMuchOwe" data-index="PatientLegalStatus" class="databasecontrol"><span>how much do you owe?</span></li>';
+                    databasecontrol_li += '<li data-type="CurrentlyOnParole" data-index="PatientLegalStatus" class="databasecontrol"><span>Are you currently on parole or probation?</span></li>';
+                    databasecontrol_li += '<li data-type="ParoleProbation" data-index="PatientLegalStatus" class="databasecontrol"><span>select parole or probation</span></li>';
+                    databasecontrol_li += '<li data-type="ParoleProbationEnd" data-index="PatientLegalStatus" class="databasecontrol"><span>When does your (insert probation or parole here) end?</span></li>';
                     databasecontrol_li += '<li data-type="DifficultiesInGettingAJob" data-index="PatientLegalStatus" class="databasecontrol"><span>Are you currently having difficulties in getting a job, housing, or any government benefits because of your legal status, background or a criminal record?</span></li>';
                     databasecontrol_li += '<li data-type="GovernmentIssuedID" data-index="PatientLegalStatus" class="databasecontrol"><span>Do you have a government issued ID or driver’s license?</span></li>';
+                    databasecontrol_li += '<li data-type="GovernmentIDImg" data-index="PatientLegalStatus" class="databasecontrol"><span>government issued ID or driver’s license image</span></li>';
                     databasecontrol_li += '<li data-type="ConcernsAboutFamilyImmigrationStatus" data-index="PatientLegalStatus" class="databasecontrol"><span>Do you have concerns about your family’s immigration status?</span></li>';
                     databasecontrol_li += '<li data-type="ConcernsWithLandlord" data-index="PatientLegalStatus" class="databasecontrol"><span>Do you have concerns with or disputes with your landlord (threats of eviction, etc.)?</span></li>';
-
+                    
                     break;
                 case "9":
                     databasecontrol_li += '<li data-type="substancescore" data-index="PatientScore" class="databasecontrol"><span>Score</span></li>';
