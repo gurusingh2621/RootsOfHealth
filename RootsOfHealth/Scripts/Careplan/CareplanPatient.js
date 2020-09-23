@@ -1036,7 +1036,7 @@ function previewOnChange(obj) {
                 return false;
             } else {
                 var file = URL.createObjectURL(obj.files[i]);
-                selectedFiles += `<li><input class="form-control" type="text" value="${obj.files[i].name.split(".").shift()}"/>`
+                selectedFiles += `<li><input class="form-control" required type="text" value="${obj.files[i].name.split(".").shift()}"/>`
                 selectedFiles += '<a href="' + file + '" target="_blank">' + obj.files[i].name + '</a><span onclick="removeUpload(this)" class="removeUploadFile"><i class="fa fa-times"></i></span></li>';
             }
         }
@@ -1324,25 +1324,40 @@ function getDatabaseFieldValues() {
                     var Index = $(item).attr("data-index");
                     if (Object.keys(result)[0].length && Index != "PatientScore") {
                         var keyValue = result.PatientDetail[Index][key];
+                        if (keyValue === "0") {
+                            keyValue = null;
+                        }
                         switch (Index) {
                             case "PatientMain":
                                 if (result.PatientDetail[Index].hasOwnProperty(key)) {
-                                    
-                                    if (key == "IsPermanentAddress") {
-                                        if (keyValue) {
-                                            keyValue = "Yes";
-                                        } else {
-                                            keyValue="No"
-                                        }
+                                    switch (key) {
+                                        case "QuitSmoking":
+                                        case "EverBeenSmoker":
+                                        case "EverMemberOfUSArmedForces":
+                                        case "IsPermanentAddress":
+                                            if (keyValue != null) {
+                                                if (keyValue) {
+                                                    keyValue = "Yes";
+                                                } else {
+                                                    keyValue = "No"
+                                                }
+                                            }
+                                            break;
+                                        case "LanguagesSpeak":
+                                            if (keyValue != null) {                                              
+                                                keyValue = keyValue == "" ? "Other" : keyValue
+                                            }
+                                            break;
                                     }
+                                    
                                     $(item).html("").append(keyValue);
                                 }
                                 break;
                             case "PatientHousing":
                                 if (result.PatientDetail[Index].hasOwnProperty(key) && ItemNames.length) {
-                                    if (key == "PlaceLiveNow") {
+                                    if (key == "PlaceLiveNow" && keyValue != null) {
                                         keyValue = ItemNames.find(x => x.LookUpFieldID == 1 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                    } else if (key == "EmergencyShelter") {
+                                    } else if (key == "EmergencyShelter" && keyValue != null) {
                                         keyValue = ItemNames.find(x => x.LookUpFieldID == 2 && x.IsDeleted == false && x.ID == keyValue).OptionName;
                                     }
                                     $(item).html("").append(keyValue);
@@ -1350,21 +1365,32 @@ function getDatabaseFieldValues() {
                                 break;
                             case "PatientFinancialSecurity":
                                 if (result.PatientDetail[Index].hasOwnProperty(key) && ItemNames.length) {
-                                    if (key == "DifficultiesInPayingBills") {
+                                    if (key == "DifficultiesInPayingBills" && keyValue != null) {
                                         keyValue = ItemNames.find(x => x.LookUpFieldID == 3 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                    } else if (key == "SkipMeals") {
+                                    } else if (key == "SkipMeals" && keyValue != null) {
                                         keyValue = ItemNames.find(x => x.LookUpFieldID == 4 && x.IsDeleted == false && x.ID == keyValue).OptionName;
+                                    }
+                                    switch (key) {
+                                        case "IncomeCoverHouseholdExpenses":                                        
+                                            if (keyValue != null) {
+                                                if (keyValue) {
+                                                    keyValue = "Yes";
+                                                } else {
+                                                    keyValue = "No"
+                                                }
+                                            }
+                                            break;
                                     }
                                     $(item).html("").append(keyValue);
                                 }
                                 break;
                             case "PatientEmploymentEducation":
                                 if (result.PatientDetail[Index].hasOwnProperty(key) && ItemNames.length) {
-                                    if (key == "LevelofEducation") {
+                                    if (key == "LevelofEducation" && keyValue != null) {
                                         keyValue = ItemNames.find(x => x.LookUpFieldID == 5 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                    } else if (key == "WorkSituation") {
+                                    } else if (key == "WorkSituation" && keyValue != null) {
                                         keyValue = ItemNames.find(x => x.LookUpFieldID == 6 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                    } else if (key == "ParticipatingInEducationalOrTrainingProgram") {
+                                    } else if (key == "ParticipatingInEducationalOrTrainingProgram" && keyValue != null) {
                                         keyValue = ItemNames.find(x => x.LookUpFieldID == 7 && x.IsDeleted == false && x.ID == keyValue).OptionName;
                                     }
                                     $(item).html("").append(keyValue);
@@ -1372,33 +1398,76 @@ function getDatabaseFieldValues() {
                                 break;
                             case "PatientCommunicationAndMobility":
                                 if (result.PatientDetail[Index].hasOwnProperty(key) && ItemNames.length) {
-                                    if (key == "DifficultyGoingPlaces") {
+                                    if (key == "DifficultyGoingPlaces" && keyValue != null) {
                                         keyValue = ItemNames.find(x => x.LookUpFieldID == 8 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                    } else if (key == "ModesOfTransportation") {
+                                    } else if (key == "ModesOfTransportation" && keyValue != null) {                                      
                                         keyValue = ItemNames.find(x => x.LookUpFieldID == 9 && x.IsDeleted == false && x.ID == keyValue).OptionName;
+                                    }
+
+                                    if (key == "PersonalPhone" && keyValue != null) {
+                                        if (keyValue) {
+                                            keyValue = "Yes";
+                                        } else {
+                                            keyValue = "No"
+                                        }
                                     }
                                     $(item).html("").append(keyValue);
                                 }
+
                                 break;
                             case "PatientHealthcare":
                                 if (result.PatientDetail[Index].hasOwnProperty(key) && ItemNames.length) {
-                                    if (key == "PastMonthPoorPhysicalHealth") {
+                                    if (key == "PastMonthPoorPhysicalHealth" && keyValue != null) {
                                         keyValue = ItemNames.find(x => x.LookUpFieldID == 13 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                    } else if (key == "YourHealthIs") {
+                                    } else if (key == "YourHealthIs" && keyValue != null) {
                                         keyValue = ItemNames.find(x => x.LookUpFieldID == 12 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                    } else if (key == "PerWeekStrenuousExercise") {
+                                    } else if (key == "PerWeekStrenuousExercise" && keyValue != null) {
                                         keyValue = ItemNames.find(x => x.LookUpFieldID == 14 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                    } else if (key == "PerDayStrenuousExercise") {
+                                    } else if (key == "PerDayStrenuousExercise" && keyValue != null) {
                                         keyValue = ItemNames.find(x => x.LookUpFieldID == 15 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                    } else if (key == "PastYearEmergency") {
+                                    } else if (key == "PastYearEmergency" && keyValue != null) {
                                         keyValue = ItemNames.find(x => x.LookUpFieldID == 16 && x.IsDeleted == false && x.ID == keyValue).OptionName;
+                                    } 
+                                    else if (key == "LastSeeDentist" && keyValue != null) {
+                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 11 && x.IsDeleted == false && x.ID == keyValue).OptionName;
+                                    }
+                                    else if (key == "LastSeeDoctor" && keyValue != null && keyValue!="0") {
+                                        
+                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 10 && x.IsDeleted == false && x.ID == keyValue).OptionName;
+                                    }
+                                    else if (key == "SmokePerDay" && keyValue != null) {
+                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 17 && x.IsDeleted == false && x.ID == keyValue).OptionName;
+                                    }
+                                    else if (key == "FrequentlySmoke" && keyValue != null) {
+                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 18 && x.IsDeleted == false && x.ID == keyValue).OptionName;
+                                    }                                  
+                                    else if (key == "Diagnosed" && keyValue != null) {
+                                     
+                                        if (keyValue.indexOf(',') == -1) {
+                                            keyValue = ItemNames.find(x => x.LookUpFieldID == 44 && x.IsDeleted == false && x.ID == keyValue).OptionName;
+                                        } else {
+                                            var valueArr = keyValue.split(',');
+                                            var nameTxt = "";
+                                            for (n = 0; n < valueArr.length; n++) {
+                                                nameTxt += ItemNames.find(x => x.LookUpFieldID == 44 && x.IsDeleted == false && x.ID == valueArr[n]).OptionName+", ";
+                                            }
+                                            keyValue = nameTxt.slice(0, -2);
+                                        }
                                     }
                                     switch (key) {
+                                        case "HealthInsurance":
+                                        case "PrimaryCareDoctor":
                                         case "RegularDentist":
-                                            if (keyValue) {
-                                                keyValue = "Yes"
-                                            } else {
-                                                keyValue="No"
+                                        case "OtherDoctorsTherapists":
+                                        case "CaseManager":
+                                        case "SmokeCigarettes":
+                                        case "TobaccoProducts":
+                                            if (keyValue != null) {
+                                                if (keyValue) {
+                                                    keyValue = "Yes"
+                                                } else {
+                                                    keyValue = "No"
+                                                }
                                             }
                                             break;
                                     }
@@ -1407,24 +1476,61 @@ function getDatabaseFieldValues() {
                                 break;
                             case "PatientSocialSupport":
                                 if (result.PatientDetail[Index].hasOwnProperty(key) && ItemNames.length) {
-                                    if (key == "FinancialSecurity") {
+                                    if (key == "FinancialSecurity" && keyValue != null) {
                                         keyValue = ItemNames.find(x => x.LookUpFieldID == 19 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                    } else if (key == "FeelSafeNeighborhood") {
+                                    } else if (key == "FeelSafeNeighborhood" && keyValue != null) {
                                         keyValue = ItemNames.find(x => x.LookUpFieldID == 42 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                    } else if (key == "PlaceToStay") {
+                                    } else if (key == "PlaceToStay" && keyValue != null) {
                                         keyValue = ItemNames.find(x => x.LookUpFieldID == 20 && x.IsDeleted == false && x.ID == keyValue).OptionName;
+                                    }
+                                    else if (key == "FeelSafeNeighborhood" && keyValue != null) {
+                                        keyValue = ItemNames.find(x => x.LookUpFieldID == 42 && x.IsDeleted == false && x.ID == keyValue).OptionName;
+                                    }
+                                    switch (key) {
+                                        case "InvolvedInCommunityGroup":
+                                        case "IsAnyoneThreatenYou":
+                                        case "IsSomeoneYouCanCall":                                       
+                                            if (keyValue != null) {
+                                                if (keyValue) {
+                                                    keyValue = "Yes"
+                                                } else {
+                                                    keyValue = "No"
+                                                }
+                                            }
+                                            break;
                                     }
                                     $(item).html("").append(keyValue);
                                 }
                                 break;
                             case "PatientLegalStatus":
                                 if (result.PatientDetail[Index].hasOwnProperty(key)) {
-                                    switch (key) {
+                                    switch (key) {                                       
                                         case "GovernmentIssuedID":
-                                            if (keyValue) {
-                                                keyValue = "Yes"
-                                            } else {
-                                                keyValue = "No"
+                                        case "ConcernsAboutFamilyImmigrationStatus":
+                                        case "ConcernsWithLandlord":
+                                            if (keyValue != null) {
+                                                if (keyValue) {
+                                                    keyValue = "Yes"
+                                                } else {
+                                                    keyValue = "No"
+                                                }
+                                            }
+                                            break;
+                                        case "GovernmentIDImg":
+                                            if (keyValue != null) {
+                                                if (keyValue.indexOf('.')) {
+                                                    keyValue = `<img style="max-width:250px" class="img-fluid" src="/Files/${keyValue}" alt="">`;
+                                                }
+                                            }
+                                            break;
+                                        case "LastReleased":
+                                            if (keyValue != null) {
+                                                keyValue = ItemNames.find(x => x.LookUpFieldID == 21 && x.IsDeleted == false && x.ID == keyValue).OptionName;
+                                            }
+                                            break;
+                                        case "ParoleProbation":
+                                            if (keyValue != null) {
+                                                keyValue = ItemNames.find(x => x.LookUpFieldID == 22 && x.IsDeleted == false && x.ID == keyValue).OptionName;
                                             }
                                             break;
                                     }
@@ -1433,40 +1539,61 @@ function getDatabaseFieldValues() {
                                 break;
                             case "Dast":
                                 if (result.PatientDetail[Index].hasOwnProperty(key)) {
+                                    switch (key) {
+                                        case "Blackouts":
+                                        case "EngagedInIllegalActivities":
+                                        case "GuiltyAboutYourDrug":
+                                        case "MedicalLoss":
+                                        case "NeglectedFamily":
+                                        case "OneDrugAtATime":
+                                        case "SpouseComplain":
+                                        case "UnableToStopUsingDrugs":
+                                        case "UsedDrugsForMedicalReasons":
+                                        case "WithdrawalSymptoms":
+                                        case "EverInjectedDrugs":
+                                            if (keyValue != null) {
+                                                if (keyValue) {
+                                                    keyValue = "Yes"
+                                                } else {
+                                                    keyValue = "No"
+                                                }
+                                            }
+                                            break;                                       
+                                    }
                                     $(item).html("").append(keyValue);
-                                } else {
+                                } else {                                 
                                     var drugType = key[key.length - 1];
                                     key = key.slice(0, -1);
                                     keyValue = result.PatientDetail[Index][key];
-                                    if (key == "DrugsContaining") {
-                                        keyValue = keyValue.indexOf(drugType)!=-1?"Yes":"No"
+                                    if (key == "DrugsContaining" && keyValue != null) {
+                                        keyValue = keyValue.indexOf(drugType)==-1?"No":"Yes"
                                     }
                                     $(item).html("").append(keyValue);
                                 }
                                 break;
                             case "Audit":
                                 if (result.PatientDetail[Index].hasOwnProperty(key) && ItemNames.length) {
-                                    if (key == "DrinkContainingAlcohol") {
+                                    if (key == "DrinkContainingAlcohol" && keyValue != null) {
                                         keyValue = ItemNames.find(x => x.LookUpFieldID == 25 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                    } else if (key == "HowManyDrinks") {
+                                    } else if (key == "HowManyDrinks" && keyValue != null) {
                                         keyValue = ItemNames.find(x => x.LookUpFieldID == 26 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                    } else if (key == "NotAbleToStopDrinking") {
+                                    } else if (key == "NotAbleToStopDrinking" && keyValue != null) {
                                         keyValue = ItemNames.find(x => x.LookUpFieldID == 28 && x.IsDeleted == false && x.ID == keyValue).OptionName;
                                     }
-                                    if (key == "FailedWhatWasExpected") {
+                                    if (key == "FailedWhatWasExpected" && keyValue != null) {
                                         keyValue = ItemNames.find(x => x.LookUpFieldID == 29 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                    } else if (key == "SixOrMoreDrink") {
+                                    } else if (key == "SixOrMoreDrink" && keyValue != null) {
                                         keyValue = ItemNames.find(x => x.LookUpFieldID == 27 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                    } else if (key == "FirstDrinkMorning") {
+                                    } else if (key == "FirstDrinkMorning" && keyValue != null) {
                                         keyValue = ItemNames.find(x => x.LookUpFieldID == 30 && x.IsDeleted == false && x.ID == keyValue).OptionName;
                                     }
-                                    if (key == "FeelingOfGuilt") {
+                                    if (key == "FeelingOfGuilt" && keyValue != null) {
                                         keyValue = ItemNames.find(x => x.LookUpFieldID == 31 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                    } else if (key == "UnableToRemember") {
+                                    } else if (key == "UnableToRemember" && keyValue != null) {
                                         keyValue = ItemNames.find(x => x.LookUpFieldID == 32 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                    } else if (key == "InjuredOfYourDrinking") {
+                                    } else if (key == "InjuredOfYourDrinking" && keyValue != null) {
                                         keyValue = ItemNames.find(x => x.LookUpFieldID == 33 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                    } else if (key == "FriendsSuggestedYouCutDown") {
+                                    } else if (key == "FriendsSuggestedYouCutDown" && keyValue != null) {
                                         keyValue = ItemNames.find(x => x.LookUpFieldID == 34 && x.IsDeleted == false && x.ID == keyValue).OptionName;
                                     }
                                     $(item).html("").append(keyValue);
@@ -1474,7 +1601,7 @@ function getDatabaseFieldValues() {
                                 break;
                             case "PHQ9":
                                 if (result.PatientDetail[Index].hasOwnProperty(key)) {
-                                    if (key == "FeelingTired") {
+                                    if (key == "FeelingTired" && keyValue != null) {
                                         switch (keyValue) {                                           
                                             case 0:
                                                 keyValue = "Not at all";
@@ -1506,11 +1633,11 @@ function getDatabaseFieldValues() {
 
                             case "PatientFoodAccess":
                                 if (result.PatientDetail[Index].hasOwnProperty(key) && ItemNames.length) {
-                                    if (key == "PortionsOfVegetables") {
+                                    if (key == "PortionsOfVegetables" && keyValue != null) {
                                         keyValue = ItemNames.find(x => x.LookUpFieldID == 36 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                    } else if (key == "ServingsOfFruit") {
+                                    } else if (key == "ServingsOfFruit" && keyValue != null) {
                                         keyValue = ItemNames.find(x => x.LookUpFieldID == 35 && x.IsDeleted == false && x.ID == keyValue).OptionName;
-                                    } else if (key == "MajorityOfFood") {
+                                    } else if (key == "MajorityOfFood" && keyValue != null) {
                                         keyValue = ItemNames.find(x => x.LookUpFieldID == 37 && x.IsDeleted == false && x.ID == keyValue).OptionName;
                                     }
                                     $(item).html("").append(keyValue);
