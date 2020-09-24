@@ -251,44 +251,76 @@ function saveBasicInfo(status) {
     if ($(".render-basicform").find("input[type='file']").length) {
         $(".render-basicform").find("input[type='file']").each(function (index, item) {
             if ($(item).hasClass("program-control") || $(item).hasClass("base-control")) {
-                uploadFiles($(item).attr("id"));
+                var res = validateFiles($(item).attr("id"));
+                if (res == false) {
+                    return false;
+                }
             }
         });
     }
-    var model = {
-        ID: isupdateProgramFields ? careplanid : 0,
-        TableName: tableName,
-        carePlanCols: fieldmodel,       
-    }  
-    $(".loaderOverlay").show();
-    $.ajax({
-        type: "POST",
-        url: Apipath + '/api/PatientMain/savecareplanbasicinfo',
-        contentType: 'application/json; charset=UTF-8',
-        data: JSON.stringify(model),
-        dataType: "json",
-        success: function (res) {
-            if ($(".render-basicform").find(".base-control").length) {
-                saveBaseFieldInfo();
+    if ($(".render-basicform").find("input.invaild-input").length) {
+        return false;
+    }
+    $.confirm({
+        icon: 'fas fa-exclamation-triangle',
+        title: 'Confirm',
+        content: 'Once form submitted can not be edited again, press ok to continue',
+        type: 'green',
+        typeAnimated: true,
+        buttons: {
+            ok: {
+                btnClass: 'btn-green',
+                action: function () {
+                    var model = {
+                        ID: isupdateProgramFields ? careplanid : 0,
+                        TableName: tableName,
+                        carePlanCols: fieldmodel,
+                    }
+                    $(".loaderOverlay").show();
+                    $.ajax({
+                        type: "POST",
+                        url: Apipath + '/api/PatientMain/savecareplanbasicinfo',
+                        contentType: 'application/json; charset=UTF-8',
+                        data: JSON.stringify(model),
+                        dataType: "json",
+                        success: function (res) {
+                            if ($(".render-basicform").find(".base-control").length) {
+                                saveBaseFieldInfo();
+                            }
+                            //update Careplan status
+                            updateCareplanStatus(status);
+                            $("#carePlanName").val("");
+
+                            toastr.success("Saved successfully");
+                            $(".loaderOverlay").hide();
+                            $(".basic-info-actions").hide();
+                            if (intervalStatus != "") {
+                                clearInterval(intervalStatus);
+                            }
+                            if ($(".render-basicform").find("input[type='file']").length) {
+                                $(".render-basicform").find("input[type='file']").each(function (index, item) {
+                                    if ($(item).hasClass("program-control") || $(item).hasClass("base-control")) {
+                                        uploadFiles($(item).attr("id"));
+                                    }
+                                });
+                            }
+                            makeBasicInfoReadonly();
+                            //window.location.href = '/careplan/modifytemplate?TemplateId=' + result.id + '&ProgramId=' + programId + '&Template=' + result.TemplateName;
+                        },
+                        error: function (e) {
+                            toastr.error("Something Happen Wrong");
+                            $(".loaderOverlay").hide();
+                        }
+                    });
+                }
+            },
+            cancel: {
+
             }
-            //update Careplan status
-            updateCareplanStatus(status);           
-            $("#carePlanName").val("");
-            
-            toastr.success("Saved successfully");
-            $(".loaderOverlay").hide();
-            $(".basic-info-actions").hide();
-            if (intervalStatus != "") {
-                clearInterval(intervalStatus);
-            }
-            makeBasicInfoReadonly();
-            //window.location.href = '/careplan/modifytemplate?TemplateId=' + result.id + '&ProgramId=' + programId + '&Template=' + result.TemplateName;
         },
-        error: function (e) {
-            toastr.error("Something Happen Wrong");
-            $(".loaderOverlay").hide();
-        }
+
     });
+   
 }
 function saveCareplan() {
     if ($("#carePlanName").val().trim() == "") {
@@ -487,10 +519,14 @@ function getBaseFields() {
                             case "checkbox":
                                 if ($(item).hasAttr("data-column") && $(item).closest("div.form-group").hasClass("base-control")) {
                                     var value = baseFields[$(item).attr("data-column")];
-                                    var valueArr = value.split(',');
-                                    for (var i = 0; i < valueArr.length; i++) {
-                                        $(item).closest("div.form-group").find(`input[value=${valueArr[i]}]`).prop("checked", true);
-                                    }                                   
+                                    if (value == null || value == "") {
+
+                                    } else {
+                                        var valueArr = value.split(',');
+                                        for (var i = 0; i < valueArr.length; i++) {
+                                            $(item).closest("div.form-group").find(`input[value=${valueArr[i]}]`).prop("checked", true);
+                                        }
+                                    }
                                 }
                                 break;
                             case "file":
@@ -502,12 +538,12 @@ function getBaseFields() {
                                         dataType: "json",
                                         async: false,
                                         success: function (result) {
-                                            if (result != "") {
+                                            if (result != "" && result != null) {
                                                 var filesArr = result.Files.split(',');
                                                 var namesArr = result.FileNames.split(',');
                                                 var selectedFiles = `<div class="label">File Names</div><ul class="file_uploaded_list file_uploaded_inputs">`;
                                                 for (var i = 0; i < filesArr.length; i++) {
-                                                    selectedFiles += `<li><input class="form-control" type="text" value="${namesArr[i]}"/>`
+                                                    selectedFiles += `<li><input class="form-control" placeholder="Enter file name here" type="text" value="${namesArr[i]}"/>`
                                                     selectedFiles += '<a href="/' + careplanUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a><span onclick="removeUpload(this)" class="removeUploadFile"><i class="fa fa-times"></i></span></li>';
                                                 }
                                                 selectedFiles += "</ul>";
@@ -563,20 +599,29 @@ function getBaseFieldData() {
                                 if ($(item).hasAttr("data-column")) {
                                     if ($(item).closest("div.inputContent").parent().hasClass("base-control")) {
                                         value = baseFields[$(item).attr("data-column")];
-                                        var valueArr = value.split(',');
-                                        var valueTxt = "";
-                                        if (isupdateProgramFields) {
-                                            for (var i = 0; i < valueArr.length; i++) {
-                                                $(item).closest("div.inputContent").find(`input[value=${valueArr[i]}]`).prop("checked", true);
-                                            }
+                                        if (value == null || value == "") {
+                                            if (isupdateProgramFields) {
+
+                                            } else {
+                                                $(item).closest("div.inputContent").parent().next().html("").show();
+                                                $(item).closest("div.inputContent").hide();
+                                            }                                           
                                         } else {
-                                            for (var i = 0; i < valueArr.length; i++) {
-                                                valueTxt += $(item).closest("div.inputContent").find(`input[value=${valueArr[i]}]`).next().text() + ",";
+                                            var valueArr = value.split(',');
+                                            var valueTxt = "";
+                                            if (isupdateProgramFields) {
+                                                for (var i = 0; i < valueArr.length; i++) {
+                                                    $(item).closest("div.inputContent").find(`input[value=${valueArr[i]}]`).prop("checked", true);
+                                                }
+                                            } else {
+                                                for (var i = 0; i < valueArr.length; i++) {
+                                                    valueTxt += $(item).closest("div.inputContent").find(`input[value=${valueArr[i]}]`).next().text() + ", ";
+                                                }
+                                                valueTxt = valueTxt.slice(0, -2);
+                                                $(item).closest("div.inputContent").parent().next().html("").append(valueTxt).show();
+                                                $(item).closest("div.inputContent").hide();
                                             }
-                                            valueTxt=  valueTxt.slice(0, -1);
-                                            $(item).closest("div.inputContent").parent().next().html("").append(valueTxt).show();
-                                            $(item).closest("div.inputContent").hide();
-                                        }                                                                            
+                                        }
                                     }
                                 }
                                 break;
@@ -595,7 +640,7 @@ function getBaseFieldData() {
                                                     var namesArr = result.FileNames.split(',');
                                                     var selectedFiles = `<div class="label">File Names</div><ul class="file_uploaded_list file_uploaded_inputs">`;
                                                     for (var i = 0; i < filesArr.length; i++) {
-                                                        selectedFiles += `<li><input class="form-control" type="text" value="${namesArr[i]}"/>`
+                                                        selectedFiles += `<li><input class="form-control" placeholder="Enter file name here" type="text" value="${namesArr[i]}"/>`
                                                         selectedFiles += '<a href="/' + careplanUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a><span onclick="removeUpload(this)" class="removeUploadFile"><i class="fa fa-times"></i></span></li>';
                                                     }
                                                     selectedFiles += "</ul>";
@@ -783,22 +828,30 @@ function getBasicInfoByCareplanId(careplanid, templateid) {
                         switch ($(item).attr("type")) {
                             case "radio":
                             case "checkbox":
-                                if ($(item).hasAttr("data-column") && $(item).closest("div.inputContent").parent().hasClass("program-control")) {
-                                    
+                                if ($(item).hasAttr("data-column") && $(item).closest("div.inputContent").parent().hasClass("program-control")) {                                    
                                     value = fields[$(item).attr("data-column")];
-                                    var valueArr = value.split(',');
-                                    var valueTxt = "";
-                                    if (isupdateProgramFields) {
-                                        for (var i = 0; i < valueArr.length; i++) {
-                                            $(item).closest("div.inputContent").find(`input[value=${valueArr[i]}]`).prop("checked", true);
+                                    if (value == null || value == "") {
+                                        if (isupdateProgramFields) {
+
+                                        } else {
+                                            $(item).closest("div.inputContent").parent().next().html("").show();
+                                            $(item).closest("div.inputContent").hide();
                                         }
                                     } else {
-                                        for (var i = 0; i < valueArr.length; i++) {
-                                            valueTxt += $(item).closest("div.inputContent").find(`input[value=${valueArr[i]}]`).next().text() + ",";
+                                        var valueArr = value.split(',');
+                                        var valueTxt = "";
+                                        if (isupdateProgramFields) {
+                                            for (var i = 0; i < valueArr.length; i++) {
+                                                $(item).closest("div.inputContent").find(`input[value=${valueArr[i]}]`).prop("checked", true);
+                                            }
+                                        } else {
+                                            for (var i = 0; i < valueArr.length; i++) {
+                                                valueTxt += $(item).closest("div.inputContent").find(`input[value=${valueArr[i]}]`).next().text() + ", ";
+                                            }
+                                            valueTxt = valueTxt.slice(0, -2);
+                                            $(item).closest("div.inputContent").parent().next().html("").append(valueTxt).show();
+                                            $(item).closest("div.inputContent").hide();
                                         }
-                                        valueTxt= valueTxt.slice(0, -1);                                        
-                                        $(item).closest("div.inputContent").parent().next().html("").append(valueTxt).show();
-                                        $(item).closest("div.inputContent").hide();
                                     }
                                 }
                                 break;
@@ -953,19 +1006,24 @@ function checkprogramfieldbyid(tempid,careplanid) {
 function makeBasicInfoReadonly() {
     var value = "";
     isupdateProgramFields = false;
-    $(".render-basicform").find(".program-control,.base-control").each(function (index, item) {
+    $(".render-basicform").find(".program-control,.base-control").each(function (index, item) {    
         if ($(item).is("div")) {
             var selectedValues = $.map($(item).find("input:checked"), function (n, i) {
                 return n.value;
             }).join(',');
-            var valueArr = selectedValues.split(',');
-            var valueTxt = "";
-            for (var i = 0; i < valueArr.length; i++) {
-                valueTxt += $(item).find(`input[value=${valueArr[i]}]`).next().text() + ",";
+            if (selectedValues == "") {
+                $(item).next().html("").show();
+                $(item).find("div.inputContent").hide();
+            } else {
+                var valueArr = selectedValues.split(',');
+                var valueTxt = "";
+                for (var i = 0; i < valueArr.length; i++) {
+                    valueTxt += $(item).find(`input[value=${valueArr[i]}]`).next().text() + ", ";
+                }
+                valueTxt = valueTxt.slice(0, -2);
+                $(item).next().html("").append(valueTxt).show();
+                $(item).find("div.inputContent").hide();
             }
-            valueTxt= valueTxt.slice(0, -1);           
-            $(item).next().html("").append(valueTxt).show();
-            $(item).find("div.inputContent").hide();
             //value = $(item).find("input:checked").next().text();
             //$(item).next().html("").append(value).show();
             //$(item).find("div.inputContent").hide();
@@ -1024,7 +1082,7 @@ function addZero(i) {
 }
 function previewOnChange(obj) {
     if (obj.files.length) {
-        var selectedFiles = `<div class="label">File Names</div><ul class="file_uploaded_list file_uploaded_inputs">`;
+        var selectedFiles =`<div class="label">File Names</div><ul class="file_uploaded_list file_uploaded_inputs">`;
         var iSize = "";
         var maxSize = $(obj).attr("data-filesize");
         for (var i = 0; i < obj.files.length; i++) {
@@ -1034,14 +1092,14 @@ function previewOnChange(obj) {
                 toastr.error(obj.files[i].name + " Size is exceeded than " + maxSize + "kb");
                 obj.value = "";
                 return false;
-            } else {
+            } else {                           
                 var file = URL.createObjectURL(obj.files[i]);
-                selectedFiles += `<li><input class="form-control" required type="text" value="${obj.files[i].name.split(".").shift()}"/>`
+                selectedFiles += `<li><input class="form-control" placeholder="Enter file name here" type="text" value="${obj.files[i].name.split(".").shift()}"/>`
                 selectedFiles += '<a href="' + file + '" target="_blank">' + obj.files[i].name + '</a><span onclick="removeUpload(this)" class="removeUploadFile"><i class="fa fa-times"></i></span></li>';
             }
         }
         selectedFiles += "</ul>";
-        $(obj).next().next().html("").append(selectedFiles);
+        $(obj).next().next().html("").append(selectedFiles);       
     } else {
         $(obj).next().next().html("");
     }    
@@ -1071,15 +1129,16 @@ function uploadFiles(Id) {
         type: "POST",
         url: "/CarePlan/UploadFiles",
         dataType: "json",
-        contentType: false, // Not to set any content header
-        processData: false, // Not to process data
+        contentType: false, 
+        processData: false,
         data: fileData,
         async: false,
         success: function (result, status, xhr) {
-           
+            return true;
         }, error: function (e) {
             toastr.error("Something Happen Wrong");
             $(".loaderOverlay").hide();
+            return false
         }
     });
 }
@@ -1098,7 +1157,7 @@ function getUploadedFile(careid, Id) {
                 if (isupdateProgramFields) {
                      selectedFiles = `<div class="label">File Names</div><ul class="file_uploaded_list file_uploaded_inputs">`;
                     for (var i = 0; i < filesArr.length; i++) {
-                        selectedFiles += `<li><input class="form-control" type="text" value="${namesArr[i]}"/>`
+                        selectedFiles += `<li><input class="form-control" placeholder="Enter file name here" type="text" value="${namesArr[i]}"/>`
                         selectedFiles += '<a href="/' + careplanUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a><span onclick="removeUpload(this)" class="removeUploadFile"><i class="fa fa-times"></i></span></li>';
                     }
                     selectedFiles += "</ul>";                   
@@ -1111,7 +1170,7 @@ function getUploadedFile(careid, Id) {
                             case "png":
                             case "jpg":
                             case "jpeg":                                
-                                selectedFiles += '<li><img  src="/' + careplanUploadedPath + filesArr[i] + '" alt="Care Plan Upload"><span>' + namesArr[i] + '</span></li>';
+                                selectedFiles += '<li><img  src="/' + careplanUploadedPath + filesArr[i] + '" alt="Care Plan Upload"><span><a href="/' + careplanUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></span></li>';
                                 break;
                             default:
                                 selectedFiles += '<li><a href="/' + careplanUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></li>';
@@ -1149,7 +1208,7 @@ function getBaseUploadedFile(Id) {
                         case "png":
                         case "jpg":
                         case "jpeg":
-                            selectedFiles += '<li><img  src="/' + careplanUploadedPath + filesArr[i] + '" alt="Care Plan Upload"><span>' + namesArr[i] + '</span></li>';
+                            selectedFiles += '<li><img  src="/' + careplanUploadedPath + filesArr[i] + '" alt="Care Plan Upload"><span><a href="/' + careplanUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></span></li>';
                             break;
                          default:
                             selectedFiles += '<li><a href="/' + careplanUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></li>';
@@ -1265,13 +1324,19 @@ function saveBasicInfoAsDraft(status) {
             fieldmodel.push({ ColumnName: $(item).attr("data-column"), FieldValue: $(item).val() });
         }
     });
-    if (fieldmodel.length < 8) return;
+    //if (fieldmodel.length < 8) return;  
     if ($(".render-basicform").find("input[type='file']").length) {
         $(".render-basicform").find("input[type='file']").each(function (index, item) {
             if ($(item).hasClass("program-control") || $(item).hasClass("base-control")) {
-                uploadFiles($(item).attr("id"));
+                var res = validateFiles($(item).attr("id"));
+                if (res == false) {
+                    return false;
+                }
             }
         });
+    }
+    if ($(".render-basicform").find("input.invaild-input").length) {
+        return false;
     }
     var model = {
         ID: isupdateProgramFields ? careplanid : 0,
@@ -1298,6 +1363,13 @@ function saveBasicInfoAsDraft(status) {
             //$(".basic-info-actions").hide();
             if (intervalStatus != "") {
                 clearInterval(intervalStatus);
+            }
+            if ($(".render-basicform").find("input[type='file']").length) {
+                $(".render-basicform").find("input[type='file']").each(function (index, item) {
+                    if ($(item).hasClass("program-control") || $(item).hasClass("base-control")) {
+                        uploadFiles($(item).attr("id"));
+                    }
+                });
             }
             isupdateProgramFields = true;
             //makeBasicInfoReadonly();
@@ -1600,37 +1672,65 @@ function getDatabaseFieldValues() {
                                 }
                                 break;
                             case "PHQ9":
-                                if (result.PatientDetail[Index].hasOwnProperty(key)) {
-                                    if (key == "FeelingTired" && keyValue != null) {
-                                        switch (keyValue) {                                           
-                                            case 0:
-                                                keyValue = "Not at all";
+                                if (result.PatientDetail[Index].hasOwnProperty(key)) {                                   
+                                        switch (key) {
+                                            case "LittleInterest":
+                                            case "FeelingBad":
+                                            case "FeelingDown":
+                                            case "FeelingTired":
+                                            case "HurtingYourself":
+                                            case "PoorAppetite":
+                                            case "TroubleFalling":
+                                            case "TroubleConcentraiting":
+                                            case "restless":
+                                            case "ProblemsMade":
+                                            if (keyValue != null) {
+                                                switch (keyValue) {
+                                                    case 0:
+                                                        keyValue = "Not at all";
+                                                        break;
+                                                    case 1:
+                                                        keyValue = "Several days";
+                                                        break;
+                                                    case 2:
+                                                        keyValue = "More than half the days";
+                                                        break;
+                                                    case 3:
+                                                        keyValue = "Nearly every day";
+                                                        break;
+                                                    default:
+                                                        keyValue = "None";
+                                                        break;
+                                                }
                                                 break;
-                                            case 1:
-                                                keyValue = "Several days";
-                                                break;
-                                            case 2:
-                                                keyValue = "More than half the days";
-                                                break;
-                                            case 3:
-                                                keyValue = "Nearly every day";
-                                                break;
-                                            default:
-                                                keyValue = "None";
-                                                break;
-                                        }
+                                        }                                       
                                     }
                                     $(item).html("").append(keyValue);
                                 }
                                 break;
 
-                            case "PatientMentalHealth":
-                                
+                            case "PatientMentalHealth":                               
                                 if (result.PatientDetail[Index].hasOwnProperty(key)) {
+                                    switch (key) {
+                                        case "MentalHealthConditions":
+                                            if (keyValue != null) {
+                                                keyValue = ItemNames.find(x => x.LookUpFieldID == 43 && x.IsDeleted == false && x.ID == keyValue).OptionName;
+                                            }
+                                            break;
+                                        case "PoorMentalHealth":
+                                            if (keyValue != null) {
+                                                keyValue = ItemNames.find(x => x.LookUpFieldID == 23 && x.IsDeleted == false && x.ID == keyValue).OptionName;
+                                            }
+                                            break;
+                                        case "SufferExcessive":
+                                            if (keyValue != null) {
+                                                keyValue = ItemNames.find(x => x.LookUpFieldID == 24 && x.IsDeleted == false && x.ID == keyValue).OptionName;
+                                            }
+                                            break;
+                                    }
                                     $(item).html("").append(keyValue);
                                 }
                                 break;
-
                             case "PatientFoodAccess":
                                 if (result.PatientDetail[Index].hasOwnProperty(key) && ItemNames.length) {
                                     if (key == "PortionsOfVegetables" && keyValue != null) {
@@ -1670,9 +1770,46 @@ function GetDropDownName() {
     });
 }
 function removeUpload(obj) {
-    if ($(obj).parent().parent().find("li").length == 1) {
-        $(obj).parent().parent().parent().html("");
-    } else {
-        $(obj).closest("li").remove();
+    $.confirm({
+        icon: 'fas fa-exclamation-triangle',
+        title: 'Confirm',
+        content: 'Are you sure to delete this attachment ?',
+        type: 'red',
+        typeAnimated: true,
+        buttons: {
+            yes: {
+                btnClass: 'btn-danger',
+                action: function () {
+                    if ($(obj).parent().parent().find("li").length == 1) {
+                        $(obj).parent().parent().parent().html("");
+                    } else {
+                        $(obj).closest("li").remove();
+                    }   
+                }
+            },
+            no: {
+                
+            }
+        },
+
+    });
+    
+}
+function validateFiles(Id) {
+    var files = $("#" + Id).get(0).files;
+    if (files.length == 0 && $("#" + Id).parent().prev().hasClass("required-asterisk")) {
+        toastr.error("File upload field is required");
+        return false;
+    }
+    $("#" + Id).next().next().find("input").each(function (index, item) {
+        if ($(item).val().trim() == "") {
+            $(item).addClass("invaild-input");
+        } else {
+            $(item).removeClass("invaild-input");
+        }
+    });
+    if ($("#" + Id).next().next().find("input.invaild-input").length) {
+        toastr.error("File name field is required");
+        return false;
     }
 }

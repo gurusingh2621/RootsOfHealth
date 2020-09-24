@@ -454,6 +454,9 @@ ul.file_uploaded_list li .removeUploadFile {
 #content .render-basicform .bootom-form-row.mb-2 {
     padding-top: 0 !important;
 }
+input.invaild-input {
+    border: 1px solid red !important;
+}
 /*My responsive style
 ============================================================================================ */
 @media(min-width:1400px) {
