@@ -321,21 +321,32 @@ namespace RootsOfHealth.Controllers
         }
         [HttpPost]
         public ActionResult UploadFiles()
-        {
+        {         
             string path = Server.MapPath("~/"+ CarePlanUploadPath);
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
-            HttpFileCollectionBase files = Request.Files;
-            var Files = Request["Files"];
+            HttpFileCollectionBase files = Request.Files;           
             var filenames= Request["FileNames"];
+            var savedfiles = Request["Files"];
             var controlid = Request["ControlId"];
             var carePlanId = Request["CarePlanId"];
             var patientId= Request["PatientId"];
             var IsBaseField= Convert.ToBoolean(Request["IsBaseField"]);
-            string guidName = "";
+            string guidName = "";          
             List<string> FilesGuid = new List<string>();
+            if (savedfiles.IndexOf(',') > 0)
+            {
+                var savedArr = savedfiles.Split(',');
+                for(int i = 0; i < savedArr.Length; i++)
+                {
+                    FilesGuid.Add(savedArr[i]);
+                }
+            }else if (savedfiles.IndexOf('.') > 0)
+            {
+                FilesGuid.Add(savedfiles);
+            }
             for (int i = 0; i < files.Count; i++)
             {
                 HttpPostedFileBase file = files[i];
@@ -373,7 +384,7 @@ namespace RootsOfHealth.Controllers
                 {
 
                 }
-            }
+            }           
              return Json(files.Count + " Files Uploaded!");
         }
         [HttpPost]
