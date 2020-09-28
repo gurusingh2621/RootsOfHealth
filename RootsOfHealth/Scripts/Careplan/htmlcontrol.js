@@ -1903,9 +1903,9 @@ function saveHtml() {
         toastr.error("", "Enter required fields for controls", { progressBar: true });
         return;
     }
-    $("#droppable .database-field").each(function (i, e) {
-        return;
-    });
+    //$("#droppable .database-field").each(function (i, e) {
+    //    return;
+    //});
     if ($("#checkbox-finalize").prop("checked")) {
         if ($("#checkbox-finalize").attr("disabled") != undefined) {
             saveTemplate(1);
@@ -1971,7 +1971,7 @@ function saveTemplate(isactive) {
     }).done(function (result) {
         if (result != "0") {
             var models = [];
-
+            models.push({ ColDataType: "int", ColumnName: "PatientID" });
             $("#droppable [type=text]").each(function (index, item) {
                 if ($(item).hasClass("database-field") || $(item).hasClass("base-control") || $(item).hasClass("basecontrol-id")) return;
                 models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column") });
