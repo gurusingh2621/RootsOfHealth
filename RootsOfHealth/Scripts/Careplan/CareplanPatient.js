@@ -1,6 +1,7 @@
 ﻿var tableName = "";
 var careplanid = "0";
 var templateid = "";
+var basetemplateid = "0";
 var intervalStatus = "";
 var isupdateBaseField = false;
 var isupdateProgramFields = false;
@@ -27,8 +28,7 @@ $(document).ready(function () {
     $(".close_right_sidebar").click(function () {
         $(this).parents('.right_sidebar').removeClass('opened');
     }); 
-    getCarePlanList();
-    checkbasefieldbypatientid();
+    getCarePlanList();    
 });
 function getCareProgramOptions() {
     $("#carePlanName").val("");
@@ -166,7 +166,7 @@ function proceedCarePlan(ProgramId) {
                 });                            
                 toogleToolTip();     
                 getDatabaseFieldValues();
-                $("textarea.program-control").summernote({
+                $("textarea.program-control,textarea.base-control").summernote({
                     toolbar: [
                         ['para', ['ul', 'ol', 'paragraph']],
                         ['style', ['bold', 'italic', 'underline', 'clear']],
@@ -192,14 +192,19 @@ function proceedCarePlan(ProgramId) {
 function saveBasicInfo(status) {
     var fieldmodel = [];  
     var isvalid = true;
-    $(".render-basicform").find("input.form-control,input.custom-control-input,select.form-control,textarea.form-control").each(function (index, item) {
+    $(".render-basicform").find(".base-control,.program-control,input.custom-control-input").each(function (index, item) {
         if ($(item).is("input") && $(item).hasAttr("data-column")) {
             switch ($(item).attr("type")) {
                 case "radio":
                 case "checkbox":
                     if ($(item).closest(".inputContent").prev().hasClass("required-asterisk") && $(item).closest("div.inputContent").find("input:checked").length==0) {
                           isvalid = false;
-                          }
+                    }
+                    break;
+                case "file":
+                    if ($(item).next().next().find("input").length == 0) {
+                        isvalid = false;
+                    }
                     break;
                 default:
                     if ($(item).closest(".inputContent").prev().hasClass("required-asterisk") && $(item).val().trim()=="") {
@@ -235,7 +240,7 @@ function saveBasicInfo(status) {
     fieldmodel.push({ ColumnName: "ModifiedBy", FieldValue: userId });
     fieldmodel.push({ ColumnName: "ModifiedDate", FieldValue: getActualFullDate() });
     if ($(".render-basicform").find(".base-control").length) {
-        fieldmodel.push({ ColumnName: "BaseTemplateID", FieldValue: $("#hdnbasetempid").val() });
+        fieldmodel.push({ ColumnName: "BaseTemplateID", FieldValue: basetemplateid });
     }
     $(".render-basicform [type=text],[type=number],[type=file],[type=date]").each(function (index, item) {
         if ($(item).hasAttr("data-column") && $(item).val() != "" && !$(item).hasClass("base-control")) {
@@ -438,6 +443,7 @@ function getHeaderAndFooter() {
                 case -1:
                     break;
                 default:
+                    basetemplateid = result;
                     $.ajax({
                         type: "GET",
                         url: '/careplan/GetFormHtmlById?Id=' + result,
@@ -471,10 +477,10 @@ function parseHTML(htmlstr) {
     return t.content.cloneNode(true);
 }
 function saveBaseFieldInfo() {
+    checkbasefieldbypatientid();
     var fieldmodel = [];
     fieldmodel.push({ ColumnName: "PatientID", FieldValue: PatientId });
-    fieldmodel.push({ ColumnName: "TemplateID", FieldValue: templateid });
-    fieldmodel.push({ ColumnName: "BaseTemplateID", FieldValue: $("#hdnbasetempid").val() });
+    fieldmodel.push({ ColumnName: "TemplateID", FieldValue: templateid });    
     fieldmodel.push({ ColumnName: "Careplanid", FieldValue: careplanid });
     if (!isupdateBaseField) {
         fieldmodel.push({ ColumnName: "CreatedBy", FieldValue: userId });
@@ -681,7 +687,7 @@ function getBaseFieldData() {
                                             dataType: "json",
                                             async: false,
                                             success: function (result) {
-                                                if (result != "") {
+                                                if (result != "" && result != null) {
                                                     var filesArr = result.Files.split(',');
                                                     var namesArr = result.FileNames.split(',');
                                                     var selectedFiles = `<div class="label">File Names</div><ul class="file_uploaded_list file_uploaded_inputs">`;
@@ -763,6 +769,7 @@ function editCarePlan(Id) {
                     intervalStatus = setInterval(saveBasicInfoAsDraft,300000,2);
                     break;
                 case 1://in-progress
+                    careplanid = result.CarePlanId;
                     getBasicInfoTemplateById(result.TemplateID);
                     getBasicInfoByCareplanId(result.CarePlanId, result.TemplateID);
                     $(".basic-info-actions").hide();
@@ -805,9 +812,9 @@ function getBasicInfoTemplateById(id) {
                 $(".render-basicform").html("").append(result.html);
                 tableName = result.tableName;
                 templateid = id;
-                //if ($(".render-basicform").find(".basecontentarea").length > 0) {
-                //    getBaseFieldData();
-                //}
+                if ($(".render-basicform").find(".basecontentarea").length > 0) {
+                    getBasehtmlByCarePlanId(careplanid);
+                }
                 $(".render-basicform .event-btn-right").remove();
                 $(".render-basicform .ck-editor-header").remove();
                 $(".render-basicform").find(".question-container").parent().css("border", "none");
@@ -832,7 +839,7 @@ function getBasicInfoTemplateById(id) {
                 });
                 toogleToolTip();
                 getDatabaseFieldValues();
-                $("textarea.form-control").summernote({
+                $("textarea.program-control,textarea.base-control").summernote({
                     toolbar: [
                         ['para', ['ul', 'ol', 'paragraph']],
                         ['style', ['bold', 'italic', 'underline', 'clear']],
@@ -1017,7 +1024,8 @@ function checkbasefieldbypatientid() {
         type: "GET",
         url: Apipath + '/api/PatientMain/checkbasefieldbypatientid?patientid=' + PatientId,
         contentType: 'application/json; charset=UTF-8',
-        dataType: "json",   
+        dataType: "json",
+        async: false,
         success: function (result) {
             
             if (result != 0) {
@@ -1105,7 +1113,11 @@ function makeBasicInfoReadonly() {
         }
         if ($(item).is("textarea")) {
             value = $(item).summernote('code');
-            $(item).parent().find("label.label-program").html("").append(value).show();
+            if ($(item).hasClass("base-control")) {
+                $(item).parent().find("label.label-base").html("").append(value).show();
+            } else {
+                $(item).parent().find("label.label-program").html("").append(value).show();
+            }            
             $(item).next().hide();
         }
 
@@ -1133,7 +1145,7 @@ function previewOnChange(obj) {
         if ($(".render-basicform").find("input[type='file']").length) {
             $(".render-basicform").find("input[type='file']").each(function (index, item) {
                 if ($(item).hasClass("program-control") || $(item).hasClass("base-control")) {
-                    if ($(item).attr("id") == $(obj).attr("id")) {                    
+                    if ($(item).attr("id") == $(obj).attr("id")) {                      
                         switch (index) {                            
                             case 0:
                                 fileData = null;
@@ -1184,6 +1196,13 @@ function previewOnChange(obj) {
         }      
         //var selectedFiles =`<div class="label">File Names</div><ul class="file_uploaded_list file_uploaded_inputs">`;
         var selectedFiles = $(obj).next().next().find("div.label").length ? "" : `<div class="label">File Names</div><ul class="file_uploaded_list file_uploaded_inputs">`;
+        if (!$(obj).hasAttr("multiple")) {
+            for (var key of fileData.keys()) {               
+                fileData.delete(key)
+            }
+            selectedFiles = `<div class="label">File Names</div><ul class="file_uploaded_list file_uploaded_inputs">`;
+            $(obj).next().next().html("");
+        }
         var iSize = "";
         var maxSize = $(obj).attr("data-filesize");
         for (var i = 0; i < obj.files.length; i++) {
@@ -1195,7 +1214,7 @@ function previewOnChange(obj) {
                     obj.value = "";
                     return false;
                 } else {
-                    var file = URL.createObjectURL(obj.files[i]);
+                    var file = URL.createObjectURL(obj.files[i]);                    
                     selectedFiles += `<li><input class="form-control" placeholder="Enter file name here" type="text" value="${obj.files[i].name.split(".").shift()}"/>`
                     selectedFiles += '<a href="' + file + '" target="_blank">' + obj.files[i].name + '</a><span data-remove="' + obj.files[i].name + '" onclick="removeUpload(this)" class="removeUploadFile"><i class="fa fa-times"></i></span></li>';
                     fileData.append(obj.files[i].name, obj.files[i]);
@@ -1212,10 +1231,13 @@ function previewOnChange(obj) {
         //$(obj).next().next().html("");
     }    
 }
-function uploadFiles(Id, fileData) {  
+function uploadFiles(Id, fileData) {
     var files = $("#" + Id).get(0).files;
     //if (files.length == 0) {
     //    return;
+    //}
+    //for (var pair of fileData.entries()) {
+    //    console.log(pair[0] + ', ' + pair[1]);
     //}
     var fileNames = [];
     var savedfiles =[];
@@ -1408,7 +1430,7 @@ function saveBasicInfoAsDraft(status) {
     fieldmodel.push({ ColumnName: "ModifiedBy", FieldValue: userId });
     fieldmodel.push({ ColumnName: "ModifiedDate", FieldValue: getActualFullDate() });
     if ($(".render-basicform").find(".base-control").length) {
-        fieldmodel.push({ ColumnName: "BaseTemplateID", FieldValue: $("#hdnbasetempid").val() });
+        fieldmodel.push({ ColumnName: "BaseTemplateID", FieldValue: basetemplateid });
     }
     $(".render-basicform [type=text],[type=number],[type=file],[type=date]").each(function (index, item) {
         if ($(item).hasAttr("data-column") && $(item).val() != "" && !$(item).hasClass("base-control")) {
@@ -1476,7 +1498,8 @@ function saveBasicInfoAsDraft(status) {
             }
             if ($(".render-basicform").find("input[type='file']").length) {
                 $(".render-basicform").find("input[type='file']").each(function (index, item) {
-                    if ($(item).hasClass("program-control") || $(item).hasClass("base-control")) {                       
+                    if ($(item).hasClass("program-control") || $(item).hasClass("base-control")) {
+                       
                         switch (index) {
                             case 0:
                                 uploadFiles($(item).attr("id"), fileData1);
@@ -1921,18 +1944,12 @@ function removeUpload(obj) {
         buttons: {
             yes: {
                 btnClass: 'btn-danger',
-                action: function () {
-                    debugger;
-                    if ($(obj).parent().parent().find("li").length == 1) {
-                        toastr.error("At least one file name is required with file upload");
-                        return;
-                    }
+                action: function () {                
                     var inputId = $(obj).parent().parent().parent().prev().prev('input[type="file"]').attr("id");
                     if ($(".render-basicform").find("input[type='file']").length && $(obj).hasAttr("data-remove")) {
                         $(".render-basicform").find("input[type='file']").each(function (index, item) {
                             if ($(item).hasClass("program-control") || $(item).hasClass("base-control")) {
                                 if ($(item).attr("id") == inputId) {
-                                    debugger;
                                     switch (index) {
                                         case 0:                                          
                                             fileData1.delete($(obj).attr("data-remove"));;
@@ -1971,7 +1988,8 @@ function removeUpload(obj) {
                         });
                     }                   
                     if ($(obj).parent().parent().find("li").length == 1) {
-                        //$(obj).parent().parent().parent().html("");
+                        $(obj).parent().parent().parent().prev().prev('input[type="file"]').val('');
+                        $(obj).parent().parent().parent().html("");
                     } else {                        
                         $(obj).closest("li").remove();
                     }                  
@@ -2014,4 +2032,46 @@ function clearFileData() {
     fileData8 = new FormData();
     fileData9 = new FormData();
     fileData10 = new FormData();
+}
+function getBasehtmlByCarePlanId(careid) {
+    $.ajax({
+        type: "GET",
+        url: Apipath + '/api/PatientMain/getbasetemplateidbycareplanid?Careplanid=' + careid,
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        async: false,
+        success: function (result) {
+            switch (result) {
+                case 0:
+                    break;
+                default:
+                    basetemplateid = result;
+                    $.ajax({
+                        type: "GET",
+                        url: '/careplan/GetCarePlanTemplateById?TemplateId=' + result,
+                        contentType: 'application/json; charset=UTF-8',
+                        dataType: "json",
+                        async: false,
+                        success: function (result) {
+                            if (result.html != "") {
+                                var baseHtml = parseHTML(result.html);
+                                var baseHeader = $(baseHtml).find(".baseheader").html();
+                                var baseFooter = $(baseHtml).find(".basefooter").html();
+                                $(".render-basicform").find(".baseheader").html("").append(baseHeader);
+                                $(".render-basicform").find(".basefooter").html("").append(baseFooter);
+                            }
+                        },
+                        error: function (e) {
+                            toastr.error("Something happen Wrong");
+                            $(".loaderOverlay").hide();
+                        }
+                    });
+                    break;
+            }
+        },
+        error: function (e) {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });
 }
