@@ -1849,7 +1849,7 @@ function saveHtml() {
     }).done(function (result) {
         if (result != "0") {
             var models = [];
-
+            models.push({ ColDataType: "int", ColumnName: "PatientID" });
             $("#droppable [type=text]").each(function (index, item) {
                 if ($(item).hasClass("database-field")) return;
                 models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column") });
