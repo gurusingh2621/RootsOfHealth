@@ -38,8 +38,7 @@ function getCareProgramOptions() {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         async: false,
-        success: function (result) {
-            isupdateBaseField = parseInt(result.BasePatientCount) != 0 ? true : false;
+        success: function (result) {          
             if (result.ProgramOptions.length) {             
                 $(".createtemplate").show();
                 $(".notemplate").hide();
@@ -1537,6 +1536,7 @@ function saveBasicInfoAsDraft(status) {
             }
             isupdateProgramFields = true;
             clearFileData();
+            getSaveAsDraftUploadedFile();
             //makeBasicInfoReadonly();
             //window.location.href = '/careplan/modifytemplate?TemplateId=' + result.id + '&ProgramId=' + programId + '&Template=' + result.TemplateName;
         }, error: function (e) {
@@ -2070,6 +2070,50 @@ function getBasehtmlByCarePlanId(careid) {
             }
         },
         error: function (e) {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });
+}
+function getSaveAsDraftUploadedFile() {
+    $(".render-basicform").find("input.program-control,input.base-control").each(function (index, item) {
+        if ($(item).is("input")) {
+            switch ($(item).attr("type")) {
+                case "file":
+                    if ($(item).hasClass("base-control") && $(item).hasAttr("data-column")) {
+                        getbasefileforSaveAsDraft($(item).attr("id"));
+                    } else if ($(item).hasClass("program-control") && $(item).hasAttr("data-column")) {
+                        getUploadedFile(careplanid, $(item).attr("id"))
+                    }
+                    break;
+            }
+        }
+    });
+
+}
+function getbasefileforSaveAsDraft(Id) {
+    $.ajax({
+        type: "GET",
+        url: Apipath + '/api/PatientMain/getbasefilesbypatientid?PatientId=' + PatientId + '&controlid=' + Id,
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        async: false,
+        success: function (result) {
+            if (result != "" && result != null) {
+                var filesArr = result.Files.split(',');
+                var namesArr = result.FileNames.split(',');
+                var selectedFiles = `<div class="label">File Names</div><ul class="file_uploaded_list file_uploaded_inputs">`;
+                for (var i = 0; i < filesArr.length; i++) {
+                    selectedFiles += `<li><input class="form-control" data-file="${filesArr[i]}" placeholder="Enter file name here" type="text" value="${namesArr[i]}"/>`
+                    selectedFiles += '<a href="/' + careplanUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a><span onclick="removeUpload(this)" class="removeUploadFile"><i class="fa fa-times"></i></span></li>';
+                }
+                selectedFiles += "</ul>";
+                $("#" + Id).next().next().html("").append(selectedFiles);
+            } else {
+                $("#" + Id).next().next().html("");
+            }
+        },
+        error: function () {
             toastr.error("Something happen Wrong");
             $(".loaderOverlay").hide();
         }
