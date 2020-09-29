@@ -218,8 +218,8 @@ function saveBasicInfo(status) {
                 isvalid = false;
             }
         }
-        if ($(item).is("textarea") && $(item).hasAttr("data-column")) {
-            if ($(item).closest(".inputContent").prev().hasClass("required-asterisk") && $(item).summernote("isEmpty")) {
+        if ($(item).is("textarea") && $(item).hasAttr("data-column") && $(item).val().trim() == "") {
+            if ($(item).closest(".inputContent").prev().hasClass("required-asterisk")) {
                 isvalid = false;
             }
         }
@@ -961,9 +961,6 @@ $.fn.hasAttr = function (name) {
     return this.attr(name) !== undefined;
 };
 function closecarePlan() {
-    if (intervalStatus != "") {
-        clearInterval(intervalStatus);
-    }
     clearFileData();
     $.ajax({
         type: "GET",
@@ -976,7 +973,10 @@ function closecarePlan() {
              templateid = "";
              intervalStatus = "";             
             isupdateProgramFields = false;
-            $("#carePlanName").val("");            
+            $("#carePlanName").val("");
+            if (intervalStatus != "") {
+                clearInterval(intervalStatus);
+            }
             $("span.careplanCount").html("").append(result.length);
             if (result.length) {
                 var careplanList = "";
@@ -1204,16 +1204,8 @@ function previewOnChange(obj) {
         }
         var iSize = "";
         var maxSize = $(obj).attr("data-filesize");
-        var fileExtensons = $(obj).attr("data-accept").split(',');
-        var filename = "";
         for (var i = 0; i < obj.files.length; i++) {
             if (fileData.get(obj.files[i].name) == null) {
-                filename = obj.files[i].name;
-                if (!fileExtensons.some(el => filename.toLowerCase().endsWith(el))) {
-                    toastr.error("Invalid file. Valid formats are (" + fileExtensons.join(",").replace(/\./g,' ') + ")");
-                    obj.value = "";
-                    return false;
-                }
                 iSize = (obj.files[i].size / 1024);
                 iSize = (Math.round(iSize * 100) / 100);
                 if (iSize > maxSize) {
@@ -1255,9 +1247,6 @@ function uploadFiles(Id, fileData) {
         }
     });
     if (files.length==0 && savedfiles.length == 0) {
-        return;
-    }
-    if (fileNames.length == 0) {
         return;
     }
     fileData.append("CarePlanId", careplanid);
@@ -1396,6 +1385,40 @@ function getBaseUploadedFile(Id) {
 //}
 function saveBasicInfoAsDraft(status) {
     var fieldmodel = [];
+    var isvalid = true;
+    $(".render-basicform").find("input.form-control,input.custom-control-input,select.form-control,textarea.form-control").each(function (index, item) {
+        if ($(item).is("input") && $(item).hasAttr("data-column")) {
+            switch ($(item).attr("type")) {
+                case "radio":
+                case "checkbox":
+                    if ($(item).closest(".inputContent").prev().hasClass("required-asterisk") && $(item).closest("div.inputContent").find("input:checked").length == 0) {
+                        isvalid = false;
+                    }
+                    break;
+                default:
+                    if ($(item).closest(".inputContent").prev().hasClass("required-asterisk") && $(item).val().trim() == "") {
+                        isvalid = false;
+                    }
+                    break;
+
+            }
+        }
+        if ($(item).is("select") && $(item).hasAttr("data-column") && $(item).val().trim() == "" && $(item).val() == "0") {
+            if ($(item).closest(".inputContent").prev().hasClass("required-asterisk")) {
+                isvalid = false;
+            }
+        }
+        if ($(item).is("textarea") && $(item).hasAttr("data-column") && $(item).val().trim() == "") {
+            if ($(item).closest(".inputContent").prev().hasClass("required-asterisk")) {
+                isvalid = false;
+            }
+        }
+
+    });
+    //if (!isvalid) {
+    //    toastr.error("Field marked with asterisk(*) are mandatory");
+    //    return;
+    //}
     fieldmodel.push({ ColumnName: "PatientID", FieldValue: PatientId });
     fieldmodel.push({ ColumnName: "TemplateID", FieldValue: templateid });
     fieldmodel.push({ ColumnName: "Careplanid", FieldValue: careplanid });
@@ -1432,6 +1455,7 @@ function saveBasicInfoAsDraft(status) {
             fieldmodel.push({ ColumnName: $(item).attr("data-column"), FieldValue: $(item).val() });
         }
     });
+    //if (fieldmodel.length < 8) return;  
     if ($(".render-basicform").find("input[type='file']").length) {
         $(".render-basicform").find("input[type='file']").each(function (index, item) {
             if ($(item).hasClass("program-control") || $(item).hasClass("base-control")) {
@@ -1531,6 +1555,7 @@ function getDatabaseFieldValues() {
             dataType: "json",
             async: false,
             success: function (result) {
+                console.log(result);
                 $(".render-basicform  label.database-field").each(function (index, item) {
                     var key = $(item).attr("id").substring(0, $(this).attr("id").lastIndexOf("_"));
                     var Index = $(item).attr("data-index");
@@ -1905,6 +1930,7 @@ function GetDropDownName() {
         async: false,
         success: function (result) {
             ItemNames = result;
+            console.log(ItemNames);
         },
     });
 }
@@ -2060,7 +2086,7 @@ function getSaveAsDraftUploadedFile() {
                         getUploadedFile(careplanid, $(item).attr("id"))
                     }
                     break;
-            } 
+            }
         }
     });
 

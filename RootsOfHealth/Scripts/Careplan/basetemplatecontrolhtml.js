@@ -712,7 +712,7 @@ function EditHtml(type, ID) {
                 }
                 $(controlId).parent().prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span><span class="desc"></span>`);
 
-                $(controlId).attr("data-accept", $("#filetype").val());
+                $(controlId).attr("accept", $("#filetype").val());
                 $(controlId).attr("data-filesize", $(".lblfilesize").val());
                 if ($("#required-input").prop("checked")) {
                     $(controlId).parent().prev().addClass("required-asterisk");
@@ -1635,7 +1635,7 @@ function EditHtml(type, ID) {
             maxHeight: 300
         });
         $("#filetype").closest('div').find('label').append('<span></span>');
-        var selectedfiletype = $(controlId).attr("data-accept");
+        var selectedfiletype = $(controlId).attr("accept");
         if (selectedfiletype != undefined) {
             $("#filetype").val(selectedfiletype.split(','));
             $("#filetype").multiselect("refresh");
