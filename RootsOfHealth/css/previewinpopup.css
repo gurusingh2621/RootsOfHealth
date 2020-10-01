@@ -131,12 +131,12 @@ span.tooltipicon i {
     position: relative;
 }
 
-    .required-asterisk:after {
-        content: "*";
-        position: absolute;
-        color: #c10000;
-        margin-left: 5px;
-    }
+label.required-asterisk span.title:after {
+    content: "*";
+    position: absolute;
+    color: #c10000;
+    margin-left: 5px;   
+}
 
 span.tooltipicon {
     outline: none;

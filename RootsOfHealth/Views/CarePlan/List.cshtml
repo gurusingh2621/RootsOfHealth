@@ -4,6 +4,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link href="~/css/careplanlist.css" rel="stylesheet" />
+<link href="~/css/previewinpopup.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
+
 <section id="content" class="responsive-container pt-0">
 
     <div class="inner-content mt-0">
@@ -101,8 +104,26 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="PreviewModal" tabindex="-1" role="dialog" aria-labelledby="PreviewModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered preview-modal" role="document" style="max-width: 80%;height:90%">
+        <div class="modal-content" style="height:90%">
+            <div class="modal-header preview-header">
+                <h5 class="modal-title" id="PreviewModalTitle">Preview</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body preview-body scroll">
 
+            </div>
+            <div class="modal-footer preview-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 @section scripts{
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.js"></script>
     <script>
         var userId = "@Session["userid"]";
     </script>

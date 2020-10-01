@@ -19,15 +19,15 @@ function GetCarePlanTemplateList() {
                     careplans += `<tr>
                          <td width="20%">${item.TemplateName}</td>
                          <td width="15%">${item.ProgramsName == null ? "" : item.ProgramsName}</td>
-                         <td width="12%">${item.IsActive ? "Completed" : "In Progress"}</td>
+                         <td width="10%">${item.IsActive ? "Completed" : "In Progress"}</td>
                          <td width="15%">${item.ModifiedDate != null ? item.ModifiedDate.split("T")[0] : ""}</td>
-                        <td width="15%">${item.IsActive && item.IsBaseTemplate == false ? item.Isactivated == 1 ? "Yes" : "No" : ""}</td>
-                            <td width="23%"><div>`
+                        <td width="10%">${item.IsActive && item.IsBaseTemplate == false ? item.Isactivated == 1 ? "Yes" : "No" : ""}</td>
+                            <td width="30%"><div>`;
+                    careplans += `<a href="javascript:void(0)" onclick="ViewCarePlanContent(${item.TemplateID},\'${item.TemplateName}'\)" class="btn btn-success text-white" style="cursor:pointer;">VIEW</a>`
                     if (item.IsBaseTemplate) {
                         careplans += `<a href="/careplan/BaseTemplate?templateid=${item.TemplateID}"  class="btn btn-success text-white" style="cursor:pointer;">MODIFY</a>`
 
-                    } else {
-                        console.log(Object.entries(item));
+                    } else {                        
                         careplans += `<a href="javascript:void(0)" onclick="Proceed({TemplateID:${item.TemplateID},TemplateName:\'${item.TemplateName}\',ProgramsID:${item.ProgramsID},IsBaseTemplate:${item.IsBaseTemplate}})"  class="btn btn-success text-white" style="cursor: pointer; ${item.Isactivated == true ? "display:none;" : ""} ">MODIFY</a>`
                     }
                     if (item.IsActive == 1 && item.IsBaseTemplate == false) {
@@ -221,4 +221,128 @@ function alertInprogressStatus() {
         type:  'red',
         content: 'Template can not activate until status is complete',
     });
+}
+function ViewCarePlanContent(ID,name) {
+    $(".loaderOverlay").show();
+    $("#PreviewModalTitle").html("").append(name);
+    $.ajax({
+        type: "GET",
+        url: '/careplan/GetCarePlanTemplateById?TemplateId=' + ID,
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",        
+        success: function (result) {
+        if (result.html != "") {
+                $(".preview-body").html("").append(result.html);
+                if ($(".preview-body").find(".basecontentarea").length > 0) {
+                    ViewHeaderAndFooter();
+                }
+                $(".preview-body .event-btn-right").remove();
+                $(".preview-body .ck-editor-header").remove();
+                $(".preview-body").find(".question-container").parent().css("border", "none");
+                $(".preview-body").find(".dragresize").find(".question-container").remove();
+                $(".preview-body").find(".dragresize").find(".bootom-form-row").css({ "padding": "0", "margin": "0" });
+                $(".preview-body .html-content").prev().css("display", "none");
+                $(".preview-body .html-content").parent().parent().parent().addClass("left-control");
+                $(".preview-body .f-g-left").each(function (index, item) {
+                    $(item).parent().parent().addClass("left-control");
+                });
+                $('.preview-body textarea').bind('copy paste cut', function (e) {
+                    e.preventDefault();
+                });
+                $('.preview-body textarea').keypress(function (e) {
+                    var regex = new RegExp("^[a-zA-Z0-9]+$");
+                    var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+                    if (regex.test(str)) {
+                        return true;
+                    }
+                    e.preventDefault();
+                    return false;
+                });
+
+                ViewtoogleToolTip();
+                $(".preview-body textarea.form-control").summernote({
+                    toolbar: [
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['style', ['bold', 'italic', 'underline', 'clear']],
+                        ['font', ['strikethrough', 'superscript', 'subscript']],
+                    ],
+                    height: 150,
+                    placeholder: "Type here",
+                    callbacks: {
+                        onInit: function (e) {
+                            this.placeholder
+                                ? e.editingArea.find(".note-placeholder").html(this.placeholder)
+                                : e.editingArea.remove(".note-placeholder")
+                        }
+                    },
+                });
+               
+                $("#PreviewModal").modal({
+                    show: true,
+                    keyboard: false,
+                    backdrop: 'static'
+                });
+            }
+            $(".loaderOverlay").hide();
+        },
+        error: function (e) {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });   
+}
+function ViewHeaderAndFooter() {
+    $.ajax({
+        type: "GET",
+        url: Apipath + '/api/PatientMain/getbasetemplateid',
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        async: false,
+        success: function (result) {
+            switch (result) {
+                case -1:
+                    break;
+                default:
+                    $.ajax({
+                        type: "GET",
+                        url: '/careplan/GetFormHtmlById?Id=' + result,
+                        contentType: 'application/json; charset=UTF-8',
+                        dataType: "json",
+                        async: false,
+                        success: function (result) {
+                            var baseHtml = ViewparseHTML(result.html);
+                            var baseHeader = $(baseHtml).find(".baseheader").html();
+                            var baseFooter = $(baseHtml).find(".basefooter").html();
+                            $(".preview-body").find(".baseheader").html("").append(baseHeader);
+                            $(".preview-body").find(".basefooter").html("").append(baseFooter);
+                        }
+                    });
+                    break;
+            }
+        }, error: function (e) {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });
+}
+function ViewtoogleToolTip() {
+    $('.tooltipicon').tooltip({
+        trigger: "click",
+        html: true,
+        container: 'body'
+    });
+    $('.tooltipicon').on('show.bs.tooltip', function () {
+        $('.tooltipicon').not(this).tooltip('hide');
+    });
+    $('body').on('click', function (e) {
+        if ($(e.target).data('toggle') !== 'tooltip' && $(e.target).parents('[data-toggle="tooltip"]').length === 0
+            && $(e.target).parents('.tooltip.in').length === 0) {
+            (($('[data-toggle="tooltip"]').tooltip('hide').data('bs.tooltip') || {}).inState || {}).click = false;
+        }
+    });
+}
+function ViewparseHTML(htmlstr) {
+    var t = document.createElement('template');
+    t.innerHTML = htmlstr;
+    return t.content.cloneNode(true);
 }

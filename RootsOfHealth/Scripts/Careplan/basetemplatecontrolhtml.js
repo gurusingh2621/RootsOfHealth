@@ -69,8 +69,7 @@ function HtmlControlDragnDrop() {
                         '<div class="custom-control custom-checkbox  d-inline-block mr-2">' +
                         '<input type="checkbox" class="custom-control-input"  name="checkbox" value="2" id="checkbox2">' +
                         '<label class="custom-control-label" for="checkbox2">option 2</label></div>' +
-                        '</div>' +
-                        '<label class="label-base"></label>' +
+                        '</div>' +                      
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
                         '</div>';
@@ -117,8 +116,7 @@ function HtmlControlDragnDrop() {
                         '<div class="custom-control custom-radio d-inline-block mr-2">' +
                         '<input type="radio" class="custom-control-input"  name="radio" value="2" id="radio2">' +
                         '<label class="custom-control-label" for="radio2">option 2</label></div>' +
-                        '</div>' +
-                        '<label class="label-base"></label>' +
+                        '</div>' +                       
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
                         '</div>';
@@ -396,8 +394,7 @@ function EditHtml(type, ID) {
                      <label class="custom-control-label" for="${ID + index}">${$(this).find("input.option-text").val().trim()}</label></div>
                      `;
                 });
-                option_data += "</div></div>";
-                //$(option_data).appendTo(".dragresize  [id=" + ID + "]");
+                option_data += "</div><label class='label-base'></label></div>";                
                 $(controlId).find("div").html("");
                 $(controlId).append(option_data);
                 $(controlId).find(".checkbox-group").find("span.title").html("").append($(".lbltext").val().trim());
@@ -1057,7 +1054,7 @@ function EditHtml(type, ID) {
     <label class="custom-control-label" for="${ID + index}">${$(this).find("input.option-text").val()}</label></div>
     `;
                 });
-                option_data += "</div></div>";
+                option_data += "</div><label class='label-base'></label></div>";
                 $(controlId).find("div").html("");
                 $(controlId).append(option_data);
                 if (columnName != undefined) {
