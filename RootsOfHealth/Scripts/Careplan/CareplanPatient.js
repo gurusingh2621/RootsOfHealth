@@ -38,20 +38,44 @@ function getCareProgramOptions() {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         async: false,
-        success: function (result) {          
-            if (result.ProgramOptions.length) {             
-                $(".createtemplate").show();
-                $(".notemplate").hide();
-                $(".btnCareplanProceed").show();
-                $("#ddlProgram").html("");
-                for (var i = 0; i < result.ProgramOptions.length; i++) {
-                    $("#ddlProgram").append($("<option></option>").val(result.ProgramOptions[i].ProgramsID).html(result.ProgramOptions[i].ProgramsName));
-                }
-            } else {
-                $(".notemplate").show();
-                $(".createtemplate").hide();
-                $(".btnCareplanProceed").hide();
-            }
+        success: function (result) {
+            switch (result.ProgramOptions.length) {
+                case 0:
+                    if (result.IsExistPatientProgram == false) {
+                        $(".notemplate p").html("").append("No program exists");
+                        $(".notemplate").show();
+                        $(".createtemplate").hide();
+                        $(".btnCareplanProceed").hide();
+                    } else
+                        if (result.IsExistCarePlanTemplate == false || result.IsCreatedTemplateForAllProgram==false) {
+                            $(".notemplate p").html("").append("No active care plan template exists");
+                            $(".notemplate").show();
+                            $(".createtemplate").hide();
+                            $(".btnCareplanProceed").hide();
+                        }else
+                        if (result.IsUsedAllCarePlanTemplate) {
+                                $(".notemplate p").html("").append("Care plan already running for all programs");
+                                $(".notemplate").show();
+                                $(".createtemplate").hide();
+                                $(".btnCareplanProceed").hide();
+                            } else {
+                                $(".notemplate p").html("").append("No programs template available for careplan creation"); 
+                                $(".notemplate").show();
+                                $(".createtemplate").hide();
+                                $(".btnCareplanProceed").hide();
+                            } 
+                    break;
+                default:
+                    $(".notemplate p").html("").append("No programs available for careplan creation"); 
+                    $(".createtemplate").show();
+                    $(".notemplate").hide();
+                    $(".btnCareplanProceed").show();
+                    $("#ddlProgram").html("");
+                    for (var i = 0; i < result.ProgramOptions.length; i++) {
+                        $("#ddlProgram").append($("<option></option>").val(result.ProgramOptions[i].ProgramsID).html(result.ProgramOptions[i].ProgramsName));
+                    }
+                    break;
+            }                   
             $('#AddCarePlanModal').modal({ backdrop: 'static', keyboard: false })  
         },
         error: function (e) {
