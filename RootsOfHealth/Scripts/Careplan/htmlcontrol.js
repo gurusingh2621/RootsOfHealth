@@ -7,8 +7,7 @@ $(function () {
     } else {
         GetFormHtmlById(sessionStorage.getItem("Id"));
         $("#hdnTemplateId").val(sessionStorage.getItem("Id"));
-    }
-    ShowPreviewButton();  
+    }   
 });
 function CheckSortableHtml() {
     $("#ddlform").val("0");
@@ -253,7 +252,7 @@ function EditHtml(type, ID) {
     </div>`;
             popupString += '<div class="modal-row">' +
                 '<label class="required-asterisk">Label Text</label>' +
-                '<input  type="text"  class="form-control lbltext"  onkeyup="ValidateColumnName(this)" value="' + labelText + '"/>' +
+                '<input  type="text"  class="form-control lbltext"  value="' + labelText + '"/>' +
                 '</div>';
 
 
@@ -467,7 +466,7 @@ function EditHtml(type, ID) {
             </div>`;
             popupString += '<div class="modal-row">' +
                 '<label class="required-asterisk">Label Text</label>' +
-                '<input  type="text"  class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + labelText + '"/>' +
+                '<input  type="text"  class="form-control lbltext" value="' + labelText + '"/>' +
                 '</div>';
 
             if (tooltiptext != '') {
@@ -612,7 +611,7 @@ function EditHtml(type, ID) {
                              </div>`;
             popupString += '<div class="modal-row">' +
                 '<label class="required-asterisk">Label Text</label>' +
-                '<input  type="text"  class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + labelText + '"/>' +
+                '<input  type="text"  class="form-control lbltext" value="' + labelText + '"/>' +
                 '</div>';
             if (tooltiptext != '') {
                 popupString += `<div class="modal-row custom-control custom-checkbox">
@@ -661,7 +660,7 @@ function EditHtml(type, ID) {
     <input type="radio" class="custom-control-input" id="label-multiple-no" name="radio-multiple" value="no" ${allowMultiple === undefined ? "checked" : ""}>
     <label class="custom-control-label" for="label-multiple-no">No</label></div>
     </div>`;
-            popupString += `<div class="modal-row"><label class="required-asterisk">Individual file size(in kb)</label><input type="text" onkeyup="validateFileSize(this)" class="form-control lblfilesize" value="${fileSize}" onkeyup="ValidateColumnName(this)"></div>`;
+            popupString += `<div class="modal-row"><label class="required-asterisk">Individual file size(in kb)</label><input type="text" onkeyup="validateFileSize(this)" class="form-control lblfilesize" value="${fileSize}"></div>`;
 
             popupString += '<div class="modal-row">' +
                 '<label class="control-label"> Field Size </label>' +
@@ -772,7 +771,7 @@ function EditHtml(type, ID) {
     </div>`;
             popupString += '<div class="modal-row">' +
                 '<label class="required-asterisk">Label Text</label>' +
-                '<input  type="text"  class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + labelText + '"/>' +
+                '<input  type="text"  class="form-control lbltext" value="' + labelText + '"/>' +
                 '</div>';
 
             if (tooltiptext != '') {
@@ -915,7 +914,7 @@ function EditHtml(type, ID) {
                            </div>`;
             popupString += '<div class="modal-row">' +
                 '<label class="required-asterisk">Label Text</label>' +
-                '<input  type="text"  class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + labelText + '"/>' +
+                '<input  type="text"  class="form-control lbltext" value="' + labelText + '"/>' +
                 '</div>';
             if (tooltiptext != '') {
                 popupString += `<div class="modal-row custom-control custom-checkbox">
@@ -1128,7 +1127,7 @@ function EditHtml(type, ID) {
     </div>`;
             popupString += '<div class="modal-row">' +
                 '<label class="required-asterisk">Label Text</label>' +
-                '<input  type="text"  class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + labelText + '"/>' +
+                '<input  type="text"  class="form-control lbltext" value="' + labelText + '"/>' +
                 '</div>';
             if (tooltiptext != '') {
                 popupString += `<div class="modal-row custom-control custom-checkbox">
@@ -1335,7 +1334,7 @@ function EditHtml(type, ID) {
 
             popupString += '<div class="modal-row">' +
                 '<label class="required-asterisk">Label Text</label>' +
-                '<input  type="text"  class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + labelText + '"/>' +
+                '<input  type="text"  class="form-control lbltext" value="' + labelText + '"/>' +
                 '</div>';
             if (tooltiptext != '') {
                 popupString += `<div class="modal-row custom-control custom-checkbox">
@@ -1474,7 +1473,7 @@ function EditHtml(type, ID) {
                             </div>`;
             popupString += '<div class="modal-row">' +
                 '<label class="required-asterisk">Label Text</label>' +
-                '<input  type="text"  class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + labelText + '"/>' +
+                '<input  type="text"  class="form-control lbltext" value="' + labelText + '"/>' +
                 '</div>';
 
             if (tooltiptext != '') {
@@ -1692,47 +1691,6 @@ function parseHTML(htmlstr) {
     t.innerHTML = htmlstr;
     return t.content.cloneNode(true);
 }
-//PreviewForm=>use to redirect on preview form page
-function PreviewForm() {
-    if ($("#hdnTemplateId").val() == "0") return;
-    window.location.href = `/home/GetCarePlanForm?Id=${$("#hdnTemplateId").val()}&patientid=0`;
-}
-//CheckColumnType=>use to check column type for text field inside popup
-function CheckColumnType(e) {
-    if ($(e).val() == "int") {
-        $("#colsize").val("50");
-        $("#colsize").attr("disabled", "disabled");
-    } else {
-        $("#colsize").removeAttr("disabled");
-    }
-}
-//CheckFieldSize=>use to set field width accroding to input container width
-function CheckFieldSize(e) {
-    switch ($(e).val()) {
-        case "col-md-4":
-            $(e).parent().parent().next().find("select[id='fieldsize'] option").each(function (index, value) {
-                if (index > 0) {
-                    $(this).attr('disabled', true);
-                }
-            });
-            break;
-        case "col-md-6":
-            $(e).parent().parent().next().find("select[id='fieldsize'] option").each(function (index, value) {
-                if (index > 1) {
-                    $(this).attr('disabled', true);
-                }
-            });
-            break;
-        case "col-md-12":
-            $(e).parent().parent().next().find("select[id='fieldsize'] option").each(function (index, value) {
-                $(this).attr('disabled', false);
-            });
-            break;
-        default:
-
-            break;
-    }
-}
 //isLabelNameExist=>use to validate duplicate column name
 function isLabelNameExist(LabelName, controlid) {
     var isvalid = false;
@@ -1797,21 +1755,6 @@ function isLabelNameExist(LabelName, controlid) {
         });
     }
     return isvalid;
-}
-//ValidateColumn=>use to enter only alphabat for column name
-function ValidateColumn(name) {
-    var columnname = new RegExp("^[a-zA-Z0-9_]*$");
-    if (columnname.test(name)) {
-        return true;
-    } else {
-        return false;
-    }
-}
-//ShowPreviewButton=>use to show preview button on page
-function ShowPreviewButton() {
-    if ($("#hdnTemplateId").val() != "0") {
-        //$(".preview").css("display", "inline");
-    }
 }
 //saveHtml=>use to save template and create table in database for program
 function saveHtml() {
@@ -2028,129 +1971,6 @@ function saveTemplate(isactive) {
         }
     });
 }
-//saveHtml=>use to save template in careplantemplate
-function saveDraftHtml() {
-    if ($(".templatename-input").val().trim() == "") {
-        toastr.error("", "Template name is required", { progressBar: true });
-        return;
-    }
-    if ($("#droppable .dragresize ").length == 0) {
-        return;
-    }
-    var isvalid = true;
-    if (isBaseTemplate == 'True' || $("#droppable").find(".basecontentarea").length > 0) {
-        $("#droppable").find("input.form-control,input.custom-control-input,select.form-control,textarea.form-control").not(".base-control").each(function (index, item) {
-            var colname = $(item).attr("data-column");
-            if (typeof colname !== typeof undefined && colname !== false) {
-            } else {
-                if ($(item).is("input")) {
-                    switch ($(item).attr("type")) {
-                        case "radio":
-                        case "checkbox":
-                            var datacol = $(item).parent().parent().find("input").first().attr("data-column");
-                            if (typeof datacol !== typeof undefined && datacol !== false) {
-                            } else {
-                                $(item).closest(".dragresize").addClass("invalid-field");
-                                isvalid = false;
-                            }
-                            break;
-                        default:
-                            if ($(item).hasClass("database-field")) return;
-                            $(item).closest(".dragresize").addClass("invalid-field");
-                            isvalid = false;
-                            break;
-
-                    }
-                }
-                if ($(item).is("select")) {
-                    $(item).closest(".dragresize").addClass("invalid-field");
-                    isvalid = false;
-                }
-                if ($(item).is("textarea")) {
-                    $(item).closest(".dragresize").addClass("invalid-field");
-                    isvalid = false;
-                }
-            }
-
-        });
-    } else {
-        $("#droppable").find("input.form-control,input.custom-control-input,select.form-control,textarea.form-control").each(function (index, item) {
-            var colname = $(item).attr("data-column");
-            if (typeof colname !== typeof undefined && colname !== false) {
-            } else {
-                if ($(item).is("input")) {
-                    switch ($(item).attr("type")) {
-                        case "radio":
-                        case "checkbox":
-                            var datacol = $(item).parent().parent().find("input").first().attr("data-column");
-                            if (typeof datacol !== typeof undefined && datacol !== false) {
-                            } else {
-                                $(item).closest(".dragresize").addClass("invalid-field");
-                                isvalid = false;
-                            }
-                            break;
-                        default:
-                            if ($(item).hasClass("database-field")) return;
-                            $(item).closest(".dragresize").addClass("invalid-field");
-                            isvalid = false;
-                            break;
-
-                    }
-                }
-                if ($(item).is("select")) {
-                    $(item).closest(".dragresize").addClass("invalid-field");
-                    isvalid = false;
-                }
-                if ($(item).is("textarea")) {
-                    $(item).closest(".dragresize").addClass("invalid-field");
-                    isvalid = false;
-                }
-            }
-
-        });
-    }
-    if (!isvalid) {
-
-        toastr.error("", "Enter required fields for controls", { progressBar: true });
-        return;
-    }
-    $("#droppable").find(".database-field,.base-control").each(function (i, e) {
-        return;
-    });
-    var gethtml = $("#droppable").html();
-    var model = {
-        TemplateID: $("#hdnTemplateId").val(),
-        TemplateName: $(".templatename-input").val(),
-        ProgramID: programId,
-        IsSavedDraft: 1,
-        CreatedBy: userId,
-        ModifiedBy: userId,
-    };
-    $(".loaderOverlay").css("display", "flex");
-    $.ajax({
-        type: "POST",
-        url: '/CarePlan/SaveFormDraftTemplate',
-        data: JSON.stringify({ htmlTemplate: gethtml, Model: model, ProgramName: programName }),
-        contentType: 'application/json; charset=UTF-8',
-        dataType: "json",
-        success: function (result) {
-            if (result == "0") {
-                toastr.error("Program Already Exist.");
-                $(".loaderOverlay").hide();
-                return false;
-            } else {
-                //templateId = result.id;
-                $("#hdnTemplateId").val(result.id);
-                //$("a.preview").css("display", "inline");
-                $(".loaderOverlay").hide();
-                sessionStorage.setItem("Id", result.id);
-                //window.location.href = '/careplan/modifytemplate?TemplateId=' + result.id + '&ProgramId=' + programId + '&Template=' + result.TemplateName;
-
-            }
-            toastr.success("Draft Saved successfully.");
-        }
-    });
-}
 //GetFormHtmlById=>use to get template by template name
 function GetFormHtmlById(Id) {
     $(".loaderOverlay").css("display", "flex");
@@ -2202,33 +2022,6 @@ function GetFormHtmlById(Id) {
             $(".loaderOverlay").hide();
         }
     });
-}
-function ValidateColumnName(e) {
-    //var item = $(e).val();
-    //$(e).parent().next().find(".lblcolname").val(item.split(" ").join("").replace(/[_\W]+/g, ""));
-}
-function validatepopup(e) {
-    //var ControlID = $(e).parent().next().find(".lbltext").attr("control-id");
-    //var colname = $("#" + ControlID).attr("data-column");
-    //if (typeof colname !== typeof undefined && colname !== false) {
-    //} else {
-    //    $("#" + ControlID).closest(".dragresize").remove();
-    //}
-    //var isInvalid = false;
-    //if ($(".lbltext").val().trim() == "") {
-    //    isInvalid = true;
-    //}
-    //if ($(".lblcolname").val().trim() == "") {
-    //    isInvalid = true;
-    //}
-    //if (isInvalid) {
-    //    toastr.error("", "Label text or column name is required", { progressBar: true });
-    //    $(e).removeAttr("data-dismiss");
-    //    return;
-    //} else {
-    //    $(e).attr("data-dismiss", "modal");
-    //    return;
-    //}
 }
 function toogleToolTip() {
     $('.tooltipicon').tooltip({
@@ -2418,27 +2211,6 @@ function closePreview() {
         event.stopPropagation();
     });
     $("#PreviewModal").modal('hide');
-}
-function setInputSize(obj) {
-    switch (obj.value) {
-        case "col-md-4":
-            $("#fieldsize").html("");
-            $('#fieldsize').append('<option value="col-md-4">Small</option>');
-            break;
-        case "col-md-6":
-            $("#fieldsize").html("");
-            $('#fieldsize').append('<option value="col-md-4">Small</option>');
-            $('#fieldsize').append('<option value="col-md-6">Medium</option>');
-            
-            break;
-        case "col-md-12":
-            $("#fieldsize").html("");
-            $('#fieldsize').append('<option value="col-md-4">Small</option>');
-            $('#fieldsize').append('<option value="col-md-6">Medium</option>');
-            $('#fieldsize').append('<option value="col-md-12">Large</option>');
-            break;
-        
-    }
 }
 function backToList() {
             $(".hiddenSavedHtml").find("div.dragresize").removeClass("ui-sortable-handle").removeAttr("style");

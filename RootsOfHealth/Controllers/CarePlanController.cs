@@ -15,12 +15,7 @@ namespace RootsOfHealth.Controllers
         string WebApiKey = WebConfigurationManager.AppSettings["WebApi"];
         string CarePlanUploadPath= WebConfigurationManager.AppSettings["CarePlanUploadPath"];
         // GET: CarePlan
-        #region[CarePlanTemplate]
-        [Authorize(Roles = "navigator,supervisor")]
-        public ActionResult CreateCareForm()
-        {
-            return View();
-        }
+        #region[CarePlanTemplate]     
         public JsonResult SaveFormTemplate(string htmlTemplate, CarePlantemplateBO Model,string ProgramName)
         {
             string TemplateName = "";
@@ -28,8 +23,8 @@ namespace RootsOfHealth.Controllers
             if (Model.ProgramID == 0)
             {
                 ProgramName = "BaseTemplate";
-                TemplateName=ProgramName + DateTime.Now.ToString("dd_MM_yyyy_hh_mm_ss");
-                dataFile = Server.MapPath("~/App_Data/" + TemplateName + ".html");             
+                TemplateName =Guid.NewGuid().ToString() + ".html";
+                dataFile = Server.MapPath("~/App_Data/" + TemplateName);             
                 System.IO.File.WriteAllText(@dataFile, htmlTemplate);
                 Model.TemplatePath = TemplateName;
                 Model.TemplateTable = "tbl_" + ProgramName;
@@ -38,8 +33,8 @@ namespace RootsOfHealth.Controllers
             else
             {
                 ProgramName = ProgramName.Replace(" ", "");
-                TemplateName = ProgramName + "_CarePlan" + DateTime.Now.ToString("dd_MM_yyyy_hh_mm_ss");
-                dataFile = Server.MapPath("~/App_Data/" + TemplateName + ".html");
+                TemplateName = Guid.NewGuid().ToString() + ".html";
+                dataFile = Server.MapPath("~/App_Data/" + TemplateName);
                 System.IO.File.WriteAllText(@dataFile, htmlTemplate);
                 Model.TemplatePath = TemplateName;
                 Model.TemplateTable = "tbl_" + ProgramName + "_CarePlan";
@@ -74,50 +69,7 @@ namespace RootsOfHealth.Controllers
                 }
             }
                     return Json("");
-        }
-        public JsonResult SaveFormDraftTemplate(string htmlTemplate, CarePlantemplateBO Model, string ProgramName)
-        {
-            ProgramName = ProgramName.Replace(" ", "");
-            string TemplateName = ProgramName + "_CarePlan" + DateTime.Now.ToString("dd_MM_yyyy_hh_mm_ss");
-            var dataFile = Server.MapPath("~/App_Data/" + TemplateName + ".html");
-            System.IO.File.WriteAllText(@dataFile, htmlTemplate);
-            Model.TemplatePath = TemplateName;
-            Model.TemplateTable = "tbl_" + ProgramName + "_CarePlan";
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri(WebApiKey);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var responseTask = client.PostAsJsonAsync("api/PatientMain/savecareplandrafttemplate", Model);
-                responseTask.Wait();
-
-                var result = responseTask.Result;
-                if (result.IsSuccessStatusCode)
-                {
-                    var data = result.Content.ReadAsStringAsync().Result;
-                    if (data == "0")
-                    {
-                        return Json("0");
-                    }
-                    else
-                    {
-                        return Json(new
-                        {
-                            id = data,
-                            tablename = Model.TemplateTable,
-                            TemplateName = Model.TemplatePath
-                        });
-                    }
-
-                }
-            }
-            return Json("");
-        }
-        [Authorize(Roles = "navigator,supervisor")]
-        public ActionResult DynamicCareForm()
-        {
-            return View();
-        }
+        }           
         public ActionResult List()
         {
             return View();
@@ -132,6 +84,7 @@ namespace RootsOfHealth.Controllers
                 isRedirect = true
             });
         }
+        [Authorize(Roles = "navigator,supervisor")]
         public ActionResult ModifyTemplate(CarePlantemplateBO data)
         {
             string ProgramName = "";
@@ -198,7 +151,7 @@ namespace RootsOfHealth.Controllers
             PathName = data.TemplatePath;
             if (PathName != "" && PathName!= null)
             {
-                var gethtml = System.IO.File.ReadAllText(Server.MapPath("~/App_Data/" + PathName + ".html"));
+                var gethtml = System.IO.File.ReadAllText(Server.MapPath("~/App_Data/" + PathName));
                 var jsonResult = new
                 {
                     html = gethtml,
@@ -215,7 +168,7 @@ namespace RootsOfHealth.Controllers
                 Isactivated=0
             }, JsonRequestBehavior.AllowGet);
         }
-
+        [Authorize(Roles = "navigator,supervisor")]
         public ActionResult BaseTemplate(int templateid)
         {
             ViewBag.TemplateId = templateid;
@@ -262,7 +215,7 @@ namespace RootsOfHealth.Controllers
             PathName = data.TemplatePath;
             if (PathName != "" && PathName != null)
             {
-                var gethtml = System.IO.File.ReadAllText(Server.MapPath("~/App_Data/" + PathName + ".html"));
+                var gethtml = System.IO.File.ReadAllText(Server.MapPath("~/App_Data/" + PathName));
                 var jsonResult = new
                 {
                     html = gethtml,
@@ -296,7 +249,7 @@ namespace RootsOfHealth.Controllers
                     var data = result.Content.ReadAsAsync<CarePlantemplateBO>();
                     if (data.Result != null && data.Result.TemplatePath != null)
                     {
-                        var gethtml = System.IO.File.ReadAllText(Server.MapPath("~/App_Data/" + data.Result.TemplatePath + ".html"));
+                        var gethtml = System.IO.File.ReadAllText(Server.MapPath("~/App_Data/" + data.Result.TemplatePath));
                         var jsonResult = new
                         {
                             html = gethtml,

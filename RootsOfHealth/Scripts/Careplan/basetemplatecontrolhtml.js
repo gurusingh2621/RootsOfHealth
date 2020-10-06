@@ -8,7 +8,7 @@ $(function () {
         GetFormHtmlById(sessionStorage.getItem("Id"));
         $("#hdnTemplateId").val(sessionStorage.getItem("Id"));
     }
-})
+});
 function CheckSortableHtml() {
     $("#ddlform").val("0");
     HtmlControlDragnDrop();
@@ -255,7 +255,7 @@ function EditHtml(type, ID) {
     </div>`;
             popupString += '<div class="modal-row">' +
                 '<label class="required-asterisk">Label Text</label>' +
-                '<input  type="text"  class="form-control lbltext"  onkeyup="ValidateColumnName(this)" value="' + labelText + '"/>' +
+                '<input  type="text"  class="form-control lbltext" value="' + labelText + '"/>' +
                 '</div>';
 
 
@@ -470,7 +470,7 @@ function EditHtml(type, ID) {
             </div>`;
             popupString += '<div class="modal-row">' +
                 '<label class="required-asterisk">Label Text</label>' +
-                '<input  type="text"  class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + labelText + '"/>' +
+                '<input  type="text"  class="form-control lbltext" value="' + labelText + '"/>' +
                 '</div>';
 
             if (tooltiptext != '') {
@@ -615,7 +615,7 @@ function EditHtml(type, ID) {
                              </div>`;
             popupString += '<div class="modal-row">' +
                 '<label class="required-asterisk">Label Text</label>' +
-                '<input  type="text"  class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + labelText + '"/>' +
+                '<input  type="text"  class="form-control lbltext" value="' + labelText + '"/>' +
                 '</div>';
             if (tooltiptext != '') {
                 popupString += `<div class="modal-row custom-control custom-checkbox">
@@ -664,7 +664,7 @@ function EditHtml(type, ID) {
     <input type="radio" class="custom-control-input" id="label-multiple-no" name="radio-multiple" value="no" ${allowMultiple === undefined ? "checked" : ""}>
     <label class="custom-control-label" for="label-multiple-no">No</label></div>
     </div>`;
-            popupString += `<div class="modal-row"><label class="required-asterisk">Individual file size(in kb)</label><input type="text" onkeyup="validateFileSize(this)" class="form-control lblfilesize" value="${fileSize}" onkeyup="ValidateColumnName(this)"></div>`;
+            popupString += `<div class="modal-row"><label class="required-asterisk">Individual file size(in kb)</label><input type="text" onkeyup="validateFileSize(this)" class="form-control lblfilesize" value="${fileSize}"></div>`;
 
             popupString += '<div class="modal-row">' +
                 '<label class="control-label"> Field Size </label>' +
@@ -775,7 +775,7 @@ function EditHtml(type, ID) {
     </div>`;
             popupString += '<div class="modal-row">' +
                 '<label class="required-asterisk">Label Text</label>' +
-                '<input  type="text"  class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + labelText + '"/>' +
+                '<input  type="text"  class="form-control lbltext" value="' + labelText + '"/>' +
                 '</div>';
 
             if (tooltiptext != '') {
@@ -918,7 +918,7 @@ function EditHtml(type, ID) {
                            </div>`;
             popupString += '<div class="modal-row">' +
                 '<label class="required-asterisk">Label Text</label>' +
-                '<input  type="text"  class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + labelText + '"/>' +
+                '<input  type="text"  class="form-control lbltext" value="' + labelText + '"/>' +
                 '</div>';
             if (tooltiptext != '') {
                 popupString += `<div class="modal-row custom-control custom-checkbox">
@@ -1132,7 +1132,7 @@ function EditHtml(type, ID) {
     </div>`;
             popupString += '<div class="modal-row">' +
                 '<label class="required-asterisk">Label Text</label>' +
-                '<input  type="text"  class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + labelText + '"/>' +
+                '<input  type="text"  class="form-control lbltext" value="' + labelText + '"/>' +
                 '</div>';
             if (tooltiptext != '') {
                 popupString += `<div class="modal-row custom-control custom-checkbox">
@@ -1340,7 +1340,7 @@ function EditHtml(type, ID) {
 
             popupString += '<div class="modal-row">' +
                 '<label class="required-asterisk">Label Text</label>' +
-                '<input  type="text"  class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + labelText + '"/>' +
+                '<input  type="text"  class="form-control lbltext" value="' + labelText + '"/>' +
                 '</div>';
             if (tooltiptext != '') {
                 popupString += `<div class="modal-row custom-control custom-checkbox">
@@ -1479,7 +1479,7 @@ function EditHtml(type, ID) {
                             </div>`;
             popupString += '<div class="modal-row">' +
                 '<label class="required-asterisk">Label Text</label>' +
-                '<input  type="text"  class="form-control lbltext" onkeyup="ValidateColumnName(this)" value="' + labelText + '"/>' +
+                '<input  type="text"  class="form-control lbltext" value="' + labelText + '"/>' +
                 '</div>';
 
             if (tooltiptext != '') {
@@ -1643,7 +1643,6 @@ function EditHtml(type, ID) {
     $("#exampleModalCenter").modal("show");
 
 }
-
 //RemoveOption=>use to remove option of select,radio,checkbox inside popup
 function RemoveOption(obj) {
     let len = $(obj).parent().parent().parent().find("div.option-block").length;
@@ -1695,33 +1694,6 @@ function parseHTML(htmlstr) {
     t.innerHTML = htmlstr;
     return t.content.cloneNode(true);
 }
-//CheckFieldSize=>use to set field width accroding to input container width
-function CheckFieldSize(e) {
-    switch ($(e).val()) {
-        case "col-md-4":
-            $(e).parent().parent().next().find("select[id='fieldsize'] option").each(function (index, value) {
-                if (index > 0) {
-                    $(this).attr('disabled', true);
-                }
-            });
-            break;
-        case "col-md-6":
-            $(e).parent().parent().next().find("select[id='fieldsize'] option").each(function (index, value) {
-                if (index > 1) {
-                    $(this).attr('disabled', true);
-                }
-            });
-            break;
-        case "col-md-12":
-            $(e).parent().parent().next().find("select[id='fieldsize'] option").each(function (index, value) {
-                $(this).attr('disabled', false);
-            });
-            break;
-        default:
-
-            break;
-    }
-}
 //isLabelNameExist=>use to validate duplicate column name
 function isLabelNameExist(LabelName, controlid) {
     var isvalid = false;
@@ -1755,16 +1727,6 @@ function isLabelNameExist(LabelName, controlid) {
     });
     return isvalid;
 }
-//ValidateColumn=>use to enter only alphabat for column name
-function ValidateColumn(name) {
-    var columnname = new RegExp("^[a-zA-Z0-9_]*$");
-    if (columnname.test(name)) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
 //saveHtml=>use to save template and create table in database for program
 function saveHtml() {
     if ($("#droppable").find(".dragresize").length == 0) {
@@ -1920,33 +1882,6 @@ function GetFormHtmlById(Id) {
             $(".loaderOverlay").hide();
         }
     });
-}
-function ValidateColumnName(e) {
-    //var item = $(e).val();
-    //$(e).parent().next().find(".lblcolname").val(item.split(" ").join("").replace(/[_\W]+/g, ""));
-}
-function validatepopup(e) {
-    //var ControlID = $(e).parent().next().find(".lbltext").attr("control-id");
-    //var colname = $("#" + ControlID).attr("data-column");
-    //if (typeof colname !== typeof undefined && colname !== false) {
-    //} else {
-    //    $("#" + ControlID).closest(".dragresize").remove();
-    //}
-    //var isInvalid = false;
-    //if ($(".lbltext").val().trim() == "") {
-    //    isInvalid = true;
-    //}
-    //if ($(".lblcolname").val().trim() == "") {
-    //    isInvalid = true;
-    //}
-    //if (isInvalid) {
-    //    toastr.error("", "Label text or column name is required", { progressBar: true });
-    //    $(e).removeAttr("data-dismiss");
-    //    return;
-    //} else {
-    //    $(e).attr("data-dismiss", "modal");
-    //    return;
-    //}
 }
 function toogleToolTip() {
     $('.tooltipicon').tooltip({
