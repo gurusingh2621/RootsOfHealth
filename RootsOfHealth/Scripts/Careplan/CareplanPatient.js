@@ -48,7 +48,7 @@ function getCareProgramOptions() {
                         $(".btnCareplanProceed").hide();
                     } else
                         if (result.IsExistCarePlanTemplate == false || result.IsCreatedTemplateForAllProgram==false) {
-                            $(".notemplate p").html("").append("No active care plan template exists");
+                            $(".notemplate p").html("").append("No active care plan template exists for available client programs");
                             $(".notemplate").show();
                             $(".createtemplate").hide();
                             $(".btnCareplanProceed").hide();

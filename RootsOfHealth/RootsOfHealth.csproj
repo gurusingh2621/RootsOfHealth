@@ -159,7 +159,6 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CarePlanController.cs" />
     <Compile Include="Controllers\DashBoardController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -325,7 +324,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Patient\Add.cshtml" />
     <Content Include="Views\DashBoard\Index.cshtml" />
     <Content Include="Views\Patient\Appointment.cshtml" />
@@ -371,9 +369,6 @@
     <Content Include="Views\Patient\NotesTemplateField.cshtml" />
     <Content Include="Views\DashBoard\Display.cshtml" />
     <Content Include="Views\Shared\Patient\_LookupOptionList.cshtml" />
-    <Content Include="Views\CarePlan\CreateCareForm.cshtml" />
-    <Content Include="Views\CarePlan\DynamicCareForm.cshtml" />
-    <Content Include="Views\Home\GetCarePlanForm.cshtml" />
     <Content Include="Views\Patient\_FormScheduling.cshtml" />
     <Content Include="Views\Patient\AddLookUpOption.cshtml" />
     <Content Include="Views\Patient\EditLookUpOption.cshtml" />
