@@ -6,6 +6,13 @@ var intervalStatus = "";
 var isupdateBaseField = false;
 var isupdateProgramFields = false;
 var ItemNames;
+var carePlanEnum = {
+    NotSaved: 0,
+    NotStarted: 1,
+    SavedAsDraft: 2,
+    InProgress: 3,
+    Completed:4
+};
 //--------------
 var fileData1 = new FormData();
 var fileData2 = new FormData();
@@ -104,19 +111,23 @@ function getCarePlanList() {
                                      <td>${result[i].ProgramsName}</td>
                                       <td class="text-center">`;
                     switch (result[i].status) {
-                        case 0:
+                        case carePlanEnum.NotSaved:
+                             //not saved
+                            careplanList += `<span class="status_value notStarted">Not Saved</span>`;
+                            break;
+                        case carePlanEnum.NotStarted:
                             //not started
                             careplanList += `<span class="status_value notStarted">Not Started</span>`;
                             break;
-                        case 1:
+                        case carePlanEnum.InProgress:
                             //In Progress
                             careplanList += `<span class="status_value inProgress">In Progress</span>`;
                             break;
-                        case 2:
+                        case carePlanEnum.SavedAsDraft:
                             //Saved As Draft
                             careplanList += `<span class="status_value asDraft">Saved As Draft</span>`;
                             break;
-                        case 3:
+                        case carePlanEnum.Completed:
                             //Completed
                             careplanList += `<span class="status_value completed">completed</span>`;
                             break;
@@ -392,7 +403,7 @@ function saveCareplan() {
     var model = {
         CarePlanName: $("#carePlanName").val(),
         ProgramID: $("#ddlProgram").val(),
-        Status: 0,//not started
+        Status: carePlanEnum.NotSaved,//not saved
         CreatedBy: userId,
         ModifiedBy: userId,
         PatientId: PatientId
@@ -414,7 +425,8 @@ function saveCareplan() {
                     careplanid = res;
                     $("#addNewCarePlansSidebar").find("h3").first().html("").append($("#carePlanName").val());
                     proceedCarePlan();
-                    intervalStatus = setInterval(saveBasicInfoAsDraft, 300000, 2);
+                    updateDefaultneeds(res);
+                    intervalStatus = setInterval(saveBasicInfoAsDraft, 300000, carePlanEnum.SavedAsDraft);
                     $(".loaderOverlay").hide();
                     break;
             }                  
@@ -723,25 +735,37 @@ function editCarePlan(Id) {
             $("#addNewCarePlansSidebar").find("h3").first().html("").append(result.CarePlanName);
             isupdateProgramFields = false;       
             switch (result.Status) {
-                case 0://not started                    
+                case carePlanEnum.NotSaved://not saved                    
                     careplanid = result.CarePlanId;                   
                     proceedCarePlan(result.ProgramID);
-                    intervalStatus = setInterval(saveBasicInfoAsDraft,300000,2);
+                    $("a.need-nav,a.summary-nav").parent().addClass("disabled");
+                    intervalStatus = setInterval(saveBasicInfoAsDraft, 300000, carePlanEnum.SavedAsDraft);
                     break;
-                case 1://in-progress
+                case carePlanEnum.NotStarted://not started                    
                     careplanid = result.CarePlanId;
                     getCarePlanBasicFormHtml(result.TemplateID);
                     getCarePlanBasicFormValue(result.CarePlanId, result.TemplateID);
-                    $(".basic-info-actions").hide();                 
+                    $(".basic-info-actions").hide();
+                    $("a.need-nav,a.summary-nav").parent().removeClass("disabled");
                     $("#carePlansSidebar").removeClass('opened');
                     $("#addNewCarePlansSidebar").addClass('opened');
                     break;
-                case 2://save as draft
+                case carePlanEnum.InProgress://in-progress
+                    careplanid = result.CarePlanId;
+                    getCarePlanBasicFormHtml(result.TemplateID);
+                    getCarePlanBasicFormValue(result.CarePlanId, result.TemplateID);
+                    $(".basic-info-actions").hide();
+                    $("a.need-nav,a.summary-nav").parent().removeClass("disabled");
+                    $("#carePlansSidebar").removeClass('opened');
+                    $("#addNewCarePlansSidebar").addClass('opened');
+                    break;
+                case carePlanEnum.SavedAsDraft://save as draft
                     careplanid = result.CarePlanId;
                     isUpdateProgramFields(result.TemplateID, result.CarePlanId);
                     getCarePlanBasicFormHtml(result.TemplateID);
                     getCarePlanBasicFormValue(result.CarePlanId, result.TemplateID);
-                    $(".basic-info-actions").show();                    
+                    $(".basic-info-actions").show();
+                    $("a.need-nav,a.summary-nav").parent().addClass("disabled");
                     $("#carePlansSidebar").removeClass('opened');
                     $("#addNewCarePlansSidebar").addClass('opened');
                     break;                
@@ -932,19 +956,23 @@ function closecarePlan() {
                                      <td>${result[i].ProgramsName}</td>
                                       <td class="text-center">`;
                     switch (result[i].status) {
-                        case 0:
+                        case carePlanEnum.NotSaved:
+                            //not saved
+                            careplanList += `<span class="status_value notStarted">Not Saved</span>`;
+                            break;
+                        case carePlanEnum.NotStarted:
                             //not started
                             careplanList += `<span class="status_value notStarted">Not Started</span>`;
                             break;
-                        case 1:
+                        case carePlanEnum.InProgress:
                             //In Progress
                             careplanList += `<span class="status_value inProgress">In Progress</span>`;
                             break;
-                        case 2:
+                        case carePlanEnum.SavedAsDraft:
                             //Saved As Draft
                             careplanList += `<span class="status_value asDraft">Saved As Draft</span>`;
                             break;
-                        case 3:
+                        case carePlanEnum.Completed:
                             //Completed
                             careplanList += `<span class="status_value completed">completed</span>`;
                             break;
@@ -1006,6 +1034,7 @@ function isUpdateProgramFields(tempid,careplanid) {
 function makeBasicInfoReadonly() {
     var value = "";
     isupdateProgramFields = false;
+    $("a.need-nav,a.summary-nav").parent().removeClass("disabled");
     $(".render-basicform").find(".program-control,.base-control").each(function (index, item) {    
         if ($(item).is("div")) {
             var selectedValues = $.map($(item).find("input:checked"), function (n, i) {
@@ -1831,7 +1860,10 @@ function getDatabaseFieldValues() {
                     }
                 });
 
-            },
+            }, error: function () {
+                toastr.error("Something happen Wrong");
+                $(".loaderOverlay").hide();
+            }
         });
     }
 }
@@ -1846,6 +1878,10 @@ function GetDropDownName() {
             ItemNames = result;
             
         },
+        error: function () {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
     });
 }
 function removeUpload(obj) {
@@ -2001,4 +2037,34 @@ function getSavedFilesAsDraft() {
         }
     });
 
+}
+function updateDefaultneeds(careid) {
+    var model = {
+        TemplateId: templateid,
+        PatientId: PatientId,
+        CarePlanId: careid,
+        Status: 0,
+        CreatedBy: userId
+    }
+    $.ajax({
+        type: "POST",
+        url: Apipath + '/api/PatientMain/updatedefaultneeds',
+        contentType: 'application/json; charset=UTF-8',
+        data: JSON.stringify(model),
+        dataType: "json",
+        async: false,
+        success: function (res) {
+            
+        }, error: function () {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });
+
+}
+function showSummary() {
+    if ($("a.summary-nav").parent().hasClass("disabled")) {
+        return false;
+    }
+    $("a.summary-nav").tab('show');
 }

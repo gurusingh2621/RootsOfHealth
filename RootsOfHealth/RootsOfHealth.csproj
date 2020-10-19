@@ -219,6 +219,7 @@
     <Content Include="css\all.min.css" />
     <Content Include="css\bootstrap.min.css" />
     <Content Include="css\careplanlist.css" />
+    <Content Include="css\CareplanNeedsAndGoals.css" />
     <Content Include="css\CareplanPatient.css" />
     <Content Include="css\careplantemplate.css" />
     <Content Include="css\fullcalendar.min.css" />
@@ -284,6 +285,7 @@
     <Content Include="Scripts\bootstrap_multiselect.js" />
     <Content Include="Scripts\Careplan\basetemplatecontrolhtml.js" />
     <Content Include="Scripts\Careplan\careplanlist.js" />
+    <Content Include="Scripts\Careplan\CareplanNeedsAndGoals.js" />
     <Content Include="Scripts\Careplan\CareplanPatient.js" />
     <Content Include="Scripts\Careplan\databasecontrol.js" />
     <Content Include="Scripts\Careplan\htmlcontrol.js" />
