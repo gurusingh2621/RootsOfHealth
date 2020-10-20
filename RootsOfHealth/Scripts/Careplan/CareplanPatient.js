@@ -30,6 +30,13 @@ $(document).ready(function () {
     }); 
     getCarePlanList();    
 });
+$(".care_plan_name_field").keypress(function (event) {
+    var keycode = event.keyCode || event.which;
+    if (keycode == '13' && !event.shiftKey) {
+        updateCarePlanName(this);
+        event.preventDefault();
+    }
+});
 function getCareProgramOptions() {
     $("#carePlanName").val("");
     $.ajax({
@@ -412,7 +419,7 @@ function saveCareplan() {
                     break;
                 default:
                     careplanid = res;
-                    $("#addNewCarePlansSidebar").find("h3").first().html("").append($("#carePlanName").val());
+                    $(".care_plan_name_field").val($("#carePlanName").val());
                     proceedCarePlan();
                     intervalStatus = setInterval(saveBasicInfoAsDraft, 300000, 2);
                     $(".loaderOverlay").hide();
@@ -720,7 +727,7 @@ function editCarePlan(Id) {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",       
         success: function (result) {
-            $("#addNewCarePlansSidebar").find("h3").first().html("").append(result.CarePlanName);
+            $(".care_plan_name_field").val(result.CarePlanName);
             isupdateProgramFields = false;       
             switch (result.Status) {
                 case 0://not started                    
@@ -738,7 +745,7 @@ function editCarePlan(Id) {
                     break;
                 case 2://save as draft
                     careplanid = result.CarePlanId;
-                    isUpdateProgramFields(result.TemplateID, result.CarePlanId);
+                    isUpdateProgramFields(result.TemplateID, result.CarePlanId);                  
                     getCarePlanBasicFormHtml(result.TemplateID);
                     getCarePlanBasicFormValue(result.CarePlanId, result.TemplateID);
                     $(".basic-info-actions").show();                    
@@ -2001,4 +2008,39 @@ function getSavedFilesAsDraft() {
         }
     });
 
+}
+function updateCarePlanName(obj) {
+    if ($(obj).val().trim() == "") {
+        toastr.error("Careplan name is required");
+        return;
+    }
+    var model = {
+        CarePlanName: $(obj).val(),
+        CarePlanId: careplanid,
+        PatientId: PatientId
+    }
+    $(".loaderOverlay").show();
+    $.ajax({
+        type: "POST",
+        url: Apipath + '/api/PatientMain/updatecareplanname',
+        contentType: 'application/json; charset=UTF-8',
+        data: JSON.stringify(model),
+        dataType: "json",
+        success: function (res) {
+            switch (res) {
+                case -1:
+                    toastr.error("Careplan name alreday exist");
+                    $(".loaderOverlay").hide();
+                    break;
+                default:
+                    toastr.success("Changes saved successfully");
+                    $(".loaderOverlay").hide();
+                    break;
+            }
+        },
+        error: function (e) {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });
 }
