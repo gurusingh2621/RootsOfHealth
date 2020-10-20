@@ -37,6 +37,13 @@ $(document).ready(function () {
     }); 
     getCarePlanList();    
 });
+$(".care_plan_name_field").keypress(function (event) {
+    var keycode = event.keyCode || event.which;
+    if (keycode == '13' && !event.shiftKey) {
+        updateCarePlanName(this);
+        event.preventDefault();
+    }
+});
 function getCareProgramOptions() {
     $("#carePlanName").val("");
     $.ajax({
@@ -423,7 +430,7 @@ function saveCareplan() {
                     break;
                 default:
                     careplanid = res;
-                    $("#addNewCarePlansSidebar").find("h3").first().html("").append($("#carePlanName").val());
+                    $(".care_plan_name_field").val($("#carePlanName").val());
                     proceedCarePlan();
                     updateDefaultneeds(res);
                     intervalStatus = setInterval(saveBasicInfoAsDraft, 300000, carePlanEnum.SavedAsDraft);
@@ -732,7 +739,7 @@ function editCarePlan(Id) {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",       
         success: function (result) {
-            $("#addNewCarePlansSidebar").find("h3").first().html("").append(result.CarePlanName);
+            $(".care_plan_name_field").val(result.CarePlanName);
             isupdateProgramFields = false;       
             switch (result.Status) {
                 case carePlanEnum.NotSaved://not saved                    
@@ -761,7 +768,7 @@ function editCarePlan(Id) {
                     break;
                 case carePlanEnum.SavedAsDraft://save as draft
                     careplanid = result.CarePlanId;
-                    isUpdateProgramFields(result.TemplateID, result.CarePlanId);
+                    isUpdateProgramFields(result.TemplateID, result.CarePlanId);                  
                     getCarePlanBasicFormHtml(result.TemplateID);
                     getCarePlanBasicFormValue(result.CarePlanId, result.TemplateID);
                     $(".basic-info-actions").show();
