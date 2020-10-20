@@ -457,6 +457,22 @@ ul.file_uploaded_list li .removeUploadFile {
 input.invaild-input {
     border: 1px solid red !important;
 }
+
+input.care_plan_name_field {
+    display: inline-block !important;
+    border: 1px solid transparent;
+    box-shadow: none !important;
+    outline: none !important;
+    font-size: 18px;
+    color: #212529;
+    font-weight: 500;
+    padding: 2px 5px;
+    width: calc(100% - 40px);
+}
+
+    input.care_plan_name_field:hover {
+        border: 1px solid #ced4da;
+    }
 /*My responsive style
 ============================================================================================ */
 @media(min-width:1400px) {
