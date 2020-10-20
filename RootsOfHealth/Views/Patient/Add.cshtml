@@ -288,8 +288,8 @@
 
 @section scripts {
     <script src="https://code.jquery.com/ui/1.12.0-rc.2/jquery-ui.min.js"
-            integrity="sha256-55Jz3pBCF8z9jBO1qQ7cIf0L+neuPTD1u7Ytzrp2dqo="
-            crossorigin="anonymous"></script>
+        integrity="sha256-55Jz3pBCF8z9jBO1qQ7cIf0L+neuPTD1u7Ytzrp2dqo="
+        crossorigin="anonymous"></script>
     <script>
         $('#menu-toggle').click(function () {
             $(this).toggleClass('open');
@@ -1153,18 +1153,29 @@
 
         //------------Profile Start--------------------------------------//
 
-
+            var lblOtherArray = ["Other"];
             var lblRace = $('#lblRace').html();
-            var lblRaceArray = lblRace != undefined?lblRace.split(','):'';
+            if (lblRace == "") {
+                $("#ddRace").val(lblOtherArray);
+                $('.selectboxmultiple button[data-id="ddRace"]').find('.filter-option-inner-inner').html("Other");
+                $('#OtherRace').show();
+            } else {
+                var lblRaceArray = lblRace != undefined ? lblRace.split(',') : '';
+                $("#ddRace").val(lblRaceArray);
+                $('.selectboxmultiple button[data-id="ddRace"]').find('.filter-option-inner-inner').html(lblRace);
+            }
 
-        $("#ddRace").val(lblRaceArray);
-        $('.selectboxmultiple button[data-id="ddRace"]').find('.filter-option-inner-inner').html(lblRace);
+
             var lblLanguages = $('#lblLanguages').html();
-            var lblLanguagesArray = lblLanguages != undefined ? lblLanguages.split(',') : '';
-           
-        $("#ddLanguages").val(lblLanguagesArray);
-        $('.selectboxmultiple button[data-id="ddLanguages"]').find('.filter-option-inner-inner').html(lblLanguages);
-
+            if (lblLanguages == "") {
+                $("#ddLanguages").val(lblOtherArray);
+                $('.selectboxmultiple button[data-id="ddLanguages"]').find('.filter-option-inner-inner').html("Other");
+                $('#OtherLanguage').show();
+            } else {
+                var lblLanguagesArray = lblLanguages != undefined ? lblLanguages.split(',') : '';
+                $("#ddLanguages").val(lblLanguagesArray);
+                $('.selectboxmultiple button[data-id="ddLanguages"]').find('.filter-option-inner-inner').html(lblLanguages);
+            }
 
         var lblUSArmedForces = $('#lblUSArmedForces').html().toLocaleLowerCase();
         $("input[name=USArmedRadio][value='"+lblUSArmedForces+"']").prop('checked', true);
@@ -1205,7 +1216,7 @@
             $('#divPermanentAddress').show();
         }
 
-            
+
         var lblContact = $('#lblContact').html();
         $('#ddWayToContact').val('' + lblContact);
         if (lblContact == "Other") {
@@ -1873,7 +1884,7 @@
 
 
             // check if option at index 0 is clicked
-            if (clickedIndex == 0) {
+            if (clickedIndex == 0 || clickedIndex == null) {
                 var all = $(this).children('option[value="Select All"]');
                 optionvalue = all.html();
 
@@ -1881,7 +1892,7 @@
                 if (optionvalue == "Select All") {
 
                     // check if all option is selected or not
-                    if (isSelected) {
+                    if (isSelected || isSelected == null) {
 
                         // make all option selected if all option is selected
                         $(this).selectpicker('selectAll');
@@ -1926,7 +1937,9 @@
                 }
                 else
                 {
-                    RaceEthnicity.push($(this).val());
+                    if (jQuery.inArray($(this).val(), RaceEthnicity) == -1) {
+                        RaceEthnicity.push($(this).val());
+                    }
                 }
 
             });
@@ -1940,7 +1953,9 @@
 
                 }
                 else {
-                    RaceEthnicity.push($(this).val());
+                    if (jQuery.inArray($(this).val(), RaceEthnicity) == -1) {
+                        RaceEthnicity.push($(this).val());
+                    }
                 }
 
             });
@@ -1948,7 +1963,7 @@
 
 
 
-        $('#ddLanguages').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+            $('#ddLanguages').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
             // do something...
 
             var divOtherLanguage = $('#OtherLanguage');
@@ -1964,8 +1979,8 @@
             }
 
 
-            // check if option at index 0 is clicked
-            if (clickedIndex == 0) {
+                // check if option at index 0 is clicked
+                if (clickedIndex == 0 || clickedIndex == null) {
                 var all = $(this).children('option[value="Select All"]');
                 optionvalue = all.html();
 
@@ -1973,7 +1988,7 @@
                 if (optionvalue == "Select All") {
 
                     // check if all option is selected or not
-                    if (isSelected) {
+                    if (isSelected || isSelected == null) {
 
                         // make all option selected if all option is selected
                         $(this).selectpicker('selectAll');
@@ -2017,20 +2032,25 @@
                 }
                 else
                 {
-                    LanguagesSpeak.push($(this).val());
+                    if (jQuery.inArray($(this).val(), LanguagesSpeak) == -1) {
+                        LanguagesSpeak.push($(this).val());
+                    }
                 }
-
             });
 
             });
 
 
             $.each($("#ddLanguages option:selected"), function () {
+                //second
                 if ($(this).val() == "Other" || $(this).val() == "Select All") {
 
                 }
                 else {
-                    LanguagesSpeak.push($(this).val());
+                    if (jQuery.inArray($(this).val(), LanguagesSpeak) == -1) {
+                        LanguagesSpeak.push($(this).val());
+                    }
+
                 }
 
             });
@@ -2752,38 +2772,20 @@
                     divhtml = divhtml + temp;
                 }
 
-                $('.ChildrenAgeDiv').html(divhtml);
-
+            $('.ChildrenAgeDiv').html(divhtml);
             var lblAgeChildren = $('#lblAgeChildren').html();
-            var AgeChildrenArray = lblAgeChildren != undefined?lblAgeChildren.split(','):'';
-            for (var i = 0; i < AgeChildrenArray.length; i++) {
-                var AgeChildren = AgeChildrenArray!=''?AgeChildrenArray[i].split(':'):'';
-                $('#child_year_' + (i + 1)).val(AgeChildren[0].toString());
-                $('#child_days_' + (i + 1)).val(AgeChildren[1].toString());
+            var AgeChildrenArray = lblAgeChildren != undefined ? lblAgeChildren.split(',') : '';
+            if (AgeChildrenArray != '') {
+                for (var i = 0; i < AgeChildrenArray.length; i++) {
+                    var AgeChildren = AgeChildrenArray != '' ? AgeChildrenArray[i].split(':') : '';
+                    $('#child_year_' + (i + 1)).val(AgeChildren[0].toString());
+                    $('#child_days_' + (i + 1)).val(AgeChildren[1].toString());
+                }
             }
-
         }
 
 
-        $("#txtChildren").keyup(function () {
 
-        $('.ChildrenAgeDiv').html('');
-
-        var val = $('#txtChildren').val();
-
-        var divhtml = '';
-
-        for (var i = 1; i <= parseInt(val); i++) {
-
-            var temp = $('.ChildrenAgeTemplate').html();
-            temp = temp.replace('#number', i);
-            temp = temp.replace('#yearid', 'child_year_' + i);
-            temp = temp.replace('#daysid', 'child_days_' + i);
-            divhtml = divhtml + temp;
-        }
-
-        $('.ChildrenAgeDiv').html(divhtml);
-            });
 
 
         if ('@ViewBag.message' == "RecordSaved") {
@@ -2922,7 +2924,7 @@
                 $('#txtStudentID').val('');
             }
 
-     
+
 
     });
 
@@ -3124,7 +3126,12 @@
             {
                 $('#Profile').find('.selectboxmultiple button[data-id="ddRace"]').removeClass('invalid-field');
             }
-
+            if ($.inArray("Other", RaceValue) != -1 && RaceValue.length < 7 && $('#txtOtherRace').val().trim() == "") {
+                $('#txtOtherRace').addClass('invalid-field');
+                check = false;
+            } else {
+                $('#txtOtherRace').removeClass('invalid-field');
+            }
             var LanguagesValue = $('#ddLanguages').selectpicker().val();
 
             if (LanguagesValue.length == 0)
@@ -3136,6 +3143,12 @@
             else
             {
                 $('#Profile').find('.selectboxmultiple button[data-id="ddLanguages"]').removeClass('invalid-field');
+            }
+            if ($.inArray("Other", LanguagesValue) != -1 && LanguagesValue.length < 7 && $('#txtOtherLanguage').val().trim() == "") {
+                $('#txtOtherLanguage').addClass('invalid-field');
+                check = false;
+            } else {
+                $('#txtOtherLanguage').removeClass('invalid-field');
             }
         }
         if (check == false)
@@ -3532,8 +3545,43 @@
 
             $("input[type=hidden][name=PatientChildrensAges]").val(PatientChildrensAges);
             $("input[type=hidden][name=EverMemberOfUSArmedForces]").val(EverMemberOfUSArmedForces);
+            var selectedracevalues = $("#ddRace").selectpicker().val();
+            if (selectedracevalues.indexOf("Other") != -1 && selectedracevalues.length < 7) {
+                RaceEthnicity = [];
 
+            } else if (selectedracevalues.length < 7) {
+                RaceEthnicity = [];
+                $.each($("#ddRace option:selected"), function () {
+                    if ($(this).val() == "Other" || $(this).val() == "Select All") {
+
+                    }
+                    else {
+                        if (jQuery.inArray($(this).val(), RaceEthnicity) == -1) {
+                            RaceEthnicity.push($(this).val());
+                        }
+                    }
+                });
+                $("#txtOtherRace").val("");
+            }
             $("input[type=hidden][name=RaceEthnicity]").val(RaceEthnicity);
+            var selectedvalues = $('#ddLanguages').selectpicker().val();
+            if (selectedvalues.indexOf("Other") != -1 && selectedvalues.length < 7) {
+                LanguagesSpeak = [];
+
+            } else if (selectedvalues.length < 7) {
+                LanguagesSpeak = [];
+                $.each($("#ddLanguages option:selected"), function () {
+                    if ($(this).val() == "Other" || $(this).val() == "Select All") {
+
+                    }
+                    else {
+                        if (jQuery.inArray($(this).val(), LanguagesSpeak) == -1) {
+                            LanguagesSpeak.push($(this).val());
+                        }
+                    }
+                });
+                $("#txtOtherLanguage").val("");
+            }
             $("input[type=hidden][name=LanguagesSpeak]").val(LanguagesSpeak);
             $("input[type=hidden][name=ClinicID]").val('@Session["ClinicID"]');
             //document.getElementById('frmProfile').submit();
@@ -3936,14 +3984,21 @@
 
         var drugscontaining = "";
 
-        $.each($("input[name='frmDast_check1']:checked"), function () {
-            drugscontaining +=$(this).val()+",";
-        });
-
-        if (drugscontaining.length > 0) {
-            drugscontaining = drugscontaining.substring(0, drugscontaining.length-1)
-        }
-
+        //$.each($(".drug-radibtns input[name='frmDast_check1']:checked"), function () {
+        //    drugscontaining +=$(this).val()+",";
+        //});
+      
+        drugscontaining = $.map($('.drug-radibtns input[name="frmDast_check1"]:checked'), function (n, i) {
+            if (!n.hasAttribute("style")) {
+                return n.value;
+            }
+        }).join(',');
+       
+        //if (drugscontaining.length > 0) {
+        //    drugscontaining = drugscontaining.substring(0, drugscontaining.length-1)
+        //}
+        //console.log($('#hdfDrugsContaining').val());
+        //$('#hdfDrugsContaining').val("");
         $('#hdfDrugsContaining').val(drugscontaining);
 
         var radio0 = $("input[name='frmDast_radio0']:checked").val();
