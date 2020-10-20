@@ -2069,6 +2069,41 @@ function updateDefaultneeds(careid) {
     });
 
 }
+function updateCarePlanName(obj) {
+    if ($(obj).val().trim() == "") {
+        toastr.error("Careplan name is required");
+        return;
+    }
+    var model = {
+        CarePlanName: $(obj).val(),
+        CarePlanId: careplanid,
+        PatientId: PatientId
+    }
+    $(".loaderOverlay").show();
+    $.ajax({
+        type: "POST",
+        url: Apipath + '/api/PatientMain/updatecareplanname',
+        contentType: 'application/json; charset=UTF-8',
+        data: JSON.stringify(model),
+        dataType: "json",
+        success: function (res) {
+            switch (res) {
+                case -1:
+                    toastr.error("Careplan name alreday exist");
+                    $(".loaderOverlay").hide();
+                    break;
+                default:
+                    toastr.success("Changes saved successfully");
+                    $(".loaderOverlay").hide();
+                    break;
+            }
+        },
+        error: function (e) {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });
+}
 function showSummary() {
     if ($("a.summary-nav").parent().hasClass("disabled")) {
         return false;
