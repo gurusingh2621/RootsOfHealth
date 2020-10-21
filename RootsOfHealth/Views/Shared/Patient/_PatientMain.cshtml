@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link href="~/Content/css/jquery.timeselector.css" rel="stylesheet" />
 <link href="~/css/CareplanPatient.css" rel="stylesheet" />
-
+<link href="~/css/CareplanNeedsAndGoals.css" rel="stylesheet" />
 <style>
     select#ddlProgramType {
         display: block !important;
@@ -154,7 +154,7 @@
                     <div class="paitent-detail-left">
                         <div class="detail-heading d-flex">
                             <h2>Client Profile</h2>
-                            
+
                             <div class="detail-button ml-auto">
                                 <a href='javaScript:void(0)' onclick=""
                                    class="btn btn-success label-fields" data-toggle="carePlansSidebar">
@@ -1869,8 +1869,8 @@
                         <div class="rounded_tabs_list">
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item"><a class="nav-link active show" href="#a_p_basic_info" data-toggle="tab">Basic Information</a></li>
-                                <li class="nav-item"><a class="nav-link show" href="#a_p_needAndGoal" data-toggle="tab">Needs & Goals</a></li>
-                                <li class="nav-item"><a class="nav-link show" href="#a_p_plan_summery" data-toggle="tab">Plan Summary</a></li>
+                                <li class="nav-item disabled"><a class="nav-link show need-nav" href="#a_p_needAndGoal" onclick="GetNeedAndGoalList()">Needs & Goals</a></li>
+                                <li class="nav-item disabled"><a class="nav-link show summary-nav" href="#a_p_plan_summery" onclick="showSummary()">Plan Summary</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div id="a_p_basic_info" class="tab-pane active show ">
@@ -1890,7 +1890,32 @@
                                         </a>
                                     </div>
                                 </div>
-                                <div id="a_p_needAndGoal" class="tab-pane show">@*Needs & Goals*@</div>
+                                <div id="a_p_needAndGoal" class="tab-pane show">
+                                    <div id="needContent">
+                                        <div class="tab_heading">
+                                            <div class="searchBoxWrap">
+                                                <h5><i class="fas fa-check-double"></i>Needs (<span class="completedNeedCount">0</span>/<span class="needCount">0</span>)</h5>
+                                                <div class="searchbox">
+                                                    <input type="text" placeholder="Search..." onkeyup="SearchNeedAndGoal(this)" autocomplete="off">
+                                                    <button type="submit"><i class="fas fa-search"></i></button>
+                                                </div>
+                                                <a class="addNewNeed" href="javascript:{}" onclick="NeedFocus()"><i class="fa fa-plus"></i></a>
+                                            </div>
+
+                                        </div>
+                                        <div class="needListOuter">
+                                            <div class="text-center"></div>
+                                            <ul class="needsList scroll">
+                                                <li class="last-child">
+                                                    <div class="addNewNeedGoal">
+                                                        <div class="plusIcon"><i class="fa fa-plus"></i></div>
+                                                        <textarea class="txtNeed" maxlength="1000" placeholder="add need" onkeyup="textAreaAdjust(this)"></textarea>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div id="a_p_plan_summery" class="tab-pane show">@*Plan Summary*@</div>
                             </div>
                         </div>
@@ -2102,15 +2127,104 @@
     </div>
 </div>
 <!-- AddCarePlan Modal end here -->
+<!--CarePlan Change Status Modal Starts Here-->
+<div class="modal fade" id="CarePlanChangeStatusModal" tabindex="-1" role="dialog" aria-labelledby="CarePlanChangeStatusModal"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Change Status</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form">
+                    <div class="form-group col-md-12">
+                        <label>Select Status</label>
+                        <select class="form-control form-control-sm ddlStatus">
+                            <option value="0">Not Started</option>
+                            <option value="1">In Progress</option>
+                            <option value="2">Completed</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label for="ddlProgram">Add Note</label>
+                        <textarea class="form-control form-control-sm needNote"></textarea>
+                        <textarea class="form-control form-control-sm goalNote"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href='javascript:{}' class="btn btn-success label-fields submitNeedStatus" onclick="UpdateNeedStatus()">Submit</a>
+                <a href='javascript:{}' class="btn btn-success label-fields submitGoalStatus" onclick="UpdateGoalStatus()">Submit</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- CarePlan Change Status Modal end here -->
+<!--CarePlan Outcome Modal Starts Here-->
+<div class="modal fade carePlanOutcomes" id="carePlanOutcomes" tabindex="-1" role="dialog" aria-labelledby="carePlanOutcomes"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title outcomeTitle">Outcomes(<span class="outcomecount">0</span>)</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="addOutcomeWrap">
+                    <div class="addNewOutcome">
+                        <div class="a_outcome_item">
+                            <div class="a_o_head">
+                                <div class="a_o_head_name">
+                                    @*<span class="name_thumb c_blue">AD</span>*@
+                                    @*<input type="text" name="add-New-Outcome" class="txtOutcome" placeholder="+ Add New Outcomes">*@
+                                    <textarea class="txtOutcome" placeholder="+ Add New Outcomes" onkeyup="textAreaAdjust(this)"></textarea>
+                                    <textarea class="txtIntervention" placeholder="+ Add New Intervention" onkeyup="textAreaAdjust(this)"></textarea>
+                                </div>
+                            </div>
+                            <div class="addNewHeadAction">
+                                <button type="button" class="checkBtn"><i class="fa fa-check"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="a_outcome_list_wrap">
+                        <div class="a_outcome_list scroll">
+                            <div class="a_outcome_item">
+                                <div class="a_o_head">
+                                    <div class="a_o_head_name">
+                                        <span class="name_thumb c_blue">AD</span><strong>Amardeep Singh</strong>
+                                    </div>
+                                    <div class="a_o_date">Jan 08, 2020 at 11:10 AM</div>
+                                </div>
+                                <div class="a_o_content">
+                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
+                                    <div class="status_changed"><b>Status Changed:</b> From Not Started To In Progress</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- CarePlan Outcome Modal end here -->
 <script>
     var userId = "@Session["userid"]";
     var PatientId = "@Model.PatientID";
     var careplanUploadedPath = "@System.Web.Configuration.WebConfigurationManager.AppSettings["CarePlanUploadPath"]";
 </script>
+<script src="~/Scripts/jquery-ui.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.js"></script>
 <script src="~/Content/script/jquery.timeselector.js"></script>
 <script src="~/Scripts/Careplan/CareplanPatient.js"></script>
-<script> 
+<script src="~/Scripts/Careplan/CareplanNeedsAndGoals.js"></script>
+<script>
     $(".scroll").scroll(function () {
         var sticky = $('.sidebar-right'),
             scroll = $(".scroll").scrollTop();
@@ -2262,7 +2376,7 @@
 
         GetTypeOfAppointments();
         GetLocationOfAppointments();
-       
+
     });
     function addChildrenDiv() {
         $('.ChildrenAgeDiv').html('');

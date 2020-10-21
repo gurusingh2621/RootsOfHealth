@@ -1,0 +1,553 @@
+﻿
+#needContent .tab_heading {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 0 10px;
+}
+
+    #needContent .tab_heading h5 {
+        font-size: 18px;
+        color: #555;
+        margin: 0px;
+    }
+
+    #needContent .tab_heading a.addNewNeed {
+        color: #555;
+        /*background: #22baa0;
+        color: #fff;*/
+        font-size: 18px;
+        border: 0;
+        padding: 7px 12px;
+        border-radius: 6px;      
+    }
+
+#needContent ul.needsList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+    max-height: calc(100vh - 250px);
+    overflow-y: auto;
+}
+
+    #needContent ul.needsList li ul {
+        padding: 0;
+        list-style: none;
+    }
+
+    #needContent ul.needsList li ul {
+        padding: 0 0 0 30px;
+        list-style: none;   
+    }
+
+
+#needContent .needItem {
+    padding: 10px 25px 10px 10px;
+    border-top: 1px solid #ddd;
+    position: relative;
+    cursor: pointer;
+    transition: all ease 0.4s;
+}
+
+    #needContent .needItem:hover {
+        background: transparent;
+    }
+
+#needContent .statusDiv {
+    display: inline-block;
+    color: #f79d01;
+    padding: 3px 10px;
+    background: rgba(247, 157, 1, 0.12);
+    border-radius: 50px;
+    line-height: 1;
+    font-size: 13px;
+    margin: 4px 0 0;
+}
+
+#needContent .needItem i.down_arrow {
+    position: absolute;
+    right: 8px;
+    color: #a1a1a1;
+    top: 10px;
+    transition: all ease 0.4s;
+    -webkit-transition: all ease 0.4s;
+}
+
+#needContent .needsList > li > .needItem {
+    border-bottom: 1px solid #ddd;
+}
+
+#needContent ul.needsList > li:first-child > .needItem {
+    border-top: 0;
+}
+
+
+#needContent ul.needsList li ul > li:first-child .needItem {
+    border-top: 0;
+}
+
+#needContent ul.needsList li.opened .needItem i.down_arrow {
+    transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+}
+
+#needContent .hide_down_arrow {
+    display: none;
+}
+
+#needContent ul.needsList > li > .addNewNeedGoal {
+    border-top: 1px solid #ddd;
+}
+
+#needContent ul.needsList > li > ul .addNewNeedGoal {
+    border-top: 1px solid #ddd;
+}
+
+#needContent .addNewNeedGoal {
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+}
+
+    #needContent .addNewNeedGoal .plusIcon {
+        border: 1px solid #ddd;
+        width: 22px;
+        border-radius: 50%;
+        display: flex;
+        height: 22px;
+        justify-content: center;
+        align-items: center;
+        font-size: 12px;
+        color: #ccc;
+    }
+
+#needContent textarea.txtNeed, textarea.txtGoal {
+    border: 0;
+    padding: 0 10px;
+    font-size: 14px;
+    width: calc(100% - 22px);
+    color: #555;
+    height: 21px;
+    outline: none;
+    resize: none;
+    overflow: auto;
+    background: transparent;
+    word-break: break-word;
+}
+
+#needContent .itemHoverActions {
+    position: absolute;
+    right: 0;
+    padding: 8px 8px;
+    background: #fff;
+    box-shadow: 0 0 12px rgba(0,0,0,0.2);
+    -webkit-box-shadow: 0 0 12px rgba(0,0,0,0.2);
+    border-radius: 6px;
+    -webkit-border-radius: 6px;
+    display: flex;
+    top: 95%;
+    display: none;
+    z-index: 9;
+}
+
+#needContent .needItem:hover .itemHoverActions {
+    display: flex;
+}
+
+
+#needContent .itemHoverActions a {
+    color: #818181;
+    padding: 0px 10px;
+    display: block;
+    border-right: 1px solid #cdd;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+    #needContent .itemHoverActions a.delete_item {
+        color: #fe6464;
+    }
+
+    #needContent .itemHoverActions a:last-child {
+        border: 0;
+    }
+
+#needContent .needModal_wrap .modal-header h5.modal-title {
+    font-size: 18px;
+    color: #555;
+}
+
+#needContent .searchBoxWrap {
+    display: flex;
+    /* align-items: center; */
+    width: 100%;
+    /* align-content: center; */
+    justify-content: center;
+    /* position: relative; */
+    justify-content: space-between;
+    margin: 0px 0px 10px;
+}
+
+    #needContent .searchBoxWrap .searchbox {
+        margin-right: 15px;
+        border: 1px solid #ddd;
+        border-radius: 50px;
+        max-width: initial;
+        display:none;
+    }
+
+        #needContent .searchBoxWrap .searchbox input {
+            border: 0;
+            padding: 5px 15px;
+            background: transparent;
+        }
+
+        #needContent .searchBoxWrap .searchbox button {
+            border: 0;
+            background: transparent;
+            padding: 5px 15px;
+        }
+
+#needContent .needItem  textarea.edittxtGoal, textarea.txtneed {
+    border: 0;
+    height: 21px;
+    min-height: initial;
+    resize: none;
+    width: 100%;
+    padding: 0;
+    display: block;
+    outline: none;
+    word-break: break-word;
+    white-space:pre-wrap;
+}
+#carePlanOutcomes textarea.txtOutcome, #carePlanOutcomes textarea.txtIntervention {
+    border: 0;
+    height: 21px;
+    min-height: initial;
+    resize: none;
+    width: 100%;
+    padding: 0;
+    display: block;
+    outline: none;
+    word-break: break-word;
+}
+#needContent .needListOuter.scroll {
+   /* max-height: calc(100vh - 230px);
+    overflow-y: auto;
+    padding: 0px;*/
+}
+
+
+#needContent .goalcontent {
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+
+#needContent .itemHoverActions a .fa-level-up-alt {
+    transform: rotate(90deg);
+}
+
+#needContent .needItem .dragIcon {
+    position: absolute;
+    left: 0;
+    top: 10px;
+    margin: 0px;
+    color: #c4c4c4;
+    opacity: 0;
+    cursor: move;
+}
+
+#needContent .needItem {
+    padding-left: 20px;
+    background: transparent;
+}
+
+    #needContent .needItem:hover a.dragIcon {
+        opacity: 1;
+    }
+    #needContent .needItem .dragIcon {
+        font-size: 18px;
+    }
+
+#needContent span.countgoal {
+    width: 22px;
+    height: 22px;
+    background: #EBA11E;
+    float: left;
+    text-align: center;
+    color: #fff;
+    line-height: 20px;
+    border-radius: 50%;
+    margin-right: 5px;
+    font-size: 11px;
+    flex: 0 0 22px;
+    max-width: 22px;
+    border: 1px solid transparent;
+}
+#needContent .editNeed {
+    display: flex;
+    align-items: flex-start;
+}
+#needContent .needDesc {
+    word-break: break-word;
+    white-space:pre-wrap;
+}
+#needContent .status_labels_div span {
+    display: inline-block;
+    text-align: center;
+    margin-right: 10px;
+    min-width: initial;
+    padding: 0 15px;
+}
+#needContent .status_labels_div {
+    margin: 5px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+#needContent .status_labels_div span.outcome_status {
+    background: rgba(34, 186, 160,0.2);
+    color: #22baa0;
+}
+
+
+#needContent span.countgoal.notStarted,
+#needContent span.countgoal.inProgress, 
+#needContent span.countgoal.fullCompleted {
+    background: transparent;
+    border-color: #bbb;
+    color: #bbb;
+    font-size: 0;
+    position: relative;
+}
+#needContent span.countgoal.inProgress {
+    background: #EBA11E;
+    border-color: #EBA11E;
+    color: #fff;
+}
+#needContent span.countgoal.fullCompleted {
+    background: #75a400;
+    border-color: #75a400;
+    color: #fff;
+}
+    #needContent span.countgoal.notStarted:after,
+    #needContent span.countgoal.inProgress:after,
+    #needContent span.countgoal.fullCompleted:after {
+        content: "\f00c";
+        font-family: "Font Awesome 5 Free";
+        font-size: 12px;
+        font-weight: 900;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+#needContent .tab_heading h5 i {
+    margin-right: 10px;
+}
+.tooltip-inner {
+    max-width: 200px;
+    padding: 3px 8px;
+    color: #000;
+    text-align: center;
+    background-color: #ffffff;
+    border-radius: .25rem;
+    box-shadow: 0 0 12px rgba(0,0,0,0.2);
+    -webkit-box-shadow: 0 0 12px rgba(0,0,0,0.2);
+    -webkit-border-radius: 10px;
+}
+.tooltip.bs-tooltip-auto[x-placement^=bottom] .arrow::before, .tooltip.bs-tooltip-bottom .arrow::before {
+    margin-left: -3px;
+    content: "";
+    border-width: 0 5px 5px;
+    border-bottom-color: #ffffff;
+}
+#needContent span.countgoal.not_start_circle {
+    background: rgba(141,141,141,0.2);
+    border-color: rgba(141,141,141,0.2);
+    color: #8d8d8d;
+}
+#needContent span.countgoal.in_progress_circle {
+    background: #EBA11E !important;
+    border-color: #EBA11E !important;
+}
+#needContent span.countgoal.completed_circle {
+    background: #75a400 !important;
+    border-color: #75a400 !important;
+}
+#CarePlanChangeStatusModal .ddlStatus {
+    display: block !important;
+}
+
+.movable-placeholder {
+    background: #34425a;
+    width: 100%;
+    height: 20px;
+    display: block;
+    padding: 20px;
+    margin: 0 0 15px 0;
+    border-style: dashed;
+    border-width: 1px;
+    border-color: #000;
+}
+#needContent ul.needsList.needsul {
+    max-height: calc(100vh - 280px);
+}
+/*Outcome modal css start here*/
+.a_outcome_list_wrap {
+    margin-right: -15px;
+}
+.a_outcome_list.scroll {
+    padding-right: 15px;
+}
+.carePlanOutcomes .modal-dialog {
+    max-width: 700px;
+}
+
+.carePlanOutcomes .modal-header {
+    padding: 16px 30px;
+    border-color: #cacaca;
+}
+
+.name_thumb {
+    display: flex;
+    height: 30px;
+    width: 30px;
+    min-width: 30px;
+    background: #517dd5;
+    color: #fff;
+    border-radius: 50px;
+    -webkit-border-radius: 50px;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+.c_blue {
+    background: #517dd5;
+}
+
+.c_orange {
+    background: #fca40b;
+}
+
+.a_o_head_name {
+    display: flex;
+    align-items: center;
+}
+
+.a_o_head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+    .a_o_head strong {
+        color: #555;
+    }
+
+.a_outcome_item {
+    padding: 10px 0;
+    border-bottom: 1px solid #cacaca;
+    font-size: 14px;
+}
+
+    .a_outcome_item:last-child {
+        border-bottom: 0px;
+    }
+
+.addNewOutcome .a_outcome_item {
+    border-bottom: 1px solid #cacaca;
+    /*padding: 10px 0 20px;*/
+    padding:0px 0px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.a_o_head_name input {
+    border: 0;
+    width: 100%;
+}
+
+.a_o_content {
+    padding: 0 0 0 40px;
+    color: #9b9b9b;
+    word-break:break-word;
+}
+
+.carePlanOutcomes .modal-body {
+    padding: 15px 30px;
+}
+
+.status_changed {
+    font-size: 13px;
+    color: #555;
+    margin: 5px 0 0;
+}
+
+.a_o_date {
+    font-size: 13px;
+    color: #555;
+}
+
+.checkBtn {
+    width: 23px;
+    height: 23px;
+    border: 0;
+    background: #c7c7c7;
+    border-radius: 50px;
+    -webkit-border-radius: 50px;
+    color: #fff;
+    padding: 0;
+    font-size: 13px;
+}
+
+    .checkBtn .fa-check {
+        color: #fff;
+    }
+
+.addNewOutcome .a_outcome_item .a_o_head {
+    width: calc(100% - 35px);
+}
+
+    .addNewOutcome .a_outcome_item .a_o_head .a_o_head_name {
+        width: 100%;
+    }
+
+.a_o_head_name input::placeholder {
+    color: #c5c5c5;
+    opacity: 1;
+}
+
+.a_o_head_name input:-ms-input-placeholder {
+    color: #c5c5c5;
+    opacity: 1;
+}
+
+.a_o_head_name input::-ms-input-placeholder {
+    color: #c5c5c5;
+    opacity: 1;
+}
+.a_outcome_list{
+    height:400px;
+    overflow-y:auto;
+}
+
+@media(max-width:767px) {
+    .a_o_date {
+        padding: 0 0 10px 40px;
+    }
+
+    .a_o_head {
+        align-items: flex-start;
+        justify-content: flex-start;
+        flex-direction: column;
+    }
+}
+/*Outcome modal css end here*/
