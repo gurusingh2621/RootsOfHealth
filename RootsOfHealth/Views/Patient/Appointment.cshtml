@@ -289,7 +289,7 @@
 
         // save new appointment
         function saveAppointment(appointmentInfo) {
-            debugger;
+           
             var data = {};
 
             if (typeof appointmentInfo == "undefined") {
@@ -320,7 +320,7 @@
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (result) {
-
+                   
                     getAllAppointments();
                     $('#exampleModal').modal('hide');
                     emptyModel();
@@ -339,7 +339,6 @@
         }
 
         function TwentyFourHourTime(time) {
-            debugger;
             var FinalTime = '';
             var SplitedTime = time == null?'': time.split(' ');
 
@@ -400,7 +399,6 @@
 
         // get all appointments from backend
         function getAllAppointments() {
-         //   var data = ;
             $.ajax({
                 type: "GET",
                 url: Apipath + '/api/PatientMain/GetAllPatientAppointment',
@@ -426,7 +424,6 @@
 
         // bind calendar events
         function bindCalendarEvents(data) {
-            debugger;
             var eventData = [];
             $('#calendar').fullCalendar('removeEvents');
             for (var i = 0; i < data.length; i++) {
@@ -452,6 +449,7 @@
                 allDaySlot: false,
                 eventLimit: true, // allow "more" link when too many events
                 eventRender: function (eventObj, $el) {
+                    $(".popover").remove();
                     $el.popover({
                         title: eventObj.title,
                         content: eventObj.description,
@@ -461,7 +459,21 @@
                     });
                 },
               events: eventData,
-
+                eventResize: function (info) {
+                    var data = info.start.toISOString()
+                    var date = new Date(data);
+                    var strDate = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear();
+                    let obj = AllAppointmentArray.find(o => o.PatientAppointmentID === info.id);
+                    var data = {
+                        PatientAppointmentID: obj.PatientAppointmentID,
+                        AppointmentDate: strDate,
+                        AppointmentTime: info.start.format("hh:mmA"),
+                        PatientID: obj.PatientID,
+                        Notes: obj.Notes,
+                        AppointmentEndTime: info.end.format("hh:mmA")                        
+                    }
+                    saveAppointment(data);
+                },
                 // event fire on click of any event
                 eventClick: function (info) {
                     getAppointmentByid(info.id)
@@ -471,7 +483,7 @@
 
                  // event fire on day click
                 dayClick: function (date, allDay, jsEvent, view) {
-                    debugger;
+                   
                     var date = new Date(date);
                     var tzDifference = date.getTimezoneOffset();
                     var offset = new Date(date.getTime() + tzDifference * 60 * 1000);
@@ -511,14 +523,14 @@
             $('#calendar').fullCalendar('removeEventSource', eventData);
             $('#calendar').fullCalendar('addEventSource', eventData);
 
-            debugger;
+           
             var data = $('#calendar');
 
 
         }
 
         $("#calendar .fc-month-button").on("click", function () {
-            debugger;
+           
             alert(1);
         });
 
