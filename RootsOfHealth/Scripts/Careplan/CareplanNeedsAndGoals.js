@@ -2,6 +2,11 @@
 var goalId = 0;
 var needRef;
 var goalRef;
+var needGoalEnum = {
+    NotStarted: 0,
+    InProgress: 1,
+    Completed:2
+}
 $(".txtNeed").keypress(function (event) {
     var keycode = event.keyCode || event.which;
     if (keycode == '13' && !event.shiftKey) {
@@ -44,13 +49,13 @@ function NeedsGoals(result) {
                                    <div class="status_labels_div">
                                    <span class="status_value outcome_status"  onclick="GetOutcomes(this)">Outcomes (${result[i].OutcomeCount})</span>`;
             switch (result[i].NeedStatus) {
-                case 0:
+                case needGoalEnum.NotStarted:
                     needstring += `<span onclick="EditNeedStatus(this)"  class="status_value notStarted">Not Started</span>`; 
                     break;
-                case 1:
+                case needGoalEnum.InProgress:
                     needstring += `<span onclick="EditNeedStatus(this)" class="status_value inProgress">In Progress</span>`;
                     break;
-                case 2:
+                case needGoalEnum.Completed:
                     needstring += `<span onclick="EditNeedStatus(this)" class="status_value completed">completed</span>`;
                     completedNeeds += 1;
                     break;               
@@ -122,7 +127,7 @@ function SaveNeed(e) {
         TemplateID: templateid,
         PatientID: PatientId,
         CarePlanId: careplanid,
-        Status:0,
+        Status: needGoalEnum.NotStarted,
         CreatedBy: userId,
         ModifiedBy: userId
     }
@@ -200,7 +205,7 @@ function SaveGoal(e) {
     var goalModel = {
         GoalID: $(e).closest("li").attr("data-goalid"),
         GoalDesc: $(e).val(),
-        Status: 0,
+        Status: needGoalEnum.NotStarted,
         NeedID: $(e).closest("ul.goalsList").parent().attr("data-needid"),
         CreatedBy: userId,
         ModifiedBy: userId
