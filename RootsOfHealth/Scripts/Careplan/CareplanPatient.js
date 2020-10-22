@@ -733,6 +733,7 @@ function getBaseFieldData() {
 }
 function editCarePlan(Id) {
     $(".loaderOverlay").show();
+    setCarePlanActiveTab('a_p_basic_info');
     $.ajax({
         type: "GET",
         url: Apipath + '/api/PatientMain/getcareplanbyid?Careplanid=' + Id,
@@ -769,7 +770,7 @@ function editCarePlan(Id) {
                 case carePlanEnum.SavedAsDraft://save as draft
                     careplanid = result.CarePlanId;
                     isUpdateProgramFields(result.TemplateID, result.CarePlanId);                  
-                    getCarePlanBasicFormHtml(result.TemplateID);
+                    proceedCarePlan(result.ProgramID);
                     getCarePlanBasicFormValue(result.CarePlanId, result.TemplateID);
                     $(".basic-info-actions").show();
                     $("a.need-nav,a.summary-nav").parent().addClass("disabled");
@@ -2043,7 +2044,6 @@ function getSavedFilesAsDraft() {
             }
         }
     });
-
 }
 function updateDefaultneeds(careid) {
     var model = {
@@ -2103,6 +2103,12 @@ function updateCarePlanName(obj) {
             $(".loaderOverlay").hide();
         }
     });
+}
+function setCarePlanActiveTab(tab) {
+    $('#addNewCarePlansSidebar .nav-tabs li a').removeClass('active show');
+    $('#addNewCarePlansSidebar .tab-content .tab-pane').removeClass('active show');
+    $('#addNewCarePlansSidebar a[href="#' + tab + '"]').addClass('active show');
+    $('#addNewCarePlansSidebar #' + tab).addClass('active show');
 }
 function showSummary() {
     if ($("a.summary-nav").parent().hasClass("disabled")) {
