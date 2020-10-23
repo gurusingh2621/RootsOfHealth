@@ -44,6 +44,9 @@ $(".care_plan_name_field").keypress(function (event) {
         event.preventDefault();
     }
 });
+$(".care_plan_name_field").focusout(function () {
+        updateCarePlanName(this);
+});
 function getCareProgramOptions() {
     $("#carePlanName").val("");
     $.ajax({
@@ -385,7 +388,8 @@ function saveBasicInfo(status) {
                                 });
                             }
                             clearFileData();
-                            makeBasicInfoReadonly();                           
+                            makeBasicInfoReadonly();
+                            updateDefaultneeds(careplanid);
                         },
                         error: function (e) {
                             toastr.error("Something happen Wrong");
@@ -746,6 +750,7 @@ function editCarePlan(Id) {
                 case carePlanEnum.NotSaved://not saved                    
                     careplanid = result.CarePlanId;                   
                     proceedCarePlan(result.ProgramID);
+                    $("#ddlcareplanstatus").removeClass("show_careplanstatus");
                     $("a.need-nav,a.summary-nav").parent().addClass("disabled");
                     intervalStatus = setInterval(saveBasicInfoAsDraft, 300000, carePlanEnum.SavedAsDraft);
                     break;
@@ -754,6 +759,7 @@ function editCarePlan(Id) {
                     getCarePlanBasicFormHtml(result.TemplateID);
                     getCarePlanBasicFormValue(result.CarePlanId, result.TemplateID);
                     $(".basic-info-actions").hide();
+                    $("#ddlcareplanstatus").addClass("show_careplanstatus").val("1");
                     $("a.need-nav,a.summary-nav").parent().removeClass("disabled");
                     $("#carePlansSidebar").removeClass('opened');
                     $("#addNewCarePlansSidebar").addClass('opened');
@@ -763,6 +769,7 @@ function editCarePlan(Id) {
                     getCarePlanBasicFormHtml(result.TemplateID);
                     getCarePlanBasicFormValue(result.CarePlanId, result.TemplateID);
                     $(".basic-info-actions").hide();
+                    $("#ddlcareplanstatus").addClass("show_careplanstatus").val("3");
                     $("a.need-nav,a.summary-nav").parent().removeClass("disabled");
                     $("#carePlansSidebar").removeClass('opened');
                     $("#addNewCarePlansSidebar").addClass('opened');
@@ -773,6 +780,7 @@ function editCarePlan(Id) {
                     proceedCarePlan(result.ProgramID);
                     getCarePlanBasicFormValue(result.CarePlanId, result.TemplateID);
                     $(".basic-info-actions").show();
+                    $("#ddlcareplanstatus").removeClass("show_careplanstatus");
                     $("a.need-nav,a.summary-nav").parent().addClass("disabled");
                     $("#carePlansSidebar").removeClass('opened');
                     $("#addNewCarePlansSidebar").addClass('opened');
@@ -1040,6 +1048,7 @@ function isUpdateProgramFields(tempid,careplanid) {
     });
 }
 function makeBasicInfoReadonly() {
+    $("#ddlcareplanstatus").addClass("show_careplanstatus").val("1");
     var value = "";
     isupdateProgramFields = false;
     $("a.need-nav,a.summary-nav").parent().removeClass("disabled");
@@ -1490,7 +1499,8 @@ function saveBasicInfoAsDraft(status) {
             }
             isupdateProgramFields = true;
             clearFileData();
-            getSavedFilesAsDraft();           
+            getSavedFilesAsDraft();          
+            updateDefaultneeds(careplanid);
         }, error: function (e) {
             toastr.error("Something happen Wrong");
             $(".loaderOverlay").hide();
@@ -2109,6 +2119,30 @@ function setCarePlanActiveTab(tab) {
     $('#addNewCarePlansSidebar .tab-content .tab-pane').removeClass('active show');
     $('#addNewCarePlansSidebar a[href="#' + tab + '"]').addClass('active show');
     $('#addNewCarePlansSidebar #' + tab).addClass('active show');
+}
+function setCarePlanStatus(obj) {
+    if ($(obj).val()== "-1") {
+        return;
+    }
+    var model = {
+        CarePlanId: careplanid,
+        Status: $(obj).val(),
+        ModifiedBy: userId
+    };
+    $.ajax({
+        type: "POST",
+        url: Apipath + '/api/PatientMain/updatecareplanstatus',
+        contentType: 'application/json; charset=UTF-8',
+        data: JSON.stringify(model),
+        dataType: "json",
+        success: function (res) {
+            toastr.success("Changes saved successfully");
+        },
+        error: function (e) {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });
 }
 function showSummary() {
     if ($("a.summary-nav").parent().hasClass("disabled")) {

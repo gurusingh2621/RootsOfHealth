@@ -1860,6 +1860,11 @@
                 <div class="right_sidebar" id="addNewCarePlansSidebar">
                     <div class="right_sidebar_head">                        
                         <input type="text" class="form-control care_plan_name_field" value="Add new care plan" placeholder="Enter care plan name" />
+                        <select class="form-control" id="ddlcareplanstatus" onchange="setCarePlanStatus(this)">
+                            <option value="-1">Select Care plan Status</option>
+                            <option value="1">Not Started</option>
+                            <option value="3">In Progress</option>
+                        </select>
                         <div class="ml-auto">
                             <!-- <a href="#" class="btn btn-success">Add New</a> -->
                             <a class="close_right_sidebar" onclick="getCarePlanList();" href="javascript:void(0);"><i class="fa fa-times"></i></a>
@@ -2180,14 +2185,15 @@
                         <div class="a_outcome_item">
                             <div class="a_o_head">
                                 <div class="a_o_head_name">
-                                    @*<span class="name_thumb c_blue">AD</span>*@
+                                    <span class="name_thumb c_blue">@Session["OutcomeAddedBy"]</span>
                                     @*<input type="text" name="add-New-Outcome" class="txtOutcome" placeholder="+ Add New Outcomes">*@
                                     <textarea class="txtOutcome" placeholder="+ Add New Outcomes" onkeyup="textAreaAdjust(this)"></textarea>
                                     <textarea class="txtIntervention" placeholder="+ Add New Intervention" onkeyup="textAreaAdjust(this)"></textarea>
                                 </div>
                             </div>
                             <div class="addNewHeadAction">
-                                <button type="button" class="checkBtn"><i class="fa fa-check"></i></button>
+                                <button type="button" class="checkBtn btnOutcome" onclick="SaveOutCome(this)"><i class="fa fa-check"></i></button>
+                                <button type="button" class="checkBtn btnIntervention" onclick="SaveIntervention(this)"><i class="fa fa-check"></i></button>
                             </div>
                         </div>
                     </div>

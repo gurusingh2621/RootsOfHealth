@@ -506,8 +506,11 @@
     color: #fff;
     padding: 0;
     font-size: 13px;
+    cursor:pointer;
 }
-
+.checkGreen {
+    background: green;
+}
     .checkBtn .fa-check {
         color: #fff;
     }
