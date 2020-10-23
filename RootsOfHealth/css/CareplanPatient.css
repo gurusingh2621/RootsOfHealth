@@ -467,12 +467,22 @@ input.care_plan_name_field {
     color: #212529;
     font-weight: 500;
     padding: 2px 5px;
-    width: calc(100% - 40px);
+    width: auto;
 }
 
     input.care_plan_name_field:hover {
         border: 1px solid #ced4da;
     }
+
+.show_careplanstatus {
+    display: inline-block !important;
+}
+
+select#ddlcareplanstatus {
+    margin: 0 15px;
+    width: auto;
+    height:33px;
+}
 /*My responsive style
 ============================================================================================ */
 @media(min-width:1400px) {

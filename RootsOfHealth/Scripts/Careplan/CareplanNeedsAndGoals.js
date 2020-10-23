@@ -15,18 +15,10 @@ $(".txtNeed").keypress(function (event) {
     }
 });
 $(".txtOutcome").keypress(function (event) {
-        var keycode = event.keyCode || event.which;
-        if (keycode == '13' && !event.shiftKey) {
-            SaveOutCome(this);
-            event.preventDefault();
-        }
-    });
+    $(".btnOutcome").addClass("checkGreen");
+});
 $(".txtIntervention").keypress(function (event) {
-    var keycode = event.keyCode || event.which;
-    if (keycode == '13' && !event.shiftKey) {
-        SaveIntervention(this);
-        event.preventDefault();
-    }
+    $(".btnIntervention").addClass("checkGreen");
 });
 function NeedsGoals(result) {
     if (result.length) {
@@ -37,13 +29,11 @@ function NeedsGoals(result) {
         var needstring = '';
         for (var i = 0; i < result.length; i++) {            
             var goals = parseHTML(result[i].GoalHtml);
-            var notStartedGoals =$(goals).find("span.status_value.notStarted").length;
-            var inProgressGolas = $(goals).find("span.status_value.inProgress").length;
-            var completedGoals = $(goals).find("span.status_value.completed").length;
+            var notStartedGoals = $(goals).find("span.status_value.notStarted").length + $(goals).find("span.status_value.inProgress").length;
             needstring += `<li class="hasChild" data-needid="${result[i].NeedID}" data-status="${result[i].NeedStatus}">
                                 <div class="needItem">
                                 <div class="editNeed">
-                                   <span class="countgoal ${notStartedGoals > 0 ? "not_start_circle" : inProgressGolas > 0 ? "in_progress_circle" : completedGoals > 0 ? "completed_circle" :"not_start_circle"}" onclick="ExpandCollapseFromGoalCount(this)">${notStartedGoals}</span>
+                                   <span class="countgoal not_start_circle" onclick="ExpandCollapseFromGoalCount(this)">${notStartedGoals}</span>
                                    <div class="w-100">
                                    <span  class="needDesc">${result[i].NeedDesc}</span>
                                    <div class="status_labels_div">
@@ -701,8 +691,8 @@ function GetInterventions(obj) {
     if (obj != null) {
         goalRef = obj;
         $(".outcomeTitle").html("").append('Interventions(<span class="outcomecount">0</span>)');
-        $(".txtIntervention").show();
-        $(".txtOutcome").hide();
+        $(".txtIntervention,.btnIntervention").show();
+        $(".txtOutcome,.btnOutcome").hide();
         $(".txtIntervention").val("");
         goalId = $(obj).closest("li").attr("data-goalid");
     }
@@ -747,8 +737,8 @@ function GetOutcomes(obj) {
     if (obj != null) {
         needRef = obj;
         $(".outcomeTitle").html("").append('Outcomes(<span class="outcomecount">0</span>)');
-        $(".txtIntervention").hide();
-        $(".txtOutcome").show();
+        $(".txtIntervention,.btnIntervention").hide();
+        $(".txtOutcome,.btnOutcome").show();
         $(".txtOutcome").val("");
         needId = $(obj).closest("li").attr("data-needid");
     }
@@ -840,6 +830,7 @@ function UpdateNeedStatus() {
                         statusRef.addClass("inProgress");
                         statusRef.html("").append("In Progress");
                     }
+                    $("#ddlcareplanstatus").val("3");
                     break;
                 case "2":
                     var completedNeedCount = parseInt($("span.completedNeedCount").html());
@@ -854,6 +845,7 @@ function UpdateNeedStatus() {
                         statusRef.addClass("completed");
                         statusRef.html("").append("Completed");
                     }
+                    $("#ddlcareplanstatus").val("3");
                     break;
             }
             toastr.success("Changes saved successfully");
@@ -921,11 +913,12 @@ function UpdateGoalStatus() {
                         statusRef.removeClass("notStarted inProgress completed");
                         statusRef.addClass("inProgress");
                         statusRef.html("").append("In Progress");
-                    }                   
+                    }   
+                    $("#ddlcareplanstatus").val("3");
                     break;
                 case "2":
-                    var completedNeedCount = parseInt($("span.completedNeedCount").html());
-                    $("span.completedNeedCount").html("").append(completedNeedCount + 1);
+                    //var completedNeedCount = parseInt($("span.completedNeedCount").html());
+                    //$("span.completedNeedCount").html("").append(completedNeedCount + 1);
                     if ($(goalRef).is("span")) {
                         var statusCircle = $(goalRef).parent().parent().prev();
                         statusCircle.removeClass("notStarted inProgress fullCompleted");
@@ -942,24 +935,12 @@ function UpdateGoalStatus() {
                         statusRef.addClass("completed");
                         statusRef.html("").append("Completed");
                     }
+                    $("#ddlcareplanstatus").val("3");
                     break;
             }
             var goals = $(goalRef).closest("ul.goalsList");
-            var notStartedGoals = goals.find("span.status_value.notStarted").length;
-            var inProgressGolas = goals.find("span.status_value.inProgress").length;
-            var completedGoals = goals.find("span.status_value.completed").length;
+            var notStartedGoals = goals.find("span.status_value.notStarted").length + goals.find("span.status_value.inProgress").length;
             var needCircle = goals.prev().find("div.editNeed").find("span").first();
-               
-            needCircle.removeClass("not_start_circle in_progress_circle completed_circle");
-            if (notStartedGoals > 0) {
-                needCircle.addClass("not_start_circle");
-            } else if (inProgressGolas > 0) {
-                needCircle.addClass("in_progress_circle");
-            } else if (completedGoals > 0) {
-                needCircle.addClass("completed_circle");
-            } else {
-                needCircle.addClass("not_start_circle");
-            }
             needCircle.html("").append(notStartedGoals);
             if (res.UpdatedNeed == 1) {
                 var needStatusSpan = goals.prev().find("div.status_labels_div").find("span.status_value").last();
@@ -971,6 +952,14 @@ function UpdateGoalStatus() {
             $(".ddlStatus").val("0");
             $(".goalNote").val('');
             $("#CarePlanChangeStatusModal").modal('hide');
+            var goalsCount = goals.find("li").not("li.newGoal").length;
+            var completedgoalsCount = goals.find(`li[data-status="${needGoalEnum.Completed}"]`).length;
+            if (goalsCount == completedgoalsCount) {
+                $.alert({
+                    title: 'Reminder Alert!',
+                    content: 'Mark need  complete with comments',
+                });
+            }
         }, error: function () {
             toastr.error("Something happen Wrong");
             $(".loaderOverlay").hide();
@@ -995,6 +984,7 @@ function SaveOutCome(e) {
         data: JSON.stringify(model),
         dataType: "json",
         success: function (res) {
+            $(".btnOutcome").removeClass("checkGreen");
             GetOutcomes();
             $(needRef).html("").append(`Outcomes(${$("span.outcomecount").html()})`);
             $(".txtOutcome").val("").css("height", "21px");;
@@ -1024,6 +1014,7 @@ function SaveIntervention(e) {
         data: JSON.stringify(model),
         dataType: "json",
         success: function (res) {
+            $(".btnIntervention").removeClass("checkGreen");
             GetInterventions();
             $(".txtIntervention").val("").css("height", "21px");
             $(goalRef).html("").append(`Intervention(${$("span.outcomecount").html()})`);
