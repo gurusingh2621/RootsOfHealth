@@ -436,7 +436,6 @@ function saveCareplan() {
                     careplanid = res;
                     $(".care_plan_name_field").val($("#carePlanName").val());
                     proceedCarePlan();
-                    updateDefaultneeds(res);
                     intervalStatus = setInterval(saveBasicInfoAsDraft, 300000, carePlanEnum.SavedAsDraft);
                     $(".loaderOverlay").hide();
                     break;
@@ -1500,7 +1499,6 @@ function saveBasicInfoAsDraft(status) {
             isupdateProgramFields = true;
             clearFileData();
             getSavedFilesAsDraft();          
-            updateDefaultneeds(careplanid);
         }, error: function (e) {
             toastr.error("Something happen Wrong");
             $(".loaderOverlay").hide();
@@ -2129,20 +2127,58 @@ function setCarePlanStatus(obj) {
         Status: $(obj).val(),
         ModifiedBy: userId
     };
-    $.ajax({
-        type: "POST",
-        url: Apipath + '/api/PatientMain/updatecareplanstatus',
-        contentType: 'application/json; charset=UTF-8',
-        data: JSON.stringify(model),
-        dataType: "json",
-        success: function (res) {
-            toastr.success("Changes saved successfully");
-        },
-        error: function (e) {
-            toastr.error("Something happen Wrong");
-            $(".loaderOverlay").hide();
-        }
-    });
+    if (model.Status == "4") {
+        $.confirm({
+            icon: 'fas fa-exclamation-triangle',
+            title: 'Confirm',
+            content: 'Once care plan completed can not be edited or restart again, press ok to continue',
+            type: 'green',
+            typeAnimated: true,
+            buttons: {
+                ok: {
+                    btnClass: 'btn-green',
+                    action: function () {
+                        $.ajax({
+                            type: "POST",
+                            url: Apipath + '/api/PatientMain/updatecareplanstatus',
+                            contentType: 'application/json; charset=UTF-8',
+                            data: JSON.stringify(model),
+                            dataType: "json",
+                            success: function (res) {
+                                if (res == 0) {
+                                    toastr.error("Care plan needs is not completed");
+                                } else {
+                                    toastr.success("Changes saved successfully");
+                                }
+                                },
+                            error: function (e) {
+                                toastr.error("Something happen Wrong");
+                                $(".loaderOverlay").hide();
+                            }
+                        });
+                    }
+                },
+                cancel: function () {
+
+                }
+            }
+        });
+    } else {
+        $.ajax({
+            type: "POST",
+            url: Apipath + '/api/PatientMain/updatecareplanstatus',
+            contentType: 'application/json; charset=UTF-8',
+            data: JSON.stringify(model),
+            dataType: "json",
+            success: function (res) {
+                toastr.success("Changes saved successfully");
+            },
+            error: function (e) {
+                toastr.error("Something happen Wrong");
+                $(".loaderOverlay").hide();
+            }
+        });
+    }
 }
 function showSummary() {
     if ($("a.summary-nav").parent().hasClass("disabled")) {

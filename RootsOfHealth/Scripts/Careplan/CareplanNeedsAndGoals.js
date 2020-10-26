@@ -14,12 +14,21 @@ $(".txtNeed").keypress(function (event) {
         event.preventDefault();
     }
 });
-$(".txtOutcome").keypress(function (event) {
-    $(".btnOutcome").addClass("checkGreen");
+$(".txtOutcome").keypress(function (event) {  
+    var keycode = event.keyCode || event.which;
+    if (keycode == '13' && !event.shiftKey) {
+        SaveOutCome(this);
+        event.preventDefault();
+    }
 });
-$(".txtIntervention").keypress(function (event) {
-    $(".btnIntervention").addClass("checkGreen");
+$(".txtIntervention").keypress(function (event) {  
+    var keycode = event.keyCode || event.which;
+    if (keycode == '13' && !event.shiftKey) {
+        SaveIntervention(this);
+        event.preventDefault();
+    }
 });
+
 function NeedsGoals(result) {
     if (result.length) {
         var completedNeeds = 0;
@@ -522,6 +531,20 @@ function textAreaAdjust(o) {
     }
     if ($(o).hasClass("txtNeed")) {
         NeedFocus();
+    }
+    if ($(o).hasClass("txtIntervention")) {
+        if ($(o).val().trim() == "") {
+            $(".btnIntervention").removeClass("checkGreen");
+        } else {
+            $(".btnIntervention").addClass("checkGreen");
+        } 
+    }
+    if ($(o).hasClass("txtOutcome")) {
+        if ($(o).val().trim() == "") {
+            $(".btnOutcome").removeClass("checkGreen");
+        } else {
+            $(".btnOutcome").addClass("checkGreen");
+        } 
     }
 }
 function ExpandCollapse(o) {

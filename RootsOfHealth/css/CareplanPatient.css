@@ -467,7 +467,7 @@ input.care_plan_name_field {
     color: #212529;
     font-weight: 500;
     padding: 2px 5px;
-    width: auto;
+    width:100%;
 }
 
     input.care_plan_name_field:hover {
