@@ -37,10 +37,10 @@ $(document).ready(function () {
     $(".close_right_sidebar").click(function () {
         $(this).parents('.right_sidebar').removeClass('opened');
     }); 
+    getCarePlanList();     
     $("#ddlcareplanstatus").on('focus', function () {
         prevSelectedCarePlan = this.value;
-    });
-    getCarePlanList();    
+    });    
 });
 $(".care_plan_name_field").keypress(function (event) {
     var keycode = event.keyCode || event.which;
@@ -749,7 +749,8 @@ function editCarePlan(Id) {
         dataType: "json",       
         success: function (result) {
             $(".care_plan_name_field").val(result.CarePlanName);
-            isupdateProgramFields = false;       
+            isupdateProgramFields = false;
+            $("#ddlcareplanstatus,.care_plan_name_field").removeAttr("disabled");
             switch (result.Status) {
                 case carePlanEnum.NotSaved://not saved                    
                     careplanid = result.CarePlanId;                   
@@ -788,7 +789,18 @@ function editCarePlan(Id) {
                     $("a.need-nav,a.summary-nav").parent().addClass("disabled");
                     $("#carePlansSidebar").removeClass('opened');
                     $("#addNewCarePlansSidebar").addClass('opened');
-                    break;                
+                    break;   
+                case carePlanEnum.Completed://Completed
+                    careplanid = result.CarePlanId;
+                    getCarePlanBasicFormHtml(result.TemplateID);
+                    getCarePlanBasicFormValue(result.CarePlanId, result.TemplateID);
+                    $(".basic-info-actions").hide();
+                    $("#ddlcareplanstatus").addClass("show_careplanstatus").val("4");
+                    $("a.need-nav,a.summary-nav").parent().removeClass("disabled");
+                    $("#carePlansSidebar").removeClass('opened');
+                    $("#addNewCarePlansSidebar").addClass('opened');                
+                    $("#ddlcareplanstatus,.care_plan_name_field").attr("disabled", true);
+                    break;
                 default:                 
                     break;
             }
@@ -2151,8 +2163,14 @@ function setCarePlanStatus(obj) {
                                 data: JSON.stringify(model),
                                 dataType: "json",
                                 success: function (res) {
-                                    prevSelectedCarePlan = model.Status;
-                                        toastr.success("Changes saved successfully");
+                                    prevSelectedCarePlan = model.Status;                                      
+                                    $("#ddlcareplanstatus,.care_plan_name_field").attr("disabled", true);
+                                    $(".needGoalHover").addClass("disableHoverItem");
+                                    $(".status_labels_div").find("span:last").addClass("disableHoverItem");
+                                    $(".txtNeed,.txtOutcome,.txtIntervention").attr("disabled", true);
+                                    $(".needsList").sortable('destroy');
+                                    $(".goalsList").sortable('destroy');
+                                    toastr.success("Changes saved successfully");
                                 },
                                 error: function (e) {
                                     toastr.error("Something happen Wrong");
@@ -2202,9 +2220,4 @@ function checkCarePlanStatus() {
         }
     });
 }
-function showSummary() {
-    if ($("a.summary-nav").parent().hasClass("disabled")) {
-        return false;
-    }
-    $("a.summary-nav").tab('show');
-}
+

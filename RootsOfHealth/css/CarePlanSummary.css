@@ -1,0 +1,51 @@
+﻿#AddSummaryModal .form-control {
+    display: block !important;
+}
+
+#AddSummaryModal a.btn.btn-default {
+    background: #3b3c3c63;
+    border-radius: 50px;
+    border: 1px solid #3b3c3c63;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 8px 20px;
+    margin-right: 5px;
+    color: #ffffff;
+}
+#AddSummaryModal .txtNextReviewDate {
+    background: url(../images/time-icon.png) no-repeat 0 0;
+    background-position: 98% 9px;
+    cursor: pointer;
+}
+.plan_summery_wrap .tab_heading {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #cacaca;
+    padding: 0 0 10px;
+}
+.plan_summery_wrap .a_o_content {
+    white-space: normal;
+}
+.plan_summery_wrap .a_o_content p {
+    margin: 0 0 0;
+    line-height: 1.4;
+    word-break:break-word;
+    white-space:pre-wrap;
+}
+.plan_summery_wrap .tab_heading h5 {
+    font-size: 18px;
+    color: #555;
+    margin: 0px;
+    font-weight: 500;
+}
+.plan_summery_wrap .tab_heading h5 i {
+    margin-right: 10px;
+    font-size: 17px;
+}
+.plan_summery_wrap a.addNewSummary {
+    color: #555;
+}
+.plan_summery_wrap .a_o_date b,
+.plan_summery_wrap .status_changed b {
+    font-weight: 500;
+}

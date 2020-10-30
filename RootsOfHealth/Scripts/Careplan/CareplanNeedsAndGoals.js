@@ -79,39 +79,45 @@ function NeedsGoals(result) {
         needList.find("li").not("li.last-child").remove();
         needList.find("li.last-child").before(needstring);
         $("span.completedNeedCount").html("").append(completedNeeds);
-        $(".needsList").sortable({
-            items: "li.hasChild",
-            cursor: 'move',
-            opacity: 0.7,
-            revert: 300,
-            delay: 150,
-            placeholder: "movable-placeholder",
-            containment: "#needContent",
-            start: function (e, ui) {
-                ui.placeholder.height(ui.helper.outerHeight());
-            },
-            update: function () {
-                needSendOrderToServer();
-            },
-        });
-        $(".goalsList").sortable({
-            items: "li",
-            //handle: '.handle,.dragIcon',
-            cursor: 'move',
-            cancel: ".newGoal",
-            opacity: 0.7,
-            revert: 300,
-            delay: 150,
-            placeholder: "movable-placeholder",
-            containment: "#needContent",
-            start: function (e, ui) {
-                ui.placeholder.height(ui.helper.outerHeight());
-            },
-            update: function () {
-                goalSendOrderToServer();
-            }
-        });
-
+        if ($("#ddlcareplanstatus").val() != "4") {
+            $(".needGoalHover").removeClass("disableHoverItem");
+            $(".status_labels_div").find("span:last").removeClass("disableHoverItem");
+            $(".needsList").sortable({
+                items: "li.hasChild",
+                cursor: 'move',
+                opacity: 0.7,
+                revert: 300,
+                delay: 150,
+                placeholder: "movable-placeholder",
+                containment: "#needContent",
+                start: function (e, ui) {
+                    ui.placeholder.height(ui.helper.outerHeight());
+                },
+                update: function () {
+                    needSendOrderToServer();
+                },
+            });
+            $(".goalsList").sortable({
+                items: "li",
+                //handle: '.handle,.dragIcon',
+                cursor: 'move',
+                cancel: ".newGoal",
+                opacity: 0.7,
+                revert: 300,
+                delay: 150,
+                placeholder: "movable-placeholder",
+                containment: "#needContent",
+                start: function (e, ui) {
+                    ui.placeholder.height(ui.helper.outerHeight());
+                },
+                update: function () {
+                    goalSendOrderToServer();
+                }
+            });
+        } else {
+            $(".needGoalHover").addClass("disableHoverItem");
+            $(".status_labels_div").find("span:last").addClass("disableHoverItem");
+        }
     }
     $(".loaderOverlay").hide();
 }
@@ -283,6 +289,11 @@ function GetNeedAndGoalList() {
     }
     $("a.need-nav").tab('show');
     $(".loaderOverlay").show();
+    if ($("#ddlcareplanstatus").val() == "4") {        
+        $(".txtNeed,.txtOutcome,.txtIntervention").attr("disabled", true);
+    } else {
+        $(".txtNeed,.txtOutcome,.txtIntervention").removeAttr("disabled");
+    }
     $.ajax({
         type: "GET",
         url: Apipath + '/api/PatientMain/getneedbycareplanid?CarePlanId=' + careplanid,
@@ -299,8 +310,9 @@ function GetNeedAndGoalList() {
             } else {
                 $(".needGoalHover").tooltip();
                
-            }
-            NeedFocus();
+            }         
+                NeedFocus();
+            
         }, error: function (e) {
             toastr.error("Something happen Wrong");
             $(".loaderOverlay").hide();
@@ -308,6 +320,9 @@ function GetNeedAndGoalList() {
     });
 }
 function DeleteNeed(obj) {
+    if ($(obj).hasClass("disableHoverItem")) {
+        return;
+    }
     $.ajax({
         type: "GET",
         url: Apipath + '/api/PatientMain/editneed?NeedId=' + $(obj).closest("li").attr("data-needid"),
@@ -367,6 +382,9 @@ function DeleteNeed(obj) {
     
 }
 function DeleteGoal(obj) {
+    if ($(obj).hasClass("disableHoverItem")) {
+        return;
+    }
     $.ajax({
         type: "GET",
         url: Apipath + '/api/PatientMain/editgoal?GoalId=' + $(obj).closest("li").attr("data-goalid"),
@@ -432,6 +450,9 @@ function DeleteGoal(obj) {
     });
 }
 function AddNewGoalFromNeed(e) {
+    if ($(e).hasClass("disableHoverItem")) {
+        return;
+    }
     $(e).closest("ul.needsList").find("ul.goalsList").not($(e).parent().parent().next()).each(function (index, item) {
         $(item).find("li.newGoal").remove();
     });
@@ -556,6 +577,9 @@ function ExpandCollapseFromGoalCount(o) {
     $(o).closest("div.needItem").next('ul.goalsList').slideToggle();
 }
 function EditGoal(o) {
+    if ($(o).hasClass("disableHoverItem")) {
+        return;
+    }
     $.ajax({
         type: "GET",
         url: Apipath + '/api/PatientMain/editgoal?GoalId=' + $(o).closest("li").attr("data-goalid"),
@@ -604,6 +628,9 @@ function EditGoal(o) {
     });   
 }
 function EditNeed(o) {
+    if ($(o).hasClass("disableHoverItem")) {
+        return;
+    }
     $.ajax({
         type: "GET",
         url: Apipath + '/api/PatientMain/editneed?NeedId=' + $(o).closest("li").attr("data-needid"),
@@ -681,6 +708,9 @@ function goalOrNeedFocus(obj) {
     }
 }
 function EditGoalStatus(obj) {
+    if ($(obj).hasClass("disableHoverItem")) {
+        return;
+    }
     $("#CarePlanChangeStatusModal .goalNote").show();
     $("#CarePlanChangeStatusModal .needNote").hide();
     $("#CarePlanChangeStatusModal .submitGoalStatus").show();
@@ -696,6 +726,9 @@ function EditGoalStatus(obj) {
     });
 }
 function EditNeedStatus(obj) {
+    if ($(obj).hasClass("disableHoverItem")) {
+        return;
+    }
     $("#CarePlanChangeStatusModal .goalNote").hide();
     $("#CarePlanChangeStatusModal .needNote").show();
     $("#CarePlanChangeStatusModal .submitGoalStatus").hide();
@@ -726,7 +759,7 @@ function GetInterventions(obj) {
         dataType: "json",
         async: false,
         success: function (result) {
-            var intervention = $(".a_outcome_list");
+            var intervention = $("#carePlanOutcomes").find(".a_outcome_list");
             intervention.html("");
             var interventionStr = '';
             $("span.outcomecount").html("").append(result.length);
@@ -772,7 +805,7 @@ function GetOutcomes(obj) {
         dataType: "json",
         async: false,
         success: function (result) {
-            var outcome = $(".a_outcome_list");
+            var outcome = $("#carePlanOutcomes").find(".a_outcome_list");
             outcome.html("");
             var outcomeStr = '';
             $("span.outcomecount").html("").append(result.length);
