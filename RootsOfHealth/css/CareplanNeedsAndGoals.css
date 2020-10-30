@@ -507,7 +507,11 @@
     color: #fff;
     padding: 0;
     font-size: 13px;
-    cursor:pointer;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
 }
 .checkGreen {
     background: green;

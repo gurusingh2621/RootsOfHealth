@@ -483,6 +483,9 @@ select#ddlcareplanstatus {
     width: auto;
     height:34px;
 }
+#addNewCarePlansSidebar .form-control:disabled {
+    background-color: #ffffff;
+}
 /*My responsive style
 ============================================================================================ */
 @media(min-width:1400px) {

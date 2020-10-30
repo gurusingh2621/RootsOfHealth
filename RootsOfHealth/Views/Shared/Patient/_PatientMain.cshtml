@@ -4,6 +4,7 @@
 <link href="~/Content/css/jquery.timeselector.css" rel="stylesheet" />
 <link href="~/css/CareplanPatient.css" rel="stylesheet" />
 <link href="~/css/CareplanNeedsAndGoals.css" rel="stylesheet" />
+<link href="~/css/CarePlanSummary.css" rel="stylesheet" />
 <style>
     select#ddlProgramType {
         display: block !important;
@@ -1858,7 +1859,7 @@
                 </div>
 
                 <div class="right_sidebar" id="addNewCarePlansSidebar">
-                    <div class="right_sidebar_head">                        
+                    <div class="right_sidebar_head">
                         <input type="text" class="form-control care_plan_name_field" value="Add new care plan" placeholder="Enter care plan name" />
                         <select class="form-control" id="ddlcareplanstatus" onchange="setCarePlanStatus(this)">
                             <option value="-1">Select Care plan Status</option>
@@ -1922,7 +1923,42 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="a_p_plan_summery" class="tab-pane show">@*Plan Summary*@</div>
+                                <div id="a_p_plan_summery" class="tab-pane show">
+                                    <div class="plan_summery_wrap summaryContent">
+                                        <div class="tab_heading">
+                                            <h5><i class="fas fa-check-double"></i>Summary</h5>
+                                            <a class="addNewSummary" href="javascript:{}" onclick="openAddSummary()"><i class="fa fa-plus"></i></a>
+                                        </div>
+                                        <div class="a_outcome_list scroll">
+                                            <div class="a_outcome_item">
+                                                <div class="a_o_head">
+                                                    <div class="a_o_head_name">
+                                                        <span class="name_thumb c_blue">AD</span><strong>Amardeep Singh</strong>
+                                                    </div>
+                                                    <div class="a_o_date"><b>Reviewed on:</b> Jan 08,2020 at 11:10 AM</div>
+                                                </div>
+                                                <div class="a_o_content">
+                                                    <p>Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy.</p>
+                                                    <div class="status_changed"><b>Next Review Date:</b> Jan 08,2020 at 11:10 AM</div>
+                                                </div>
+                                            </div>
+                                            <div class="a_outcome_item">
+                                                <div class="a_o_head">
+                                                    <div class="a_o_head_name">
+                                                        <span class="name_thumb c_blue">AD</span><strong>Amardeep Singh</strong>
+                                                    </div>
+                                                    <div class="a_o_date"><b>Reviewed on:</b> Jan 08,2020 at 11:10 AM</div>
+                                                </div>
+                                                <div class="a_o_content">
+                                                    <p>Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy.</p>
+                                                    <div class="status_changed"><b>Next Review Date:</b> Jan 08,2020 at 11:10 AM</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -2221,6 +2257,37 @@
     </div>
 </div>
 <!-- CarePlan Outcome Modal end here -->
+<!--CarePlan Summary Modal Starts Here-->
+<div class="modal fade" id="AddSummaryModal" tabindex="-1" role="dialog" aria-labelledby="AddSummaryModal"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Care Plan Summary</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form">
+                    <div class="form-group col-md-12">
+                        <label>Next Review Date</label>
+                        <input type="text" class="form-control txtNextReviewDate"/>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label>Summary</label>
+                        <textarea class="form-control form-control-sm txtSummaryNote"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href='javascript:{}' class="btn btn-default label-fields" onclick="clearSummary()">Cancel</a>
+                <a href='javascript:{}' class="btn btn-success label-fields" onclick="AddSummary()">Submit</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- CarePlan Summary Modal end here -->
 <script>
     var userId = "@Session["userid"]";
     var PatientId = "@Model.PatientID";
@@ -2231,6 +2298,7 @@
 <script src="~/Content/script/jquery.timeselector.js"></script>
 <script src="~/Scripts/Careplan/CareplanPatient.js"></script>
 <script src="~/Scripts/Careplan/CareplanNeedsAndGoals.js"></script>
+<script src="~/Scripts/Careplan/CarePlanSummary.js"></script>
 <script>
     $(".scroll").scroll(function () {
         var sticky = $('.sidebar-right'),
