@@ -76,7 +76,8 @@ function AddSummary() {
         Description: $(".txtSummaryNote").val(),
         ReviewedBy: userId,
         NextReviewDate: $(".txtNextReviewDate").val(),
-        CarePlanId: careplanid
+        CarePlanId: careplanid,
+        PatientId: PatientId
     }
     $.ajax({
         type: "POST",
