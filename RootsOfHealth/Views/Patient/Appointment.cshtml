@@ -467,10 +467,10 @@
                     var data = {
                         PatientAppointmentID: obj.PatientAppointmentID,
                         AppointmentDate: strDate,
-                        AppointmentTime: info.start.format("hh:mmA"),
+                        AppointmentTime: info.start.format("hh:mm A"),
                         PatientID: obj.PatientID,
                         Notes: obj.Notes,
-                        AppointmentEndTime: info.end.format("hh:mmA")                        
+                        AppointmentEndTime: info.end.format("hh:mm A")                        
                     }
                     saveAppointment(data);
                 },
