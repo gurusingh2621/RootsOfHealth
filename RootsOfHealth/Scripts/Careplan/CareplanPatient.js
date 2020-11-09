@@ -121,7 +121,7 @@ function getCarePlanList() {
             if (result.length) {
                 var careplanList = "";
                 for (var i = 0; i < result.length; i++) {
-                    careplanList += `<tr onclick="editCarePlan(${result[i].CarePlanId})">
+                    careplanList += `<tr data-careplan=${result[i].CarePlanId}">
                                      <td>${result[i].CarePlanName}</td>
                                      <td>${result[i].ProgramsName}</td>
                                       <td class="text-center">`;
@@ -149,11 +149,15 @@ function getCarePlanList() {
                     }
                     careplanList += `<td class="text-right">${result[i].CreatedDate.split("T")[0]}</td>`;
                     careplanList += `<td class="text-right">${result[i].ModifiedDate.split("T")[0]}</td>`;
+                    careplanList += `<td class="text-right"><div>
+                   <a href="javascript:void(0)" onclick="editCarePlan(${result[i].CarePlanId})" class="btn btn-success text-white" style="cursor:pointer;">Edit</a>
+                   <a href="javascript:void(0)"  onclick="deleteCarePlan(this)" class="btn btn-success text-white ${result[i].status == carePlanEnum.NotSaved ? '' : result[i].status == carePlanEnum.SavedAsDraft ? '' : 'disabled'}" style="cursor:pointer;">Delete</a>
+                       </div></td>`;
                 }
                 $(".careplanlist tbody").html("").append(careplanList);
 
             } else {
-                $(".careplanlist tbody").html("").append('<tr><td colspan="5" class="text-center">No careplan found.</td></tr>');
+                $(".careplanlist tbody").html("").append('<tr><td colspan="6" class="text-center">No careplan found.</td></tr>');
             }
         },
         error: function (e) {
@@ -2217,7 +2221,55 @@ function checkCarePlanStatus() {
         async: false,
         success: function (result) {
             isCarePlanNeedCompleted = result > 0 ? true : false;
+        }, error: function () {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
         }
     });
 }
+function deleteCarePlan(obj) {
+    $.confirm({
+        icon: 'fas fa-exclamation-triangle',
+        title: 'Confirm',
+        content: 'Are you sure you want to delete!',
+        type: 'red',
+        typeAnimated: true,
+        buttons: {
+            confirm: {
+                btnClass: 'btn-danger',
+                action: function () {
+                    var model = {
+                        CarePlanId: $(obj).closest("tr").attr("data-careplan"),
+                        ModifiedBy: userId
+                    }
+                    $.ajax({
+                        type: "POST",
+                        url: Apipath + '/api/PatientMain/removecareplan',
+                        data: JSON.stringify(model),
+                        contentType: 'application/json; charset=UTF-8',
+                        dataType: "json",
+                        async: false,
+                        success: function (result) {
+                            switch (result) {
+                                case 0:
+                                    toastr.error("Could not delete started careplan");
+                                    break;
+                                default:
+                                    $(obj).closest("tr").remove();
+                                    toastr.success("Changes saved successfully");
+                                    break;
+                            }                          
+                        }, error: function (e) {
+                            toastr.error("Something happen Wrong");
+                            $(".loaderOverlay").hide();
+                        }
+                    })
+                }
 
+            },
+            cancel: function () {
+
+            }
+        }
+    });
+}

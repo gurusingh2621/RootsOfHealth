@@ -546,6 +546,9 @@
     height:400px;
     overflow-y:auto;
 }
+.status_description p {
+    font-size: 13px;
+}
 
 @media(max-width:767px) {
     .a_o_date {
@@ -559,3 +562,22 @@
     }
 }
 /*Outcome modal css end here*/
+
+
+.edit_actions {
+    text-align: right;
+    display:none;
+}
+.edit_actions .btn {
+    padding: 2px 10px;
+    margin: 0 0 0 5px;
+    background: #22baa0;
+    color: #fff;
+    font-size: 12px!important;
+}
+.edit_actions .btn:hover{
+    opacity:0.9;
+}
+.edit_actions .btn.btn_cancel {
+    background: #c4c4c4;
+}
