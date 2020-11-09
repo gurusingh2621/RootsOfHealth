@@ -9,6 +9,7 @@
 });
 function showSummary() {
     if ($("a.summary-nav").parent().hasClass("disabled")) {
+        toastr.error("First submit basic information to enable summary");
         return false;
     }
     $("a.summary-nav").tab('show');

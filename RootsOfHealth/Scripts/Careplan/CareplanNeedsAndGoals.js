@@ -45,6 +45,10 @@ function NeedsGoals(result) {
                                    <span class="countgoal not_start_circle" onclick="ExpandCollapseFromGoalCount(this)">${notStartedGoals}</span>
                                    <div class="w-100">
                                    <span  class="needDesc">${result[i].NeedDesc}</span>
+                                    <div class="edit_actions needAction">
+                                           <button type="button" onclick="saveEditNeed(this)" class="btn">Save</button>
+                                           <button type="button" onclick="cancelEditneed(this)" class="btn btn_cancel">Cancel</button>
+                                     </div>
                                    <div class="status_labels_div">
                                    <span class="status_value outcome_status"  onclick="GetOutcomes(this)">Outcomes (${result[i].OutcomeCount})</span>`;
             switch (result[i].NeedStatus) {
@@ -150,6 +154,10 @@ function SaveNeed(e) {
                                 <span class="countgoal not_start_circle" onclick="ExpandCollapseFromGoalCount(this)">0</span>
                                 <div class="w-100">
                                 <span class="needDesc">${$(e).val()}</span>
+                                <div class="edit_actions needAction">
+                                           <button type="button" onclick="saveEditNeed(this)" class="btn">Save</button>
+                                           <button type="button" onclick="cancelEditneed(this)" class="btn btn_cancel">Cancel</button>
+                                 </div>
                                 <div class="status_labels_div">
                                 <span class="status_value outcome_status"  onclick="GetOutcomes(this)">Outcomes (0)</span>
                                 <span onclick="EditNeedStatus(this)" class="status_value notStarted">Not Started</span>
@@ -173,6 +181,7 @@ function SaveNeed(e) {
             } else {
                 $(e).prev().html($(e).val());
                 $(e).prev().show();
+                $(e).next().hide();
                 $(e).remove();
             }
 
@@ -230,6 +239,10 @@ function SaveGoal(e) {
                                   <span class="countgoal notStarted"></span>
                                   <div class="w-100">
                                   <span class="goalcontent">${$(e).val()}</span>
+                                  <div class="edit_actions goalAction">
+                                  <button type="button" onclick="saveEditGoal(this)" class="btn">Save</button>
+                                  <button type="button" onclick="cancelEditGoal(this)" class="btn btn_cancel">Cancel</button>
+                                  </div>
                                   <div class="status_labels_div">
                                   <span class="status_value outcome_status" onclick="GetInterventions(this)">Intervention (0)</span>
                                   <span onclick="EditGoalStatus(this)" class="status_value notStarted">Not Started</span>
@@ -249,6 +262,7 @@ function SaveGoal(e) {
             } else {
                 $(e).prev().html($(e).val());
                 $(e).prev().show();
+                $(e).next().hide();
                 $(e).remove();
             }
             var showCollapse = goalList.prev().find("i.down_arrow").hasClass("hide_down_arrow");
@@ -285,6 +299,7 @@ function SaveGoal(e) {
 }
 function GetNeedAndGoalList() {
     if ($("a.need-nav").parent().hasClass("disabled")) {
+        toastr.error("First submit basic information to enable needs and goals");
         return false;
     }
     $("a.need-nav").tab('show');
@@ -591,35 +606,45 @@ function EditGoal(o) {
                     toastr.error("Cannot Edit.Item contains historical Data");
                     break;
                 default:
+                    $(o).closest("ul.needsList").find("ul.goalsList li").not($(o).closest("li")).each(function (index, item) {
+                        $(item).find("span.goalcontent").show();
+                        $(item).find("div.goalAction").hide();
+                        $(item).find("textarea.edittxtGoal").remove();
+                    });
                     var item = $(o).parent().prev().find("span.goalcontent");
-                    var goalDiv = `<textarea maxlength="1000" class="edittxtGoal" spellcheck="false" style="padding:0px !important;margin:0px !important" onfocus="goalOrNeedFocus(this)">${item.html()}</textarea>`;
-                    item.hide();
-                    item.after(goalDiv);
-                    $(".edittxtGoal").keyup(function () {
-                        var o = this;
-                        o.style.height = "1px";
+                    if (item.next().is("textarea")) {
+                        $(".edittxtGoal").focus();
+                    } else {
+                        $(o).parent().prev().find("div.goalAction").show();
+                        var goalDiv = `<textarea maxlength="1000" class="edittxtGoal" spellcheck="false" style="padding:0px !important;margin:0px !important" onfocus="goalOrNeedFocus(this)">${item.html()}</textarea>`;
+                        item.hide();
+                        item.after(goalDiv);
+                        $(".edittxtGoal").keyup(function () {
+                            var o = this;
+                            o.style.height = "1px";
 
-                        if (o.scrollHeight > 20) {
-                            o.style.height = (o.scrollHeight + 1) + "px";
-                        }
-                        else {
-                            o.style.height = "20px";
-                        }
-                    });
-                    $(".edittxtGoal").keypress(function (event) {
-                        var keycode = event.keyCode || event.which;
-                        if (keycode == '13' && !event.shiftKey) {
-                            SaveGoal(this);
-                            event.preventDefault();
-                        }
-                    });
-                    $(".edittxtGoal").focusout(function () {
-                        $(this).prev().show();
-                        $(this).remove();
+                            if (o.scrollHeight > 20) {
+                                o.style.height = (o.scrollHeight + 1) + "px";
+                            }
+                            else {
+                                o.style.height = "20px";
+                            }
+                        });
+                        $(".edittxtGoal").keypress(function (event) {
+                            var keycode = event.keyCode || event.which;
+                            if (keycode == '13' && !event.shiftKey) {
+                                SaveGoal(this);
+                                event.preventDefault();
+                            }
+                        });
+                        //$(".edittxtGoal").focusout(function () {
+                        //    $(this).prev().show();
+                        //    $(this).remove();
 
-                    })
-                    $(".edittxtGoal").focus();
-                    break;
+                        //})
+                        $(".edittxtGoal").focus();
+                        break;
+                    }
             }
         }, error: function (e) {
             toastr.error("Something happen Wrong");
@@ -642,34 +667,45 @@ function EditNeed(o) {
                     toastr.error("Cannot Edit.  Item contains historical Data");
                     break;
                 default:
+                    $(o).closest("ul.needsList").find("li").not($(o).parent().parent().prev()).each(function (index, item) {
+                        $(item).find("span.needDesc").show();
+                        $(item).find("div.needAction").hide();
+                        $(item).find("textarea.txtneed").remove();
+                    });
                     var item = $(o).parent().parent().find("span.needDesc");
-                    var needDiv = `<textarea maxlength="1000" class="txtneed" spellcheck="false" style="padding:0px !important;"  onfocus="goalOrNeedFocus(this)">${item.html()}</textarea>`;
-                    item.hide();
-                    item.after(needDiv);
-                    $(".txtneed").keyup(function () {
-                        var o = this;
-                        o.style.height = "1px";
+                    if (item.next().is('textarea')) {
+                        $(".txtneed").focus();
+                    } else {
+                        $(o).parent().parent().find("div.needAction").show();
+                        var needDiv = `<textarea maxlength="1000" class="txtneed" spellcheck="false" style="padding:0px !important;"  onfocus="goalOrNeedFocus(this)">${item.html()}</textarea>`;
+                        item.hide();
+                        item.after(needDiv);
+                        $(".txtneed").keyup(function () {
+                            var o = this;
+                            o.style.height = "1px";
 
-                        if (o.scrollHeight > 20) {
-                            o.style.height = (o.scrollHeight + 1) + "px";
-                        }
-                        else {
-                            o.style.height = "20px";
-                        }
-                    })
-                    $(".txtneed").keypress(function (event) {
-                        var keycode = event.keyCode || event.which;
-                        if (keycode == '13' && !event.shiftKey) {
-                            SaveNeed(this);
-                            event.preventDefault();
-                        }
-                    });
-                    $(".txtneed").focusout(function () {
-                        $(this).prev().show();
-                        $(this).remove();
+                            if (o.scrollHeight > 20) {
+                                o.style.height = (o.scrollHeight + 1) + "px";
+                            }
+                            else {
+                                o.style.height = "20px";
+                            }
+                        });
+                        $(".txtneed").keypress(function (event) {
+                            var keycode = event.keyCode || event.which;
+                            if (keycode == '13' && !event.shiftKey) {
+                                SaveNeed(this);
+                                event.preventDefault();
+                            }
+                        });
+                        //$(".txtneed").focusout(function () {
+                        //    $(this).prev().show();
+                        //    $(this).next().hide();
+                        //    $(this).remove();
 
-                    });
-                    $(".txtneed").focus();
+                        //});
+                        $(".txtneed").focus();
+                    }
                     break;
             }
         }, error: function (e) {
@@ -678,6 +714,40 @@ function EditNeed(o) {
         }
     });
     
+}
+function saveEditNeed(obj) {
+    var needObj = $(obj).parent().prev();
+    if (needObj.val().trim() == "") {
+        toastr.error("", "Need is required", { progressBar: true });
+        return;
+    }
+    var needModel = {
+        NeedID: $(obj).closest("li").attr("data-needid"),
+        NeedDesc: needObj.val(),
+        TemplateID: templateid,
+        PatientID: PatientId,
+        CarePlanId: careplanid,
+        Status: needGoalEnum.NotStarted,
+        CreatedBy: userId,
+        ModifiedBy: userId
+    }
+    $.ajax({
+        type: "POST",
+        url: Apipath + '/api/PatientMain/saveneed',
+        data: JSON.stringify(needModel),
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        success: function (result) {
+            $(needObj).prev().html("").append(needObj.val());
+                $(needObj).prev().show();
+                $(needObj).next().hide();
+                $(needObj).remove();                     
+        },
+        error: function (e) {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    })
 }
 function SearchNeedAndGoal(obj) {
     var keyword = $(obj).val().trim();
@@ -718,6 +788,9 @@ function EditGoalStatus(obj) {
     goalRef = obj;
     var status = $(obj).closest("li").attr("data-status");
     goalId = $(obj).closest("li").attr("data-goalid");
+    var goalDesc = $(obj).closest("li").find("span.goalcontent").html();
+    $(".status_description").find("p").html("").append(goalDesc);
+    $(".status_description").find("label").html("").append("Goal");
     $(".goalNote").val('');
     $("#CarePlanChangeStatusModal").find("select").first().val(status);
     $("#CarePlanChangeStatusModal").modal({
@@ -736,6 +809,9 @@ function EditNeedStatus(obj) {
     needRef = obj;
     var status = $(obj).closest("li").attr("data-status");
     needId = $(obj).closest("li").attr("data-needid");
+    var needDesc = $(obj).closest("li").find("span.needDesc").html();
+    $(".status_description").find("p").html("").append(needDesc);
+    $(".status_description").find("label").html("").append("Need");
     $(".needNote").val('');
     $("#CarePlanChangeStatusModal").find("select").first().val(status);
     $("#CarePlanChangeStatusModal").modal({
@@ -1082,4 +1158,50 @@ function SaveIntervention(e) {
         }
     });
 
+}
+function cancelEditneed(obj) {
+    if ($(obj).parent().prev().hasClass("txtneed")) {
+        $(obj).parent().prev().remove();
+    }
+    $(obj).parent().prev().show();
+    $(obj).parent().hide();
+
+}
+function saveEditGoal(obj) {
+    var goalObj = $(obj).parent().prev();
+    if (goalObj.val().trim() == "") {
+        toastr.error("", "Goal is required", { progressBar: true });
+        return;
+    }
+    var goalModel = {
+        GoalID: $(obj).closest("li").attr("data-goalid"),
+        GoalDesc: goalObj.val(),
+        Status: needGoalEnum.NotStarted,
+        NeedID: $(obj).closest("ul.goalsList").parent().attr("data-needid"),
+        CreatedBy: userId,
+        ModifiedBy: userId
+    }
+    $.ajax({
+        type: "POST",
+        url: Apipath + '/api/PatientMain/savegoal',
+        data: JSON.stringify(goalModel),
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        success: function (result) {
+            $(goalObj).prev().html("").append(goalObj.val());
+            $(goalObj).prev().show();
+            $(goalObj).next().hide();
+            $(goalObj).remove();
+        }, error: function (e) {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });
+}
+function cancelEditGoal(obj) {
+    if ($(obj).parent().prev().hasClass("edittxtGoal")) {
+        $(obj).parent().prev().remove();
+    }
+    $(obj).parent().prev().show();
+    $(obj).parent().hide();
 }
