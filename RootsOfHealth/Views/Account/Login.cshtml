@@ -139,83 +139,140 @@
             margin: auto;
             /* display: block; */
         }
+        .loaderOverlay {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255,255,255,0.95);
+            display: none;
+        }
+
+        .loader {
+            width: 100px;
+            height: 100px;
+            border-radius: 100%;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #loader-6 {
+        }
+
+            #loader-6 span {
+                display: inline-block;
+                width: 5px;
+                height: 20px;
+                background-color: #22baa0;
+                margin-right: 2px;
+            }
+
+                #loader-6 span:nth-child(1) {
+                    animation: grow 1s ease-in-out infinite;
+                }
+
+                #loader-6 span:nth-child(2) {
+                    animation: grow 1s ease-in-out 0.15s infinite;
+                }
+
+                #loader-6 span:nth-child(3) {
+                    animation: grow 1s ease-in-out 0.30s infinite;
+                }
+
+                #loader-6 span:nth-child(4) {
+                    animation: grow 1s ease-in-out 0.45s infinite;
+                }
+        @@keyframes grow {
+            0%, 100% {
+                -webkit-transform: scaleY(1);
+                -ms-transform: scaleY(1);
+                -o-transform: scaleY(1);
+                transform: scaleY(1);
+            }
+
+            50% {
+                -webkit-transform: scaleY(1.8);
+                -ms-transform: scaleY(1.8);
+                -o-transform: scaleY(1.8);
+                transform: scaleY(1.8);
+            }
+        }
     </style>
 </head>
 <body>
+    <div class="loaderOverlay">
+        <div class="loader" id="loader-6">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
     <div class="login-box">
-        @*<img src="~/images/avatar.png" class="avatar">*@
-
         <h1>Log in</h1>
-        @using (Html.BeginForm())
-        {
-            @Html.AntiForgeryToken()
-            <div class="form-group">
-                <p>Username</p>
-                <div class="userName">
-                    @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @placeholder = "Enter Username" } })
-                    <span class="UserIcon"><img src="~/images/profile.svg"></span>
-                </div>
-
-
+        <div class="form-group">
+            <p>Username</p>
+            <div class="userName">
+                <input class="text-box single-line" id="UserName" name="UserName" placeholder="Enter Username" type="text" value="">
+                <span class="UserIcon"><img src="~/images/profile.svg"></span>
             </div>
+        </div>
 
-            <div class="form-group">
-                <p>Password</p>
-                <div class="userName">
-                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @placeholder = "Enter Password", @type = "password" } })
-                    <span class="UserIcon"><img src="~/images/key.svg"></span>
-                </div>
+        <div class="form-group">
+            <p>Password</p>
+            <div class="userName">
+                <input class="text-box single-line" id="Password" name="Password" placeholder="Enter Password" type="password" value="">
+                <span class="UserIcon"><img src="~/images/key.svg"></span>
             </div>
-            <input type="button" name="submit" value="Login" onclick="Login()">
-            // <a href="#">Forget Password</a>
-        }
-
-
+        </div>
+        <input type="button" name="submit" value="Login" onclick="Login()">
     </div>
 
 </body>
 </html>
 @Scripts.Render("~/bundles/jquery")
-
 <script src="~/Scripts/toastr.min.js"></script>
 <script>
-    function Login() {
-       
+    function Login() {     
         var email = $('#UserName').val().trim();
-        var password = $('#Password').val();
-
-        if (email != "" && password != "") {
+        var password = $('#Password').val().trim();
+        if (email == '') {
+            toastr.error("Username Field is required");
+            return;
+        }
+        if (password == '') {
+            toastr.error("Password Field is required");
+            return;
+        }
+        $(".loaderOverlay").css("display", "flex");
             $.ajax({
                 type: "Post",
                 contentType: "application/json; charset=utf-8",
                 url: "/Account/CheckLogin",
                 data:JSON.stringify({ UserName: email, Password: password }),
                 dataType: "Json",
-                success: function (response) {
-                   
-                    if (response == "LoggedIn") {
+                success: function (response) {              
+                    if (response == "LoggedIn") {                       
                         window.location.href = "/DashBoard/Display";
+                        $(".loaderOverlay").hide();
                     }
                     else {
-
                         toastr.error(response);
+                        $(".loaderOverlay").hide();
                     }
 
                 },
                 error: function (data) {
-                    
+                    $(".loaderOverlay").hide();
                     toastr.error('error');
                 }
-            });
-        }
-        else if (email == "" && password == "") {
-            toastr.error("Both Fields are required.");
-        }
-        else if (email == "") {
-            toastr.error("Username Field is required.")
-        }
-        else {
-            toastr.error("Password Field is required.")
-        }
+            });      
     }
 </script>
