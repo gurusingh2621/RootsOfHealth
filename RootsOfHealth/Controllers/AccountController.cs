@@ -57,10 +57,6 @@ namespace RootsOfHealth.Controllers
             UserBO model = new UserBO();
             model.UserName = UserName;
             model.Password = Password;
-            if (!string.IsNullOrWhiteSpace(model.UserName) || !string.IsNullOrWhiteSpace(model.Password))
-            {
-
-
                 using (var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri(WebApiKey);
@@ -98,11 +94,7 @@ namespace RootsOfHealth.Controllers
                                 }
                                 GetRolePermission(Convert.ToInt32(user.RoleID));
                             }
-
-
-                            return Json("LoggedIn");
-                            
-
+                            return Json("LoggedIn");                          
                         }
                         else
                         {
@@ -110,13 +102,7 @@ namespace RootsOfHealth.Controllers
                         }
                     }
                 }
-
-
-            }
-            else
-            {
-                return Json("please enter valid username/password.");
-            }
+            
             return Json("");
         }
 
