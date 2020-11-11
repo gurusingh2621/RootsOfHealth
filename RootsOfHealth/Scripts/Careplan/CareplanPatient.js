@@ -34,7 +34,7 @@ $(document).ready(function () {
     $("a[data-toggle='addNewCarePlansSidebar']").click(function () {
         $('#addNewCarePlansSidebar').addClass('opened');
     });
-    $(".close_right_sidebar").click(function () {
+    $(".carePlan_sideBar").click(function () {
         $(this).parents('.right_sidebar').removeClass('opened');
     }); 
     getCarePlanList();     
