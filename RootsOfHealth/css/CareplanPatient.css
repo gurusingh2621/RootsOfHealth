@@ -140,9 +140,9 @@ Sidebar style
         #content .profile-tabs .rounded_tabs_list .tab-content .tab-pane {
             padding-top: 20px;
         }
-.careplanlist tr {
+/*.careplanlist tr {
     cursor: pointer;
-}
+}*/
 
 /*div#AddCarePlanModal {
     z-index: 9999;

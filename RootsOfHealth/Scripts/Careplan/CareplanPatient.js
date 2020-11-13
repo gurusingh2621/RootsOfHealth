@@ -121,37 +121,37 @@ function getCarePlanList() {
             if (result.length) {
                 var careplanList = "";
                 for (var i = 0; i < result.length; i++) {
-                    careplanList += `<tr data-careplan=${result[i].CarePlanId}">
-                                     <td>${result[i].CarePlanName}</td>
-                                     <td>${result[i].ProgramsName}</td>
-                                      <td class="text-center">`;
+                    careplanList += `<tr data-careplan="${result[i].CarePlanId}" class="text-center">
+                                     <td width="20%">${result[i].CarePlanName}</td>
+                                     <td width="10%">${result[i].ProgramsName}</td>
+                                      <td width="20%">`;
                     switch (result[i].status) {
                         case carePlanEnum.NotSaved:
                              //not saved
-                            careplanList += `<span class="status_value notStarted">Not Saved</span>`;
+                            careplanList += `<span class="status_value notStarted">Not Saved</span></td>`;
                             break;
                         case carePlanEnum.NotStarted:
                             //not started
-                            careplanList += `<span class="status_value notStarted">Not Started</span>`;
+                            careplanList += `<span class="status_value notStarted">Not Started</span></td>`;
                             break;
                         case carePlanEnum.InProgress:
                             //In Progress
-                            careplanList += `<span class="status_value inProgress">In Progress</span>`;
+                            careplanList += `<span class="status_value inProgress">In Progress</span></td>`;
                             break;
                         case carePlanEnum.SavedAsDraft:
                             //Saved As Draft
-                            careplanList += `<span class="status_value asDraft">Saved As Draft</span>`;
+                            careplanList += `<span class="status_value asDraft">Saved As Draft</span></td>`;
                             break;
                         case carePlanEnum.Completed:
                             //Completed
-                            careplanList += `<span class="status_value completed">completed</span>`;
+                            careplanList += `<span class="status_value completed">completed</span></td>`;
                             break;
                     }
-                    careplanList += `<td class="text-right">${result[i].CreatedDate.split("T")[0]}</td>`;
-                    careplanList += `<td class="text-right">${result[i].ModifiedDate.split("T")[0]}</td>`;
-                    careplanList += `<td class="text-right"><div>
-                   <a href="javascript:void(0)" onclick="editCarePlan(${result[i].CarePlanId})" class="btn btn-success text-white" style="cursor:pointer;">Edit</a>
-                   <a href="javascript:void(0)"  onclick="deleteCarePlan(this)" class="btn btn-success text-white ${result[i].status == carePlanEnum.NotSaved ? '' : result[i].status == carePlanEnum.SavedAsDraft ? '' : 'disabled'}" style="cursor:pointer;">Delete</a>
+                    careplanList += `<td width="15%">${result[i].CreatedDate.split("T")[0]}</td>`;
+                    careplanList += `<td width="15%">${result[i].ModifiedDate.split("T")[0]}</td>`;
+                    careplanList += `<td width="20%"><div>
+                   <a href="javascript:void(0)" onclick="editCarePlan(${result[i].CarePlanId})" class="btn btn-success text-white" style="cursor:pointer;">${result[i].status == carePlanEnum.Completed ? 'View' :'Edit'}</a>
+                   <a href="javascript:void(0)"  onclick="deleteCarePlan(this)" class="btn btn-success text-white" style="cursor:pointer;">Delete</a>
                        </div></td>`;
                 }
                 $(".careplanlist tbody").html("").append(careplanList);
@@ -446,6 +446,10 @@ function saveCareplan() {
                     $(".care_plan_name_field").val($("#carePlanName").val());
                     proceedCarePlan();
                     intervalStatus = setInterval(saveBasicInfoAsDraft, 300000, carePlanEnum.SavedAsDraft);
+                    setCarePlanActiveTab('a_p_basic_info');
+                    $("#ddlcareplanstatus,.care_plan_name_field").removeAttr("disabled");
+                    $("#ddlcareplanstatus").removeClass("show_careplanstatus").val("-1");
+                    $("a.need-nav,a.summary-nav").parent().addClass("disabled");
                     $(".loaderOverlay").hide();
                     break;
             }                  
@@ -759,7 +763,7 @@ function editCarePlan(Id) {
                 case carePlanEnum.NotSaved://not saved                    
                     careplanid = result.CarePlanId;                   
                     proceedCarePlan(result.ProgramID);
-                    $("#ddlcareplanstatus").removeClass("show_careplanstatus");
+                    $("#ddlcareplanstatus").removeClass("show_careplanstatus").val("-1");
                     $("a.need-nav,a.summary-nav").parent().addClass("disabled");
                     intervalStatus = setInterval(saveBasicInfoAsDraft, 300000, carePlanEnum.SavedAsDraft);
                     break;
@@ -789,7 +793,7 @@ function editCarePlan(Id) {
                     proceedCarePlan(result.ProgramID);
                     getCarePlanBasicFormValue(result.CarePlanId, result.TemplateID);
                     $(".basic-info-actions").show();
-                    $("#ddlcareplanstatus").removeClass("show_careplanstatus");
+                    $("#ddlcareplanstatus").removeClass("show_careplanstatus").val("-1");
                     $("a.need-nav,a.summary-nav").parent().addClass("disabled");
                     $("#carePlansSidebar").removeClass('opened');
                     $("#addNewCarePlansSidebar").addClass('opened');
@@ -987,34 +991,38 @@ function closecarePlan() {
             if (result.length) {
                 var careplanList = "";
                 for (var i = 0; i < result.length; i++) {
-                    careplanList += `<tr onclick="editCarePlan(${result[i].CarePlanId})">
-                                     <td>${result[i].CarePlanName}</td>
-                                     <td>${result[i].ProgramsName}</td>
-                                      <td class="text-center">`;
+                    careplanList += `<tr data-careplan="${result[i].CarePlanId}" class="text-center">
+                                     <td width="20%">${result[i].CarePlanName}</td>
+                                     <td width="10%">${result[i].ProgramsName}</td>
+                                      <td width="20%">`;
                     switch (result[i].status) {
                         case carePlanEnum.NotSaved:
                             //not saved
-                            careplanList += `<span class="status_value notStarted">Not Saved</span>`;
+                            careplanList += `<span class="status_value notStarted">Not Saved</span></td>`;
                             break;
                         case carePlanEnum.NotStarted:
                             //not started
-                            careplanList += `<span class="status_value notStarted">Not Started</span>`;
+                            careplanList += `<span class="status_value notStarted">Not Started</span></td>`;
                             break;
                         case carePlanEnum.InProgress:
                             //In Progress
-                            careplanList += `<span class="status_value inProgress">In Progress</span>`;
+                            careplanList += `<span class="status_value inProgress">In Progress</span></td>`;
                             break;
                         case carePlanEnum.SavedAsDraft:
                             //Saved As Draft
-                            careplanList += `<span class="status_value asDraft">Saved As Draft</span>`;
+                            careplanList += `<span class="status_value asDraft">Saved As Draft</span></td>`;
                             break;
                         case carePlanEnum.Completed:
                             //Completed
-                            careplanList += `<span class="status_value completed">completed</span>`;
+                            careplanList += `<span class="status_value completed">completed</span></td>`;
                             break;
                     }
-                    careplanList += `<td class="text-right">${result[i].CreatedDate.split("T")[0]}</td>`;
-                    careplanList += `<td class="text-right">${result[i].ModifiedDate.split("T")[0]}</td>`;
+                    careplanList += `<td width="15%">${result[i].CreatedDate.split("T")[0]}</td>`;
+                    careplanList += `<td width="15%">${result[i].ModifiedDate.split("T")[0]}</td>`;
+                    careplanList += `<td width="20%"><div>
+                   <a href="javascript:void(0)" onclick="editCarePlan(${result[i].CarePlanId})" class="btn btn-success text-white" style="cursor:pointer;">${result[i].status == carePlanEnum.Completed ? 'View' : 'Edit'}</a>
+                   <a href="javascript:void(0)"  onclick="deleteCarePlan(this)" class="btn btn-success text-white" style="cursor:pointer;">Delete</a>
+                       </div></td>`;
                 }
                 $(".careplanlist tbody").html("").append(careplanList);
 
@@ -2171,9 +2179,11 @@ function setCarePlanStatus(obj) {
                                     $("#ddlcareplanstatus,.care_plan_name_field").attr("disabled", true);
                                     $(".needGoalHover").addClass("disableHoverItem");
                                     $(".status_labels_div").find("span:last").addClass("disableHoverItem");
+                                    $("a.dragIcon").css("display", "none");
                                     $(".txtNeed,.txtOutcome,.txtIntervention").attr("disabled", true);
                                     $(".needsList").sortable('destroy');
                                     $(".goalsList").sortable('destroy');
+
                                     toastr.success("Changes saved successfully");
                                 },
                                 error: function (e) {
@@ -2228,6 +2238,7 @@ function checkCarePlanStatus() {
     });
 }
 function deleteCarePlan(obj) {
+    var id = $(obj).closest("tr").attr("data-careplan")
     $.confirm({
         icon: 'fas fa-exclamation-triangle',
         title: 'Confirm',
@@ -2238,21 +2249,19 @@ function deleteCarePlan(obj) {
             confirm: {
                 btnClass: 'btn-danger',
                 action: function () {
-                    var model = {
-                        CarePlanId: $(obj).closest("tr").attr("data-careplan"),
-                        ModifiedBy: userId
-                    }
                     $.ajax({
                         type: "POST",
                         url: Apipath + '/api/PatientMain/removecareplan',
-                        data: JSON.stringify(model),
+                        data: JSON.stringify({
+                                               CarePlanId: id,
+                                               ModifiedBy: userId
+                                       }),
                         contentType: 'application/json; charset=UTF-8',
                         dataType: "json",
-                        async: false,
                         success: function (result) {
                             switch (result) {
                                 case 0:
-                                    toastr.error("Could not delete started careplan");
+                                    toastr.error("Careplan has been submitted  can not be deleted");
                                     break;
                                 default:
                                     $(obj).closest("tr").remove();
@@ -2272,4 +2281,44 @@ function deleteCarePlan(obj) {
             }
         }
     });
+}
+function showBasicInfo() {
+    var canClose = false;
+    var needText = $(".txtNeed").val().trim();
+    var goalText = $(".txtGoal").val();
+    needText == '' ? canClose = true : canClose = false;
+    if (canClose == true)
+        goalText == undefined ? canClose = true : goalText.trim() == '' ? canClose = true : canClose = false;
+
+    var editNeedText = $('.txtneed').val();
+    var editGoaltext = $(".edittxtGoal").val();
+    if (canClose == true)
+        editNeedText == undefined ? canClose = true : editNeedText == $('.txtneed').prev().html() ? canClose = true : canClose = false;
+    if (canClose == true)
+        editGoaltext == undefined ? canClose = true : editGoaltext == $('.edittxtGoal').prev().html() ? canClose = true : canClose = false;
+    if (!canClose) {
+        $.confirm({
+            icon: 'fas fa-exclamation-triangle',
+            title: 'Confirm',
+            content: 'You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?',
+            type: 'red',
+            columnClass: 'col-md-6 col-md-offset-3',
+            typeAnimated: true,
+            buttons: {
+                stay: {
+                    btnClass: 'btn-green',
+                },
+                leave: {
+                    action: function () {
+                        $(".txtNeed").val('');
+                        $(".needsList").find("li.hasChild").remove();
+                        $("a.basic-nav").tab('show');
+                    }
+                }
+            },
+
+        });
+    } else {
+        $("a.basic-nav").tab('show');
+    }
 }

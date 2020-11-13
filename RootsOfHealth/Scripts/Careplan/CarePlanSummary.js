@@ -12,10 +12,49 @@ function showSummary() {
         toastr.error("First submit basic information to enable summary");
         return false;
     }
-    $("a.summary-nav").tab('show');
-    $(".loaderOverlay").show();
-    GetSummaries();
-   
+    $(".addNewSummary").tooltip();
+    var canClose = false;
+    var needText = $(".txtNeed").val().trim();
+    var goalText = $(".txtGoal").val();
+    needText == '' ? canClose = true : canClose = false;
+    if (canClose == true)
+        goalText == undefined ? canClose = true : goalText.trim() == '' ? canClose = true : canClose = false;
+
+    var editNeedText = $('.txtneed').val();
+    var editGoaltext = $(".edittxtGoal").val();
+    if (canClose == true)
+        editNeedText == undefined ? canClose = true : editNeedText == $('.txtneed').prev().html() ? canClose = true : canClose = false;
+    if (canClose == true)
+        editGoaltext == undefined ? canClose = true : editGoaltext == $('.edittxtGoal').prev().html() ? canClose = true : canClose = false;
+    if (!canClose) {
+        $.confirm({
+            icon: 'fas fa-exclamation-triangle',
+            title: 'Confirm',
+            content: 'You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?',
+            type: 'red',
+            columnClass: 'col-md-6 col-md-offset-3',
+            typeAnimated: true,
+            buttons: {
+                stay: {
+                    btnClass: 'btn-green',
+                },
+                leave: {
+                    action: function () {
+                        $(".txtNeed").val('');
+                        $(".needsList").find("li.hasChild").remove();
+                        $("a.summary-nav").tab('show');
+                        $(".loaderOverlay").show();
+                        GetSummaries();
+                    }
+                }
+            },
+
+        });
+    } else {
+        $("a.summary-nav").tab('show');
+        $(".loaderOverlay").show();
+        GetSummaries();
+    }  
 }
 function GetSummaries() {
     $.ajax({
@@ -45,6 +84,9 @@ function GetSummaries() {
                 summary.append(summaryStr);
                 $(".loaderOverlay").hide();
             } else {
+                summaryStr = "";
+                summaryStr = "<p class='text-center' style='color:#818181'>No summary so far for care plan</p>";
+                summary.append(summaryStr);
                 $(".loaderOverlay").hide();
             }
         }, error: function (e) {

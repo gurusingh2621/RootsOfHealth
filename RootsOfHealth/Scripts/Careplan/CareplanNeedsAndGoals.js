@@ -86,6 +86,7 @@ function NeedsGoals(result) {
         if ($("#ddlcareplanstatus").val() != "4") {
             $(".needGoalHover").removeClass("disableHoverItem");
             $(".status_labels_div").find("span:last").removeClass("disableHoverItem");
+            $("a.dragIcon").css("display", "inline-block");
             $(".needsList").sortable({
                 items: "li.hasChild",
                 cursor: 'move',
@@ -121,6 +122,7 @@ function NeedsGoals(result) {
         } else {
             $(".needGoalHover").addClass("disableHoverItem");
             $(".status_labels_div").find("span:last").addClass("disableHoverItem");
+            $("a.dragIcon").css("display", "none");
         }
     }
     $(".loaderOverlay").hide();
@@ -304,6 +306,7 @@ function GetNeedAndGoalList() {
     }
     $("a.need-nav").tab('show');
     $(".loaderOverlay").show();
+    $(".addNewNeed").tooltip();
     if ($("#ddlcareplanstatus").val() == "4") {        
         $(".txtNeed,.txtOutcome,.txtIntervention").attr("disabled", true);
     } else {
@@ -1238,6 +1241,7 @@ function canCloseNeeds(obj) {
                 leave: {
                     action: function () {
                         $(".txtNeed").val('');
+                        $(".needsList").find("li.hasChild").remove();
                         $(obj).parents('.right_sidebar').removeClass('opened');
                     }
                 }
