@@ -1805,13 +1805,13 @@
                         <div class="care_plans_table_wrap table-responsive">
                             <table class="table table-hover careplanlist">
                                 <thead>
-                                    <tr>
+                                    <tr class="text-center">
                                         <th>Care Plan</th>
                                         <th>Programs</th>
-                                        <th class="text-center">Status</th>
-                                        <th class="text-right">Created On</th>
-                                        <th class="text-right">Modified On</th>
-                                        <th class="text-center">Action</th>
+                                        <th>Status</th>
+                                        <th>Created On</th>
+                                        <th>Modified On</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -1876,7 +1876,7 @@
                     <div class="right_sidebar_body">
                         <div class="rounded_tabs_list">
                             <ul class="nav nav-tabs" role="tablist">
-                                <li class="nav-item"><a class="nav-link active show" href="#a_p_basic_info" data-toggle="tab">Basic Information</a></li>
+                                <li class="nav-item"><a class="nav-link basic-nav active show" href="#a_p_basic_info" onclick="showBasicInfo()">Basic Information</a></li>
                                 <li class="nav-item disabled"><a class="nav-link show need-nav" href="#a_p_needAndGoal" onclick="GetNeedAndGoalList()">Needs & Goals</a></li>
                                 <li class="nav-item disabled"><a class="nav-link show summary-nav" href="#a_p_plan_summery" onclick="showSummary()">Plan Summary</a></li>
                             </ul>
@@ -1907,7 +1907,7 @@
                                                     <input type="text" placeholder="Search..." onkeyup="SearchNeedAndGoal(this)" autocomplete="off">
                                                     <button type="submit"><i class="fas fa-search"></i></button>
                                                 </div>
-                                                <a class="addNewNeed" href="javascript:{}" onclick="NeedFocus()"><i class="fa fa-plus"></i></a>
+                                                <a class="addNewNeed" title="Add new need" data-placement="top" href="javascript:{}" onclick="NeedFocus()"><i class="fa fa-plus"></i></a>
                                             </div>
 
                                         </div>
@@ -1928,7 +1928,7 @@
                                     <div class="plan_summery_wrap summaryContent">
                                         <div class="tab_heading">
                                             <h5><i class="fas fa-check-double"></i>Summary</h5>
-                                            <a class="addNewSummary" href="javascript:{}" onclick="openAddSummary()"><i class="fa fa-plus"></i></a>
+                                            <a class="addNewSummary" title="Add new summary" data-placement="top"  href="javascript:{}" onclick="openAddSummary()"><i class="fa fa-plus"></i></a>
                                         </div>
                                         <div class="a_outcome_list scroll">
                                             <div class="a_outcome_item">
