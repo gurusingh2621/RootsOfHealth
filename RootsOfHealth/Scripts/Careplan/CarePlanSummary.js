@@ -13,6 +13,11 @@ function showSummary() {
         return false;
     }
     $(".addNewSummary").tooltip();
+    if ($("#ddlcareplanstatus").val() == "4") {
+        $("a.addNewSummary").css("display", "none");
+    } else {
+        $("a.addNewSummary").css("display", "block");
+    }
     var canClose = false;
     var needText = $(".txtNeed").val().trim();
     var goalText = $(".txtGoal").val();
