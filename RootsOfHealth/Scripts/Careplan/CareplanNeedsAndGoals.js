@@ -28,7 +28,6 @@ $(".txtIntervention").keypress(function (event) {
         event.preventDefault();
     }
 });
-
 function NeedsGoals(result) {
     if (result.length) {
         var completedNeeds = 0;
@@ -46,8 +45,8 @@ function NeedsGoals(result) {
                                    <div class="w-100">
                                    <span  class="needDesc">${result[i].NeedDesc}</span>
                                     <div class="edit_actions needAction">
-                                           <button type="button" onclick="saveEditNeed(this)" class="btn">Save</button>
-                                           <button type="button" onclick="cancelEditneed(this)" class="btn btn_cancel">Cancel</button>
+                                           <button id="btnSaveEditNeed" type="button" onclick="saveEditNeed(this)" class="btn">Save</button>
+                                           <button id="btnCancelEditNeed" type="button" onclick="cancelEditneed(this)" class="btn btn_cancel">Cancel</button>
                                      </div>
                                    <div class="status_labels_div">
                                    <span class="status_value outcome_status"  onclick="GetOutcomes(this)">Outcomes (${result[i].OutcomeCount})</span>`;
@@ -119,10 +118,24 @@ function NeedsGoals(result) {
                     goalSendOrderToServer();
                 }
             });
+            $("ul.ui-sortable li").on("mousedown", function (event) {
+                if (event.target.id == "btnSaveEditNeed" || event.target.id == "btnCancelEditNeed"
+                    || event.target.id == "btnSaveEditGoal" || event.target.id == "btnCancelEditGoal") {
+                    $("#needContent").addClass("btnClicked");
+                } else {
+                    if ($(".txtneed").is(":focus")) {
+                        $(".txtneed").blur();
+                    }
+                    if ($(".edittxtGoal").is(":focus")) {
+                        $(".edittxtGoal").blur();
+                    }
+                }
+            });
         } else {
             $(".needGoalHover").addClass("disableHoverItem");
             $(".status_labels_div").find("span:last").addClass("disableHoverItem");
             $("a.dragIcon").css("display", "none");
+            $("div.itemHoverActions").css("display", "none");
         }
     }
     $(".loaderOverlay").hide();
@@ -157,8 +170,8 @@ function SaveNeed(e) {
                                 <div class="w-100">
                                 <span class="needDesc">${$(e).val()}</span>
                                 <div class="edit_actions needAction">
-                                           <button type="button" onclick="saveEditNeed(this)" class="btn">Save</button>
-                                           <button type="button" onclick="cancelEditneed(this)" class="btn btn_cancel">Cancel</button>
+                                           <button id="btnSaveEditNeed" type="button" onclick="saveEditNeed(this)" class="btn">Save</button>
+                                           <button id="btnCancelEditNeed" type="button" onclick="cancelEditneed(this)" class="btn btn_cancel">Cancel</button>
                                  </div>
                                 <div class="status_labels_div">
                                 <span class="status_value outcome_status"  onclick="GetOutcomes(this)">Outcomes (0)</span>
@@ -242,8 +255,8 @@ function SaveGoal(e) {
                                   <div class="w-100">
                                   <span class="goalcontent">${$(e).val()}</span>
                                   <div class="edit_actions goalAction">
-                                  <button type="button" onclick="saveEditGoal(this)" class="btn">Save</button>
-                                  <button type="button" onclick="cancelEditGoal(this)" class="btn btn_cancel">Cancel</button>
+                                  <button id="btnSaveEditGoal" type="button" onclick="saveEditGoal(this)" class="btn">Save</button>
+                                  <button id="btnCancelEditGoal" type="button" onclick="cancelEditGoal(this)" class="btn btn_cancel">Cancel</button>
                                   </div>
                                   <div class="status_labels_div">
                                   <span class="status_value outcome_status" onclick="GetInterventions(this)">Intervention (0)</span>
@@ -309,8 +322,10 @@ function GetNeedAndGoalList() {
     $(".addNewNeed").tooltip();
     if ($("#ddlcareplanstatus").val() == "4") {        
         $(".txtNeed,.txtOutcome,.txtIntervention").attr("disabled", true);
+        $("a.addNewNeed,li.last-child").css("display", "none");
     } else {
         $(".txtNeed,.txtOutcome,.txtIntervention").removeAttr("disabled");
+        $("a.addNewNeed,li.last-child").css("display", "block");
     }
     $.ajax({
         type: "GET",
@@ -643,8 +658,68 @@ function EditGoal(o) {
                         //$(".edittxtGoal").focusout(function () {
                         //    $(this).prev().show();
                         //    $(this).remove();
-
                         //})
+                        $(".edittxtGoal").focusout(function () {
+                            goalRef = item;
+                            if ($(goalRef).html() == $(goalRef).next().val()) {
+                                return;
+                            }
+                            if ($("#needContent").hasClass("btnClicked")) {
+                                return;
+                            }
+                            $.confirm({
+                                icon: 'fas fa-exclamation-triangle',
+                                title: 'Confirm',
+                                content: 'You have unsaved changes for this goal!',
+                                type: 'green',
+                                columnClass: 'col-md-6 col-md-offset-3',
+                                typeAnimated: true,
+                                buttons: {
+                                    save: {
+                                        text: 'save changes',
+                                        btnClass: 'btn-green',
+                                        action: function () {
+                                            if ($(goalRef).next().val().trim() == "") {
+                                                toastr.error("", "Goal is required", { progressBar: true });
+                                                return;
+                                            }
+                                            var goalModel = {
+                                                GoalID: $(goalRef).closest("li").attr("data-goalid"),
+                                                GoalDesc: $(goalRef).next().val(),
+                                                Status: needGoalEnum.NotStarted,
+                                                NeedID: $(goalRef).closest("ul.goalsList").parent().attr("data-needid"),
+                                                CreatedBy: userId,
+                                                ModifiedBy: userId
+                                            }
+                                            $.ajax({
+                                                type: "POST",
+                                                url: Apipath + '/api/PatientMain/savegoal',
+                                                data: JSON.stringify(goalModel),
+                                                contentType: 'application/json; charset=UTF-8',
+                                                dataType: "json",
+                                                success: function (result) {
+                                                    $("#needContent").removeClass("btnClicked");
+                                                    $(goalRef).html("").append($(goalRef).next().val()).show();
+                                                    $(goalRef).next().remove();
+                                                    $(goalRef).next().hide();
+                                                }, error: function (e) {
+                                                    toastr.error("Something happen Wrong");
+                                                    $(".loaderOverlay").hide();
+                                                }
+                                            });
+                                        }
+                                    },
+                                    cancel: {
+                                        action: function () {
+                                            $(goalRef).show();
+                                            $(goalRef).next().remove();
+                                            $(goalRef).next().hide();
+                                        }
+                                    }
+                                },
+
+                            });
+                        });
                         $(".edittxtGoal").focus();
                         break;
                     }
@@ -707,6 +782,70 @@ function EditNeed(o) {
                         //    $(this).remove();
 
                         //});
+                        $(".txtneed").focusout(function () {
+                            needRef = item;
+                            if ($(needRef).html() == $(needRef).next().val()) {
+                                return;
+                            }
+                            if ($("#needContent").hasClass("btnClicked")) {
+                                return;
+                            }
+                            $.confirm({
+                                icon: 'fas fa-exclamation-triangle',
+                                title: 'Confirm',
+                                content: 'You have unsaved changes for this need!',
+                                type: 'green',
+                                columnClass: 'col-md-6 col-md-offset-3',
+                                typeAnimated: true,
+                                buttons: {
+                                    save: {
+                                        text: 'save changes',
+                                        btnClass: 'btn-green',
+                                        action: function () {
+                                            if ($(needRef).next().val().trim() == "") {
+                                                toastr.error("", "Need is required", { progressBar: true });
+                                                return;
+                                            }
+                                            var needModel = {
+                                                NeedID: $(needRef).closest("li").attr("data-needid"),
+                                                NeedDesc: $(needRef).next().val(),
+                                                TemplateID: templateid,
+                                                PatientID: PatientId,
+                                                CarePlanId: careplanid,
+                                                Status: needGoalEnum.NotStarted,
+                                                CreatedBy: userId,
+                                                ModifiedBy: userId
+                                            }
+                                            $.ajax({
+                                                type: "POST",
+                                                url: Apipath + '/api/PatientMain/saveneed',
+                                                data: JSON.stringify(needModel),
+                                                contentType: 'application/json; charset=UTF-8',
+                                                dataType: "json",
+                                                success: function (result) {
+                                                    $("#needContent").removeClass("btnClicked");
+                                                    $(needRef).html("").append($(needRef).next().val()).show();
+                                                    $(needRef).next().remove();
+                                                    $(needRef).next().hide();
+                                                },
+                                                error: function (e) {
+                                                    toastr.error("Something happen Wrong");
+                                                    $(".loaderOverlay").hide();
+                                                }
+                                            });
+                                        }
+                                    },
+                                    cancel: {
+                                        action: function () {
+                                            $("#needContent").removeClass("btnClicked");
+                                            $(needRef).show();
+                                            $(needRef).next().remove();
+                                            $(needRef).next().hide();
+                                        }
+                                    }
+                                },
+                            });
+                        });
                         $(".txtneed").focus();
                     }
                     break;
@@ -741,6 +880,7 @@ function saveEditNeed(obj) {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
+            $("#needContent").removeClass("btnClicked");
             $(needObj).prev().html("").append(needObj.val());
                 $(needObj).prev().show();
                 $(needObj).next().hide();
@@ -1163,6 +1303,7 @@ function SaveIntervention(e) {
 
 }
 function cancelEditneed(obj) {
+    $("#needContent").removeClass("btnClicked");
     if ($(obj).parent().prev().hasClass("txtneed")) {
         $(obj).parent().prev().remove();
     }
@@ -1191,6 +1332,7 @@ function saveEditGoal(obj) {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
+            $("#needContent").removeClass("btnClicked");
             $(goalObj).prev().html("").append(goalObj.val());
             $(goalObj).prev().show();
             $(goalObj).next().hide();
@@ -1202,6 +1344,7 @@ function saveEditGoal(obj) {
     });
 }
 function cancelEditGoal(obj) {
+    $("#needContent").removeClass("btnClicked");
     if ($(obj).parent().prev().hasClass("edittxtGoal")) {
         $(obj).parent().prev().remove();
     }
@@ -1251,7 +1394,6 @@ function canCloseNeeds(obj) {
     }
     
 }
-
 window.onbeforeunload = function (evt) {
     var canClose = false;
     var needText = $(".txtNeed").val().trim();

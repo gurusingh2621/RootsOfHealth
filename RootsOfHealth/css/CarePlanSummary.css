@@ -49,3 +49,7 @@
 .plan_summery_wrap .status_changed b {
     font-weight: 500;
 }
+
+.plan_summery_wrap .a_outcome_list{
+    height:550px;
+}
