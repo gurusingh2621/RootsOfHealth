@@ -126,7 +126,7 @@
     border: 0;
     padding: 0 10px;
     font-size: 14px;
-    width: calc(100% - 22px);
+    width: calc(100% - 167px);
     color: #555;
     height: 21px;
     outline: none;
@@ -580,4 +580,17 @@
 }
 .edit_actions .btn.btn_cancel {
     background: #c4c4c4;
+}
+.addNewNeedGoal .edit_actions {
+    display: flex !important;
+    min-width: 145px;
+}
+#needContent .needItem {
+    transition: all ease 0.4s;
+}
+#needContent .needItem:hover {
+    background: rgba(0,0,0,0.075);
+}
+#needContent .needItem textarea.edittxtGoal, textarea.txtneed {
+    background:transparent;
 }
