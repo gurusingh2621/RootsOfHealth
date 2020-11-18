@@ -155,7 +155,14 @@ function getCarePlanList() {
                        </div></td>`;
                 }
                 $(".careplanlist tbody").html("").append(careplanList);
-
+                $(".careplanlist").DataTable({
+                    retrieve: true,
+                    "order": [[4, "desc"]],
+                    'columnDefs': [{
+                        'targets': [5],
+                        'orderable': false
+                    }]
+                });
             } else {
                 $(".careplanlist tbody").html("").append('<tr><td colspan="6" class="text-center">No careplan found.</td></tr>');
             }
@@ -1025,7 +1032,14 @@ function closecarePlan() {
                        </div></td>`;
                 }
                 $(".careplanlist tbody").html("").append(careplanList);
-
+                $(".careplanlist").DataTable({
+                    retrieve: true,
+                    "order": [[4, "desc"]],
+                    'columnDefs': [{
+                        'targets': [5],
+                        'orderable': false
+                    }]
+                });
             } else {
                 $(".careplanlist tbody").html("").append('<tr><td colspan="5" class="text-center">No careplan found.</td></tr>');
             }
