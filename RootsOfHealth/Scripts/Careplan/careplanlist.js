@@ -25,7 +25,8 @@ function GetCarePlanTemplateList() {
                             <td width="30%"><div>`;
                     careplans += `<a href="javascript:void(0)" onclick="ViewCarePlanContent(${item.TemplateID},\'${item.TemplateName}'\)" class="btn btn-success text-white" style="cursor:pointer;">VIEW</a>`
                     if (item.IsBaseTemplate) {
-                        careplans += `<a href="/careplan/BaseTemplate?templateid=${item.TemplateID}"  class="btn btn-success text-white" style="cursor:pointer;">MODIFY</a>`
+                        item.IsActive = item.IsActive == null ? false : item.IsActive;
+                        careplans += `<a href="/careplan/BaseTemplate?templateid=${item.TemplateID}&Status=${item.IsActive}"  class="btn btn-success text-white" style="cursor:pointer;">MODIFY</a>`
 
                     } else {                        
                         careplans += `<a href="javascript:void(0)" onclick="Proceed({TemplateID:${item.TemplateID},TemplateName:\'${item.TemplateName}\',ProgramsID:${item.ProgramsID},IsBaseTemplate:${item.IsBaseTemplate}})"  class="btn btn-success text-white" style="cursor: pointer; ${item.Isactivated == true ? "display:none;" : ""} ">MODIFY</a>`

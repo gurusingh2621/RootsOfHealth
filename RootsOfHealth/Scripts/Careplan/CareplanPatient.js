@@ -353,8 +353,8 @@ function saveBasicInfo(status) {
                         success: function (res) {
                             if ($(".render-basicform").find(".base-control").length) {
                                 saveBaseFieldInfo();
+                                updateDefaultneeds(careplanid, basetemplateid);
                             }
-                            
                             updateCareplanStatus(status);//update Careplan status
                             $("#carePlanName").val("");                            
                             $(".loaderOverlay").hide();
@@ -405,7 +405,7 @@ function saveBasicInfo(status) {
                             }
                             clearFileData();
                             makeBasicInfoReadonly();
-                            updateDefaultneeds(careplanid);
+                            updateDefaultneeds(careplanid, templateid);
                         },
                         error: function (e) {
                             toastr.error("Something happen Wrong");
@@ -2096,9 +2096,9 @@ function getSavedFilesAsDraft() {
         }
     });
 }
-function updateDefaultneeds(careid) {
+function updateDefaultneeds(careid,tempid) {
     var model = {
-        TemplateId: templateid,
+        TemplateId: tempid,
         PatientId: PatientId,
         CarePlanId: careid,
         Status: 0,

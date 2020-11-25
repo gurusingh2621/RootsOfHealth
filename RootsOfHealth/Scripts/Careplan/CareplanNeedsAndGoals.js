@@ -129,6 +129,9 @@ function NeedsGoals(result) {
                     if ($(".edittxtGoal").is(":focus")) {
                         $(".edittxtGoal").blur();
                     }
+                    if ($(".txtNeed").is(":focus")) {
+                        $(".txtNeed").blur();
+                    }
                 }
             });
         } else {
@@ -551,7 +554,7 @@ function AddNewGoalFromNeed(e) {
     }
     var goalString = `<li class="newGoal">
                       <div class="addNewNeedGoal"><div class="plusIcon"><i class="fa fa-plus"></i></div>
-                      <textarea maxlength="1000" class="txtGoal" placeholder="add goal" onkeyup="textAreaAdjust(this)"></textarea>
+                      <textarea maxlength="1000" class="txtGoal" placeholder="add goal" onkeyup="textAreaAdjust(this)" onblur="GoalOnBlur()"></textarea>
                       <div class="edit_actions">
                       <button  type="button" onclick="saveNewGoal(this)" class="btn">Save</button>
                       <button  type="button" onclick="cancelNewGoal(this)" class="btn btn_cancel">Cancel</button>
@@ -564,7 +567,7 @@ function AddNewGoalFromNeed(e) {
     } else {
         $(e).parent().parent().after(`<ul class="goalsList">
                                       <li  class="newGoal"><div class="addNewNeedGoal"><div class="plusIcon"><i class="fa fa-plus"></i></div>
-                                      <textarea maxlength="1000" class="txtGoal" placeholder="add goal" onkeyup="textAreaAdjust(this)"></textarea>
+                                      <textarea maxlength="1000" class="txtGoal" placeholder="add goal" onkeyup="textAreaAdjust(this)" onblur="GoalOnBlur()"></textarea>
                                       <div class="edit_actions">
                                       <button  type="button" onclick="saveNewGoal(this)" class="btn">Save</button>
                                       <button  type="button" onclick="cancelNewGoal(this)" class="btn btn_cancel">Cancel</button>
@@ -735,7 +738,9 @@ function EditGoal(o) {
                             $.confirm({
                                 icon: 'fas fa-exclamation-triangle',
                                 title: 'Confirm',
-                                content: 'You have unsaved changes for this goal!',
+                                content: 'You have unsaved changes for this goal!' + `<hr/>
+                      <p class="goal-title">Goal</p>
+                      <p class="goal-content">${$(goalRef).next().val()}</p>`,
                                 type: 'green',
                                 columnClass: 'col-md-6 col-md-offset-3',
                                 typeAnimated: true,
@@ -858,7 +863,9 @@ function EditNeed(o) {
                             $.confirm({
                                 icon: 'fas fa-exclamation-triangle',
                                 title: 'Confirm',
-                                content: 'You have unsaved changes for this need!',
+                                content: 'You have unsaved changes for this need!' + `<hr/>
+                      <p class="need-title">Need</p>
+                      <p class="need-content">${$(needRef).next().val()}</p>`,
                                 type: 'green',
                                 columnClass: 'col-md-6 col-md-offset-3',
                                 typeAnimated: true,
@@ -956,23 +963,6 @@ function saveEditNeed(obj) {
             $(".loaderOverlay").hide();
         }
     })
-}
-function SearchNeedAndGoal(obj) {
-    var keyword = $(obj).val().trim();
-    if (keyword == '') { GetNeedAndGoalList() } else {
-        $.ajax({
-            type: "GET",
-            url: Apipath + '/api/PatientMain/searchneedandgoal?TemplateId=' + templateid + '&keyword=' + keyword,
-            contentType: 'application/json; charset=UTF-8',
-            dataType: "json",
-            success: function (result) {
-                NeedsGoals(result);
-            }, error: function (e) {
-                toastr.error("Something happen Wrong");
-                $(".loaderOverlay").hide();
-            }
-        });
-    }
 }
 function goalOrNeedFocus(obj) {
     obj.style.height = "21px";
@@ -1712,4 +1702,63 @@ window.onbeforeunload = function (evt) {
         }
     }
 
+}
+function NeedOnBlur() {
+    var needTxt = $(".txtNeed");
+    if (needTxt.val().trim() != "") {
+        $.confirm({
+            icon: 'fas fa-exclamation-triangle',
+            title: 'Confirm',
+            content: 'You have unsaved changes for this need!' + `<hr/>
+                      <p class="need-title">Need</p>
+                      <p class="need-content">${needTxt.val()}</p>`,
+            type: 'green',
+            columnClass: 'col-md-6 col-md-offset-3',
+            typeAnimated: true,
+            buttons: {
+                save: {
+                    text: 'save changes',
+                    btnClass: 'btn-green',
+                    action: function () {
+                        saveNewNeed();
+                    }
+                },
+                cancel: {
+                    action: function () {
+                        needTxt.val("").css("height", "21px");
+                        NeedFocus();
+                    }
+                }
+            },
+        });
+    }
+}
+function GoalOnBlur() {
+    var goaltxt = $(".txtGoal");
+    if (goaltxt.val().trim() != "") {
+        $.confirm({
+            icon: 'fas fa-exclamation-triangle',
+            title: 'Confirm',
+            content: 'You have unsaved changes for this goal!' + `<hr/>
+                      <p class="goal-title">Goal</p>
+                      <p class="goal-content">${goaltxt.val()}</p>`,
+            type: 'green',
+            columnClass: 'col-md-6 col-md-offset-3',
+            typeAnimated: true,
+            buttons: {
+                save: {
+                    text: 'save changes',
+                    btnClass: 'btn-green',
+                    action: function () {
+                        saveNewGoal();
+                    }
+                },
+                cancel: {
+                    action: function () {
+                        goaltxt.val("").css("height", "21px").focus();
+                    }
+                }
+            },
+        });
+    }
 }

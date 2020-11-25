@@ -210,7 +210,7 @@ function SaveGoal(e) {
 }
 
 function GetNeedAndGoalList() {
-    tempId = sessionStorage.getItem("Id") === null ? templateId : sessionStorage.getItem("Id")
+    tempId = sessionStorage.getItem("Id") === null ? templateId : sessionStorage.getItem("Id");
     $.ajax({
         type: "GET",
         url: Apipath + '/api/PatientMain/getneedbytemplateid?TemplateId=' + tempId,
@@ -223,6 +223,7 @@ function GetNeedAndGoalList() {
             if (result.length == 0) {
                 var emptyText = "no default need exist for " + programName;
                 $(".needsList").prev().html(emptyText.toUpperCase());
+                $("span.needCount").html("").append("0");
             }               
             $("#NeedModal").modal('show');
             NeedFocus();
