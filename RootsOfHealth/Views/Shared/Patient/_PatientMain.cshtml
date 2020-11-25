@@ -1917,7 +1917,7 @@
                                                 <li class="last-child">
                                                     <div class="addNewNeedGoal">
                                                         <div class="plusIcon"><i class="fa fa-plus"></i></div>
-                                                        <textarea class="txtNeed" maxlength="1000" placeholder="add need" onkeyup="textAreaAdjust(this)"></textarea>
+                                                        <textarea class="txtNeed" maxlength="1000" placeholder="add need" onblur="NeedOnBlur()" onkeyup="textAreaAdjust(this)"></textarea>
                                                         <div class="edit_actions">
                                                             <button type="button" onclick="saveNewNeed(this)" class="btn">Save</button>
                                                             <button type="button" onclick="cancelNewNeed(this)" class="btn btn_cancel">Cancel</button>

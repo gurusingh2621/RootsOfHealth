@@ -169,9 +169,10 @@ namespace RootsOfHealth.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
         [Authorize(Roles = "navigator,supervisor")]
-        public ActionResult BaseTemplate(int templateid)
+        public ActionResult BaseTemplate(int templateid,bool Status)
         {
             ViewBag.TemplateId = templateid;
+            ViewBag.Status = Status;
             return View();
         }
         #endregion

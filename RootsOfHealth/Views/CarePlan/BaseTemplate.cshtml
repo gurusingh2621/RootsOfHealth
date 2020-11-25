@@ -7,9 +7,10 @@
 <link href="~/css/previewinpopup.css" rel="stylesheet" />
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
 <style>
-     .contentbtn {
+    .contentbtn {
         margin-bottom: 20px !important;
     }
+
     .preview-body .basecontentarea {
         border: 2px dashed #e2e2e2;
         min-height: 100px;
@@ -19,13 +20,16 @@
         align-items: flex-start;
         flex-wrap: wrap;
     }
-   span.basecontentspan {
-        display:inline;
+
+    span.basecontentspan {
+        display: inline;
     }
-    .baseheader,.basefooter {
+
+    .baseheader, .basefooter {
         border-color: #39be19;
     }
-    .contentarea1,.contentarea2,.contentarea3 {
+
+    .contentarea1, .contentarea2, .contentarea3 {
         border-color: #df1e1e;
     }
 </style>
@@ -43,6 +47,7 @@
 
                     <div class="detail-button ml-auto">
                         <a href="/careplan/list" class="btn btn-success mr-10 backlist"> <i class="fa fa-arrow-left"></i> Back to list</a>
+                        <a href="javascript:{}" onclick="GetNeedAndGoalList()" style="@Html.Raw(ViewBag.Status?"":"display:none")" class="btn btn-success mr-2 btnNeedsPopup"> <i class="far fa-save"></i> Needs & Goals</a>
                         <a href="javascript:{}" onclick="return PreviewInPopUp();" class="btn btn-success mr-10 preview-inpopup">
                             <i class="far fa-save"></i>
                             Preview
@@ -207,11 +212,105 @@
         </div>
     </div>
 </div>
+<div class="modal fade needModal_wrap" id="NeedModal" tabindex="-1" role="dialog" aria-labelledby="NeedModalLabel">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 80%;height:90%">
+        <div class="modal-content" style="height:90%">
+            <div class="modal-header">
+                <h5 class="modal-title">ADD DEFAULT NEEDS & GOALS</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="needModalContent">
+                    <div class="tab_heading">
+                        <div class="searchBoxWrap">
+                            <h5> Needs (<span class="needCount">0</span>)</h5>
+                            <div class="searchbox">
+                                <input type="text" placeholder="Search..." onkeyup="SearchNeedAndGoal(this)" autocomplete="off">
+                                <button type="submit"><i class="fas fa-search"></i></button>
+                            </div>
+                            <a class="addNewNeed" href="javascript:{}" onclick="NeedFocus()"><i class="fa fa-plus"></i></a>
+                        </div>
+
+                    </div>
+                    <div class="needListOuter scroll">
+                        <div class="text-center"></div>
+                        <ul class="needsList">
+                            <li class="hasChild opened">
+                                <div class="needItem">
+                                    <div>This is the first Need. Please do it asap.</div>
+
+                                    <i class="down_arrow fa fa-chevron-down"></i>
+                                    <div class="itemHoverActions">
+                                        <a href="#"><i class="fas fa-level-up-alt"></i></a>
+                                        <a href="#" class="delete_item"><i class="fa fa-trash"></i></a>
+                                    </div>
+                                </div>
+                                <ul class="goalsList">
+                                    <li>
+                                        <div class="needItem">
+                                            <div>This is the first Goal. Please do it asap.</div>
+
+                                            <div class="itemHoverActions">
+                                                <a href="#"><i class="fa fa-clipboard-check"></i></a>
+                                                <a href="#" class="delete_item"><i class="fa fa-trash"></i></a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="needItem">
+                                            <div>This is the first Goal. Please do it asap.</div>
+
+                                            <div class="itemHoverActions">
+                                                <a href="#"><i class="fa fa-clipboard-check"></i></a>
+                                                <a href="#" class="delete_item"><i class="fa fa-trash"></i></a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="addNewNeedGoal">
+                                            <div class="plusIcon"><i class="fa fa-plus"></i></div>
+                                            <input type="text" name="Add New Need" placeholder="Add New Goal...">
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <div class="needItem">
+                                    <div>This is the first Need. Please do it asap.</div>
+                                    <i class="down_arrow fa fa-chevron-down"></i>
+                                    <div class="itemHoverActions">
+                                        <a href="#"><i class="fa fa-clipboard-check"></i></a>
+                                        <a href="#" class="delete_item"><i class="fa fa-trash"></i></a>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="last-child">
+                                <div class="addNewNeedGoal">
+                                    <div class="plusIcon"><i class="fa fa-plus"></i></div>
+                                    <textarea class="txtNeed" maxlength="1000" placeholder="add need" onkeyup="textAreaAdjust(this)"></textarea>
+                                </div>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
 @section scripts{
     <script src="~/Scripts/jquery-ui.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.js"></script>
     <script src="~/Scripts/Careplan/basetemplatecontrolhtml.js"></script>
     <script src="~/Scripts/Careplan/databasecontrol.js"></script>
+    <script src="~/Scripts/Careplan/NeedAndGoal.js"></script>
     <script>
         var templateId =@ViewBag.TemplateId;
         var userId = '@Session["userid"]';

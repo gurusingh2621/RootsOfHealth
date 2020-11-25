@@ -1857,6 +1857,7 @@ function saveHtml() {
                     toastr.success("Saved successfully.");
                     $("a.preview").css("display", "inline");
                     $("a.btndraft").css("display", "none");
+                    $("a.btnNeedsPopup").css("display","inline");
                     sessionStorage.setItem("Id", result.id);
                     $(".loaderOverlay").hide();
                 },

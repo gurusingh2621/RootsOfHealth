@@ -1964,6 +1964,7 @@ function saveTemplate(isactive) {
                     //$("a.preview").css("display", "inline");
                     // $("a.btndraft").css("display", "none");
                     sessionStorage.setItem("Id", result.id);
+                    $("a.btnNeedsPopup").css("display", "inline");
                     $(".loaderOverlay").hide();
                     //window.location.href = '/careplan/modifytemplate?TemplateId=' + result.id + '&ProgramId=' + programId + '&Template=' + result.TemplateName;
                 },

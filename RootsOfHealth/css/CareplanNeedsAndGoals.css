@@ -594,3 +594,11 @@
 #needContent .needItem textarea.edittxtGoal, textarea.txtneed {
     background:transparent;
 }
+.jconfirm-content p.goal-title, p.need-title {
+    margin: 0px;
+    font-weight: 500;
+}
+
+.jconfirm-content p.goal-content, p.need-content {
+    font-size: 13px;
+}
