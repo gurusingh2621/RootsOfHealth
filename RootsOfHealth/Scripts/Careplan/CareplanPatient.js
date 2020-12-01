@@ -353,7 +353,7 @@ function saveBasicInfo(status) {
                         success: function (res) {
                             if ($(".render-basicform").find(".base-control").length) {
                                 saveBaseFieldInfo();
-                                updateDefaultneeds(careplanid, basetemplateid);
+                                //updateDefaultneeds(careplanid, basetemplateid);
                             }
                             updateCareplanStatus(status);//update Careplan status
                             $("#carePlanName").val("");                            
@@ -405,7 +405,7 @@ function saveBasicInfo(status) {
                             }
                             clearFileData();
                             makeBasicInfoReadonly();
-                            updateDefaultneeds(careplanid, templateid);
+                            //updateDefaultneeds(careplanid, templateid);
                         },
                         error: function (e) {
                             toastr.error("Something happen Wrong");
@@ -2095,30 +2095,6 @@ function getSavedFilesAsDraft() {
             }
         }
     });
-}
-function updateDefaultneeds(careid,tempid) {
-    var model = {
-        TemplateId: tempid,
-        PatientId: PatientId,
-        CarePlanId: careid,
-        Status: 0,
-        CreatedBy: userId
-    }
-    $.ajax({
-        type: "POST",
-        url: Apipath + '/api/PatientMain/updatedefaultneeds',
-        contentType: 'application/json; charset=UTF-8',
-        data: JSON.stringify(model),
-        dataType: "json",
-        async: false,
-        success: function (res) {
-            
-        }, error: function () {
-            toastr.error("Something happen Wrong");
-            $(".loaderOverlay").hide();
-        }
-    });
-
 }
 function updateCarePlanName(obj) {
     if ($(obj).val().trim() == "") {

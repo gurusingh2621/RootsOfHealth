@@ -602,3 +602,96 @@
 .jconfirm-content p.goal-content, p.need-content {
     font-size: 13px;
 }
+
+
+
+
+.defaultsNeedsGoals_div ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    max-height: 250px;
+}
+.defaultsNeedsGoals_div ul li {
+    position: relative;
+    border-top: 1px solid #ddd;
+    padding: 10px 0px 10px 28px;
+    margin-right: 5px;
+}
+
+.defaultsNeedsGoals_div ul li label.checkbox_input {
+    position: absolute;
+    right:auto;
+    left:0;
+    top: 50%;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+}
+.d_n_actions {
+    padding: 0 0px 5px 0;
+}
+.d_n_actions .btn {
+    padding: 4px 10px;
+    margin: 0 0 0 5px;
+    background: #22baa0;
+    color: #fff;
+    font-size: 12px !important;
+    line-height: 1.2;
+    margin: 5px 5px 5px 0;
+}
+.d_n_actions .btn:hover {
+    opacity: 0.9;
+}
+.d_n_actions {
+    align-items: center;
+    flex-wrap: wrap;
+}
+.defaultsNeedsGoals_div ul li p {
+    margin: 0;
+    font-size: 14px;
+    color: #555;
+    line-height: 1.5;
+}
+.d_n_actions label.checkbox_input {
+    margin-left: 0;
+    padding-left: 0px;
+    display: flex;
+    margin: 0;
+    align-items: center;
+}
+    .d_n_actions label.checkbox_input span:after {
+        top: 2px;
+    }
+    .d_n_actions label.checkbox_input span {
+        width: auto;
+        padding-left: 25px;
+    }
+label.checkbox_input input {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+}
+label.checkbox_input input + span {
+    position: relative;
+    display: block;
+    height: 18px;
+    width: 18px;
+}
+label.checkbox_input input + span::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 1rem;
+    height: 1rem;
+    content: "";
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 10px;
+    background-color: #dee2e6;
+    border-radius: 2px;
+}
+    label.checkbox_input input:checked + span::after {
+        background-color: #22baa0;
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3E%3C/svg%3E");
+    }

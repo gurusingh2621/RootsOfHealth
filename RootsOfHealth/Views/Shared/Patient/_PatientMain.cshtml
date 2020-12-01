@@ -1907,7 +1907,7 @@
                                                     <input type="text" placeholder="Search..." onkeyup="SearchNeedAndGoal(this)" autocomplete="off">
                                                     <button type="submit"><i class="fas fa-search"></i></button>
                                                 </div>
-                                                <a class="addNewNeed" title="Add new need" data-placement="top" href="javascript:{}" onclick="NeedFocus()"><i class="fa fa-plus"></i></a>
+                                                <a class="addNewNeed" title="Add new need"  data-placement="top" href="javascript:{}" onclick="GetDefaultNeeds()"><i class="fa fa-plus"></i></a>
                                             </div>
 
                                         </div>
@@ -1932,7 +1932,7 @@
                                     <div class="plan_summery_wrap summaryContent">
                                         <div class="tab_heading">
                                             <h5><i class="fas fa-check-double"></i>Summary</h5>
-                                            <a class="addNewSummary" title="Add new summary" data-placement="top"  href="javascript:{}" onclick="openAddSummary()"><i class="fa fa-plus"></i></a>
+                                            <a class="addNewSummary" title="Add new summary" data-placement="top" href="javascript:{}" onclick="openAddSummary()"><i class="fa fa-plus"></i></a>
                                         </div>
                                         <div class="a_outcome_list scroll">
                                             <div class="a_outcome_item">
@@ -2281,7 +2281,7 @@
                 <div class="form">
                     <div class="form-group col-md-12">
                         <label>Next Review Date</label>
-                        <input type="text" class="form-control txtNextReviewDate"/>
+                        <input type="text" class="form-control txtNextReviewDate" />
                     </div>
                     <div class="form-group col-md-12">
                         <label>Summary</label>
@@ -2297,6 +2297,44 @@
     </div>
 </div>
 <!-- CarePlan Summary Modal end here -->
+<!--Default need popup start here-->
+<div class="modal fade defaultsNeedsGoals" id="DefaultNeedsPopUp" tabindex="-1" role="dialog" aria-labelledby="DefaultNeedsPopUp"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title defaultNeedTitle">Default Needs</h5>
+                <button type="button" class="close"  aria-label="Close">
+                    <span aria-hidden="true" class="closeDefaultNeed">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="defaultsNeedsGoals_div">
+                    <div class="d_n_actions defaultNeedAction d-flex">
+                        <label class="checkbox_input"><input class="defaultallneed" type="checkbox" onchange="checkAllDefaultNeed(this)" name="defaultNeeds" value="" /><span>Select All </span></label>
+                        <a href="#" class="btn ml-auto" onclick="AddDefaultneeds()">Add to Care Plans</a>
+                        <a href="#" class="btn" onclick="closeDefaultNeed()">Add New Needs</a>
+                        <a href="#" class="btn" onclick="closeDefaultNeed()">Cancel</a>
+                    </div>
+                    <div class="d_n_actions defaultGoalAction d-none">
+                        <label class="checkbox_input"><input class="defaultallneed" type="checkbox" onchange="checkAllDefaultNeed(this)" name="defaultNeeds" value="" /><span>Select All </span></label>
+                        <a href="#" class="btn ml-auto" onclick="AddDefaultgoals()">Add to Care Plans</a>
+                        <a href="#" class="btn" onclick="focusAddGoals()">Add New Goal</a>
+                        <a href="#" class="btn" onclick="closeDefaultGoals()">Cancel</a>
+                    </div>
+                    <ul class="defaultneedul scroll">
+                        <li>
+                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text</p>
+                            <label class="checkbox_input"><input type="checkbox" name="defaultNeeds" value="" /><span></span></label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--Default need popup end here-->
 <script>
     var userId = "@Session["userid"]";
     var PatientId = "@Model.PatientID";
