@@ -2,6 +2,8 @@
 var goalId = 0;
 var needRef;
 var goalRef;
+var newGoalRef = "";
+var defaultneedLen = 0;
 var needGoalEnum = {
     NotStarted: 0,
     InProgress: 1,
@@ -38,7 +40,7 @@ function NeedsGoals(result) {
         for (var i = 0; i < result.length; i++) {            
             var goals = parseHTML(result[i].GoalHtml);
             var notStartedGoals = $(goals).find("span.status_value.notStarted").length + $(goals).find("span.status_value.inProgress").length;
-            needstring += `<li class="hasChild" data-needid="${result[i].NeedID}" data-status="${result[i].NeedStatus}">
+            needstring += `<li class="hasChild" data-needid="${result[i].NeedID}" data-status="${result[i].NeedStatus}" data-defaultNeed="${result[i].DefaultneedId}">
                                 <div class="needItem">
                                 <div class="editNeed">
                                    <span class="countgoal not_start_circle" onclick="ExpandCollapseFromGoalCount(this)">${notStartedGoals}</span>
@@ -166,7 +168,7 @@ function SaveNeed(e) {
         dataType: "json",
         success: function (result) {
             if ($(e).closest("li").attr("data-needid") == undefined) {
-                var needString = `<li class="hasChild opened" data-needid="${result}" data-status="0">
+                var needString = `<li class="hasChild opened" data-needid="${result}" data-status="0" data-defaultNeed="0">
                                 <div class="needItem">
                                 <div class="editNeed">
                                 <span class="countgoal not_start_circle" onclick="ExpandCollapseFromGoalCount(this)">0</span>
@@ -543,6 +545,15 @@ function AddNewGoalFromNeed(e) {
     $(e).closest("ul.needsList").find("ul.goalsList").not($(e).parent().parent().next()).each(function (index, item) {
         $(item).find("li.newGoal").remove();
     });
+    var isDefaultNeed = parseInt($(e).closest("li.hasChild").attr("data-defaultneed")) > 0 ? true : false;
+    if (isDefaultNeed && newGoalRef==""){
+        newGoalRef = e;
+        $(".defaultNeedAction").removeClass("d-flex").addClass("d-none");
+        $(".defaultGoalAction").removeClass("d-none").addClass("d-flex");
+        $("h5.defaultNeedTitle").html("").append("Default Goals");
+        GetDefaultgoals($(e).closest("li.hasChild").attr("data-needid"),$(e).closest("li.hasChild").attr("data-defaultneed"));
+        return;
+    }
     if ($(e).parent().parent().next().find("li").last().hasClass("newGoal")) {
         if (!$(e).closest("li.hasChild ").hasClass("opened")) {
             $(e).closest("li.hasChild ").addClass("opened");
@@ -560,19 +571,11 @@ function AddNewGoalFromNeed(e) {
                       <button  type="button" onclick="cancelNewGoal(this)" class="btn btn_cancel">Cancel</button>
                        </div>
                       </div></li>`;
-
     var isgoalulExist = $(e).parent().parent().next().is("ul");
     if (isgoalulExist) {
         $(e).parent().parent().next().append(goalString);
     } else {
-        $(e).parent().parent().after(`<ul class="goalsList">
-                                      <li  class="newGoal"><div class="addNewNeedGoal"><div class="plusIcon"><i class="fa fa-plus"></i></div>
-                                      <textarea maxlength="1000" class="txtGoal" placeholder="add goal" onkeyup="textAreaAdjust(this)" onblur="GoalOnBlur()"></textarea>
-                                      <div class="edit_actions">
-                                      <button  type="button" onclick="saveNewGoal(this)" class="btn">Save</button>
-                                      <button  type="button" onclick="cancelNewGoal(this)" class="btn btn_cancel">Cancel</button>
-                                      </div>
-                                      </div></li></ul>`);
+        $(e).parent().parent().after(`<ul class="goalsList">${goalString}</ul>`);
     }
     $(".txtGoal").keypress(function (event) {
         var keycode = event.keyCode || event.which;
@@ -1440,7 +1443,7 @@ function saveNewNeed(obj) {
         dataType: "json",
         success: function (result) {
             if (needTxt.closest("li").attr("data-needid") == undefined) {
-                var needString = `<li class="hasChild opened" data-needid="${result}" data-status="0">
+                var needString = `<li class="hasChild opened" data-needid="${result}" data-status="0" data-defaultNeed="0">
                                 <div class="needItem">
                                 <div class="editNeed">
                                 <span class="countgoal not_start_circle" onclick="ExpandCollapseFromGoalCount(this)">0</span>
@@ -1762,3 +1765,196 @@ function GoalOnBlur() {
         });
     }
 }
+function checkAllDefaultNeed(obj) {
+    if (obj.checked) {
+        $("[name='defaultNeeds']").each(function () {
+            this.checked = true;
+        });
+    } else {
+        $("[name='defaultNeeds']").each(function () {
+            this.checked = false;
+        });
+    }
+}
+function GetDefaultNeeds() {
+    $(".defaultNeedAction").removeClass("d-none").addClass("d-flex");
+    $(".defaultGoalAction").removeClass("d-flex").addClass("d-none");
+    $("h5.defaultNeedTitle").html("").append("Default Needs");
+    var model = {
+        TemplateId: templateid,
+        BaseTemplateId: basetemplateid,
+        PatientId: PatientId
+    }
+    $.ajax({
+        type: "POST",
+        url: Apipath + '/api/PatientMain/getdefaultneeds',
+        contentType: 'application/json; charset=UTF-8',
+        data: JSON.stringify(model),
+        dataType: "json",
+        async: false,
+        success: function (res) {
+            var defaultNeedUl = $(".defaultneedul");
+            defaultNeedUl.html("");
+            $(".defaultallneed").prop("checked", false);
+            if (res.length) {
+                defaultneedLen = res.length;
+                var defaultNeedStr = "";
+                for (var i = 0; i < res.length; i++) {
+                    defaultNeedStr += `<li>
+                                        <p>${res[i].NeedDesc}</p>
+                                        <label class="checkbox_input">
+                                        <input type="checkbox" onclick="checkDefaultNeeds(this)" name="defaultNeeds" value="${res[i].NeedID}" /><span></span>
+                                        </label></li>`;
+                }
+                defaultNeedUl.append(defaultNeedStr);
+                $("#DefaultNeedsPopUp").modal({
+                    show: true,
+                    keyboard: false,
+                    backdrop: 'static'
+                });
+            } else {
+                NeedFocus();
+            }
+        }, error: function () {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });
+}
+function checkDefaultNeeds(obj) {
+    if ($(obj).closest("ul.defaultneedul").find("input:checked").length == $(obj).closest("ul.defaultneedul").find("li").length) {
+        $(".defaultallneed").prop("checked", true);
+    } else {
+        $(".defaultallneed").prop("checked", false);
+    }
+}
+function closeDefaultNeed() {
+    $("#DefaultNeedsPopUp").modal('hide');
+    NeedFocus();
+}
+function AddDefaultneeds() {
+    var needIDs = [];
+    $("ul.defaultneedul input:checkbox:checked").map(function () {
+        needIDs.push($(this).val());
+    });
+    if (needIDs.length == 0) {
+        toastr.error("Select at least one default need");
+        return;
+    }
+    var model = {
+        NeedIDs: needIDs,
+        PatientId: PatientId,
+        CarePlanId: careplanid,
+        Status: 0
+    }
+    $.ajax({
+        type: "POST",
+        url: Apipath + '/api/PatientMain/adddefaultneedtocareplan',
+        contentType: 'application/json; charset=UTF-8',
+        data: JSON.stringify(model),
+        dataType: "json",
+        async: false,
+        success: function (res) {
+            for (var i = 0; i < needIDs.length; i++) {
+                $("ul.defaultneedul").find(`input[value='${needIDs[i]}']`).first().closest("li").remove();
+            }
+            $(".defaultallneed").prop("checked", false);
+            toastr.success("Changes saved successfully");
+            if ($("ul.defaultneedul").find("li").length == 0) {
+                closeDefaultGoals();
+            }
+        }, error: function () {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });
+
+}
+function GetDefaultgoals(needid,DefaultNeedId) {
+    $.ajax({
+        type: "GET",
+        url: Apipath + '/api/PatientMain/getgoalbyneedid?NeedId=' + needid + '&DefaultNeedId=' + DefaultNeedId,
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        async: false,
+        success: function (res) {
+            var defaultNeedUl = $(".defaultneedul");
+            defaultNeedUl.html("");
+            $(".defaultallneed").prop("checked", false);
+            if (res.length) {
+                defaultneedLen = res.length;
+                var defaultNeedStr = "";
+                for (var i = 0; i < res.length; i++) {
+                    defaultNeedStr += `<li>
+                                        <p>${res[i].GoalDesc}</p>
+                                        <label class="checkbox_input">
+                                        <input type="checkbox" onclick="checkDefaultNeeds(this)" name="defaultNeeds" value="${res[i].GoalID}" /><span></span>
+                                        </label></li>`;
+                }
+                defaultNeedUl.append(defaultNeedStr);
+                $("#DefaultNeedsPopUp").modal({
+                    show: true,
+                    keyboard: false,
+                    backdrop: 'static'
+                });
+            } else {
+                AddNewGoalFromNeed(newGoalRef);
+                newGoalRef = "";
+            }
+
+        }, error: function () {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });
+}
+function AddDefaultgoals() {
+    var goalIDs = [];
+    $("ul.defaultneedul input:checkbox:checked").map(function () {
+        goalIDs.push($(this).val());
+    });
+    if (goalIDs.length == 0) {
+        toastr.error("Select at least one default goal");
+        return;
+    }
+    var model = {
+        GoalIDs: goalIDs,
+        NeedId: $(newGoalRef).closest("li.hasChild").attr("data-needid"),
+        CarePlanId: careplanid,
+        Status: 0
+    }
+    $.ajax({
+        type: "POST",
+        url: Apipath + '/api/PatientMain/adddefaultgoaltocareplan',
+        contentType: 'application/json; charset=UTF-8',
+        data: JSON.stringify(model),
+        dataType: "json",
+        async: false,
+        success: function (res) {
+            for (var i = 0; i < goalIDs.length; i++) {
+                $("ul.defaultneedul").find(`input[value='${goalIDs[i]}']`).first().closest("li").remove();
+            }
+            $(".defaultallneed").prop("checked", false);
+            toastr.success("Changes saved successfully");
+            if ($("ul.defaultneedul").find("li").length==0) {
+                closeDefaultGoals();
+            }
+        }, error: function () {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });
+}
+function focusAddGoals() {
+    $("#DefaultNeedsPopUp").modal('hide');
+    AddNewGoalFromNeed(newGoalRef);
+    newGoalRef = "";
+}
+function closeDefaultGoals() {
+    $("#DefaultNeedsPopUp").modal('hide');
+    newGoalRef = "";
+    if ($("ul.defaultneedul").find("li").length != defaultneedLen) {
+        GetNeedAndGoalList();
+    }
+}
+$(".closeDefaultNeed").click(closeDefaultGoals);
