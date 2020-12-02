@@ -122,7 +122,9 @@ function NeedsGoals(result) {
             });
             $("ul.ui-sortable li").on("mousedown", function (event) {
                 if (event.target.id == "btnSaveEditNeed" || event.target.id == "btnCancelEditNeed"
-                    || event.target.id == "btnSaveEditGoal" || event.target.id == "btnCancelEditGoal") {
+                    || event.target.id == "btnSaveEditGoal" || event.target.id == "btnCancelEditGoal"
+                    || event.target.id == "btnnewneed" || event.target.id == "btncancelnewneed"
+                    || event.target.id == "btnnewgoal" || event.target.id == "btncancelnewgoal") {
                     $("#needContent").addClass("btnClicked");
                 } else {
                     if ($(".txtneed").is(":focus")) {
@@ -200,7 +202,9 @@ function SaveNeed(e) {
                 NeedFocus();
                 $("ul.ui-sortable li").on("mousedown", function (event) {
                     if (event.target.id == "btnSaveEditNeed" || event.target.id == "btnCancelEditNeed"
-                        || event.target.id == "btnSaveEditGoal" || event.target.id == "btnCancelEditGoal") {
+                        || event.target.id == "btnSaveEditGoal" || event.target.id == "btnCancelEditGoal"
+                        || event.target.id == "btnnewneed" || event.target.id == "btncancelnewneed"
+                        || event.target.id == "btnnewgoal" || event.target.id == "btncancelnewgoal") {
                         $("#needContent").addClass("btnClicked");
                     } else {
                         if ($(".txtneed").is(":focus")) {
@@ -237,7 +241,9 @@ function SaveNeed(e) {
                 });
                 $("ul.ui-sortable li").on("mousedown", function (event) {
                     if (event.target.id == "btnSaveEditNeed" || event.target.id == "btnCancelEditNeed"
-                        || event.target.id == "btnSaveEditGoal" || event.target.id == "btnCancelEditGoal") {
+                        || event.target.id == "btnSaveEditGoal" || event.target.id == "btnCancelEditGoal"
+                        || event.target.id == "btnnewneed" || event.target.id == "btncancelnewneed"
+                        || event.target.id == "btnnewgoal" || event.target.id == "btncancelnewgoal") {
                         $("#needContent").addClass("btnClicked");
                     } else {
                         if ($(".txtneed").is(":focus")) {
@@ -307,7 +313,9 @@ function SaveGoal(e) {
                 $(e).closest("ul.goalsList").prev().find(".countgoal").first().html("").append(goalCount + 1);
                 $("ul.ui-sortable li").on("mousedown", function (event) {
                     if (event.target.id == "btnSaveEditNeed" || event.target.id == "btnCancelEditNeed"
-                        || event.target.id == "btnSaveEditGoal" || event.target.id == "btnCancelEditGoal") {
+                        || event.target.id == "btnSaveEditGoal" || event.target.id == "btnCancelEditGoal"
+                        || event.target.id == "btnnewneed" || event.target.id == "btncancelnewneed"
+                        || event.target.id == "btnnewgoal" || event.target.id == "btncancelnewgoal") {
                         $("#needContent").addClass("btnClicked");
                     } else {
                         if ($(".txtneed").is(":focus")) {
@@ -348,7 +356,9 @@ function SaveGoal(e) {
                 });
                 $("ul.ui-sortable li").on("mousedown", function (event) {
                     if (event.target.id == "btnSaveEditNeed" || event.target.id == "btnCancelEditNeed"
-                        || event.target.id == "btnSaveEditGoal" || event.target.id == "btnCancelEditGoal") {
+                        || event.target.id == "btnSaveEditGoal" || event.target.id == "btnCancelEditGoal"
+                        || event.target.id == "btnnewneed" || event.target.id == "btncancelnewneed"
+                        || event.target.id == "btnnewgoal" || event.target.id == "btncancelnewgoal") {
                         $("#needContent").addClass("btnClicked");
                     } else {
                         if ($(".txtneed").is(":focus")) {
@@ -550,7 +560,7 @@ function AddNewGoalFromNeed(e) {
         newGoalRef = e;
         $(".defaultNeedAction").removeClass("d-flex").addClass("d-none");
         $(".defaultGoalAction").removeClass("d-none").addClass("d-flex");
-        $("h5.defaultNeedTitle").html("").append("Default Goals");
+        $("h5.defaultNeedTitle").html("").append("Default goals for need: <span>" + $(e).parent().parent().find("span.needDesc").html() + "</span>");
         GetDefaultgoals($(e).closest("li.hasChild").attr("data-needid"),$(e).closest("li.hasChild").attr("data-defaultneed"));
         return;
     }
@@ -567,8 +577,8 @@ function AddNewGoalFromNeed(e) {
                       <div class="addNewNeedGoal"><div class="plusIcon"><i class="fa fa-plus"></i></div>
                       <textarea maxlength="1000" class="txtGoal" placeholder="add goal" onkeyup="textAreaAdjust(this)" onblur="GoalOnBlur()"></textarea>
                       <div class="edit_actions">
-                      <button  type="button" onclick="saveNewGoal(this)" class="btn">Save</button>
-                      <button  type="button" onclick="cancelNewGoal(this)" class="btn btn_cancel">Cancel</button>
+                      <button id="btnnewgoal" type="button" onclick="saveNewGoal(this)" class="btn">Save</button>
+                      <button id="btncancelnewgoal" type="button" onclick="cancelNewGoal(this)" class="btn btn_cancel">Cancel</button>
                        </div>
                       </div></li>`;
     var isgoalulExist = $(e).parent().parent().next().is("ul");
@@ -1442,6 +1452,7 @@ function saveNewNeed(obj) {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
+            $("#needContent").removeClass("btnClicked");
             if (needTxt.closest("li").attr("data-needid") == undefined) {
                 var needString = `<li class="hasChild opened" data-needid="${result}" data-status="0" data-defaultNeed="0">
                                 <div class="needItem">
@@ -1475,7 +1486,9 @@ function saveNewNeed(obj) {
                 NeedFocus();
                 $("ul.ui-sortable li").on("mousedown", function (event) {
                     if (event.target.id == "btnSaveEditNeed" || event.target.id == "btnCancelEditNeed"
-                        || event.target.id == "btnSaveEditGoal" || event.target.id == "btnCancelEditGoal") {
+                        || event.target.id == "btnSaveEditGoal" || event.target.id == "btnCancelEditGoal"
+                        || event.target.id == "btnnewneed" || event.target.id == "btncancelnewneed"
+                        || event.target.id == "btnnewgoal" || event.target.id == "btncancelnewgoal") {
                         $("#needContent").addClass("btnClicked");
                     } else {
                         if ($(".txtneed").is(":focus")) {
@@ -1506,7 +1519,9 @@ function saveNewNeed(obj) {
                 });
                 $("ul.ui-sortable li").on("mousedown", function (event) {
                     if (event.target.id == "btnSaveEditNeed" || event.target.id == "btnCancelEditNeed"
-                        || event.target.id == "btnSaveEditGoal" || event.target.id == "btnCancelEditGoal") {
+                        || event.target.id == "btnSaveEditGoal" || event.target.id == "btnCancelEditGoal"
+                        || event.target.id == "btnnewneed" || event.target.id == "btncancelnewneed"
+                        || event.target.id == "btnnewgoal" || event.target.id == "btncancelnewgoal") {
                         $("#needContent").addClass("btnClicked");
                     } else {
                         if ($(".txtneed").is(":focus")) {
@@ -1547,6 +1562,7 @@ function saveNewGoal(obj) {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
+            $("#needContent").removeClass("btnClicked");
             var goalList = goaltxt.closest(".goalsList");
             if (goaltxt.closest("li").attr("data-goalid") == undefined) {
                 var goalString = `<li data-goalid="${result}" data-status="0" class="ui-sortable-handle">
@@ -1577,7 +1593,9 @@ function saveNewGoal(obj) {
                 goaltxt.closest("ul.goalsList").prev().find(".countgoal").first().html("").append(goalCount + 1);
                 $("ul.ui-sortable li").on("mousedown", function (event) {
                     if (event.target.id == "btnSaveEditNeed" || event.target.id == "btnCancelEditNeed"
-                        || event.target.id == "btnSaveEditGoal" || event.target.id == "btnCancelEditGoal") {
+                        || event.target.id == "btnSaveEditGoal" || event.target.id == "btnCancelEditGoal"
+                        || event.target.id == "btnnewneed" || event.target.id == "btncancelnewneed"
+                        || event.target.id == "btnnewgoal" || event.target.id == "btncancelnewgoal") {
                         $("#needContent").addClass("btnClicked");
                     } else {
                         if ($(".txtneed").is(":focus")) {
@@ -1613,7 +1631,9 @@ function saveNewGoal(obj) {
                 });
                 $("ul.ui-sortable li").on("mousedown", function (event) {
                     if (event.target.id == "btnSaveEditNeed" || event.target.id == "btnCancelEditNeed"
-                        || event.target.id == "btnSaveEditGoal" || event.target.id == "btnCancelEditGoal") {
+                        || event.target.id == "btnSaveEditGoal" || event.target.id == "btnCancelEditGoal"
+                        || event.target.id == "btnnewneed" || event.target.id == "btncancelnewneed"
+                        || event.target.id == "btnnewgoal" || event.target.id == "btncancelnewgoal") {
                         $("#needContent").addClass("btnClicked");
                     } else {
                         if ($(".txtneed").is(":focus")) {
@@ -1634,9 +1654,11 @@ function saveNewGoal(obj) {
     })
 }
 function cancelNewNeed(obj) {
+    $("#needContent").removeClass("btnClicked");
     $(obj).parent().prev().val("").focus().css("height", "21px");
 }
 function cancelNewGoal(obj) {
+    $("#needContent").removeClass("btnClicked");
     $(obj).parent().prev().val("").focus().css("height", "21px");
 }
 function canCloseNeeds(obj) {
@@ -1707,6 +1729,9 @@ window.onbeforeunload = function (evt) {
 
 }
 function NeedOnBlur() {
+    if ($("#needContent").hasClass("btnClicked")) {
+        return;
+    }
     var needTxt = $(".txtNeed");
     if (needTxt.val().trim() != "") {
         $.confirm({
@@ -1723,11 +1748,13 @@ function NeedOnBlur() {
                     text: 'save changes',
                     btnClass: 'btn-green',
                     action: function () {
+                        $("#needContent").removeClass("btnClicked");
                         saveNewNeed();
                     }
                 },
                 cancel: {
                     action: function () {
+                        $("#needContent").removeClass("btnClicked");
                         needTxt.val("").css("height", "21px");
                         NeedFocus();
                     }
@@ -1737,6 +1764,9 @@ function NeedOnBlur() {
     }
 }
 function GoalOnBlur() {
+    if ($("#needContent").hasClass("btnClicked")) {
+        return;
+    }
     var goaltxt = $(".txtGoal");
     if (goaltxt.val().trim() != "") {
         $.confirm({
@@ -1753,11 +1783,13 @@ function GoalOnBlur() {
                     text: 'save changes',
                     btnClass: 'btn-green',
                     action: function () {
+                        $("#needContent").removeClass("btnClicked");
                         saveNewGoal();
                     }
                 },
                 cancel: {
                     action: function () {
+                        $("#needContent").removeClass("btnClicked");
                         goaltxt.val("").css("height", "21px").focus();
                     }
                 }
@@ -1830,6 +1862,9 @@ function checkDefaultNeeds(obj) {
 }
 function closeDefaultNeed() {
     $("#DefaultNeedsPopUp").modal('hide');
+    if ($("ul.defaultneedul").find("li").length != defaultneedLen) {
+        GetNeedAndGoalList();
+    }
     NeedFocus();
 }
 function AddDefaultneeds() {

@@ -1917,10 +1917,10 @@
                                                 <li class="last-child">
                                                     <div class="addNewNeedGoal">
                                                         <div class="plusIcon"><i class="fa fa-plus"></i></div>
-                                                        <textarea class="txtNeed" maxlength="1000" placeholder="add need" onblur="NeedOnBlur()" onkeyup="textAreaAdjust(this)"></textarea>
+                                                        <textarea class="txtNeed" maxlength="1000" placeholder="add need" onblur="NeedOnBlur(event)" onkeyup="textAreaAdjust(this)"></textarea>
                                                         <div class="edit_actions">
-                                                            <button type="button" onclick="saveNewNeed(this)" class="btn">Save</button>
-                                                            <button type="button" onclick="cancelNewNeed(this)" class="btn btn_cancel">Cancel</button>
+                                                            <button id="btnnewneed" type="button" onclick="saveNewNeed(this)" class="btn">Save</button>
+                                                            <button id="btncancelnewneed" type="button" onclick="cancelNewNeed(this)" class="btn btn_cancel">Cancel</button>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -2312,14 +2312,14 @@
                 <div class="defaultsNeedsGoals_div">
                     <div class="d_n_actions defaultNeedAction d-flex">
                         <label class="checkbox_input"><input class="defaultallneed" type="checkbox" onchange="checkAllDefaultNeed(this)" name="defaultNeeds" value="" /><span>Select All </span></label>
-                        <a href="#" class="btn ml-auto" onclick="AddDefaultneeds()">Add to Care Plans</a>
-                        <a href="#" class="btn" onclick="closeDefaultNeed()">Add New Needs</a>
+                        <a href="#" class="btn ml-auto" onclick="AddDefaultneeds()">Add to care plan</a>
+                        <a href="#" class="btn" onclick="closeDefaultNeed()">Add new need</a>
                         <a href="#" class="btn" onclick="closeDefaultNeed()">Cancel</a>
                     </div>
                     <div class="d_n_actions defaultGoalAction d-none">
                         <label class="checkbox_input"><input class="defaultallneed" type="checkbox" onchange="checkAllDefaultNeed(this)" name="defaultNeeds" value="" /><span>Select All </span></label>
-                        <a href="#" class="btn ml-auto" onclick="AddDefaultgoals()">Add to Care Plans</a>
-                        <a href="#" class="btn" onclick="focusAddGoals()">Add New Goal</a>
+                        <a href="#" class="btn ml-auto" onclick="AddDefaultgoals()">Add to need</a>
+                        <a href="#" class="btn" onclick="focusAddGoals()">Add new goal</a>
                         <a href="#" class="btn" onclick="closeDefaultGoals()">Cancel</a>
                     </div>
                     <ul class="defaultneedul scroll">
