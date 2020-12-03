@@ -632,15 +632,15 @@
 .d_n_actions {
     padding: 0 0px 5px 0;
 }
-.d_n_actions .btn {
-    padding: 4px 10px;
+/*.d_n_actions .btn {*/
+    /*padding: 4px 10px;
     margin: 0 0 0 5px;
     background: #22baa0;
     color: #fff;
     font-size: 12px !important;
     line-height: 1.2;
-    margin: 5px 5px 5px 0;
-}
+    margin: 5px 5px 5px 0;*/
+/*}*/
 .d_n_actions .btn:hover {
     opacity: 0.9;
 }
@@ -701,4 +701,13 @@ label.checkbox_input input + span::after {
     font-size: 14px;
     font-weight: 400;
     color: #555;
+}
+@media (min-width: 992px) {
+    .defaultsNeedsGoals .modal-lg {
+        max-width: 800px;
+    }
+}
+.defaultsNeedsGoals .btn-cancel {
+    background-color: #999;
+    border-color: #999;
 }

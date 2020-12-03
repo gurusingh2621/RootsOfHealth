@@ -136,6 +136,9 @@ function NeedsGoals(result) {
                     if ($(".txtNeed").is(":focus")) {
                         $(".txtNeed").blur();
                     }
+                    if ($(".txtGoal").is(":focus")) {
+                        $(".txtGoal").blur();
+                    }
                 }
             });
         } else {
@@ -213,6 +216,9 @@ function SaveNeed(e) {
                         if ($(".edittxtGoal").is(":focus")) {
                             $(".edittxtGoal").blur();
                         }
+                        if ($(".txtGoal").is(":focus")) {
+                            $(".txtGoal").blur();
+                        }
                     }
                 });
             } else {
@@ -251,6 +257,9 @@ function SaveNeed(e) {
                         }
                         if ($(".edittxtGoal").is(":focus")) {
                             $(".edittxtGoal").blur();
+                        }
+                        if ($(".txtGoal").is(":focus")) {
+                            $(".txtGoal").blur();
                         }
                     }
                 });
@@ -324,6 +333,9 @@ function SaveGoal(e) {
                         if ($(".edittxtGoal").is(":focus")) {
                             $(".edittxtGoal").blur();
                         }
+                        if ($(".txtGoal").is(":focus")) {
+                            $(".txtGoal").blur();
+                        }
                     }
                 });
             } else {
@@ -366,6 +378,9 @@ function SaveGoal(e) {
                         }
                         if ($(".edittxtGoal").is(":focus")) {
                             $(".edittxtGoal").blur();
+                        }
+                        if ($(".txtGoal").is(":focus")) {
+                            $(".txtGoal").blur();
                         }
                     }
                 });
@@ -1497,6 +1512,9 @@ function saveNewNeed(obj) {
                         if ($(".edittxtGoal").is(":focus")) {
                             $(".edittxtGoal").blur();
                         }
+                        if ($(".txtGoal").is(":focus")) {
+                            $(".txtGoal").blur();
+                        }
                     }
                 });
             }
@@ -1529,6 +1547,9 @@ function saveNewNeed(obj) {
                         }
                         if ($(".edittxtGoal").is(":focus")) {
                             $(".edittxtGoal").blur();
+                        }
+                        if ($(".txtGoal").is(":focus")) {
+                            $(".txtGoal").blur();
                         }
                     }
                 });
@@ -1604,6 +1625,9 @@ function saveNewGoal(obj) {
                         if ($(".edittxtGoal").is(":focus")) {
                             $(".edittxtGoal").blur();
                         }
+                        if ($(".txtGoal").is(":focus")) {
+                            $(".txtGoal").blur();
+                        }
                     }
                 });
             }
@@ -1641,6 +1665,9 @@ function saveNewGoal(obj) {
                         }
                         if ($(".edittxtGoal").is(":focus")) {
                             $(".edittxtGoal").blur();
+                        }
+                        if ($(".txtGoal").is(":focus")) {
+                            $(".txtGoal").blur();
                         }
                     }
                 });
