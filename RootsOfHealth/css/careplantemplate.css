@@ -617,7 +617,9 @@ ul.needsList > li > ul .addNewNeedGoal {
 .needItem:hover .itemHoverActions {
     display: flex;
 }
-
+li.baseNeed .needItem:hover  .itemHoverActions {
+    display:none;
+}
 .itemHoverActions a {
     color: #818181;
     padding: 0px 10px;
@@ -719,9 +721,14 @@ ul.needsList > li > ul .addNewNeedGoal {
     padding-left: 20px;
     background: transparent;
 }
-
+/*li.baseNeed .needItem:hover {
+    background: rgba(0,0,0,0.075);
+}*/
 .needItem:hover a.dragIcon {
     opacity: 1;
+}
+li.baseNeed .needItem:hover a.dragIcon {
+    opacity: 0;
 }
 /*needs popup style closed*/
 /*multiselect css start*/

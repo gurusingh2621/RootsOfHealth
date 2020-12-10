@@ -6,7 +6,6 @@ $(".txtNeed").keypress(function (event) {
         event.preventDefault();
     }
 });
-
 function NeedsGoals(result) {
     if (result.length) {
         $("span.needCount").html("").append(result.length);
@@ -15,8 +14,6 @@ function NeedsGoals(result) {
         var needstring = '';
         for (var i = 0; i < result.length; i++) {
             var goals = parseHTML(result[i].GoalHtml);
-            
-
             needstring += `<li class="hasChild" data-needid="${result[i].NeedID}">
                                 <div class="needItem">
                                  <div class="editNeed"><span class="countgoal" onclick="ExpandCollapseFromGoalCount(this)">${$(goals).find("li").length}</span><span onclick="EditNeed(this)" class="needDesc">${result[i].NeedDesc}</span></div>
@@ -72,10 +69,22 @@ function NeedsGoals(result) {
             }
 
         });
-
+        $("ul.ui-sortable li").on("mousedown", function (event) {
+                if ($(".txtneed").is(":focus")) {
+                    $(".txtneed").blur();
+                }
+                if ($(".edittxtGoal").is(":focus")) {
+                    $(".edittxtGoal").blur();
+                }
+                if ($(".txtNeed").is(":focus")) {
+                    $(".txtNeed").blur();
+                }
+                if ($(".txtGoal").is(":focus")) {
+                    $(".txtGoal").blur();
+                }
+        });
     }
 }
-
 function SaveNeed(e) {
     if ($(e).val().trim() == "") {
         toastr.error("", "Need is required", { progressBar: true });
@@ -142,7 +151,6 @@ function SaveNeed(e) {
         }
     })
 }
-
 function SaveGoal(e) {
     if ($(e).val().trim() == "") {
         toastr.error("", "Goal is required", { progressBar: true });
@@ -208,7 +216,6 @@ function SaveGoal(e) {
         }
     })
 }
-
 function GetNeedAndGoalList() {
     tempId = sessionStorage.getItem("Id") === null ? templateId : sessionStorage.getItem("Id");
     $.ajax({
@@ -219,18 +226,79 @@ function GetNeedAndGoalList() {
         success: function (result) {
             $(".needsList li").not("li.last-child").remove();
             NeedsGoals(result);
-
             if (result.length == 0) {
                 var emptyText = "no default need exist for " + programName;
                 $(".needsList").prev().html(emptyText.toUpperCase());
                 $("span.needCount").html("").append("0");
-            }               
-            $("#NeedModal").modal('show');
+            }
+            $("#NeedModal").modal({
+                show: true,
+                keyboard: false,
+                backdrop: 'static'
+            });
             NeedFocus();
+        },
+        error: function () {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        },
+        complete: function (response) {
+            debugger;
+            if (response.responseJSON.length == 0) {
+                $(".needsList").find("li").not("li.last-child").remove();
+                $(".needsList").prev().html("");
+            }
+                if (isBaseTemplate == 'False') {
+                    $.ajax({
+                        type: "GET",
+                        url: Apipath + '/api/PatientMain/getbaseneedbytemplateid',
+                        contentType: 'application/json; charset=UTF-8',
+                        dataType: "json",
+                        async: false,
+                        success: function (result) {
+                            if (result.length) {
+                                var needCount = parseInt($("span.needCount").html());
+                                $("span.needCount").html("").append(needCount + result.length);
+                                var needList = $(".needsList");
+                                needList.prev().html("");
+                                var needstring = '';
+                                for (var i = 0; i < result.length; i++) {
+                                    var goals = parseHTML(result[i].GoalHtml);
+                                    needstring += `<li class="hasChild baseNeed" data-needid="${result[i].NeedID}">
+                                <div class="needItem">
+                                 <div class="editNeed"><span class="countgoal" onclick="ExpandCollapseFromGoalCount(this)">${$(goals).find("li").length}</span><span onclick="EditNeed(this)" class="needDesc">${result[i].NeedDesc}</span></div>
+                               <i onclick="ExpandCollapse(this)" class="down_arrow fa fa-chevron-down ${result[i].GoalHtml.length ? "" : "hide_down_arrow"}"></i>
+                               <div class="itemHoverActions">
+                               <a href="javascript:{}" onclick="AddNewGoalFromNeed(this)"><i class="fas fa-level-up-alt"></i></a>
+                               <a href="javascript:{}" class="delete_item" onclick="DeleteNeed(this)"><i class="fa fa-trash"></i></a>
+                               </div><a class="dragIcon" href="#!"><i class="fas fa-grip-vertical"></i></a></div>`;
+                                    if (result[i].GoalHtml.length) {
+                                        needstring += `<ul class="goalsList baseGoal" style="display: none;">
+                                ${result[i].GoalHtml}
+                                 </ul>
+                                  `;
+                                    }
+                                    needstring += `</li>`;
+                                }
+                                needList.find("li.last-child").before(needstring);
+                            } else {
+                                if (response.responseJSON.length==0) {
+                                    var emptyText = "no default need exist for " + programName;
+                                    $(".needsList").prev().html(emptyText.toUpperCase());
+                                    $("span.needCount").html("").append("0");
+                                }
+                            }
+                        },
+                        error: function () {
+                            toastr.error("Something happen Wrong");
+                            $(".loaderOverlay").hide();
+                        }
+                    });
+                }
+            
         }
-    })
+    });
 }
-
 function DeleteNeed(obj) {
     $.confirm({
         icon: 'fas fa-exclamation-triangle',
@@ -268,7 +336,6 @@ function DeleteNeed(obj) {
     });
     
 }
-
 function DeleteGoal(obj) {
     $.confirm({
         icon: 'fas fa-exclamation-triangle',
@@ -314,7 +381,6 @@ function DeleteGoal(obj) {
     })
     
 }
-
 function AddNewGoalFromNeed(e) {
     $(e).closest("ul.needsList").find("ul.goalsList").not($(e).parent().parent().next()).each(function (index, item) {
         $(item).find("li.newGoal").remove();
@@ -328,13 +394,12 @@ function AddNewGoalFromNeed(e) {
         $(".txtGoal").focus();
         return;
     }
-    var goalString = `<li class="newGoal"><div class="addNewNeedGoal"><div class="plusIcon"><i class="fa fa-plus"></i></div><textarea maxlength="1000" class="txtGoal" placeholder="add goal" onkeyup="textAreaAdjust(this)"></textarea></div></li>`;
-
+    var goalString = `<li class="newGoal"><div class="addNewNeedGoal"><div class="plusIcon"><i class="fa fa-plus"></i></div><textarea maxlength="1000" class="txtGoal" placeholder="add goal" onblur="GoalOnBlur()" onkeyup="textAreaAdjust(this)"></textarea></div></li>`;
     var isgoalulExist = $(e).parent().parent().next().is("ul");
     if (isgoalulExist) {
         $(e).parent().parent().next().append(goalString);
     } else {
-        $(e).parent().parent().after('<ul class="goalsList"><li  class="newGoal"><div class="addNewNeedGoal"><div class="plusIcon"><i class="fa fa-plus"></i></div><textarea maxlength="1000" class="txtGoal" placeholder="add goal" onkeyup="textAreaAdjust(this)"></textarea></div></li></ul>');
+        $(e).parent().parent().after(`<ul class="goalsList">${goalString}</ul>`);
     }
     $(".txtGoal").keypress(function (event) {
         var keycode = event.keyCode || event.which;
@@ -350,12 +415,10 @@ function AddNewGoalFromNeed(e) {
         $(".txtGoal").focus();
     }
 }   
-
 function NeedFocus() {
     var txtneed = document.getElementsByClassName("txtNeed");
     $(txtneed).focus();
 }
-
 function goalSendOrderToServer() {
 
     var order = [];
@@ -381,7 +444,6 @@ function goalSendOrderToServer() {
     });
 
 }
-
 function needSendOrderToServer() {
 
     var order = [];
@@ -407,7 +469,6 @@ function needSendOrderToServer() {
     });
 
 }
-
 function textAreaAdjust(o) {
     o.style.height = "1px";
 
@@ -419,7 +480,6 @@ function textAreaAdjust(o) {
     }
 
 }
-
 function ExpandCollapse(o) {
     $(o).parent().parent().toggleClass("opened");
     $(o).parent().next('ul').slideToggle();
@@ -428,8 +488,10 @@ function ExpandCollapseFromGoalCount(o) {
     $(o).closest("li.hasChild").toggleClass("opened");
     $(o).closest("div.needItem").next('ul.goalsList').slideToggle();
 }
-
 function EditGoal(o) {
+    if ($(o).closest("ul.goalsList").hasClass("baseGoal")) {
+        return;
+    }
     var item = $(o).html();
     var goalDiv = `<textarea maxlength="1000" class="edittxtGoal" spellcheck="false" style="padding:0px !important;margin:0px !important" onfocus="goalOrNeedFocus(this)">${item}</textarea>`;
     $(o).hide();
@@ -460,8 +522,10 @@ function EditGoal(o) {
     })
     $(".edittxtGoal").focus();
 }
-
 function EditNeed(o) {
+    if ($(o).closest("li.hasChild").hasClass("baseNeed")) {
+        return;
+    }
     var item = $(o).html();
     var needDiv = `<textarea maxlength="1000" class="txtneed" spellcheck="false" style="padding:0px !important;"  onfocus="goalOrNeedFocus(this)">${item}</textarea>`;
     $(o).hide();
@@ -491,7 +555,6 @@ function EditNeed(o) {
     })
     $(".txtneed").focus();
 }
-
 function SearchNeedAndGoal(obj) {
     var keyword = $(obj).val().trim();
     if (keyword == '') { GetNeedAndGoalList() } else {
@@ -506,7 +569,6 @@ function SearchNeedAndGoal(obj) {
         });
     }
 }
-
 function goalOrNeedFocus(obj) {
     obj.style.height = "21px";
     obj.style.height = (obj.scrollHeight+1) + "px";
@@ -518,5 +580,236 @@ function goalOrNeedFocus(obj) {
         obj.updating = false;
     }
 }
+function NeedOnBlur() {
+    var needTxt = $(".txtNeed");
+    if (needTxt.val().trim() != "") {
+        $.confirm({
+            icon: 'fas fa-exclamation-triangle',
+            title: 'Confirm',
+            content: 'You have unsaved changes for this need!' + `<hr/>
+                      <p class="need-title">Need</p>
+                      <p class="need-content">${needTxt.val()}</p>`,
+            type: 'green',
+            columnClass: 'col-md-6 col-md-offset-3',
+            typeAnimated: true,
+            buttons: {
+                save: {
+                    text: 'save changes',
+                    btnClass: 'btn-green',
+                    action: function () {
+                        saveNewNeed();
+                    }
+                },
+                cancel: {
+                    action: function () {
+                        needTxt.val("").css("height", "21px");
+                        NeedFocus();
+                    }
+                }
+            },
+        });
+    }
+}
+function saveNewNeed(obj) {
+    var needTxt = $(".txtNeed");
+    if (needTxt.val().trim() == "") {
+        toastr.error("", "Need is required", { progressBar: true });
+        return;
+    }
+    var needModel = {
+        NeedID: needTxt.closest("li").attr("data-needid"),
+        NeedDesc: needTxt.val(),
+        TemplateID: tempId,
+        PatientID: null,
+        CreatedBy: userId,
+        ModifiedBy: userId
+    }
+    $.ajax({
+        type: "POST",
+        url: Apipath + '/api/PatientMain/saveneed',
+        data: JSON.stringify(needModel),
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        success: function (result) {
+            if (needTxt.closest("li").attr("data-needid") == undefined) {
+                var needString = `<li class="hasChild opened" data-needid="${result}">
+                                <div class="needItem">
+                                 <div class="editNeed"><span class="countgoal" onclick="ExpandCollapseFromGoalCount(this)">0</span><span onclick="EditNeed(this)" class="needDesc">${needTxt.val()}</span></div>
+                               <i class="down_arrow fa fa-chevron-down hide_down_arrow" onclick="ExpandCollapse(this)"></i>
+                               <div class="itemHoverActions">
+                               <a href="javascript:{}" onclick="AddNewGoalFromNeed(this)"><i class="fas fa-level-up-alt"></i></a>
+                               <a href="javascript:{}" class="delete_item" onclick="DeleteNeed(this)"><i class="fa fa-trash"></i></a>
+                               </div><a class="dragIcon" href="#!"><i class="fas fa-grip-vertical"></i></a></div>                               
+                                  </li>
+                     `;
+                $(".needsList").find("li.last-child").before(needString);
+                $(".txtNeed").val("").css("height", "21px");
+                $(".needsList").prev().html("");
+                var needCount = parseInt($("span.needCount").html());
+                $("span.needCount").html("").append(needCount + 1);
+                $(".txtNeed").blur();
+                NeedFocus();
+            }
 
+            if (!$(".needsList").hasClass('ui-sortable')) {
+                $(".needsList").sortable({
+                    items: "li.hasChild",
+                    cursor: 'move',
+                    opacity: 0.7,
+                    revert: 300,
+                    delay: 150,
+                    placeholder: "movable-placeholder",
+                    containment: ".needModalContent",
+                    start: function (e, ui) {
+                        ui.placeholder.height(ui.helper.outerHeight());
+                    },
+                    update: function () {
+                        needSendOrderToServer();
+                    }
 
+                });
+            }
+
+        },
+        error: function (e) {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    })
+}
+function GoalOnBlur() {
+    var goaltxt = $(".txtGoal");
+    if (goaltxt.val().trim() != "") {
+        $.confirm({
+            icon: 'fas fa-exclamation-triangle',
+            title: 'Confirm',
+            content: 'You have unsaved changes for this goal!' + `<hr/>
+                      <p class="goal-title">Goal</p>
+                      <p class="goal-content">${goaltxt.val()}</p>`,
+            type: 'green',
+            columnClass: 'col-md-6 col-md-offset-3',
+            typeAnimated: true,
+            buttons: {
+                save: {
+                    text: 'save changes',
+                    btnClass: 'btn-green',
+                    action: function () {
+                        saveNewGoal();
+                    }
+                },
+                cancel: {
+                    action: function () {
+                        goaltxt.val("").css("height", "21px").focus();
+                    }
+                }
+            },
+        });
+    }
+}
+function saveNewGoal(obj) {
+    var goaltxt = $(".txtGoal");
+    if (goaltxt.val().trim() == "") {
+        toastr.error("", "Goal is required", { progressBar: true });
+        return;
+    }
+    var goalModel = {
+        GoalID: goaltxt.closest("li").attr("data-goalid"),
+        GoalDesc: goaltxt.val(),
+        NeedID: goaltxt.closest("ul.goalsList").parent().attr("data-needid"),
+        CreatedBy: userId,
+        ModifiedBy: userId
+    }
+    $.ajax({
+        type: "POST",
+        url: Apipath + '/api/PatientMain/savegoal',
+        data: JSON.stringify(goalModel),
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        success: function (result) {
+            var goalList = goaltxt.closest(".goalsList");
+            if (goaltxt.closest("li").attr("data-goalid") == undefined) {
+                var goalString = `<li data-goalid="${result}" class="ui-sortable-handle">
+<div class="needItem"> <div class="goalcontent" onclick="EditGoal(this)" >${goaltxt.val()}</div>
+<div class="itemHoverActions"> <a href="javascript:{}" class="delete_item" onclick="DeleteGoal(this)"><i class="fa fa-trash"></i></a> </div>
+<a class="dragIcon" href="#!"><i class="fas fa-grip-vertical"></i></a>
+</div> </li>`;
+                goalList.find("li.newGoal").before(goalString);
+                goaltxt.val("").focus().css("height", "21px");
+                var goalCount = parseInt(goaltxt.parent().parent().parent().prev().find(".countgoal").html());
+                goaltxt.parent().parent().parent().prev().find(".countgoal").html("").append(goalCount + 1);
+            } else {
+                
+            }
+            var showCollapse = goalList.prev().find("i.down_arrow").hasClass("hide_down_arrow");
+            if (showCollapse) {
+                goalList.prev().find("i.down_arrow").removeClass("hide_down_arrow");
+            }
+            if (!goalList.hasClass('ui-sortable')) {
+                $(".goalsList").sortable({
+                    items: "li",
+                    //handle: '.handle,.dragIcon',
+                    cursor: 'move',
+                    cancel: ".newGoal",
+                    opacity: 0.7,
+                    revert: 300,
+                    delay: 150,
+                    placeholder: "movable-placeholder",
+                    containment: ".needModalContent",
+                    start: function (e, ui) {
+                        ui.placeholder.height(ui.helper.outerHeight());
+                    },
+                    update: function () {
+                        goalSendOrderToServer();
+
+                    }
+
+                });
+            }
+
+        }, error: function (e) {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    })
+}
+function GetBaseNeeds(){
+    $.ajax({
+        type: "GET",
+        url: Apipath + '/api/PatientMain/getbaseneedbytemplateid',
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        async: false,
+        success: function (result) {
+            if (result.length) {
+                var needCount = parseInt($("span.needCount").html());
+                $("span.needCount").html("").append(needCount + result.length);
+                var needList = $(".needsList");
+                needList.prev().html("");
+                var needstring = '';
+                for (var i = 0; i < result.length; i++) {
+                    var goals = parseHTML(result[i].GoalHtml);
+                    needstring += `<li class="hasChild baseNeed" data-needid="${result[i].NeedID}">
+                                <div class="needItem">
+                                 <div class="editNeed"><span class="countgoal" onclick="ExpandCollapseFromGoalCount(this)">${$(goals).find("li").length}</span><span onclick="EditNeed(this)" class="needDesc">${result[i].NeedDesc}</span></div>
+                               <i onclick="ExpandCollapse(this)" class="down_arrow fa fa-chevron-down ${result[i].GoalHtml.length ? "" : "hide_down_arrow"}"></i>
+                               <div class="itemHoverActions">
+                               <a href="javascript:{}" onclick="AddNewGoalFromNeed(this)"><i class="fas fa-level-up-alt"></i></a>
+                               <a href="javascript:{}" class="delete_item" onclick="DeleteNeed(this)"><i class="fa fa-trash"></i></a>
+                               </div><a class="dragIcon" href="#!"><i class="fas fa-grip-vertical"></i></a></div>`;
+                    if (result[i].GoalHtml.length) {
+                        needstring += `<ul class="goalsList baseGoal" style="display: none;">
+                                ${result[i].GoalHtml}
+                                 </ul>
+                                  `;
+                    }
+                    needstring += `</li>`;
+                }
+                needList.find("li.last-child").before(needstring);
+            }
+        },
+        error: function () {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });
+}
