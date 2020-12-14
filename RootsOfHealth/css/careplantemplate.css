@@ -730,6 +730,14 @@ li.baseNeed .needItem:hover  .itemHoverActions {
 li.baseNeed .needItem:hover a.dragIcon {
     opacity: 0;
 }
+.jconfirm-content p.goal-title, p.need-title {
+    margin: 0px;
+    font-weight: 500;
+}
+
+.jconfirm-content p.goal-content, p.need-content {
+    font-size: 13px;
+}
 /*needs popup style closed*/
 /*multiselect css start*/
 .divFiletype button.multiselect {
@@ -933,6 +941,7 @@ span.basecontentspan {
 span.needDesc {
     word-break: break-word;
     white-space:pre-wrap;
+    width:100%;
 }
 
 .movable-placeholder {
