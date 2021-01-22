@@ -29,6 +29,7 @@ namespace RootsOfHealth.Models
         public PatientScoreBO PatientScore { get; set; }
         public ScheduleDateBO ScheduleDate { get; set; }
 
+        public List<ProgramsForPatientBO> Programs { get; set; }
 
 
 

@@ -360,7 +360,6 @@ function DeleteGoal(obj) {
                         contentType: 'application/json; charset=UTF-8',
                         dataType: "json",
                         success: function (result) {
-                            debugger;
                             var goalCount = $(obj).closest("li").siblings().length;
                             if (goalCount == 0) {
                                 $(obj).closest(".goalsList").prev().find("i.down_arrow").addClass("hide_down_arrow");

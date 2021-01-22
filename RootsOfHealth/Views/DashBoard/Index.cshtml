@@ -452,7 +452,6 @@
                 dataType: "html",
                 contentType: "application/json; charset=utf-8",
                 success: function (result) {
-
                     $('#myTabContent').html(result);
                     
                 },
@@ -516,8 +515,8 @@
 
     }
 
-    function ActivateTab(PatientId, Tab) {
-        window.location.href = '/Patient/Add?PatientID=' + PatientId + '&CurrentTab=' + Tab;
+    function ActivateTab(PatientId, Tab,Subtab) {
+        window.location.href = '/Patient/Add?PatientID=' + PatientId + '&CurrentTab=' + Tab +'&SubTab='+Subtab;
 
     }
 </script>
