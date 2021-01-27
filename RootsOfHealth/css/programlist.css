@@ -1,0 +1,39 @@
+﻿.createtemplate .radiobuttonWrap {
+    display: flex;
+}
+
+    .createtemplate .radiobuttonWrap .custom-control {
+        margin-right: 30px;
+    }
+
+.createtemplate .customselect {
+    margin: 30px 0 0 0;
+}
+
+    .createtemplate .customselect select {
+        height: 30px !important;
+        font-size: 13px;
+        border: 1px solid #e2e2e2;
+        border-radius: 0px;
+        padding: 0 15px;
+        background: url(../images/chevron-arrow-down.svg) no-repeat 0 0;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        -ms-appearance: none;
+        background-size: 12px;
+        background-position: 98% 5px;
+        box-shadow: 0 0 0 !important;
+        outline: none !important;
+    }
+
+#CreateProgramModal .modal-body {
+    padding: 30px 15px;
+}
+
+.hide {
+    display: none;
+}
+
+.templatelist h2 {
+    text-transform: uppercase;
+}

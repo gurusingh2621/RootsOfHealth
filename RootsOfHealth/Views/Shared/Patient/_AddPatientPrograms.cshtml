@@ -4,7 +4,7 @@
     <div class="col-lg-6 col-md-6 col-sm-12 col-12 pt-4 pb-5 pr-5 right-border">
 
         <h6>Available Program</h6>
-        <ul class="list-group ap">      
+        <ul class="list-group scroll ap list-height">      
             @foreach (var s in Model.AvailablePrograms)
             {
                 <li  style="cursor:pointer;" onclick="selectProgram('@s.ProgramsID',this)" class="list-group-item d-flex">@s.ProgramsName</li>
@@ -16,7 +16,7 @@
     </div>
     <div class="col-lg-6 col-md-6 col-sm-12 col-12 pt-4 pb-5 pl-5">
         <h6>Client Program</h6>
-        <ul class="list-group pp">
+        <ul class="list-group scroll pp list-height">
          
             @foreach (var s in Model.PatientPrograms)
             {
@@ -73,15 +73,25 @@
 
         var formData = { 'PatientProgramsID': $('#patientprogramid').val(), 'ModifiedBy': 0, 'ModifiedDate': ModifyDate }
 
-        $.ajax({
-            type: "POST",
-            url: Apipath + '/api/PatientMain/UpdatePatientProgramsInfo',         
-            data: JSON.stringify(formData),
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            success: function (result) {
-                $('#patientprogramid').val('');
-                toastr.success("Program removed successfully");
+          $.confirm({
+                        icon: 'fas fa-exclamation-triangle',
+                        title: 'Confirm',
+                        content: 'Are you sure you want to remove program,saved data will be removed!',
+                        type: 'red',
+                        typeAnimated: true,
+                        buttons: {
+                            confirm: {
+                                btnClass: 'btn-danger',
+                                action: function () {
+                                     $.ajax({
+                                          type: "POST",
+                                url: Apipath + '/api/PatientMain/UpdatePatientProgramsInfo',         
+                                data: JSON.stringify(formData),
+                                dataType: "json",
+                                contentType: "application/json; charset=utf-8",
+                                success: function (result) {
+                               $('#patientprogramid').val('');
+                                toastr.success("Program removed successfully");
             },
             error: function () {
                 toastr.error("Error while inserting program");
@@ -93,6 +103,17 @@
 
             }
         });
+                                }
+
+                            },
+                            cancel: function () {
+
+                            }
+                        }
+                    });
+
+
+       
     }
 
     function addProgram() {

@@ -160,6 +160,7 @@
     <Compile Include="Controllers\CarePlanController.cs" />
     <Compile Include="Controllers\DashBoardController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
+    <Compile Include="Controllers\ProgramController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -201,6 +202,9 @@
     <Compile Include="Models\PHQ9BO.cs" />
     <Compile Include="Models\PotientialPatientBO.cs" />
     <Compile Include="Models\ProgramBO.cs" />
+    <Compile Include="Models\ProgramFileBO.cs" />
+    <Compile Include="Models\ProgramsForPatientBO.cs" />
+    <Compile Include="Models\ProgramtemplateBO.cs" />
     <Compile Include="Models\ReleaseAndDisclousureBO.cs" />
     <Compile Include="Models\ScheduleDateBO.cs" />
     <Compile Include="Models\TypeOfAppointmentBO.cs" />
@@ -225,6 +229,8 @@
     <Content Include="css\fullcalendar.min.css" />
     <Content Include="css\jquery-ui.css" />
     <Content Include="css\previewinpopup.css" />
+    <Content Include="css\programlist.css" />
+    <Content Include="css\programtemplate.css" />
     <Content Include="css\responsive.css" />
     <Content Include="css\select2.min.css" />
     <Content Include="css\style.css" />
@@ -313,6 +319,10 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\Program\databasecontrol.js" />
+    <Content Include="Scripts\Program\htmlcontrol.js" />
+    <Content Include="Scripts\Program\programbasetemplatecontrolhtml.js" />
+    <Content Include="Scripts\Program\programlist.js" />
     <Content Include="Scripts\select2.min.js" />
     <Content Include="Views\Patient\FormScheduling.cshtml" />
     <Content Include="Web.config">
@@ -379,6 +389,9 @@
     <Content Include="Views\CarePlan\List.cshtml" />
     <Content Include="Views\CarePlan\ModifyTemplate.cshtml" />
     <Content Include="Views\CarePlan\BaseTemplate.cshtml" />
+    <Content Include="Views\Program\List.cshtml" />
+    <Content Include="Views\Program\ModifyProgramTemplate.cshtml" />
+    <Content Include="Views\Program\ProgramBaseTemplate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

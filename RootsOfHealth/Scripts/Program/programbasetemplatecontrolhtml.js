@@ -1,6 +1,7 @@
 ﻿var new_id = 0;
 var newid = "";
 $(function () {
+   
     HtmlControlDragnDrop();
     if (sessionStorage.getItem("Id") === null) {
         GetFormHtmlById(templateId);
@@ -43,7 +44,7 @@ function HtmlControlDragnDrop() {
         receive: function (event, ui) {
             var draggableId = ui.item.attr("data-type");
             var currentid = $(ui.helper).clone().attr('id')
-             newid = draggableId + currentid;
+            newid = draggableId + currentid;
             while (true) {
                 if ($(document.getElementById(newid)).length) {
                     currentid = parseInt(currentid) + 1;
@@ -69,7 +70,7 @@ function HtmlControlDragnDrop() {
                         '<div class="custom-control custom-checkbox  d-inline-block mr-2">' +
                         '<input type="checkbox" class="custom-control-input"  name="checkbox" value="2" id="checkbox2">' +
                         '<label class="custom-control-label" for="checkbox2">option 2</label></div>' +
-                        '</div>' +                      
+                        '</div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
                         '</div>';
@@ -88,7 +89,7 @@ function HtmlControlDragnDrop() {
                 case "file":
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
                         '<label class=""><span class="title">Label</span><span class="desc"></span></label >' +
-                        '<div class="inputContent"><input id="' + newid + '" onchange="previewOnChange(this)"  type="file" class="form-control base-control" id=""/><label class="label-base"></label>' +
+                        '<div class="inputContent"><input id="' + newid + '" onchange="previewOnfileChange(this)"  type="file" class="form-control base-control" id=""/><label class="label-base"></label>' +
                         '<div class="' + newid + '_files uploaded_filewrap"></div>' +
                         '</div></div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
@@ -116,7 +117,7 @@ function HtmlControlDragnDrop() {
                         '<div class="custom-control custom-radio d-inline-block mr-2">' +
                         '<input type="radio" class="custom-control-input"  name="radio" value="2" id="radio2">' +
                         '<label class="custom-control-label" for="radio2">option 2</label></div>' +
-                        '</div>' +                       
+                        '</div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
                         '</div>';
@@ -125,11 +126,11 @@ function HtmlControlDragnDrop() {
                 case "select":
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
                         '<label class=""><span class="title">Select</span><span class="desc"></span></label>' +
-                        '<div class="inputContent"><select id="' + newid + '" class="form-control base-control"></div>' +                       
+                        '<div class="inputContent"><select id="' + newid + '" class="form-control base-control"></div>' +
                         '<option  value="1">option 1</option>' +
                         '<option  value="2">option 2</option>' +
                         ' </select>' +
-                        '<label class="label-base"></label>'+
+                        '<label class="label-base"></label>' +
                         '</div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
@@ -301,14 +302,14 @@ function EditHtml(type, ID) {
             popupString += '<div class="modal-row">' +
                 '<label>Options<span class="addoptions" onclick="addoption(this)"><i class="fas fa-plus"></i></span></label>';
             popupString += '<div class="optionHeading"><label>Text</label><label>Value</label></div>';
-            $(controlId).find("input[type='checkbox']").each(function (index,item) {
+            $(controlId).find("input[type='checkbox']").each(function (index, item) {
                 popupString += '<div class="option-block">' +
                     '<div class="option-fields">' +
-                    `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${($(item).next().text() == "option 1" || $(item).next().text() == "option 2") && $(controlId).find("input.custom-control-input").first().attr("data-column") === undefined? "" : $(item).next().text()}"/>` +
+                    `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${($(item).next().text() == "option 1" || $(item).next().text() == "option 2") && $(controlId).find("input.custom-control-input").first().attr("data-column") === undefined ? "" : $(item).next().text()}"/>` +
                     ' <input type="text" placeholder="Value" class="form-control option-value" disabled value="' + $(item).attr("value") + '"/>' +
                     '</div>' +
                     '<div class="popup-event-btn">' +
-                    `<button class="event-btn file-remove" onclick="RemoveOption(this)" ${index==0?"disabled":""}><i class="fa fa-minus-circle" aria-hidden="true"></i></button >` +
+                    `<button class="event-btn file-remove" onclick="RemoveOption(this)" ${index == 0 ? "disabled" : ""}><i class="fa fa-minus-circle" aria-hidden="true"></i></button >` +
                     '</div></div>'
             });
             popupString += '</div></div>';
@@ -348,7 +349,7 @@ function EditHtml(type, ID) {
                     }
 
                 }
-               
+
                 var allTextArray = $('.option-block').map(function () {
                     if ($(this).find("input.option-text").val().trim() != '')
 
@@ -394,7 +395,7 @@ function EditHtml(type, ID) {
                      <label class="custom-control-label" for="${ID + index}">${$(this).find("input.option-text").val().trim()}</label></div>
                      `;
                 });
-                option_data += "</div><label class='label-base'></label></div>";                
+                option_data += "</div><label class='label-base'></label></div>";
                 $(controlId).find("div").html("");
                 $(controlId).append(option_data);
                 $(controlId).find(".checkbox-group").find("span.title").html("").append($(".lbltext").val().trim());
@@ -962,7 +963,7 @@ function EditHtml(type, ID) {
             popupString += '<div class="modal-row">' +
                 '<label>Options<span class="addoptions" onclick="addoption(this)"><i class="fas fa-plus"></i></span></label>';
             popupString += '<div class="optionHeading"><label>Text</label><label>Value</label></div>';
-            $(controlId).find("input[type=radio]").each(function (index,item) {
+            $(controlId).find("input[type=radio]").each(function (index, item) {
                 popupString += '<div class="option-block">' +
                     '<div class="option-fields">' +
                     `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${($(item).next().text() == "option 1" || $(item).next().text() == "option 2") && $(controlId).find("input.custom-control-input").first().attr("data-column") === undefined ? "" : $(item).next().text()}"/>` +
@@ -1007,7 +1008,7 @@ function EditHtml(type, ID) {
                         colname = colname + randomNumber;
                     }
                 }
-               
+
 
                 var allTextArray = $('.option-block').map(function () {
                     if ($(this).find("input.option-text").val() != '')
@@ -1182,11 +1183,11 @@ function EditHtml(type, ID) {
             popupString += '<div class="modal-row">' +
                 '<label>Options<span class="addoptions" onclick="addoption(this)"><i class="fas fa-plus"></i></span></label>';
             popupString += '<div class="optionHeading"><label>Text</label><label>Value</label></div>';
-            $(controlId).find('option').each(function (index,item) {
+            $(controlId).find('option').each(function (index, item) {
                 if ($(item).val() == 0) return;
                 popupString += '<div class="option-block">' +
                     '<div class="option-fields">' +
-                    `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${($(item).text() == "option 1" || $(item).text() == "option 2") && $(controlId).attr("data-column") === undefined? "" : $(item).text()}"/>` +
+                    `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${($(item).text() == "option 1" || $(item).text() == "option 2") && $(controlId).attr("data-column") === undefined ? "" : $(item).text()}"/>` +
                     ' <input type="text" placeholder="Value" class="form-control option-value" disabled value="' + $(item).val() + '"/>' +
                     '</div>' +
                     '<div class="popup-event-btn">' +
@@ -1229,7 +1230,7 @@ function EditHtml(type, ID) {
                     }
                     $(controlId).attr("data-column", colname);
                 }
-                
+
                 var allTextArray = $('.option-block').map(function () {
                     if ($(this).find("input.option-text").val() != '')
 
@@ -1780,33 +1781,40 @@ function saveHtml() {
 
     var model = {
         TemplateID: $("#hdnTemplateId").val(),
-        TemplateName: templateName,
-        ProgramID: programId,
+        programName: programName,
         IsActive: 1,
         CreatedBy: userId,
         ModifiedBy: userId,
+        IsBaseTemplate: true,
+        ProgramID: programId,
+
+       
     };
     $(".loaderOverlay").css("display", "flex");
     $.ajax({
         type: "POST",
-        url: '/CarePlan/SaveFormTemplate',
-        data: JSON.stringify({ htmlTemplate: gethtml, Model: model, ProgramName: programName }),
+        url: '/program/SaveFormTemplate',
+        data: JSON.stringify({ htmlTemplate: gethtml, Model: model}),
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
-            if (result == "0") {
+            
+            var Res = JSON.parse(result.id);
+            if (Res.TemplateID ==0 ) {
                 toastr.error("Program Already Exist.");
                 $(".loaderOverlay").hide();
                 return false;
             } else {
                 //templateId = result.id;
                 $("#hdnTemplateId").val(result.id);
-                $(".hiddenSavedHtml").html("").append(gethtml); 
+                $(".hiddenSavedHtml").html("").append(gethtml);
             }
 
         }
     }).done(function (result) {
-        if (result != "0") {
+       
+        var _result = JSON.parse(result.id);
+        if (_result.TemplateID != 0) {
             var models = [];
             models.push({ ColDataType: "int", ColumnName: "PatientID" });
             $("#droppable [type=text]").each(function (index, item) {
@@ -1844,21 +1852,21 @@ function saveHtml() {
             }, []);
 
             var model = {
-                TableName: result.tablename,
+                TableName: _result.TemplateTable,
                 ColumnData: UniqueItems
             }
             $.ajax({
                 type: "POST",
-                url: Apipath + '/api/PatientMain/addtemplatecolumn',
+                url: Apipath + '/api/PatientMain/AddProgramTemplateColumn',
                 contentType: 'application/json; charset=UTF-8',
                 data: JSON.stringify(model),
                 dataType: "json",
                 success: function (res) {
                     toastr.success("Saved successfully.");
                     $("a.preview").css("display", "inline");
-                    $("a.btndraft").css("display", "none");
-                    $("a.btnNeedsPopup").css("display","inline");
-                    sessionStorage.setItem("Id", result.id);
+                    //$("a.btndraft").css("display", "none");
+                    //$("a.btnNeedsPopup").css("display", "inline");
+                    sessionStorage.setItem("Id", _result.TemplateID);
                     $(".loaderOverlay").hide();
                 },
             });
@@ -1870,16 +1878,16 @@ function GetFormHtmlById(Id) {
     $(".loaderOverlay").css("display", "flex");
     $.ajax({
         type: "GET",
-        url: '/careplan/GetFormHtmlById?Id=' + Id,
+        url: '/program/GetFormHtmlById?Id=' + Id,
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
             if (result.html != "") {
                 $("#droppable").html(result.html);
-                $(".hiddenSavedHtml").html("").append(result.html); 
+                $(".hiddenSavedHtml").html("").append(result.html);
                 HtmlControlDragnDrop();
             }
-                toogleToolTip();
+            toogleToolTip();
             $(".loaderOverlay").hide();
         }
     });
@@ -1907,27 +1915,12 @@ function validateFileSize(obj) {
     });
 }
 function IsColumnNameExist(colname) {
-    var tableName = '';
-    switch (programId) {
-        case "0":
-            tableName = 'tbl_BaseTemplate';
-            break;
-        case "1":
-            tableName = 'tbl_Clinic_CarePlan';
-            break;
-        case "2":
-            tableName = 'tbl_Dream_CarePlan';
-            break;
-        case "3":
-            tableName = 'tbl_OU_CarePlan';
-            break;
-        case "4":
-            tableName = 'tbl_PeraltaCollege_CarePlan';
-            break;
-    }
+   
+    var tableName = 'tbl_BaseProgramTemplate';
+           
     return $.ajax({
         type: "GET",
-        url: Apipath + '/api/PatientMain/careplaniscolumnnameexist?TableName=' + tableName + '&ColumnName=' + colname,
+        url: Apipath + '/api/PatientMain/programiscolumnnameexist?TableName=' + tableName + '&ColumnName=' + colname,
         dataType: "json",
         async: false,
         contentType: "application/json; charset=utf-8",
@@ -2015,7 +2008,7 @@ function backToList() {
     $(".hiddenSavedHtml").find("div.dragresize").removeClass("ui-sortable-handle").removeAttr("style");
     $(".hiddenSavedHtml").find(".baseheader,.basefooter").removeClass("ui-sortable");
     $(".hiddenSavedHtml").find("span.basecontentspan").removeAttr("style");
-    var savedHtml = $(".hiddenSavedHtml").html() == "" ?`
+    var savedHtml = $(".hiddenSavedHtml").html() == "" ? `
                                 <input id="hdnbasetempid" hidden="hidden" class="basecontrol-id" type="text" value="0">
                                 <div class="dragresize col-md-12">
                                     <div class="contentbtn">
@@ -2048,37 +2041,37 @@ function backToList() {
                                     </div>
                                 </div>
                             `: $(".hiddenSavedHtml")[0].innerHTML;
-            var unsavedHtml = $("#droppable").clone();
-            $(unsavedHtml).find("div.dragresize").removeClass("ui-sortable-handle").removeAttr("style");
-            $(unsavedHtml).find(".baseheader,.basefooter").removeClass("ui-sortable");
-            $(unsavedHtml).find("span.basecontentspan").removeAttr("style");
-              unsavedHtml = unsavedHtml[0].innerHTML;
-            if (savedHtml === unsavedHtml) {
-                window.location.href = '/careplan/list';
-                $(".hiddenSavedHtml").html("");
-            } else {
-                $.confirm({
-                    icon: 'fas fa-exclamation-triangle',
-                    title: 'Confirm',
-                    content: 'You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?',
-                    type: 'red',
-                    columnClass: 'col-md-6 col-md-offset-3',
-                    typeAnimated: true,
-                    buttons: {
-                        stay: {
-                            btnClass: 'btn-green',
+    var unsavedHtml = $("#droppable").clone();
+    $(unsavedHtml).find("div.dragresize").removeClass("ui-sortable-handle").removeAttr("style");
+    $(unsavedHtml).find(".baseheader,.basefooter").removeClass("ui-sortable");
+    $(unsavedHtml).find("span.basecontentspan").removeAttr("style");
+    unsavedHtml = unsavedHtml[0].innerHTML;
+    if (savedHtml === unsavedHtml) {
+        window.location.href = '/program/list';
+        $(".hiddenSavedHtml").html("");
+    } else {
+        $.confirm({
+            icon: 'fas fa-exclamation-triangle',
+            title: 'Confirm',
+            content: 'You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?',
+            type: 'red',
+            columnClass: 'col-md-6 col-md-offset-3',
+            typeAnimated: true,
+            buttons: {
+                stay: {
+                    btnClass: 'btn-green',
 
-                        },
-                        leave: {
-                            action: function () {
-                                window.location.href = '/careplan/list';
-                                $(".hiddenSavedHtml").html("");
-                            }
-                        }
-                    },
+                },
+                leave: {
+                    action: function () {
+                        window.location.href = '/program/list';
+                        $(".hiddenSavedHtml").html("");
+                    }
+                }
+            },
 
-                });
-            }
+        });
+    }
 }
 window.onbeforeunload = function (evt) {
     var message = "";
@@ -2118,7 +2111,7 @@ window.onbeforeunload = function (evt) {
                                     </div>
                                 </div>
                             `: $(".hiddenSavedHtml")[0].innerHTML;
-    
+
     var unsavedHtml = $("#droppable").clone();
     $(unsavedHtml).find("div.dragresize").removeClass("ui-sortable-handle").removeAttr("style");
     $(unsavedHtml).find(".baseheader,.basefooter").removeClass("ui-sortable");

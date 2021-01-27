@@ -4,13 +4,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
-<link href="~/css/careplantemplate.css" rel="stylesheet" />
+<link href="~/css/programtemplate.css" rel="stylesheet" />
 <link href="~/css/previewinpopup.css" rel="stylesheet" />
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
 <style>
-  #droppable  span.basecontentspan {
+    #droppable span.basecontentspan {
         display: inline;
-    }    
+    }
 </style>
 <section id="content" class="responsive-container pt-0">
 
@@ -18,20 +18,19 @@
 
         <div class="container-fluid pl-0 pr-0">
 
-            <div class="appointment carePlansWrap">
+            <div class="appointment programWrap">
                 <div class="detail-heading d-flex">
-                    <h2><span class="careplancaption">Careplan template for <span>@ViewBag.ProgramName</span> </span></h2>                    
+                    <span class="templatename-wrap">
+                        <label>Program name:</label>
+                        <input type="text" class="form-control templatename-input" value="@ViewBag.TemplateName" />
+                    </span>
                     <div class="detail-button ml-auto">
-                        <span class="templatename-wrap">
-                            <label>Template name:</label>
-                            <input type="text" class="form-control templatename-input" value="@ViewBag.TemplateName" />
-                        </span>
-                        <a href="/careplan/list" class="btn btn-success mr-10 backlist"> <i class="fa fa-arrow-left"></i> Back to list</a>
-                        <a href="javascript:{}" onclick="GetNeedAndGoalList()" style="@Html.Raw(ViewBag.IsModify?"":"display:none")" class="btn btn-success mr-2 btnNeedsPopup"> <i class="far fa-save"></i> Needs & Goals</a>                       
+
+                        <a href="/program/list" class="btn btn-success mr-10 backlist" > <i class="fa fa-arrow-left"></i> Back to list</a>
                         <a href="javascript:{}" onclick="return PreviewInPopUp();" class="btn btn-success mr-0 preview-inpopup">
                             <i class="far fa-save"></i>
                             Preview
-                        </a>                        
+                        </a>
                         <span class="finializewrap">
                             <div class="custom-control custom-checkbox  d-inline-block mr-2">
                                 <input type="checkbox" class="custom-control-input" id="checkbox-finalize" name="checkbox-final">
@@ -54,8 +53,8 @@
                                 <li class="nav-item">
                                     <a class="nav-link active" data-toggle="tab" href="#htmlTab" onclick="CheckSortableHtml()">HTML Field</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#databaseTab" onclick="CheckSortableDatabase()">Database Field</a>
+                                <li class="nav-item d-none">
+                                    <a class="nav-link"  data-toggle="tab" href="#databaseTab" onclick="CheckSortableDatabase()">Database Field</a>
                                 </li>
                             </ul>
 
@@ -150,99 +149,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade needModal_wrap" id="NeedModal" tabindex="-1" role="dialog" aria-labelledby="NeedModalLabel">
-    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 80%;height:90%">
-        <div class="modal-content" style="height:90%">
-            <div class="modal-header">
-                <h5 class="modal-title">ADD DEFAULT NEEDS & GOALS</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="needModalContent">
-                    <div class="tab_heading">
-                        <div class="searchBoxWrap">
-                            <h5> Needs (<span class="needCount">0</span>)</h5>
-                            <div class="searchbox">
-                                <input type="text" placeholder="Search..." onkeyup="SearchNeedAndGoal(this)" autocomplete="off">
-                                <button type="submit"><i class="fas fa-search"></i></button>
-                            </div>
-                            <a class="addNewNeed" href="javascript:{}" onclick="NeedFocus()"><i class="fa fa-plus"></i></a>
-                        </div>
 
-                    </div>
-                    <div class="needListOuter scroll">
-                        <div class="text-center"></div>
-                        <ul class="needsList">
-                            <li class="hasChild opened">
-                                <div class="needItem">
-                                    <div>This is the first Need. Please do it asap.</div>
-
-                                    <i class="down_arrow fa fa-chevron-down"></i>
-                                    <div class="itemHoverActions">
-                                        <a href="#"><i class="fas fa-level-up-alt"></i></a>
-                                        <a href="#" class="delete_item"><i class="fa fa-trash"></i></a>
-                                    </div>
-                                </div>
-                                <ul class="goalsList">
-                                    <li>
-                                        <div class="needItem">
-                                            <div>This is the first Goal. Please do it asap.</div>
-
-                                            <div class="itemHoverActions">
-                                                <a href="#"><i class="fa fa-clipboard-check"></i></a>
-                                                <a href="#" class="delete_item"><i class="fa fa-trash"></i></a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="needItem">
-                                            <div>This is the first Goal. Please do it asap.</div>
-
-                                            <div class="itemHoverActions">
-                                                <a href="#"><i class="fa fa-clipboard-check"></i></a>
-                                                <a href="#" class="delete_item"><i class="fa fa-trash"></i></a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="addNewNeedGoal">
-                                            <div class="plusIcon"><i class="fa fa-plus"></i></div>
-                                            <input type="text" name="Add New Need" placeholder="Add New Goal...">
-                                        </div>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <div class="needItem">
-                                    <div>This is the first Need. Please do it asap.</div>
-                                    <i class="down_arrow fa fa-chevron-down"></i>
-                                    <div class="itemHoverActions">
-                                        <a href="#"><i class="fa fa-clipboard-check"></i></a>
-                                        <a href="#" class="delete_item"><i class="fa fa-trash"></i></a>
-                                    </div>
-                                </div>
-                            </li>
-
-                            <li class="last-child">
-                                <div class="addNewNeedGoal">
-                                    <div class="plusIcon"><i class="fa fa-plus"></i></div>
-                                    <textarea class="txtNeed"  maxlength="1000" placeholder="add need" onkeyup="textAreaAdjust(this)" onblur="NeedOnBlur(event)"></textarea>
-                                </div>
-                            </li>
-                        </ul>
-
-                    </div>
-                </div>
-
-
-
-            </div>
-
-        </div>
-    </div>
-</div>
 <div class="modal fade" id="PreviewModal" tabindex="-1" role="dialog" aria-labelledby="PreviewModalTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered preview-modal" role="document" style="max-width: 80%;height:90%">
         <div class="modal-content" style="height:90%">
@@ -253,10 +160,10 @@
                 </button>
             </div>
             <div class="modal-body preview-body scroll">
-                
+
             </div>
             <div class="modal-footer preview-footer">
-               
+
             </div>
         </div>
     </div>
@@ -266,18 +173,22 @@
 @section scripts{
     <script src="~/Scripts/jquery-ui.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.js"></script>
-    <script src="~/Scripts/Careplan/htmlcontrol.js"></script>
-    <script src="~/Scripts/Careplan/databasecontrol.js"></script>
-    <script src="~/Scripts/Careplan/NeedAndGoal.js"></script>
+    <script src="~/Scripts/Program/htmlcontrol.js"></script>
+    <script src="~/Scripts/Program/databasecontrol.js"></script>
     <script>
         var templateId =@ViewBag.TemplateId;
         var isModify = '@ViewBag.IsModify';
         var programName = '@ViewBag.ProgramName';
-        var programId = '@ViewBag.ProgramId';
+        var programId = '@ViewBag.ProgramID';
         var userId = '@Session["userid"]';
         var templateName = '@ViewBag.TemplateName';
-        var isBaseTemplate='@ViewBag.IsBaseTemplate';
+        var isBaseTemplate = '@ViewBag.IsBaseTemplate';
+        var templateTable = '@ViewBag.TemplateTable'
        
+        var TemplatePath='@ViewBag.TemplatePath'
+
+
     </script>
+
 }
 

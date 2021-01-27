@@ -18,7 +18,7 @@ namespace RootsOfHealth.Controllers
 
 
         // GET: RootsOfHealth
-        public ActionResult Add(string patientId = "0", string CurrentTab=null)
+        public ActionResult Add(string patientId = "0", string CurrentTab=null,string Subtab=null)
         {
             double sub;
             Common objCommon = new Common();
@@ -872,6 +872,7 @@ namespace RootsOfHealth.Controllers
                 objCommon.BindEducationOptions(ref patientdetailobj);
                 objCommon.BindLegalOptions(ref patientdetailobj);
                 objCommon.BindSocialRecreationalOptions(ref patientdetailobj);
+                patientdetailobj.Programs = new List<ProgramsForPatientBO>();
 
             }
 
@@ -879,6 +880,7 @@ namespace RootsOfHealth.Controllers
 
             ViewBag.PatientID = patientId;
             ViewBag.CurrentTab = CurrentTab;
+            ViewBag.CurrentSubtab = Subtab;
             Response.Cookies["patientid"].Value = patientId.ToString();
             Response.Cookies["patientid"].Expires = DateTime.Now.AddDays(1);
             return View(patientdetailobj);

@@ -64,16 +64,19 @@
 <!-- Programs Tab start here  -->
 
 @{
-    Html.RenderPartial("~/Views/Shared/Patient/_PatientPrograms.cshtml", Model.PatientProgram);
+    Html.RenderPartial("~/Views/Shared/Patient/_PatientPrograms.cshtml", Model);
 }
 
 <!-- Programs Tab end here  -->
 
 
-
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
 @*<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>*@
 @*<script src="~/Scripts/jquery-ui.min.js"></script>*@
 <script>
+   var  programUploadedPath="@System.Web.Configuration.WebConfigurationManager.AppSettings["ProgramUploadPath"]";
+    var _userID="@Session["userid"]";
+
     $('#datepicker').datepicker({
         uiLibrary: 'bootstrap'
     })
@@ -617,6 +620,17 @@
 
       $(document).ready(function () {
           //notification changes start here--------------------
+
+          $('#Programs-tab').click(function () {
+              
+                if ($("#tabPills .nav-item").length > 0) {
+             
+              var FirstTab = $("#tabPills .nav-item a").get(0);
+                    
+              FirstTab.click()
+          }
+          })
+        
 
           @if (Model.ScheduleDate.IsHousingDue=="Red")
         {
@@ -1432,12 +1446,16 @@
         $('#btnAudit').css('display', 'none');
         $('#btnFood').css('display', 'none');
         $('#btnMental').css('display', 'none');
-        $('#btnClinic').css('display', 'none');
-        $('#btnDream').css('display', 'none');
-        $('#btnOUOnly').css('display', 'none');
-        $('#btnPeralta').css('display', 'none');
+        //$('#btnClinic').css('display', 'none');
+        //$('#btnDream').css('display', 'none');
+        //$('#btnOUOnly').css('display', 'none');
+        //$('#btnPeralta').css('display', 'none');
 
+          $('.btnprogramsave').each(function (index, element) {
+              
+              $(element).css('display', 'none');
 
+          })
 
         var lblCalRec = $('#lblCalRec').html().trim();
         if (lblCalRec == "") {
@@ -2205,9 +2223,656 @@
           $(".createtemplate").find(".form-control,.custom-control-label,.custom-control-input").show();
     });
 
+    //===============Proceed functions=======//
+
+   function  PrintProgram(_ProgramName) {
+
+       let htmlToPrint = $("#" + _ProgramName + "render-basicform")[0].outerHTML
+       let originalBodyContent = document.body.innerHTML;
+       let Programtitle = $('#a' + _ProgramName).text();
+       
+       document.body.innerHTML = htmlToPrint;
+       $('body').addClass('colorPrint');
+       $('body').prepend('<h4 class="text-center mb-4">' + Programtitle + '</h4>');
+       $('body>div .basecontentspan').hide();
+      window.print();
+      document.body.innerHTML = originalBodyContent;
+       $('body').removeClass('colorPrint')
+    }
 
 
 
+
+    var programName = '';
+  
+    $("#tabPills .nav-item a").on('click', function (e) {
+               $('#Programs .tab-pane').each(function (index, item) {
+                    $(item).removeClass("active show");
+               });   
+        
+        var item = $(this);
+        var _programId = item.attr("data-ProgramID")
+        programName = item.attr("data-programName");
+        var _patientID = item.attr("data-PatientID");
+        var _IsSaved = item.attr("data-Saved");
+        
+        if (_IsSaved == 'True') {
+            $('#' + programName + 'only').find('.btnprogramPrint').css('display','block');
+        }
+        else {
+            $('#' + programName + 'only').find('.btnprogramPrint').css('display','none');
+        }
+         $('#' + programName + 'only').addClass('active show');
+             var _templateID = item.attr("data-TemplateID");
+        if ($("#" + programName + "render-basicform").html().length > 0) {
+                 return;
+             } ;
+        if (_IsSaved == 'False') {
+            LoadProgramTemplate(_programId, _patientID)
+        }
+        else {
+            EditPrograms(_programId,_templateID,_patientID)
+        }
+       
+    })
+
+
+ function LoadProgramTemplate(_programId,_patientID) {  
+            
+    var programid = _programId;      
+     $.ajax({
+         type: "GET",
+         url: '/program/GetProgramTemplateByProgramId?ProgramId=' + programid,
+         contentType: 'application/json; charset=UTF-8',
+         dataType: "json",
+         async: false,
+         success: function (result) {
+             if (result.html == "") {
+                 toastr.error("No template found");
+             } else {
+
+                 $("#" + programName + "render-basicform").html("").append(result.html);
+                 tableName = result.tableName;
+                 templateid = result.TemplateId;
+                
+                 if ($("#" + programName + "render-basicform").find(".basecontentarea").length > 0) {
+                     getProgramHeaderAndFooter();
+                    
+                 }
+                
+                 $("#" + programName + "render-basicform").find(".event-btn-right").remove();
+                 $("#" + programName + "render-basicform").find(".ck-editor-header").remove();
+                 $("#" + programName + "render-basicform").find(".question-container").parent().css("border", "none");
+                 $("#" + programName + "render-basicform").find(".dragresize").find(".question-container").remove();
+                 $("#" + programName + "render-basicform").find(".dragresize").find(".bootom-form-row").css({ "padding": "7px 0px", "margin": "0" });
+                 $("#" + programName + "render-basicform").find(".html-content").prev().css("display", "none");
+                 $("#" + programName + "render-basicform").find(".html-content").parent().parent().parent().addClass("left-control");
+                 $("#" + programName + "render-basicform").find(".f-g-left").each(function (index, item) {
+                     $(item).parent().parent().addClass("left-control");
+                 });
+                 // toogleProgramToolTip();     
+                  
+                 $("textarea.program-control,textarea.base-control").summernote({
+                     toolbar: [
+                         ['para', ['ul', 'ol', 'paragraph']],
+                         ['style', ['bold', 'italic', 'underline', 'clear']],
+                         ['font', ['strikethrough', 'superscript', 'subscript']],
+                     ],
+                     placeholder: "Type here",
+                     callbacks: {
+                         onInit: function (e) {
+                             this.placeholder
+                                 ? e.editingArea.find(".note-placeholder").html(this.placeholder)
+                                 : e.editingArea.remove(".note-placeholder")
+                         }
+                     },
+                     height: 150,
+                 });
+                 makeProgramBasicInfoReadonly()
+                   if ($("#" + programName + "render-basicform").find(".basecontentarea").length > 0) {
+                     getProgramBaseFieldData(_patientID)
+                 }
+                 
+                
+             }
+         },
+        error: function (e) {
+             toastr.error("Something happen Wrong");
+             $(".loaderOverlay").hide();
+         }
+     });
+        }
+
+
+  function getProgramHeaderAndFooter() {
+    $.ajax({
+        type: "GET",
+        url: Apipath + '/api/PatientMain/getprogrambasetemplateid',
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        async: false,
+        success: function (result) {
+            switch (result.TemplateID ) {
+                case -1:
+                    break;
+                default:
+                    basetemplateid = result;
+                    $.ajax({
+                        type: "GET",
+                        url: '/program/GetFormHtmlById?Id=' + result.TemplateID,
+                        contentType: 'application/json; charset=UTF-8',
+                        dataType: "json",
+                        async: false,
+                        success: function (result) {
+                            var baseHtml = parseHTML(result.html);
+                            var baseHeader = $(baseHtml).find(".baseheader").html();
+                            var baseFooter = $(baseHtml).find(".basefooter").html();
+                            $("#"+programName+"render-basicform").find(".baseheader").html("").append(baseHeader);
+                            $("#"+programName+"render-basicform").find(".basefooter").html("").append(baseFooter);
+                        },
+                        error: function (e) {
+                            toastr.error("Something happen Wrong");
+                            $(".loaderOverlay").hide();
+                        }
+                    });
+                    break;
+            }
+        },
+        error: function (e) {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });
+        }
+
+//         function toogleProgramToolTip() {
+//        $("#"+programName+"render-basicform").find('span.tooltipicon').tooltip({
+//            trigger: "click",
+//            html: true,
+//            container: 'body'
+//        });
+//    $("#"+programName+"render-basicform").find('span.tooltipicon').on('show.bs.tooltip', function () {
+//        $("#"+programName+"render-basicform").find('span.tooltipicon').not(this).tooltip('hide');
+//    });
+//    $('body').on('click', function (e) {
+//        if ($(e.target).data('toggle') !== 'tooltip' && $(e.target).parents('[data-toggle="tooltip"]').length === 0
+//            && $(e.target).parents('.tooltip.in').length === 0) {
+//            (($('[data-toggle="tooltip"]').tooltip('hide').data('bs.tooltip') || {}).inState || {}).click = false;
+//        }
+//    });
+//}
+
+  
+    //Edit functions //
+
+
+
+        function EditPrograms(ProgramID, TemplateID, _patientID)
+        {
+        getProgramBasicFormHtml(ProgramID,TemplateID)
+        getProgramBasicFormValue(ProgramID,TemplateID,_patientID)
+        }
+
+     function getProgramBasicFormHtml(ProgramID,id) {
+            
+    $(".loaderOverlay").show();
+    $.ajax({
+        type: "GET",
+        url: '/program/GetProgramTemplateById?TemplateId=' + id,
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        async: false,
+        success: function (result) {
+            ;
+            if (result.html == "") {
+                toastr.error("No template found");
+            } else {
+                $("#"+programName+"render-basicform").html("").append(result.html);
+                tableName = result.tableName;
+                templateid = id;
+                if ($("#" + programName + "render-basicform").find(".basecontentarea").length > 0) {
+                    
+                    getBasehtmlByProgramId(ProgramID);   
+                  
+                }
+                 $("#"+programName+"render-basicform").find(".event-btn-right").remove();
+               $("#"+programName+"render-basicform").find(".ck-editor-header").remove();
+                $("#"+programName+"render-basicform").find(".question-container").parent().css("border", "none");
+                $("#"+programName+"render-basicform").find(".dragresize").find(".question-container").remove();
+                $("#"+programName+"render-basicform").find(".dragresize").find(".bootom-form-row").css({ "padding": "7px 0px", "margin": "0" });
+                $("#"+programName+"render-basicform").find(".html-content").prev().css("display", "none");
+                 $("#"+programName+"render-basicform").find(".html-content").parent().parent().parent().addClass("left-control");
+                 $("#"+programName+"render-basicform").find(".f-g-left").each(function (index, item) {
+                    $(item).parent().parent().addClass("left-control");
+                });               
+              //  toogleProgramToolTip();
+              
+                $("textarea.program-control,textarea.base-control").summernote({
+                    toolbar: [
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['style', ['bold', 'italic', 'underline', 'clear']],
+                        ['font', ['strikethrough', 'superscript', 'subscript']],
+                    ],
+                    placeholder: "Type here",
+                    callbacks: {
+                        onInit: function (e) {
+                            this.placeholder
+                                ? e.editingArea.find(".note-placeholder").html(this.placeholder)
+                                : e.editingArea.remove(".note-placeholder")
+                        }
+                    },
+                    height: 150,
+                });
+            }
+        },
+        error: function (e) {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });
+    $(".loaderOverlay").hide();
+    }
+
+
+
+   function getBasehtmlByProgramId(programid) {
+    $.ajax({
+        type: "GET",
+        url: Apipath + '/api/PatientMain/getprogrambasetemplateidbyprogramid?ProgramID=' + programid,
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        async: false,
+        success: function (result) {
+            
+            switch (result) {
+                case 0:
+                    break;
+                default:
+                    basetemplateid = result;
+                    $.ajax({
+                        type: "GET",
+                        url: '/program/GetProgramTemplateById?TemplateId=' + result,
+                        contentType: 'application/json; charset=UTF-8',
+                        dataType: "json",
+                        async: false,
+                        success: function (result) {
+                            
+                            if (result.html != "") {
+                                var baseHtml = parseHTML(result.html);
+                                var baseHeader = $(baseHtml).find(".baseheader").html();
+                                var baseFooter = $(baseHtml).find(".basefooter").html();
+                                $("#"+programName+"render-basicform").find(".baseheader").html("").append(baseHeader);
+                                $("#"+programName+"render-basicform").find(".basefooter").html("").append(baseFooter);
+                            }
+                        },
+                        error: function (e) {
+                            toastr.error("Something happen Wrong");
+                            $(".loaderOverlay").hide();
+                        }
+                    });
+                    break;
+            }
+        },
+        error: function (e) {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });
+}
+
+
+
+   function getProgramBasicFormValue(programid, templateid,_patientID) {
+        $(".loaderOverlay").show();
+        
+    $.ajax({
+        type: "GET",
+        url: Apipath + '/api/PatientMain/getfieldvaluebyprogramid?ProgramId=' + programid + "&TemplateId="+templateid+ "&PatientId="+_patientID,
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        async: false,
+        success: function (result) {
+            
+            if (result.length) {
+                var fields = result[0];
+                var value = "";
+                $("#"+programName+"render-basicform").find(".program-control,input.custom-control-input").each(function (index, item) {
+                    if ($(item).is("input")) {
+                        switch ($(item).attr("type")) {
+                            case "radio":
+                            case "checkbox":
+                                if ($(item).hasAttr("data-column") && $(item).closest("div.inputContent").parent().hasClass("program-control")) {                                    
+                                    value = fields[$(item).attr("data-column")];
+                                    
+                                    if (value == null || value == "") {
+                                       
+                                            $(item).closest("div.inputContent").find("label.label-program").html("").show();
+                                            $(item).closest("div.inputContent").find("div").first().hide();
+                                        
+                                    } else {
+                                        var valueArr = value.split(',');
+                                        var valueTxt = "";
+                                      
+                                            for (var i = 0; i < valueArr.length; i++) {
+                                                valueTxt += $(item).closest("div.inputContent").find(`input[value=${valueArr[i]}]`).next().text() + ", ";
+                                            }
+                                            valueTxt = valueTxt.slice(0, -2);
+                                            $(item).closest("div.inputContent").find("label.label-program").html("").append(valueTxt).show();
+                                            $(item).closest("div.inputContent").find("div").first().hide();  
+                                         
+                                    }
+                                }
+                                break;
+                            case "file":
+                                getProgramModuleFiles(programid, $(item).attr("id"),_patientID); 
+                               
+                                 $(item).hide();
+                                
+                                break;
+                            default:
+                                
+                                value = fields[$(item).attr("data-column")];
+                              
+                                    $(item).next().html("").append(value).show();
+                                    $(item).hide();
+                                
+                                break;
+                        }
+                    }
+                    if ($(item).is("select")) {
+                        value = fields[$(item).attr("data-column")];
+                        
+                            value = $(item).find(`option[value=${value}]`).text();
+                            $(item).next().html("").append(value).show();
+                            $(item).hide();
+                        
+                    }
+                    if ($(item).is("textarea")) {
+                        value = fields[$(item).attr("data-column")];
+                      
+                            $(item).parent().find("label.label-program").html("").append(value).show();
+                            $(item).next().hide();
+                        
+                    }
+                });                
+            }
+            if ($("#" + programName + "render-basicform").find(".basecontentarea").length > 0) {
+                getProgramBaseFieldData( _patientID);
+            }
+        }, error: function (e) {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    })
+    $(".loaderOverlay").hide();
+    }
+
+
+
+
+     function getProgramBaseFieldData(_patientID) {
+       $.ajax({
+        type: "GET",
+        url: Apipath + '/api/PatientMain/getprogrambasefieldbypatientid?Patientid=' +_patientID,
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        async: false,
+        success: function (result) {
+            if (result.length) {
+                var baseFields = result[0];
+                var value = "";
+                $("#"+programName+"render-basicform").find(".form-control.base-control,input.custom-control-input").each(function (index, item) {
+                    if ($(item).is("input")) {
+                        switch ($(item).attr("type")) {
+                            case "radio":
+                            case "checkbox":
+                                
+                                if ($(item).hasAttr("data-column")) {
+                                    if ($(item).closest("div.inputContent").parent().hasClass("base-control")) {
+                                        value = baseFields[$(item).attr("data-column")];
+                                        if (value == null || value == "" || value == undefined) {
+                                            $(item).closest("div.inputContent").find("label.label-base").html("").show();
+                                                $(item).closest("div.inputContent").find("div").first().hide();                                          
+                                        } else {
+                                            var valueArr = value.split(',');
+                                            var valueTxt = "";
+                                             for (var i = 0; i < valueArr.length; i++) {
+                                                    valueTxt += $(item).closest("div.inputContent").find(`input[value=${valueArr[i]}]`).next().text() + ", ";
+                                                }
+                                                valueTxt = valueTxt.slice(0, -2);
+                                                $(item).closest("div.inputContent").find("label.label-base").html("").append(valueTxt).show();
+                                                $(item).closest("div.inputContent").find("div").first().hide(); 
+                                        }
+                                    }
+                                }
+                                break;
+                            case "file":
+                              
+                                    getProgramBaseFilesReadonly($(item).attr("id"),_patientID);
+                                    $(item).hide();
+                                
+                                break;
+                            default:
+                                
+                                value = baseFields[$(item).attr("data-column")];
+                               
+                                    $(item).next().html("").append(value).show();
+                                    $(item).hide();
+                                
+                                break;
+                        }
+                    }
+                    if ($(item).is("select")) {
+                        value = baseFields[$(item).attr("data-column")];
+                       
+                            value = $(item).find(`option[value=${value}]`).text();
+                            $(item).next().html("").append(value).show();
+                            $(item).hide();
+                        
+                    }
+                    if ($(item).is("textarea")) {
+                        value = baseFields[$(item).attr("data-column")];
+                       
+                            $(item).parent().find("label.label-base").html("").append(value).show();
+                            $(item).next().hide();
+                        
+                    }                    
+                });
+            }
+        },
+        error: function (e) {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });
+    }
+
+
+    function getProgramBaseFilesReadonly(Id, _patientId) {
+        
+    $.ajax({
+        type: "GET",
+        url: Apipath + '/api/PatientMain/getprogrambasefilesbypatientid?PatientId=' + _patientId + '&controlid=' + Id,
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        async: false,
+        success: function (result) {
+            if (result != "" && result != null) {
+                
+                var filesArr = result.Files.split(',');
+                var namesArr = result.FileNames.split(',');
+                var selectedFiles = `<ul class="file_uploaded_list onlylinkslist">`;
+                var ext = "";
+                for (var i = 0; i < filesArr.length; i++) {
+                     ext = filesArr[i].split('.').pop();
+                    switch (ext) {
+                        case "png":
+                        case "jpg":
+                        case "jpeg":
+                            selectedFiles += '<li><img style="max-width: 90px;margin-right: 10px;" src="/' + programUploadedPath + filesArr[i] + '" alt="Care Plan Upload"><span><a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></span></li>';
+                            break;
+                         default:
+                            selectedFiles += '<li><a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></li>';
+                            break;
+                    }
+                    
+                }
+                selectedFiles += `</ul>`;
+                $("#"+programName+"render-basicform").find('#'+Id).next().next().html("").append(selectedFiles);           
+            }
+        }, error: function (e) {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });
+}
+
+
+
+    //function getProgramBaseFiles(Id,PatientId) {
+    //$.ajax({
+    //    type: "GET",
+    //    url: Apipath + '/api/PatientMain/getprogrambasefilesbypatientid?PatientId=' + PatientId + '&controlid=' + Id +'&Programid='+ProgramId,
+    //    contentType: 'application/json; charset=UTF-8',
+    //    dataType: "json",
+    //    async: false,
+    //    success: function (result) {
+    //        if (result != "" && result != null) {
+    //            var filesArr = result.Files.split(',');
+    //            var namesArr = result.FileNames.split(',');
+    //            var selectedFiles = `<div class="label">File Names</div><ul class="file_uploaded_list file_uploaded_inputs">`;
+    //            for (var i = 0; i < filesArr.length; i++) {
+    //                selectedFiles += `<li><input class="form-control" data-file="${filesArr[i]}" placeholder="Enter file name here" type="text" value="${namesArr[i]}"/>`
+    //                selectedFiles += '<a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a><span onclick="removeUpload(this)" class="removeUploadFile"><i class="fa fa-times"></i></span></li>';
+    //            }
+    //            selectedFiles += "</ul>";
+    //            $("#" + Id).next().next().html("").append(selectedFiles);
+    //        } else {
+    //            $("#" + Id).next().next().html("");
+    //        }
+    //    },
+    //    error: function () {
+    //        toastr.error("Something happen Wrong");
+    //        $(".loaderOverlay").hide();
+    //    }
+    //});
+    //}
+
+
+
+    //files
+   
+function getProgramModuleFiles(programid, Id,_patientID) {
+    $.ajax({
+        type: "GET",
+        url: Apipath + '/api/PatientMain/GetFilesByProgramID?Programid=' + programid +'&controlid='+Id+'&patientid='+_patientID,
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        async: false,
+        success: function (result) {
+           
+            if (result != "" && result != null) {
+                var filesArr = result.Files.split(',');
+                var namesArr = result.FileNames.split(',');
+                var selectedFiles = "";
+                selectedFiles = `<ul class="file_uploaded_list onlylinkslist">`; 
+                    var ext = "";
+                    for (var i = 0; i < filesArr.length; i++) {
+                         ext = filesArr[i].split('.').pop();
+                        switch (ext) {
+                            case "png":
+                            case "jpg":
+                            case "jpeg":                                
+                                selectedFiles += '<li><img style="max-width: 90px;margin-right: 10px;" src="/' + programUploadedPath + filesArr[i] + '" alt="Program Upload"><span><a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></span></li>';
+                                break;
+                            default:
+                                selectedFiles += '<li><a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></li>';
+                                break;
+                        }
+                        
+                    }
+                    selectedFiles += `</ul>`; 
+                $("#"+programName+"render-basicform").find("#"+ Id).next().next().html("").append(selectedFiles);         
+            }
+        }, error: function (e) {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });
+}
+   
+
+
+
+    function makeProgramBasicInfoReadonly() {
+   // $("#ddlcareplanstatus").addClass("show_careplanstatus").val("1");
+    var value = "";
+   // isupdateProgramFields = false;
+    $("a.need-nav,a.summary-nav").parent().removeClass("disabled");
+    $("#"+programName+"render-basicform").find(".program-control,.base-control").each(function (index, item) {    
+        if ($(item).is("div")) {
+            var selectedValues = $.map($(item).find("input:checked"), function (n, i) {
+                return n.value;
+            }).join(',');
+            if (selectedValues == "") {
+                if ($(item).hasClass("base-control")) {
+                    $(item).find("label.label-base").html("").show();
+                    $(item).find("div.inputContent").find("div").first().hide();
+                } else {
+                    $(item).find("label.label-program").html("").show();
+                    $(item).find("div.inputContent").find("div").first().hide();
+                }               
+            } else {
+                var valueArr = selectedValues.split(',');
+                var valueTxt = "";
+                for (var i = 0; i < valueArr.length; i++) {
+                    valueTxt += $(item).find(`input[value=${valueArr[i]}]`).next().text() + ", ";
+                }
+                valueTxt = valueTxt.slice(0, -2);
+                if ($(item).hasClass("base-control")) {
+                    $(item).find("label.label-base").html("").append(valueTxt).show();
+                    $(item).find("div.inputContent").find("div").first().hide();
+                } else {
+                    $(item).find("label.label-program").html("").append(valueTxt).show();
+                    $(item).find("div.inputContent").find("div").first().hide();
+                }    
+                
+            }           
+        }
+        if ($(item).is("input")) {
+            switch ($(item).attr("type")) {
+                case "file":                  
+                    if ($(item).hasClass("base-control") && $(item).hasAttr("data-column")) {
+                        getBaseFilesReadonly($(item).attr("id"));
+                    } else if ($(item).hasClass("program-control") && $(item).hasAttr("data-column")) {
+                        getProgramFiles(careplanid, $(item).attr("id"))
+                    }
+                    $(item).hide();
+                    break;
+                default:
+                    value = $(item).val();
+                    $(item).next().html("").append(value).show();                 
+                    $(item).hide();
+                    break;
+            }
+        }
+        if ($(item).is("select")) {
+            value = $(item).find('option:selected').text();
+            $(item).next().html("").append(value).show();
+            $(item).hide();
+        }
+        if ($(item).is("textarea")) {
+            value = $(item).summernote('code');
+            if ($(item).hasClass("base-control")) {
+                $(item).parent().find("label.label-base").html("").append(value).show();
+            } else {
+                $(item).parent().find("label.label-program").html("").append(value).show();
+            }            
+            $(item).next().hide();
+        }
+    });
+}
+    
 
 
 </script>

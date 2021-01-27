@@ -1,12 +1,13 @@
 ﻿var new_id = 0;
 var newid = "";
+var connect = '#droppable';
 $(function () {
-    HtmlControlDragnDrop();
+
     if (sessionStorage.getItem("Id") === null) {
         GetFormHtmlById(templateId);
-    } else {
+    }
+    else {
         GetFormHtmlById(sessionStorage.getItem("Id"));
-        $("#hdnTemplateId").val(sessionStorage.getItem("Id"));
     }
 });
 function CheckSortableHtml() {
@@ -15,17 +16,17 @@ function CheckSortableHtml() {
 }
 //HtmlControlDragnDrop=>use for drag html control from left list and drop on right dropable area
 function HtmlControlDragnDrop() {
-
     $('#control-box li').draggable({
-        connectToSortable: '.baseheader,.basefooter',
+        connectToSortable: connect,
         helper: function () {
             var cloned = $(this).clone();
             cloned.attr('id', (++new_id).toString());
             return cloned;
         },
+        containment: "#droppable",
         revert: "invalid"
-    });
-    $(".baseheader,.basefooter").sortable({
+    })
+    $(connect).sortable({
         connectWith: "#control-box",
         containment: "#droppable",
         placeholder: "highlight",
@@ -43,7 +44,7 @@ function HtmlControlDragnDrop() {
         receive: function (event, ui) {
             var draggableId = ui.item.attr("data-type");
             var currentid = $(ui.helper).clone().attr('id')
-             newid = draggableId + currentid;
+            newid = draggableId + currentid;
             while (true) {
                 if ($(document.getElementById(newid)).length) {
                     currentid = parseInt(currentid) + 1;
@@ -61,7 +62,7 @@ function HtmlControlDragnDrop() {
                     $(this).find("li[data-type='label']").replaceWith(str);
                     break;
                 case "checkbox-group":
-                    var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group base-control" id="' + newid + '">' +
+                    var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group program-control" id="' + newid + '">' +
                         '<label class="checkbox-group "><span class="title">Check Box (Multiple)</span><span class="desc"></span></label>' +
                         '<div class="custom-control custom-checkbox  d-inline-block mr-2">' +
                         '<input  type="checkbox" class="custom-control-input" name="checkbox" value="1" id="checkbox1">' +
@@ -69,7 +70,7 @@ function HtmlControlDragnDrop() {
                         '<div class="custom-control custom-checkbox  d-inline-block mr-2">' +
                         '<input type="checkbox" class="custom-control-input"  name="checkbox" value="2" id="checkbox2">' +
                         '<label class="custom-control-label" for="checkbox2">option 2</label></div>' +
-                        '</div>' +                      
+                        '</div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
                         '</div>';
@@ -78,7 +79,7 @@ function HtmlControlDragnDrop() {
                 case "date":
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
                         '<label class=""><span class="title">Label</span><span class="desc"></span></label>' +
-                        '<div class="inputContent"><input id="' + newid + '"  type="date" class="form-control base-control" id=""/><label class="label-base"></label></div>' +
+                        '<div class="inputContent"><input id="' + newid + '"  type="date" class="form-control program-control" id=""/><label class="label-program"></label></div>' +
                         '</div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
@@ -88,7 +89,7 @@ function HtmlControlDragnDrop() {
                 case "file":
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
                         '<label class=""><span class="title">Label</span><span class="desc"></span></label >' +
-                        '<div class="inputContent"><input id="' + newid + '" onchange="previewOnChange(this)"  type="file" class="form-control base-control" id=""/><label class="label-base"></label>' +
+                        '<div class="inputContent"><input id="' + newid + '" onchange="previewOnfileChange(this)" type="file" class="form-control program-control" id=""/><label class="label-program"></label>' +
                         '<div class="' + newid + '_files uploaded_filewrap"></div>' +
                         '</div></div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
@@ -100,7 +101,7 @@ function HtmlControlDragnDrop() {
                 case "number":
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
                         '<label class=""><span class="title">Label</span><span class="desc"></span></label>' +
-                        '<div class="inputContent"><input id="' + newid + '"  type="number" class="form-control base-control" id=""/><label class="label-base"></label></div>' +
+                        '<div class="inputContent"><input id="' + newid + '"  type="number" class="form-control program-control" id=""/><label class="label-program"></label></div>' +
                         '</div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
@@ -108,7 +109,7 @@ function HtmlControlDragnDrop() {
                     $(this).find("li[data-type='number']").replaceWith(str);
                     break;
                 case "radio-group":
-                    var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group base-control"  id="' + newid + '">' +
+                    var str = '<div class="dragresize col-md-12"><div class="frmbtn"><div class="form-group program-control"  id="' + newid + '">' +
                         '<label class="radiobox-group "><span class="title">Radio</span><span class="desc"></span></label>' +
                         '<div class="custom-control custom-radio d-inline-block mr-2">' +
                         '<input  type="radio" class="custom-control-input" name="radio" value="1" id="radio1">' +
@@ -116,7 +117,7 @@ function HtmlControlDragnDrop() {
                         '<div class="custom-control custom-radio d-inline-block mr-2">' +
                         '<input type="radio" class="custom-control-input"  name="radio" value="2" id="radio2">' +
                         '<label class="custom-control-label" for="radio2">option 2</label></div>' +
-                        '</div>' +                       
+                        '</div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
                         '</div>';
@@ -125,12 +126,12 @@ function HtmlControlDragnDrop() {
                 case "select":
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
                         '<label class=""><span class="title">Select</span><span class="desc"></span></label>' +
-                        '<div class="inputContent"><select id="' + newid + '" class="form-control base-control"></div>' +                       
+                        '<div class="inputContent"> <select id="' + newid + '" class="form-control program-control">' +
                         '<option  value="1">option 1</option>' +
                         '<option  value="2">option 2</option>' +
                         ' </select>' +
-                        '<label class="label-base"></label>'+
-                        '</div>' +
+                        '<label class="label-program"></label>' +
+                        '</div></div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
                         '</div>';
@@ -140,7 +141,7 @@ function HtmlControlDragnDrop() {
                     var str = '<div class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
                         '<label class=""><span class="title">Label</span><span class="desc"></span ></label>' +
 
-                        '<div class="inputContent"><input id="' + newid + '"  type="text" class="form-control base-control" id=""/><label class="label-base"></label></div>' +
+                        '<div class="inputContent"><input id="' + newid + '"  type="text" class="form-control program-control" id=""/><label class="label-program"></label></div>' +
                         '</div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
@@ -152,45 +153,42 @@ function HtmlControlDragnDrop() {
                         '<label class=""><span class="title">Textarea</span><span class="desc"></span ></label>' +
                         '<div class="inputContent"><div class="ck-editor">' +
                         '<div class="ck-editor-header"><ul><li><i class="fa fa-list-ul" aria-hidden="true"></i></li><li><i class="fa fa-list-ol" aria-hidden="true"></i></li><li><i class="fa fa-align-left" aria-hidden="true"></i></li><li><i class="fa fa-bold" aria-hidden="true"></i></li><li><i class="fa fa-italic" aria-hidden="true"></i></li><li><i class="fa fa-underline" aria-hidden="true"></i></li><li><i class="fa fa-eraser" aria-hidden="true"></i></li></ul></div>' +
-                        '<textarea id="' + newid + '"  class="form-control base-control" name="my-textarea"></textarea>' +
-                        '<label class="label-base"></label>' +
+                        '<textarea id="' + newid + '"  class="form-control program-control" name="my-textarea"></textarea>' +
+                        '<label class="label-program"></label>' +
                         '</div></div></div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
                         '<button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div>' +
                         '</div>';
                     $(this).find("li[data-type='textarea']").replaceWith(str);
-
                     break;
-
             }
         },
         stop: function (event, ui) {
             $('#droppable').find("input.form-control,textarea.form-control").on('input', function (e) {
                 $(this).val('');
             });
-            $('input[type="checkbox"],input[type="radio"]').click(function (event) {
+            $('#droppable').find('input[type="checkbox"],input[type="radio"]').click(function (event) {
                 var $checkbox = $(this);
                 setTimeout(function () {
                     $checkbox.removeAttr('checked');
                 }, 0);
-
                 event.preventDefault();
                 event.stopPropagation();
             });
-            if ($(".baseheader").find(".dragresize").length == 0) {
-                $(".baseheader").next("span.basecontentspan").show();
-            } else {
-                $(".baseheader").next("span.basecontentspan").hide();
-            }
 
-            if ($(".basefooter").find(".dragresize").length == 0) {
-                $(".basefooter").next("span.basecontentspan").show();
-            } else {
-                $(".basefooter").next("span.basecontentspan").hide();
+            if ($(".contentarea1").find(".dragresize").length > 0) {
+                $(".contentarea1").next("span.basecontentspan").hide();
+            }
+            if ($(".contentarea2").find(".dragresize").length > 0) {
+                $(".contentarea2").next("span.basecontentspan").hide();
+            }
+            if ($(".contentarea3").find(".dragresize").length > 0) {
+                $(".contentarea3").next("span.basecontentspan").hide();
             }
             if (ui.item.hasClass("ui-draggable") && ui.item.attr("data-index") === undefined) {
                 EditHtml(ui.item.attr("data-type"), newid);
             }
+
         }
     });
 }
@@ -255,7 +253,7 @@ function EditHtml(type, ID) {
     </div>`;
             popupString += '<div class="modal-row">' +
                 '<label class="required-asterisk">Label Text</label>' +
-                '<input  type="text"  class="form-control lbltext" value="' + labelText + '"/>' +
+                '<input  type="text"  class="form-control lbltext"  value="' + labelText + '"/>' +
                 '</div>';
 
 
@@ -301,14 +299,14 @@ function EditHtml(type, ID) {
             popupString += '<div class="modal-row">' +
                 '<label>Options<span class="addoptions" onclick="addoption(this)"><i class="fas fa-plus"></i></span></label>';
             popupString += '<div class="optionHeading"><label>Text</label><label>Value</label></div>';
-            $(controlId).find("input[type='checkbox']").each(function (index,item) {
+            $(controlId).find("input[type=checkbox]").each(function (index, item) {
                 popupString += '<div class="option-block">' +
                     '<div class="option-fields">' +
-                    `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${($(item).next().text() == "option 1" || $(item).next().text() == "option 2") && $(controlId).find("input.custom-control-input").first().attr("data-column") === undefined? "" : $(item).next().text()}"/>` +
-                    ' <input type="text" placeholder="Value" class="form-control option-value" disabled value="' + $(item).attr("value") + '"/>' +
+                    `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${($(item).next().text() == "option 1" || $(item).next().text() == "option 2") && $(controlId).find("input.custom-control-input").first().attr("data-column") === undefined ? "" : $(item).next().text()}"/>` +
+                    ' <input type="text" placeholder="Value" class="form-control option-value" disabled  value="' + $(item).attr("value") + '"/>' +
                     '</div>' +
                     '<div class="popup-event-btn">' +
-                    `<button class="event-btn file-remove" onclick="RemoveOption(this)" ${index==0?"disabled":""}><i class="fa fa-minus-circle" aria-hidden="true"></i></button >` +
+                    `<button  class="event-btn file-remove" onclick="RemoveOption(this)" ${index == 0 ? "disabled" : ""}><i class="fa fa-minus-circle" aria-hidden="true"></i></button >` +
                     '</div></div>'
             });
             popupString += '</div></div>';
@@ -348,7 +346,6 @@ function EditHtml(type, ID) {
                     }
 
                 }
-               
                 var allTextArray = $('.option-block').map(function () {
                     if ($(this).find("input.option-text").val().trim() != '')
 
@@ -394,7 +391,7 @@ function EditHtml(type, ID) {
                      <label class="custom-control-label" for="${ID + index}">${$(this).find("input.option-text").val().trim()}</label></div>
                      `;
                 });
-                option_data += "</div><label class='label-base'></label></div>";                
+                option_data += "</div><label class='label-program'></label></div>";
                 $(controlId).find("div").html("");
                 $(controlId).append(option_data);
                 $(controlId).find(".checkbox-group").find("span.title").html("").append($(".lbltext").val().trim());
@@ -962,14 +959,14 @@ function EditHtml(type, ID) {
             popupString += '<div class="modal-row">' +
                 '<label>Options<span class="addoptions" onclick="addoption(this)"><i class="fas fa-plus"></i></span></label>';
             popupString += '<div class="optionHeading"><label>Text</label><label>Value</label></div>';
-            $(controlId).find("input[type=radio]").each(function (index,item) {
+            $(controlId).find("input[type=radio]").each(function (index, item) {
                 popupString += '<div class="option-block">' +
                     '<div class="option-fields">' +
                     `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${($(item).next().text() == "option 1" || $(item).next().text() == "option 2") && $(controlId).find("input.custom-control-input").first().attr("data-column") === undefined ? "" : $(item).next().text()}"/>` +
                     ' <input type="text" placeholder="Value" class="form-control option-value" disabled value="' + $(item).attr("value") + '"/>' +
                     '</div>' +
                     '<div class="popup-event-btn">' +
-                    `<button class="event-btn file-remove" onclick="RemoveOption(this)" ${index == 0 ? "disabled" : ""}> <i class="fa fa-minus-circle" aria-hidden="true"></i></button >` +
+                    `<button class="event-btn file-remove" onclick="RemoveOption(this)" ${index == 0 ? "disabled" : ""}><i class="fa fa-minus-circle" aria-hidden="true"></i></button >` +
                     '</div></div>'
             });
             popupString += '</div></div> ';
@@ -1007,7 +1004,6 @@ function EditHtml(type, ID) {
                         colname = colname + randomNumber;
                     }
                 }
-               
 
                 var allTextArray = $('.option-block').map(function () {
                     if ($(this).find("input.option-text").val() != '')
@@ -1054,7 +1050,7 @@ function EditHtml(type, ID) {
     <label class="custom-control-label" for="${ID + index}">${$(this).find("input.option-text").val()}</label></div>
     `;
                 });
-                option_data += "</div><label class='label-base'></label></div>";
+                option_data += "</div><label class='label-program'></label></div>";
                 $(controlId).find("div").html("");
                 $(controlId).append(option_data);
                 if (columnName != undefined) {
@@ -1182,12 +1178,12 @@ function EditHtml(type, ID) {
             popupString += '<div class="modal-row">' +
                 '<label>Options<span class="addoptions" onclick="addoption(this)"><i class="fas fa-plus"></i></span></label>';
             popupString += '<div class="optionHeading"><label>Text</label><label>Value</label></div>';
-            $(controlId).find('option').each(function (index,item) {
+            $(controlId).find('option').each(function (index, item) {
                 if ($(item).val() == 0) return;
                 popupString += '<div class="option-block">' +
                     '<div class="option-fields">' +
-                    `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${($(item).text() == "option 1" || $(item).text() == "option 2") && $(controlId).attr("data-column") === undefined? "" : $(item).text()}"/>` +
-                    ' <input type="text" placeholder="Value" class="form-control option-value" disabled value="' + $(item).val() + '"/>' +
+                    `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${($(item).text() == "option 1" || $(item).text() == "option 2") && $(controlId).attr("data-column") === undefined ? "" : $(item).text()}"/>` +
+                    ' <input type="text" placeholder="Value" class="form-control option-value" disabled  value="' + $(item).val() + '"/>' +
                     '</div>' +
                     '<div class="popup-event-btn">' +
                     `<button class="event-btn file-remove" onclick="RemoveOption(this)" ${index == 0 ? "disabled" : ""}><i class="fa fa-minus-circle" aria-hidden="true"></i></button >` +
@@ -1229,7 +1225,7 @@ function EditHtml(type, ID) {
                     }
                     $(controlId).attr("data-column", colname);
                 }
-                
+
                 var allTextArray = $('.option-block').map(function () {
                     if ($(this).find("input.option-text").val() != '')
 
@@ -1269,7 +1265,6 @@ function EditHtml(type, ID) {
                 $(controlId).parent().prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span><span class="desc"></span>`);
                 $(controlId).html("");
                 $(".option-block").each(function (index) {
-
                     var option_data = "<option value=" + $(this).find("input.option-value").val() + ">" + $(this).find("input.option-text").val() + "</option>";
                     $(option_data).appendTo('#' + ID);
                 });
@@ -1661,9 +1656,11 @@ function RemoveControl(obj) {
             yes: {
                 btnClass: 'btn-danger',
                 action: function () {
-                    var controls = $(obj).closest(".basecontentarea");
-                    if (controls.find(".dragresize").length == 1) {
-                        controls.next("span.basecontentspan").show();
+                    if (isBaseTemplate == 'True' || $("#droppable").find(".basecontentarea").length > 0) {
+                        var controls = $(obj).closest(".basecontentarea");
+                        if (controls.find(".dragresize").length == 1) {
+                            controls.next("span.basecontentspan").show();
+                        }
                     }
                     obj.closest(".dragresize").remove();
                 }
@@ -1673,13 +1670,14 @@ function RemoveControl(obj) {
             }
         }
     });
+
 }
 //addoption=>use to add new option for select,radio,checkbox inside popup
 function addoption(obj) {
     var optionvalue = parseInt($(obj).parent().siblings(".option-block").length) + 1;
     var popupString = '<div class="option-block">' +
         '<div class="option-fields">' +
-        ' <input type="text" placeholder="Option Text" class="form-control option-text" />' +
+        ' <input type="text" placeholder="Option Text" class="form-control option-text"/>' +
         ' <input type="text" placeholder="Value" class="form-control option-value" disabled value="' + optionvalue + '"/>' +
         '</div>' +
         '<div class="popup-event-btn">' +
@@ -1697,144 +1695,298 @@ function parseHTML(htmlstr) {
 //isLabelNameExist=>use to validate duplicate column name
 function isLabelNameExist(LabelName, controlid) {
     var isvalid = false;
-    $("#droppable").find("input.form-control,input.custom-control-input,select.form-control,textarea.form-control").each(function (index, item) {
-        var lbl = '';
-        if ($(item).is("input")) {
-            switch ($(item).attr("type")) {
-                case "radio":
-                case "checkbox":
-                    if ($(item).attr("data-column") === undefined) break;
-                    lbl = $(item).parent().parent().parent().prev().find("span.title").text();
-                    break;
-                default:
-                    if ($(item).hasClass("database-field")) break;
-                    lbl = $(item).parent().prev().find("span.title").text();
-                    break;
-            }
-        }
-        if ($(item).is("select")) {
-            lbl = $(item).parent().prev().find("span.title").text();
-        }
-        if ($(item).is("textarea")) {
-            lbl = $(item).parent().parent().prev().find("span.title").text();
-        }
-
-        if (lbl == LabelName && $(item).attr("id") != controlid) {
-            toastr.error("", LabelName + " already exist", { progressBar: true });
-            isvalid = true;
-            return isvalid;
-        }
-    });
-    return isvalid;
-}
-//saveHtml=>use to save template and create table in database for program
-function saveHtml() {
-    if ($("#droppable").find(".dragresize").length == 0) {
-        toastr.error("", "Please drag field here", { progressBar: true });
-        return;
-    }
-    var isvalid = true;
-    $("#droppable").find("input.form-control,input.custom-control-input,select.form-control,textarea.form-control").each(function (index, item) {
-        var colname = $(item).attr("data-column");
-        if (typeof colname !== typeof undefined && colname !== false) {
-        }
-        else {
+    if (isBaseTemplate == 'True' || $("#droppable").find(".basecontentarea").length > 0) {
+        $("#droppable").find("input.form-control,input.custom-control-input,select.form-control,textarea.form-control").not(".base-control").each(function (index, item) {
+            var lbl = '';
             if ($(item).is("input")) {
                 switch ($(item).attr("type")) {
                     case "radio":
                     case "checkbox":
-                        var datacol = $(item).parent().parent().find("input").first().attr("data-column");
-                        if (typeof datacol !== typeof undefined && datacol !== false) {
-                        } else {
-                            $(item).closest(".dragresize").addClass("invalid-field");
-                            isvalid = false;
-                        }
+                        if ($(item).attr("data-column") === undefined) break;
+                        if ($(item).closest(".form-group").hasClass("base-control")) break;
+                        lbl = $(item).parent().parent().parent().prev().find("span.title").text();
                         break;
                     default:
-                        if ($(item).hasClass("database-field")) return;
-                        $(item).closest(".dragresize").addClass("invalid-field");
-                        isvalid = false;
+                        if ($(item).hasClass("database-field")) break;
+                        lbl = $(item).parent().prev().find("span.title").text();
                         break;
-
                 }
             }
             if ($(item).is("select")) {
-                $(item).closest(".dragresize").addClass("invalid-field");
-                isvalid = false;
+                lbl = $(item).parent().prev().find("span.title").text();
             }
             if ($(item).is("textarea")) {
-                $(item).closest(".dragresize").addClass("invalid-field");
-                isvalid = false;
+                lbl = $(item).parent().parent().prev().find("span.title").text();
             }
-        }
-    });
+
+            if (lbl == LabelName && $(item).attr("id") != controlid) {
+                toastr.error("", LabelName + " already exist", { progressBar: true });
+                isvalid = true;
+                return isvalid;
+            }
+        });
+    } else {
+        $("#droppable").find("input.form-control,input.custom-control-input,select.form-control,textarea.form-control").each(function (index, item) {
+            var lbl = '';
+            if ($(item).is("input")) {
+                switch ($(item).attr("type")) {
+                    case "radio":
+                    case "checkbox":
+                        if ($(item).attr("data-column") === undefined) break;
+                        lbl = $(item).parent().parent().parent().prev().find("span.title").text();
+                        break;
+                    default:
+                        if ($(item).hasClass("database-field")) break;
+                        lbl = $(item).parent().prev().find("span.title").text();
+                        break;
+                }
+            }
+            if ($(item).is("select")) {
+                lbl = $(item).prev().find("span.title").text();
+            }
+            if ($(item).is("textarea")) {
+                lbl = $(item).parent().parent().prev().find("span.title").text();
+            }
+
+            if (lbl == LabelName && $(item).attr("id") != controlid) {
+                toastr.error("", LabelName + " already exist", { progressBar: true });
+                isvalid = true;
+                return isvalid;
+            }
+        });
+    }
+    return isvalid;
+}
+//saveHtml=>use to save template and create table in database for program
+function saveHtml() {
+    var tempid = $("#hdnTemplateId").val();
+
+    if ($(".templatename-input").val().trim() == "") {
+        toastr.error("", "Program name is required", { progressBar: true });
+        return;
+    }
+    if ($("#droppable .dragresize").length == 0) {
+        toastr.error("", "Template should have atleast one control", { progressBar: true });
+        return;
+    }
+
+    var isvalid = true;
+    if (isBaseTemplate == 'True' || $("#droppable").find(".basecontentarea").length > 0) {
+        $("#droppable").find("input.form-control,input.custom-control-input,select.form-control,textarea.form-control").not(".base-control").each(function (index, item) {
+            var colname = $(item).attr("data-column");
+            if (typeof colname !== typeof undefined && colname !== false) {
+            } else {
+                if ($(item).is("input")) {
+                    switch ($(item).attr("type")) {
+                        case "radio":
+                        case "checkbox":
+                            var datacol = $(item).parent().parent().find("input").first().attr("data-column");
+                            if (typeof datacol !== typeof undefined && datacol !== false) {
+                            } else {
+                                $(item).closest(".dragresize").addClass("invalid-field");
+                                isvalid = false;
+                            }
+                            break;
+                        default:
+                            if ($(item).hasClass("database-field")) return;
+                            $(item).closest(".dragresize").addClass("invalid-field");
+                            isvalid = false;
+                            break;
+
+                    }
+                }
+                if ($(item).is("select")) {
+                    $(item).closest(".dragresize").addClass("invalid-field");
+                    isvalid = false;
+                }
+                if ($(item).is("textarea")) {
+                    $(item).closest(".dragresize").addClass("invalid-field");
+                    isvalid = false;
+                }
+            }
+
+        });
+    } else {
+        $("#droppable").find("input.form-control,input.custom-control-input,select.form-control,textarea.form-control").each(function (index, item) {
+            var colname = $(item).attr("data-column");
+            if (typeof colname !== typeof undefined && colname !== false) {
+            } else {
+                if ($(item).is("input")) {
+                    switch ($(item).attr("type")) {
+                        case "radio":
+                        case "checkbox":
+                            var datacol = $(item).parent().parent().find("input").first().attr("data-column");
+                            if (typeof datacol !== typeof undefined && datacol !== false) {
+                            } else {
+                                $(item).closest(".dragresize").addClass("invalid-field");
+                                isvalid = false;
+                            }
+                            break;
+                        default:
+                            if ($(item).hasClass("database-field")) return;
+                            $(item).closest(".dragresize").addClass("invalid-field");
+                            isvalid = false;
+                            break;
+
+                    }
+                }
+                if ($(item).is("select")) {
+                    $(item).closest(".dragresize").addClass("invalid-field");
+                    isvalid = false;
+                }
+                if ($(item).is("textarea")) {
+                    $(item).closest(".dragresize").addClass("invalid-field");
+                    isvalid = false;
+                }
+            }
+
+        });
+    }
     if (!isvalid) {
 
         toastr.error("", "Enter required fields for controls", { progressBar: true });
         return;
     }
-    $("#droppable .database-field").each(function (i, e) {
-        return;
-    });
-    var gethtml = $("#droppable").html();
+    //$("#droppable .database-field").each(function (i, e) {
+    //    return;
+    //});
+    if ($("#checkbox-finalize").prop("checked")) {
+        if ($("#checkbox-finalize").attr("disabled") != undefined) {
+            CheckAndSaveTemplate(1);
+        } else {
+            $.confirm({
+                icon: 'fas fa-exclamation-triangle',
+                title: 'Confirm',
+                content: 'Template will be finalized and ready to be activated. Do you want to finalize?',
+                type: 'green',
+                typeAnimated: true,
+                buttons: {
+                    yes: {
+                        btnClass: 'btn-green',
+                        action: function () {
+                            CheckAndSaveTemplate(1);
+                        }
+                    },
+                    no: {
+                        action: function () {
+                            CheckAndSaveTemplate(0);
+                        }
+                    },
+                    cancel: {
+                        btnClass: 'btn-danger',
+                    }
+                },
 
-    var model = {
-        TemplateID: $("#hdnTemplateId").val(),
-        TemplateName: templateName,
-        ProgramID: programId,
-        IsActive: 1,
-        CreatedBy: userId,
-        ModifiedBy: userId,
-    };
-    $(".loaderOverlay").css("display", "flex");
+            });
+        }
+    } else {
+        CheckAndSaveTemplate(0);
+    }
+}
+
+
+
+function CheckAndSaveTemplate(isactive) {
+
     $.ajax({
-        type: "POST",
-        url: '/CarePlan/SaveFormTemplate',
-        data: JSON.stringify({ htmlTemplate: gethtml, Model: model, ProgramName: programName }),
+        type: "GET",
+        url: '/Program/IsProgramExist?ProgramName=' + $(".templatename-input").val() + '&&TemplateID=' + $("#hdnTemplateId").val(),
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
-            if (result == "0") {
+            if (result.programExists) {
+                toastr.error("", "Program already exists", { progressBar: true });
+                ProgramExists = true;
+                return;
+            } else {
+                saveTemplate(isactive)
+            }
+        }
+
+    })
+
+
+
+}
+function saveTemplate(isactive) {
+    var gethtml = $("#droppable").html();
+    var isBtemplate = isBaseTemplate == 'true'
+    
+    var model = {
+        TemplateID: $("#hdnTemplateId").val(),
+        ProgramName: $(".templatename-input").val(),
+        IsActive: isactive,
+        CreatedBy: userId,
+        ModifiedBy: userId,
+        IsBaseTemplate: isBtemplate,
+        ProgramID:programId,
+        IsModify: isModify,
+        TemplateTable: templateTable
+            
+    };
+   
+    $(".loaderOverlay").css("display", "flex");
+    $.ajax({
+        type: "POST",
+        url: '/Program/SaveFormTemplate',
+        data: JSON.stringify({ htmlTemplate: gethtml, Model: model }),
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        success: function (result) {
+
+            var Res = JSON.parse(result.id);
+
+            if (Res.TemplateID == 0) {
                 toastr.error("Program Already Exist.");
                 $(".loaderOverlay").hide();
                 return false;
             } else {
-                //templateId = result.id;
-                $("#hdnTemplateId").val(result.id);
-                $(".hiddenSavedHtml").html("").append(gethtml); 
+               
+                templateTable = Res.TemplateTable;
+                programId = Res.ProgramID;
+                isBaseTemplate = Res.IsBaseTemplate
+
+
+                $("#hdnTemplateId").val(Res.TemplateID);
+                $(".hiddenSavedHtml").html("").append(gethtml);
             }
 
         }
     }).done(function (result) {
-        if (result != "0") {
+        var _result = JSON.parse(result.id);
+        if (_result.TemplateID != 0) {
             var models = [];
             models.push({ ColDataType: "int", ColumnName: "PatientID" });
             $("#droppable [type=text]").each(function (index, item) {
-                if ($(item).hasClass("database-field")) return;
+                if ($(item).hasClass("database-field") || $(item).hasClass("base-control") || $(item).hasClass("basecontrol-id")) return;
                 models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column") });
             });
             $("#droppable [type=number],[type=file],[type=date]").each(function (index, item) {
+                if ($(item).hasClass("base-control")) return;
                 models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column") });
             });
             $("#droppable select").each(function (index, item) {
+                if ($(item).hasClass("base-control")) return;
                 models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column") });
             });
             $("#droppable [type=radio]").each(function (index, item) {
                 var radioitem = $(item).attr("data-column");
                 if (typeof radioitem !== typeof undefined && radioitem !== false) {
+                    if ($(item).closest(".form-group").hasClass("base-control")) return;
                     models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column") });
                 }
             });
             $("#droppable [type=checkbox]").each(function (index, item) {
                 var checkitem = $(item).attr("data-column");
                 if (typeof checkitem !== typeof undefined && checkitem !== false) {
+                    if ($(item).closest(".form-group").hasClass("base-control")) return;
                     models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column") });
                 }
             });
             $("#droppable textarea").each(function (index, item) {
+                if ($(item).hasClass("base-control")) return;
                 models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column") });
             });
-
             var UniqueItems = models.reduce(function (item, e1) {
                 var matches = item.filter(function (e2) { return e1.ColumnName == e2.ColumnName });
                 if (matches.length == 0) {
@@ -1844,23 +1996,29 @@ function saveHtml() {
             }, []);
 
             var model = {
-                TableName: result.tablename,
+                TableName: _result.TemplateTable,
                 ColumnData: UniqueItems
             }
             $.ajax({
                 type: "POST",
-                url: Apipath + '/api/PatientMain/addtemplatecolumn',
+                url: Apipath + '/api/PatientMain/AddProgramTemplateColumn',
                 contentType: 'application/json; charset=UTF-8',
                 data: JSON.stringify(model),
                 dataType: "json",
                 success: function (res) {
                     toastr.success("Saved successfully.");
-                    $("a.preview").css("display", "inline");
-                    $("a.btndraft").css("display", "none");
-                    $("a.btnNeedsPopup").css("display","inline");
-                    sessionStorage.setItem("Id", result.id);
+                    //$("a.preview").css("display", "inline");
+                    // $("a.btndraft").css("display", "none");
+                   
+                    sessionStorage.setItem("Id", _result.TemplateID);
+                  //  $("a.btnNeedsPopup").css("display", "inline");
                     $(".loaderOverlay").hide();
+                    
                 },
+
+
+
+
             });
         }
     });
@@ -1870,16 +2028,49 @@ function GetFormHtmlById(Id) {
     $(".loaderOverlay").css("display", "flex");
     $.ajax({
         type: "GET",
-        url: '/careplan/GetFormHtmlById?Id=' + Id,
+        url: '/program/GetFormHtmlById?Id=' + Id,
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
-            if (result.html != "") {
-                $("#droppable").html(result.html);
-                $(".hiddenSavedHtml").html("").append(result.html); 
-                HtmlControlDragnDrop();
+            if (result.Isactivated && isModify == 'True') {
+                $("#droppable").html("");
+                toastr.error("", "Deactiavte this template to modify.", { progressBar: true });
+                setTimeout(function () { window.location.href = '/program/list'; }, 2000);
+                return;
             }
-                toogleToolTip();
+            $("#droppable").html(result.html);
+            $(".hiddenSavedHtml").html("").append(result.html);
+
+            if (isBaseTemplate == 'True' || $("#droppable").find(".basecontentarea").length > 0) {
+                getHeaderAndFooter();
+                $("#droppable").find("span.basecontentspan").html("").append("Content area, you can drop control here");
+                $(".baseheader,.basefooter").css("border", "none").find(".event-btn-right").css("pointer-events", "none").addClass("hidden");
+                connect = ".contentarea1,.contentarea2,.contentarea3";
+
+
+            }
+            HtmlControlDragnDrop();
+            if (isBaseTemplate == 'True' && sessionStorage.getItem("Id") === null) {
+                $("#hdnbasetempid").attr("value", templateId);
+            }
+
+            if (isModify == 'True') {
+                if (result.IsActive) {
+                    //$(".btndraft").css("display", "none");
+                } else {
+                    //$(".btndraft").css("display", "inline");
+                }
+            } else if (isModify != 'True') {
+                if (result.IsActive && sessionStorage.getItem("Id") !== null) {
+                    //$(".btndraft").css("display", "none");
+                } else {
+                    //$(".btndraft").css("display", "inline");
+                }
+            }
+            if (result.IsActive && isModify == 'True') {
+                $("#checkbox-finalize").prop("checked", true).attr("disabled", "disabled");
+            }
+            toogleToolTip();
             $(".loaderOverlay").hide();
         }
     });
@@ -1907,32 +2098,82 @@ function validateFileSize(obj) {
     });
 }
 function IsColumnNameExist(colname) {
-    var tableName = '';
-    switch (programId) {
-        case "0":
-            tableName = 'tbl_BaseTemplate';
-            break;
-        case "1":
-            tableName = 'tbl_Clinic_CarePlan';
-            break;
-        case "2":
-            tableName = 'tbl_Dream_CarePlan';
-            break;
-        case "3":
-            tableName = 'tbl_OU_CarePlan';
-            break;
-        case "4":
-            tableName = 'tbl_PeraltaCollege_CarePlan';
-            break;
+  
+    var tableName = 'tbl';
+    
+    if (templateTable.trim()!='') {
+        tableName = templateTable;
     }
-    return $.ajax({
+        return $.ajax({
         type: "GET",
-        url: Apipath + '/api/PatientMain/careplaniscolumnnameexist?TableName=' + tableName + '&ColumnName=' + colname,
+        url: Apipath + '/api/PatientMain/programiscolumnnameexist?TableName=' + tableName + '&ColumnName=' + colname,
         dataType: "json",
         async: false,
         contentType: "application/json; charset=utf-8",
         success: function (result) {
 
+        }
+    });
+}
+function getHeaderAndFooter() {
+    $.ajax({
+        type: "GET",
+        url: Apipath + '/api/PatientMain/GetProgramBaseTemplateId',
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        async: false,
+        success: function (result) {
+            switch (result.TemplateID ) {
+                case -1:
+                    break;
+                default:
+                    $.ajax({
+                        type: "GET",
+                        url: '/program/GetFormHtmlById?Id=' + result.TemplateID,
+                        contentType: 'application/json; charset=UTF-8',
+                        dataType: "json",
+                        async: false,
+                        success: function (result) {
+                            var baseHtml = parseHTML(result.html);
+                            var baseHeader = $(baseHtml).find(".baseheader").html();
+                            var baseFooter = $(baseHtml).find(".basefooter").html();
+                            $("#droppable").find(".baseheader").html("").append(baseHeader);
+                            $("#droppable").find(".basefooter").html("").append(baseFooter);
+                        }
+                    });
+                    break;
+            }
+        }
+    });
+}
+function getHeaderAndFooterIn_PreviewPopup() {
+    $.ajax({
+        type: "GET",
+        url: Apipath + '/api/PatientMain/GetProgramBaseTemplateId',
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        async: false,
+        success: function (result) {
+            switch (result.TemplateID ) {
+                case -1:
+                    break;
+                default:
+                    $.ajax({
+                        type: "GET",
+                        url: '/program/GetFormHtmlById?Id=' + result.TemplateID,
+                        contentType: 'application/json; charset=UTF-8',
+                        dataType: "json",
+                        async: false,
+                        success: function (result) {
+                            var baseHtml = parseHTML(result.html);
+                            var baseHeader = $(baseHtml).find(".baseheader").html();
+                            var baseFooter = $(baseHtml).find(".basefooter").html();
+                            $(".preview-body").find(".baseheader").html("").append(baseHeader);
+                            $(".preview-body").find(".basefooter").html("").append(baseFooter);
+                        }
+                    });
+                    break;
+            }
         }
     });
 }
@@ -1945,6 +2186,9 @@ function convertToUrl() {
 }
 function PreviewInPopUp() {
     $(".preview-body").html("").append($("#droppable").html());
+    if ($(".preview-body").find(".basecontentarea").length > 0) {
+        getHeaderAndFooterIn_PreviewPopup();
+    }
     $(".preview-body .event-btn-right").remove();
     $(".preview-body .ck-editor-header").remove();
     $(".preview-body").find(".question-container").parent().css("border", "none");
@@ -2013,118 +2257,45 @@ function closePreview() {
 }
 function backToList() {
     $(".hiddenSavedHtml").find("div.dragresize").removeClass("ui-sortable-handle").removeAttr("style");
-    $(".hiddenSavedHtml").find(".baseheader,.basefooter").removeClass("ui-sortable");
-    $(".hiddenSavedHtml").find("span.basecontentspan").removeAttr("style");
-    var savedHtml = $(".hiddenSavedHtml").html() == "" ?`
-                                <input id="hdnbasetempid" hidden="hidden" class="basecontrol-id" type="text" value="0">
-                                <div class="dragresize col-md-12">
-                                    <div class="contentbtn">
-                                        <div class="basecontentarea contentarea1"></div>
-                                        <span class="basecontentspan">Content area, you can not drop here</span>
-                                    </div>
-                                </div>
-                                <div class="dragresize col-md-12">
-                                    <div class="contentbtn">
-                                        <div class="baseheader basecontentarea"></div>
-                                        <span class="basecontentspan">Base header, you can drop content here</span>
-                                    </div>
-                                </div>
-                                <div class="dragresize col-md-12">
-                                    <div class="contentbtn">
-                                        <div class="basecontentarea contentarea2"></div>
-                                        <span class="basecontentspan">Content area, you can not drop here</span>
-                                    </div>
-                                </div>
-                                <div class="dragresize col-md-12">
-                                    <div class="contentbtn">
-                                        <div class="basefooter basecontentarea"></div>
-                                        <span class="basecontentspan">Base footer, you can drop content here</span>
-                                    </div>
-                                </div>
-                                <div class="dragresize col-md-12">
-                                    <div class="contentbtn">
-                                        <div class="basecontentarea contentarea3"></div>
-                                        <span class="basecontentspan">Content area, you can not drop here</span>
-                                    </div>
-                                </div>
-                            `: $(".hiddenSavedHtml")[0].innerHTML;
-            var unsavedHtml = $("#droppable").clone();
-            $(unsavedHtml).find("div.dragresize").removeClass("ui-sortable-handle").removeAttr("style");
-            $(unsavedHtml).find(".baseheader,.basefooter").removeClass("ui-sortable");
-            $(unsavedHtml).find("span.basecontentspan").removeAttr("style");
-              unsavedHtml = unsavedHtml[0].innerHTML;
-            if (savedHtml === unsavedHtml) {
-                window.location.href = '/careplan/list';
-                $(".hiddenSavedHtml").html("");
-            } else {
-                $.confirm({
-                    icon: 'fas fa-exclamation-triangle',
-                    title: 'Confirm',
-                    content: 'You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?',
-                    type: 'red',
-                    columnClass: 'col-md-6 col-md-offset-3',
-                    typeAnimated: true,
-                    buttons: {
-                        stay: {
-                            btnClass: 'btn-green',
+    var savedHtml = $(".hiddenSavedHtml")[0].innerHTML;
+    var unsavedHtml = $("#droppable").clone();
+    $(unsavedHtml).find("div.dragresize").removeClass("ui-sortable-handle").removeAttr("style");
+    unsavedHtml = unsavedHtml[0].innerHTML;
+    if (savedHtml === unsavedHtml) {
+        window.location.href = '/program/list';
+        $(".hiddenSavedHtml").html("");
+    } else {
+        $.confirm({
+            icon: 'fas fa-exclamation-triangle',
+            title: 'Confirm',
+            content: 'You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?',
+            type: 'red',
+            columnClass: 'col-md-6 col-md-offset-3',
+            typeAnimated: true,
+            buttons: {
+                stay: {
+                    btnClass: 'btn-green',
 
-                        },
-                        leave: {
-                            action: function () {
-                                window.location.href = '/careplan/list';
-                                $(".hiddenSavedHtml").html("");
-                            }
-                        }
-                    },
+                },
+                leave: {
+                    action: function () {
+                        window.location.href = '/program/list';
+                        $(".hiddenSavedHtml").html("");
+                    }
+                }
+            },
 
-                });
-            }
+        });
+    }
 }
 window.onbeforeunload = function (evt) {
     var message = "";
     $(".hiddenSavedHtml").find("div.dragresize").removeClass("ui-sortable-handle").removeAttr("style");
-    $(".hiddenSavedHtml").find(".baseheader,.basefooter").removeClass("ui-sortable");
-    $(".hiddenSavedHtml").find("span.basecontentspan").removeAttr("style");
-    var savedHtml = $(".hiddenSavedHtml").html() == "" ? `
-                                <input id="hdnbasetempid" hidden="hidden" class="basecontrol-id" type="text" value="0">
-                                <div class="dragresize col-md-12">
-                                    <div class="contentbtn">
-                                        <div class="basecontentarea contentarea1"></div>
-                                        <span class="basecontentspan">Content area, you can not drop here</span>
-                                    </div>
-                                </div>
-                                <div class="dragresize col-md-12">
-                                    <div class="contentbtn">
-                                        <div class="baseheader basecontentarea"></div>
-                                        <span class="basecontentspan">Base header, you can drop content here</span>
-                                    </div>
-                                </div>
-                                <div class="dragresize col-md-12">
-                                    <div class="contentbtn">
-                                        <div class="basecontentarea contentarea2"></div>
-                                        <span class="basecontentspan">Content area, you can not drop here</span>
-                                    </div>
-                                </div>
-                                <div class="dragresize col-md-12">
-                                    <div class="contentbtn">
-                                        <div class="basefooter basecontentarea"></div>
-                                        <span class="basecontentspan">Base footer, you can drop content here</span>
-                                    </div>
-                                </div>
-                                <div class="dragresize col-md-12">
-                                    <div class="contentbtn">
-                                        <div class="basecontentarea contentarea3"></div>
-                                        <span class="basecontentspan">Content area, you can not drop here</span>
-                                    </div>
-                                </div>
-                            `: $(".hiddenSavedHtml")[0].innerHTML;
-    
+    var savedHtml = $(".hiddenSavedHtml")[0].innerHTML;
     var unsavedHtml = $("#droppable").clone();
     $(unsavedHtml).find("div.dragresize").removeClass("ui-sortable-handle").removeAttr("style");
-    $(unsavedHtml).find(".baseheader,.basefooter").removeClass("ui-sortable");
-    $(unsavedHtml).find("span.basecontentspan").removeAttr("style");
     unsavedHtml = unsavedHtml[0].innerHTML;
-    if (savedHtml != unsavedHtml) {
+    if (savedHtml !== unsavedHtml) {
         message = 'You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?'
         if (typeof evt == 'undefined') {
             evt = window.event;
@@ -2132,7 +2303,11 @@ window.onbeforeunload = function (evt) {
         if (evt) {
             evt.returnValue = message;
         }
+
         return message
     }
 
 }
+
+
+
