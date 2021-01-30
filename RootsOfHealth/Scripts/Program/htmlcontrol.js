@@ -127,8 +127,9 @@ function HtmlControlDragnDrop() {
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
                         '<label class=""><span class="title">Select</span><span class="desc"></span></label>' +
                         '<div class="inputContent"> <select id="' + newid + '" class="form-control program-control">' +
-                        '<option  value="1">option 1</option>' +
-                        '<option  value="2">option 2</option>' +
+                        '<option  value="0">option 1</option>' +
+                        '<option  value="1">option 2</option>' +
+                        '<option  value="2">option 3</option>' +
                         ' </select>' +
                         '<label class="label-program"></label>' +
                         '</div></div>' +
@@ -1179,15 +1180,24 @@ function EditHtml(type, ID) {
                 '<label>Options<span class="addoptions" onclick="addoption(this)"><i class="fas fa-plus"></i></span></label>';
             popupString += '<div class="optionHeading"><label>Text</label><label>Value</label></div>';
             $(controlId).find('option').each(function (index, item) {
-                if ($(item).val() == 0) return;
-                popupString += '<div class="option-block">' +
-                    '<div class="option-fields">' +
-                    `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${($(item).text() == "option 1" || $(item).text() == "option 2") && $(controlId).attr("data-column") === undefined ? "" : $(item).text()}"/>` +
-                    ' <input type="text" placeholder="Value" class="form-control option-value" disabled  value="' + $(item).val() + '"/>' +
-                    '</div>' +
-                    '<div class="popup-event-btn">' +
-                    `<button class="event-btn file-remove" onclick="RemoveOption(this)" ${index == 0 ? "disabled" : ""}><i class="fa fa-minus-circle" aria-hidden="true"></i></button >` +
-                    '</div></div>'
+                if ($(item).val() == 0) {
+                    popupString += '<div class="option-block">' +
+                        '<div class="option-fields">' +
+                        `<input type="text" placeholder="Option Text" class="form-control option-text"  value="" disabled/>` +
+                        ' <input type="text" placeholder="Value" class="form-control option-value" disabled  value="0"/>' +
+                        '</div>' +
+                        '</div>'
+                }
+                else {
+                    popupString += '<div class="option-block">' +
+                        '<div class="option-fields">' +
+                        `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${($(item).text() == "option 2" || $(item).text() == "option 3") && $(controlId).attr("data-column") === undefined ? "" : $(item).text()}"/>` +
+                        ' <input type="text" placeholder="Value" class="form-control option-value" disabled  value="' + $(item).val() + '"/>' +
+                        '</div>' +
+                        '<div class="popup-event-btn">' +
+                        `<button class="event-btn file-remove" onclick="RemoveOption(this,'true')" ${index == 0 ? "disabled" : ""}><i class="fa fa-minus-circle" aria-hidden="true"></i></button >` +
+                        '</div></div>'
+                }
             });
             popupString += '</div></div> ';
             $("#btnSave").unbind();
@@ -1205,9 +1215,13 @@ function EditHtml(type, ID) {
                 }
                 var breakout = false;
                 $('.option-block').each(function () {
-                    if ($(this).find("input.option-text").val().trim() == '' || $(this).find("input.option-value").val().trim() == '') {
-                        breakout = true;
-                        return false;
+                    if ($(this).find("input.option-value").val().trim() == '0' && $(this).find("input.option-text").val().trim() == '') {
+
+                    } else {
+                        if ($(this).find("input.option-text").val().trim() == '' || $(this).find("input.option-value").val().trim() == '') {
+                            breakout = true;
+                            return false;
+                        }
                     }
                 });
                 if (breakout) {
@@ -1639,8 +1653,9 @@ function EditHtml(type, ID) {
 
 }
 //RemoveOption=>use to remove option of select,radio,checkbox inside popup
-function RemoveOption(obj) {
+function RemoveOption(obj, isdropdown) {
     let len = $(obj).parent().parent().parent().find("div.option-block").length;
+    if (len == 2 && isdropdown =='true') return;
     if (len == 1) return;
     obj.closest(".option-block").remove();
 };

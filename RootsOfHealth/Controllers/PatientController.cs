@@ -1487,7 +1487,7 @@ namespace RootsOfHealth.Controllers
 
         public ActionResult AppointmentSetting()
         {
-           // List<TypeOfAppointmentBO> lst = new List<TypeOfAppointmentBO>();
+            // List<TypeOfAppointmentBO> lst = new List<TypeOfAppointmentBO>();
             //AppointmentBO model = new AppointmentBO();
             //using (var client = new HttpClient())
             //{
@@ -1512,7 +1512,7 @@ namespace RootsOfHealth.Controllers
 
             //    }
 
-                
+
             //}
 
             return View();
@@ -1578,6 +1578,37 @@ namespace RootsOfHealth.Controllers
                 }
 
                 return PartialView("~/Views/Shared/Patient/_GetTypeOfAppointments.cshtml",lst);
+            }
+  
+        }
+        public ActionResult GetProgramsForPatient(int PatientId)
+        {
+            List<ProgramsForPatientBO> lst = new List<ProgramsForPatientBO>();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                //HTTP GET
+                var responseTask = client.GetAsync("/api/PatientMain/getProgramsForPatient?PatientId=" + PatientId);
+
+
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<List<ProgramsForPatientBO>>();
+                    readTask.Wait();
+                    lst = readTask.Result;
+
+
+                }
+                else //web api sent error response 
+                {
+                    //log response status here..
+
+                }
+
+                return PartialView("~/Views/Shared/Patient/_PatientPrograms.cshtml", lst);
             }
         }
     }

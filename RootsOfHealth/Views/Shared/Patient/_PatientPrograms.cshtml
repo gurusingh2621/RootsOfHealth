@@ -1,4 +1,4 @@
-﻿@model RootsOfHealth.Models.PatientDetailBO
+﻿@model List<RootsOfHealth.Models.ProgramsForPatientBO>
 
 
 <div class="tab-pane fade @Html.Raw(ViewBag.CurrentTab=="ProgramTab"?"show active":"")" id="Programs" role="tabpanel" aria-labelledby="Programs-tab">
@@ -9,7 +9,7 @@
                     <div class="paitent-detail-left">
                         <ul class="nav nav-tabs">
 
-                            @foreach (var item in Model.Programs)
+                            @foreach (var item in Model)
                             { var programName = @item.ProgramName.Replace(" ", "");
                                 <li class="nav-item" >
                                  <a id="@("a"+programName)" class="nav-link" data-toggle="tab"
@@ -43,7 +43,7 @@
 
                         <div class="tab-content" style="margin-top:20px">
 
-                            @foreach (var item in Model.Programs)
+                            @foreach (var item in Model)
                             { var ProgramN = item.ProgramName.Replace(" ","");
                                 <div class="tab-pane fade" id="@(ProgramN+"only")">
                                     <div>
@@ -55,15 +55,15 @@
                                                     Save
                                                 </a>
                                                 <a href="javascript:{}" onclick="ActivateTab(@item.patientID,'ProgramTab','@ProgramN')"
-                                                   class="btn btn-success label-fields">
+                                                   class="btn btn-success label-fields btnProgramEdit">
                                                     <i class="far fa-edit"></i>
                                                     Edit
                                                 </a>
-                                                <a href="javascript:{}" onclick="PrintProgram('@ProgramN')"
-                                                   class="btn btn-success label-fields btnprogramPrint">
-                                                    <i class="far fa-save"></i>
-                                                    Print
-                                                </a>
+                                                @* <a href="javascript:{}" onclick="PrintProgram('@ProgramN')"
+           class="btn btn-success label-fields btnprogramPrint">
+            <i class="far fa-save"></i>
+            Print
+        </a>*@
                                             </div>
                                         </div>
 
