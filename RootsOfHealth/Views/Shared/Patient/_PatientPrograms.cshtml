@@ -13,30 +13,13 @@
                             { var programName = @item.ProgramName.Replace(" ", "");
                                 <li class="nav-item" >
                                  <a id="@("a"+programName)" class="nav-link" data-toggle="tab"
-                                    href="@("#" + programName + "only")" data-ProgramID="@item.ProgramID" data-PatientID="@item.patientID" data-TemplateID="@item.TemplateID" data-programName=@(programName) data-saved="@item.Saved">@item.ProgramName<span class="check @Html.Raw(item.Saved?"":"d-none")"><i class="fas fa-check-circle"></i></span></a>
+                                    href="@("#" + programName + "only")" data-ProgramID="@item.ProgramID" data-PatientID="@item.patientID" data-TemplateID="@item.TemplateID" data-programName=@(programName)>@item.ProgramName<span class="check @Html.Raw(item.Saved?"":"d-none")"><i class="fas fa-check-circle"></i></span></a>
                               </li>
 
                             }
-                            @*<li class="nav-item" id="Clinic"  style="display:none">
-                                <a id="aclinic" class="nav-link @Html.Raw(ViewBag.CurrentTab=="aclinic"?"show active":string.IsNullOrWhiteSpace(ViewBag.CurrentTab)?"show active":"")" data-toggle="tab"
-                                   href="#ClinicOnly">Clinic<span class="check"><i class="fas fa-check-circle"></i></span></a>
-                            </li>
-                            <li class="nav-item" id="Dream"  style="display:none">
-                                <a id="adream" class="nav-link @Html.Raw(ViewBag.CurrentTab=="adream"?"show active":"")" data-toggle="tab" href="#DreamOnly">
-                                    Dream<span class="check"><i class="fas fa-check-circle"></i></span>
-                                                                                                                                                                                                        
-                                </a>
-                            </li>
-                            <li class="nav-item" id="OU"  style="display:none">
-                                <a id="aou" class="nav-link @Html.Raw(ViewBag.CurrentTab=="aou"?"show active":"")" data-toggle="tab" href="#OUOnly">OU<span class="check"><i class="fas fa-check-circle"></i></span></a>
-                            </li>
-                            <li class="nav-item" id="Peralta"  style="display:none">
-                                <a id="aPeraltaColleges" class="nav-link @Html.Raw(ViewBag.CurrentTab=="aPeraltaColleges"?"show active":"")" data-toggle="tab" href="#PeraltaColleges">Peralta Colleges<span class="check"><i class="fas fa-check-circle"></i></span></a>
-                            </li>*@
+                           
 
                         </ul>
-
-                      
 
                         <!-- Tab panes -->
 
@@ -67,9 +50,6 @@
                                             </div>
                                         </div>
 
-                                        @*<form id="@("frm"+item.ProgramName)" style="height:calc(100vh - 290px)" class="detail-patient-form scroll">
-            @item.ProgramName+this
-        </form>*@
                                     <div class="SidebarScroll scroll inner-main-content">
                                         <style>
                                             ul.file_uploaded_list li img {
@@ -89,193 +69,7 @@
                     </div>
                 </div>
 
-                @*<div class="col-lg-4 col-md-12 col-sm-12 col-12 ">
-                    <div class="sidebar-right">
-                        <div class="appointement">
-                            <h3>Appointment</h3>
-                            <div class="scroll scroll-height">
-                                <div class="appointement-row">
-                                    <div class="calender-img">
-                                        <img src="images/calender-icon.png" alt="">
-                                    </div>
-                                    <h6>
-                                        <span class="date">Date: 24-4-2019</span>, <span class="time">
-                                            Time:
-                                            5:30 PM
-                                        </span>
-                                    </h6>
-                                    <p>
-                                        At vero eos et accusamus et iusto odio dignissimos ducimus
-                                        qui
-                                        blanditiis praesentium voluptatum
-                                    </p>
-                                    <a href="#!" class="btn btn-link">Read More...</a>
-                                </div>
-                                <div class="appointement-row">
-                                    <div class="calender-img">
-                                        <img src="images/calender-icon.png" alt="">
-                                    </div>
-                                    <h6>
-                                        <span class="date">Date: 26-4-2019</span>, <span class="time">
-                                            Time:
-                                            5:30 PM
-                                        </span>
-                                    </h6>
-                                    <p>
-                                        At vero eos et accusamus et iusto odio dignissimos ducimus
-                                        qui
-                                        blanditiis praesentium voluptatum
-                                    </p>
-                                    <a href="#!" class="btn btn-link">Read More...</a>
-                                </div>
-                                <div class="appointement-row">
-                                    <div class="calender-img">
-                                        <img src="images/calender-icon.png" alt="">
-                                    </div>
-                                    <h6>
-                                        <span class="date">Date: 28-4-2019</span>, <span class="time">
-                                            Time:
-                                            5:30 PM
-                                        </span>
-                                    </h6>
-                                    <p>
-                                        At vero eos et accusamus et iusto odio dignissimos ducimus
-                                        qui
-                                        blanditiis praesentium voluptatum
-                                    </p>
-                                    <a href="#!" class="btn btn-link">Read More...</a>
-                                </div>
-                                <div class="appointement-row">
-                                    <div class="calender-img">
-                                        <img src="images/calender-icon.png" alt="">
-                                    </div>
-                                    <h6>
-                                        <span class="date">Date: 30-4-2019</span>, <span class="time">
-                                            Time:
-                                            5:30 PM
-                                        </span>
-                                    </h6>
-                                    <p>
-                                        At vero eos et accusamus et iusto odio dignissimos ducimus
-                                        qui
-                                        blanditiis praesentium voluptatum
-                                    </p>
-                                    <a href="#!" class="btn btn-link">Read More...</a>
-                                </div>
-                                <div class="appointement-row">
-                                    <div class="calender-img">
-                                        <img src="images/calender-icon.png" alt="">
-                                    </div>
-                                    <h6>
-                                        <span class="date">Date: 1-5-2019</span>, <span class="time">
-                                            Time:
-                                            5:30 PM
-                                        </span>
-                                    </h6>
-                                    <p>
-                                        At vero eos et accusamus et iusto odio dignissimos ducimus
-                                        qui
-                                        blanditiis praesentium voluptatum
-                                    </p>
-                                    <a href="#!" class="btn btn-link">Read More...</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="appointement">
-                            <h3>Notes</h3>
-                            <div class="scroll scroll-height">
-
-
-                                <div class="appointement-row">
-                                    <div class="calender-img">
-                                        <img src="images/calender-icon.png" alt="">
-                                    </div>
-                                    <h6>
-                                        <span class="date">Date: 24-4-2019</span>, <span class="time">
-                                            Time:
-                                            5:30 PM
-                                        </span>
-                                    </h6>
-                                    <p>
-                                        At vero eos et accusamus et iusto odio dignissimos ducimus
-                                        qui
-                                        blanditiis praesentium voluptatum
-                                    </p>
-                                    <a href="#!" class="btn btn-link">Read More...</a>
-                                </div>
-                                <div class="appointement-row">
-                                    <div class="calender-img">
-                                        <img src="images/calender-icon.png" alt="">
-                                    </div>
-                                    <h6>
-                                        <span class="date">Date: 26-4-2019</span>, <span class="time">
-                                            Time:
-                                            5:30 PM
-                                        </span>
-                                    </h6>
-                                    <p>
-                                        At vero eos et accusamus et iusto odio dignissimos ducimus
-                                        qui
-                                        blanditiis praesentium voluptatum
-                                    </p>
-                                    <a href="#!" class="btn btn-link">Read More...</a>
-                                </div>
-                                <div class="appointement-row">
-                                    <div class="calender-img">
-                                        <img src="images/calender-icon.png" alt="">
-                                    </div>
-                                    <h6>
-                                        <span class="date">Date: 28-4-2019</span>, <span class="time">
-                                            Time:
-                                            5:30 PM
-                                        </span>
-                                    </h6>
-                                    <p>
-                                        At vero eos et accusamus et iusto odio dignissimos ducimus
-                                        qui
-                                        blanditiis praesentium voluptatum
-                                    </p>
-                                    <a href="#!" class="btn btn-link">Read More...</a>
-                                </div>
-                                <div class="appointement-row">
-                                    <div class="calender-img">
-                                        <img src="images/calender-icon.png" alt="">
-                                    </div>
-                                    <h6>
-                                        <span class="date">Date: 30-4-2019</span>, <span class="time">
-                                            Time:
-                                            5:30 PM
-                                        </span>
-                                    </h6>
-                                    <p>
-                                        At vero eos et accusamus et iusto odio dignissimos ducimus
-                                        qui
-                                        blanditiis praesentium voluptatum
-                                    </p>
-                                    <a href="#!" class="btn btn-link">Read More...</a>
-                                </div>
-                                <div class="appointement-row">
-                                    <div class="calender-img">
-                                        <img src="images/calender-icon.png" alt="">
-                                    </div>
-                                    <h6>
-                                        <span class="date">Date: 1-5-2019</span>, <span class="time">
-                                            Time:
-                                            5:30 PM
-                                        </span>
-                                    </h6>
-                                    <p>
-                                        At vero eos et accusamus et iusto odio dignissimos ducimus
-                                        qui
-                                        blanditiis praesentium voluptatum
-                                    </p>
-                                    <a href="#!" class="btn btn-link">Read More...</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>*@
-            </div>
+                          </div>
         </div>
 
     </div>

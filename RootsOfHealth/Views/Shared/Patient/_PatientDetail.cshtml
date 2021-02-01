@@ -1203,7 +1203,7 @@
             @:$("#FoodAccess-tab").find('span').css('display', 'inline');
                 }
 
-           @if (Model.PatientProgram.PatientProgramsID == 0)
+           @*@if (Model.PatientProgram.PatientProgramsID == 0)
         {
                @:$("#Programs-tab").find('span').css('display', 'none');
           if (Model.PatientProgram.ClinicOnly.ClinicOnlyID == 0)
@@ -1286,7 +1286,7 @@
 
                }
 
-           }
+           }*@
         $('.form-control').css('display', 'none');
         $('.Add').css('display', 'none');
         $('.selectboxmultiple').css('display', 'none');
@@ -1351,10 +1351,10 @@
 
         //----------------PeraltaCollege Start----------------//
 
-        var lblOneYouAre = $('#lblOneYouAre').html();
-        if (lblOneYouAre == "Student") {
-            $('#divStudent').css('display', 'block');
-        }
+        //var lblOneYouAre = $('#lblOneYouAre').html();
+        //if (lblOneYouAre == "Student") {
+        //    $('#divStudent').css('display', 'block');
+        //}
         //----------------PeraltaCollege end----------------//
 
         var lblgender = $('#lblGender').html();
@@ -2174,52 +2174,52 @@
         //--------------------clinic only(program) Start-----------------------------//
 
 
-        ApplyTickCross1($('#hdfTestedForTB').val(), $('#ipositiveOne'), $('#ipositiveTwo'));
-        ApplyTickCross1($('#hdfTBdiseaseAtAnyTime').val(), $('#iinfectiousOne'), $('#iinfectiousTwo'));
+        //ApplyTickCross1($('#hdfTestedForTB').val(), $('#ipositiveOne'), $('#ipositiveTwo'));
+        //ApplyTickCross1($('#hdfTBdiseaseAtAnyTime').val(), $('#iinfectiousOne'), $('#iinfectiousTwo'));
 
-        ApplyTickCross1($('#hdfWeakenedImmuneSystem').val(), $('#iSystemOne'), $('#iSystemTwo'));
-        ApplyTickCross1($('#hdfElevatedRateOfTB').val(), $('#iElevatedOne'), $('#iElevatedTwo'));
-        ApplyTickCross1($('#hdfVolunteerOfHighRisk').val(), $('#iVolunteerOne'), $('#iVolunteerTwo'));
-        function ApplyTickCross1(d, ele1, ele2) {
-
-
-            if (d == "True") {
-                ele1.removeClass('fa-times');
-                ele1.addClass('fa-check');
-            }
-            if (d == "False") {
-                ele2.removeClass('fa-times');
-                ele2.addClass('fa-check');
-            }
-
-        }
-        var RadioPregnant = $('#lblpregnant').html();
-        if (RadioPregnant == "Yes") {
-            $('#divIsPregnant').show();
-
-        }
-        else {
-            $('#divIsPregnant').hide();
-        }
-
-        var RadioBirth = $('#lblbirth').html();
-        if (RadioBirth == "Yes") {
-            $('#divBirthControl').show();
-
-        }
-        else {
-            $('#divBirthControl').hide();
-        }
+        //ApplyTickCross1($('#hdfWeakenedImmuneSystem').val(), $('#iSystemOne'), $('#iSystemTwo'));
+        //ApplyTickCross1($('#hdfElevatedRateOfTB').val(), $('#iElevatedOne'), $('#iElevatedTwo'));
+        //ApplyTickCross1($('#hdfVolunteerOfHighRisk').val(), $('#iVolunteerOne'), $('#iVolunteerTwo'));
+        //function ApplyTickCross1(d, ele1, ele2) {
 
 
-        var RadioPregnant = $('#lblPregnant').html();
-        if (RadioPregnant == "Yes") {
-            $('#divPregnantYes').show();
+        //    if (d == "True") {
+        //        ele1.removeClass('fa-times');
+        //        ele1.addClass('fa-check');
+        //    }
+        //    if (d == "False") {
+        //        ele2.removeClass('fa-times');
+        //        ele2.addClass('fa-check');
+        //    }
 
-        }
-        else {
-            $('#divPregnantYes').hide();
-        }
+        //}
+        //var RadioPregnant = $('#lblpregnant').html();
+        //if (RadioPregnant == "Yes") {
+        //    $('#divIsPregnant').show();
+
+        //}
+        //else {
+        //    $('#divIsPregnant').hide();
+        //}
+
+        //var RadioBirth = $('#lblbirth').html();
+        //if (RadioBirth == "Yes") {
+        //    $('#divBirthControl').show();
+
+        //}
+        //else {
+        //    $('#divBirthControl').hide();
+        //}
+
+
+        //var RadioPregnant = $('#lblPregnant').html();
+        //if (RadioPregnant == "Yes") {
+        //    $('#divPregnantYes').show();
+
+        //}
+        //else {
+        //    $('#divPregnantYes').hide();
+        //}
 
          //--------------------clinic only(program) end-----------------------------//
 
@@ -2256,14 +2256,14 @@
         var _programId = item.attr("data-ProgramID")
         programName = item.attr("data-programName");
         programElement = $("#" + programName + "render-basicform");
-        var _IsSaved = item.attr("data-Saved");
+        var _IsSaved =$('#' + programName + 'only').find('.btnprogramsave').attr('data-save'); 
 
-        if (_IsSaved == 'True') {
-            $('#' + programName + 'only').find('.btnprogramPrint').css('display','block');
-        }
-        else {
-            $('#' + programName + 'only').find('.btnprogramPrint').css('display','none');
-        }
+        //if (_IsSaved == 'True') {
+        //    $('#' + programName + 'only').find('.btnprogramPrint').css('display','block');
+        //}
+        //else {
+        //    $('#' + programName + 'only').find('.btnprogramPrint').css('display','none');
+        //}
          $('#' + programName + 'only').addClass('active show');
              var _templateID = item.attr("data-TemplateID");
         if (programElement.html().length > 0) {
@@ -2316,7 +2316,6 @@
                  programElement.find(".f-g-left").each(function (index, item) {
                      $(item).parent().parent().addClass("left-control");
                  });
-                 // toogleProgramToolTip();
 
                  $("textarea.program-control,textarea.base-control").summernote({
                      toolbar: [
@@ -2407,7 +2406,7 @@
         }
 
      function getProgramBasicFormHtml(ProgramID,id) {
-        
+       
     $.ajax({
         type: "GET",
         url: '/program/GetProgramTemplateById?TemplateId=' + id,
@@ -2528,7 +2527,7 @@
         dataType: "json",
         async: false,
         success: function (result) {
-
+            
             if (result.length) {
                 var fields = result[0];
                 var value = "";
@@ -2566,7 +2565,7 @@
 
                                 break;
                             default:
-
+                                
                                 value = fields[$(item).attr("data-column")];
 
                                     $(item).next().html("").append(value).show();
@@ -2577,8 +2576,13 @@
                     }
                     if ($(item).is("select")) {
                         value = fields[$(item).attr("data-column")];
-
-                            value = $(item).find(`option[value=${value}]`).text();
+                        
+                        if (value == 0) {
+                            value=''
+                        }
+                        else {
+                             value = $(item).find(`option[value=${value}]`).text();
+                        }
                             $(item).next().html("").append(value).show();
                             $(item).hide();
 
@@ -2649,7 +2653,7 @@
 
                                 break;
                             default:
-
+                                
                                 value = baseFields[$(item).attr("data-column")];
 
                                     $(item).next().html("").append(value).show();
@@ -2660,8 +2664,13 @@
                     }
                     if ($(item).is("select")) {
                         value = baseFields[$(item).attr("data-column")];
-
+                        
+                        if (value == 0) {
+                            value = '';
+                        }
+                        else {
                             value = $(item).find(`option[value=${value}]`).text();
+                        }
                             $(item).next().html("").append(value).show();
                             $(item).hide();
 
@@ -2818,7 +2827,13 @@
             }
         }
         if ($(item).is("select")) {
-            value = $(item).find('option:selected').text();
+            value=$(item).find('option:selected').val();
+            if (value == 0) {
+                value = '';
+            }
+            else {
+                 value = $(item).find('option:selected').text();
+            }
             $(item).next().html("").append(value).show();
             $(item).hide();
         }

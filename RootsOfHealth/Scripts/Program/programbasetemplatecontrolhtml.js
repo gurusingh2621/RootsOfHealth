@@ -1186,9 +1186,9 @@ function EditHtml(type, ID) {
             popupString += '<div class="optionHeading"><label>Text</label><label>Value</label></div>';
             $(controlId).find('option').each(function (index, item) {
                 if ($(item).val() == 0) {
-                    popupString += '<div class="option-block">' +
+                    popupString += '<div class="option-block  d-none">' +
                         '<div class="option-fields">' +
-                        `<input type="text" placeholder="Option Text" class="form-control option-text"  value="" disabled/>` +
+                        `<input type="text"  class="form-control option-text"  value="Select.." disabled/>` +
                         ' <input type="text" placeholder="Value" class="form-control option-value" disabled  value="0"/>' +
                         '</div>' +
                         '</div>'
@@ -1220,7 +1220,7 @@ function EditHtml(type, ID) {
                 }
                 var breakout = false;
                 $('.option-block').each(function () {
-                    if ($(this).find("input.option-value").val().trim() == '0' && $(this).find("input.option-text").val().trim() == '') {
+                    if ($(this).find("input.option-value").val().trim() == '0' && $(this).find("input.option-text").val().trim() == 'Select..') {
 
                     } else {
                         if ($(this).find("input.option-text").val().trim() == '' || $(this).find("input.option-value").val().trim() == '') {
