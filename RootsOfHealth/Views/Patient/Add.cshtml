@@ -389,8 +389,16 @@
                 toastr.error("Digit: "+ error.v +" is invalid" );
             }
         };
-
-
+        $('#btnaddprogram').click(function (e) {
+            var value = $('#btnaddprogram').attr('data-totalProgramCount')
+            
+        if (value<=0) {
+             e.preventDefault();
+            e.stopPropagation();
+            toastr.error('No program available')
+        }
+       
+    })
         function GetPatientPrograms() {
 
             var pid = _PatientId;
@@ -404,7 +412,7 @@
                 dataType: "html",
                 contentType: "application/json; charset=utf-8",
                 success: function (result) {
-
+                    
                     $('.modal-body').html(result);
 
 
@@ -1122,10 +1130,10 @@
                     $("a#Dast-tab").addClass("show active");
                     $("div#DAST").addClass("show active");
                 }
-                if (currenttab != 'aclinic' && currenttab != 'adream' && currenttab != 'aou' && currenttab != 'aPeraltaColleges') {
-                    $("a#aclinic").addClass("show active");
-                    $("div#ClinicOnly").addClass("show active");
-                }
+                //if (currenttab != 'aclinic' && currenttab != 'adream' && currenttab != 'aou' && currenttab != 'aPeraltaColleges') {
+                //    $("a#aclinic").addClass("show active");
+                //    $("div#ClinicOnly").addClass("show active");
+                //}
 
             }
             if (currenttab == 'ProgramTab') {
@@ -1139,16 +1147,16 @@
             }
 
         );
-        $("#ClinicOnly_AnyVaccinations").multiselect({
-            includeSelectAllOption: true,
-            nonSelectedText: 'Nothing selected',
-            buttonWidth: '100%',
-            maxHeight: 300
-        });
-        $("#ClinicOnly_AnyVaccinations").closest('div').find('label').append('<span></span>');
-        var selectedVaccinations = '@Model.PatientProgram.ClinicOnly.AnyVaccinations';
-        $("#ClinicOnly_AnyVaccinations").val(selectedVaccinations.split(','));
-        $("#ClinicOnly_AnyVaccinations").multiselect("refresh");
+        //$("#ClinicOnly_AnyVaccinations").multiselect({
+        //    includeSelectAllOption: true,
+        //    nonSelectedText: 'Nothing selected',
+        //    buttonWidth: '100%',
+        //    maxHeight: 300
+        //});
+        //$("#ClinicOnly_AnyVaccinations").closest('div').find('label').append('<span></span>');
+       // var selectedVaccinations = '@Model.PatientProgram.ClinicOnly.AnyVaccinations';
+        //$("#ClinicOnly_AnyVaccinations").val(selectedVaccinations.split(','));
+        //$("#ClinicOnly_AnyVaccinations").multiselect("refresh");
         $(".open-eye").css("display", "block");
         $(".ssn-label").css("display", "none");
         showNotificationCount();
@@ -1753,123 +1761,123 @@
         //----------------------Clinic only(Program) start-------------------------//
 
 
-            var lblScreeningTests = $('#lblScreeningTests').html();
-            var lblScreeningTestsArray = lblScreeningTests != undefined?lblScreeningTests.split(','):'';
-        $("#ddScreeningTests").val(lblScreeningTestsArray);
-        $('.selectboxmultiple button[data-id="ddScreeningTests"]').find('.filter-option-inner-inner').html(lblScreeningTests);
+        //    var lblScreeningTests = $('#lblScreeningTests').html();
+        //    var lblScreeningTestsArray = lblScreeningTests != undefined?lblScreeningTests.split(','):'';
+        //$("#ddScreeningTests").val(lblScreeningTestsArray);
+        //$('.selectboxmultiple button[data-id="ddScreeningTests"]').find('.filter-option-inner-inner').html(lblScreeningTests);
 
-        $('#txtDateOfSurgeries').datepicker(
-            {
-                changeYear: true,
-                changeMonth: true
-            }
-        );
-
-
-        $('#txtDueDate').datepicker(
-            {
-                changeYear: true,
-                changeMonth: true
-            }
-        );
+        //$('#txtDateOfSurgeries').datepicker(
+        //    {
+        //        changeYear: true,
+        //        changeMonth: true
+        //    }
+        //);
 
 
-
-        $("input[name=frmClinic_radio1][value='" + $('#hdfPregnant').val() + "']").prop('checked', true);
-        $("input[name=frmClinic_radio2][value='" + $('#hdfBirthControl').val() + "']").prop('checked', true);
-        $("input[name=frmClinic_radio3][value='" + $('#hdfEmergencyContraception').val() + "']").prop('checked', true);
-        $("input[name=frmClinic_radio4][value='" + $('#hdfEverBeenPregnant').val() + "']").prop('checked', true);
-        $("input[name=frmClinic_radio5][value='" + $('#hdfHealthcareDirective').val() + "']").prop('checked', true);
-        $("input[name=frmClinic_radio6][value='" + $('#hdfAdvancedHealthcareDirectives').val() + "']").prop('checked', true);
-        $("input[name=frmClinic_radio7][value='" + $('#hdfTestedForTB').val() + "']").prop('checked', true);
-        $("input[name=frmClinic_radio8][value='" + $('#hdfTBdiseaseAtAnyTime').val() + "']").prop('checked', true);
-        $("input[name=frmClinic_radio9][value='" + $('#hdfWeakenedImmuneSystem').val() + "']").prop('checked', true);
-        $("input[name=frmClinic_radio10][value='" + $('#hdfElevatedRateOfTB').val() + "']").prop('checked', true);
-        $("input[name=frmClinic_radio11][value='" + $('#hdfVolunteerOfHighRisk').val() + "']").prop('checked', true);
+        //$('#txtDueDate').datepicker(
+        //    {
+        //        changeYear: true,
+        //        changeMonth: true
+        //    }
+        //);
 
 
 
-        var RadioPregnant = $('#lblpregnant').html();
-        if (RadioPregnant == "Yes") {
-            $('#divIsPregnant').show();
+        //$("input[name=frmClinic_radio1][value='" + $('#hdfPregnant').val() + "']").prop('checked', true);
+        //$("input[name=frmClinic_radio2][value='" + $('#hdfBirthControl').val() + "']").prop('checked', true);
+        //$("input[name=frmClinic_radio3][value='" + $('#hdfEmergencyContraception').val() + "']").prop('checked', true);
+        //$("input[name=frmClinic_radio4][value='" + $('#hdfEverBeenPregnant').val() + "']").prop('checked', true);
+        //$("input[name=frmClinic_radio5][value='" + $('#hdfHealthcareDirective').val() + "']").prop('checked', true);
+        //$("input[name=frmClinic_radio6][value='" + $('#hdfAdvancedHealthcareDirectives').val() + "']").prop('checked', true);
+        //$("input[name=frmClinic_radio7][value='" + $('#hdfTestedForTB').val() + "']").prop('checked', true);
+        //$("input[name=frmClinic_radio8][value='" + $('#hdfTBdiseaseAtAnyTime').val() + "']").prop('checked', true);
+        //$("input[name=frmClinic_radio9][value='" + $('#hdfWeakenedImmuneSystem').val() + "']").prop('checked', true);
+        //$("input[name=frmClinic_radio10][value='" + $('#hdfElevatedRateOfTB').val() + "']").prop('checked', true);
+        //$("input[name=frmClinic_radio11][value='" + $('#hdfVolunteerOfHighRisk').val() + "']").prop('checked', true);
 
-        }
-        else {
-            $('#divIsPregnant').hide();
-        }
 
-        var RadioBirth = $('#lblbirth').html();
-        if (RadioBirth == "Yes") {
-            $('#divBirthControl').show();
 
-        }
-        else {
-            $('#divBirthControl').hide();
-        }
+        //var RadioPregnant = $('#lblpregnant').html();
+        //if (RadioPregnant == "Yes") {
+        //    $('#divIsPregnant').show();
 
-        var RadioPregnant = $('#lblPregnant').html();
-        if (RadioPregnant == "Yes") {
-            $('#divPregnantYes').show();
+        //}
+        //else {
+        //    $('#divIsPregnant').hide();
+        //}
 
-        }
-        else {
-            $('#divPregnantYes').hide();
-        }
+        //var RadioBirth = $('#lblbirth').html();
+        //if (RadioBirth == "Yes") {
+        //    $('#divBirthControl').show();
+
+        //}
+        //else {
+        //    $('#divBirthControl').hide();
+        //}
+
+        //var RadioPregnant = $('#lblPregnant').html();
+        //if (RadioPregnant == "Yes") {
+        //    $('#divPregnantYes').show();
+
+        //}
+        //else {
+        //    $('#divPregnantYes').hide();
+        //}
 
 
            //----------------------Clinic only(Program) end-------------------------//
 
          //----------------------Dream only(Program) Start-------------------------//
 
-          $("input[name=frmDream_radio1][value='" + $('#hdfDrivenBySomeone').val() + "']").prop('checked', true);
+          //$("input[name=frmDream_radio1][value='" + $('#hdfDrivenBySomeone').val() + "']").prop('checked', true);
 
           //----------------------Dream only(Program) end-------------------------//
 
 
          //----------------------OU only(Program) starts-------------------------//
 
-        $("input[name=frmOU_radio1][value='" + $('#hdfUnsafeCity').val() + "']").prop('checked', true);
-        $("input[name=frmOU_radio2][value='" + $('#hdfDrugTest').val() + "']").prop('checked', true);
-        $("input[name=frmOU_radio3][value='" + $('#hdfLearningDisabilities').val() + "']").prop('checked', true);
-        $("input[name=frmOU_radio4][value='" + $('#hdfAnyPendingCourtDates').val() + "']").prop('checked', true);
-        $("input[name=frmOU_radio5][value='" + $('#hdfConvictedOfAnyOffense').val() + "']").prop('checked', true);
-        $("input[name=frmOU_radio6][value='" + $('#hdfMisdemeanor').val() + "']").prop('checked', true);
-        $("input[name=frmOU_radio7][value='" + $('#hdfFelony').val() + "']").prop('checked', true);
-        $("input[name=frmOU_radio8][value='" + $('#hdfRestrainingOrders').val() + "']").prop('checked', true);
-        $("input[name=frmOU_radio9][value='" + $('#hdfAngerManagement').val() + "']").prop('checked', true);
-        $("input[name=frmOU_radio10][value='" + $('#hdfTermsOfProbation').val() + "']").prop('checked', true);
-        $("input[name=frmOU_radio11][value='" + $('#hdfGunInvolvedActivity').val() + "']").prop('checked', true);
-        $("input[name=frmOU_radio12][value='" + $('#hdfGangRelatedStreetViolence').val() + "']").prop('checked', true);
-        $("input[name=frmOU_radio13][value='" + $('#hdfKilledDueToTurf').val() + "']").prop('checked', true);
-        $("input[name=frmOU_radio14][value='" + $('#hdfHotSpotArea').val() + "']").prop('checked', true);
-        $("input[name=frmOU_radio15][value='" + $('#hdfAssociateWithTurfs').val() + "']").prop('checked', true);
-        $("input[name=frmOU_radio16][value='" + $('#hdfViolentOffense').val() + "']").prop('checked', true);
-        $("input[name=frmOU_radio17][value='" + $('#hdfHaveSSN').val() + "']").prop('checked', true);
-        $("input[name=frmOU_radio18][value='" + $('#hdfHaveStateIssuedPhotoID').val() + "']").prop('checked', true);
-        $("input[name=frmOU_radio19][value='" + $('#hdfHaveI9').val() + "']").prop('checked', true);
-        $("input[name=frmOU_radio20][value='" + $('#hdfEligibleForEmployment').val() + "']").prop('checked', true);
+        //$("input[name=frmOU_radio1][value='" + $('#hdfUnsafeCity').val() + "']").prop('checked', true);
+        //$("input[name=frmOU_radio2][value='" + $('#hdfDrugTest').val() + "']").prop('checked', true);
+        //$("input[name=frmOU_radio3][value='" + $('#hdfLearningDisabilities').val() + "']").prop('checked', true);
+        //$("input[name=frmOU_radio4][value='" + $('#hdfAnyPendingCourtDates').val() + "']").prop('checked', true);
+        //$("input[name=frmOU_radio5][value='" + $('#hdfConvictedOfAnyOffense').val() + "']").prop('checked', true);
+        //$("input[name=frmOU_radio6][value='" + $('#hdfMisdemeanor').val() + "']").prop('checked', true);
+        //$("input[name=frmOU_radio7][value='" + $('#hdfFelony').val() + "']").prop('checked', true);
+        //$("input[name=frmOU_radio8][value='" + $('#hdfRestrainingOrders').val() + "']").prop('checked', true);
+        //$("input[name=frmOU_radio9][value='" + $('#hdfAngerManagement').val() + "']").prop('checked', true);
+        //$("input[name=frmOU_radio10][value='" + $('#hdfTermsOfProbation').val() + "']").prop('checked', true);
+        //$("input[name=frmOU_radio11][value='" + $('#hdfGunInvolvedActivity').val() + "']").prop('checked', true);
+        //$("input[name=frmOU_radio12][value='" + $('#hdfGangRelatedStreetViolence').val() + "']").prop('checked', true);
+        //$("input[name=frmOU_radio13][value='" + $('#hdfKilledDueToTurf').val() + "']").prop('checked', true);
+        //$("input[name=frmOU_radio14][value='" + $('#hdfHotSpotArea').val() + "']").prop('checked', true);
+        //$("input[name=frmOU_radio15][value='" + $('#hdfAssociateWithTurfs').val() + "']").prop('checked', true);
+        //$("input[name=frmOU_radio16][value='" + $('#hdfViolentOffense').val() + "']").prop('checked', true);
+        //$("input[name=frmOU_radio17][value='" + $('#hdfHaveSSN').val() + "']").prop('checked', true);
+        //$("input[name=frmOU_radio18][value='" + $('#hdfHaveStateIssuedPhotoID').val() + "']").prop('checked', true);
+        //$("input[name=frmOU_radio19][value='" + $('#hdfHaveI9').val() + "']").prop('checked', true);
+        //$("input[name=frmOU_radio20][value='" + $('#hdfEligibleForEmployment').val() + "']").prop('checked', true);
 
 
-        $('#txtPendingDate').datepicker(
-            {
-                changeYear: true,
-                changeMonth: true
-            }
-        );
+        //$('#txtPendingDate').datepicker(
+        //    {
+        //        changeYear: true,
+        //        changeMonth: true
+        //    }
+        //);
 
-        $('#txtMisdemeanor').datepicker(
-            {
-                changeYear: true,
-                changeMonth: true
-            }
-        );
+        //$('#txtMisdemeanor').datepicker(
+        //    {
+        //        changeYear: true,
+        //        changeMonth: true
+        //    }
+        //);
 
-        $('#txtFelony').datepicker(
-            {
-                changeYear: true,
-                changeMonth: true
-            }
-        );
+        //$('#txtFelony').datepicker(
+        //    {
+        //        changeYear: true,
+        //        changeMonth: true
+        //    }
+        //);
 
 
          //----------------------OU only(Program) ends-------------------------//
@@ -2179,94 +2187,94 @@
 
 
 
-        $('#ddScreeningTests').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
-            // do something...
+        //$('#ddScreeningTests').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+        //    // do something...
 
-            //  var selected = $('#ddRace option:selected').val();
-
-
-            var selectedvalues = $('#ddScreeningTests').selectpicker().val();
-            if (selectedvalues == "Nothing selected" || selectedvalues == "") {
-                $("#divlastScreening").hide();
-                $("#txtYearOflastScreening").val("");
-            }
-            else {
-                $("#divlastScreening").show();
-            }
+        //    //  var selected = $('#ddRace option:selected').val();
 
 
+        //    var selectedvalues = $('#ddScreeningTests').selectpicker().val();
+        //    if (selectedvalues == "Nothing selected" || selectedvalues == "") {
+        //        $("#divlastScreening").hide();
+        //        $("#txtYearOflastScreening").val("");
+        //    }
+        //    else {
+        //        $("#divlastScreening").show();
+        //    }
 
 
 
-            // check if option at index 0 is clicked
-            if (clickedIndex == 0) {
-                var all = $(this).children('option[value="Select All"]');
-                optionvalue = all.html();
 
-                // check if All option is clicked
-                if (optionvalue == "Select All") {
 
-                    // check if all option is selected or not
-                    if (isSelected) {
+        //    // check if option at index 0 is clicked
+        //    if (clickedIndex == 0) {
+        //        var all = $(this).children('option[value="Select All"]');
+        //        optionvalue = all.html();
 
-                        // make all option selected if all option is selected
-                        $(this).selectpicker('selectAll');
+        //        // check if All option is clicked
+        //        if (optionvalue == "Select All") {
 
-                    } else {
+        //            // check if all option is selected or not
+        //            if (isSelected) {
 
-                        // make all option un-selected if all option is un-selected
-                        $(this).selectpicker('deselectAll');
-                    }
-                }
-            }
-            else {
+        //                // make all option selected if all option is selected
+        //                $(this).selectpicker('selectAll');
 
-                // get selected values and convert it into array
-                var selectedarray = $(this).val().toString()?$(this).val().toString().split(','):'';
+        //            } else {
 
-                // check if all values are selected
-                if (selectedarray.length >= 10 && $.inArray("Select All", selectedarray) == -1) {
+        //                // make all option un-selected if all option is un-selected
+        //                $(this).selectpicker('deselectAll');
+        //            }
+        //        }
+        //    }
+        //    else {
 
-                    // select all option if all values are selected
-                    $(this).children('option[value="Select All"]').prop("selected", true);
+        //        // get selected values and convert it into array
+        //        var selectedarray = $(this).val().toString()?$(this).val().toString().split(','):'';
 
-                }
-                else {
+        //        // check if all values are selected
+        //        if (selectedarray.length >= 10 && $.inArray("Select All", selectedarray) == -1) {
 
-                    // un-select all option if all values are selected
-                    $(this).children('option[value="Select All"]').prop("selected", false);
+        //            // select all option if all values are selected
+        //            $(this).children('option[value="Select All"]').prop("selected", true);
 
-                }
+        //        }
+        //        else {
 
-            }
+        //            // un-select all option if all values are selected
+        //            $(this).children('option[value="Select All"]').prop("selected", false);
 
-            // refresh select list
-            $(this).selectpicker('refresh');
+        //        }
 
-            //ScreeningTests = [];
-            $.each($("#ddScreeningTests option:selected"), function () {
+        //    }
 
-                if ($(this).val() == "Select All") {
+        //    // refresh select list
+        //    $(this).selectpicker('refresh');
 
-                }
-                else {
-                    ScreeningTests.push($(this).val());
-                }
+        //    //ScreeningTests = [];
+        //    $.each($("#ddScreeningTests option:selected"), function () {
 
-            });
+        //        if ($(this).val() == "Select All") {
 
-            });
+        //        }
+        //        else {
+        //            ScreeningTests.push($(this).val());
+        //        }
 
-            $.each($("#ddScreeningTests option:selected"), function () {
+        //    });
 
-                if ($(this).val() == "Select All") {
+        //    });
 
-                }
-                else {
-                    ScreeningTests.push($(this).val());
-                }
+            //$.each($("#ddScreeningTests option:selected"), function () {
 
-            });
+            //    if ($(this).val() == "Select All") {
+
+            //    }
+            //    else {
+            //        ScreeningTests.push($(this).val());
+            //    }
+
+            //});
 
         $('#ddGender').on('change', function ()
         {
@@ -2908,65 +2916,65 @@
         });
 
 
-        $("#ProgramConsentImg").change(function () {
+        //$("#ProgramConsentImg").change(function () {
 
-            var formData = new FormData();
-            var totalFiles = document.getElementById("ProgramConsentImg").files.length;
-            for (var i = 0; i < totalFiles; i++) {
-                var file = document.getElementById("ProgramConsentImg").files[i];
-                file = this.files[i];
-                const fileType = file['type'];
-                const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
-                if (!validImageTypes.includes(fileType)) {
-                    // invalid file type code goes here.
-                    toastr.error("Invalid Image");
-                }
+        //    var formData = new FormData();
+        //    var totalFiles = document.getElementById("ProgramConsentImg").files.length;
+        //    for (var i = 0; i < totalFiles; i++) {
+        //        var file = document.getElementById("ProgramConsentImg").files[i];
+        //        file = this.files[i];
+        //        const fileType = file['type'];
+        //        const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+        //        if (!validImageTypes.includes(fileType)) {
+        //            // invalid file type code goes here.
+        //            toastr.error("Invalid Image");
+        //        }
 
-                formData.append("ProgramConsentImg", file);
-            }
-            $.ajax({
-                type: "POST",
-                url: '/Patient/Upload',
-                data: formData,
-                dataType: 'html',
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                    ProgramConsentImg = response;
+        //        formData.append("ProgramConsentImg", file);
+        //    }
+        //    $.ajax({
+        //        type: "POST",
+        //        url: '/Patient/Upload',
+        //        data: formData,
+        //        dataType: 'html',
+        //        contentType: false,
+        //        processData: false,
+        //        success: function (response) {
+        //            ProgramConsentImg = response;
 
-                    $("input[type=hidden][name=ProgramConsentForm]").val(ProgramConsentImg);
-                    $("#ProgramConsentPic").attr('src', "/Files/" + response)
-                },
-                error: function (error) {
-                    toastr.error("errror");
-                },
-            })
-        });
+        //            $("input[type=hidden][name=ProgramConsentForm]").val(ProgramConsentImg);
+        //            $("#ProgramConsentPic").attr('src', "/Files/" + response)
+        //        },
+        //        error: function (error) {
+        //            toastr.error("errror");
+        //        },
+        //    })
+        //});
 
             //----------------------Peralta College(Program) end-------------------------//
 
-            $('#ddOneYouAre').change(function () {
+            //$('#ddOneYouAre').change(function () {
 
-                OneYouAre = $('#ddOneYouAre option:selected').text();
-                if (OneYouAre == "Student") {
-                    $('#divStudent').show();
-                }
-                else {
-                    $('#divStudent').hide();
-                    $('#txtStudentID').val('');
-                }
-            });
+            //    OneYouAre = $('#ddOneYouAre option:selected').text();
+            //    if (OneYouAre == "Student") {
+            //        $('#divStudent').show();
+            //    }
+            //    else {
+            //        $('#divStudent').hide();
+            //        $('#txtStudentID').val('');
+            //    }
+            //});
 
 
-            var OneYou = $('#ddOneYouAre option:selected').text();
+            //var OneYou = $('#ddOneYouAre option:selected').text();
 
-            if (OneYou == "Student") {
-                $('#divStudent').show();
-            }
-            else {
-                $('#divStudent').hide();
-                $('#txtStudentID').val('');
-            }
+            //if (OneYou == "Student") {
+            //    $('#divStudent').show();
+            //}
+            //else {
+            //    $('#divStudent').hide();
+            //    $('#txtStudentID').val('');
+            //}
 
 
 
@@ -3223,35 +3231,35 @@
 
 
 
-         ClinicPregnant = $("input[name='frmClinic_radio1']:checked").val();
-        if (ClinicPregnant == "Yes") {
-            $('#divIsPregnant').show();
+        // ClinicPregnant = $("input[name='frmClinic_radio1']:checked").val();
+        //if (ClinicPregnant == "Yes") {
+        //    $('#divIsPregnant').show();
 
-        }
-        else {
-            $('#divIsPregnant').hide();
-        }
+        //}
+        //else {
+        //    $('#divIsPregnant').hide();
+        //}
 
-        ClinicBirthControl = $("input[name='frmClinic_radio2']:checked").val();
-        if (ClinicBirthControl == "True") {
-            $('#divBirthControl').show();
+        //ClinicBirthControl = $("input[name='frmClinic_radio2']:checked").val();
+        //if (ClinicBirthControl == "True") {
+        //    $('#divBirthControl').show();
 
-        }
-        else {
-            $('#divBirthControl').hide();
-        }
-
-
+        //}
+        //else {
+        //    $('#divBirthControl').hide();
+        //}
 
 
-        PregnantYes = $("input[name='frmClinic_radio4']:checked").val();
-        if (PregnantYes == "True") {
-            $('#divPregnantYes').show();
 
-        }
-        else {
-            $('#divPregnantYes').hide();
-        }
+
+        //PregnantYes = $("input[name='frmClinic_radio4']:checked").val();
+        //if (PregnantYes == "True") {
+        //    $('#divPregnantYes').show();
+
+        //}
+        //else {
+        //    $('#divPregnantYes').hide();
+        //}
 
 
 
@@ -4275,243 +4283,243 @@
 
     }
 
-    function ClinicOnlySave() {
-        $(".loaderOverlay").css("display", "flex");
-        AddDate();
-        $("input[type=hidden][name=CreatedDate]").val(CreatedDate);
-        $("input[type=hidden][name=ModifiedDate]").val(ModifiedDate);
+    //function ClinicOnlySave() {
+    //    $(".loaderOverlay").css("display", "flex");
+    //    AddDate();
+    //    $("input[type=hidden][name=CreatedDate]").val(CreatedDate);
+    //    $("input[type=hidden][name=ModifiedDate]").val(ModifiedDate);
 
 
-        var radio1 = $("input[name='frmClinic_radio1']:checked").val();
-        var radio2 = $("input[name='frmClinic_radio2']:checked").val();
-        var radio3 = $("input[name='frmClinic_radio3']:checked").val();
-        var radio4 = $("input[name='frmClinic_radio4']:checked").val();
-        var radio5 = $("input[name='frmClinic_radio5']:checked").val();
-        var radio6 = $("input[name='frmClinic_radio6']:checked").val();
-        var radio7 = $("input[name='frmClinic_radio7']:checked").val();
-        var radio8 = $("input[name='frmClinic_radio8']:checked").val();
-        var radio9 = $("input[name='frmClinic_radio9']:checked").val();
-        var radio10 = $("input[name='frmClinic_radio10']:checked").val();
+    //    var radio1 = $("input[name='frmClinic_radio1']:checked").val();
+    //    var radio2 = $("input[name='frmClinic_radio2']:checked").val();
+    //    var radio3 = $("input[name='frmClinic_radio3']:checked").val();
+    //    var radio4 = $("input[name='frmClinic_radio4']:checked").val();
+    //    var radio5 = $("input[name='frmClinic_radio5']:checked").val();
+    //    var radio6 = $("input[name='frmClinic_radio6']:checked").val();
+    //    var radio7 = $("input[name='frmClinic_radio7']:checked").val();
+    //    var radio8 = $("input[name='frmClinic_radio8']:checked").val();
+    //    var radio9 = $("input[name='frmClinic_radio9']:checked").val();
+    //    var radio10 = $("input[name='frmClinic_radio10']:checked").val();
 
-        var radio11 = $("input[name='frmClinic_radio11']:checked").val();
-        $("input[type=hidden][name=PreventativeScreeningTests]").val(ScreeningTests);
+    //    var radio11 = $("input[name='frmClinic_radio11']:checked").val();
+    //    $("input[type=hidden][name=PreventativeScreeningTests]").val(ScreeningTests);
 
 
 
-        $('#hdfPregnant').val(radio1);
-        $('#hdfBirthControl').val(radio2);
-        $('#hdfEmergencyContraception').val(radio3);
-        $('#hdfEverBeenPregnant').val(radio4);
-        $('#hdfHealthcareDirective').val(radio5);
-        $('#hdfAdvancedHealthcareDirectives').val(radio6);
-        $('#hdfTestedForTB').val(radio7);
-        $('#hdfTBdiseaseAtAnyTime').val(radio8);
-        $('#hdfWeakenedImmuneSystem').val(radio9);
-        $('#hdfElevatedRateOfTB').val(radio10);
-        $('#hdfVolunteerOfHighRisk').val(radio11);
-        $("#hdfAnyVaccinations").val($("#ClinicOnly_AnyVaccinations").val());
+    //    $('#hdfPregnant').val(radio1);
+    //    $('#hdfBirthControl').val(radio2);
+    //    $('#hdfEmergencyContraception').val(radio3);
+    //    $('#hdfEverBeenPregnant').val(radio4);
+    //    $('#hdfHealthcareDirective').val(radio5);
+    //    $('#hdfAdvancedHealthcareDirectives').val(radio6);
+    //    $('#hdfTestedForTB').val(radio7);
+    //    $('#hdfTBdiseaseAtAnyTime').val(radio8);
+    //    $('#hdfWeakenedImmuneSystem').val(radio9);
+    //    $('#hdfElevatedRateOfTB').val(radio10);
+    //    $('#hdfVolunteerOfHighRisk').val(radio11);
+    //    $("#hdfAnyVaccinations").val($("#ClinicOnly_AnyVaccinations").val());
 
 
 
-        var formData = $("#frmClinic").serializeObject();
+    //    var formData = $("#frmClinic").serializeObject();
 
 
 
-        $.ajax({
-            type: "POST",
-            url: Apipath + '/api/PatientMain/ClinicOnly',
-            data: JSON.stringify(formData),
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            success: function (result) {
-                $(".loaderOverlay").hide();
-                $("input[type=hidden][name=ClinicOnlyID]").val(result);
+    //    $.ajax({
+    //        type: "POST",
+    //        url: Apipath + '/api/PatientMain/ClinicOnly',
+    //        data: JSON.stringify(formData),
+    //        dataType: "json",
+    //        contentType: "application/json; charset=utf-8",
+    //        success: function (result) {
+    //            $(".loaderOverlay").hide();
+    //            $("input[type=hidden][name=ClinicOnlyID]").val(result);
 
-                toastr.success("Record saved successfully");
-                $("#aclinic").find('span').css('display', 'inline');
-                $("#Programs-tab").find('span').css('display', 'inline');
+    //            toastr.success("Record saved successfully");
+    //            $("#aclinic").find('span').css('display', 'inline');
+    //            $("#Programs-tab").find('span').css('display', 'inline');
 
 
-            },
-            error: function () {
-                $(".loaderOverlay").hide();
-                toastr.error("Error while inserting data");
+    //        },
+    //        error: function () {
+    //            $(".loaderOverlay").hide();
+    //            toastr.error("Error while inserting data");
 
 
-            }
-        });
+    //        }
+    //    });
 
-    }
+    //}
 
-    function DreamOnlySave() {
-        $(".loaderOverlay").css("display", "flex");
-        AddDate();
-        $("input[type=hidden][name=CreatedDate]").val(CreatedDate);
-        $("input[type=hidden][name=ModifiedDate]").val(ModifiedDate);
+    //function DreamOnlySave() {
+    //    $(".loaderOverlay").css("display", "flex");
+    //    AddDate();
+    //    $("input[type=hidden][name=CreatedDate]").val(CreatedDate);
+    //    $("input[type=hidden][name=ModifiedDate]").val(ModifiedDate);
 
-        var radio1 = $("input[name='frmDream_radio1']:checked").val();
+    //    var radio1 = $("input[name='frmDream_radio1']:checked").val();
 
-        $('#hdfDrivenBySomeone').val(radio1);
+    //    $('#hdfDrivenBySomeone').val(radio1);
 
-        var formData = $("#frmDream").serializeObject();
+    //    var formData = $("#frmDream").serializeObject();
 
 
-        $.ajax({
-            type: "POST",
-            url: Apipath + '/api/PatientMain/DreamOnly',
-            data: JSON.stringify(formData),
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            success: function (result) {
-                $(".loaderOverlay").hide();
-                $("input[type=hidden][name=DreamOnlyID]").val(result);
+    //    $.ajax({
+    //        type: "POST",
+    //        url: Apipath + '/api/PatientMain/DreamOnly',
+    //        data: JSON.stringify(formData),
+    //        dataType: "json",
+    //        contentType: "application/json; charset=utf-8",
+    //        success: function (result) {
+    //            $(".loaderOverlay").hide();
+    //            $("input[type=hidden][name=DreamOnlyID]").val(result);
 
-                toastr.success("Record saved successfully");
-                $("#adream").find('span').css('display', 'inline');
-                $("#Programs-tab").find('span').css('display', 'inline');
+    //            toastr.success("Record saved successfully");
+    //            $("#adream").find('span').css('display', 'inline');
+    //            $("#Programs-tab").find('span').css('display', 'inline');
 
 
-            },
-            error: function () {
-                $(".loaderOverlay").hide();
-                toastr.error("Error while inserting data");
+    //        },
+    //        error: function () {
+    //            $(".loaderOverlay").hide();
+    //            toastr.error("Error while inserting data");
 
 
-            }
-        });
+    //        }
+    //    });
 
-    }
+    //}
 
-    function OUOnlySave() {
-        $(".loaderOverlay").css("display", "flex");
-        AddDate();
-        $("input[type=hidden][name=CreatedDate]").val(CreatedDate);
-        $("input[type=hidden][name=ModifiedDate]").val(ModifiedDate);
+    //function OUOnlySave() {
+    //    $(".loaderOverlay").css("display", "flex");
+    //    AddDate();
+    //    $("input[type=hidden][name=CreatedDate]").val(CreatedDate);
+    //    $("input[type=hidden][name=ModifiedDate]").val(ModifiedDate);
 
 
-        var radio1 = $("input[name='frmOU_radio1']:checked").val();
-        var radio2 = $("input[name='frmOU_radio2']:checked").val();
-        var radio3 = $("input[name='frmOU_radio3']:checked").val();
-        var radio4 = $("input[name='frmOU_radio4']:checked").val();
-        var radio5 = $("input[name='frmOU_radio5']:checked").val();
-        var radio6 = $("input[name='frmOU_radio6']:checked").val();
-        var radio7 = $("input[name='frmOU_radio7']:checked").val();
-        var radio8 = $("input[name='frmOU_radio8']:checked").val();
-        var radio9 = $("input[name='frmOU_radio9']:checked").val();
-        var radio10 = $("input[name='frmOU_radio10']:checked").val();
+    //    var radio1 = $("input[name='frmOU_radio1']:checked").val();
+    //    var radio2 = $("input[name='frmOU_radio2']:checked").val();
+    //    var radio3 = $("input[name='frmOU_radio3']:checked").val();
+    //    var radio4 = $("input[name='frmOU_radio4']:checked").val();
+    //    var radio5 = $("input[name='frmOU_radio5']:checked").val();
+    //    var radio6 = $("input[name='frmOU_radio6']:checked").val();
+    //    var radio7 = $("input[name='frmOU_radio7']:checked").val();
+    //    var radio8 = $("input[name='frmOU_radio8']:checked").val();
+    //    var radio9 = $("input[name='frmOU_radio9']:checked").val();
+    //    var radio10 = $("input[name='frmOU_radio10']:checked").val();
 
-        var radio11 = $("input[name='frmOU_radio11']:checked").val();
-        var radio12 = $("input[name='frmOU_radio12']:checked").val();
+    //    var radio11 = $("input[name='frmOU_radio11']:checked").val();
+    //    var radio12 = $("input[name='frmOU_radio12']:checked").val();
 
-        var radio13 = $("input[name='frmOU_radio13']:checked").val();
-        var radio14 = $("input[name='frmOU_radio14']:checked").val();
-        var radio15 = $("input[name='frmOU_radio15']:checked").val();
-        var radio16 = $("input[name='frmOU_radio16']:checked").val();
+    //    var radio13 = $("input[name='frmOU_radio13']:checked").val();
+    //    var radio14 = $("input[name='frmOU_radio14']:checked").val();
+    //    var radio15 = $("input[name='frmOU_radio15']:checked").val();
+    //    var radio16 = $("input[name='frmOU_radio16']:checked").val();
 
-        var radio17 = $("input[name='frmOU_radio17']:checked").val();
-        var radio18 = $("input[name='frmOU_radio18']:checked").val();
-        var radio19 = $("input[name='frmOU_radio19']:checked").val();
-        var radio20 = $("input[name='frmOU_radio20']:checked").val();
+    //    var radio17 = $("input[name='frmOU_radio17']:checked").val();
+    //    var radio18 = $("input[name='frmOU_radio18']:checked").val();
+    //    var radio19 = $("input[name='frmOU_radio19']:checked").val();
+    //    var radio20 = $("input[name='frmOU_radio20']:checked").val();
 
 
-        $('#hdfUnsafeCity').val(radio1);
+    //    $('#hdfUnsafeCity').val(radio1);
 
-        $('#hdfDrugTest').val(radio2);
-        $('#hdfLearningDisabilities').val(radio3);
+    //    $('#hdfDrugTest').val(radio2);
+    //    $('#hdfLearningDisabilities').val(radio3);
 
-        $('#hdfAnyPendingCourtDates').val(radio4);
-        $('#hdfConvictedOfAnyOffense').val(radio5);
-        $('#hdfMisdemeanor').val(radio6);
-        $('#hdfFelony').val(radio7);
-        $('#hdfRestrainingOrders').val(radio8);
-        $('#hdfAngerManagement').val(radio9);
-        $('#hdfGunInvolvedActivity').val(radio11);
+    //    $('#hdfAnyPendingCourtDates').val(radio4);
+    //    $('#hdfConvictedOfAnyOffense').val(radio5);
+    //    $('#hdfMisdemeanor').val(radio6);
+    //    $('#hdfFelony').val(radio7);
+    //    $('#hdfRestrainingOrders').val(radio8);
+    //    $('#hdfAngerManagement').val(radio9);
+    //    $('#hdfGunInvolvedActivity').val(radio11);
 
-        $('#hdfGangRelatedStreetViolence').val(radio12);
-        $('#hdfKilledDueToTurf').val(radio13);
-        $('#hdfHotSpotArea').val(radio14);
-        $('#hdfAssociateWithTurfs').val(radio15);
-        $('#hdfViolentOffense').val(radio16);
-        $('#hdfTermsOfProbation').val(radio10);
+    //    $('#hdfGangRelatedStreetViolence').val(radio12);
+    //    $('#hdfKilledDueToTurf').val(radio13);
+    //    $('#hdfHotSpotArea').val(radio14);
+    //    $('#hdfAssociateWithTurfs').val(radio15);
+    //    $('#hdfViolentOffense').val(radio16);
+    //    $('#hdfTermsOfProbation').val(radio10);
 
-        $('#hdfHaveSSN').val(radio17);
-        $('#hdfHaveStateIssuedPhotoID').val(radio18);
-        $('#hdfHaveI9').val(radio19);
-        $('#hdfEligibleForEmployment').val(radio20);
+    //    $('#hdfHaveSSN').val(radio17);
+    //    $('#hdfHaveStateIssuedPhotoID').val(radio18);
+    //    $('#hdfHaveI9').val(radio19);
+    //    $('#hdfEligibleForEmployment').val(radio20);
 
-        $('#hdfSafety').val(getpriorityvalues('.safety-options li'));
-        $('#hdfEmployment').val(getpriorityvalues('.employement-options li'));
-        $('#hdfHousingShelter').val(getpriorityvalues('.housingshelter-options li'));
-        $('#hdfEducation').val(getpriorityvalues('.education-options li'));
-        $('#hdfLegal').val(getpriorityvalues('.legal-options li'));
-        $('#hdfSocialRecreational').val(getpriorityvalues('.socialrecreational-options li'));
+    //    $('#hdfSafety').val(getpriorityvalues('.safety-options li'));
+    //    $('#hdfEmployment').val(getpriorityvalues('.employement-options li'));
+    //    $('#hdfHousingShelter').val(getpriorityvalues('.housingshelter-options li'));
+    //    $('#hdfEducation').val(getpriorityvalues('.education-options li'));
+    //    $('#hdfLegal').val(getpriorityvalues('.legal-options li'));
+    //    $('#hdfSocialRecreational').val(getpriorityvalues('.socialrecreational-options li'));
 
 
-        var formData = $("#frmOU").serializeObject();
+    //    var formData = $("#frmOU").serializeObject();
 
 
 
-        $.ajax({
-            type: "POST",
-            url: Apipath + '/api/PatientMain/OUOnly',
-            data: JSON.stringify(formData),
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            success: function (result) {
-                $(".loaderOverlay").hide();
-                $("input[type=hidden][name=OUOnlyID]").val(result);
+    //    $.ajax({
+    //        type: "POST",
+    //        url: Apipath + '/api/PatientMain/OUOnly',
+    //        data: JSON.stringify(formData),
+    //        dataType: "json",
+    //        contentType: "application/json; charset=utf-8",
+    //        success: function (result) {
+    //            $(".loaderOverlay").hide();
+    //            $("input[type=hidden][name=OUOnlyID]").val(result);
 
-                toastr.success("Record saved successfully");
-                $("#aou").find('span').css('display', 'inline');
-                $("#Programs-tab").find('span').css('display', 'inline');
+    //            toastr.success("Record saved successfully");
+    //            $("#aou").find('span').css('display', 'inline');
+    //            $("#Programs-tab").find('span').css('display', 'inline');
 
 
-            },
-            error: function () {
-                $(".loaderOverlay").hide();
-                toastr.error("Error while inserting data");
+    //        },
+    //        error: function () {
+    //            $(".loaderOverlay").hide();
+    //            toastr.error("Error while inserting data");
 
 
-            }
-        });
+    //        }
+    //    });
 
-    }
+    //}
 
-    function PeraltaCollegesSave() {
-        $(".loaderOverlay").css("display", "flex");
-            AddDate();
-            $("input[type=hidden][name=CreatedDate]").val(CreatedDate);
-            $("input[type=hidden][name=ModifiedDate]").val(ModifiedDate);
+    //function PeraltaCollegesSave() {
+    //    $(".loaderOverlay").css("display", "flex");
+    //        AddDate();
+    //        $("input[type=hidden][name=CreatedDate]").val(CreatedDate);
+    //        $("input[type=hidden][name=ModifiedDate]").val(ModifiedDate);
 
-            var formData = $("#frmPeraltaColleges").serializeObject();
+    //        var formData = $("#frmPeraltaColleges").serializeObject();
 
 
 
-            $.ajax({
-                type: "POST",
-                url: Apipath + '/api/PatientMain/PeraltaCollege',
-                data: JSON.stringify(formData),
-                dataType: "json",
-                contentType: "application/json; charset=utf-8",
-                success: function (result) {
-                    $(".loaderOverlay").hide();
-                    $("input[type=hidden][name=PeraltaCollegesID]").val(result);
+    //        $.ajax({
+    //            type: "POST",
+    //            url: Apipath + '/api/PatientMain/PeraltaCollege',
+    //            data: JSON.stringify(formData),
+    //            dataType: "json",
+    //            contentType: "application/json; charset=utf-8",
+    //            success: function (result) {
+    //                $(".loaderOverlay").hide();
+    //                $("input[type=hidden][name=PeraltaCollegesID]").val(result);
 
-                    toastr.success("Record saved successfully");
-                    $("#aPeraltaColleges").find('span').css('display', 'inline');
-                    $("#Programs-tab").find('span').css('display', 'inline');
+    //                toastr.success("Record saved successfully");
+    //                $("#aPeraltaColleges").find('span').css('display', 'inline');
+    //                $("#Programs-tab").find('span').css('display', 'inline');
 
 
-                },
-                error: function () {
-                    $(".loaderOverlay").hide();
-                    toastr.error("Error while inserting data");
+    //            },
+    //            error: function () {
+    //                $(".loaderOverlay").hide();
+    //                toastr.error("Error while inserting data");
 
 
-                }
-            });
+    //            }
+    //        });
 
-        }
+    //    }
 
     function getpriorityvalues(ele) {
 
@@ -4657,7 +4665,7 @@ var fileDataP10 = new FormData();
          var _IsSaved = 'False';
         function RebindEvent() {
              
-             $("#tabPills .nav-item a").on('click', function (e) {
+            $("#tabPills .nav-item a").on('click', function (e) {
              $('#Programs .tab-pane').each(function (index, item) {
                 $(item).removeClass("active show");
                 });
@@ -4670,7 +4678,7 @@ var fileDataP10 = new FormData();
              var _programId = item.attr("data-ProgramID")
              _programName = item.attr("data-programName");
              _programelement=$("#"+_programName+"render-basicform")
-            _IsSaved = item.attr("data-Saved");
+            _IsSaved = $('#' + _programName + 'only').find('.btnprogramsave').attr('data-save');
              $('#' + _programName + 'only').addClass('active show');
              var _templateID = item.attr("data-TemplateID");
                  
@@ -5051,16 +5059,18 @@ var fileDataP10 = new FormData();
                             default:
 
                                 value = baseFields[$(item).attr("data-column")];
-
-                                    item.value = value;
-
+                                item.value = value;
                                 break;
                         }
                     }
                     if ($(item).is("select")) {
                         value = baseFields[$(item).attr("data-column")];
-
-                            item.value = value;
+                                if (value == null) {
+                                    item.value = 0;
+                                }
+                                else {
+                                     item.value = value;
+                                }
 
                     }
                     if ($(item).is("textarea")) {
@@ -5256,7 +5266,6 @@ var fileDataP10 = new FormData();
     $("#" + Id).next().next().find("input").each(function (index, item) {
         fileNames.push($(item).val());
 
-        console.log(item)
         if ($(item).hasAttr("data-file")) {
             savedfiles.push($(item).attr("data-file"));
         }
@@ -5292,10 +5301,10 @@ var fileDataP10 = new FormData();
     });
 }
    ///Save
-
+       
 
       function saveProgramBasicInfo(_templateId, _templatetable, _programID) {
-      var _Saved = $('#' + _programName + 'only').find('.btnprogramsave').attr('data-save');
+          var _Saved = $('#' + _programName + 'only').find('.btnprogramsave').attr('data-save');
       var fieldmodel = [];
       var isvalid = true;
       _programelement.find(".base-control,.program-control,input.custom-control-input").each(function (index, item) {

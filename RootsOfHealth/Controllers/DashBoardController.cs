@@ -62,13 +62,13 @@ namespace RootsOfHealth.Controllers
                         patientdetailobj.PatientSubstanceUse.Dast = patientdetailobj.Dast;
 
                         patientdetailobj.PatientMentalHealth.PHQ9 = patientdetailobj.PHQ9;
-                        patientdetailobj.PatientProgram.ClinicOnly = patientdetailobj.ClinicOnly;
+                         patientdetailobj.PatientProgram.ClinicOnly = patientdetailobj.ClinicOnly;
                         patientdetailobj.PatientProgram.DreamOnly = patientdetailobj.DreamOnly;
                         patientdetailobj.PatientProgram.OUOnly = patientdetailobj.OUOnly;
                         patientdetailobj.PatientProgram.PeraltaCollege = patientdetailobj.PeraltaCollege;
 
 
-                        ViewBag.PatientId = patientdetailobj.PatientMain.PatientID;
+                    ViewBag.PatientId = patientdetailobj.PatientMain.PatientID;
                         ViewBag.FirstName = patientdetailobj.PatientMain.FirstName + " " + patientdetailobj.PatientMain.MiddleName + " " + patientdetailobj.PatientMain.LastName;
                         ViewBag.DOB = patientdetailobj.PatientMain.DateOfBirth;
                         ViewBag.mentalPDOB = patientdetailobj.PatientMentalHealth.CreatedDate == null ? DateTime.Now.ToShortDateString() : patientdetailobj.PatientMentalHealth.CreatedDate.ToString();
@@ -865,7 +865,7 @@ namespace RootsOfHealth.Controllers
 
 
                         patientdetailobj.ScheduleDate = sheduleobj;
-                        objCommon.BindDBOptions(ref patientdetailobj);
+                       objCommon.BindDBOptions(ref patientdetailobj);
 
                     }
                     else //web api sent error response 
@@ -979,8 +979,9 @@ namespace RootsOfHealth.Controllers
 
             programobj.AvailablePrograms = availablePrograms;
             programobj.PatientPrograms = patientprograms;
+            @ViewBag.TotalProgramCounts =availablePrograms.Count + patientprograms.Count;
 
-            
+
              return PartialView("~/Views/Shared/Patient/_AddPatientPrograms.cshtml", programobj);
            
 

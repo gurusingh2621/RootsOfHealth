@@ -35,6 +35,7 @@
 <script>
     var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]'
 
+    $('#btnaddprogram').attr('data-totalProgramCount','@ViewBag.TotalProgramCounts')
     function selectProgram(id,ele) {
 
         $('#programid').val(id);
