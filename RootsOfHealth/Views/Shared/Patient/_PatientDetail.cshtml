@@ -2474,7 +2474,7 @@
     function getBasehtmlByProgramId(programid) {
     $.ajax({
         type: "GET",
-        url: Apipath + '/api/PatientMain/getprogrambasetemplateidbyprogramid?ProgramID=' + programid,
+        url: Apipath + '/api/PatientMain/getprogrambasetemplateidbyprogramid?ProgramID=' + programid + '&&PatientId=' + _patientID,
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         async: false,
