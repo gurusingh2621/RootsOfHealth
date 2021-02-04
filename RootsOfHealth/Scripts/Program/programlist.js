@@ -41,7 +41,7 @@ function GetProgramTemplateList() {
                     } else if (item.IsActive == 0 && item.IsBaseTemplate == false){
                         programs += `<a href="javascript:void(0)" onclick="alertInprogressStatus()"  class="btn btn-success text-white" style="cursor:pointer;">ACTIVATE</a>`;
                     }
-
+                 
                     programs += `</div></td></tr>`;
                 });
                 programlist.html("").append(programs);
@@ -81,7 +81,7 @@ function SetTemplateStatus(Templateid, Status) {
     $.confirm({
         icon: 'fas fa-exclamation-triangle',
         title: 'Confirm',
-        content: Status == true ? 'This template will be activated and users will have access. Do you want to continue?' : 'Are you sure you want to de-activate. Careplan implementation for This program will be removed for users ?',
+        content: Status == true ? 'This template will be activated and users will have access. Do you want to continue?' : 'Are you sure you want to de-activate.?',
         type: Status == true ? 'green' : 'red',
         columnClass: 'col-md-6 col-md-offset-3',
         typeAnimated: true,
