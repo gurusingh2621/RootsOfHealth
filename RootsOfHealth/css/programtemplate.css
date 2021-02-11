@@ -276,6 +276,13 @@ div#droppable .form-control[type="file"] {
 div#droppable textarea.form-control {
     height: 150px;
 }
+div#droppable .form-control.priority {
+    height: auto !important;
+    min-height:50px;
+}
+div#droppable .form-control.priority>li {
+  cursor:move
+}
 
 div#droppable .form-control:focus {
     box-shadow: none;
