@@ -42,6 +42,13 @@
 .preview-body textarea.form-control {
     height: 50px;
 }
+   .preview-body .form-control.priority {
+        height: auto!important;
+        min-height:50px
+    }
+    .preview-body .form-control.priority>li {
+      cursor:move
+    }
 
 .preview-body .form-control:focus {
     box-shadow: none;

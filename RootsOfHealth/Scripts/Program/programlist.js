@@ -3,6 +3,7 @@
     GetBaseTemplateId();
     sessionStorage.clear();
 });
+var _programDataTable = '';
 function GetProgramTemplateList() {
     $(".loaderOverlay").css("display", "flex");
     $.ajax({
@@ -41,6 +42,10 @@ function GetProgramTemplateList() {
                     } else if (item.IsActive == 0 && item.IsBaseTemplate == false){
                         programs += `<a href="javascript:void(0)" onclick="alertInprogressStatus()"  class="btn btn-success text-white" style="cursor:pointer;">ACTIVATE</a>`;
                     }
+
+                    if (!item.IsBaseTemplate) {
+                        programs += `<a href="javascript:void(0)" onclick="DeleteProgram(${item.ProgramID},this)"  class="btn btn-success text-white" style="cursor:pointer;">Delete</a>`;
+                    }
                  
                     programs += `</div></td></tr>`;
                 });
@@ -50,7 +55,7 @@ function GetProgramTemplateList() {
                 programlist.html("").append(programs);
             }
             
-            $('#tblProgramTemplateList').DataTable({
+          _programDataTable= $('#tblProgramTemplateList').DataTable({
                 retrieve: true,
                 searching: false,
                 'columnDefs': [{
@@ -109,7 +114,26 @@ function SetTemplateStatus(Templateid, Status) {
     });
 
 }
+function DeleteProgram(_programId, button) {
+    var btn = $(button);
+     
+    $.ajax({
+        type: "Post",
+        url: Apipath + '/api/PatientMain/deleteprogram?Programid=' + _programId,
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        success: function (result) {
+            if (result.DeleteStatus == 0) {
+                toastr.error("", result.Message, { progressBar: true });
+            }
+            else if (result.DeleteStatus == 1) {
+                toastr.success("", "Deleted successfully", { progressBar: true });
+                _programDataTable.row(btn.parents('tr')).remove().draw();
+            }
+        }
+    });
 
+}
 function getTemplates(obj) {
     if ($(obj).prop("checked")) {
         $.ajax({
@@ -364,6 +388,7 @@ function ViewProgramContent(ID,name) {
                     backdrop: 'static'
                 });
             }
+            $(".priority").sortable();
             $(".loaderOverlay").hide();
         },
         error: function (e) {
