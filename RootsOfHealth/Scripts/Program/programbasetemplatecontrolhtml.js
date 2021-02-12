@@ -166,9 +166,9 @@ function HtmlControlDragnDrop() {
                 case "priority":
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
                         '<label class=""><span class="title">Priority</span><span class="desc"></span></label>' +
-                        '<div class="inputContent"> <ul id="' + newid + '" class="form-control  priority base-control">' +
-                        '<li  value="1">option 1</li>' +
-                        '<li  value="2">option 2</li>' +
+                        '<div class="inputContent"> <ul id="' + newid + '" class="form-control  priority base-control" style="border:none;">' +
+                        '<li style="margin-bottom: 5px" value="1">option 1</li>' +
+                        '<li style="margin-bottom: 5px" value="2">option 2</li>' +
                         ' </ul>' +
                         '<label class="label-program"></label>' +
                         '</div></div>' +
@@ -1505,7 +1505,7 @@ function EditHtml(type, ID) {
                 $(controlId).parent().prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span><span class="desc"></span>`);
                 $(controlId).html("");
                 $(".option-block").each(function (index) {
-                    var option_data = "<li value=" + $(this).find("input.option-value").val() + ">" + $(this).find("input.option-text").val() + "</li>";
+                    var option_data = "<li style='margin-bottom:5px' value=" + $(this).find("input.option-value").val() + ">" + $(this).find("input.option-text").val() + "</li>";
                     $(option_data).appendTo('#' + ID);
                 });
                 
@@ -2040,7 +2040,7 @@ function saveHtml() {
                 return false;
             } else {
                 //templateId = result.id;
-                $("#hdnTemplateId").val(result.id);
+                $("#hdnTemplateId").val(Res.TemplateID);
                 $(".hiddenSavedHtml").html("").append(gethtml);
             }
 

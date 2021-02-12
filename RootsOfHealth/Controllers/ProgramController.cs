@@ -40,7 +40,7 @@ namespace RootsOfHealth.Controllers
                     var data = result.Content.ReadAsAsync<ProgramtemplateBO>();
                     if (data.Result != null && data.Result.TemplatePath != null)
                     {
-                        var gethtml = System.IO.File.ReadAllText(Server.MapPath("~/App_Data/" + data.Result.TemplatePath));
+                        var gethtml = System.IO.File.ReadAllText(Server.MapPath("~/App_Data/Templates/ProgramsTemplate/" + data.Result.TemplatePath));
                         var jsonResult = new
                         {
                             html = gethtml,
@@ -128,7 +128,7 @@ namespace RootsOfHealth.Controllers
             PathName = data.TemplatePath;
             if (PathName != "" && PathName != null)
             {
-                var gethtml = System.IO.File.ReadAllText(Server.MapPath("~/App_Data/" + PathName));
+                var gethtml = System.IO.File.ReadAllText(Server.MapPath("~/App_Data/Templates/ProgramsTemplate/" + PathName));
                 var jsonResult = new
                 {
                     html = gethtml,
@@ -150,13 +150,21 @@ namespace RootsOfHealth.Controllers
         {
             string TemplateName = "";
             string dataFile = "";
+            string path = "";
             if (Model.IsBaseTemplate)
             {
                 Model.ProgramName = "BaseProgramTemplate";
                 TemplateName = Guid.NewGuid().ToString() + ".html";
-                dataFile = Server.MapPath("~/App_Data/" + TemplateName);
+
+                path = "~/App_Data/Templates/ProgramsTemplate/BaseTemplate";
+                 if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(Server.MapPath(path));
+                }
+               
+                dataFile = Server.MapPath(path + "/" + TemplateName);
                 System.IO.File.WriteAllText(@dataFile, htmlTemplate);
-                Model.TemplatePath = TemplateName;
+                Model.TemplatePath =  "BaseTemplate/" + TemplateName;
                 Model.TemplateTable = "tbl_" + Model.ProgramName;
                 Model.IsBaseTemplate = true;
             }
@@ -164,10 +172,15 @@ namespace RootsOfHealth.Controllers
             {
                 
                 if (htmlTemplate != null) {
+                    path = "~/App_Data/Templates/ProgramsTemplate/" + Model.ProgramID;
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(Server.MapPath(path));
+                    }
                 TemplateName = Guid.NewGuid().ToString() + ".html";
-                dataFile = Server.MapPath("~/App_Data/" + TemplateName);
+                dataFile = Server.MapPath(path + "/" + TemplateName);
                 System.IO.File.WriteAllText(@dataFile, htmlTemplate);
-                Model.TemplatePath = TemplateName;
+                Model.TemplatePath = Model.ProgramID + "/" + TemplateName;
                 }
                 if(TemplatePath!=null && htmlTemplate == null)
                 {
@@ -220,14 +233,14 @@ namespace RootsOfHealth.Controllers
         }
 
         [HttpGet]
-        public JsonResult IsProgramExist(string ProgramName,int TemplateID)
+        public JsonResult IsProgramExist(string ProgramName,int ProgramId)
         {
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(WebApiKey);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var responseTask = client.GetAsync("api/PatientMain/isprogramexist?ProgramName=" + ProgramName.Replace(" ","")+"&&TemplateID="+ TemplateID);
+                var responseTask = client.GetAsync("api/PatientMain/isprogramexist?ProgramName=" + ProgramName.Replace(" ","")+ "&&ProgramId=" + ProgramId);
                 responseTask.Wait();
                 var result = responseTask.Result;
                 if (result.IsSuccessStatusCode)
@@ -295,7 +308,7 @@ namespace RootsOfHealth.Controllers
             PathName = data.TemplatePath;
             if (PathName != "" && PathName != null)
             {
-                var gethtml = System.IO.File.ReadAllText(Server.MapPath("~/App_Data/" + PathName));
+                var gethtml = System.IO.File.ReadAllText(Server.MapPath("~/App_Data/Templates/ProgramsTemplate/" + PathName));
                 var jsonResult = new
                 {
                     html = gethtml,
