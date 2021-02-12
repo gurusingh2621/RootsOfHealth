@@ -115,20 +115,38 @@ function SetTemplateStatus(Templateid, Status) {
 
 }
 function DeleteProgram(_programId, button) {
-    var btn = $(button);
-     
-    $.ajax({
-        type: "Post",
-        url: Apipath + '/api/PatientMain/deleteprogram?Programid=' + _programId,
-        contentType: 'application/json; charset=UTF-8',
-        dataType: "json",
-        success: function (result) {
-            if (result.DeleteStatus == 0) {
-                toastr.error("", result.Message, { progressBar: true });
-            }
-            else if (result.DeleteStatus == 1) {
-                toastr.success("", "Deleted successfully", { progressBar: true });
-                _programDataTable.row(btn.parents('tr')).remove().draw();
+
+    $.confirm({
+        icon: 'fas fa-exclamation-triangle',
+        title: 'Confirm',
+        content: 'Are you sure,you want to delete this program?',
+        type: 'red',
+        columnClass: 'col-md-6 col-md-offset-3',
+        typeAnimated: true,
+        buttons: {
+            yes: {
+                btnClass: 'btn-red',
+                action: function () {
+                    var btn = $(button);
+
+                    $.ajax({
+                        type: "Post",
+                        url: Apipath + '/api/PatientMain/deleteprogram?Programid=' + _programId,
+                        contentType: 'application/json; charset=UTF-8',
+                        dataType: "json",
+                        success: function (result) {
+                            if (result.DeleteStatus == 0) {
+                                toastr.error("", result.Message, { progressBar: true });
+                            }
+                            else if (result.DeleteStatus == 1) {
+                                toastr.success("", "Deleted successfully", { progressBar: true });
+                                _programDataTable.row(btn.parents('tr')).remove().draw();
+                            }
+                        }
+                    });
+                }
+            },
+            no: function () {
             }
         }
     });
@@ -192,7 +210,7 @@ function CreateProgram() {
     }
     $.ajax({
         type: "GET",
-        url: '/Program/IsProgramExist?ProgramName=' + ProgramName + '&&TemplateID=0',
+        url: '/Program/IsProgramExist?ProgramName=' + ProgramName + '&&ProgramId=0',
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
@@ -294,7 +312,7 @@ function ProceedProgram(data) {
         success: function (result) {
             
             if (result.isRedirect) {
-                //  sessionStorage.clear();
+                  //sessionStorage.clear();
                 window.location.href = result.redirectUrl;
             }
         },
