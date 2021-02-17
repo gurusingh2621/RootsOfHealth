@@ -1106,7 +1106,7 @@
                 dataType: "html",
                 contentType: "application/json; charset=utf-8",
                 success: function (result) {
-                    ;
+                    
                     $('#Programs')[0].outerHTML = result;
 
                     $('#Programs').addClass('active show')
@@ -1146,7 +1146,12 @@
 
             }
             if (currenttab == 'ProgramTab') {
-                $('#programtbs').click();
+                if (@Model.Programs.Count> 0) {
+                    $('#programtbs').click();
+                }
+                else {
+                    $('#Profile-tab').click();
+                }
             }
         $('.date').datepicker(
             {
@@ -5026,6 +5031,12 @@ var fileDataP10 = new FormData();
                         if (result.length > 0) {
                             $(item).html(result);
                         }
+                    }
+                    if ($(item).is("textarea")) {
+                        value = fields[$(item).attr("data-column")];
+
+                        $(item).summernote('code', value);
+
                     }
                 });
             }
