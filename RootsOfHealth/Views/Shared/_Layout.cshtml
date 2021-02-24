@@ -113,8 +113,8 @@
             border-bottom: none;
         }
         .colorPrint {
-            background:white!important;
-            
+            background: white !important;
+            padding-top: 30px!important
         }
             #Programs .nav-tabs:hover {
                 overflow-x: hidden !important;
@@ -243,7 +243,7 @@
                 position: relative;
                 margin: 0 0 10px 0;
             }
-
+           
                 .render-basicProgramform .frmbtn select.form-control {
                     padding: 0 15px;
                     background: url(../images/chevron-arrow-down.svg) no-repeat 0 0;
@@ -319,8 +319,48 @@
                 padding: 0 15px;
             }
 
-        .scroll {
-            overflow-y: auto;
+            .scroll {
+                overflow-y: auto;
+            }
+            @@page{
+                margin:20mm
+            }
+       @@media print {
+       
+        .left-control .frmbtn {
+            border: 0;
+            padding: 0;
+        }
+      
+        .render-basicProgramform .basecontentarea {
+            display: block;
+            box-sizing: border-box !important;
+        }
+        table {
+            break-inside: auto;
+        }
+
+        .dragresize {
+            break-inside: avoid;
+            padding-top: 10px;
+            float: left;
+        }
+      
+            .dragresize.col-md-6 {
+                width: 50% !important;
+                box-sizing: border-box !important;
+            }
+            .dragresize.col-md-4 {
+                width: 33.333% !important;
+                box-sizing: border-box !important;
+            }
+            .dragresize.col-md-6 div,
+            .dragresize.col-md-4 div{
+                box-sizing: border-box !important;
+            }
+        .render-basicProgramform .frmbtn {
+            margin: 0px 0 0px 0;
+        }
         }
     </style>
 </head>

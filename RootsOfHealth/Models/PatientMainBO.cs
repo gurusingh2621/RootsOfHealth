@@ -74,6 +74,7 @@ namespace RootsOfHealth.Models
         public string EmergencyContact2City { get; set; }
         public string EmergencyContact2State { get; set; }
         public string EmergencyContact2Zip { get; set; }
+        public string AmdMedicalRecordNumber { get; set; }
         public Nullable<int> ClinicID { get; set; }
         public ProgramBO Program { get; set; }
 
