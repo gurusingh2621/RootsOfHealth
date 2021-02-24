@@ -78,16 +78,24 @@
     var _userID = "@Session["userid"]";
     var _patientID = '@ViewBag.PatientId';
     var programName = '';
-    var programElement=''
+    var programElement = '';
+    var clinicAddress = "";
+    var _ClinicId = "@Model.PatientMain.ClinicID"
+    var _amdMedRecordNo = '@Model.PatientMain.AmdMedicalRecordNumber';
+    var clientMiddleName = '@Model.PatientMain.MiddleName';
+     var clientName = '@Model.PatientMain.FirstName'+" "+'@Model.PatientMain.LastName'
+    if (clientMiddleName.trim().length > 0) {
+        clientName = '@Model.PatientMain.FirstName' + " " + clientMiddleName+" "+'@Model.PatientMain.LastName'
+    }
 
     $('#datepicker').datepicker({
-        uiLibrary: 'bootstrap'
+                uiLibrary: 'bootstrap'
     })
     $("#opennotepopup").click(function () {
         $("#ddlProgramType").closest("div").show();
-        notescloseModel();
-    });
-    function notescloseModel() {
+                    notescloseModel();
+                });
+                function notescloseModel() {
 
         $("#ddlProgramType").val(0);
 
@@ -95,10 +103,10 @@
         $('.tmpdiv').find('input, textarea')
             .each(function () {
                 $(this).val('');
-            });
+                    });
         $(".tmpdiv").html('');
         $(".close").click();
-    }
+            }
     $(".close").click(function () {
         $("#noteshdnID").val(0);
         $("#ddlProgramType").val(0);
@@ -107,78 +115,78 @@
         $('.tmpdiv').find('input, textarea')
             .each(function () {
                 $(this).val('');
-            });
+                });
         $(".tmpdiv").html('');
-    });
+            });
 
     $.date = function (dateObject) {
-        var d = new Date(dateObject);
-        var day = d.getDate();
-        var month = d.getMonth() + 1;
-        var year = d.getFullYear();
-        if (day < 10) {
-            day = "0" + day;
-        }
-        if (month < 10) {
-            month = "0" + month;
-        }
-        var date = day + "/" + month + "/" + year;
+                var d = new Date(dateObject);
+                var day = d.getDate();
+                var month = d.getMonth() + 1;
+                var year = d.getFullYear();
+                if (day < 10) {
+                    day = "0" + day;
+                }
+                if (month < 10) {
+                    month = "0" + month;
+                }
+                var date = day + "/" + month + "/" + year;
 
-        return date;
-    };
+                return date;
+            };
     $("#hideAppointmentContent").click(function (e) {
         $("#appointementContent").hide();
         $('#pat_out_div').addClass('col-lg-12 col-md-12 col-sm-12 col-12');
         $('#pat_out_div').removeClass('col-lg-8 col-md-12 col-sm-12 col-12 pr-0');
-        e.preventDefault();
-    });
+                e.preventDefault();
+            });
     $("#hideNoteContent").click(function (e) {
         $(".appointement-notes").hide();
         $('#pat_out_div').addClass('col-lg-12 col-md-12 col-sm-12 col-12');
         $('#pat_out_div').removeClass('col-lg-8 col-md-12 col-sm-12 col-12 pr-0');
-        e.preventDefault();
-    });
+                e.preventDefault();
+            });
     $("#btnPatientAppointments").click(function (e) {
         $("#appointementContent").show();
         $(".appointement-notes").hide();
         $('#pat_out_div').removeClass('col-lg-12 col-md-12 col-sm-12 col-12');
         $('#pat_out_div').addClass('col-lg-8 col-md-12 col-sm-12 col-12 pr-0');
-        e.preventDefault();
-    });
+                e.preventDefault();
+            });
     $("#btnPatientNotes").click(function (e) {
         $("#appointementContent").hide();
         $(".appointement-notes").show();
         $('#pat_out_div').removeClass('col-lg-12 col-md-12 col-sm-12 col-12');
         $('#pat_out_div').addClass('col-lg-8 col-md-12 col-sm-12 col-12 pr-0');
-        e.preventDefault();
-    });
+                e.preventDefault();
+            });
     function ShowMore(id) {
 
-        var $this = $("#"+id);
-        var $content = $this.parent().prev("p.content");
-        var linkText = $this.text();
+                var $this = $("#"+id);
+                var $content = $this.parent().prev("p.content");
+                var linkText = $this.text();
 
-        if (linkText === "read more") {
-            linkText = "Show less";
+                if (linkText === "read more") {
+                    linkText = "Show less";
             $content.switchClass("hideContent", "showContent", 400);
-        } else {
-            linkText = "read more";
+                } else {
+                    linkText = "read more";
             $content.switchClass("showContent", "hideContent", 400);
-        };
+                };
 
         $this.text(linkText);
 
-    }
+            }
 
-    //--get list of appointment by Patient ID
-    function getListAllAppointments() {
+            //--get list of appointment by Patient ID
+            function getListAllAppointments() {
 
 
-        var data = {
+                var data = {
             PatientID: '@ViewBag.PatientId',
             startdate: '@DateTime.Now.ToString("yyyy-MM-dd")',
             enddate: '@DateTime.Now.AddDays(7).ToString("yyyy-MM-dd")'
-        };
+                };
 
         $.ajax({
             type: "GET",
@@ -188,49 +196,49 @@
             dataType: "json",
             success: function (data) {
                 $("#hdnCurrentDate").val(data.CurrentDate);
-                if (data.Data.length) {
-                    var result = data.Data;
-                    var tbl = '';
-                    for (var i = 0; i < result.length; i++) {
+                    if (data.Data.length) {
+                        var result = data.Data;
+                        var tbl = '';
+                        for (var i = 0; i < result.length; i++) {
 
-                        tbl += '<div class="appointement-row">'
-                        tbl += '<div class="calender-img" >'
-                        tbl += '<img src="/images/calender-icon.png" alt=""></div>'
-                        tbl += '<h6>'
-                        tbl += '<span class="date">Date:' + $.date(result[i].AppointmentDate) + '</span>,'
-                        tbl += '<span class="time">'
-                        tbl += ' Time:' + result[i].AppointmentTime + '</span></h6>'
-                        tbl += '<p class="content hideContent">' + result[i].Notes + '</p > <div class="show-more">'
-                        if (result[i].Notes.length>100) {
-                            tbl += '<a href="#!" id="'+result[i].PatientAppointmentID+'" onclick="ShowMore(' + result[i].PatientAppointmentID + ')" class="btn btn-link" >read more</a>' }
-                        tbl += '</div ></div>'
+                            tbl += '<div class="appointement-row">'
+                            tbl += '<div class="calender-img" >'
+                            tbl += '<img src="/images/calender-icon.png" alt=""></div>'
+                            tbl += '<h6>'
+                            tbl += '<span class="date">Date:' + $.date(result[i].AppointmentDate) + '</span>,'
+                            tbl += '<span class="time">'
+                            tbl += ' Time:' + result[i].AppointmentTime + '</span></h6>'
+                            tbl += '<p class="content hideContent">' + result[i].Notes + '</p > <div class="show-more">'
+                            if (result[i].Notes.length>100) {
+                                tbl += '<a href="#!" id="'+result[i].PatientAppointmentID+'" onclick="ShowMore(' + result[i].PatientAppointmentID + ')" class="btn btn-link" >read more</a>' }
+                            tbl += '</div ></div>'
 
                     }
 
                     $('#appointementlst').html(tbl);
 
-                } else {
+                    } else {
                     $("#loadMore").hide();
-                }
+                    }
 
 
-            },
+                },
             error: function (e) {
-                toastr.error("Error while getting appotment data.");
-            }
-        });
+                    toastr.error("Error while getting appotment data.");
+                }
+            });
     }
 
-    function getListAllAppointmentsLoadMore() {
+        function getListAllAppointmentsLoadMore() {
 
-        var data = {
+            var data = {
             PatientID: '@ViewBag.PatientId',
             startdate: $("#hdnCurrentDate").val(),
             enddate: $("#hdnCurrentDate").val()
-        };
+            };
 
         $.ajax({
-            type: "GET",
+        type: "GET",
             url: Apipath + '/api/PatientMain/GetListPatientAppointmentByPatientId',
             data: data,
             contentType: "application/json; charset=utf-8",
@@ -289,7 +297,7 @@
             ModifiedBy: parseInt(@Session["userid"].ToString())
         };
         $.ajax({
-            type: "POST",
+    type: "POST",
             url: Apipath + '/api/PatientMain/savenotes',
             data: JSON.stringify(data),
             contentType: 'application/json; charset=UTF-8',
@@ -298,32 +306,32 @@
 
                 $("#txtNotes1").val('');
 
-            },
+        },
             complete: function (result) {
 
-                var models = [];
+            var models = [];
                 $('.tmpdiv').find('.getValue')
                     .each(function () {
-                        var b = { ID: $(this).attr('data-fieldvlueid'), NotesTemplateFieldID: $(this).attr('data-id'), NoteID: result.responseJSON, Value: $(this).val() };
-                        models.push(b);
-                    });
+                var b = { ID: $(this).attr('data-fieldvlueid'), NotesTemplateFieldID: $(this).attr('data-id'), NoteID: result.responseJSON, Value: $(this).val() };
+            models.push(b);
+        });
 
-                if (models.length == 0) {
+        if (models.length == 0) {
                     $(".close").click();
-                    getListAllNotesLoadMore();
-                    return
+            getListAllNotesLoadMore();
+            return
                 };
                 $.ajax({
-                    type: "POST",
+        type: "POST",
                     url: Apipath + '/api/PatientMain/SaveNotesTemplateFieldValue',
                     data: JSON.stringify(models),
                     contentType: 'application/json; charset=UTF-8',
                     dataType: "json",
                     success: function (result) {
                         $(".close").click();
-                        getListAllNotesLoadMore();
-                    }
-                })
+                getListAllNotesLoadMore();
+            }
+        })
 
             }
 
@@ -336,22 +344,22 @@
         };
 
         $.ajax({
-            type: "GET",
+    type: "GET",
             url: Apipath + '/api/PatientMain/GetListPatientnotesbyid',
             data: data,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (result) {
                 $('#notesList').html('');
-                if (result.length) {
+            if (result.length) {
 
 
-                    var tbl = '';
-                    for (var i = 0; i < result.length; i++) {
+                var tbl = '';
+                for (var i = 0; i < result.length; i++) {
 
-                        var splitDateTime = result[i].CreatedDate.split("T");
+                    var splitDateTime = result[i].CreatedDate.split("T");
 
-                        tbl += '<div class="appointement-row">'
+                    tbl += '<div class="appointement-row">'
                         tbl += '<div class="notesclose" hidden="hidden" >&#10539;</div>'
                         tbl += '<div class="calender-img" >'
                         tbl += '<img src="/images/calender-icon.png" alt=""></div>'
@@ -361,8 +369,8 @@
                         tbl += ' Time:' + splitDateTime[1].substring(0,splitDateTime[1].lastIndexOf(':')); + '</span></h6>'
                         tbl += '<p class="content hideContent">' + result[i].Description + '</p> <div class="show-more">'
                         if (result[i].Description.length>100) {
-                            tbl += '<a href="#!" id="' + result[i].NotesID + '" onclick="ShowMore(' + result[i].NotesID + ')" class="btn btn-link" >read more</a>' }
-                        tbl += '</div ><div class="editicons"><button onclick="EditNote(' + result[i].NotesID + ')"><i class="fas fa-edit"></i></button> <button  onclick="ViewNote(' + result[i].NotesID + ')"><i class="fa fa-eye" aria-hidden="true"></i></button> <button onclick="RemoveNote(' + result[i].NotesID + ')"><i class="far fa-trash-alt"></i></button></div></div>'
+                        tbl += '<a href="#!" id="' + result[i].NotesID + '" onclick="ShowMore(' + result[i].NotesID + ')" class="btn btn-link" >read more</a>' }
+                    tbl += '</div ><div class="editicons"><button onclick="EditNote(' + result[i].NotesID + ')"><i class="fas fa-edit"></i></button> <button  onclick="ViewNote(' + result[i].NotesID + ')"><i class="fa fa-eye" aria-hidden="true"></i></button> <button onclick="RemoveNote(' + result[i].NotesID + ')"><i class="far fa-trash-alt"></i></button></div></div>'
 
                     }
 
@@ -370,20 +378,20 @@
 
                     $("#notesList").animate({ scrollDown: $('#notesList').prop("scrollHeight") }, 1000);
 
-                }
-
-
-            },
-            error: function (e) {
-                toastr.error("Error while getting appotment data.");
             }
-        });
+
+
+        },
+            error: function (e) {
+            toastr.error("Error while getting appotment data.");
+        }
+    });
     }
 
 
     function EditNote(id) {
                     $.ajax({
-                        type: "GET",
+        type: "GET",
                         url: Apipath + '/api/PatientMain/EditNoteByID?noteid='+id,
                         contentType: 'application/json; charset=UTF-8',
                         dataType: "json",
@@ -392,68 +400,68 @@
                             $("#noteshdnID").val(result.NotesID);
                             $("#txtNotes1").val(result.Description);
 
-                        },
+            },
                         complete: function () {
                             $.ajax({
-                                type: "GET",
+                type: "GET",
                                 url: Apipath + '/api/PatientMain/EditNotesTemplateFieldValueByNoteID?noteid=' + id,
                                 contentType: 'application/json; charset=UTF-8',
                                 dataType: "json",
                                 success: function (result) {
                                     $(".tmpdiv").html('');
-                                    if (result.length) {
+                        if (result.length) {
 
-                                        for (var i = 0; i < result.length; i++) {
-                                            switch (result[i].FieldType) {
-                                                case "Text":
+                            for (var i = 0; i < result.length; i++) {
+                                switch (result[i].FieldType) {
+                                    case "Text":
                                                     $(".tmpdiv").append('<div class="form-group">' +
                                                         '<label>' + result[i].Field + '</label>' +
                                                         '<input type="text" class="form-control txtField getValue" data-id=' + result[i].NotesTemplateFieldID + ' data-fieldvlueid=' + result[i].ID + ' value=' + result[i].Value + '>' +
                                                         '</div>'
                                                     )
                                                     break;
-                                                case "Number":
+                                    case "Number":
                                                     $(".tmpdiv").append('<div class="form-group">' +
                                                         '<label>' + result[i].Field + '</label>' +
                                                         '<input type="number" class="form-control txtField getValue" data-id=' + result[i].NotesTemplateFieldID + ' data-fieldvlueid=' + result[i].ID + ' value=' + result[i].Value + '>' +
                                                         '</div>'
                                                     )
                                                     break;
-                                                case "Date":
+                                    case "Date":
                                                     $(".tmpdiv").append('<div class="form-group">' +
                                                         '<label>' + result[i].Field + '</label>' +
                                                         '<input type="text" class="form-control datepick getValue" data-id=' + result[i].NotesTemplateFieldID + '  data-fieldvlueid=' + result[i].ID + ' value=' + result[i].Value + '>' +
                                                         '</div>'
                                                     )
                                                     break;
-                                                case "Large text":
+                                    case "Large text":
                                                     $(".tmpdiv").append('<div class="form-group">' +
                                                         '<label>' + result[i].Field + '</label>' +
                                                         '<textarea cols="10" rows="2" style="height:38px !important" class="form-control getValue" data-id=' + result[i].NotesTemplateFieldID + '  data-fieldvlueid=' + result[i].ID + '>' + result[i].Value+'</textarea>' +
                                                         '</div>'
                                                     )
                                                     break;
-                                            }
+                                }
 
 
 
-                                        }
+                            }
 
                                         $(".tmpdiv").find('.datepick').datepicker();
                                         $("#ddlProgramType").closest("div").hide();
-                                    }
-                                }
-                            })
+                        }
+                    }
+                })
                         },
                         error: function () {
 
-                            toastr.error("Error while edit note");
-                        }
-                    });
-                }
+                toastr.error("Error while edit note");
+            }
+        });
+    }
     function ViewNote(id) {
         $.ajax({
-            type: "GET",
+        type: "GET",
             url: Apipath + '/api/PatientMain/EditNoteByID?noteid=' + id,
             contentType: 'application/json; charset=UTF-8',
             dataType: "json",
@@ -464,7 +472,7 @@
             },
             complete: function () {
                 $.ajax({
-                    type: "GET",
+                type: "GET",
                     url: Apipath + '/api/PatientMain/EditNotesTemplateFieldValueByNoteID?noteid=' + id,
                     contentType: 'application/json; charset=UTF-8',
                     dataType: "json",
@@ -519,39 +527,39 @@
             }
         });
     }
-      function RemoveNote(id) {
+    function RemoveNote(id) {
 
-                if (confirm("Are you sure,you want to delete.")) {
+        if (confirm("Are you sure,you want to delete.")) {
 
-                    var model = {
+            var model = {
                         noteid: id,
                         modifyby:@Session["userid"].ToString(),
                         modifydate:'@DateTime.Now.ToString("yyyy-MM-dd")'
                     };
                     $.ajax({
-                        type: "POST",
+        type: "POST",
                         url: Apipath + '/api/PatientMain/removenote',
                         data: JSON.stringify(model),
                         contentType: 'application/json; charset=UTF-8',
                         dataType: "json",
                         success: function (result) {
-                                toastr.success("delete successfully");
-                                getListAllNotesLoadMore();
+                toastr.success("delete successfully");
+                getListAllNotesLoadMore();
 
-                        },
+            },
                         error: function () {
 
-                            toastr.error("Error while deleting data");
-                        }
-                    });
-                }
+                toastr.error("Error while deleting data");
+            }
+        });
+    }
     }
 
     function GetFieldsByProgramID() {
 
         var id = $("#ddlProgramType").val();
         $.ajax({
-            type: "GET",
+        type: "GET",
             url: Apipath + '/api/PatientMain/GetNotesTemplateByProgramID?programid=' + id,
             contentType: 'application/json; charset=UTF-8',
             dataType: "json",
@@ -626,13 +634,13 @@
 
           $('#Programs-tab').click(function () {
 
-                if ($("#tabPills .nav-item").length > 0) {
+            if ($("#tabPills .nav-item").length > 0) {
 
-              var FirstTab = $("#tabPills .nav-item a").get(0);
+                var FirstTab = $("#tabPills .nav-item a").get(0);
 
-              FirstTab.click()
+                FirstTab.click()
           }
-          })
+        })
 
 
           @if (Model.ScheduleDate.IsHousingDue=="Red")
@@ -2228,22 +2236,64 @@
 
     //===============Proceed functions=======//
 
-   function  PrintProgram(_ProgramName) {
+    function GetClinicAddress(_patientClinicId, _ProgramName) {
+          $.ajax({
+              type: "GET",
+              url: Apipath + '/api/PatientMain/getclinicaddress?ClinicID=' + _patientClinicId,
+              contentType: 'application/json; charset=UTF-8',
+              dataType: "json",
+              async: true,
+              success: function (data) {
+                  clinicAddress = data;
+                  printFunction(_ProgramName);
+              },
+              error: function (e) {
+                  toastr.error("Something happen Wrong");
+                  $(".loaderOverlay").hide();
+              }
+          });
+      }
 
-       let htmlToPrint = $("#" + _ProgramName + "render-basicform")[0].outerHTML
-       let originalBodyContent = document.body.innerHTML;
-       let Programtitle = $('#a' + _ProgramName).text();
+      function PrintProgram(_ProgramName) {
 
-       document.body.innerHTML = htmlToPrint;
-       $('body').addClass('colorPrint');
-       $('body').prepend('<h4 class="text-center mb-4">' + Programtitle + '</h4>');
-       $('body>div .basecontentspan').hide();
-      window.print();
-      document.body.innerHTML = originalBodyContent;
-       $('body').removeClass('colorPrint')
+          if (clinicAddress.trim().length == 0 && _ClinicId > 0) {
+              GetClinicAddress(_ClinicId, _ProgramName);
+          }
+          else {
+              printFunction(_ProgramName)
+          }
+
     }
+      function printFunction(_ProgramName) {
 
+          let htmlToPrint = $("#" + _ProgramName + "render-basicform")[0].outerHTML
+          let Programtitle = $('#a' + _ProgramName).text();
+          let HeadHtml = $('head').html();
+          var stringToAppend = '<h4 class="text-center mb-4">' + Programtitle + '</h4>';
+          stringToAppend += '<table  width="40%" style="margin-left:35px;margin-bottom:15px">';
+          stringToAppend += '<tr><th width="50%">Name</th><td>' + clientName + '<td></tr>'
+          stringToAppend += '<tr><th width=50%">Medical Record Number</th><td>' + _amdMedRecordNo + '<td></tr>'
+          stringToAppend += '<tr><th width="50%">Address</th><td>' + clinicAddress + '<td></tr>'
+          stringToAppend += '</table>'
+          var mywindow = window.open('', '', 'width=1000,height=800');
+          mywindow.document.domain = window.document.domain;
+          mywindow.document.write('<html><head><title></title>');
+          mywindow.document.write(HeadHtml);
+          mywindow.document.write('<style>div .basecontentspan{display:none} .table-responsive { overflow-x: visible !important; }</style>')
+          mywindow.document.write('</head><body class="colorPrint"><table style="width:100%"><thead><tr><td>');
+          mywindow.document.write(stringToAppend);
+          mywindow.document.write('</td></tr></thead><tbody><tr><td>')
+          mywindow.document.write(htmlToPrint);
+          mywindow.document.write('</td></tr></tbody></body></html>');
+          mywindow.document.close();
 
+          setTimeout(function () {
+              mywindow.document.close();
+              mywindow.focus();
+              mywindow.print();
+              mywindow.close();
+          }, 500);
+      }
 
 
     $("#tabPills .nav-item a").on('click', function (e) {
