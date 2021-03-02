@@ -2279,12 +2279,12 @@
           mywindow.document.domain = window.document.domain;
           mywindow.document.write('<html><head><title></title>');
           mywindow.document.write(HeadHtml);
-          mywindow.document.write('<style>div .basecontentspan{display:none} .table-responsive { overflow-x: visible !important; }</style>')
-          mywindow.document.write('</head><body class="colorPrint"><table style="width:100%"><thead><tr><td>');
+          mywindow.document.write('<style>div .basecontentspan{display:none}</style>')
+          mywindow.document.write('</head><body class="colorPrint">');
           mywindow.document.write(stringToAppend);
-          mywindow.document.write('</td></tr></thead><tbody><tr><td>')
+         
           mywindow.document.write(htmlToPrint);
-          mywindow.document.write('</td></tr></tbody></body></html>');
+          mywindow.document.write('</body></html>');
           mywindow.document.close();
 
           setTimeout(function () {
