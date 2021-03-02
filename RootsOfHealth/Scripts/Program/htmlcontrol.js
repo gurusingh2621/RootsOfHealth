@@ -355,9 +355,10 @@ function EditHtml(type, ID) {
                     toastr.error("", "Options can not be empty", { progressBar: true });
                     return false;
                 }
-
+               
                 var colname = $(".lbltext").val().trim();
                 colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
+                    colname=shortenColName(colname);
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $(controlId).find("input.custom-control-input").first().attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -553,6 +554,7 @@ function EditHtml(type, ID) {
                 }
                 var colname = $(".lbltext").val().trim();
                 colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
+                colname = shortenColName(colname);
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $(controlId).attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -716,6 +718,7 @@ function EditHtml(type, ID) {
                 }
                 var colname = $(".lbltext").val().trim();
                 colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
+                colname = shortenColName(colname);
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $(controlId).attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -861,6 +864,7 @@ function EditHtml(type, ID) {
                 }
                 var colname = $(".lbltext").val().trim();
                 colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
+                colname = shortenColName(colname);
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $(controlId).attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -1017,6 +1021,7 @@ function EditHtml(type, ID) {
                 }
                 var colname = $(".lbltext").val().trim();
                 colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
+                colname = shortenColName(colname);
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $(controlId).find("input.custom-control-input").first().attr("data-column") == undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -1251,6 +1256,7 @@ function EditHtml(type, ID) {
                 }
                 var colname = $(".lbltext").val().trim();
                 colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
+                colname = shortenColName(colname);
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $(controlId).attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -1434,6 +1440,7 @@ function EditHtml(type, ID) {
                 }
                 var colname = $(".lbltext").val().trim();
                 colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
+                colname = shortenColName(colname);
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $(controlId).attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -1593,6 +1600,7 @@ function EditHtml(type, ID) {
                 }
                 var colname = $(".lbltext").val().trim();
                 colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
+                colname = shortenColName(colname);
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $(controlId).attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -1766,6 +1774,7 @@ function EditHtml(type, ID) {
                 }
                 var colname = $(".lbltext").val().trim();
                 colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
+                colname = shortenColName(colname);
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $(controlId).attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -1901,6 +1910,28 @@ function RemoveControl(obj) {
         }
     });
 
+}
+function hash(str) {
+    var hash = 0, i, chr;
+    if (str.length === 0) return hash;
+    for (i = 0; i < str.length; i++) {
+        chr = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + chr;
+        hash |= 0; 
+    }
+    if (hash < 0) {
+        return -1*hash
+    }
+    return hash;
+}
+function shortenColName(colname) {
+    if (colname.length > 128) {
+        let firstSub = colname.substring(0, 100);
+        let lastSub = colname.substring(100, colname.length);
+        let generatedHash = hash(lastSub);
+        colname = firstSub + generatedHash;
+    }
+    return colname
 }
 //addoption=>use to add new option for select,radio,checkbox inside popup
 function addoption(obj) {
