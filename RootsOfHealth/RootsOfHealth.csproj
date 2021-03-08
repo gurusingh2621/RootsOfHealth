@@ -235,6 +235,7 @@
     <Content Include="css\select2.min.css" />
     <Content Include="css\style.css" />
     <Content Include="css\CarePlanSummary.css" />
+    <Content Include="css\UserGroup.css" />
     <Content Include="favicon.ico" />
     <Content Include="Files\thermometer-1539191_1920.jpg" />
     <Content Include="fonts\fa-brands-400.svg" />
@@ -324,6 +325,7 @@
     <Content Include="Scripts\Program\programbasetemplatecontrolhtml.js" />
     <Content Include="Scripts\Program\programlist.js" />
     <Content Include="Scripts\select2.min.js" />
+    <Content Include="Scripts\Usergroup\UserGroup.js" />
     <Content Include="Views\Patient\FormScheduling.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -392,6 +394,8 @@
     <Content Include="Views\Program\List.cshtml" />
     <Content Include="Views\Program\ModifyProgramTemplate.cshtml" />
     <Content Include="Views\Program\ProgramBaseTemplate.cshtml" />
+    <Content Include="Views\Account\UserGroupList.cshtml" />
+    <Content Include="Views\Shared\Account\_AddGroup.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

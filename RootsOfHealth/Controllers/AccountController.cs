@@ -341,5 +341,16 @@ namespace RootsOfHealth.Controllers
         {
             return View();
         }
+        [HttpGet]
+        public ActionResult UserGroupList()
+        {
+            return View();
+        }
+        [HttpGet]
+        public ActionResult AddGroup()
+        {
+            return PartialView("~/Views/Shared/Account/_AddGroup.cshtml");
+        }
     }
+   
 }

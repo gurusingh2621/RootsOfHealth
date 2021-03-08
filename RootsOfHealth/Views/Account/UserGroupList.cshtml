@@ -1,0 +1,70 @@
+﻿
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/css/UserGroup.css" rel="stylesheet" />
+
+<section id="content" class="responsive-container pt-0">
+
+    <div class="inner-content mt-0">
+
+        <div class="container-fluid pl-0 pr-0">
+
+            <div class="appointment scroll">
+                <div class="detail-heading d-flex templatelist">
+                    <h2>Groups</h2>
+                </div>
+                <a href="javascript:void(0)" class="btn btn-success mb-2" data-toggle="modal" data-target="#CreateGroupModal" id="CreateGroup">Create Group</a>
+                <table id="tblGroupTemplateList" class="table table-striped border">
+                    <thead>
+                        <tr class="table-active">
+                            <th>Group Name</th>
+                            <th>Created on</th>
+                            <th>Modified on</th>
+                            <th>Member count</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody class="grouplist">
+
+                        <tr></tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="modal fade" id="CreateGroupModal" data-toggle="modal" tabindex="-1" role="dialog" aria-labelledby="CreateGroupModal"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="min-height:600px">
+            <input id="GroupId" type="text" hidden />
+            <div class="modal-header">
+                <h5 style="margin: 0;padding: 4px 0;">Create / Update Group</h5>
+                <div class="ml-auto">
+                    <button class="btn btn-success" id="SaveGroupButton" onclick="SaveGroup()">Save</button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="modal-body">
+
+
+
+            </div>
+        </div>
+        </div>
+
+    </div>
+
+    @section scripts{
+
+        <script>
+        var userId = "@Session["userid"]";
+        </script>
+        <script src="~/Scripts/Usergroup/UserGroup.js"></script>
+    }

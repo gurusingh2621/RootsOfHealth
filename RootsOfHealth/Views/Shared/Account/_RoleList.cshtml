@@ -28,7 +28,9 @@
                 <td>
                     <a href="#" onclick="ShowEdit(@item.RoleID)" class="btn btn-success">Edit</a>
                     @*@Html.ActionLink("Edit", "EditRole", new { roleid = item.RoleID })*@
+                   @if (item.RoleName.ToLower().Replace(" ","")!= "careplanapproval") {
                     <a href="#" class="btn btn-danger" onclick="Remove(@item.RoleID)">Delete</a>
+                   }
                 </td>
             </tr>
         }
