@@ -337,6 +337,7 @@ function EditHtml(type, ID) {
 
                 var colname = $(".lbltext").val().trim();
                 colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
+                colname = shortenColName(colname);
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $(controlId).find("input.custom-control-input").first().attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -532,6 +533,7 @@ function EditHtml(type, ID) {
                 }
                 var colname = $(".lbltext").val().trim();
                 colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
+                colname =shortenColName(colname);
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $(controlId).attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -695,6 +697,7 @@ function EditHtml(type, ID) {
                 }
                 var colname = $(".lbltext").val().trim();
                 colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
+                colname = shortenColName(colname);
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $(controlId).attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -840,6 +843,7 @@ function EditHtml(type, ID) {
                 }
                 var colname = $(".lbltext").val().trim();
                 colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
+                colname =shortenColName(colname);
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $(controlId).attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -996,6 +1000,7 @@ function EditHtml(type, ID) {
                 }
                 var colname = $(".lbltext").val().trim();
                 colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
+                colname =shortenColName(colname);
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $(controlId).find("input.custom-control-input").first().attr("data-column") == undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -1216,6 +1221,7 @@ function EditHtml(type, ID) {
                 }
                 var colname = $(".lbltext").val().trim();
                 colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
+                colname = shortenColName(colname);
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $(controlId).attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -1399,6 +1405,7 @@ function EditHtml(type, ID) {
                 }
                 var colname = $(".lbltext").val().trim();
                 colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
+                colname = shortenColName(colname);
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $(controlId).attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -1536,6 +1543,7 @@ function EditHtml(type, ID) {
                 }
                 var colname = $(".lbltext").val().trim();
                 colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
+                colname =shortenColName(colname);
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $(controlId).attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -1880,6 +1888,9 @@ function saveHtml() {
 }
 function saveTemplate(isactive) {
     var gethtml = $("#droppable").html();
+    if (sessionStorage.getItem("TableName") != null) {
+        templateTable = sessionStorage.getItem("TableName");
+    }
     var model = {
         TemplateID: $("#hdnTemplateId").val(),
         TemplateName: $(".templatename-input").val(),
@@ -1887,6 +1898,7 @@ function saveTemplate(isactive) {
         IsActive: isactive,
         CreatedBy: userId,
         ModifiedBy: userId,
+        TemplateTable: templateTable
     };
     $(".loaderOverlay").css("display", "flex");
     $.ajax({
@@ -1964,6 +1976,8 @@ function saveTemplate(isactive) {
                     //$("a.preview").css("display", "inline");
                     // $("a.btndraft").css("display", "none");
                     sessionStorage.setItem("Id", result.id);
+                    sessionStorage.setItem("TableName", result.tablename);
+                    templateTable = result.tablename;
                     $("a.btnNeedsPopup").css("display", "inline");
                     $(".loaderOverlay").hide();
                     //window.location.href = '/careplan/modifytemplate?TemplateId=' + result.id + '&ProgramId=' + programId + '&Template=' + result.TemplateName;
@@ -2047,20 +2061,9 @@ function validateFileSize(obj) {
     });
 }
 function IsColumnNameExist(colname) {
-    var tableName = '';
-    switch (programId) {
-        case "1":
-            tableName = 'tbl_Clinic_CarePlan';
-            break;
-        case "2":
-            tableName = 'tbl_Dream_CarePlan';
-            break;
-        case "3":
-            tableName = 'tbl_OU_CarePlan';
-            break;
-        case "4":
-            tableName = 'tbl_PeraltaCollege_CarePlan';
-            break;
+    var tableName = templateTable;
+    if (sessionStorage.getItem("TableName") != null) {
+        tableName = sessionStorage.getItem("TableName");
     }
     return $.ajax({
         type: "GET",
