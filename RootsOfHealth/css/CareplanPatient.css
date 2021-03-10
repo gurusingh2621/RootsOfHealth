@@ -156,7 +156,7 @@ Sidebar style
     padding:0;
     box-sizing:border-box;
     align-content: baseline;
-    max-height: 500px;
+    max-height: 380px;
     overflow-y: auto;
 }
 

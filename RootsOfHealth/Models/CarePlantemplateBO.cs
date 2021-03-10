@@ -11,6 +11,7 @@ namespace RootsOfHealth.Models
         public int TemplateID { get; set; }
         public string TemplateName { get; set; }
         public Nullable<int> ProgramID { get; set; }
+        public string ProgramName { get; set; }
         public Nullable<bool> IsSavedDraft { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public string TemplatePath { get; set; }

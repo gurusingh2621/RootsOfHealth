@@ -4,6 +4,7 @@
     GetBaseTemplateId();
     sessionStorage.clear();
 });
+var _careplanListTable=''
 function GetCarePlanTemplateList() {
     $(".loaderOverlay").css("display", "flex");
     $.ajax({
@@ -29,7 +30,7 @@ function GetCarePlanTemplateList() {
                         careplans += `<a href="/careplan/BaseTemplate?templateid=${item.TemplateID}&Status=${item.IsActive}"  class="btn btn-success text-white" style="cursor:pointer;">MODIFY</a>`
 
                     } else {                        
-                        careplans += `<a href="javascript:void(0)" onclick="Proceed({TemplateID:${item.TemplateID},TemplateName:\'${item.TemplateName}\',ProgramsID:${item.ProgramsID},IsBaseTemplate:${item.IsBaseTemplate}})"  class="btn btn-success text-white" style="cursor: pointer; ${item.Isactivated == true ? "display:none;" : ""} ">MODIFY</a>`
+                        careplans += `<a href="javascript:void(0)" onclick="Proceed({TemplateID:${item.TemplateID},TemplateName:\'${item.TemplateName}\',ProgramsID:${item.ProgramsID},IsBaseTemplate:${item.IsBaseTemplate},ProgramName:'${item.ProgramsName}',TemplateTable:'${item.TemplateTable}'})"  class="btn btn-success text-white" style="cursor: pointer; ${item.Isactivated == true ? "display:none;" : ""} ">MODIFY</a>`
                     }
                     if (item.IsActive == 1 && item.IsBaseTemplate == false) {
                         if (item.Isactivated == true) {
@@ -41,6 +42,10 @@ function GetCarePlanTemplateList() {
                         careplans += `<a href="javascript:void(0)" onclick="alertInprogressStatus()"  class="btn btn-success text-white" style="cursor:pointer;">ACTIVATE</a>`;
                     }
 
+
+                    if (!item.IsBaseTemplate) {
+                        careplans += `<a href="javascript:void(0)" onclick="DeleteCarePlanTemplate(${item.ProgramsID},this)"  class="btn btn-success text-white" style="cursor:pointer;">Delete</a>`;
+                    }
                     careplans += `</div></td></tr>`;
                 });
                 careplanlist.html("").append(careplans);
@@ -48,7 +53,7 @@ function GetCarePlanTemplateList() {
                 careplans += `<tr><td colspan="6"><p class="text-center">No data found.</p></td></tr>`;
                 careplanlist.html("").append(careplans);
             }
-            $('#tblCarePlanTemplateList').DataTable({
+            _careplanListTable=    $('#tblCarePlanTemplateList').DataTable({
                 paging: false,
                 retrieve: true,
                 searching: false,
@@ -75,6 +80,45 @@ $("#radioBaseTemplate").change(function () {
         $(this).prop("checked", false);
     }
 });
+
+function DeleteCarePlanTemplate(_programId, button) {
+
+    $.confirm({
+        icon: 'fas fa-exclamation-triangle',
+        title: 'Confirm',
+        content: 'Are you sure,you want to delete this program?',
+        type: 'red',
+        columnClass: 'col-md-6 col-md-offset-3',
+        typeAnimated: true,
+        buttons: {
+            yes: {
+                btnClass: 'btn-red',
+                action: function () {
+                    var btn = $(button);
+
+                    $.ajax({
+                        type: "Post",
+                        url: Apipath + '/api/PatientMain/deletecareplantemplate?Programid=' + _programId,
+                        contentType: 'application/json; charset=UTF-8',
+                        dataType: "json",
+                        success: function (result) {
+                            if (result.status == 0) {
+                                toastr.error("", result.message, { progressBar: true });
+                            }
+                            else if (result.status == 1) {
+                                toastr.success("", "Deleted successfully", { progressBar: true });
+                                _careplanListTable.row(btn.parents('tr')).remove().draw();
+                                getPrograms();
+                            }
+                        }
+                    });
+                }
+            },
+            no: function () {
+            }
+        }
+    });
+}
 function SetTemplateStatus(Templateid, Status) {
     $.confirm({
         icon: 'fas fa-exclamation-triangle',
@@ -115,9 +159,11 @@ function getPrograms() {
         dataType: "json",
         success: function (result) {
             if (result.length) {
+                let options = '';
                 for (var i = 0; i < result.length; i++) {
-                    $("#ddlProgram option[value='" + result[i].ProgramsID + "']").remove();
+                  options+= `<option value="${result[i].ProgramsID}">${result[i].ProgramsName}</option>`
                 }
+                $('#ddlProgram').html(options);
             }
         },
     });
@@ -161,7 +207,9 @@ function Proceed(data) {
             TemplateName: templateName,
             ProgramID: programid,
             TemplateID: $("#radioBaseTemplate").prop("checked") ? $("#radioBaseTemplate").attr("data-baseid") : templateid,
-            IsBaseTemplate: $("#radioBaseTemplate").prop("checked")
+            IsBaseTemplate: $("#radioBaseTemplate").prop("checked"),
+            ProgramName:  $( "#ddlProgram option:selected").text(),
+            TemplateTable:'tbl'
         }
     } else {
         model = {
@@ -169,7 +217,9 @@ function Proceed(data) {
             ProgramID: data.ProgramsID,
             TemplateID: data.TemplateID,
             IsBaseTemplate: data.IsBaseTemplate,
-            IsModify: true
+            IsModify: true,
+            ProgramName: data.ProgramName,
+            TemplateTable: data.TemplateTable
         }
     }
     $.ajax({
