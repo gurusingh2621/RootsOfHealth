@@ -340,6 +340,7 @@ function EditHtml(type, ID) {
 
                 var colname = $(".lbltext").val().trim();
                 colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
+                colname =shortenColName(colname);
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $(controlId).find("input.custom-control-input").first().attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -536,6 +537,7 @@ function EditHtml(type, ID) {
                 }
                 var colname = $(".lbltext").val().trim();
                 colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
+                colname = shortenColName(colname);
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $(controlId).attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -699,6 +701,7 @@ function EditHtml(type, ID) {
                 }
                 var colname = $(".lbltext").val().trim();
                 colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
+                colname = shortenColName(colname);
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $(controlId).attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -844,6 +847,7 @@ function EditHtml(type, ID) {
                 }
                 var colname = $(".lbltext").val().trim();
                 colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
+                colname =shortenColName(colname);
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $(controlId).attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -1000,6 +1004,7 @@ function EditHtml(type, ID) {
                 }
                 var colname = $(".lbltext").val().trim();
                 colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
+                colname = shortenColName(colname);
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $(controlId).find("input.custom-control-input").first().attr("data-column") == undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -1221,6 +1226,7 @@ function EditHtml(type, ID) {
                 }
                 var colname = $(".lbltext").val().trim();
                 colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
+                colname = shortenColName(colname);
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $(controlId).attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -1405,6 +1411,7 @@ function EditHtml(type, ID) {
                 }
                 var colname = $(".lbltext").val().trim();
                 colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
+                colname = shortenColName(colname);
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $(controlId).attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
@@ -1542,6 +1549,7 @@ function EditHtml(type, ID) {
                 }
                 var colname = $(".lbltext").val().trim();
                 colname = colname.split(" ").join("").replace(/[_\W]+/g, "");
+                colname = shortenColName(colname);
                 labelText = labelText.split(" ").join("").replace(/[_\W]+/g, "");
                 if (colname != labelText && $(controlId).attr("data-column") === undefined) {
                     while (IsColumnNameExist(colname).responseJSON) {
