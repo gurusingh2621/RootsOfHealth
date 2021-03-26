@@ -1,0 +1,294 @@
+﻿.createtemplate .radiobuttonWrap {
+    display: flex;
+}
+
+    .createtemplate .radiobuttonWrap .custom-control {
+        margin-right: 30px;
+    }
+
+.createtemplate .customselect {
+    margin: 30px 0 0 0;
+}
+
+    .createtemplate .customselect select {
+        height: 30px !important;
+        font-size: 13px;
+        border: 1px solid #e2e2e2;
+        border-radius: 0px;
+        padding: 0 15px;
+        background: url(../images/chevron-arrow-down.svg) no-repeat 0 0;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        -ms-appearance: none;
+        background-size: 12px;
+        background-position: 98% 5px;
+        box-shadow: 0 0 0 !important;
+        outline: none !important;
+    }
+
+.hide {
+    display: none;
+}
+
+.templatelist h2 {
+    text-transform: uppercase;
+}
+
+.select_member_box .bootstrap-select .dropdown-toggle .filter-option {
+    display: flex;
+    align-items: center;
+}
+
+.modal-dialog.modal-lg {
+    max-width: 800px;
+}
+
+.select_member_box .btn {
+    height: 38px;
+    margin-left: 10px;
+}
+
+.members_list_table thead {
+    box-shadow: 0px 1px 3px rgb(0 0 0 / 25%);
+    position: relative;
+    z-index: 1;
+    background: #f3f4f4;
+    border: 0;
+    border-radius: 4px;
+}
+
+.member_name {
+    display: flex;
+    align-items: center;
+}
+
+.member_img {
+    height: 40px;
+    width: 40px;
+    min-width: 40px;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #eee;
+    overflow: hidden;
+}
+
+    .member_img img {
+        height: 100%;
+        width: 100%;
+        object-fit: contain;
+    }
+
+table#tblGroupTemplateList.dataTable thead th {
+    white-space: nowrap;
+    outline: none !important;
+    text-transform: uppercase;
+}
+
+.member_name_text span {
+    font-size: 12px;
+}
+
+.member_name_text strong {
+    font-weight: 500;
+}
+
+
+.members_list_table {
+    vertical-align: middle;
+    font-size: 14px;
+    border-bottom: 0 !important;
+}
+
+    .members_list_table thead th {
+        border: 0;
+    }
+
+    .members_list_table tbody tr:first-child td {
+        border-top: 0;
+    }
+
+.select_member_box .dropdown-toggle.btn {
+    background-position: 98% 12px;
+    border-radius: 4px;
+    margin-left: 0px;
+    background-image: none;
+}
+
+select#GroupRoles {
+    font-size: 14px;
+}
+
+.member_select_action {
+    display: flex;
+}
+
+.select_member_box .bootstrap-select {
+    padding-right: 10px;
+}
+
+#CreateGroupModal .btn-success {
+    border-radius: 4px;
+}
+
+.members_list_table th {
+    color: #999;
+    font-weight: normal;
+    vertical-align: middle;
+}
+
+.members_list_table td {
+    vertical-align: middle;
+}
+
+.members_list_table thead th:first-child {
+    width: 90px;
+}
+
+.members_list_table thead th:nth-child(2) {
+    width: 30%;
+}
+
+.member_name_text strong {
+    display: block;
+}
+
+.member_name_text {
+    line-height: 1.3;
+}
+
+.members_list_table thead th {
+    border-bottom: 0 !important;
+}
+
+label.input_checkbox {
+    margin: 0px 0 0;
+    position: relative;
+    top: 3px;
+}
+
+    label.input_checkbox input {
+        position: absolute;
+        opacity: 0;
+    }
+
+.members_list_table th, .members_list_table td {
+    vertical-align: middle !important;
+    padding: 10px 18px !important;
+}
+
+.members_list_table td {
+    padding: 6px 18px !important;
+}
+
+label.input_checkbox span {
+    display: block;
+    position: relative;
+    height: 20px;
+    width: 20px;
+    background: #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+label.input_checkbox input:checked + span {
+    background-color: #22baa0;
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='%23fff' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3E%3C/svg%3E");
+    background-size: 12px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#userlist_wrapper.dataTables_wrapper .dataTables_info {
+    float: none;
+    border-top: 1px solid #dee2e6;
+    background: #f3f4f4;
+    padding: 5px 10px;
+    text-align: right;
+}
+
+.custom_select {
+    position: relative;
+}
+
+    .custom_select select {
+        appearance: none;
+        -webkit-appearance: none;
+    }
+
+    .custom_select:after,
+    .bootstrap-select .dropdown-toggle .filter-option:after {
+        display: block;
+        content: "\f078";
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        font-size: 15px;
+        position: absolute;
+        right: 12px;
+        top: 9px;
+        color: #a4a4a4;
+        pointer-events: none;
+    }
+
+div#CreateGroupModal .modal-dialog.modal-lg {
+    width: 95%;
+}
+
+div#CreateGroupModal {
+    padding-left: 0 !important;
+}
+
+.bootstrap-select .dropdown-toggle .filter-option:after {
+    top: 11px;
+}
+
+#userlist_wrapper.dataTables_wrapper .dataTables_paginate {
+    font-size: 13px;
+}
+
+    #userlist_wrapper.dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 2px 5px;
+        display: inline-block;
+    }
+
+        #userlist_wrapper.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            background: #22baa0;
+            color: #fff !important;
+            border: 0;
+        }
+
+table#userlist {
+    min-height: 200px;
+}
+
+.dataTables_scrollBody > table > thead > tr {
+    visibility: collapse;
+    height: 0px !important;
+}
+
+.dataTables_scrollBody {
+    height: 220px !important
+}
+
+#CreateGroupModal .form-control {
+    font-size: 14px;
+}
+
+.btn-success:disabled:hover, .btn-success:disabled {
+    background: #22baa0;
+    border: 1px solid #22baa0;
+}
+
+div#userlist_wrapper .dataTables_scrollBody {
+    height: 255px !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 2px 10px;
+}
+
+table.dataTable tbody th, table.dataTable tbody td {
+    padding: 8px 18px;
+}

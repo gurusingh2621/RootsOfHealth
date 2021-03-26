@@ -1,0 +1,84 @@
+﻿
+
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group select_group_role">
+                <label>Role</label>
+                <div class="custom_select">
+                    <select class="form-control" id="GroupRoles">
+                        <option hidden>None</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Group Name</label>
+                <input type="text" id="GroupName" class="form-control" placeholder="Type group name" maxlength="100"/>
+            </div>
+        </div>
+    </div>
+    
+
+<div class="form-group select_member_box">
+    <label>Members</label>
+    <div class="d-flex align-items-center">
+        <select class="form-control selectpicker" id="UsersToAdd" title="Select members to add" data-live-search="true" data-selected-text-format="count>0" data-actions-box="true" multiple></select>
+        <div class="member_select_action ml-auto">
+            <button type="button" id="AddSelectedUsers" onclick="AddMembersToTable()" class="btn btn-success" disabled>Add Member</button>
+            <button type="button" id="RemoveSelectedUsers" onclick="RemoveSelectedUsers()" class="btn btn-danger" disabled>Remove Selected</button>
+        </div>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table members_list_table" id="userlist">
+        <thead>
+            <tr>
+                <th>
+                    <label class="input_checkbox">
+                        <input type="checkbox" id="Select_All" name="SelectAllUsers" onchange="SelectedOrDeselectAll(this)"  value="select all" />
+                        <span></span>
+                    </label>
+                </th>
+                <th>Action</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+          
+        </tbody>
+    </table>
+    </div>
+
+    <script>
+        $('#UsersToAdd').on('change', function () {
+            SelectedUsers = []
+            SelectedUsers = $('#UsersToAdd').val()
+            console.log(SelectedUsers)
+            if (SelectedUsers.length > 0) {
+                $('#AddSelectedUsers').prop('disabled', false);
+            }
+            else {
+                $('#AddSelectedUsers').prop('disabled', true);
+            }
+        });
+
+        $('#GroupName').on('input', function () {
+            detectChange();
+        })
+        $('#GroupRoles').on('change', function () {
+            detectChange();
+        })
+       
+    </script>
+
+
+
+
+
+
+
+
+
+
