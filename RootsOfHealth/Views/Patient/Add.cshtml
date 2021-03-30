@@ -11,25 +11,7 @@
         display: none;
     }
 
-    .showHideInner {
-        margin-top: 0px !important;
-    }
-
-    .showHidepaitent-detail-left {
-        height: 570px !important;
-    }
-
-    .showHidepaitentinner-main-content {
-        height: 500px !important;
-    }
-
-    .showHidebody {
-        padding-top: 15px !important;
-    }
-
-    .showHidecontent {
-        padding-top: 0px !important;
-    }
+   
 
     .inner-main-content {
         height: calc(100vh - 240px);
@@ -133,6 +115,95 @@
     .list-height {
             height: calc(100vh - 300px);
         }
+
+
+    /* New css
+-------------------------------------------------*/
+    #content.responsive-container .profile-tabs .tabs-scroll {
+        position: fixed;
+        top: 60px;
+        right: 0;
+        width: 260px;
+        z-index: 9990;
+        flex-direction: column;
+        display: block;
+        height: calc(100vh - 60px);
+        left: auto;
+        margin: 0;
+        background: #34425a;
+        overflow: auto;
+        transform: translateX(100%);
+        -webkit-transform: translateX(100%);
+        transition: all ease 0.4s;
+    }
+
+    #content.responsive-container {
+        padding-top: 0px !important;
+    }
+
+    #content .inner-content {
+        margin-top: 0px !important;
+    }
+
+    #content.responsive-container.showHidecontent .profile-tabs .tabs-scroll {
+        transform: translateX(0%);
+        -webkit-transform: translateX(0%);
+    }
+
+    #content.responsive-container .profile-tabs .tabs-scroll > .nav-tabs {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin: 0;
+        position: static;
+        height: auto;
+        padding: 0;
+        background: transparent;
+        border: 0px;
+        overflow:hidden;
+    }
+
+    #content.responsive-container .profile-tabs .tabs-scroll > ul#myTab > li {
+        margin: 0;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+        #content.responsive-container .profile-tabs .tabs-scroll > ul#myTab > li > a {
+            margin: 0;
+            width:100%;
+        }
+
+            #content.responsive-container .profile-tabs .tabs-scroll > ul#myTab > li > a:after {
+                content: none;
+            }
+
+    .tabs-scroll > ul#myTab > li > a .check {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        z-index: 9;
+    }
+    .tabs-scroll > ul#myTab > li > a .notCountR {
+        top: 7px;
+        right: 35px;
+    }
+        .inner-main-content {
+        height: calc(100vh - 180px);
+    }
+
+    .paitent-detail-left {
+        height: calc(100vh - 100px);
+    }
+
+    #menu-toggle {
+        right: 0;
+        top: 20px;
+        transition: all ease 0.4s;
+    }
+
+    div#menu-toggle.open {
+        right: 260px;
+    }
 </style>
 <!-- Content start here -->
 <section id="content" class="responsive-container ">
@@ -199,7 +270,7 @@
                 </li>
             </ul>
         </div>
-        <div id="menu-toggle" class="open">
+        <div id="menu-toggle" class="">
             <div id="hamburger">
                 <span></span>
                 <span></span>
