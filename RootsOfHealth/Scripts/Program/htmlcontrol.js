@@ -1911,28 +1911,7 @@ function RemoveControl(obj) {
     });
 
 }
-function hash(str) {
-    var hash = 0, i, chr;
-    if (str.length === 0) return hash;
-    for (i = 0; i < str.length; i++) {
-        chr = str.charCodeAt(i);
-        hash = ((hash << 5) - hash) + chr;
-        hash |= 0; 
-    }
-    if (hash < 0) {
-        return -1*hash
-    }
-    return hash;
-}
-function shortenColName(colname) {
-    if (colname.length > 128) {
-        let firstSub = colname.substring(0, 100);
-        let lastSub = colname.substring(100, colname.length);
-        let generatedHash = hash(lastSub);
-        colname = firstSub + generatedHash;
-    }
-    return colname
-}
+
 //addoption=>use to add new option for select,radio,checkbox inside popup
 function addoption(obj) {
     var optionvalue = parseInt($(obj).parent().siblings(".option-block").length) + 1;
