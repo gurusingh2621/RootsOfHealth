@@ -86,7 +86,8 @@
      var clientName = '@Model.PatientMain.FirstName'+" "+'@Model.PatientMain.LastName'
     if (clientMiddleName.trim().length > 0) {
         clientName = '@Model.PatientMain.FirstName' + " " + clientMiddleName+" "+'@Model.PatientMain.LastName'
-    }
+      }
+      var _dateOfBirth = '@Model.PatientMain.DateOfBirth'
 
     $('#datepicker').datepicker({
                 uiLibrary: 'bootstrap'
@@ -2273,6 +2274,7 @@
           stringToAppend += '<table  width="40%" style="margin-left:35px;margin-bottom:15px">';
           stringToAppend += '<tr><th width="50%">Name</th><td>' + clientName + '<td></tr>'
           stringToAppend += '<tr><th width=50%">Medical Record Number</th><td>' + _amdMedRecordNo + '<td></tr>'
+          stringToAppend += '<tr><th width=50%">Date Of Birth</th><td>' + _dateOfBirth + '<td></tr>'
           stringToAppend += '<tr><th width="50%">Address</th><td>' + clinicAddress + '<td></tr>'
           stringToAppend += '</table>'
           var mywindow = window.open('', '', 'width=1000,height=800');

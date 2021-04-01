@@ -123,7 +123,7 @@
         position: fixed;
         top: 60px;
         right: 0;
-        width: 260px;
+        width: 310px;
         z-index: 9990;
         flex-direction: column;
         display: block;
@@ -183,7 +183,7 @@
         right: 15px;
         z-index: 9;
     }
-    .tabs-scroll > ul#myTab > li > a .notCountR {
+    .tabs-scroll > ul#myTab > li > a .notCountR, a .notCountO, a .notCountG {
         top: 7px;
         right: 35px;
     }
@@ -202,7 +202,7 @@
     }
 
     div#menu-toggle.open {
-        right: 260px;
+        right: 310px;
     }
 </style>
 <!-- Content start here -->
@@ -367,6 +367,14 @@
         var _PatientId = '@ViewBag.PatientID';
           var  programUploadedPath="@System.Web.Configuration.WebConfigurationManager.AppSettings["ProgramUploadPath"]";
         var _userID="@Session["userid"]";
+
+        $('#myTab a').each(function () {
+            $(this).click(function () {
+                $('#menu-toggle').click();
+            })   
+         
+        });
+
         $('#menu-toggle').click(function () {
             $(this).toggleClass('open');
             if ($("#menu-toggle").hasClass("open")) {
@@ -4774,7 +4782,7 @@ var fileDataP10 = new FormData();
         }
         else {
             EditPrograms(_programId, _templateID)
-        }
+             }
     })
         }
         
@@ -4804,6 +4812,9 @@ var fileDataP10 = new FormData();
                 if (_programelement.find(".basecontentarea").length > 0) {
                     getProgramHeaderAndFooter();
                 }
+                else {
+                    BindChangeEvent()
+                }
                 _programelement.find(".event-btn-right").remove();
                 _programelement.find(".ck-editor-header").remove();
                 _programelement.find(".question-container").parent().css("border", "none");
@@ -4824,6 +4835,9 @@ var fileDataP10 = new FormData();
                     ],
                     placeholder: "Type here",
                     callbacks: {
+                        onChange: function () {
+                            enableSave()
+                        },
                         onInit: function (e) {
                             this.placeholder
                                 ? e.editingArea.find(".note-placeholder").html(this.placeholder)
@@ -4838,7 +4852,11 @@ var fileDataP10 = new FormData();
             }
             
             _programelement.find(".priority").each((index, item) => {
-                $(item).sortable();
+                $(item).sortable({
+                    change: function (event, ui) {
+                        enableSave()
+                    }
+                });
             })
             $(".loaderOverlay").hide();
         }, error: function (e) {
@@ -4882,6 +4900,7 @@ var fileDataP10 = new FormData();
                     });
                     break;
             }
+            BindChangeEvent()
         },
         error: function (e) {
             toastr.error("Something happen Wrong");
@@ -4943,6 +4962,9 @@ var fileDataP10 = new FormData();
 
                     getBasehtmlByProgramId(ProgramID);
                 }
+                else {
+                    BindChangeEvent()
+                }
                _programelement.find(".event-btn-right").remove();
                _programelement.find(".ck-editor-header").remove();
                _programelement.find(".question-container").parent().css("border", "none");
@@ -4963,6 +4985,9 @@ var fileDataP10 = new FormData();
                     ],
                     placeholder: "Type here",
                     callbacks: {
+                        onChange: function () {
+                            enableSave()
+                        },
                         onInit: function (e) {
                             this.placeholder
                                 ? e.editingArea.find(".note-placeholder").html(this.placeholder)
@@ -4974,9 +4999,14 @@ var fileDataP10 = new FormData();
             }
             getProgramBasicFormValue(ProgramID,id)
             _programelement.find(".priority").each((index, item) => {
-                $(item).sortable()
+                $(item).sortable({
+                    change: function (event, ui) {
+                        enableSave()
+                    }
+                })
             })
-             $(".loaderOverlay").hide();
+            $(".loaderOverlay").hide();
+            disableSave()
         },
         error: function (e) {
             toastr.error("Something happen Wrong");
@@ -5024,6 +5054,7 @@ var fileDataP10 = new FormData();
                     });
                     break;
             }
+            BindChangeEvent()
         },
         error: function (e) {
             toastr.error("Something happen Wrong");
@@ -5230,7 +5261,7 @@ var fileDataP10 = new FormData();
                 var selectedFiles = `<div class="label">File Names</div><ul class="file_uploaded_list file_uploaded_inputs">`;
                 for (var i = 0; i < filesArr.length; i++) {
                     selectedFiles += `<li><input class="form-control" data-file="${filesArr[i]}" placeholder="Enter file name here" type="text" value="${namesArr[i]}"/>`
-                    selectedFiles += '<a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a><span onclick="removeUpload(this)" class="removeUploadFile"><i class="fa fa-times"></i></span></li>';
+                    selectedFiles += '<a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a><span onclick="removeProgramUpload(this)" class="removeUploadFile"><i class="fa fa-times"></i></span></li>';
                 }
                 selectedFiles += "</ul>";
                _programelement.find("#"+Id).next().next().html("").append(selectedFiles);
@@ -5555,9 +5586,10 @@ var fileDataP10 = new FormData();
                         success: function (res) {
                             if (_programelement.find(".base-control").length) {
                                 saveProgramBaseFieldInfo(_programID, _templateId,_Saved);
-                                
+
                             }
-                        
+
+                            disableSave()
                             $(".loaderOverlay").hide();
                             toastr.success("Saved successfully");
                             $(".basic-info-actions").hide();
@@ -5756,6 +5788,7 @@ function removeProgramUpload(obj) {
                     } else {
                         $(obj).closest("li").remove();
                     }
+                    enableSave();
                 }
             },
             no: {
@@ -5766,6 +5799,26 @@ function removeProgramUpload(obj) {
     });
 }
 
+        function BindChangeEvent() {
+           
+            _programelement.find('input,select').each(function () {
+               
+                $(this).change(function () {
+                    enableSave()
+
+                });
+            });
+        }
+
+        function enableSave() {
+            $('#' + _programName + 'only').find('.btnprogramsave').removeClass('disabled')
+            $('#' + _programName + 'only').find('.btnprogramsave').css({ "background-color": "#22baa0", "border": "1px solid #22baa0" });
+        }
+
+        function disableSave() {
+            $('#' + _programName + 'only').find('.btnprogramsave').addClass('disabled')
+            $('#' + _programName + 'only').find('.btnprogramsave').css({ "background-color": "#a1a1a1", "border": "1px solid #a1a1a1" });
+        }
 
  function clearProgramFileData() {
  fileDataP1 = new FormData();
