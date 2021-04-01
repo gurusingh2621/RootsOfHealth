@@ -133,6 +133,95 @@
     .list-height {
             height: calc(100vh - 300px);
         }
+
+
+    /* New css
+-------------------------------------------------*/
+    #content.responsive-container .profile-tabs .tabs-scroll {
+        position: fixed;
+        top: 60px;
+        right: 0;
+        width: 310px;
+        z-index: 9990;
+        flex-direction: column;
+        display: block;
+        height: calc(100vh - 60px);
+        left: auto;
+        margin: 0;
+        background: #34425a;
+        overflow: auto;
+        transform: translateX(100%);
+        -webkit-transform: translateX(100%);
+        transition: all ease 0.4s;
+    }
+
+    #content.responsive-container {
+        padding-top: 0px !important;
+    }
+
+    #content .inner-content {
+        margin-top: 0px !important;
+    }
+
+    #content.responsive-container.showHidecontent .profile-tabs .tabs-scroll {
+        transform: translateX(0%);
+        -webkit-transform: translateX(0%);
+    }
+
+    #content.responsive-container .profile-tabs .tabs-scroll > .nav-tabs {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin: 0;
+        position: static;
+        height: auto;
+        padding: 0;
+        background: transparent;
+        border: 0px;
+        overflow:hidden;
+    }
+
+    #content.responsive-container .profile-tabs .tabs-scroll > ul#myTab > li {
+        margin: 0;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+        #content.responsive-container .profile-tabs .tabs-scroll > ul#myTab > li > a {
+            margin: 0;
+            width:100%;
+        }
+
+            #content.responsive-container .profile-tabs .tabs-scroll > ul#myTab > li > a:after {
+                content: none;
+            }
+
+    .tabs-scroll > ul#myTab > li > a .check {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        z-index: 9;
+    }
+    .tabs-scroll > ul#myTab > li > a .notCountR, a .notCountO, a .notCountG {
+        top: 7px;
+        right: 35px;
+    }
+        .inner-main-content {
+        height: calc(100vh - 180px);
+    }
+
+    .paitent-detail-left {
+        height: calc(100vh - 100px);
+    }
+
+    #menu-toggle {
+        right: 0;
+        top: 20px;
+        transition: all ease 0.4s;
+    }
+
+    div#menu-toggle.open {
+        right: 310px;
+    }
 </style>
 <!-- Content start here -->
 <section id="content" class="responsive-container ">
@@ -296,6 +385,14 @@
         var _PatientId = '@ViewBag.PatientID';
           var  programUploadedPath="@System.Web.Configuration.WebConfigurationManager.AppSettings["ProgramUploadPath"]";
         var _userID="@Session["userid"]";
+
+        $('#myTab a').each(function () {
+            $(this).click(function () {
+                $('#menu-toggle').click();
+            })   
+         
+        });
+
         $('#menu-toggle').click(function () {
             $(this).toggleClass('open');
             if ($("#menu-toggle").hasClass("open")) {
@@ -4703,7 +4800,7 @@ var fileDataP10 = new FormData();
         }
         else {
             EditPrograms(_programId, _templateID)
-        }
+             }
     })
         }
         
@@ -4733,6 +4830,9 @@ var fileDataP10 = new FormData();
                 if (_programelement.find(".basecontentarea").length > 0) {
                     getProgramHeaderAndFooter();
                 }
+                else {
+                    BindChangeEvent()
+                }
                 _programelement.find(".event-btn-right").remove();
                 _programelement.find(".ck-editor-header").remove();
                 _programelement.find(".question-container").parent().css("border", "none");
@@ -4753,6 +4853,9 @@ var fileDataP10 = new FormData();
                     ],
                     placeholder: "Type here",
                     callbacks: {
+                        onChange: function () {
+                            enableSave()
+                        },
                         onInit: function (e) {
                             this.placeholder
                                 ? e.editingArea.find(".note-placeholder").html(this.placeholder)
@@ -4767,7 +4870,11 @@ var fileDataP10 = new FormData();
             }
             
             _programelement.find(".priority").each((index, item) => {
-                $(item).sortable();
+                $(item).sortable({
+                    change: function (event, ui) {
+                        enableSave()
+                    }
+                });
             })
             $(".loaderOverlay").hide();
         }, error: function (e) {
@@ -4811,6 +4918,7 @@ var fileDataP10 = new FormData();
                     });
                     break;
             }
+            BindChangeEvent()
         },
         error: function (e) {
             toastr.error("Something happen Wrong");
@@ -4872,6 +4980,9 @@ var fileDataP10 = new FormData();
 
                     getBasehtmlByProgramId(ProgramID);
                 }
+                else {
+                    BindChangeEvent()
+                }
                _programelement.find(".event-btn-right").remove();
                _programelement.find(".ck-editor-header").remove();
                _programelement.find(".question-container").parent().css("border", "none");
@@ -4892,6 +5003,9 @@ var fileDataP10 = new FormData();
                     ],
                     placeholder: "Type here",
                     callbacks: {
+                        onChange: function () {
+                            enableSave()
+                        },
                         onInit: function (e) {
                             this.placeholder
                                 ? e.editingArea.find(".note-placeholder").html(this.placeholder)
@@ -4903,9 +5017,14 @@ var fileDataP10 = new FormData();
             }
             getProgramBasicFormValue(ProgramID,id)
             _programelement.find(".priority").each((index, item) => {
-                $(item).sortable()
+                $(item).sortable({
+                    change: function (event, ui) {
+                        enableSave()
+                    }
+                })
             })
-             $(".loaderOverlay").hide();
+            $(".loaderOverlay").hide();
+            disableSave()
         },
         error: function (e) {
             toastr.error("Something happen Wrong");
@@ -4953,6 +5072,7 @@ var fileDataP10 = new FormData();
                     });
                     break;
             }
+            BindChangeEvent()
         },
         error: function (e) {
             toastr.error("Something happen Wrong");
@@ -5159,7 +5279,7 @@ var fileDataP10 = new FormData();
                 var selectedFiles = `<div class="label">File Names</div><ul class="file_uploaded_list file_uploaded_inputs">`;
                 for (var i = 0; i < filesArr.length; i++) {
                     selectedFiles += `<li><input class="form-control" data-file="${filesArr[i]}" placeholder="Enter file name here" type="text" value="${namesArr[i]}"/>`
-                    selectedFiles += '<a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a><span onclick="removeUpload(this)" class="removeUploadFile"><i class="fa fa-times"></i></span></li>';
+                    selectedFiles += '<a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a><span onclick="removeProgramUpload(this)" class="removeUploadFile"><i class="fa fa-times"></i></span></li>';
                 }
                 selectedFiles += "</ul>";
                _programelement.find("#"+Id).next().next().html("").append(selectedFiles);
@@ -5484,9 +5604,10 @@ var fileDataP10 = new FormData();
                         success: function (res) {
                             if (_programelement.find(".base-control").length) {
                                 saveProgramBaseFieldInfo(_programID, _templateId,_Saved);
-                                
+
                             }
-                        
+
+                            disableSave()
                             $(".loaderOverlay").hide();
                             toastr.success("Saved successfully");
                             $(".basic-info-actions").hide();
@@ -5685,6 +5806,7 @@ function removeProgramUpload(obj) {
                     } else {
                         $(obj).closest("li").remove();
                     }
+                    enableSave();
                 }
             },
             no: {
@@ -5695,6 +5817,26 @@ function removeProgramUpload(obj) {
     });
 }
 
+        function BindChangeEvent() {
+           
+            _programelement.find('input,select').each(function () {
+               
+                $(this).change(function () {
+                    enableSave()
+
+                });
+            });
+        }
+
+        function enableSave() {
+            $('#' + _programName + 'only').find('.btnprogramsave').removeClass('disabled')
+            $('#' + _programName + 'only').find('.btnprogramsave').css({ "background-color": "#22baa0", "border": "1px solid #22baa0" });
+        }
+
+        function disableSave() {
+            $('#' + _programName + 'only').find('.btnprogramsave').addClass('disabled')
+            $('#' + _programName + 'only').find('.btnprogramsave').css({ "background-color": "#a1a1a1", "border": "1px solid #a1a1a1" });
+        }
 
  function clearProgramFileData() {
  fileDataP1 = new FormData();
