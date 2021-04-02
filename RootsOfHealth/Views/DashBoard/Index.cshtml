@@ -34,7 +34,7 @@
 -------------------------------------------------*/
 
 
-#content.responsive-container .profile-tabs .tabs-scroll {
+#content .profile-tabs .tabs-scroll {
 position: fixed;
 top: 60px;
 right: 0;
@@ -51,17 +51,21 @@ transform: translateX(100%);
 -webkit-transform: translateX(100%);
 transition: all ease 0.4s;
 }
-#content.responsive-container {
+.tabs-scroll > ul#myTab > li > a .notCountR, a .notCountO, a .notCountG, a .notCountR {
+    top: 7px;
+    right: 35px;
+}
+#content {
 padding-top:0px!important;
 }
 #content .inner-content {
 margin-top:0px!important;
 }
-#content.responsive-container.showHidecontent .profile-tabs .tabs-scroll {
+#content.showHidecontent .profile-tabs .tabs-scroll {
 transform: translateX(0%);
 -webkit-transform: translateX(0%);
 }
-#content.responsive-container .profile-tabs .tabs-scroll > .nav-tabs {
+#content .profile-tabs .tabs-scroll > .nav-tabs {
 display: flex;
 flex-direction: column;
 width: 100%;
@@ -72,14 +76,14 @@ padding: 0;
 background: transparent;
 border: 0px;
 }
-#content.responsive-container .profile-tabs .tabs-scroll > ul#myTab > li {
+#content .profile-tabs .tabs-scroll > ul#myTab > li {
 margin: 0;
 border-bottom: 1px solid rgba(255,255,255,0.1);
 }
-#content.responsive-container .profile-tabs .tabs-scroll > ul#myTab > li > a {
+#content .profile-tabs .tabs-scroll > ul#myTab > li > a {
 margin: 0;
 }
-#content.responsive-container .profile-tabs .tabs-scroll > ul#myTab > li > a:after {
+#content .profile-tabs .tabs-scroll > ul#myTab > li > a:after {
 content: none;
 }
 .tabs-scroll > ul#myTab > li > a .check {

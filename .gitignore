@@ -328,8 +328,9 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
-/RootsOfHealth/Scripts
+
 /RootsOfHealth/Files
 /RootsOfHealth/images/loader.gif
 /RootsOfHealth/App_Data
 /RootsOfHealth/Uploads
+
