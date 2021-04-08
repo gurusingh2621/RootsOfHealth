@@ -33,20 +33,20 @@ namespace RootsOfHealth.Controllers
                     client.BaseAddress = new Uri(WebApiKey);
                     //HTTP GET
                     var responseTask = client.GetAsync("/api/PatientMain/GetDetailOfPatient?patientid=" + patientId);
-                    var responseTask1 = client.GetAsync("/api/PatientMain/GetFormScheduling");
+                  //  var responseTask1 = client.GetAsync("/api/PatientMain/GetFormScheduling");
 
                     responseTask.Wait();
-                    responseTask1.Wait();
+                  //  responseTask1.Wait();
 
                     var result = responseTask.Result;
-                    var result1 = responseTask1.Result;
-                    if (result.IsSuccessStatusCode && result1.IsSuccessStatusCode)
+                    //var result1 = responseTask1.Result;
+                    if (result.IsSuccessStatusCode)
                     {
                         var readTask = result.Content.ReadAsAsync<PatientAllDetailByIDBO>();
                         readTask.Wait();
 
-                        var readTask1 = result1.Content.ReadAsAsync<List<FormSchedulingBO>>();
-                        readTask1.Wait();
+                        //var readTask1 = result1.Content.ReadAsAsync<List<FormSchedulingBO>>();
+                        //readTask1.Wait();
 
 
                         patientdetailobj = readTask.Result.PatientDetail;
@@ -67,7 +67,7 @@ namespace RootsOfHealth.Controllers
                         ViewBag.PatientID = patientId;
 
 
-                        formscheduleobj = readTask1.Result;
+                        formscheduleobj = readTask.Result.FormScheduling;
                         foreach (var m in formscheduleobj)
                         {
                             if (m.FormName == "Housing")

@@ -1,0 +1,187 @@
+﻿@model Tuple<RootsOfHealth.Models.AmdProfileBO, RootsOfHealth.Models.PatientMainBO>
+    <style>
+        .Highlight{
+
+           background-color:green
+              
+
+        }
+
+        .amdProfileData table {
+            font-size: 14px;
+        }
+        .amdProfileData table th {
+            font-weight: 500;
+            width:35%;
+        }
+        .amdProfileData table td {
+            width: 65%;
+        }
+        .amdProfileData .table-striped tbody tr:nth-of-type(odd) {
+            background: rgba(0,0,0,.02);
+        }
+        .amdProfileData .table-hover tbody tr:hover {
+            background: rgba(0,0,0,.05);
+        }
+        .amdProfileData h6 {
+            padding: 12px 12px 12px;
+            margin: 0;
+            background: #eee;
+           
+        }
+        .amdProfileData h6 span {
+            color: #22baa0;
+        }
+        .amdProfileData .table-striped tbody tr.highlight {
+            background: rgb(234 2 2 / 5%);
+            color: #ea0202;
+        }
+        .amdProfileData .table-responsive {
+            max-height: calc(100vh - 200px);
+            overflow: auto;
+            border: 0px;
+        }
+
+    </style>
+@if (Model.Item1 == null)
+{
+
+    <h1>there is no amd</h1>
+}
+else
+{
+ <div class="amdProfileData">
+    <h6>Chart Number : <span>@(Model.Item1.ChartNumber == null ? "" : Model.Item1.ChartNumber)</span></h6>
+    <div class="table-responsive scroll">
+        <table class="table table-striped table-hover">
+            <thead>
+
+            </thead>
+            <tbody>
+                <tr class=@((Model.Item1.FirstName==null?"":Model.Item1.FirstName)!=(Model.Item2.FirstName==null?"":Model.Item2.FirstName) ?"Highlight":"")>
+                    <th scope="col">First Name</th>
+                    <td scope="col">@(Model.Item1.FirstName == null ? "" : Model.Item1.FirstName)</td>
+                </tr>
+                <tr class=@((Model.Item1.LastName==null?"":Model.Item1.LastName)!=(Model.Item2.LastName==null?"":Model.Item2.LastName) ?"Highlight":"")>
+                    <th>Last Name</th>
+                    <td>@(Model.Item1.LastName == null ? "" : Model.Item1.LastName)</td>
+
+
+                </tr>
+                <tr class=@((Model.Item1.Gender==null?"":Model.Item1.Gender)!=(Model.Item2.Gender==null?"":Model.Item2.Gender) ?"Highlight":"")>
+                    <th scope="row">Gender</th>
+                    <td>@(Model.Item1.Gender == null ? "" : Model.Item1.Gender)</td>
+
+                </tr>
+                <tr>
+                    <th scope="row">Home Phone</th>
+                    <td>@(Model.Item1.HomePhone == null ? "" : Model.Item1.HomePhone)</td>
+
+                </tr>
+                <tr class=@((Model.Item1.CellPhone==null?"":Model.Item1.CellPhone)!=(Model.Item2.CellPhone==null?"":Model.Item2.CellPhone) ?"Highlight":"")>
+                    <th scope="row">Cell Phone</th>
+                    <td>@(Model.Item1.CellPhone == null ? "" : Model.Item1.CellPhone)</td>
+
+                </tr>
+                @*<tr>
+                    <th scope="row">Work Phone</th>
+                    <td>Mark</td>
+
+
+                </tr>*@
+                <tr class=@((Model.Item1.Email==null?"":Model.Item1.Email)!=(Model.Item2.EmailAddress==null?"":Model.Item2.EmailAddress) ?"Highlight":"")>
+                    <th scope="row">Email</th>
+                    <td>@(Model.Item1.Email == null ? "" : Model.Item1.Email)</td>
+
+                </tr>
+
+                <tr>
+                    <th scope="row">Social Security</th>
+                    <td>@(Model.Item1.SSN == null ? "" : Model.Item1.SSN)</td>
+                    @*<td>
+                        <div class="ssn-icon">
+                            <div class="ssn-label">
+                                <div class="ssn-label-inner set-eye-pos">
+                                    <label class="label-fields lbl-hideamd">@Model.Item1.SSN</label>
+                                    <div class="stardivAmd">*********</div>
+                                    <div class="ssn-icon-label">
+                                        <i class="fa fa-eye open-eye" style="display:none" onclick="Hidessnlabel()"></i>
+                                        <i class="fa fa-eye-slash close-eye" onclick="showSSnlabel()"></i>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <input tabindex="9" type="password" id="txtSocialSecNo" name="SocialSecurityNumber" class="form-control" maxlength="50"
+                                   placeholder="000-00-0000" value="@Model.Item1.SSN">
+                            <div class="ssn-icon-eye">
+                                <i class="fa fa-eye open-eye" style="display:none" onclick="showAMDssn()"></i>
+                                <i class="fa fa-eye-slash close-eye" style="display:none" onclick="hideAMDssn()"></i>
+                            </div>
+
+                        </div>
+                    </td>*@
+
+
+                </tr>
+                <tr class=@((Model.Item1.DOB==null?"":Model.Item1.DOB)!=(Model.Item2.DateOfBirth==null?"":Model.Item2.DateOfBirth) ?"Highlight":"")>
+                    <th scope="row">DBO</th>
+                    <td>@(Model.Item1.DOB == null ? "" : Model.Item1.DOB)</td>
+
+                </tr>
+                <tr class=@((Model.Item1.Address==null?"":Model.Item1.Address)!=(Model.Item2.Address==null?"":Model.Item2.Address) ?"Highlight":"")>
+                    <th scope="row">Address Lane 1</th>
+                    <td>@(Model.Item1.Address == null ? "" : Model.Item1.Address)</td>
+
+                </tr>
+                @*<tr>
+                    <th scope="row">Address Lane 2</th>
+                    <td>Mark</td>
+
+
+                </tr>*@
+                <tr class=@((Model.Item1.City==null?"":Model.Item1.City)!=(Model.Item2.City==null?"":Model.Item2.City) ?"Highlight":"")>
+                    <th scope="row">City</th>
+                    <td>@(Model.Item1.City == null ? "" : Model.Item1.City)</td>
+
+                </tr>
+                <tr class=@((Model.Item1.State==null?"":Model.Item1.State)!=(Model.Item2.State==null?"":Model.Item2.State) ?"Highlight":"")>
+                    <th scope="row">State</th>
+                    <td>@(Model.Item1.State == null ? "" : Model.Item1.State)</td>
+
+                </tr>
+                <tr class=@((Model.Item1.ZipCode==null?"":Model.Item1.ZipCode)!=(Model.Item2.Zip==null?"":Model.Item2.Zip) ?"Highlight":"")>
+                    <th scope="row">Zip</th>
+                    <td>@(Model.Item1.ZipCode == null ? "" : Model.Item1.ZipCode)</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    </div>
+
+}
+
+
+   <script>
+       function showAMDssn() {
+           $(".stardivAmd").hide();
+           $(".hideamd").show();
+       }
+       function hideAMDssn() {
+           $(".stardivAmd").show();
+           $(".hideamd").hide();
+       }
+   </script>
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -88,7 +88,7 @@
         clientName = '@Model.PatientMain.FirstName' + " " + clientMiddleName+" "+'@Model.PatientMain.LastName'
       }
       var _dateOfBirth = '@Model.PatientMain.DateOfBirth'
-
+   
     $('#datepicker').datepicker({
                 uiLibrary: 'bootstrap'
     })
@@ -1308,51 +1308,62 @@
         //-----------Score Bind Start------------------------------//
         //-----------------Housingscore start----------------------//
         $('#txthousingscore').html(@Model.PatientScore.housingscore+"/26");
-        $('#txthousingstatus').html('@Model.PatientScore.housingstatus');
+          $('#txthousingstatus').html('@Model.PatientScore.housingstatus');
+          InsertBadge( $('#txthousingstatus'),'@Model.PatientScore.housingstatus')
          //-----------------Housingscore end----------------------//
          //----------------financialscore start----------------------//
         $('#txtfinancialscore').html(@Model.PatientScore.financialcscore+"/22");
-        $('#txtfinancialstatus').html('@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Model.PatientScore.financialcstatus.ToLower())');
+          $('#txtfinancialstatus').html('@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Model.PatientScore.financialcstatus.ToLower())');
+          InsertBadge( $('#txtfinancialstatus'),'@Model.PatientScore.financialcstatus')
          //-----------------financialscore end----------------------//
          //----------------Employmentscore start----------------------//
         $('#txtemploymentscore').html(@Model.PatientScore.employmentscore+"/20");
-        $('#txtemploymentstatus').html('@Model.PatientScore.employmentstatus');
+          $('#txtemploymentstatus').html('@Model.PatientScore.employmentstatus');
+          InsertBadge( $('#txtemploymentstatus'),'@Model.PatientScore.employmentstatus')
          //-----------------Employmentscore end----------------------//
         //----------------communicationscore start----------------------//
         $('#txtcommunscore').html(@Model.PatientScore.communicationscore+"/12");
-        $('#txtcommunstatus').html('@Model.PatientScore.communicationstatus');
+          $('#txtcommunstatus').html('@Model.PatientScore.communicationstatus');
+          InsertBadge($('#txtcommunstatus'),'@Model.PatientScore.communicationstatus')
          //-----------------communicationscore end----------------------//
           //----------------Healthcarescore start----------------------//
         $('#txthealthscore').html(@Model.PatientScore.healthcarescore+"/26");
-        $('#txthealthstatus').html('@Model.PatientScore.healthcarestatus');
+          $('#txthealthstatus').html('@Model.PatientScore.healthcarestatus');
+          InsertBadge( $('#txthealthstatus'),'@Model.PatientScore.healthcarestatus')
          //-----------------Healthcarescore end----------------------//
         //----------------Socialscore start----------------------//
         $('#txtsocialscore').html(@Model.PatientScore.socialsupportscore+"/12");
-        $('#txtsocialstatus').html('@Model.PatientScore.socialsupportstatus');
+          $('#txtsocialstatus').html('@Model.PatientScore.socialsupportstatus');
+          InsertBadge( $('#txtsocialstatus'),'@Model.PatientScore.socialsupportstatus')
          //-----------------Socialscore end----------------------//
          //----------------Legalscore start----------------------//
         $('#txtlegalscore').html(@Model.PatientScore.legalstatusscore+"/18");
-        $('#txtlegalstatus').html('@Model.PatientScore.legalstatusstatus');
+          $('#txtlegalstatus').html('@Model.PatientScore.legalstatusstatus');
+          InsertBadge( $('#txtlegalstatus'),'@Model.PatientScore.legalstatusstatus')
          //-----------------Legalscore end----------------------//
            //----------------Substancescore start----------------------//
         $('#txtsubtscore').html(@Model.PatientScore.substancescore+"/20");
-        $('#txtsubtstatus').html('@Model.PatientScore.substancestatus');
+          $('#txtsubtstatus').html('@Model.PatientScore.substancestatus');
+          InsertBadge($('#txtsubtstatus'),'@Model.PatientScore.substancestatus')
          //-----------------Substancescore end----------------------//
           //----------------Mental Health score start----------------------//
         $('#txtmentalscore').html(@Model.PatientScore.mentalhealthscore+"/20");
-        $('#txtmentalstatus').html('@Model.PatientScore.mentalhealthstatus');
+          $('#txtmentalstatus').html('@Model.PatientScore.mentalhealthstatus');
+          InsertBadge( $('#txtmentalstatus'),'@Model.PatientScore.mentalhealthstatus')
          //-----------------Mental Health score end----------------------//
 
             //----------------Food Access score start----------------------//
         $('#txtfoodscore').html(@Model.PatientScore.foodaccessscore+"/26");
-        $('#txtfoodstatus').html('@Model.PatientScore.foodaccessstatus');
+          $('#txtfoodstatus').html('@Model.PatientScore.foodaccessstatus');
+          InsertBadge($('#txtfoodstatus'),'@Model.PatientScore.foodaccessstatus')
          //-----------------Food Access score end----------------------//
 
           //----------------Profile(Overall) score start----------------------//
-        $('#txtoverallscore').html(@Model.PatientScore.OverallScore+"/200");
-
+          $('#txtoverallscore').html(@Model.PatientScore.OverallScore+"/200");
+          
          @*$('#txtoverallstatus').html('@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Model.PatientScore.OverallStatus.ToLower())');*@
-           $('#txtoverallstatus').html('@Model.PatientScore.OverallStatus');
+          $('#txtoverallstatus').html('@Model.PatientScore.OverallStatus');
+          InsertBadge( $('#txtoverallstatus'),'@Model.PatientScore.OverallStatus')
          //-----------------Profile(Overall) score end----------------------//
 
 
@@ -2950,7 +2961,41 @@
         }
     });
 }
+      $('#btnAMDProfile').click(function () {
+       var PatientObject=  @Html.Raw(Json.Encode(Model.PatientMain));
+          $('#AMDProfile .modal-body').html("")
 
+          $.ajax({
+              type: "Post",
+              url: '/Dashboard/GetAMDProfile',
+              data: JSON.stringify(PatientObject),
+              contentType: "application/json; charset=utf-8",
+              dataType: "html",
+              success: function (data) {
+                  $('#AMDProfile .modal-body').html(data)
+              },
+              error: function (e) {
+                  toastr.error("Error AMDProfile Data.");
+              }
+          });
 
+      })
+      function InsertBadge(statusele,status) {
+          var badge=''
+          if (status == 'crisis') {
+              badge = '<span class="badge badge-danger" style="height:10px; position:relative; top:4px;">&nbsp; &nbsp;</span>'
+          }
+          else if (status == 'secure') {
+              badge ='<span class="badge badge-success" style="height:10px; position:relative; top:4px;">&nbsp; &nbsp;</span>'
+          }
+          else if (status =='struggling') {
+              badge ='<span class="badge badge-warning" style="height:10px; position:relative; top:4px;background-color:#ecec04!important">&nbsp; &nbsp;</span>'
+          }
+          else if (status == 'at risk') {
+              badge ='<span class="badge badge-warning"style="height:10px; position:relative; top:4px; background-color:#FF8C00!important">&nbsp; &nbsp;</span>'
+          }
+         
+          $(statusele).parent().append(badge)
+      }
 
   </script>
