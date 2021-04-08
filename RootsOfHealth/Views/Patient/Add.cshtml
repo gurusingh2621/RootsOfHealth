@@ -361,13 +361,13 @@
             crossorigin="anonymous"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
     <script>
-
+        
         var _programName = "";
         var _programelement = ''
         var _PatientId = '@ViewBag.PatientID';
           var  programUploadedPath="@System.Web.Configuration.WebConfigurationManager.AppSettings["ProgramUploadPath"]";
         var _userID="@Session["userid"]";
-
+        $('#btnAMDProfile').hide();
         $('#myTab a').each(function () {
             $(this).click(function () {
                 $('#menu-toggle').click();

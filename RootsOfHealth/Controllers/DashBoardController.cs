@@ -1009,8 +1009,13 @@ namespace RootsOfHealth.Controllers
                 }
               
             }
+            if (AmdModel == null)
+            {
+                return Content("");
+            }
+             
                   var CombineAMDAndPatient=Tuple.Create<AmdProfileBO, PatientMainBO>(AmdModel, Patient);
-           return PartialView("~/Views/Shared/Patient/_AMDProfile.cshtml", CombineAMDAndPatient);
+                 return PartialView("~/Views/Shared/Patient/_AMDProfile.cshtml", CombineAMDAndPatient);
 
 
         }
