@@ -2972,7 +2972,14 @@
               contentType: "application/json; charset=utf-8",
               dataType: "html",
               success: function (data) {
-                  $('#AMDProfile .modal-body').html(data)
+                  if (data != '') {
+                      $('#AMDProfile .modal-body').html(data)
+                      $('#AMDProfile').modal('show');
+                  }
+                  else {
+                      toastr.error("No data available")
+                  }
+                
               },
               error: function (e) {
                   toastr.error("Error AMDProfile Data.");

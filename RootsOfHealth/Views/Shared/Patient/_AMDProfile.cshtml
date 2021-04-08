@@ -1,12 +1,6 @@
 ﻿@model Tuple<RootsOfHealth.Models.AmdProfileBO, RootsOfHealth.Models.PatientMainBO>
     <style>
-        .Highlight{
-
-           background-color:green
-              
-
-        }
-
+      
         .amdProfileData table {
             font-size: 14px;
         }
@@ -32,7 +26,7 @@
         .amdProfileData h6 span {
             color: #22baa0;
         }
-        .amdProfileData .table-striped tbody tr.highlight {
+        .amdProfileData .table-striped tbody tr.Highlight {
             background: rgb(234 2 2 / 5%);
             color: #ea0202;
         }
@@ -43,13 +37,8 @@
         }
 
     </style>
-@if (Model.Item1 == null)
-{
 
-    <h1>there is no amd</h1>
-}
-else
-{
+
  <div class="amdProfileData">
     <h6>Chart Number : <span>@(Model.Item1.ChartNumber == null ? "" : Model.Item1.ChartNumber)</span></h6>
     <div class="table-responsive scroll">
@@ -159,7 +148,7 @@ else
     </div>
     </div>
 
-}
+
 
 
    <script>
