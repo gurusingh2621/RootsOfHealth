@@ -164,6 +164,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AmdProfileBO.cs" />
     <Compile Include="Models\AppointmentBO.cs" />
     <Compile Include="Models\AuditBO.cs" />
     <Compile Include="Models\AuthorizationBO.cs" />
@@ -396,6 +397,7 @@
     <Content Include="Views\Program\ProgramBaseTemplate.cshtml" />
     <Content Include="Views\Account\UserGroupList.cshtml" />
     <Content Include="Views\Shared\Account\_AddGroup.cshtml" />
+    <Content Include="Views\Shared\Patient\_AMDProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

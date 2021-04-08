@@ -986,5 +986,33 @@ namespace RootsOfHealth.Controllers
            
 
         }
+
+        [HttpPost]
+        public ActionResult GetAMDProfile(PatientMainBO Patient)
+        {
+
+           AmdProfileBO AmdModel = null;
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                //HTTP GET
+                var responseTask = client.GetAsync("/api/PatientMain/getamdprofile?PatientId=" + Patient.PatientID);
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+             
+                if (result.IsSuccessStatusCode)
+                {
+                   var readTask = result.Content.ReadAsAsync<AmdProfileBO>();
+                    readTask.Wait();
+                    AmdModel = readTask.Result;
+                }
+              
+            }
+                  var CombineAMDAndPatient=Tuple.Create<AmdProfileBO, PatientMainBO>(AmdModel, Patient);
+           return PartialView("~/Views/Shared/Patient/_AMDProfile.cshtml", CombineAMDAndPatient);
+
+
+        }
     }
 }
