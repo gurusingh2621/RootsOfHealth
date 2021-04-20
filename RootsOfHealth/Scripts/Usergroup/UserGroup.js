@@ -148,7 +148,7 @@ function LoadUserDropdown(groupid) {
             $.each(result, function (index, item) {
                 options += `<option data-tokens="${item.FirstName + ' ' + item.LastName + '(' + item.Email + ')'}"
                            value="${item.UserID}:${item.FirstName + ' ' + item.LastName}:${item.Email}:${item.Image}">
-                           ${item.FirstName + ' ' + item.LastName + '(' + item.Email + ')'}
+                            ${item.FirstName + ' ' + item.LastName + '(' + item.Email + ')'}
                            </option>`
             })
             $('#UsersToAdd').html(options);

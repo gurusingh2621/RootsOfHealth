@@ -351,5 +351,11 @@ namespace RootsOfHealth.Controllers
             return Json(Paths);
         }
         #endregion
+
+        public ActionResult Requests()
+        {
+            return View();
+
+        }
     }
 }

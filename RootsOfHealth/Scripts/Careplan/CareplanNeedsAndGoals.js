@@ -393,7 +393,54 @@ function SaveGoal(e) {
         }
     })
 }
+function getCarePlanRequest() {
+    hideAprovalBtnStatus()
+    $.ajax({
+        type: "GET",
+        url: Apipath + '/api/PatientMain/getcareplanrequest?CarePlanId=' + careplanid + '&UserId=' + userId,
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        success: function (result) {
+            if (result==null) {
+                $('#btnApproval').css('display', 'block');
+            }
+            else {
+                if ((result.Status == null || result.Status == 0) && result.Type == 1) {
+                    $('#btnRevertRequest').css('display', 'block');
+                    $('#careplanStatus').css('display', 'block');
+                    $('#careplanStatus .ApprovalRequestSent').css('display', 'block');
+                }
+                else if (result.Status == 1 && result.Type == 1) {
+                    $('#btnRevokeRequest').css('display', 'block');
+                    $('#careplanStatus').css('display', 'block');
+                    $('#careplanStatus .RequestUnderReview').css('display', 'block');
+                }
+                else if (result.Status == 1 && result.Type == 3) {
+                    $('#careplanStatus').css('display', 'block');
+                    $('#careplanStatus .RevokeRequestSendt').css('display', 'block');
+                }
+            }
+        }
+        , error: function (e) {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });
+
+}
+
+function hideAprovalBtnStatus(){
+    $('#btnApproval').css('display', 'none');
+    $('#btnRevertRequest').css('display', 'none');
+    $('#btnRevokeRequest').css('display', 'none');
+    $('#careplanStatus').css('display', 'none');
+    $('#careplanStatus .ApprovalRequestSent').css('display', 'none');
+    $('#careplanStatus .RequestUnderReview').css('display', 'none');
+    $('#careplanStatus .RequestUnderReview').css('display', 'none');
+    $('#careplanStatus .RevokeRequestSendt').css('display', 'none');
+}
 function GetNeedAndGoalList() {
+    getCarePlanRequest()
     if ($("a.need-nav").parent().hasClass("disabled")) {
         toastr.error("First submit basic information to enable needs and goals");
         return false;
@@ -423,7 +470,6 @@ function GetNeedAndGoalList() {
                 $(".needsList").prev().html(emptyText.toUpperCase());
             } else {
                 $(".needGoalHover").tooltip();
-               
             }         
                 NeedFocus();
             
