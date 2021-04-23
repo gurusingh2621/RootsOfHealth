@@ -4,6 +4,8 @@ var needRef;
 var goalRef;
 var newGoalRef = "";
 var defaultneedLen = 0;
+var needStatus = 0;
+var goalStatus = 0;
 var needGoalEnum = {
     NotStarted: 0,
     InProgress: 1,
@@ -401,10 +403,12 @@ function getCarePlanRequest() {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
-            if (result==null) {
-                $('#btnApproval').css('display', 'block');
+            if (result == null) {
+                isApprovedRequestSent=
+                    $('#btnApproval').css('display', 'block');
             }
             else {
+                IsRequestSent = true;
                 if ((result.Status == null || result.Status == 0) && result.Type == 1) {
                     $('#btnRevertRequest').css('display', 'block');
                     $('#careplanStatus').css('display', 'block');
@@ -417,7 +421,7 @@ function getCarePlanRequest() {
                 }
                 else if (result.Status == 1 && result.Type == 3) {
                     $('#careplanStatus').css('display', 'block');
-                    $('#careplanStatus .RevokeRequestSendt').css('display', 'block');
+                    $('#careplanStatus .RevokeRequestSent').css('display', 'block');
                 }
             }
         }
@@ -429,22 +433,27 @@ function getCarePlanRequest() {
 
 }
 
+
 function hideAprovalBtnStatus(){
     $('#btnApproval').css('display', 'none');
     $('#btnRevertRequest').css('display', 'none');
     $('#btnRevokeRequest').css('display', 'none');
     $('#careplanStatus').css('display', 'none');
     $('#careplanStatus .ApprovalRequestSent').css('display', 'none');
+    $('#careplanStatus .RequestUnderRleview').css('display', 'none');
     $('#careplanStatus .RequestUnderReview').css('display', 'none');
-    $('#careplanStatus .RequestUnderReview').css('display', 'none');
-    $('#careplanStatus .RevokeRequestSendt').css('display', 'none');
+    $('#careplanStatus .RevokeRequestSent').css('display', 'none');
 }
 function GetNeedAndGoalList() {
-    getCarePlanRequest()
+    if (IsUserCarePlanApprover == 'false') {
+        getCarePlanRequest()
+    }
     if ($("a.need-nav").parent().hasClass("disabled")) {
         toastr.error("First submit basic information to enable needs and goals");
         return false;
-    }
+}
+   
+
     $("a.need-nav").tab('show');
     $(".loaderOverlay").show();
     $(".addNewNeed").tooltip();
@@ -480,9 +489,24 @@ function GetNeedAndGoalList() {
     });
 }
 function DeleteNeed(obj) {
+    if (!CanEditCarePlan()) {
+        return
+    }
     if ($(obj).hasClass("disableHoverItem")) {
         return;
     }
+    if (IsUserCarePlanApprover == 'false') {
+        var statusNeed = $(obj).closest("li").attr("data-status")
+        if (statusNeed == "1") {
+            toastr.error("Cant delete In-progress need")
+            return;
+        }
+        else if (statusNeed == "2") {
+            toastr.error("Cant delete completed need")
+            return;
+        }
+    }
+
     $.ajax({
         type: "GET",
         url: Apipath + '/api/PatientMain/editneed?NeedId=' + $(obj).closest("li").attr("data-needid"),
@@ -541,9 +565,35 @@ function DeleteNeed(obj) {
     });
     
 }
+
+
+function CanEditCarePlan() {
+    if (IsRequestSent || IsUserCarePlanApprover=='false') {
+        toastr.error("Cant make any change till request is accepted")
+        return false;
+    }
+    return true;
+
+}
+
 function DeleteGoal(obj) {
+    if (IsRequestSent) {
+        toastr.error("Cant make any change till request is accepted")
+    }
+
     if ($(obj).hasClass("disableHoverItem")) {
         return;
+    }
+    if (IsUserCarePlanApprover == 'false') {
+        var statusGoal = $(obj).closest("li").attr("data-status")
+        if (statusGoal == "1") {
+            toastr.error("Cant delete In-progress goal")
+            return;
+        }
+        else if (statusGoal == "2") {
+            toastr.error("Cant delete completed goal")
+            return;
+        }
     }
     $.ajax({
         type: "GET",
@@ -610,6 +660,10 @@ function DeleteGoal(obj) {
     });
 }
 function AddNewGoalFromNeed(e) {
+    if (!CanEditCarePlan()) {
+        return
+    }
+   
     if ($(e).hasClass("disableHoverItem")) {
         return;
     }
@@ -752,6 +806,10 @@ function ExpandCollapseFromGoalCount(o) {
     $(o).closest("div.needItem").next('ul.goalsList').slideToggle();
 }
 function EditGoal(o) {
+    if (!CanEditCarePlan()) {
+        return
+    }
+
     if ($(o).hasClass("disableHoverItem")) {
         return;
     }
@@ -875,6 +933,10 @@ function EditGoal(o) {
     });   
 }
 function EditNeed(o) {
+    if (!CanEditCarePlan()) {
+        return
+    }
+
     if ($(o).hasClass("disableHoverItem")) {
         return;
     }
@@ -1050,6 +1112,9 @@ function goalOrNeedFocus(obj) {
     }
 }
 function EditGoalStatus(obj) {
+    if (!CanEditCarePlan()) {
+        return
+    }
     if ($(obj).hasClass("disableHoverItem")) {
         return;
     }
@@ -1059,6 +1124,7 @@ function EditGoalStatus(obj) {
     $("#CarePlanChangeStatusModal .submitNeedStatus").hide();
     goalRef = obj;
     var status = $(obj).closest("li").attr("data-status");
+    goalStatus = status
     goalId = $(obj).closest("li").attr("data-goalid");
     var goalDesc = $(obj).closest("li").find("span.goalcontent").html();
     $(".status_description").find("p").html("").append(goalDesc);
@@ -1071,15 +1137,20 @@ function EditGoalStatus(obj) {
     });
 }
 function EditNeedStatus(obj) {
+
+    if (!CanEditCarePlan()) {
+        return
+    }
     if ($(obj).hasClass("disableHoverItem")) {
         return;
-    }
+    } 
     $("#CarePlanChangeStatusModal .goalNote").hide();
     $("#CarePlanChangeStatusModal .needNote").show();
     $("#CarePlanChangeStatusModal .submitGoalStatus").hide();
     $("#CarePlanChangeStatusModal .submitNeedStatus").show();
     needRef = obj;
     var status = $(obj).closest("li").attr("data-status");
+    needStatus = status;
     needId = $(obj).closest("li").attr("data-needid");
     var needDesc = $(obj).closest("li").find("span.needDesc").html();
     $(".status_description").find("p").html("").append(needDesc);
@@ -1194,6 +1265,23 @@ function GetOutcomes(obj) {
     }
 }
 function UpdateNeedStatus() {
+   
+    if (IsUserCarePlanApprover == 'false') {
+        var changedStatus = $(".ddlStatus").val()
+        if (needStatus == '0' && (changedStatus == "1" || changedStatus == "2")) {
+            if (changedStatus == '1') {
+                toastr.error("Status can be changed to In progress")
+            }
+            else {
+                toastr.error("Status can be changed to completed")
+            }
+        }
+        else if (changedStatus == '0' && (needStatus == "1" || needStatus == "2")) {
+
+            toastr.error("Status can be changed to Not-started")
+        }
+    }
+
     if ($(".needNote").val().trim()=="") {
         toastr.error("Note is required");
         return;
@@ -1272,12 +1360,50 @@ function UpdateNeedStatus() {
         }
     });
 }
+
+function isUserCarePlanApprover() {
+    
+    $.ajax({
+        type: "get",
+        url: Apipath + '/api/PatientMain/isusercareplanapproval?userid=' + userId,
+        contentType: 'application/json; charset=UTF-8',
+        data: JSON.stringify(model),
+        dataType: "json",
+        success: function (res) {
+            isUserCareplanApprover = res == null ? false : res;
+           
+        },
+        error: function () {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });
+
+
+
+
+
+}
 function UpdateGoalStatus() {
+    var changedStatus = $(".ddlStatus").val()
+    if (goalStatus == '0' && (changedStatus == "1" || changedStatus == "2")) {
+        if (changedStatus == '1') {
+            toastr.error("Status can be changed to In progress")
+        }
+        else {
+            toastr.error("Status can be changed to completed")
+        }
+    }
+    else if (changedStatus == '0' && (goalStatus == "1" || goalStatus == "2")) {
+
+        toastr.error("Status can be changed to Not-started")
+    }
+
     if ($(".goalNote").val().trim() == "") {
         toastr.error("Note is required");
         return;
     }
-    var model = {
+        var model = {
         GoalId: goalId,
         Note: $(".goalNote").val(),
         Status: $(".ddlStatus").val(),
@@ -1882,6 +2008,10 @@ function checkAllDefaultNeed(obj) {
     }
 }
 function GetDefaultNeeds() {
+    if (!CanEditCarePlan()) {
+        return
+    }
+
     $(".defaultNeedAction").removeClass("d-none").addClass("d-flex");
     $(".defaultGoalAction").removeClass("d-flex").addClass("d-none");
     $("h5.defaultNeedTitle").html("").append("Default Needs");

@@ -34,6 +34,7 @@ namespace RootsOfHealth.Models
         public List<UserBO> UserList { get; set;}
        public List<UserRolesBO> UserRoles { get; set; }
         public UserRolesBO UserRole { get; set; }
+        public Nullable<bool> isCarePlanApprover { get; set; }
     }
 
 }

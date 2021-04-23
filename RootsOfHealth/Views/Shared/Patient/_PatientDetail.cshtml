@@ -2972,12 +2972,15 @@
               contentType: "application/json; charset=utf-8",
               dataType: "html",
               success: function (data) {
-                  if (data != '') {
-                      $('#AMDProfile .modal-body').html(data)
-                      $('#AMDProfile').modal('show');
+                  if (data == '0') {
+                      toastr.error("No data available");
+                  }
+                  else if (data == '1') {
+                      toastr.error("multiple records available");
                   }
                   else {
-                      toastr.error("No data available")
+                      $('#AMDProfile .modal-body').html(data)
+                      $('#AMDProfile').modal('show');
                   }
                 
               },

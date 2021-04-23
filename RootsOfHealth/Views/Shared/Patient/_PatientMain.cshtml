@@ -145,10 +145,22 @@
         padding-right: 15px;
     }
     .cp_request_status {
-        display: flex;
+        display: block;
         align-items: center;
+        margin-top: 20px;
         font-size: 14px;
     }
+        .cp_request_status div#careplanStatus {
+            display: flex;
+            width: 100%;
+            margin: 0 0 15px;
+        }
+        .cp_request_status div#careplanStatus label {
+            display: block;
+            margin-right: 5%;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
     .cp_request_status div#careplanStatus {
         margin-right: 10px;
         font-size: 14px;
@@ -1906,6 +1918,7 @@
                                 <li class="nav-item"><a class="nav-link basic-nav active show" href="#a_p_basic_info" onclick="showBasicInfo()">Basic Information</a></li>
                                 <li class="nav-item disabled"><a class="nav-link show need-nav" href="#a_p_needAndGoal" onclick="GetNeedAndGoalList()">Needs & Goals</a></li>
                                 <li class="nav-item disabled"><a class="nav-link show summary-nav" href="#a_p_plan_summery" onclick="showSummary()">Plan Summary</a></li>
+                                <li class="nav-item disabled"><a class="nav-link show summary-nav" href="#a_p_request_summery" onclick="showSummary()">Request Detail</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div id="a_p_basic_info" class="tab-pane active show ">
@@ -1930,21 +1943,12 @@
                                         <div class="tab_heading">
                                             <div class="searchBoxWrap">
                                                 <h5><i class="fas fa-check-double"></i>Needs (<span class="completedNeedCount">0</span>/<span class="needCount">0</span>)</h5>
-                                                <div class="ml-auto cp_request_status">
-                                                    <div id="careplanStatus" style="margin-left:auto;">
-                                                        <span style="display:none" class="ApprovalRequestSent">Approval Request Sent</span>
-                                                        <span style="display:none" class="RequestUnderReview">Under Review</span>
-                                                        <span style="display:none" class="RevokeRequestSendt">Revoke Request Sent</span>
-                                                    </div>
-                                                    <button style="display:none" class="btn-success" id="btnApproval" onclick="ChooseUsersPopUp()">Approve</button>
-                                                    <button style="display:none" class="btn-success" id="btnRevertRequest" onclick="ApprovalOrRevertRequestRequest('2')">Revert</button>
-                                                    <button style="display:none" class="btn-success" id="btnRevokeRequest" onclick="ApprovalOrRevertRequestRequest('3')">RevokeRequest</button>
-                                                </div>
+                                                
                                                 <div class="searchbox">
                                                     <input type="text" placeholder="Search..." onkeyup="SearchNeedAndGoal(this)" autocomplete="off">
                                                     <button type="submit"><i class="fas fa-search"></i></button>
                                                 </div>
-                                                <a class="addNewNeed" title="Add new need"data-placement="top" href="javascript:{}" onclick="GetDefaultNeeds()"><i class="fa fa-plus"></i></a>
+                                                <a class="addNewNeed" title="Add new need" data-placement="top" href="javascript:{}" onclick="GetDefaultNeeds()"><i class="fa fa-plus"></i></a>
                                             </div>
 
                                         </div>
@@ -2001,9 +2005,26 @@
 
                                     </div>
                                 </div>
+                                <div id="a_p_request_summery" class="tab-pane show">
+                                    <div class="plan_summery_wrap summaryContent">
+                                        <div class="tab_heading">
+                                            <h5><i class="fas fa-file-alt"></i>Request Detail</h5>
+                                        </div>
+                                        <div class="cp_request_status">
+                                            <div id="careplanStatus">
+                                                <label>Request Status</label>
+                                                <span class="ApprovalRequestSent">Approval Request Sent</span>
+                                                <span style="display:none" class="RequestUnderReview">Under Review</span>
+                                                <span style="display:none" class="RevokeRequestSent">Revoke Request Sent</span>
+                                            </div>
+                                            <button class="btn-success" id="btnApproval" onclick="ChooseUsersPopUp()">Approve</button>
+                                            <button style="display:none" class="btn-success" id="btnRevertRequest" onclick="ApprovalOrRevertRequestRequest('2')">Revert</button>
+                                            <button style="display:none" class="btn-success" id="btnRevokeRequest" onclick="ApprovalOrRevertRequestRequest('3')">RevokeRequest</button>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
                 </div>
                 <!--Sidebar html End-->
             </div>
@@ -2420,6 +2441,8 @@
 <script>
     var userId = "@Session["userid"]";
     var PatientId = "@Model.PatientID";
+    var IsUserCarePlanApprover = '@Session["IsCarePlanApprover"]'
+    var IsRequestSent=false
     var careplanUploadedPath = "@System.Web.Configuration.WebConfigurationManager.AppSettings["CarePlanUploadPath"]";
 </script>
 <script src="~/Scripts/jquery-ui.js"></script>
@@ -2512,14 +2535,17 @@
                     $('#careplanStatus .ApprovalRequestSent').css('display', 'block')
                     $('#btnRevertRequest').css('display', 'block');
                     $('#RequestUserModel').modal('hide')
+                    IsRequestSent=true
                 }
                 else if (result == 2) {
                     toastr.success("Approval request is reverted");
                     $('#btnApproval').css('display', 'block');
+                    IsRequestSent = false;
                 }
                 else if (result == 3) {
                     toastr.error("cant be reverted");
                     $('#btnRevokeRequest').css('display', 'block');
+                    IsRequestSent = true;
                 }
                 else if (result == 4) {
                     toastr.success("Revoke Request has sent successfully");
@@ -2529,6 +2555,7 @@
                 else if (result == 5) {
                     $('#btnApproval').css('display', 'block');
                     toastr.success("Revoke Request cant be sent");
+                    IsRequestSent =false;
                 }
             },
             error: function (e) {

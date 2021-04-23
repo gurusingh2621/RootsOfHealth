@@ -991,7 +991,7 @@ namespace RootsOfHealth.Controllers
         public ActionResult GetAMDProfile(PatientMainBO Patient)
         {
 
-           AmdProfileBO AmdModel = null;
+            List<AmdProfileBO> AmdModel = null;
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(WebApiKey);
@@ -1000,22 +1000,26 @@ namespace RootsOfHealth.Controllers
                 responseTask.Wait();
 
                 var result = responseTask.Result;
-             
+
                 if (result.IsSuccessStatusCode)
                 {
-                   var readTask = result.Content.ReadAsAsync<AmdProfileBO>();
+                    var readTask = result.Content.ReadAsAsync<List<AmdProfileBO>>();
                     readTask.Wait();
                     AmdModel = readTask.Result;
                 }
-              
+
             }
-            if (AmdModel == null)
+            if (AmdModel == null || AmdModel.Count == 0)
             {
-                return Content("");
+                return Content("0");
             }
-             
-                  var CombineAMDAndPatient=Tuple.Create<AmdProfileBO, PatientMainBO>(AmdModel, Patient);
-                 return PartialView("~/Views/Shared/Patient/_AMDProfile.cshtml", CombineAMDAndPatient);
+            if (AmdModel.Count > 1)
+            {
+                return Content("1");
+            }
+
+            var CombineAMDAndPatient = Tuple.Create<AmdProfileBO, PatientMainBO>(AmdModel[0], Patient);
+            return PartialView("~/Views/Shared/Patient/_AMDProfile.cshtml", CombineAMDAndPatient);
 
 
         }
