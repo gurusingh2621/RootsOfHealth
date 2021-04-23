@@ -85,6 +85,8 @@ namespace RootsOfHealth.Controllers
                                 user = readTask.Result;
                                 Session["userid"] = user.UserID;
                                 Session["ClinicID"] = user.ClinicID;
+                                Session["UserName"] = user.UserName;
+                                Session["IsCarePlanApprover"] = user.isCarePlanApprover.HasValue ? user.isCarePlanApprover.Value : false;
                                 string usernameChars = string.IsNullOrWhiteSpace(user.FirstName) ?"" : user.FirstName[0].ToString();
                                 usernameChars+= string.IsNullOrWhiteSpace(user.LastName) ? "" : user.LastName[0].ToString();
                                 Session["OutcomeAddedBy"] = usernameChars;

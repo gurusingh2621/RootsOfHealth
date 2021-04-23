@@ -2137,6 +2137,11 @@ function setCarePlanActiveTab(tab) {
     $('#addNewCarePlansSidebar #' + tab).addClass('active show');
 }
 function setCarePlanStatus(obj) {
+    if (!CanEditCarePlan()) {
+        $("#ddlcareplanstatus").val(prevSelectedCarePlan);
+        return
+    }
+
     if ($(obj).val()== "-1") {
         return;
     }
@@ -2145,73 +2150,115 @@ function setCarePlanStatus(obj) {
         Status: $(obj).val(),
         ModifiedBy: userId
     };
-    if (model.Status == "4") {
-        checkCarePlanStatus();
-        if (isCarePlanNeedCompleted) {
-            $.confirm({
-                icon: 'fas fa-exclamation-triangle',
-                title: 'Confirm',
-                content: 'Once care plan completed can not be edited or restart again, press ok to continue',
-                type: 'green',
-                typeAnimated: true,
-                buttons: {
-                    ok: {
-                        btnClass: 'btn-green',
-                        action: function () {
-                            $.ajax({
-                                type: "POST",
-                                url: Apipath + '/api/PatientMain/updatecareplanstatus',
-                                contentType: 'application/json; charset=UTF-8',
-                                data: JSON.stringify(model),
-                                dataType: "json",
-                                success: function (res) {
-                                    prevSelectedCarePlan = model.Status;                                      
-                                    $("#ddlcareplanstatus,.care_plan_name_field").attr("disabled", true);
-                                    $(".needGoalHover").addClass("disableHoverItem");
-                                    $(".status_labels_div").find("span:last").addClass("disableHoverItem");
-                                    $("a.dragIcon").css("display", "none");
-                                    $(".txtNeed,.txtOutcome,.txtIntervention").attr("disabled", true);
-                                    $(".needsList").sortable('destroy');
-                                    $(".goalsList").sortable('destroy');
+          
 
-                                    toastr.success("Changes saved successfully");
-                                },
-                                error: function (e) {
-                                    toastr.error("Something happen Wrong");
-                                    $(".loaderOverlay").hide();
-                                }
-                            });
-                        }
-                    },
-                    cancel:{
-                        action: function () {
-                            $("#ddlcareplanstatus").val(prevSelectedCarePlan);
-                        }
-                    }
-                }
-            });
-        } else {
-            $("#ddlcareplanstatus").val(prevSelectedCarePlan);
-            toastr.error("Can not complete care plan, their are incomplete needs. Please complete all needs to complete care plan.");
-        }
-    } else {
-        $.ajax({
-            type: "POST",
-            url: Apipath + '/api/PatientMain/updatecareplanstatus',
-            contentType: 'application/json; charset=UTF-8',
-            data: JSON.stringify(model),
-            dataType: "json",
-            success: function (res) {
-                prevSelectedCarePlan = model.Status;
-                toastr.success("Changes saved successfully");
-            },
-            error: function (e) {
-                toastr.error("Something happen Wrong");
-                $(".loaderOverlay").hide();
-            }
-        });
+               $.ajax({
+                  type: "POST",
+                  url: Apipath + '/api/PatientMain/updatecareplanstatus',
+                  contentType: 'application/json; charset=UTF-8',
+                  data: JSON.stringify(model),
+                  dataType: "json",
+                  success: function (res) {
+                      
+                      if (res.status == 1) {
+                          prevSelectedCarePlan = model.Status;
+                          toastr.success("Changes saved successfully");
+                      }
+                      else {
+                          if (model.Status == 1) {
+                              toastr.error("Status cant be changed to Not Started");
+
+                          }
+                          else if (model.Status == 3) {
+                              toastr.error("Status cant be changed to In-Progress");
+                          }
+                          else if (model.Status == 4) {
+                              toastr.error("Status cant be changed to Completed");
+                          }
+
+                          $("#ddlcareplanstatus").val(prevSelectedCarePlan);
+
+
+                      }
+                                                    
+                     
+                     
+                  },
+                  error: function (e) {
+                      toastr.error("Something happen Wrong");
+                      $(".loaderOverlay").hide();
+                  }
+              });
+
+
+
+    //if (model.Status == "4") {
+    //    checkCarePlanStatus();
+    //    if (isCarePlanNeedCompleted) {
+    //        $.confirm({
+    //            icon: 'fas fa-exclamation-triangle',
+    //            title: 'Confirm',
+    //            content: 'Once care plan completed can not be edited or restart again, press ok to continue',
+    //            type: 'green',
+    //            typeAnimated: true,
+    //            buttons: {
+    //                ok: {
+    //                    btnClass: 'btn-green',
+    //                    action: function () {
+    //                        $.ajax({
+    //                            type: "POST",
+    //                            url: Apipath + '/api/PatientMain/updatecareplanstatus',
+    //                            contentType: 'application/json; charset=UTF-8',
+    //                            data: JSON.stringify(model),
+    //                            dataType: "json",
+    //                            success: function (res) {
+    //                                prevSelectedCarePlan = model.Status;                                      
+    //                                $("#ddlcareplanstatus,.care_plan_name_field").attr("disabled", true);
+    //                                $(".needGoalHover").addClass("disableHoverItem");
+    //                                $(".status_labels_div").find("span:last").addClass("disableHoverItem");
+    //                                $("a.dragIcon").css("display", "none");
+    //                                $(".txtNeed,.txtOutcome,.txtIntervention").attr("disabled", true);
+    //                                $(".needsList").sortable('destroy');
+    //                                $(".goalsList").sortable('destroy');
+
+    //                                toastr.success("Changes saved successfully");
+    //                            },
+    //                            error: function (e) {
+    //                                toastr.error("Something happen Wrong");
+    //                                $(".loaderOverlay").hide();
+    //                            }
+    //                        });
+    //                    }
+    //                },
+    //                cancel:{
+    //                    action: function () {
+    //                        $("#ddlcareplanstatus").val(prevSelectedCarePlan);
+    //                    }
+    //                }
+    //            }
+    //        });
+    //    } else {
+    //        $("#ddlcareplanstatus").val(prevSelectedCarePlan);
+    //        toastr.error("Can not complete care plan, their are incomplete needs. Please complete all needs to complete care plan.");
+    //    }
+    //} else {
+    //    $.ajax({
+    //        type: "POST",
+    //        url: Apipath + '/api/PatientMain/updatecareplanstatus',
+    //        contentType: 'application/json; charset=UTF-8',
+    //        data: JSON.stringify(model),
+    //        dataType: "json",
+    //        success: function (res) {
+    //            prevSelectedCarePlan = model.Status;
+    //            toastr.success("Changes saved successfully");
+    //        },
+    //        error: function (e) {
+    //            toastr.error("Something happen Wrong");
+    //            $(".loaderOverlay").hide();
+    //        }
+    //    });
     }
-}
+
 function checkCarePlanStatus() {
     $.ajax({
         type: "GET",

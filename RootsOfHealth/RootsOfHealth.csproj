@@ -296,6 +296,7 @@
     <Content Include="Scripts\Careplan\careplanlist.js" />
     <Content Include="Scripts\Careplan\CareplanNeedsAndGoals.js" />
     <Content Include="Scripts\Careplan\CareplanPatient.js" />
+    <Content Include="Scripts\Careplan\CareplanRequests.js" />
     <Content Include="Scripts\Careplan\databasecontrol.js" />
     <Content Include="Scripts\Careplan\htmlcontrol.js" />
     <Content Include="Scripts\Careplan\NeedAndGoal.js" />
@@ -398,6 +399,7 @@
     <Content Include="Views\Account\UserGroupList.cshtml" />
     <Content Include="Views\Shared\Account\_AddGroup.cshtml" />
     <Content Include="Views\Shared\Patient\_AMDProfile.cshtml" />
+    <Content Include="Views\CarePlan\Requests.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

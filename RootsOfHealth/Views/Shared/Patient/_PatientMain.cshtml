@@ -144,6 +144,42 @@
         max-width: 150px;
         padding-right: 15px;
     }
+    .cp_request_status {
+        display: block;
+        align-items: center;
+        margin-top: 20px;
+        font-size: 14px;
+    }
+        .cp_request_status div#careplanStatus {
+            display: flex;
+            width: 100%;
+            margin: 0 0 15px;
+        }
+        .cp_request_status div#careplanStatus label {
+            display: block;
+            margin-right: 5%;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+    .cp_request_status div#careplanStatus {
+        margin-right: 10px;
+        font-size: 14px;
+    }
+    #RequestUserModel .btn.dropdown-toggle .filter-option {
+        height: 40px;
+        display: flex;
+        align-items: center;
+    }
+
+    #RequestUserModel .btn.dropdown-toggle {
+        height: 40px;
+        background-position: 97% 14px;
+        border-radius: 5px;
+    }
+    textarea#RequestMessage {
+        display: block !important;
+        min-height: 140px;
+    }
 </style>
 <div onscroll="abc()" class="tab-pane fade test @Html.Raw(ViewBag.CurrentTab == "Profile-tab" ? "show active" : string.IsNullOrWhiteSpace(ViewBag.CurrentTab) ? "show active" : "")" id="Profile" role="tabpanel" aria-labelledby="Profile-tab">
     <!-- Inner content start here  -->
@@ -1882,6 +1918,7 @@
                                 <li class="nav-item"><a class="nav-link basic-nav active show" href="#a_p_basic_info" onclick="showBasicInfo()">Basic Information</a></li>
                                 <li class="nav-item disabled"><a class="nav-link show need-nav" href="#a_p_needAndGoal" onclick="GetNeedAndGoalList()">Needs & Goals</a></li>
                                 <li class="nav-item disabled"><a class="nav-link show summary-nav" href="#a_p_plan_summery" onclick="showSummary()">Plan Summary</a></li>
+                                <li class="nav-item disabled"><a class="nav-link show summary-nav" href="#a_p_request_summery" onclick="showSummary()">Request Detail</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div id="a_p_basic_info" class="tab-pane active show ">
@@ -1906,11 +1943,12 @@
                                         <div class="tab_heading">
                                             <div class="searchBoxWrap">
                                                 <h5><i class="fas fa-check-double"></i>Needs (<span class="completedNeedCount">0</span>/<span class="needCount">0</span>)</h5>
+                                                
                                                 <div class="searchbox">
                                                     <input type="text" placeholder="Search..." onkeyup="SearchNeedAndGoal(this)" autocomplete="off">
                                                     <button type="submit"><i class="fas fa-search"></i></button>
                                                 </div>
-                                                <a class="addNewNeed" title="Add new need"  data-placement="top" href="javascript:{}" onclick="GetDefaultNeeds()"><i class="fa fa-plus"></i></a>
+                                                <a class="addNewNeed" title="Add new need" data-placement="top" href="javascript:{}" onclick="GetDefaultNeeds()"><i class="fa fa-plus"></i></a>
                                             </div>
 
                                         </div>
@@ -1967,14 +2005,53 @@
 
                                     </div>
                                 </div>
+                                <div id="a_p_request_summery" class="tab-pane show">
+                                    <div class="plan_summery_wrap summaryContent">
+                                        <div class="tab_heading">
+                                            <h5><i class="fas fa-file-alt"></i>Request Detail</h5>
+                                        </div>
+                                        <div class="cp_request_status">
+                                            <div id="careplanStatus">
+                                                <label>Request Status</label>
+                                                <span class="ApprovalRequestSent">Approval Request Sent</span>
+                                                <span style="display:none" class="RequestUnderReview">Under Review</span>
+                                                <span style="display:none" class="RevokeRequestSent">Revoke Request Sent</span>
+                                            </div>
+                                            <button class="btn-success" id="btnApproval" onclick="ChooseUsersPopUp()">Approve</button>
+                                            <button style="display:none" class="btn-success" id="btnRevertRequest" onclick="ApprovalOrRevertRequestRequest('2')">Revert</button>
+                                            <button style="display:none" class="btn-success" id="btnRevokeRequest" onclick="ApprovalOrRevertRequestRequest('3')">RevokeRequest</button>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
                 </div>
                 <!--Sidebar html End-->
             </div>
         </div>
 
+    </div>
+</div>
+<div class="modal fade" id="RequestUserModel" tabindex="-1" role="dialog" aria-labelledby="RequestUserModel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered preview-modal" role="document">
+        <div class="modal-content" style="height:90%">
+
+            <div class="modal-header preview-header">
+                <h5 class="modal-title" id="PreviewModalTitle">Request</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body preview-body scroll">
+                <div class="form-group">
+                    <select class="form-control selectpicker" id="UserAndGroups" title="Select members to add" data-live-search="true" data-selected-text-format="count>0" data-actions-box="true" multiple></select>
+                </div>
+                <div class="form-group">
+                    <textarea class="form-control" id="RequestMessage" style="display:block!important;"></textarea>
+                </div>
+                <button class="btn btn-success" onclick="ApprovalOrRevertRequestRequest('1')">Send Request</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -2364,6 +2441,8 @@
 <script>
     var userId = "@Session["userid"]";
     var PatientId = "@Model.PatientID";
+    var IsUserCarePlanApprover = '@Session["IsCarePlanApprover"]'
+    var IsRequestSent=false
     var careplanUploadedPath = "@System.Web.Configuration.WebConfigurationManager.AppSettings["CarePlanUploadPath"]";
 </script>
 <script src="~/Scripts/jquery-ui.js"></script>
@@ -2373,6 +2452,121 @@
 <script src="~/Scripts/Careplan/CareplanNeedsAndGoals.js"></script>
 <script src="~/Scripts/Careplan/CarePlanSummary.js"></script>
 <script>
+    function ChooseUsersPopUp() {
+        $.ajax({
+            type: "Get",
+            url: Apipath + '/api/PatientMain/getapproversusersandgroups',
+            contentType: 'application/json; charset=UTF-8',
+            dataType: "json",
+            async: false,
+            success: function (result) {
+                var options=''
+                $.each(result, function (index, item) {
+                    if (!item.IsGroup) {
+                        options += `<option data-tokens=" ${item.Name + '(' + item.Email + ')'}"
+                           value="${item.id}:${item.IsGroup}"> 
+                           ${item.Name + '(' + item.Email + ')'}
+                           </option>`
+                    }
+                    else {
+                        options += `<option data-tokens="${item.Name}"
+                            value="${item.id}:${item.IsGroup}"> 
+                           ${item.Name} (Group)
+                           </option>`
+                    }
+                })
+                $('#UserAndGroups').html(options);
+                $('#UserAndGroups').selectpicker();
+                $('#RequestUserModel').modal('show');
+
+            },
+            error: function (e) {
+                toastr.error("Something happen Wrong");
+                $(".loaderOverlay").hide();
+            }
+        });
+
+    }
+    function ApprovalOrRevertRequestRequest(type) {
+        var SelectedUsers = [];
+        var SelectedGroups = [];
+        
+        if (type == 1) {
+            var UsersNGroups = $('#UserAndGroups').val();
+            for (let i = 0; i < UsersNGroups.length; i++) {
+                var value = UsersNGroups[i].split(':');
+                if (value[1]) {
+                    SelectedGroups.push(value[0])
+                }
+                else {
+                    SelectedUsers.push(value[0])
+                }
+            }
+            if (SelectedUsers.length <= 0 && SelectedGroups.length <= 0) {
+                toastr.error("Please select atleast  an user or a group");
+                return
+            }
+            if ($('#RequestMessage').val().trim() == '') {
+                toastr.error("Please write a message");
+                return
+            }
+        }
+        
+        var Model = {
+            Message: $('#RequestMessage').val(),
+            SentBy: userId,
+            CareplanId: careplanid,
+            UserIds: SelectedUsers,
+            GroupIds: SelectedGroups,
+            Type: type
+        };
+        hideAprovalBtnStatus();
+        $.ajax({
+            type: "Post",
+            url: Apipath + '/api/PatientMain/sendcareplanrequest',
+            data: JSON.stringify(Model),
+            contentType: 'application/json; charset=UTF-8',
+            dataType: "json",
+            async: false,
+            success: function (result) {
+                if (result == 1) {
+                    toastr.success("Approval Request has sent successfully");
+                    $('#careplanStatus').css('display', 'block');
+                    $('#careplanStatus .ApprovalRequestSent').css('display', 'block')
+                    $('#btnRevertRequest').css('display', 'block');
+                    $('#RequestUserModel').modal('hide')
+                    IsRequestSent=true
+                }
+                else if (result == 2) {
+                    toastr.success("Approval request is reverted");
+                    $('#btnApproval').css('display', 'block');
+                    IsRequestSent = false;
+                }
+                else if (result == 3) {
+                    toastr.error("cant be reverted");
+                    $('#btnRevokeRequest').css('display', 'block');
+                    IsRequestSent = true;
+                }
+                else if (result == 4) {
+                    toastr.success("Revoke Request has sent successfully");
+                    $('#careplanStatus').css('display', 'block');
+                  //  $('#careplanStatus .ApprovalRequestSent').css('display', 'block')
+                }
+                else if (result == 5) {
+                    $('#btnApproval').css('display', 'block');
+                    toastr.success("Revoke Request cant be sent");
+                    IsRequestSent =false;
+                }
+            },
+            error: function (e) {
+                toastr.error("Something happen Wrong");
+                $(".loaderOverlay").hide();
+            }
+        });
+
+    }
+
+   
     $(".scroll").scroll(function () {
         var sticky = $('.sidebar-right'),
             scroll = $(".scroll").scrollTop();
