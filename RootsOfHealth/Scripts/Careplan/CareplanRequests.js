@@ -29,10 +29,10 @@ function LoadRequest() {
                            <td width="15%">${item.ProgramName == null ? "" : item.ProgramName}</td>
                            <td width="15%">${item.ClientName == null ? "" : item.ClientName}</td>
                            <td width="15%">${item.Type == 3 ? "Revoke request" :"Approval request" }</td>
-                           <td width="15%">${item.SentOn != null ? item.SentOn.split("T")[0] : ""}</td>`
-                         
+                           <td width="15%">${item.UserName == null ? "" : item.UserName}</td>`
+                        var AcceptedBy = item.AcceptedBy == userId ? "myself" : item.AcceptedBy
                         if (item.Status == 1) {
-                            status = `<span class="s_accepted">Request Accepted by ${item.AcceptedBy}</span>`
+                            status = `<span class="s_accepted">Request Accepted by ${AcceptedBy}</span>`
                         } 
                         else {
                             status =  '<span class="s_notApproved">Not Accepted</span>'
@@ -103,7 +103,7 @@ function LoadRequestHistory() {
                            <td width="15%">${item.ClientName == null ? "" : item.ClientName}</td>`
 
                     if (item.Status == 2 && item.Type == 1) {
-                        status = `<span class="s_accepted">Accepted approved </span>`
+                        status = `<span class="s_accepted">Accepted approved</span>`
                     }
                     else if (item.Status == 2 && item.Type == 3) {
                         status = '<span class="s_notApproved">Accepted revert request</span>'
@@ -115,7 +115,7 @@ function LoadRequestHistory() {
 
 
                   
-                    careplansRequest += `</div></td></tr>`;
+                    careplansRequest += `</div></td><td>${item.ModifiedOn == null ? "" : item.ModifiedOn.split("T")[0]}</td></tr>`;
                 });
                 careplanlist.html("").append(careplansRequest);
             } else {
@@ -216,20 +216,20 @@ function OpenPopUp(item) {
                     <tbody>
                         <tr>
                             <th scope="row">Program Name</th>
-                            <td>Mark</td>
+                            <td>${item.ProgramName == null ? "" : item.ProgramName}</td>
                         </tr>
                         <tr>
                             <th scope="row">Client Name</th>
-                            <td>Jacob</td>
+                            <td>${item.ClientName == null ? "" : item.ClientName}</td>
 
                         </tr>
                         <tr>
                             <th scope="row">CarePlan Name</th>
-                            <td>Larry</td>
+                            <td>${item.CarePlanName == null ? "" : item.CarePlanName}</td>
                         </tr>
                         <tr>
                             <th scope="row">Recieved On</th>
-                            <td>Mark</td>
+                            <td>${item.SentOn==null?"":item.SentOn.split("T")[0]}</td>
                         </tr>
                         <tr>
                             <th scope="row">Status</th>
@@ -239,14 +239,14 @@ function OpenPopUp(item) {
 
                         </tr>
                         <tr>
-                            <th scope="row">3</th>
-                            <td>Larry</td>
+                            <th scope="row">Title</th>
+                            <td>${item.Type == 3 ? "Revoke request" : "Approval request" }</td>
                         </tr>
                     </tbody>
                 </table>
             <div class="message_block">
                 <h6>Message</h6>
-                <p>sdfkljsdflsdfjsdlfjs lsjf slkfj slfk jsflk sjdfkl sdjfklsfjskldf jsdklfjsdklf jslkfjsklsdjfklsdjal;sk jsdafk jsdfkl jsdl; jsflksdj klasdfj klsdjsdkljsdkljsadfklsdjlk jsdfkljweiorj fkljio djlasdkj aslkfjlfjdslfk sdjf klasf jasdflk jadflpkj kl;fjakljl;fjasdfj</p>
+                <p>${item.Message}</p>
              </div>
 
 ${actionbutton}`

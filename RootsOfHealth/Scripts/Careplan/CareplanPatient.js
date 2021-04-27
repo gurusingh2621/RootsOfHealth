@@ -2359,3 +2359,4 @@ function showBasicInfo() {
         $("a.basic-nav").tab('show');
     }
 }
+
