@@ -1918,7 +1918,7 @@
                                 <li class="nav-item"><a class="nav-link basic-nav active show" href="#a_p_basic_info" onclick="showBasicInfo()">Basic Information</a></li>
                                 <li class="nav-item disabled"><a class="nav-link show need-nav" href="#a_p_needAndGoal" onclick="GetNeedAndGoalList()">Needs & Goals</a></li>
                                 <li class="nav-item disabled"><a class="nav-link show summary-nav" href="#a_p_plan_summery" onclick="showSummary()">Plan Summary</a></li>
-                                <li class="nav-item disabled"><a class="nav-link show summary-nav" href="#a_p_request_summery" onclick="showSummary()">Request Detail</a></li>
+                                <li class="nav-item requestItem disabled d-none"><a class="nav-link show request-nav" href="#a_p_request_summery" onclick="actionRequest()">Action</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div id="a_p_basic_info" class="tab-pane active show ">
@@ -2013,13 +2013,13 @@
                                         <div class="cp_request_status">
                                             <div id="careplanStatus">
                                                 <label>Request Status</label>
-                                                <span class="ApprovalRequestSent">Approval Request Sent</span>
+                                                <span style="display:none" class="ApprovalRequestSent">Approval Request Sent</span>
                                                 <span style="display:none" class="RequestUnderReview">Under Review</span>
                                                 <span style="display:none" class="RevokeRequestSent">Revoke Request Sent</span>
                                             </div>
-                                            <button class="btn-success" id="btnApproval" onclick="ChooseUsersPopUp()">Approve</button>
-                                            <button style="display:none" class="btn-success" id="btnRevertRequest" onclick="ApprovalOrRevertRequestRequest('2')">Revert</button>
-                                            <button style="display:none" class="btn-success" id="btnRevokeRequest" onclick="ApprovalOrRevertRequestRequest('3')">RevokeRequest</button>
+                                            <button style="display:none" class="btn-success" id="btnApproval" onclick="ChooseUsersPopUp('1')">Send Approval Request</button>
+                                            <button style="display:none" class="btn-success" id="btnRevertRequest" onclick="ApprovalOrRevertRequestRequest('2')">Revert Approval Request</button>
+                                            <button style="display:none" class="btn-success" id="btnRevokeRequest" onclick="ChooseUsersPopUp('2')">Send Revoke Request</button>
                                         </div>
                                     </div>
                                     </div>
@@ -2049,7 +2049,8 @@
                 <div class="form-group">
                     <textarea class="form-control" id="RequestMessage" style="display:block!important;"></textarea>
                 </div>
-                <button class="btn btn-success" onclick="ApprovalOrRevertRequestRequest('1')">Send Request</button>
+                <button class="btn btn-success" id="btnsendAproval" onclick="ApprovalOrRevertRequestRequest('1')">Send Request</button>
+                <button class="btn btn-success" id="btnsendRevoke" onclick="ApprovalOrRevertRequestRequest('3')">Revoke Request</button>
             </div>
         </div>
     </div>
@@ -2452,7 +2453,20 @@
 <script src="~/Scripts/Careplan/CareplanNeedsAndGoals.js"></script>
 <script src="~/Scripts/Careplan/CarePlanSummary.js"></script>
 <script>
-    function ChooseUsersPopUp() {
+    
+    if (IsUserCarePlanApprover == 'False') {
+        $('.requestItem').removeClass('d-none');
+    }
+
+    function ChooseUsersPopUp(type) {
+        if (type == '1') {
+            $('#btnsendAproval').show();
+            $('#btnsendRevoke').hide();
+
+        } else {
+            $('#btnsendAproval').hide();
+            $('#btnsendRevoke').show();
+        }
         $.ajax({
             type: "Get",
             url: Apipath + '/api/PatientMain/getapproversusersandgroups',
@@ -2477,6 +2491,7 @@
                 })
                 $('#UserAndGroups').html(options);
                 $('#UserAndGroups').selectpicker();
+                $("RequestMessage").val("");
                 $('#RequestUserModel').modal('show');
 
             },
@@ -2495,7 +2510,7 @@
             var UsersNGroups = $('#UserAndGroups').val();
             for (let i = 0; i < UsersNGroups.length; i++) {
                 var value = UsersNGroups[i].split(':');
-                if (value[1]) {
+                if (value[1]=='true') {
                     SelectedGroups.push(value[0])
                 }
                 else {
@@ -2550,7 +2565,7 @@
                 else if (result == 4) {
                     toastr.success("Revoke Request has sent successfully");
                     $('#careplanStatus').css('display', 'block');
-                  //  $('#careplanStatus .ApprovalRequestSent').css('display', 'block')
+                    $('#careplanStatus .RevokeRequestSent').css('display', 'block')
                 }
                 else if (result == 5) {
                     $('#btnApproval').css('display', 'block');

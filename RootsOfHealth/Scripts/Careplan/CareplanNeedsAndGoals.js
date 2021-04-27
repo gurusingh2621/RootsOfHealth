@@ -153,6 +153,9 @@ function NeedsGoals(result) {
     $(".loaderOverlay").hide();
 }
 function SaveNeed(e) {
+    if (!CanEditCarePlan()) {
+        return
+    }
     if ($(e).val().trim() == "") {
         toastr.error("", "Need is required", { progressBar: true });
         return;
@@ -266,6 +269,7 @@ function SaveNeed(e) {
                     }
                 });
             }
+            changeCareplanStatus()
 
         },
         error: function (e) {
@@ -387,6 +391,7 @@ function SaveGoal(e) {
                     }
                 });
             }
+            changeCareplanStatus()
 
 
         }, error: function (e) {
@@ -395,6 +400,11 @@ function SaveGoal(e) {
         }
     })
 }
+function actionRequest() {
+    
+    getCarePlanRequest()
+    $("a.request-nav").tab('show');
+  }
 function getCarePlanRequest() {
     hideAprovalBtnStatus()
     $.ajax({
@@ -404,11 +414,11 @@ function getCarePlanRequest() {
         dataType: "json",
         success: function (result) {
             if (result == null) {
-                isApprovedRequestSent=
+                  IsRequestSent=false
                     $('#btnApproval').css('display', 'block');
             }
             else {
-                IsRequestSent = true;
+                 IsRequestSent = true;
                 if ((result.Status == null || result.Status == 0) && result.Type == 1) {
                     $('#btnRevertRequest').css('display', 'block');
                     $('#careplanStatus').css('display', 'block');
@@ -445,7 +455,7 @@ function hideAprovalBtnStatus(){
     $('#careplanStatus .RevokeRequestSent').css('display', 'none');
 }
 function GetNeedAndGoalList() {
-    if (IsUserCarePlanApprover == 'false') {
+    if (IsUserCarePlanApprover == 'False') {
         getCarePlanRequest()
     }
     if ($("a.need-nav").parent().hasClass("disabled")) {
@@ -543,6 +553,7 @@ function DeleteNeed(obj) {
                                             $(obj).closest("li").remove();
                                             $("span.needCount").html("").append($("ul.needsList").find("li.hasChild").length);
                                             toastr.success("", "Changes saved successfully", { progressBar: true });
+                                            changeCareplanStatus()
                                         }, error: function (e) {
                                             toastr.error("Something happen Wrong");
                                             $(".loaderOverlay").hide();
@@ -568,7 +579,8 @@ function DeleteNeed(obj) {
 
 
 function CanEditCarePlan() {
-    if (IsRequestSent || IsUserCarePlanApprover=='false') {
+    
+    if (IsRequestSent && IsUserCarePlanApprover=='False') {
         toastr.error("Cant make any change till request is accepted")
         return false;
     }
@@ -636,7 +648,7 @@ function DeleteGoal(obj) {
                             $(obj).closest(".goalsList").prev().find(".countgoal").html("").append(goalCount - 1);
                             $(obj).closest("li").remove();
                             toastr.success("", "Changes saved successfully", { progressBar: true });
-
+                            changeCareplanStatus()
                         }, error: function (e) {
                             toastr.error("Something happen Wrong");
                             $(".loaderOverlay").hide();
@@ -904,6 +916,7 @@ function EditGoal(o) {
                                                     $(goalRef).html("").append($(goalRef).next().val()).show();
                                                     $(goalRef).next().remove();
                                                     $(goalRef).next().hide();
+                                                    changeCareplanStatus()
                                                 }, error: function (e) {
                                                     toastr.error("Something happen Wrong");
                                                     $(".loaderOverlay").hide();
@@ -1066,6 +1079,9 @@ function EditNeed(o) {
     
 }
 function saveEditNeed(obj) {
+    if (!CanEditCarePlan()) {
+        return
+    }
     var needObj = $(obj).parent().prev();
     if (needObj.val().trim() == "") {
         toastr.error("", "Need is required", { progressBar: true });
@@ -1099,6 +1115,12 @@ function saveEditNeed(obj) {
             $(".loaderOverlay").hide();
         }
     })
+}
+function changeCareplanStatus() {
+    if (prevSelectedCarePlan == "4") {
+        prevSelectedCarePlan = "3";
+        $('#ddlcareplanstatus').value("3")
+    }
 }
 function goalOrNeedFocus(obj) {
     obj.style.height = "21px";
@@ -1137,7 +1159,7 @@ function EditGoalStatus(obj) {
     });
 }
 function EditNeedStatus(obj) {
-
+    
     if (!CanEditCarePlan()) {
         return
     }
@@ -1163,6 +1185,10 @@ function EditNeedStatus(obj) {
     });
 }
 function GetInterventions(obj) {
+    if (!CanEditCarePlan()) {
+        return
+    }
+
     if (obj != null) {
         goalRef = obj;
         $(".outcomeTitle").html("").append('Interventions(<span class="outcomecount">0</span>)');
@@ -1214,6 +1240,10 @@ function GetInterventions(obj) {
     }
 }
 function GetOutcomes(obj) {
+    if (!CanEditCarePlan()) {
+        return
+    }
+
     if (obj != null) {
         needRef = obj;
         $(".outcomeTitle").html("").append('Outcomes(<span class="outcomecount">0</span>)');
@@ -1266,19 +1296,21 @@ function GetOutcomes(obj) {
 }
 function UpdateNeedStatus() {
    
-    if (IsUserCarePlanApprover == 'false') {
+    if (IsUserCarePlanApprover == 'False') {
         var changedStatus = $(".ddlStatus").val()
         if (needStatus == '0' && (changedStatus == "1" || changedStatus == "2")) {
             if (changedStatus == '1') {
-                toastr.error("Status can be changed to In progress")
+                toastr.error("Status can be changed to In-progress")
             }
             else {
                 toastr.error("Status can be changed to completed")
             }
+            return
         }
         else if (changedStatus == '0' && (needStatus == "1" || needStatus == "2")) {
 
             toastr.error("Status can be changed to Not-started")
+            return
         }
     }
 
@@ -1393,10 +1425,12 @@ function UpdateGoalStatus() {
         else {
             toastr.error("Status can be changed to completed")
         }
+        return
     }
     else if (changedStatus == '0' && (goalStatus == "1" || goalStatus == "2")) {
 
         toastr.error("Status can be changed to Not-started")
+        return
     }
 
     if ($(".goalNote").val().trim() == "") {
@@ -1602,6 +1636,7 @@ function saveEditGoal(obj) {
             $(goalObj).prev().show();
             $(goalObj).next().hide();
             $(goalObj).remove();
+            changeCareplanStatus()
         }, error: function (e) {
             toastr.error("Something happen Wrong");
             $(".loaderOverlay").hide();
@@ -1617,6 +1652,9 @@ function cancelEditGoal(obj) {
     $(obj).parent().hide();
 }
 function saveNewNeed(obj) {
+    if (!CanEditCarePlan()) {
+        return
+    }
     var needTxt =$(".txtNeed");
     if (needTxt.val().trim() == "") {
         toastr.error("", "Need is required", { progressBar: true });
@@ -1725,6 +1763,10 @@ function saveNewNeed(obj) {
                         }
                     }
                 });
+            }
+
+            if (prevSelectedCarePlan == "4") {
+
             }
 
         },
@@ -1844,6 +1886,7 @@ function saveNewGoal(obj) {
                     }
                 });
             }
+            changeCareplanStatus()
 
 
         }, error: function (e) {
