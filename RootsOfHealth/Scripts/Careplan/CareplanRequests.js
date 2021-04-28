@@ -43,6 +43,7 @@ function LoadRequest() {
                         
                         careplansRequest += `<a onClick="OpenPopUp({CarePlanName:\'${item.CarePlanName}\',Type:\'${item.Type}\',ProgramName:\'${item.ProgramName}\',Message:\'${item.Message}\',ClientName:'${item.ClientName}\',
                     UserName:'${item.UserName}',SentOn:'${item.SentOn}',Status:'${item.Status}',AcceptedBy:'${item.AcceptedBy}',AcceptedById:'${item.AcceptedById}',Status:'${item.Status}',RequestId:'${item.RequestId}',IsRead:'${item.IsRead}'})" class="btn btn-success text-white" style="cursor:pointer;">View Message</a>`
+                        careplansRequest += `<a onClick="editCarePlan(${item.CarePlanId},PatientId=${item.PatientId})" class="btn btn-success text-white" style="cursor:pointer;">View Careplan</a>`
                         careplansRequest += `</div></td></tr>`;
                     });
                     careplanlist.html("").append(careplansRequest);

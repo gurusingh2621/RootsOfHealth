@@ -86,7 +86,8 @@ function NeedsGoals(result) {
         needList.find("li").not("li.last-child").remove();
         needList.find("li.last-child").before(needstring);
         $("span.completedNeedCount").html("").append(completedNeeds);
-        if ($("#ddlcareplanstatus").val() != "4") {
+        //disabale form to edit if completed commented functionality
+       /* if ($("#ddlcareplanstatus").val() != "4") {*/
             $(".needGoalHover").removeClass("disableHoverItem");
             $(".status_labels_div").find("span:last").removeClass("disableHoverItem");
             $("a.dragIcon").css("display", "inline-block");
@@ -143,12 +144,13 @@ function NeedsGoals(result) {
                     }
                 }
             });
-        } else {
-            $(".needGoalHover").addClass("disableHoverItem");
-            $(".status_labels_div").find("span:last").addClass("disableHoverItem");
-            $("a.dragIcon").css("display", "none");
-            $("div.itemHoverActions").css("display", "none");
-        }
+        //} 
+        //else {
+        //    $(".needGoalHover").addClass("disableHoverItem");
+        //    $(".status_labels_div").find("span:last").addClass("disableHoverItem");
+        //    $("a.dragIcon").css("display", "none");
+        //    $("div.itemHoverActions").css("display", "none");
+        //}
     }
     $(".loaderOverlay").hide();
 }
@@ -298,6 +300,7 @@ function SaveGoal(e) {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
+            updateNeedStatus(e);
             var goalList = $(e).closest(".goalsList");
             if ($(e).closest("li").attr("data-goalid") == undefined) {
                 var goalString = `<li data-goalid="${result}" data-status="0" class="ui-sortable-handle">
@@ -392,7 +395,7 @@ function SaveGoal(e) {
                 });
             }
             changeCareplanStatus()
-
+           
 
         }, error: function (e) {
             toastr.error("Something happen Wrong");
@@ -415,7 +418,12 @@ function getCarePlanRequest() {
         success: function (result) {
             if (result == null) {
                   IsRequestSent=false
-                    $('#btnApproval').css('display', 'block');
+                $('#btnApproval').css('display', 'block');
+                if (IsCarePlanChanged) {
+                    $('#btnApproval').prop('disabled', false);
+                } else {
+                    $('#btnApproval').prop('disabled', true);
+                }
             }
             else {
                  IsRequestSent = true;
@@ -423,6 +431,14 @@ function getCarePlanRequest() {
                     $('#btnRevertRequest').css('display', 'block');
                     $('#careplanStatus').css('display', 'block');
                     $('#careplanStatus .ApprovalRequestSent').css('display', 'block');
+                    if (result.GroupNames != null && result.GroupNames != '') {
+                        $('#careplanStatus .sentGroups').css('display', 'block');
+                        $('#careplanStatus .sentGroups').text('Groups: ' + result.GroupNames.substr(0, result.GroupNames.length - 1))
+                    }
+                    if (result.UserNames != null && result.UserNames != '') {
+                        $('#careplanStatus .sentUsers').css('display', 'block');
+                        $('#careplanStatus .sentUsers').text('Users: ' + result.UserNames.substr(0, result.UserNames.length - 1))
+                    }
                 }
                 else if (result.Status == 1 && result.Type == 1) {
                     $('#btnRevokeRequest').css('display', 'block');
@@ -453,6 +469,8 @@ function hideAprovalBtnStatus(){
     $('#careplanStatus .RequestUnderRleview').css('display', 'none');
     $('#careplanStatus .RequestUnderReview').css('display', 'none');
     $('#careplanStatus .RevokeRequestSent').css('display', 'none');
+    $('#careplanStatus .sentGroups').css('display', 'none');
+    $('#careplanStatus .sentUsers').css('display', 'none');
 }
 function GetNeedAndGoalList() {
     if (IsUserCarePlanApprover == 'False') {
@@ -467,13 +485,13 @@ function GetNeedAndGoalList() {
     $("a.need-nav").tab('show');
     $(".loaderOverlay").show();
     $(".addNewNeed").tooltip();
-    if ($("#ddlcareplanstatus").val() == "4") {        
-        $(".txtNeed,.txtOutcome,.txtIntervention").attr("disabled", true);
-        $("a.addNewNeed,li.last-child").css("display", "none");
-    } else {
+   // if ($("#ddlcareplanstatus").val() == "4") {        
+        //$(".txtNeed,.txtOutcome,.txtIntervention").attr("disabled", true);
+        //$("a.addNewNeed,li.last-child").css("display", "none");
+   // } else {
         $(".txtNeed,.txtOutcome,.txtIntervention").removeAttr("disabled");
         $("a.addNewNeed,li.last-child").css("display", "block");
-    }
+    //}
     $.ajax({
         type: "GET",
         url: Apipath + '/api/PatientMain/getneedbycareplanid?CarePlanId=' + careplanid,
@@ -505,7 +523,7 @@ function DeleteNeed(obj) {
     if ($(obj).hasClass("disableHoverItem")) {
         return;
     }
-    if (IsUserCarePlanApprover == 'false') {
+    if (IsUserCarePlanApprover == 'False') {
         var statusNeed = $(obj).closest("li").attr("data-status")
         if (statusNeed == "1") {
             toastr.error("Cant delete In-progress need")
@@ -596,7 +614,7 @@ function DeleteGoal(obj) {
     if ($(obj).hasClass("disableHoverItem")) {
         return;
     }
-    if (IsUserCarePlanApprover == 'false') {
+    if (IsUserCarePlanApprover == 'False') {
         var statusGoal = $(obj).closest("li").attr("data-status")
         if (statusGoal == "1") {
             toastr.error("Cant delete In-progress goal")
@@ -639,7 +657,8 @@ function DeleteGoal(obj) {
                         contentType: 'application/json; charset=UTF-8',
                         dataType: "json",
                         async: false,
-                        success: function (result) {                        
+                        success: function (result) {  
+                            updateNeedStatus(obj);
                             var goalCount = $(obj).closest("li").siblings().length;
                             if (goalCount == 0) {
                                 $(obj).closest(".goalsList").prev().find("i.down_arrow").addClass("hide_down_arrow");
@@ -912,6 +931,7 @@ function EditGoal(o) {
                                                 contentType: 'application/json; charset=UTF-8',
                                                 dataType: "json",
                                                 success: function (result) {
+                                                    updateNeedStatus(o);
                                                     $("#needContent").removeClass("btnClicked");
                                                     $(goalRef).html("").append($(goalRef).next().val()).show();
                                                     $(goalRef).next().remove();
@@ -1048,6 +1068,7 @@ function EditNeed(o) {
                                                     $(needRef).html("").append($(needRef).next().val()).show();
                                                     $(needRef).next().remove();
                                                     $(needRef).next().hide();
+                                                    changeCareplanStatus()
                                                 },
                                                 error: function (e) {
                                                     toastr.error("Something happen Wrong");
@@ -1108,7 +1129,8 @@ function saveEditNeed(obj) {
             $(needObj).prev().html("").append(needObj.val());
                 $(needObj).prev().show();
                 $(needObj).next().hide();
-                $(needObj).remove();                     
+            $(needObj).remove();  
+            changeCareplanStatus()
         },
         error: function (e) {
             toastr.error("Something happen Wrong");
@@ -1117,6 +1139,8 @@ function saveEditNeed(obj) {
     })
 }
 function changeCareplanStatus() {
+    IsCarePlanChanged = true;
+    toastr.success("Need approval")
     if (prevSelectedCarePlan == "4") {
         prevSelectedCarePlan = "3";
         $('#ddlcareplanstatus').value("3")
@@ -1196,11 +1220,11 @@ function GetInterventions(obj) {
         $(".txtOutcome,.btnOutcome").hide();
         $(".txtIntervention").val("");
         goalId = $(obj).closest("li").attr("data-goalid");
-        if ($("#ddlcareplanstatus").val() == "4") {
-            $(".txtIntervention").closest("div.a_outcome_item").hide();
-        } else {
+        //if ($("#ddlcareplanstatus").val() == "4") {
+        //    $(".txtIntervention").closest("div.a_outcome_item").hide();
+        //} else {
             $(".txtIntervention").closest("div.a_outcome_item").show();
-        }
+        //}
     }
     $.ajax({
         type: "GET",
@@ -1251,11 +1275,11 @@ function GetOutcomes(obj) {
         $(".txtOutcome,.btnOutcome").show();
         $(".txtOutcome").val("");
         needId = $(obj).closest("li").attr("data-needid");
-        if ($("#ddlcareplanstatus").val() == "4") {
-            $(".txtOutcome").closest("div.a_outcome_item").hide();
-        } else {
+        //if ($("#ddlcareplanstatus").val() == "4") {
+        //    $(".txtOutcome").closest("div.a_outcome_item").hide();
+        //} else {
             $(".txtOutcome").closest("div.a_outcome_item").show();
-        }
+        //}
     }
     $.ajax({
         type: "GET",
@@ -1295,7 +1319,7 @@ function GetOutcomes(obj) {
     }
 }
 function UpdateNeedStatus() {
-   
+    
     if (IsUserCarePlanApprover == 'False') {
         var changedStatus = $(".ddlStatus").val()
         if (needStatus == '0' && (changedStatus == "1" || changedStatus == "2")) {
@@ -1339,50 +1363,56 @@ function UpdateNeedStatus() {
         data: JSON.stringify(model),
         dataType: "json",
         success: function (res) {
-            $(needRef).closest("li").attr("data-status", model.Status);
-            switch (model.Status) {
-                case "0":
-                    if ($(needRef).is("span")) {
-                        $(needRef).removeClass("notStarted inProgress completed");
-                        $(needRef).addClass("notStarted");
-                        $(needRef).html("").append("Not Started");
-                    } else {
-                        var statusRef = $(needRef).parent().parent().find("div.status_labels_div").find("span.status_value").last();
-                        statusRef.removeClass("notStarted inProgress completed");
-                        statusRef.addClass("notStarted");
-                        statusRef.html("").append("Not Started");
-                    }
-                    break;
-                case "1":
-                    if ($(needRef).is("span")) {
-                        $(needRef).removeClass("notStarted inProgress completed");
-                        $(needRef).addClass("inProgress");
-                        $(needRef).html("").append("In Progress");
-                    } else {
-                        var statusRef = $(needRef).parent().parent().find("div.status_labels_div").find("span.status_value").last();
-                        statusRef.removeClass("notStarted inProgress completed");
-                        statusRef.addClass("inProgress");
-                        statusRef.html("").append("In Progress");
-                    }
-                    $("#ddlcareplanstatus").val("3");
-                    break;
-                case "2":
-                    var completedNeedCount = parseInt($("span.completedNeedCount").html());
-                    $("span.completedNeedCount").html("").append(completedNeedCount + 1);
-                    if ($(needRef).is("span")) {
-                        $(needRef).removeClass("notStarted inProgress completed");
-                        $(needRef).addClass("completed");
-                        $(needRef).html("").append("Completed");
-                    } else {
-                        var statusRef = $(needRef).parent().parent().find("div.status_labels_div").find("span.status_value").last();
-                        statusRef.removeClass("notStarted inProgress completed");
-                        statusRef.addClass("completed");
-                        statusRef.html("").append("Completed");
-                    }
-                    $("#ddlcareplanstatus").val("3");
-                    break;
+            if (res == "-2") {
+                toastr.success("cant change status till request is not approved");
+
+            } else {
+
+                $(needRef).closest("li").attr("data-status", model.Status);
+                switch (model.Status) {
+                    case "0":
+                        if ($(needRef).is("span")) {
+                            $(needRef).removeClass("notStarted inProgress completed");
+                            $(needRef).addClass("notStarted");
+                            $(needRef).html("").append("Not Started");
+                        } else {
+                            var statusRef = $(needRef).parent().parent().find("div.status_labels_div").find("span.status_value").last();
+                            statusRef.removeClass("notStarted inProgress completed");
+                            statusRef.addClass("notStarted");
+                            statusRef.html("").append("Not Started");
+                        }
+                        break;
+                    case "1":
+                        if ($(needRef).is("span")) {
+                            $(needRef).removeClass("notStarted inProgress completed");
+                            $(needRef).addClass("inProgress");
+                            $(needRef).html("").append("In Progress");
+                        } else {
+                            var statusRef = $(needRef).parent().parent().find("div.status_labels_div").find("span.status_value").last();
+                            statusRef.removeClass("notStarted inProgress completed");
+                            statusRef.addClass("inProgress");
+                            statusRef.html("").append("In Progress");
+                        }
+                        $("#ddlcareplanstatus").val("3");
+                        break;
+                    case "2":
+                        var completedNeedCount = parseInt($("span.completedNeedCount").html());
+                        $("span.completedNeedCount").html("").append(completedNeedCount + 1);
+                        if ($(needRef).is("span")) {
+                            $(needRef).removeClass("notStarted inProgress completed");
+                            $(needRef).addClass("completed");
+                            $(needRef).html("").append("Completed");
+                        } else {
+                            var statusRef = $(needRef).parent().parent().find("div.status_labels_div").find("span.status_value").last();
+                            statusRef.removeClass("notStarted inProgress completed");
+                            statusRef.addClass("completed");
+                            statusRef.html("").append("Completed");
+                        }
+                        $("#ddlcareplanstatus").val("3");
+                        break;
+                }
+                toastr.success("Changes saved successfully");
             }
-            toastr.success("Changes saved successfully");
             $(".ddlStatus").val("0");
             $(".needNote").val('');
             $("#CarePlanChangeStatusModal").modal('hide');
@@ -1412,27 +1442,25 @@ function isUserCarePlanApprover() {
     });
 
 
-
-
-
 }
 function UpdateGoalStatus() {
     var changedStatus = $(".ddlStatus").val()
-    if (goalStatus == '0' && (changedStatus == "1" || changedStatus == "2")) {
-        if (changedStatus == '1') {
-            toastr.error("Status can be changed to In progress")
+    if (IsUserCarePlanApprover == 'False') {
+        if (goalStatus == '0' && (changedStatus == "1" || changedStatus == "2")) {
+            if (changedStatus == '1') {
+                toastr.error("Status can be changed to In progress")
+            }
+            else {
+                toastr.error("Status can be changed to completed")
+            }
+            return
         }
-        else {
-            toastr.error("Status can be changed to completed")
+        else if (changedStatus == '0' && (goalStatus == "1" || goalStatus == "2")) {
+
+            toastr.error("Status can be changed to Not-started")
+            return
         }
-        return
     }
-    else if (changedStatus == '0' && (goalStatus == "1" || goalStatus == "2")) {
-
-        toastr.error("Status can be changed to Not-started")
-        return
-    }
-
     if ($(".goalNote").val().trim() == "") {
         toastr.error("Note is required");
         return;
@@ -1450,89 +1478,95 @@ function UpdateGoalStatus() {
         contentType: 'application/json; charset=UTF-8',
         data: JSON.stringify(model),
         dataType: "json",
-        success: function (res) {                   
-            $(goalRef).closest("li").attr("data-status", model.Status);
-            switch (model.Status) {
-                case "0":
-                    if ($(goalRef).is("span")) {
-                        var statusCircle = $(goalRef).parent().parent().prev();
-                        statusCircle.removeClass("notStarted inProgress fullCompleted");
-                        statusCircle.addClass("notStarted");
-                        $(goalRef).removeClass("notStarted inProgress completed");
-                        $(goalRef).addClass("notStarted");
-                        $(goalRef).html("").append("Not Started");
-                    } else {
-                        var statusCircle = $(goalRef).parent().prev().prev();
-                        statusCircle.removeClass("notStarted inProgress fullCompleted");
-                        statusCircle.addClass("notStarted");
-                        var statusRef = $(goalRef).parent().parent().find("div.status_labels_div").find("span.status_value").last();
-                        statusRef.removeClass("notStarted inProgress completed");
-                        statusRef.addClass("notStarted");
-                        statusRef.html("").append("Not Started");
-                    }
-                    break;
-                case "1":
-                    if ($(goalRef).is("span")) {
-                        var statusCircle = $(goalRef).parent().parent().prev();
-                        statusCircle.removeClass("notStarted inProgress fullCompleted");
-                        statusCircle.addClass("inProgress");
-                        $(goalRef).removeClass("notStarted inProgress completed");
-                        $(goalRef).addClass("inProgress");
-                        $(goalRef).html("").append("In Progress");
-                    } else {
-                        var statusCircle = $(goalRef).parent().prev().prev();
-                        statusCircle.removeClass("notStarted inProgress fullCompleted");
-                        statusCircle.addClass("inProgress");
-                        var statusRef = $(goalRef).parent().parent().find("div.status_labels_div").find("span.status_value").last();
-                        statusRef.removeClass("notStarted inProgress completed");
-                        statusRef.addClass("inProgress");
-                        statusRef.html("").append("In Progress");
-                    }   
-                    $("#ddlcareplanstatus").val("3");
-                    break;
-                case "2":
-                    //var completedNeedCount = parseInt($("span.completedNeedCount").html());
-                    //$("span.completedNeedCount").html("").append(completedNeedCount + 1);
-                    if ($(goalRef).is("span")) {
-                        var statusCircle = $(goalRef).parent().parent().prev();
-                        statusCircle.removeClass("notStarted inProgress fullCompleted");
-                        statusCircle.addClass("fullCompleted");
-                        $(goalRef).removeClass("notStarted inProgress completed");
-                        $(goalRef).addClass("completed");
-                        $(goalRef).html("").append("Completed");
-                    } else {
-                        var statusCircle = $(goalRef).parent().prev().prev();
-                        statusCircle.removeClass("notStarted inProgress fullCompleted");
-                        statusCircle.addClass("fullCompleted");
-                        var statusRef = $(goalRef).parent().parent().find("div.status_labels_div").find("span.status_value").last();
-                        statusRef.removeClass("notStarted inProgress completed");
-                        statusRef.addClass("completed");
-                        statusRef.html("").append("Completed");
-                    }
-                    $("#ddlcareplanstatus").val("3");
-                    break;
+        success: function (res) {   
+            if (res == "-2") {
+                toastr.error("cant change status till Careplan is not approved");
             }
-            var goals = $(goalRef).closest("ul.goalsList");
-            var notStartedGoals = goals.find("span.status_value.notStarted").length + goals.find("span.status_value.inProgress").length;
-            var needCircle = goals.prev().find("div.editNeed").find("span").first();
-            needCircle.html("").append(notStartedGoals);
-            if (res.UpdatedNeed == 1) {
-                var needStatusSpan = goals.prev().find("div.status_labels_div").find("span.status_value").last();
-                needStatusSpan.removeClass("notStarted inProgress completed");
-                needStatusSpan.addClass("inProgress");
-                needStatusSpan.html("").append("In Progress");
-            }   
-            toastr.success("Changes saved successfully");
-            $(".ddlStatus").val("0");
-            $(".goalNote").val('');
-            $("#CarePlanChangeStatusModal").modal('hide');
-            var goalsCount = goals.find("li").not("li.newGoal").length;
-            var completedgoalsCount = goals.find(`li[data-status="${needGoalEnum.Completed}"]`).length;
-            if (goalsCount == completedgoalsCount) {
-                $.alert({
-                    title: 'Reminder Alert!',
-                    content: 'Mark need  complete with comments',
-                });
+            else {
+                $(goalRef).closest("li").attr("data-status", model.Status);
+                updateNeedStatus(goalRef);
+                switch (model.Status) {
+                    case "0":
+                        if ($(goalRef).is("span")) {
+                            var statusCircle = $(goalRef).parent().parent().prev();
+                            statusCircle.removeClass("notStarted inProgress fullCompleted");
+                            statusCircle.addClass("notStarted");
+                            $(goalRef).removeClass("notStarted inProgress completed");
+                            $(goalRef).addClass("notStarted");
+                            $(goalRef).html("").append("Not Started");
+                        } else {
+                            var statusCircle = $(goalRef).parent().prev().prev();
+                            statusCircle.removeClass("notStarted inProgress fullCompleted");
+                            statusCircle.addClass("notStarted");
+                            var statusRef = $(goalRef).parent().parent().find("div.status_labels_div").find("span.status_value").last();
+                            statusRef.removeClass("notStarted inProgress completed");
+                            statusRef.addClass("notStarted");
+                            statusRef.html("").append("Not Started");
+                        }
+                        break;
+                    case "1":
+                        if ($(goalRef).is("span")) {
+                            var statusCircle = $(goalRef).parent().parent().prev();
+                            statusCircle.removeClass("notStarted inProgress fullCompleted");
+                            statusCircle.addClass("inProgress");
+                            $(goalRef).removeClass("notStarted inProgress completed");
+                            $(goalRef).addClass("inProgress");
+                            $(goalRef).html("").append("In Progress");
+                        } else {
+                            var statusCircle = $(goalRef).parent().prev().prev();
+                            statusCircle.removeClass("notStarted inProgress fullCompleted");
+                            statusCircle.addClass("inProgress");
+                            var statusRef = $(goalRef).parent().parent().find("div.status_labels_div").find("span.status_value").last();
+                            statusRef.removeClass("notStarted inProgress completed");
+                            statusRef.addClass("inProgress");
+                            statusRef.html("").append("In Progress");
+                        }
+                        $("#ddlcareplanstatus").val("3");
+                        break;
+                    case "2":
+                        //var completedNeedCount = parseInt($("span.completedNeedCount").html());
+                        //$("span.completedNeedCount").html("").append(completedNeedCount + 1);
+                        if ($(goalRef).is("span")) {
+                            var statusCircle = $(goalRef).parent().parent().prev();
+                            statusCircle.removeClass("notStarted inProgress fullCompleted");
+                            statusCircle.addClass("fullCompleted");
+                            $(goalRef).removeClass("notStarted inProgress completed");
+                            $(goalRef).addClass("completed");
+                            $(goalRef).html("").append("Completed");
+                        } else {
+                            var statusCircle = $(goalRef).parent().prev().prev();
+                            statusCircle.removeClass("notStarted inProgress fullCompleted");
+                            statusCircle.addClass("fullCompleted");
+                            var statusRef = $(goalRef).parent().parent().find("div.status_labels_div").find("span.status_value").last();
+                            statusRef.removeClass("notStarted inProgress completed");
+                            statusRef.addClass("completed");
+                            statusRef.html("").append("Completed");
+                        }
+                        $("#ddlcareplanstatus").val("3");
+                        break;
+                }
+                var goals = $(goalRef).closest("ul.goalsList");
+                var notStartedGoals = goals.find("span.status_value.notStarted").length + goals.find("span.status_value.inProgress").length;
+                var needCircle = goals.prev().find("div.editNeed").find("span").first();
+                needCircle.html("").append(notStartedGoals);
+                if (res.UpdatedNeed == 1) {
+                    var needStatusSpan = goals.prev().find("div.status_labels_div").find("span.status_value").last();
+                    needStatusSpan.removeClass("notStarted inProgress completed");
+                    needStatusSpan.addClass("inProgress");
+                    needStatusSpan.html("").append("In Progress");
+                }
+                toastr.success("Changes saved successfully");
+                $(".ddlStatus").val("0");
+                $(".goalNote").val('');
+                $("#CarePlanChangeStatusModal").modal('hide');
+                var goalsCount = goals.find("li").not("li.newGoal").length;
+                var completedgoalsCount = goals.find(`li[data-status="${needGoalEnum.Completed}"]`).length;
+                if (goalsCount == completedgoalsCount) {
+                    $.alert({
+                        title: 'Reminder Alert!',
+                        content: 'Mark need  complete with comments',
+                    });
+                }
             }
         }, error: function () {
             toastr.error("Something happen Wrong");
@@ -1631,6 +1665,7 @@ function saveEditGoal(obj) {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
+            updateNeedStatus(obj);
             $("#needContent").removeClass("btnClicked");
             $(goalObj).prev().html("").append(goalObj.val());
             $(goalObj).prev().show();
@@ -1764,10 +1799,8 @@ function saveNewNeed(obj) {
                     }
                 });
             }
-
-            if (prevSelectedCarePlan == "4") {
-
-            }
+            changeCareplanStatus()
+            
 
         },
         error: function (e) {
@@ -1797,6 +1830,7 @@ function saveNewGoal(obj) {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
+            updateNeedStatus(obj);
             $("#needContent").removeClass("btnClicked");
             var goalList = goaltxt.closest(".goalsList");
             if (goaltxt.closest("li").attr("data-goalid") == undefined) {
@@ -1887,7 +1921,7 @@ function saveNewGoal(obj) {
                 });
             }
             changeCareplanStatus()
-
+            
 
         }, error: function (e) {
             toastr.error("Something happen Wrong");
@@ -2239,3 +2273,14 @@ function closeDefaultGoals() {
     }
 }
 $(".closeDefaultNeed").click(closeDefaultGoals);
+function updateNeedStatus(obj) {
+    var item = $(obj).parents('ul.goalsList');
+    var need = $(item).closest('li');
+    var currentStatus = $(need).attr('data-status')
+    if (currentStatus == "2") {
+        $(need).attr('data-status', '1');
+        var needStatus = $(need).find('.status_value').removeClass('completed').addClass('inProgress').text('In Progress ');
+    }
+   
+}
+

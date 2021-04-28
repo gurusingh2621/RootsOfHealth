@@ -33,7 +33,7 @@ function GetGroupList() {
                          <td width="10%">${(item.MemberCount == null ? 0 : item.MemberCount)}</td>
                             <td width="30%"><div>`;
                     Groups += `<a href="javascript:void(0)" onclick="ManageMembership(${item.GroupID},${item.RoleID},'${item.GroupName}')" class="btn btn-success text-white" style="cursor:pointer;">Manage Membership</a>`
-                    Groups += `<a href="javascript:void(0)" onclick="DeleteGroup(${item.GroupID},this)" class="btn btn-success text-white" style="cursor:pointer;">Delete</a>`
+                    Groups += `<a href="javascript:void(0)" onclick="DeleteGroup(${item.GroupID},this,${item.RoleID})" class="btn btn-success text-white" style="cursor:pointer;">Delete</a>`
 
                     Groups += `</div></td></tr>`;
                 });
@@ -425,7 +425,7 @@ function CreateAndValidateGroupModel() {
 }
 
 
-function DeleteGroup(groupid,btn) {
+function DeleteGroup(groupid,btn,roleid) {
     $.confirm({
         icon: 'fas fa-exclamation-triangle',
         title: 'Confirm',
@@ -445,6 +445,9 @@ function DeleteGroup(groupid,btn) {
                         success: function (result) {
                             if (result > 0) {
                                 toastr.success("", "Deleted Successfully", { progressBar: true });
+                                if (roleid == "3") {
+                                    location.href = "/Account/UserGroupList";
+                                }
                                 let index = CreatedGroups.findIndex(x => x.ID === groupid);
                                 CreatedGroups.splice(index, 1);
                                 _usergrouplistDataTable.row($(btn).parents('tr')).remove().draw();

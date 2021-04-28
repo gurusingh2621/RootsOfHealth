@@ -22,6 +22,22 @@ namespace RootsOfHealth.Controllers
        
         public ActionResult Index()
         {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                var responseTask = client.GetAsync("api/PatientMain/isusercareplanapproval?userid=" + @Session["userid"].ToString());
+                responseTask.Wait();
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var data = result.Content.ReadAsAsync<bool>();
+                    data.Wait();
+                    var res = data.Result;
+                    @Session["IsCarePlanApprover"] = res;
+                }
+            };
             UserBO Users = new UserBO();
             using (var client = new HttpClient())
             {
@@ -346,6 +362,24 @@ namespace RootsOfHealth.Controllers
         [HttpGet]
         public ActionResult UserGroupList()
         {
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                var responseTask = client.GetAsync("api/PatientMain/isusercareplanapproval?userid=" + @Session["userid"].ToString());
+                responseTask.Wait();
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var data = result.Content.ReadAsAsync<bool>();
+                    data.Wait();
+                    var res = data.Result;
+                    @Session["IsCarePlanApprover"] = res;
+                }
+            };
+
             return View();
         }
         [HttpGet]
@@ -353,6 +387,8 @@ namespace RootsOfHealth.Controllers
         {
             return PartialView("~/Views/Shared/Account/_AddGroup.cshtml");
         }
+
+      
     }
    
 }
