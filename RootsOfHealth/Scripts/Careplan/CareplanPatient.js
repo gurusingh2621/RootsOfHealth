@@ -809,12 +809,12 @@ function editCarePlan(Id) {
                     careplanid = result.CarePlanId;
                     getCarePlanBasicFormHtml(result.TemplateID);
                     getCarePlanBasicFormValue(result.CarePlanId, result.TemplateID);
-                    $(".basic-info-actions").hide();
+                  $(".basic-info-actions").hide();
                     $("#ddlcareplanstatus").addClass("show_careplanstatus").val("4");
                     $("a.need-nav,a.summary-nav").parent().removeClass("disabled");
                     $("#carePlansSidebar").removeClass('opened');
                     $("#addNewCarePlansSidebar").addClass('opened');                
-                    $("#ddlcareplanstatus,.care_plan_name_field").attr("disabled", true);
+                   // $("#ddlcareplanstatus,.care_plan_name_field").attr("disabled", true);
                     break;
                 default:                 
                     break;
@@ -2150,8 +2150,15 @@ function setCarePlanStatus(obj) {
         Status: $(obj).val(),
         ModifiedBy: userId
     };
-          
-
+    if (model.Status == 4) {
+        checkCarePlanStatus();
+        if (!isCarePlanNeedCompleted) {
+            toastr.error("Can not complete care plan, their are incomplete needs. Please complete all needs to complete care plan.");
+            $("#ddlcareplanstatus").val(prevSelectedCarePlan);
+            return;
+        }
+    }
+    
                $.ajax({
                   type: "POST",
                   url: Apipath + '/api/PatientMain/updatecareplanstatus',
@@ -2177,11 +2184,7 @@ function setCarePlanStatus(obj) {
                           }
 
                           $("#ddlcareplanstatus").val(prevSelectedCarePlan);
-
-
                       }
-                                                    
-                     
                      
                   },
                   error: function (e) {

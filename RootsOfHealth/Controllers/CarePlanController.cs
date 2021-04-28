@@ -354,8 +354,28 @@ namespace RootsOfHealth.Controllers
 
         public ActionResult Requests()
         {
-            return View();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                var responseTask = client.GetAsync("api/PatientMain/isusercareplanapproval?userid=" + @Session["userid"].ToString());
+                responseTask.Wait();
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var data = result.Content.ReadAsAsync<bool>();
+                    data.Wait();
+                    var res = data.Result;
+                    @Session["IsCarePlanApprover"] = res;
+                    if (!res)
+                    {
+                      return  Content("you not have permission for that page");
+                    }
+                }
+            };
 
+            return View();
         }
     }
 }

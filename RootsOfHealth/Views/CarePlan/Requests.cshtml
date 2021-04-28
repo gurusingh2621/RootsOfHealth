@@ -2,12 +2,16 @@
     ViewBag.Title = "List";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<link href="~/css/CareplanPatient.css" rel="stylesheet" />
+<link href="~/css/CareplanNeedsAndGoals.css" rel="stylesheet" />
+<link href="~/css/CarePlanSummary.css" rel="stylesheet" />
 <style>
     .cprTableWrap {
         background: #fff;
         padding: 30px;
         height: calc(100vh - 100px);
     }
+
     .rounded_tabs_list .nav-tabs {
         border: 0;
         margin: 0 0 10px;
@@ -17,39 +21,45 @@
         height: auto;
         overflow: visible;
     }
-    .rounded_tabs_list .nav-tabs li a {
-        border: none;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 14px;
-        line-height: 16px;
-        display: flex;
-        align-items: center;
-        text-align: center;
-        color: #818181;
-        padding: 10px 15px;
-        border-radius: 50px;
-        position: relative;
-        background: transparent;
-        text-transform: uppercase;
-        height: auto;
-    }
-    .rounded_tabs_list .nav-tabs li {
-        margin: 0;
-    }
-    .rounded_tabs_list .nav-tabs li a:after {
-        display: none;
-    }
-    .rounded_tabs_list .nav-tabs .nav-link.active {
-        background: #FFFFFF !important;
-        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25) !important;
-        font-weight: 500;
-        color: #555;
-        width: auto;
-    }
+
+        .rounded_tabs_list .nav-tabs li a {
+            border: none;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 16px;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #818181;
+            padding: 10px 15px;
+            border-radius: 50px;
+            position: relative;
+            background: transparent;
+            text-transform: uppercase;
+            height: auto;
+        }
+
+        .rounded_tabs_list .nav-tabs li {
+            margin: 0;
+        }
+
+            .rounded_tabs_list .nav-tabs li a:after {
+                display: none;
+            }
+
+        .rounded_tabs_list .nav-tabs .nav-link.active {
+            background: #FFFFFF !important;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25) !important;
+            font-weight: 500;
+            color: #555;
+            width: auto;
+        }
+
     .rounded_tabs_list .tab-content .tab-pane {
         padding-top: 20px;
     }
+
     .c_table thead tr th {
         padding: 10px 8px;
         text-transform: capitalize;
@@ -83,22 +93,28 @@
         background: rgba(255, 165, 0,0.1);
         color: #e09101;
     }
+
     #RequestModel .table tr:first-child th, #RequestModel .table tr:first-child td {
         border-top: 0;
     }
+
     #RequestModel .table tr:last-child td,
     #RequestModel .table tr:last-child th {
         border-bottom: 1px solid #dee2e6;
     }
+
     #RequestModel .message_block {
         margin: 0 0 20px;
     }
+
     #RequestModel .scroll {
         max-height: calc(100vh - 140px);
     }
+
     div#RequestModel {
         font-size: 14px;
     }
+
     table tr.unread_mess {
         background: #eee;
         font-weight: 500;
@@ -116,7 +132,7 @@
                             <a class="nav-link basic-nav active show" id="InboxCount" data-toggle="tab" href="#cprInbox">Inbox</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link need-nav" data-toggle="tab" href="#cprHistory" >History</a>
+                            <a class="nav-link need-nav" data-toggle="tab" href="#cprHistory">History</a>
                         </li>
                     </ul>
                     <div class="tab-content">
@@ -160,7 +176,7 @@
 
             </div>
         </div>
-        </div>
+    </div>
 
 
 
@@ -174,21 +190,35 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-               
-               </div>
+
+            </div>
             <div class="modal-body preview-body scroll">
-               
+
 
             </div>
             @*<div class="modal-footer preview-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
-            </div>*@
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
+                </div>*@
         </div>
     </div>
 </div>
+
+@{
+    Html.RenderPartial("CarePlan/_CareplanSidebar");
+}
 <script>
     var userId = "@Session["userid"]";
-   
+    var IsUserCarePlanApprover = '@Session["IsCarePlanApprover"]'
+    var PatientId = "0"
+    var IsRequestSent=false
+    var careplanUploadedPath = "@System.Web.Configuration.WebConfigurationManager.AppSettings["CarePlanUploadPath"]";
+
 </script>
-        <script src="~/Scripts/Careplan/CareplanRequests.js"></script>
+<script src="~/Scripts/jquery-ui.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.js"></script>
+<script src="~/Content/script/jquery.timeselector.js"></script>
+<script src="~/Scripts/Careplan/CareplanRequests.js"></script>
+<script src="~/Scripts/Careplan/CareplanPatient.js"></script>
+<script src="~/Scripts/Careplan/CareplanNeedsAndGoals.js"></script>
+<script src="~/Scripts/Careplan/CarePlanSummary.js"></script>
 

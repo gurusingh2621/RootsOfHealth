@@ -400,6 +400,7 @@
     <Content Include="Views\Shared\Account\_AddGroup.cshtml" />
     <Content Include="Views\Shared\Patient\_AMDProfile.cshtml" />
     <Content Include="Views\CarePlan\Requests.cshtml" />
+    <Content Include="Views\Shared\CarePlan\_CareplanSidebar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

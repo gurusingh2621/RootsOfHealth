@@ -102,6 +102,8 @@
 </section>
 @section scripts{
     <script>
+        var PrevUserrole = "@Model.RoleID";
+        var userId="@Session["userid"]"
         var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
         $("#usersImg").change(function () {
 
@@ -129,7 +131,7 @@
                 success: function (response) {
                     $("input[type=hidden][name=userImg]").val(response);
                     $("#patientpic").attr('src', "/Files/" + response)
-                    
+
                 },
                 error: function (error) {
                     toastr.error("errror");
@@ -165,7 +167,7 @@
            // $("#IsDeleted option[value='']").remove();
             //$('#CreatedDate').datepicker({
             //    uiLibrary: 'bootstrap'
-            //});
+           //});
             //$('#ModifiedDate').datepicker({
             //    uiLibrary: 'bootstrap'
             //});
@@ -200,7 +202,7 @@
 
         function Save() {
 
-            
+
 
             if ($("#FirstName").val().trim() == '') {
                 toastr.error("First name is required");
@@ -259,6 +261,9 @@
                 success: function (result) {
                     if (result != '') {
                         toastr.success("User updated successfully");
+                        if (userId == '@Model.UserID' && PrevUserrole!=$('#RoleName').val()) {
+                            location.href = "/Account/Index";
+                        }
                     }
                     else {
                         toastr.error("Error while updating data");
