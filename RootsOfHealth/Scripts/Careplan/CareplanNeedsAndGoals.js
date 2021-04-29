@@ -417,15 +417,29 @@ function getCarePlanRequest() {
         dataType: "json",
         success: function (result) {
             if (result == null) {
-                  IsRequestSent=false
+                IsRequestSent = false
+                $('#careplanStatus').css('display', 'block');
                 $('#btnApproval').css('display', 'block');
-                if (IsCarePlanChanged) {
+                if (IsCarePlanChanged ) {
                     $('#btnApproval').prop('disabled', false);
+                    $('#btnApproval').removeClass('disabled')
+                    $('#careplanStatus .RequestApproved').css('display', 'block');
                 } else {
-                    $('#btnApproval').prop('disabled', true);
+                    $('#careplanStatus .requiredApproval').css('display', 'block');
+                    if (IsCarePlanApproved) {s
+                        $('#careplanStatus .RequestApproved').css('display', 'block') 
+                        $('#btnApproval').prop('disabled', true);
+                        $('#btnApproval').addClass('disabled')
+                    }
                 }
             }
             else {
+                IsCarePlanApproved = result.IsApproved 
+                RequestType = result.Type
+                RequestStatus = result.Status == null ? 0 : result.Status
+                if (IsCarePlanApproved) {
+                    $('#careplanStatus .RequestApproved').css('display', 'block')
+                }
                  IsRequestSent = true;
                 if ((result.Status == null || result.Status == 0) && result.Type == 1) {
                     $('#btnRevertRequest').css('display', 'block');
@@ -433,21 +447,22 @@ function getCarePlanRequest() {
                     $('#careplanStatus .ApprovalRequestSent').css('display', 'block');
                     if (result.GroupNames != null && result.GroupNames != '') {
                         $('#careplanStatus .sentGroups').css('display', 'block');
-                        $('#careplanStatus .sentGroups').text('Groups: ' + result.GroupNames.substr(0, result.GroupNames.length - 1))
+                        $('#careplanStatus .sentGroups').html('<b>Groups:</b> ' + result.GroupNames.substr(0, result.GroupNames.length - 2))
                     }
                     if (result.UserNames != null && result.UserNames != '') {
                         $('#careplanStatus .sentUsers').css('display', 'block');
-                        $('#careplanStatus .sentUsers').text('Users: ' + result.UserNames.substr(0, result.UserNames.length - 1))
+                        $('#careplanStatus .sentUsers').html('<b>Users:</b> ' + result.UserNames.substr(0, result.UserNames.length - 2))
                     }
                 }
                 else if (result.Status == 1 && result.Type == 1) {
                     $('#btnRevokeRequest').css('display', 'block');
                     $('#careplanStatus').css('display', 'block');
-                    $('#careplanStatus .RequestUnderReview').css('display', 'block');
+                    $('#careplanStatus .RequestUnderReview').text('Request under review (Accepted by ' + result.AcceptedBy+')').css('display', 'block');
+                  
                 }
                 else if (result.Status == 1 && result.Type == 3) {
                     $('#careplanStatus').css('display', 'block');
-                    $('#careplanStatus .RevokeRequestSent').css('display', 'block');
+                    $('#careplanStatus .RevokeRequestSent').text('Revoke request is sent to ' + result.AcceptedBy).css('display', 'block');
                 }
             }
         }
@@ -471,6 +486,8 @@ function hideAprovalBtnStatus(){
     $('#careplanStatus .RevokeRequestSent').css('display', 'none');
     $('#careplanStatus .sentGroups').css('display', 'none');
     $('#careplanStatus .sentUsers').css('display', 'none');
+    $('#careplanStatus .RequestApproved').css('display', 'none');
+    $('#careplanStatus .requiredApproval').css('display', 'none');
 }
 function GetNeedAndGoalList() {
     if (IsUserCarePlanApprover == 'False') {
@@ -598,8 +615,17 @@ function DeleteNeed(obj) {
 
 function CanEditCarePlan() {
     
-    if (IsRequestSent && IsUserCarePlanApprover=='False') {
-        toastr.error("Cant make any change till request is accepted")
+    if (IsRequestSent && IsUserCarePlanApprover == 'False') {
+        if (RequestType == 1 && RequestStatus == '1') {
+            toastr.error("Please send revoke request to make changes");
+        }
+        else if (RequestType == 3) {
+            toastr.error("Cant make any change to careplan till careplan revoke request is accepted");
+        }
+        else if (RequestType == 1 && RequestStatus == '0') {
+            toastr.error("Revert your approval request to make changes")
+        }
+      
         return false;
     }
     return true;
@@ -607,8 +633,8 @@ function CanEditCarePlan() {
 }
 
 function DeleteGoal(obj) {
-    if (IsRequestSent) {
-        toastr.error("Cant make any change till request is accepted")
+    if (!CanEditCarePlan) {
+      return
     }
 
     if ($(obj).hasClass("disableHoverItem")) {
@@ -844,17 +870,17 @@ function EditGoal(o) {
     if ($(o).hasClass("disableHoverItem")) {
         return;
     }
-    $.ajax({
-        type: "GET",
-        url: Apipath + '/api/PatientMain/editgoal?GoalId=' + $(o).closest("li").attr("data-goalid"),
-        contentType: 'application/json; charset=UTF-8',
-        dataType: "json",
-        success: function (result) {
-            switch (result) {
-                case 0:
-                    toastr.error("Cannot Edit.Item contains historical Data");
-                    break;
-                default:
+    //$.ajax({
+    //    type: "GET",
+    //    url: Apipath + '/api/PatientMain/editgoal?GoalId=' + $(o).closest("li").attr("data-goalid"),
+    //    contentType: 'application/json; charset=UTF-8',
+    //    dataType: "json",
+    //    success: function (result) {
+    //        switch (result) {
+    //            case 0:
+    //                toastr.error("Cannot Edit.Item contains historical Data");
+    //                break;
+    //            default:
                     $(o).closest("ul.needsList").find("ul.goalsList li").not($(o).closest("li")).each(function (index, item) {
                         $(item).find("span.goalcontent").show();
                         $(item).find("div.goalAction").hide();
@@ -956,14 +982,14 @@ function EditGoal(o) {
                             });
                         });
                         $(".edittxtGoal").focus();
-                        break;
+                       /* break;*/
                     }
-            }
-        }, error: function (e) {
-            toastr.error("Something happen Wrong");
-            $(".loaderOverlay").hide();
-        }
-    });   
+    //        }
+    //    }, error: function (e) {
+    //        toastr.error("Something happen Wrong");
+    //        $(".loaderOverlay").hide();
+    //    }
+    //});   
 }
 function EditNeed(o) {
     if (!CanEditCarePlan()) {
@@ -973,17 +999,17 @@ function EditNeed(o) {
     if ($(o).hasClass("disableHoverItem")) {
         return;
     }
-    $.ajax({
-        type: "GET",
-        url: Apipath + '/api/PatientMain/editneed?NeedId=' + $(o).closest("li").attr("data-needid"),
-        contentType: 'application/json; charset=UTF-8',
-        dataType: "json",
-        success: function (result) {
-            switch (result) {
-                case 0:
-                    toastr.error("Cannot Edit.  Item contains historical Data");
-                    break;
-                default:
+    //$.ajax({
+    //    type: "GET",
+    //    url: Apipath + '/api/PatientMain/editneed?NeedId=' + $(o).closest("li").attr("data-needid"),
+    //    contentType: 'application/json; charset=UTF-8',
+    //    dataType: "json",
+    //    success: function (result) {
+    //        switch (result) {
+    //            case 0:
+    //                toastr.error("Cannot Edit.  Item contains historical Data");
+    //                break;
+                   /* default:*/
                     $(o).closest("ul.needsList").find("li").not($(o).parent().parent().prev()).each(function (index, item) {
                         $(item).find("span.needDesc").show();
                         $(item).find("div.needAction").hide();
@@ -1090,13 +1116,13 @@ function EditNeed(o) {
                         });
                         $(".txtneed").focus();
                     }
-                    break;
-            }
-        }, error: function (e) {
-            toastr.error("Something happen Wrong");
-            $(".loaderOverlay").hide();
-        }
-    });
+                   
+    //        }
+    //    }, error: function (e) {
+    //        toastr.error("Something happen Wrong");
+    //        $(".loaderOverlay").hide();
+    //    }
+    //});
     
 }
 function saveEditNeed(obj) {
@@ -1140,7 +1166,8 @@ function saveEditNeed(obj) {
 }
 function changeCareplanStatus() {
     IsCarePlanChanged = true;
-    toastr.success("Need approval")
+    IsCarePlanApproved=false
+    /*toastr.success("Need approval")*/
     if (prevSelectedCarePlan == "4") {
         prevSelectedCarePlan = "3";
         $('#ddlcareplanstatus').value("3")
@@ -1324,10 +1351,10 @@ function UpdateNeedStatus() {
         var changedStatus = $(".ddlStatus").val()
         if (needStatus == '0' && (changedStatus == "1" || changedStatus == "2")) {
             if (changedStatus == '1') {
-                toastr.error("Status can be changed to In-progress")
+                toastr.error("Status can't be changed to In-progress")
             }
             else {
-                toastr.error("Status can be changed to completed")
+                toastr.error("Status can't be changed to completed")
             }
             return
         }
@@ -1364,7 +1391,16 @@ function UpdateNeedStatus() {
         dataType: "json",
         success: function (res) {
             if (res == "-2") {
-                toastr.success("cant change status till request is not approved");
+                if (RequestType == 1 && RequestStatus == '1') {
+                    toastr.error("Please send revoke request to make changes");
+                }
+                else if (RequestType == 3) {
+                    toastr.error("Cant make any change to careplan till careplan revoke request is accepted");
+                }
+                else if (RequestType == 1 && RequestStatus == '0') {
+                    toastr.error("Revert your approval request to make changes")
+                }
+               
 
             } else {
 
@@ -1448,16 +1484,16 @@ function UpdateGoalStatus() {
     if (IsUserCarePlanApprover == 'False') {
         if (goalStatus == '0' && (changedStatus == "1" || changedStatus == "2")) {
             if (changedStatus == '1') {
-                toastr.error("Status can be changed to In progress")
+                toastr.error("Status can't be changed to In progress")
             }
             else {
-                toastr.error("Status can be changed to completed")
+                toastr.error("Status can't be changed to completed")
             }
             return
         }
         else if (changedStatus == '0' && (goalStatus == "1" || goalStatus == "2")) {
 
-            toastr.error("Status can be changed to Not-started")
+            toastr.error("Status can't be changed to Not-started")
             return
         }
     }
@@ -1480,7 +1516,17 @@ function UpdateGoalStatus() {
         dataType: "json",
         success: function (res) {   
             if (res == "-2") {
-                toastr.error("cant change status till Careplan is not approved");
+
+                if (RequestType == 1 && RequestStatus == '1') {
+                    toastr.error("Please send revoke request to make changes");
+                }
+                else if (RequestType == 3) {
+                    toastr.error("Cant make any change to careplan till careplan revoke request is accepted");
+                }
+                else if (RequestType == 1 && RequestStatus == '0') {
+                    toastr.error("Revert your approval request to make changes")
+                }
+               
             }
             else {
                 $(goalRef).closest("li").attr("data-status", model.Status);

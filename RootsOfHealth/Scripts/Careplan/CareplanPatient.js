@@ -763,6 +763,7 @@ function editCarePlan(Id) {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",       
         success: function (result) {
+            IsCarePlanApproved = result.IsApproved == null ? false : result.IsApproved;
             $(".care_plan_name_field").val(result.CarePlanName);
             isupdateProgramFields = false;
             $("#ddlcareplanstatus,.care_plan_name_field").removeAttr("disabled");
