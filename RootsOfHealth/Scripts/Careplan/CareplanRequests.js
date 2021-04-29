@@ -4,7 +4,8 @@
 })
 
 var ReadCount = 0;
-var InboxTable=''
+var InboxTable = ''
+var HistoryTable = ''
 
 function LoadRequest() {
     $(".loaderOverlay").css("display", "flex");
@@ -15,9 +16,14 @@ function LoadRequest() {
         dataType: "json",
         async: true,
         success: function (result) {
-            
+            if (InboxTable != '') {
+                InboxTable.destroy();
+            }
+           
             var status=''
             var careplanlist = $(".carePlanRequestInbox");
+            careplanlist.html('')
+            
                 var careplansRequest = "";
                 if (result.length) {
                     $.each(result, function (index, item) {
@@ -25,7 +31,7 @@ function LoadRequest() {
                             ReadCount++;
                         }
                         careplansRequest += `<tr id="${item.RequestId}" class="${item.IsRead ? '' : 'unread_mess'}">
-                           <td width="20%">${item.CarePlanName == null ? "" : item.CarePlanName}</td>
+                           <td width="20%"><a onClick="editCarePlan(${item.CarePlanId},PatientId=${item.PatientId})" class="btn btn-link" style="cursor:pointer;">${item.CarePlanName == null ? "" : item.CarePlanName}</a></td>
                            <td width="15%">${item.ProgramName == null ? "" : item.ProgramName}</td>
                            <td width="15%">${item.ClientName == null ? "" : item.ClientName}</td>
                            <td width="15%">${item.Type == 3 ? "Revoke request" :"Approval request" }</td>
@@ -42,15 +48,15 @@ function LoadRequest() {
                       
                         
                         careplansRequest += `<a onClick="OpenPopUp({CarePlanName:\'${item.CarePlanName}\',Type:\'${item.Type}\',ProgramName:\'${item.ProgramName}\',Message:\'${item.Message}\',ClientName:'${item.ClientName}\',
-                    UserName:'${item.UserName}',SentOn:'${item.SentOn}',Status:'${item.Status}',AcceptedBy:'${item.AcceptedBy}',AcceptedById:'${item.AcceptedById}',Status:'${item.Status}',RequestId:'${item.RequestId}',IsRead:'${item.IsRead}'})" class="btn btn-success text-white" style="cursor:pointer;">View Message</a>`
+                    UserName:'${item.UserName}',SentOn:'${item.SentOn}',RevokeRequestDate:'${item.RevokeRequestDate}',RevertMessage:'${item.RevertMessage}',Status:'${item.Status}',AcceptedBy:'${item.AcceptedBy}',AcceptedById:'${item.AcceptedById}',Status:'${item.Status}',RequestId:'${item.RequestId}',IsRead:'${item.IsRead}'})" class="btn btn-success text-white" style="cursor:pointer;">View Message</a>`
                         careplansRequest += `<a onClick="editCarePlan(${item.CarePlanId},PatientId=${item.PatientId})" class="btn btn-success text-white" style="cursor:pointer;">View Careplan</a>`
                         careplansRequest += `</div></td></tr>`;
                     });
                     careplanlist.html("").append(careplansRequest);
                 } else {
                     careplansRequest += `<tr>
-                                        <td colspan="7"><p class="text-center">No data found.</p></td>
-                                     <td style="display: none;"></td>
+                                      <td colspan="7"><p class="text-center">No data found.</p></td>
+                                      <td style="display: none;"></td>
                                       <td style="display: none;"></td>
                                       <td style="display: none;"></td>
                                       <td style="display: none;"></td>
@@ -94,8 +100,12 @@ function LoadRequestHistory() {
         dataType: "json",
         async: true,
         success: function (result) {
+            if (HistoryTable != '') {
+                HistoryTable.destroy();
+            }
             var careplansRequest = "";
             var careplanlist = $(".tblCarePlanHistory");
+            careplanlist.html("");
             if (result.length) {
                 $.each(result, function (index, item) {
                     careplansRequest += `<tr>
@@ -120,10 +130,23 @@ function LoadRequestHistory() {
                 });
                 careplanlist.html("").append(careplansRequest);
             } else {
-                careplansRequest += `<tr><td colspan="6"><p class="text-center">No data found.</p></td></tr>`;
+                careplansRequest += `<tr><td colspan="6"><p class="text-center">No data found.</p></td>
+                                      <td style="display: none;"></td>
+                                      <td style="display: none;"></td>
+                                      <td style="display: none;"></td>
+                                      <td style="display: none;"></td>
+                                      <td style="display: none;"></td>
+                                     </tr>`;
                 careplanlist.html("").append(careplansRequest);
             }
-
+            HistoryTable = $('#tblCarePlanHistory').DataTable({
+                retrieve: true,
+                searching: false,
+                'columnDefs': [{
+                    'targets': [5],
+                    'orderable': false
+                }]
+            });
                 $(".loaderOverlay").hide();
           
         },
@@ -137,6 +160,10 @@ function LoadRequestHistory() {
 
 function changeRequestStatus(status, requestid,type) {
     //$(".loaderOverlay").css("display", "flex");
+    if (isAzaxRequestSent) {
+        return
+    }
+    isAzaxRequestSent=true
     $.ajax({
         type: "Post",
         url: Apipath + '/api/PatientMain/Changerequeststatus?status=' + status + '&requestid=' + requestid + '&userid=' + userId + '&type=' + type,
@@ -144,31 +171,44 @@ function changeRequestStatus(status, requestid,type) {
         dataType: "json",
         async: true,
         success: function (result) {
+          
             if (result.status != 3) {
                 if (status == 1) {
                     toastr.success("Request is accepted");
-                    //var span = `<span class='status_Accepted'>Accepted by ${UserName}</span>`
-                    //$('#' + requestid).find('s_accepted').html(span);
+                    $('.requestApproveButton').css('display', 'inline-block')
+                    $('.requestAcceptButton').css('display', 'none')
+
+                 //   var span = `<span class='status_Accepted'></span>`
+                    $('.Model_Status').text('Accepted by myself');
+                    $('.Model_Status').removeClass('s_notApproved').addClass('s_accepted')
+                  
                 }
                 else if (status == 2) {
                     toastr.success("Request is approved");
+                    window.location.href = '/CarePlan/Requests';
                     //InboxTable.row($('#' + requestid)).remove().draw();
+                    $('#RequestModel').modal('hide');
                 }
             }
             else if(status==3){
                 toastr.success("Request is Accepted by someone");
+                $('#RequestModel').modal('hide');
             }
-            window.location.href = '/CarePlan/Requests';
-               
+           
+            isAzaxRequestSent = false
               //  $(".loaderOverlay").hide();
             },
         error: function (e) {
+            isAzaxRequestSent = false
             toastr.error("Something happen Wrong");
             $(".loaderOverlay").hide();
         }
     });
 }
 
+$('#RequestModel').on('hidden.bs.modal', function () {
+    LoadRequest();
+});
 
 function OpenPopUp(item) {
     if (item.IsRead == 'false') {
@@ -197,21 +237,49 @@ function OpenPopUp(item) {
     }
         
     var status = ''
-    var actionbutton=''
-    if (item.Status == 1) {
-        status = `<span class="s_accepted"> Request Accepted by ${item.AcceptedBy}</span>`
+    var messageBlock = ''
+    if (item.Type == 3) {
+        messageBlock = `<div class="message_block">
+            <h6>Message</h6>
+            <ul>
+                <li><b>Message sende while revert request</b><span>${item.RevokeRequestDate.split("T")[0]}<br>${item.RevertMessage = null ? "" : item.RevertMessage}</span></li>
+                <li><b>Message  send while approval request</b><span>${item.SentOn.split("T")[0]}<br>${item.Message == null ? "" : item.Message}</span></li>  
+            </ul>
+        </div>`
+
     }
     else {
-        status = '<span class="s_notApproved">Not Accepted</span>'
+        messageBlock = `<div class="message_block">
+            <h6>Message</h6>
+            <ul>
+                <li><b>Message  send while approval request</b><span>${item.SentOn.split("T")[0]}<br>${item.Message == null ? "" : item.Message}</span></li>
+            </ul>
+        </div>`
     }
-   
-    if (item.Status == "1" && item.AcceptedById == userId) {
-        actionbutton += `<a onClick="changeRequestStatus('2',${item.RequestId},${item.Type})" style="display:inline-block" class="btn btn-success text-white" style="cursor:pointer;">${item.Type==3?"Accept Revert Request":"Approve"}</a>`
-        actionbutton += `<a onClick="changeRequestStatus('1',${item.RequestId},${item.Type})" style="display:none" class="btn btn-success text-white" style="cursor:pointer;">Accept</a>`
+    var actionbutton=''
+    if (item.Status == 1) {
+        status = `<span class="s_accepted Model_Status"> Request Accepted by ${item.AcceptedBy}</span>`
+    }
+    else {
+        status = '<span class="s_notApproved Model_Status">Not Accepted</span>'
+    }
+  
+
+    if (item.Status == "1" && item.AcceptedById == userId && item.Type == 3)
+    {
+        actionbutton += `<a onClick="changeRequestStatus('2',${item.RequestId},1)" style="display:inline-block" class="btn btn-success text-white" style="cursor:pointer;">Accept Approve Request</a>`
+        actionbutton += `<a onClick="changeRequestStatus('2',${item.RequestId},3)" style="display:inline-block" class="btn btn-success text-white" style="cursor:pointer;">Accept Revoke Request</a>`
+
+    }
+    else if (item.Status == "1" && item.AcceptedById == userId && item.Type==1) {
+        actionbutton += `<a onClick="changeRequestStatus('2',${item.RequestId},1)" style="display:inline-block" class="btn btn-success text-white" style="cursor:pointer;">Accept Approve Request</a>`
+       
     }
     else if (item.Status == "null" || item.Status == "0") {
-        actionbutton += `<a onClick="changeRequestStatus('2',${item.RequestId},${item.Type})" style="display:none" class="btn btn-success text-white" style="cursor:pointer;">${item.Type == 3 ? "Accept Revert Request" : "Approve"}</a>`
-        actionbutton += `<a onClick="changeRequestStatus('1',${item.RequestId},${item.Type})" style="display:block"  class="btn btn-success text-white" style="cursor:pointer;">Accept</a>`
+        
+        actionbutton += `<a onClick="changeRequestStatus('1',${item.RequestId},${item.Type})" style="display:inline-block"  class="btn btn-success text-white requestAcceptButton" style="cursor:pointer;">Accept Request</a>`
+        actionbutton += `<a onClick="changeRequestStatus('2',${item.RequestId},1)" style="display:none" class="btn btn-success text-white requestApproveButton" style="cursor:pointer;">Accept Approve Request</a>`
+
     }
     var modelContent =`  <table class="table">
                     <tbody>
@@ -245,10 +313,7 @@ function OpenPopUp(item) {
                         </tr>
                     </tbody>
                 </table>
-            <div class="message_block">
-                <h6>Message</h6>
-                <p>${item.Message}</p>
-             </div>
+             ${messageBlock}
 
 ${actionbutton}`
     

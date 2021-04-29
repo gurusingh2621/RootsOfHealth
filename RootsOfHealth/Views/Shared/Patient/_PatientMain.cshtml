@@ -2318,6 +2318,9 @@
     var IsUserCarePlanApprover = '@Session["IsCarePlanApprover"]'
     var IsRequestSent = false;
     var IsCarePlanChanged = false;
+    var IsCarePlanApproved = false;
+    var RequestType = '';
+    var RequestStatus = 0;
     var careplanUploadedPath = "@System.Web.Configuration.WebConfigurationManager.AppSettings["CarePlanUploadPath"]";
 </script>
 <script src="~/Scripts/jquery-ui.js"></script>
@@ -2327,6 +2330,7 @@
 <script src="~/Scripts/Careplan/CareplanNeedsAndGoals.js"></script>
 <script src="~/Scripts/Careplan/CarePlanSummary.js"></script>
 <script>
+    var isAzaxRequestSent = false;
     $('#UserAndGroups').closest('.form-group').show();
     if (IsUserCarePlanApprover == 'False') {
         $('.requestItem').removeClass('d-none');
@@ -2380,10 +2384,15 @@
         $('#RequestUserModel').modal('show');
 
     }
+   
     function ApprovalOrRevertRequestRequest(type) {
+        if (isAzaxRequestSent) {
+            return
+        }
+        isAzaxRequestSent=true
         var SelectedUsers = [];
         var SelectedGroups = [];
-        
+       
         if (type == 1) {
             var UsersNGroups = $('#UserAndGroups').val();
             for (let i = 0; i < UsersNGroups.length; i++) {
@@ -2399,6 +2408,12 @@
                 toastr.error("Please select atleast  an user or a group");
                 return
             }
+            if ($('#RequestMessage').val().trim() == '') {
+                toastr.error("Please write a message");
+                return
+            }
+        }
+        if (type == 3) {
             if ($('#RequestMessage').val().trim() == '') {
                 toastr.error("Please write a message");
                 return
@@ -2422,11 +2437,12 @@
             dataType: "json",
             async: false,
             success: function (result) {
+                isAzaxRequestSent = false;
                 if (result == 1) {
                     toastr.success("Approval Request has sent successfully");
-                    $('#careplanStatus').css('display', 'block');
-                    $('#careplanStatus .ApprovalRequestSent').css('display', 'block')
-                    $('#btnRevertRequest').css('display', 'block');
+                    //$('#careplanStatus').css('display', 'block');
+                    //$('#careplanStatus .ApprovalRequestSent').css('display', 'block')
+                    //$('#btnRevertRequest').css('display', 'block');
                     $('#RequestUserModel').modal('hide')
                     getCarePlanRequest()
                     IsRequestSent=true
@@ -2434,7 +2450,7 @@
                 else if (result == 2) {
                     toastr.success("Approval request is reverted");
                     $('#btnApproval').css('display', 'block');
-                    $('#btnApproval').prop('disabled',true)
+                    $('#btnApproval').prop('disabled',false)
                     IsRequestSent = false;
                 }
                 else if (result == 3) {
@@ -2444,8 +2460,11 @@
                 }
                 else if (result == 4) {
                     toastr.success("Revoke Request has sent successfully");
-                    $('#careplanStatus').css('display', 'block');
-                    $('#careplanStatus .RevokeRequestSent').css('display', 'block')
+                    //$('#careplanStatus').css('display', 'block');
+                    //$('#careplanStatus .RevokeRequestSent').css('display', 'block')
+                    getCarePlanRequest()
+                    $('#RequestUserModel').modal('hide')
+                    getCarePlanRequest()
                 }
                 else if (result == 5) {
                     $('#btnApproval').css('display', 'block');
@@ -2454,6 +2473,7 @@
                 }
             },
             error: function (e) {
+                isAzaxRequestSent = false;
                 toastr.error("Something happen Wrong");
                 $(".loaderOverlay").hide();
             }
