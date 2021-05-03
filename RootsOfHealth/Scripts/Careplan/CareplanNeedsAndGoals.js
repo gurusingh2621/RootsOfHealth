@@ -45,7 +45,7 @@ function NeedsGoals(result) {
             needstring += `<li class="hasChild" data-needid="${result[i].NeedID}" data-status="${result[i].NeedStatus}" data-defaultNeed="${result[i].DefaultneedId}">
                                 <div class="needItem">
                                 <div class="editNeed">
-                                   <span class="countgoal not_start_circle needCount" onclick="ExpandCollapseFromGoalCount(this)">${notStartedGoals}</span>
+                                   <span class="countgoal not_start_circle needCountItems" onclick="ExpandCollapseFromGoalCount(this)">${notStartedGoals}</span>
                                    <div class="w-100">
                                    <span  class="needDesc">${result[i].NeedDesc}</span>
                                     <div class="edit_actions needAction">
@@ -184,7 +184,7 @@ function SaveNeed(e) {
                 var needString = `<li class="hasChild opened" data-needid="${result}" data-status="0" data-defaultNeed="0">
                                 <div class="needItem">
                                 <div class="editNeed">
-                                <span class="countgoal not_start_circle needCount" onclick="ExpandCollapseFromGoalCount(this)">0</span>
+                                <span class="countgoal not_start_circle needCountItems" onclick="ExpandCollapseFromGoalCount(this)">0</span>
                                 <div class="w-100">
                                 <span class="needDesc">${$(e).val()}</span>
                                 <div class="edit_actions needAction">
@@ -419,7 +419,7 @@ function getCarePlanRequest() {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
-            
+
             if (result == null) {
                 $('#btnApproval').css('display', 'block');
                 $('#careplanStatus').css('display', 'block');
@@ -429,6 +429,7 @@ function getCarePlanRequest() {
                 
             }
             else {
+                RequestId = result.RequestId;
                 prevSelectedCarePlan = result.CarePlanStatus;
                 $('#ddlcareplanstatus').val(result.CarePlanStatus)
                 IsCarePlanApproved = result.IsApproved
@@ -438,21 +439,15 @@ function getCarePlanRequest() {
                     IsRequestSent = false
                     $('#careplanStatus').css('display', 'block');
                     $('#btnApproval').css('display', 'block');
-                    if (IsCarePlanChanged) {
+                    if (IsCarePlanApproved) {
+                        $('#careplanStatus .RequestApproved').css('display', 'block')
+                        $('#btnApproval').prop('disabled', true);
+                        $('#btnApproval').addClass('disabled')
+                    }
+                    else {
+                        $('#careplanStatus .requiredApproval').css('display', 'block');
                         $('#btnApproval').prop('disabled', false);
                         $('#btnApproval').removeClass('disabled')
-                        $('#careplanStatus .requiredApproval').css('display', 'block');
-                    } else {
-                        if (IsCarePlanApproved) {
-                            $('#careplanStatus .RequestApproved').css('display', 'block')
-                            $('#btnApproval').prop('disabled', true);
-                            $('#btnApproval').addClass('disabled')
-                        }
-                        else {
-                            $('#careplanStatus .requiredApproval').css('display', 'block');
-                            $('#btnApproval').prop('disabled', false);
-                            $('#btnApproval').removeClass('disabled')
-                        }
                     }
                 }
                 else {
@@ -480,6 +475,15 @@ function getCarePlanRequest() {
                     else if (result.Status == 1 && result.Type == 3) {
                         $('#careplanStatus').css('display', 'block');
                         $('#careplanStatus .RevokeRequestSent').text('Revoke request is sent to ' + result.AcceptedBy).css('display', 'block');
+                    }
+                    else if (result.Status == null && result.Type == 2) {
+                        IsRequestSent = false;
+                        $('#careplanStatus').css('display', 'block');
+                        $('#btnApproval').css('display', 'block');
+                        $('#btnApproval').prop('disabled', false);
+                        $('#btnApproval').removeClass('disabled')
+                        $('#careplanStatus').css('display', 'block');
+                        $('#careplanStatus .requiredApproval').css('display', 'block');
                     }
                 }
             }
@@ -572,17 +576,17 @@ function DeleteNeed(obj) {
         }
     }
 
-    $.ajax({
-        type: "GET",
-        url: Apipath + '/api/PatientMain/editneed?NeedId=' + $(obj).closest("li").attr("data-needid"),
-        contentType: 'application/json; charset=UTF-8',
-        dataType: "json",
-        success: function (result) {
-            switch (result) {
-                case 0:
-                    toastr.error("Cannot Delete.  Item contains historical Data");
-                    break;
-                default:
+    //$.ajax({
+    //    type: "GET",
+    //    url: Apipath + '/api/PatientMain/editneed?NeedId=' + $(obj).closest("li").attr("data-needid"),
+    //    contentType: 'application/json; charset=UTF-8',
+    //    dataType: "json",
+    //    success: function (result) {
+    //        switch (result) {
+    //            case 0:
+    //                toastr.error("Cannot Delete.  Item contains historical Data");
+    //                break;
+    //            default:
                     $.confirm({
                         icon: 'fas fa-exclamation-triangle',
                         title: 'Confirm',
@@ -622,13 +626,13 @@ function DeleteNeed(obj) {
                             }
                         }
                     });
-                    break;
-            }
-        }, error: function (e) {
-            toastr.error("Something happen Wrong");
-            $(".loaderOverlay").hide();
-        }
-    });
+                    
+           // }
+    //    }, error: function (e) {
+    //        toastr.error("Something happen Wrong");
+    //        $(".loaderOverlay").hide();
+    //    }
+    //});
     
 }
 
@@ -671,17 +675,17 @@ function DeleteGoal(obj) {
             return;
         }
     }
-    $.ajax({
-        type: "GET",
-        url: Apipath + '/api/PatientMain/editgoal?GoalId=' + $(obj).closest("li").attr("data-goalid"),
-        contentType: 'application/json; charset=UTF-8',
-        dataType: "json",
-        success: function (result) {
-            switch (result) {
-                case 0:
-                    toastr.error("Cannot Delete.  Item contains historical Data");
-                    break;
-                default:
+    //$.ajax({
+    //    type: "GET",
+    //    url: Apipath + '/api/PatientMain/editgoal?GoalId=' + $(obj).closest("li").attr("data-goalid"),
+    //    contentType: 'application/json; charset=UTF-8',
+    //    dataType: "json",
+    //    success: function (result) {
+    //        switch (result) {
+    //            case 0:
+    //                toastr.error("Cannot Delete.  Item contains historical Data");
+    //                break;
+    //            default:
                    $.confirm({
         icon: 'fas fa-exclamation-triangle',
         title: 'Confirm',
@@ -728,13 +732,13 @@ function DeleteGoal(obj) {
             }
         }
     })
-                    break;
-            }
-        }, error: function (e) {
-            toastr.error("Something happen Wrong");
-            $(".loaderOverlay").hide();
-        }
-    });
+    //                break;
+    //        }
+    //    }, error: function (e) {
+    //        toastr.error("Something happen Wrong");
+    //        $(".loaderOverlay").hide();
+    //    }
+    //});
 }
 function AddNewGoalFromNeed(e) {
     if (!CanEditCarePlan()) {
@@ -1174,7 +1178,7 @@ function saveEditNeed(obj) {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
-            updateNeedStatusOnEditNeed(o)
+            updateNeedStatusOnEditNeed(obj)
             $("#needContent").removeClass("btnClicked");
             $(needObj).prev().html("").append(needObj.val());
                 $(needObj).prev().show();
@@ -1790,13 +1794,13 @@ function saveNewNeed(obj) {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
-            updateNeedStatusOnEditNeed(o)
+            updateNeedStatusOnEditNeed(obj)
             $("#needContent").removeClass("btnClicked");
             if (needTxt.closest("li").attr("data-needid") == undefined) {
                 var needString = `<li class="hasChild opened" data-needid="${result}" data-status="0" data-defaultNeed="0">
                                 <div class="needItem">
                                 <div class="editNeed">
-                                <span class="countgoal not_start_circle needCount" onclick="ExpandCollapseFromGoalCount(this)">0</span>
+                                <span class="countgoal not_start_circle needCountItems" onclick="ExpandCollapseFromGoalCount(this)">0</span>
                                 <div class="w-100">
                                 <span class="needDesc">${needTxt.val()}</span>
                                 <div class="edit_actions needAction">
@@ -2372,7 +2376,7 @@ function updateNeedStatus(obj) {
     if (currentStatus == "2") {
         $(need).attr('data-status', '1');
         var needStatus = $(need).find('.needStatus').removeClass('completed').addClass('inProgress').text('In Progress');
-        $(need).find('.needCount').removeClass('completed').addClass('inProgress');
+        $(need).find('.needCountItems').removeClass('completed').addClass('inProgress');
     }
 }
 function updateNeedStatusOnEditNeed(obj) {
@@ -2381,7 +2385,7 @@ function updateNeedStatusOnEditNeed(obj) {
     if (status == '2') {
         $(need).attr('data-status', '1');
         var needStatus = $(need).find('.needStatus').removeClass('completed').addClass('inProgress').text('In Progress');
-        $(need).find('.needCount').removeClass('completed').addClass('inProgress');
+        $(need).find('.needCountItems').removeClass('completed').addClass('inProgress');
     }
 }
 
