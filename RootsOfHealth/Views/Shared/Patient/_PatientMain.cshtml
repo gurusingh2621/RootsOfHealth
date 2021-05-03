@@ -2420,8 +2420,12 @@
                 return
             }
         }
+        var message = $('#RequestMessage').val()
+        if (message != null) {
+            message = message.trim();
+        }
         var Model = {
-            Message: $('#RequestMessage').val(),
+            Message: message,
             SentBy: userId,
             RequestId: RequestId,
             CareplanId: careplanid,
