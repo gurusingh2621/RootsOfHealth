@@ -30,7 +30,7 @@ function LoadRequest() {
                         if (!item.IsRead) {
                             ReadCount++;
                         }
-                        careplansRequest += `<tr id="${item.RequestId}" class="${item.IsRead ? '' : 'unread_mess'}">
+                        careplansRequest += `<tr id="${item.RequestId}" class="${item.IsRead ? 'unread_mess' :'' }">
                            <td width="20%"><a onClick="editCarePlan(${item.CarePlanId},PatientId=${item.PatientId})" class="btn btn-link" style="cursor:pointer;">${item.CarePlanName == null ? "" : item.CarePlanName}</a></td>
                            <td width="15%">${item.ProgramName == null ? "" : item.ProgramName}</td>
                            <td width="15%">${item.ClientName == null ? "" : item.ClientName}</td>

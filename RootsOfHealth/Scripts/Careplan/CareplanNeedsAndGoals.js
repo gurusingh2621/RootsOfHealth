@@ -179,6 +179,7 @@ function SaveNeed(e) {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
+            updateNeedStatusOnEditNeed(e)
             if ($(e).closest("li").attr("data-needid") == undefined) {
                 var needString = `<li class="hasChild opened" data-needid="${result}" data-status="0" data-defaultNeed="0">
                                 <div class="needItem">
@@ -271,6 +272,7 @@ function SaveNeed(e) {
                     }
                 });
             }
+           
             changeCareplanStatus()
 
         },
@@ -1109,10 +1111,12 @@ function EditNeed(o) {
                                                 contentType: 'application/json; charset=UTF-8',
                                                 dataType: "json",
                                                 success: function (result) {
+                                                    updateNeedStatusOnEditNeed(o)
                                                     $("#needContent").removeClass("btnClicked");
                                                     $(needRef).html("").append($(needRef).next().val()).show();
                                                     $(needRef).next().remove();
                                                     $(needRef).next().hide();
+                                                   
                                                     changeCareplanStatus()
                                                 },
                                                 error: function (e) {
@@ -1170,11 +1174,13 @@ function saveEditNeed(obj) {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
+            updateNeedStatusOnEditNeed(o)
             $("#needContent").removeClass("btnClicked");
             $(needObj).prev().html("").append(needObj.val());
                 $(needObj).prev().show();
                 $(needObj).next().hide();
             $(needObj).remove();  
+           
             changeCareplanStatus()
         },
         error: function (e) {
@@ -1784,6 +1790,7 @@ function saveNewNeed(obj) {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
+            updateNeedStatusOnEditNeed(o)
             $("#needContent").removeClass("btnClicked");
             if (needTxt.closest("li").attr("data-needid") == undefined) {
                 var needString = `<li class="hasChild opened" data-needid="${result}" data-status="0" data-defaultNeed="0">
@@ -1871,6 +1878,7 @@ function saveNewNeed(obj) {
                     }
                 });
             }
+           
             changeCareplanStatus()
             
 
@@ -2366,6 +2374,14 @@ function updateNeedStatus(obj) {
         var needStatus = $(need).find('.needStatus').removeClass('completed').addClass('inProgress').text('In Progress');
         $(need).find('.needCount').removeClass('completed').addClass('inProgress');
     }
-   
+}
+function updateNeedStatusOnEditNeed(obj) {
+    var need = $(obj).closest('.hasChild');
+    var status = $(need).attr('data-status');
+    if (status == '2') {
+        $(need).attr('data-status', '1');
+        var needStatus = $(need).find('.needStatus').removeClass('completed').addClass('inProgress').text('In Progress');
+        $(need).find('.needCount').removeClass('completed').addClass('inProgress');
+    }
 }
 
