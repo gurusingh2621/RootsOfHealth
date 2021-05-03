@@ -2321,6 +2321,7 @@
     var IsCarePlanApproved = false;
     var RequestType = '';
     var RequestStatus = 0;
+    var RequestId=0
     var careplanUploadedPath = "@System.Web.Configuration.WebConfigurationManager.AppSettings["CarePlanUploadPath"]";
 </script>
 <script src="~/Scripts/jquery-ui.js"></script>
@@ -2419,10 +2420,10 @@
                 return
             }
         }
-        
         var Model = {
             Message: $('#RequestMessage').val(),
             SentBy: userId,
+            RequestId: RequestId,
             CareplanId: careplanid,
             UserIds: SelectedUsers,
             GroupIds: SelectedGroups,
@@ -2444,7 +2445,6 @@
                     //$('#careplanStatus .ApprovalRequestSent').css('display', 'block')
                     //$('#btnRevertRequest').css('display', 'block');
                     $('#RequestUserModel').modal('hide')
-                    getCarePlanRequest()
                     IsRequestSent=true
                 }
                 else if (result == 2) {
@@ -2462,15 +2462,14 @@
                     toastr.success("Revoke Request has sent successfully");
                     //$('#careplanStatus').css('display', 'block');
                     //$('#careplanStatus .RevokeRequestSent').css('display', 'block')
-                    getCarePlanRequest()
                     $('#RequestUserModel').modal('hide')
-                    getCarePlanRequest()
                 }
                 else if (result == 5) {
                     $('#btnApproval').css('display', 'block');
                     toastr.success("Revoke Request cant be sent");
                     IsRequestSent =false;
                 }
+                getCarePlanRequest()
             },
             error: function (e) {
                 isAzaxRequestSent = false;
