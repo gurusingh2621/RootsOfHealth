@@ -45,7 +45,7 @@ function NeedsGoals(result) {
             needstring += `<li class="hasChild" data-needid="${result[i].NeedID}" data-status="${result[i].NeedStatus}" data-defaultNeed="${result[i].DefaultneedId}">
                                 <div class="needItem">
                                 <div class="editNeed">
-                                   <span class="countgoal not_start_circle needCount" onclick="ExpandCollapseFromGoalCount(this)">${notStartedGoals}</span>
+                                   <span class="countgoal not_start_circle needCountItems" onclick="ExpandCollapseFromGoalCount(this)">${notStartedGoals}</span>
                                    <div class="w-100">
                                    <span  class="needDesc">${result[i].NeedDesc}</span>
                                     <div class="edit_actions needAction">
@@ -184,7 +184,7 @@ function SaveNeed(e) {
                 var needString = `<li class="hasChild opened" data-needid="${result}" data-status="0" data-defaultNeed="0">
                                 <div class="needItem">
                                 <div class="editNeed">
-                                <span class="countgoal not_start_circle needCount" onclick="ExpandCollapseFromGoalCount(this)">0</span>
+                                <span class="countgoal not_start_circle needCountItems" onclick="ExpandCollapseFromGoalCount(this)">0</span>
                                 <div class="w-100">
                                 <span class="needDesc">${$(e).val()}</span>
                                 <div class="edit_actions needAction">
@@ -1796,7 +1796,7 @@ function saveNewNeed(obj) {
                 var needString = `<li class="hasChild opened" data-needid="${result}" data-status="0" data-defaultNeed="0">
                                 <div class="needItem">
                                 <div class="editNeed">
-                                <span class="countgoal not_start_circle needCount" onclick="ExpandCollapseFromGoalCount(this)">0</span>
+                                <span class="countgoal not_start_circle needCountItems" onclick="ExpandCollapseFromGoalCount(this)">0</span>
                                 <div class="w-100">
                                 <span class="needDesc">${needTxt.val()}</span>
                                 <div class="edit_actions needAction">
@@ -2372,7 +2372,7 @@ function updateNeedStatus(obj) {
     if (currentStatus == "2") {
         $(need).attr('data-status', '1');
         var needStatus = $(need).find('.needStatus').removeClass('completed').addClass('inProgress').text('In Progress');
-        $(need).find('.needCount').removeClass('completed').addClass('inProgress');
+        $(need).find('.needCountItems').removeClass('completed').addClass('inProgress');
     }
 }
 function updateNeedStatusOnEditNeed(obj) {
@@ -2381,7 +2381,7 @@ function updateNeedStatusOnEditNeed(obj) {
     if (status == '2') {
         $(need).attr('data-status', '1');
         var needStatus = $(need).find('.needStatus').removeClass('completed').addClass('inProgress').text('In Progress');
-        $(need).find('.needCount').removeClass('completed').addClass('inProgress');
+        $(need).find('.needCountItems').removeClass('completed').addClass('inProgress');
     }
 }
 
