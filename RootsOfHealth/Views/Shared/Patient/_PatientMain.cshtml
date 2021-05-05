@@ -1922,13 +1922,13 @@
                 <div class="form-group">
                     <textarea class="form-control" id="RequestMessage" style="display:block!important;"></textarea>
                 </div>
-                <button class="btn btn-success" id="btnsendAproval" onclick="ApprovalOrRevertRequestRequest('1')">Send Request</button>
-                <button class="btn btn-success" id="btnsendRevoke" onclick="ApprovalOrRevertRequestRequest('3')">Revoke Request</button>
+                <button class="btn btn-success" id="btnsendAproval" onclick="ApprovalOrRevertRequestRequest('1');$(this).prop('disabled',true)">Send Request</button>
+                <button class="btn btn-success" id="btnsendRevoke" onclick="ApprovalOrRevertRequestRequest('3');$(this).prop('disabled',true)">Revoke Request</button>
             </div>
         </div>
     </div>
 </div>
-
+  
 <div class="modal fade" id="AMDProfile" data-toggle="modal" tabindex="-1" role="dialog" aria-labelledby="AMDProfileModal"
      aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -2311,6 +2311,7 @@
         </div>
     </div>
 </div>
+    </div>
 <!--Default need popup end here-->
 <script>
     var userId = "@Session["userid"]";
@@ -2407,16 +2408,22 @@
             }
             if (SelectedUsers.length <= 0 && SelectedGroups.length <= 0) {
                 toastr.error("Please select atleast  an user or a group");
+                $('#btnsendAproval').prop('disabled', false);
+                $('#btnsendRevoke').prop('disabled',false)
                 return
             }
             if ($('#RequestMessage').val().trim() == '') {
                 toastr.error("Please write a message");
+                $('#btnsendAproval').prop('disabled', false);
+                $('#btnsendRevoke').prop('disabled', false)
                 return
             }
         }
         if (type == 3) {
             if ($('#RequestMessage').val().trim() == '') {
                 toastr.error("Please write a message");
+                $('#btnsendAproval').prop('disabled', false);
+                $('#btnsendRevoke').prop('disabled', false)
                 return
             }
         }
@@ -2442,6 +2449,7 @@
             dataType: "json",
             async: false,
             success: function (result) {
+                
                 isAzaxRequestSent = false;
                 if (result == 1) {
                     toastr.success("Approval Request has sent successfully");
@@ -2458,7 +2466,7 @@
                     IsRequestSent = false;
                 }
                 else if (result == 3) {
-                    toastr.error("cant be reverted");
+                    toastr.error("Approval request cant be reverted");
                     $('#btnRevokeRequest').css('display', 'block');
                     IsRequestSent = true;
                 }
@@ -2470,13 +2478,22 @@
                 }
                 else if (result == 5) {
                     $('#btnApproval').css('display', 'block');
-                    toastr.success("Revoke Request cant be sent");
+                    toastr.error("Revoke Request cant be sent");
                     IsRequestSent =false;
                 }
+                else if (result == 6) {
+                    toastr.success("Approval request has already been sent");
+                    IsRequestSent = false;
+                    $('#RequestUserModel').modal('hide')
+                }
                 getCarePlanRequest()
+                //$('#btnsendAproval').prop('disabled', false);
+                //$('#btnsendRevoke').prop('disabled',false)
             },
             error: function (e) {
                 isAzaxRequestSent = false;
+                $('#btnsendAproval').prop('disabled', false);
+                $('#btnsendRevoke').prop('disabled', false)
                 toastr.error("Something happen Wrong");
                 $(".loaderOverlay").hide();
             }

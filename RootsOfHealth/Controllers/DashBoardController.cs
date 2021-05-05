@@ -1017,6 +1017,24 @@ namespace RootsOfHealth.Controllers
             {
                 return Content("1");
             }
+            if (Patient.CellPhone != null)
+            {
+                Patient.CellPhone = Patient.CellPhone.Replace("(", "").Replace(")", "").Replace("-", "").Replace(" ", "");
+            }
+            if (AmdModel[0].SSN != null)
+            {
+                var SSNString = AmdModel[0].SSN.Replace("-", "").Replace(" ", "");
+                if (SSNString.Length < 9)
+                {
+                    SSNString = SSNString.PadLeft(9, '0');
+                }
+                AmdModel[0].SSN = SSNString;
+            }
+            if (AmdModel[0].Gender != null)
+            {
+                AmdModel[0].Gender = AmdModel[0].Gender == "M" ? "Male" : "Female";
+            }
+
 
             var CombineAMDAndPatient = Tuple.Create<AmdProfileBO, PatientMainBO>(AmdModel[0], Patient);
             return PartialView("~/Views/Shared/Patient/_AMDProfile.cshtml", CombineAMDAndPatient);

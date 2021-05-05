@@ -6,6 +6,8 @@ var newGoalRef = "";
 var defaultneedLen = 0;
 var needStatus = 0;
 var goalStatus = 0;
+var DisableGoalFocusOut = false;
+var DisableNeedFocusOut = false;
 var needGoalEnum = {
     NotStarted: 0,
     InProgress: 1,
@@ -14,6 +16,7 @@ var needGoalEnum = {
 $(".txtNeed").keypress(function (event) {
     var keycode = event.keyCode || event.which;
     if (keycode == '13' && !event.shiftKey) {
+        DisableNeedFocusOut=true
         SaveNeed(this);
         event.preventDefault();
     }
@@ -87,7 +90,7 @@ function NeedsGoals(result) {
         needList.find("li.last-child").before(needstring);
         $("span.completedNeedCount").html("").append(completedNeeds);
         //disabale form to edit if completed commented functionality
-       /* if ($("#ddlcareplanstatus").val() != "4") {*/
+        if ($("#ddlcareplanstatus").val() != "4") {
             $(".needGoalHover").removeClass("disableHoverItem");
             $(".status_labels_div").find("span:last").removeClass("disableHoverItem");
             $("a.dragIcon").css("display", "inline-block");
@@ -144,13 +147,13 @@ function NeedsGoals(result) {
                     }
                 }
             });
-        //} 
-        //else {
-        //    $(".needGoalHover").addClass("disableHoverItem");
-        //    $(".status_labels_div").find("span:last").addClass("disableHoverItem");
-        //    $("a.dragIcon").css("display", "none");
-        //    $("div.itemHoverActions").css("display", "none");
-        //}
+        } 
+        else {
+            $(".needGoalHover").addClass("disableHoverItem");
+            $(".status_labels_div").find("span:last").addClass("disableHoverItem");
+            $("a.dragIcon").css("display", "none");
+            $("div.itemHoverActions").css("display", "none");
+        }
     }
     $(".loaderOverlay").hide();
 }
@@ -162,6 +165,41 @@ function SaveNeed(e) {
         toastr.error("", "Need is required", { progressBar: true });
         return;
     }
+    if (IsCarePlanApproved && IsUserCarePlanApprover == 'False') {
+        $.confirm({
+            icon: 'fas fa-exclamation-triangle',
+            title: 'Confirm',
+            content: 'Care plan  status would be changed to unapproved and need approval to complete any need, goal or care plan. Press Confirm to continue.',
+            type: 'red',
+            typeAnimated: true,
+            buttons: {
+                confirm: {
+                    btnClass: 'btn-danger',
+                    action: function () {
+                        SaveNeedFunction(e)
+                        IsCarePlanApproved=false
+                    }
+                },
+                cancel: function () {
+                    var needTxt = $(".txtNeed");
+                    $(e).closest('.editNeed').find('.needAction #btnCancelEditNeed').click();
+                    $("#needContent").removeClass("btnClicked");
+                    needTxt.val("").css("height", "21px");
+                    NeedFocus();
+
+                }
+            }
+
+        });
+    } else {
+        SaveNeedFunction(e)
+    }
+
+
+  
+}
+
+function SaveNeedFunction(e) {
     var needModel = {
         NeedID: $(e).closest("li").attr("data-needid"),
         NeedDesc: $(e).val(),
@@ -272,7 +310,7 @@ function SaveNeed(e) {
                     }
                 });
             }
-           
+
             changeCareplanStatus()
 
         },
@@ -287,6 +325,37 @@ function SaveGoal(e) {
         toastr.error("", "Goal is required", { progressBar: true });
         return;
     }
+    if (IsCarePlanApproved && IsUserCarePlanApprover == 'False') {
+        $.confirm({
+            icon: 'fas fa-exclamation-triangle',
+            title: 'Confirm',
+            content: 'Care plan  status would be changed to unapproved and need approval to complete any need, goal or care plan. Press Confirm to continue.',
+            type: 'red',
+            typeAnimated: true,
+            buttons: {
+                confirm: {
+                    btnClass: 'btn-danger',
+                    action: function () {
+                        SaveGoalfunction(e)
+                        IsCarePlanApproved = false
+                    }
+                },
+                cancel: function () {
+                    $(e).closest('.editNeed').find('.goalAction #btnCancelEditGoal').click();
+                    var goaltxt = $(".txtGoal");
+                    $("#needContent").removeClass("btnClicked");
+                    goaltxt.val("").css("height", "21px").focus();
+                }
+            }
+
+        });
+    } else {
+        SaveGoalfunction(e)
+    }
+   
+   
+}
+function SaveGoalfunction(e) {
     var goalModel = {
         GoalID: $(e).closest("li").attr("data-goalid"),
         GoalDesc: $(e).val(),
@@ -398,7 +467,7 @@ function SaveGoal(e) {
                 });
             }
             changeCareplanStatus()
-           
+
 
         }, error: function (e) {
             toastr.error("Something happen Wrong");
@@ -407,11 +476,18 @@ function SaveGoal(e) {
     })
 }
 function actionRequest() {
-    
+    if ($("a.need-nav").parent().hasClass("disabled")) {
+        toastr.error("First submit basic information to enable needs and goals");
+        return false;
+    }
     getCarePlanRequest()
     $("a.request-nav").tab('show');
   }
 function getCarePlanRequest() {
+    $('#btnsendAproval').prop('disabled', false);
+    $('#btnsendRevoke').prop('disabled', false)
+     DisableGoalFocusOut = false;
+     DisableNeedFocusOut = false;
     hideAprovalBtnStatus()
     $.ajax({
         type: "GET",
@@ -419,14 +495,12 @@ function getCarePlanRequest() {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
-
             if (result == null) {
                 $('#btnApproval').css('display', 'block');
                 $('#careplanStatus').css('display', 'block');
                 $('#btnApproval').prop('disabled', false);
                 $('#btnApproval').removeClass('disabled')
                 $('#careplanStatus .requiredApproval').css('display', 'block');
-                
             }
             else {
                 RequestId = result.RequestId;
@@ -504,7 +578,7 @@ function hideAprovalBtnStatus(){
     $('#btnRevokeRequest').css('display', 'none');
     $('#careplanStatus').css('display', 'none');
     $('#careplanStatus .ApprovalRequestSent').css('display', 'none');
-    $('#careplanStatus .RequestUnderRleview').css('display', 'none');
+    $('#careplanStatus .RequestUnderRleview').css('display', 'none'); 
     $('#careplanStatus .RequestUnderReview').css('display', 'none');
     $('#careplanStatus .RevokeRequestSent').css('display', 'none');
     $('#careplanStatus .sentGroups').css('display', 'none');
@@ -514,25 +588,26 @@ function hideAprovalBtnStatus(){
     $('#careplanStatus .notApproved').css('display', 'none')
 }
 function GetNeedAndGoalList() {
-    if (IsUserCarePlanApprover == 'False') {
-        getCarePlanRequest()
-    }
+   
     if ($("a.need-nav").parent().hasClass("disabled")) {
         toastr.error("First submit basic information to enable needs and goals");
         return false;
-}
+    }
+    if (IsUserCarePlanApprover == 'False') {
+        getCarePlanRequest()
+    }
    
 
     $("a.need-nav").tab('show');
     $(".loaderOverlay").show();
     $(".addNewNeed").tooltip();
-   // if ($("#ddlcareplanstatus").val() == "4") {        
-        //$(".txtNeed,.txtOutcome,.txtIntervention").attr("disabled", true);
-        //$("a.addNewNeed,li.last-child").css("display", "none");
-   // } else {
+    if ($("#ddlcareplanstatus").val() == "4") {        
+        $(".txtNeed,.txtOutcome,.txtIntervention").attr("disabled", true);
+        $("a.addNewNeed,li.last-child").css("display", "none");
+    } else {
         $(".txtNeed,.txtOutcome,.txtIntervention").removeAttr("disabled");
         $("a.addNewNeed,li.last-child").css("display", "block");
-    //}
+    }
     $.ajax({
         type: "GET",
         url: Apipath + '/api/PatientMain/getneedbycareplanid?CarePlanId=' + careplanid,
@@ -575,7 +650,7 @@ function DeleteNeed(obj) {
             return;
         }
     }
-
+   
     //$.ajax({
     //    type: "GET",
     //    url: Apipath + '/api/PatientMain/editneed?NeedId=' + $(obj).closest("li").attr("data-needid"),
@@ -675,6 +750,7 @@ function DeleteGoal(obj) {
             return;
         }
     }
+   
     //$.ajax({
     //    type: "GET",
     //    url: Apipath + '/api/PatientMain/editgoal?GoalId=' + $(obj).closest("li").attr("data-goalid"),
@@ -786,6 +862,7 @@ function AddNewGoalFromNeed(e) {
     $(".txtGoal").keypress(function (event) {
         var keycode = event.keyCode || event.which;
         if (keycode == '13' && !event.shiftKey) {
+            DisableGoalFocusOut=true
             SaveGoal(this);
             event.preventDefault();
         }
@@ -890,10 +967,11 @@ function EditGoal(o) {
     if (!CanEditCarePlan()) {
         return
     }
-
+    
     if ($(o).hasClass("disableHoverItem")) {
         return;
     }
+    
     //$.ajax({
     //    type: "GET",
     //    url: Apipath + '/api/PatientMain/editgoal?GoalId=' + $(o).closest("li").attr("data-goalid"),
@@ -932,7 +1010,9 @@ function EditGoal(o) {
                         $(".edittxtGoal").keypress(function (event) {
                             var keycode = event.keyCode || event.which;
                             if (keycode == '13' && !event.shiftKey) {
-                                SaveGoal(this);
+                                
+                                DisableGoalFocusOut = true
+                                SaveGoal(this, goalRef);
                                 event.preventDefault();
                             }
                         });
@@ -941,6 +1021,11 @@ function EditGoal(o) {
                         //    $(this).remove();
                         //})
                         $(".edittxtGoal").focusout(function () {
+                            
+                            if (DisableGoalFocusOut) {
+                                DisableGoalFocusOut = false;
+                                return;
+                            }
                             goalRef = item;
                             if ($(goalRef).html() == $(goalRef).next().val()) {
                                 return;
@@ -966,33 +1051,32 @@ function EditGoal(o) {
                                                 toastr.error("", "Goal is required", { progressBar: true });
                                                 return;
                                             }
-                                            var goalModel = {
-                                                GoalID: $(goalRef).closest("li").attr("data-goalid"),
-                                                GoalDesc: $(goalRef).next().val(),
-                                                Status: needGoalEnum.NotStarted,
-                                                NeedID: $(goalRef).closest("ul.goalsList").parent().attr("data-needid"),
-                                                CreatedBy: userId,
-                                                ModifiedBy: userId
+                                           
+                                            if (IsCarePlanApproved && IsUserCarePlanApprover == 'False') {
+                                                $.confirm({
+                                                    icon: 'fas fa-exclamation-triangle',
+                                                    title: 'Confirm',
+                                                    content: 'Care plan  status would be changed to unapproved and need approval to complete any need, goal or care plan. Press Confirm to continue.',
+                                                    type: 'red',
+                                                    typeAnimated: true,
+                                                    buttons: {
+                                                        confirm: {
+                                                            btnClass: 'btn-danger',
+                                                            action: function () {
+                                                                EditGoalfunction(o, goalRef)
+                                                                IsCarePlanApproved = false
+                                                            }
+                                                        },
+                                                        cancel: function () {
+                                                            $(o).closest('.editNeed').find('.goalAction #btnCancelEditGoal').click();
+                                                        }
+                                                    }
+
+                                                });
+                                            } else {
+                                                EditGoalfunction(o, goalRef)
                                             }
-                                            $.ajax({
-                                                type: "POST",
-                                                url: Apipath + '/api/PatientMain/savegoal',
-                                                data: JSON.stringify(goalModel),
-                                                contentType: 'application/json; charset=UTF-8',
-                                                dataType: "json",
-                                                success: function (result) {
-                                                    UpdateGoalstatusdom(o)
-                                                    updateNeedStatus(o);
-                                                    $("#needContent").removeClass("btnClicked");
-                                                    $(goalRef).html("").append($(goalRef).next().val()).show();
-                                                    $(goalRef).next().remove();
-                                                    $(goalRef).next().hide();
-                                                    changeCareplanStatus()
-                                                }, error: function (e) {
-                                                    toastr.error("Something happen Wrong");
-                                                    $(".loaderOverlay").hide();
-                                                }
-                                            });
+                                           
                                         }
                                     },
                                     cancel: {
@@ -1016,11 +1100,44 @@ function EditGoal(o) {
     //    }
     //});   
 }
+
+function EditGoalfunction(o, goalRef) {
+    var goalModel = {
+        GoalID: $(goalRef).closest("li").attr("data-goalid"),
+        GoalDesc: $(goalRef).next().val(),
+        Status: needGoalEnum.NotStarted,
+        NeedID: $(goalRef).closest("ul.goalsList").parent().attr("data-needid"),
+        CreatedBy: userId,
+        ModifiedBy: userId
+    }
+    $.ajax({
+        type: "POST",
+        url: Apipath + '/api/PatientMain/savegoal',
+        data: JSON.stringify(goalModel),
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        success: function (result) {
+            UpdateGoalstatusdom(o)
+            updateNeedStatus(o);
+            $("#needContent").removeClass("btnClicked");
+            $(goalRef).html("").append($(goalRef).next().val()).show();
+            $(goalRef).next().remove();
+            $(goalRef).next().hide();
+            changeCareplanStatus()
+        }, error: function (e) {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });
+
+
+
+
+}
 function EditNeed(o) {
     if (!CanEditCarePlan()) {
         return
     }
-
     if ($(o).hasClass("disableHoverItem")) {
         return;
     }
@@ -1062,6 +1179,7 @@ function EditNeed(o) {
                         $(".txtneed").keypress(function (event) {
                             var keycode = event.keyCode || event.which;
                             if (keycode == '13' && !event.shiftKey) {
+                                DisableNeedFocusOut=true
                                 SaveNeed(this);
                                 event.preventDefault();
                             }
@@ -1073,8 +1191,13 @@ function EditNeed(o) {
 
                         //});
                         $(".txtneed").focusout(function () {
+                            if (DisableNeedFocusOut) {
+                                DisableNeedFocusOut = false;
+                                return;
+                            }
                             needRef = item;
                             if ($(needRef).html() == $(needRef).next().val()) {
+                                
                                 return;
                             }
                             if ($("#needContent").hasClass("btnClicked")) {
@@ -1084,8 +1207,8 @@ function EditNeed(o) {
                                 icon: 'fas fa-exclamation-triangle',
                                 title: 'Confirm',
                                 content: 'You have unsaved changes for this need!' + `<hr/>
-                      <p class="need-title">Need</p>
-                      <p class="need-content">${$(needRef).next().val()}</p>`,
+                                 <p class="need-title">Need</p>
+                                  <p class="need-content">${$(needRef).next().val()}</p>`,
                                 type: 'green',
                                 columnClass: 'col-md-6 col-md-offset-3',
                                 typeAnimated: true,
@@ -1098,36 +1221,31 @@ function EditNeed(o) {
                                                 toastr.error("", "Need is required", { progressBar: true });
                                                 return;
                                             }
-                                            var needModel = {
-                                                NeedID: $(needRef).closest("li").attr("data-needid"),
-                                                NeedDesc: $(needRef).next().val(),
-                                                TemplateID: templateid,
-                                                PatientID: PatientId,
-                                                CarePlanId: careplanid,
-                                                Status: needGoalEnum.NotStarted,
-                                                CreatedBy: userId,
-                                                ModifiedBy: userId
+
+                                            if (IsCarePlanApproved && IsUserCarePlanApprover == 'False') {
+                                                $.confirm({
+                                                    icon: 'fas fa-exclamation-triangle',
+                                                    title: 'Confirm',
+                                                    content: 'Care plan  status would be changed to unapproved and need approval to complete any need, goal or care plan. Press Confirm to continue.',
+                                                    type: 'red',
+                                                    typeAnimated: true,
+                                                    buttons: {
+                                                        confirm: {
+                                                            btnClass: 'btn-danger',
+                                                            action: function () {
+                                                                EditNeedfunction(o, needRef)
+                                                                IsCarePlanApproved = false
+                                                            }
+                                                        },
+                                                        cancel: function () {
+                                                            $(o).closest('.editNeed').find('.needAction #btnCancelEditNeed').click();
+                                                        }
+                                                    }
+
+                                                });
+                                            } else {
+                                                EditNeedfunction(o, needRef)
                                             }
-                                            $.ajax({
-                                                type: "POST",
-                                                url: Apipath + '/api/PatientMain/saveneed',
-                                                data: JSON.stringify(needModel),
-                                                contentType: 'application/json; charset=UTF-8',
-                                                dataType: "json",
-                                                success: function (result) {
-                                                    updateNeedStatusOnEditNeed(o)
-                                                    $("#needContent").removeClass("btnClicked");
-                                                    $(needRef).html("").append($(needRef).next().val()).show();
-                                                    $(needRef).next().remove();
-                                                    $(needRef).next().hide();
-                                                   
-                                                    changeCareplanStatus()
-                                                },
-                                                error: function (e) {
-                                                    toastr.error("Something happen Wrong");
-                                                    $(".loaderOverlay").hide();
-                                                }
-                                            });
                                         }
                                     },
                                     cancel: {
@@ -1152,15 +1270,79 @@ function EditNeed(o) {
     //});
     
 }
+
+function EditNeedfunction(o, needRef) {
+    var needModel = {
+        NeedID: $(needRef).closest("li").attr("data-needid"),
+        NeedDesc: $(needRef).next().val(),
+        TemplateID: templateid,
+        PatientID: PatientId,
+        CarePlanId: careplanid,
+        Status: needGoalEnum.NotStarted,
+        CreatedBy: userId,
+        ModifiedBy: userId
+    }
+    $.ajax({
+        type: "POST",
+        url: Apipath + '/api/PatientMain/saveneed',
+        data: JSON.stringify(needModel),
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        success: function (result) {
+            updateNeedStatusOnEditNeed(o)
+            $("#needContent").removeClass("btnClicked");
+            $(needRef).html("").append($(needRef).next().val()).show();
+            $(needRef).next().remove();
+            $(needRef).next().hide();
+
+            changeCareplanStatus()
+        },
+        error: function (e) {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });
+}
+
 function saveEditNeed(obj) {
+    DisableNeedFocusOut = true;
     if (!CanEditCarePlan()) {
         return
     }
+    
+    if (IsCarePlanApproved && IsUserCarePlanApprover == 'False') {
+        $.confirm({
+            icon: 'fas fa-exclamation-triangle',
+            title: 'Confirm',
+            content: 'Care plan  status would be changed to unapproved and need approval to complete any need, goal or care plan. Press Confirm to continue.',
+            type: 'red',
+            typeAnimated: true,
+            buttons: {
+                confirm: {
+                    btnClass: 'btn-danger',
+                    action: function () {
+                        saveEditNeedFunction(obj)
+                        IsCarePlanApproved = false
+                    }
+                },
+                cancel: function () {
+                    $(obj).closest('.editNeed').find('.needAction #btnCancelEditNeed').click();
+                }
+            }
+
+        });
+    } else {
+        saveEditNeedFunction(obj)
+    }
+}
+
+function saveEditNeedFunction(obj) {
     var needObj = $(obj).parent().prev();
     if (needObj.val().trim() == "") {
         toastr.error("", "Need is required", { progressBar: true });
         return;
     }
+    
     var needModel = {
         NeedID: $(obj).closest("li").attr("data-needid"),
         NeedDesc: needObj.val(),
@@ -1178,13 +1360,14 @@ function saveEditNeed(obj) {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
+            
             updateNeedStatusOnEditNeed(obj)
             $("#needContent").removeClass("btnClicked");
             $(needObj).prev().html("").append(needObj.val());
-                $(needObj).prev().show();
-                $(needObj).next().hide();
-            $(needObj).remove();  
-           
+            $(needObj).prev().show();
+            $(needObj).next().hide();
+            $(needObj).remove();
+
             changeCareplanStatus()
         },
         error: function (e) {
@@ -1277,11 +1460,11 @@ function GetInterventions(obj) {
         $(".txtOutcome,.btnOutcome").hide();
         $(".txtIntervention").val("");
         goalId = $(obj).closest("li").attr("data-goalid");
-        //if ($("#ddlcareplanstatus").val() == "4") {
-        //    $(".txtIntervention").closest("div.a_outcome_item").hide();
-        //} else {
+        if ($("#ddlcareplanstatus").val() == "4") {
+            $(".txtIntervention").closest("div.a_outcome_item").hide();
+        } else {
             $(".txtIntervention").closest("div.a_outcome_item").show();
-        //}
+        }
     }
     $.ajax({
         type: "GET",
@@ -1332,11 +1515,11 @@ function GetOutcomes(obj) {
         $(".txtOutcome,.btnOutcome").show();
         $(".txtOutcome").val("");
         needId = $(obj).closest("li").attr("data-needid");
-        //if ($("#ddlcareplanstatus").val() == "4") {
-        //    $(".txtOutcome").closest("div.a_outcome_item").hide();
-        //} else {
+        if ($("#ddlcareplanstatus").val() == "4") {
+            $(".txtOutcome").closest("div.a_outcome_item").hide();
+        } else {
             $(".txtOutcome").closest("div.a_outcome_item").show();
-        //}
+        }
     }
     $.ajax({
         type: "GET",
@@ -1422,7 +1605,7 @@ function UpdateNeedStatus() {
         success: function (res) {
             if (res == "-2") {
                 if (RequestType == 1 && RequestStatus == '2') {
-                    toastr.error("CarePlan needs to approved into order to change status");
+                    toastr.error("Care plan approval required to change status of goal or need");
                 }
                 else if (RequestType == 1 && RequestStatus == '1') {
                     toastr.error("Please send revoke request to make changes");
@@ -1550,7 +1733,7 @@ function UpdateGoalStatus() {
         success: function (res) {   
             if (res.GoalId == "-2") {
                 if (RequestType == 1 && RequestStatus == '2') {
-                    toastr.error("CarePlan needs to approved into order to change status");
+                    toastr.error("Care plan approval required to change status of goal or need");
                 }
                 else if (RequestType == 1 && RequestStatus == '1') {
                     toastr.error("Please send revoke request to make changes");
@@ -1726,11 +1909,41 @@ function cancelEditneed(obj) {
 
 }
 function saveEditGoal(obj) {
+    
+    DisableGoalFocusOut=true
     var goalObj = $(obj).parent().prev();
     if (goalObj.val().trim() == "") {
         toastr.error("", "Goal is required", { progressBar: true });
         return;
     }
+    if (IsCarePlanApproved && IsUserCarePlanApprover == 'False') {
+        $.confirm({
+            icon: 'fas fa-exclamation-triangle',
+            title: 'Confirm',
+            content: 'Care plan  status would be changed to unapproved and need approval to complete any need, goal or care plan. Press Confirm to continue.',
+            type: 'red',
+            typeAnimated: true,
+            buttons: {
+                confirm: {
+                    btnClass: 'btn-danger',
+                    action: function () {
+                        saveEditGoalfunction(obj, goalObj)
+                        IsCarePlanApproved = false
+                    }
+                },
+                cancel: function () {
+                    $(obj).closest('.editNeed').find('.goalAction #btnCancelEditGoal').click();
+                }
+            }
+
+        });
+    } else {
+        saveEditGoalfunction(o, goalObj)
+    }
+    
+   
+}
+function saveEditGoalfunction(obj, goalObj) {
     var goalModel = {
         GoalID: $(obj).closest("li").attr("data-goalid"),
         GoalDesc: goalObj.val(),
@@ -1761,6 +1974,7 @@ function saveEditGoal(obj) {
     });
 }
 function cancelEditGoal(obj) {
+    
     $("#needContent").removeClass("btnClicked");
     if ($(obj).parent().prev().hasClass("edittxtGoal")) {
         $(obj).parent().prev().remove();
@@ -1772,11 +1986,43 @@ function saveNewNeed(obj) {
     if (!CanEditCarePlan()) {
         return
     }
-    var needTxt =$(".txtNeed");
+    var needTxt = $(".txtNeed");
     if (needTxt.val().trim() == "") {
         toastr.error("", "Need is required", { progressBar: true });
         return;
     }
+    if (IsCarePlanApproved && IsUserCarePlanApprover == 'False') {
+        $.confirm({
+            icon: 'fas fa-exclamation-triangle',
+            title: 'Confirm',
+            content: 'Care plan  status would be changed to unapproved and need approval to complete any need, goal or care plan. Press Confirm to continue.',
+            type: 'red',
+            typeAnimated: true,
+            buttons: {
+                confirm: {
+                    btnClass: 'btn-danger',
+                    action: function () {
+                        SaveNewNeedFunction(obj)
+                        IsCarePlanApproved = false
+                    }
+                },
+                cancel: function () {
+                    $("#needContent").removeClass("btnClicked");
+                    needTxt.val("").css("height", "21px");
+                    NeedFocus();
+                }
+            }
+
+        });
+    } else {
+        SaveNewNeedFunction(obj)
+    }
+
+}
+
+function SaveNewNeedFunction(obj) {
+    var needTxt =$(".txtNeed");
+    
     var needModel = {
         NeedID: needTxt.closest("li").attr("data-needid"),
         NeedDesc: needTxt.val(),
@@ -1882,9 +2128,9 @@ function saveNewNeed(obj) {
                     }
                 });
             }
-           
+
             changeCareplanStatus()
-            
+
 
         },
         error: function (e) {
@@ -1899,6 +2145,39 @@ function saveNewGoal(obj) {
         toastr.error("", "Goal is required", { progressBar: true });
         return;
     }
+    if (IsCarePlanApproved && IsUserCarePlanApprover == 'False') {
+        $.confirm({
+            icon: 'fas fa-exclamation-triangle',
+            title: 'Confirm',
+            content: 'Care plan  status would be changed to unapproved and need approval to complete any need, goal or care plan. Press Confirm to continue.',
+            type: 'red',
+            typeAnimated: true,
+            buttons: {
+                confirm: {
+                    btnClass: 'btn-danger',
+                    action: function () {
+                        saveNewGoalfunction(obj)
+                        IsCarePlanApproved = false
+                    }
+                },
+                cancel: function () {
+                    $(e).closest('.editNeed').find('.goalAction #btnCancelEditGoal').click();
+                    var goaltxt = $(".txtGoal");
+                    $("#needContent").removeClass("btnClicked");
+                    goaltxt.val("").css("height", "21px").focus();
+                }
+            }
+
+        });
+    } else {
+        saveNewGoalfunction(obj)
+    }
+   
+}
+
+function saveNewGoalfunction(obj) {
+   
+    var goaltxt = $(".txtGoal");
     var goalModel = {
         GoalID: goaltxt.closest("li").attr("data-goalid"),
         GoalDesc: goaltxt.val(),
@@ -2006,7 +2285,7 @@ function saveNewGoal(obj) {
                 });
             }
             changeCareplanStatus()
-            
+
 
         }, error: function (e) {
             toastr.error("Something happen Wrong");
@@ -2090,6 +2369,10 @@ window.onbeforeunload = function (evt) {
 
 }
 function NeedOnBlur() {
+    if (DisableNeedFocusOut) {
+        DisableNeedFocusOut = false;
+        return;
+    }
     if ($("#needContent").hasClass("btnClicked")) {
         return;
     }
@@ -2128,6 +2411,11 @@ function GoalOnBlur() {
     if ($("#needContent").hasClass("btnClicked")) {
         return;
     }
+    if (DisableGoalFocusOut) {
+        DisableGoalFocusOut = false;
+        return
+    }
+    
     var goaltxt = $(".txtGoal");
     if (goaltxt.val().trim() != "") {
         $.confirm({

@@ -171,17 +171,17 @@ function changeRequestStatus(status, requestid,type) {
         dataType: "json",
         async: true,
         success: function (result) {
-          
-            if (result.status != 3) {
+            
+            if (result.status != 3 && result.status != 4) {
                 if (status == 1) {
                     toastr.success("Request is accepted");
                     $('.requestApproveButton').css('display', 'inline-block')
                     $('.requestAcceptButton').css('display', 'none')
 
-                 //   var span = `<span class='status_Accepted'></span>`
+                    //   var span = `<span class='status_Accepted'></span>`
                     $('.Model_Status').text('Accepted by myself');
                     $('.Model_Status').removeClass('s_notApproved').addClass('s_accepted')
-                  
+
                 }
                 else if (status == 2) {
                     toastr.success("Request is approved");
@@ -190,8 +190,12 @@ function changeRequestStatus(status, requestid,type) {
                     $('#RequestModel').modal('hide');
                 }
             }
-            else if(status==3){
-                toastr.success("Request is Accepted by someone");
+            else if (result.status == 3) {
+                toastr.error("Request is Accepted by someone");
+                $('#RequestModel').modal('hide');
+            }
+            else if (result.status == 4) {
+                toastr.error("Request is reverted");
                 $('#RequestModel').modal('hide');
             }
            
@@ -210,7 +214,38 @@ $('#RequestModel').on('hidden.bs.modal', function () {
     LoadRequest();
 });
 
+
 function OpenPopUp(item) {
+    $.ajax({
+        type: "get",
+        url: Apipath + '/api/PatientMain/getCarePlanRequestByRequestId?requestid=' + item.RequestId ,
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        async: false,
+        success: function (result) {
+            if (result.Type == 2) {
+                toastr.error("Request is reverted by user")
+                LoadRequest();
+            }
+            else {
+                item.AcceptedBy = result.AcceptedByName;
+                item.Status = result.Status;
+                item.Type = result.Type;
+                item.RevertMessage = result.RevertMessage
+                item.AcceptedById = result.AcceptedBy
+                BindModel(item)
+            }
+        },
+        error: function (e) {
+            toastr.error("Something happen Wrong");
+        }
+    });
+}
+
+
+
+function BindModel(item) {
+
     if (item.IsRead == 'false') {
         $.ajax({
             type: "Post",
@@ -226,7 +261,7 @@ function OpenPopUp(item) {
                 else {
                     $('#InboxCount').text('Inbox(' + ReadCount + ')')
                 }
-               
+
                 $('#' + item.RequestId).removeClass('unread_mess')
             },
             error: function (e) {
@@ -235,7 +270,7 @@ function OpenPopUp(item) {
         });
 
     }
-        
+
     var status = ''
     var messageBlock = ''
     if (item.Type == 3) {
@@ -256,32 +291,31 @@ function OpenPopUp(item) {
             </ul>
         </div>`
     }
-    var actionbutton=''
+    var actionbutton = ''
     if (item.Status == 1) {
         status = `<span class="s_accepted Model_Status"> Request Accepted by ${item.AcceptedBy}</span>`
     }
     else {
         status = '<span class="s_notApproved Model_Status">Not Accepted</span>'
     }
-  
 
-    if (item.Status == "1" && item.AcceptedById == userId && item.Type == 3)
-    {
+
+    if (item.Status == "1" && item.AcceptedById == userId && item.Type == 3) {
         actionbutton += `<a onClick="changeRequestStatus('2',${item.RequestId},1)" style="display:inline-block" class="btn btn-success text-white" style="cursor:pointer;">Accept Approve Request</a>`
         actionbutton += `<a onClick="changeRequestStatus('2',${item.RequestId},3)" style="display:inline-block" class="btn btn-success text-white" style="cursor:pointer;">Accept Revoke Request</a>`
 
     }
-    else if (item.Status == "1" && item.AcceptedById == userId && item.Type==1) {
+    else if (item.Status == "1" && item.AcceptedById == userId && item.Type == 1) {
         actionbutton += `<a onClick="changeRequestStatus('2',${item.RequestId},1)" style="display:inline-block" class="btn btn-success text-white" style="cursor:pointer;">Accept Approve Request</a>`
-       
+
     }
-    else if (item.Status == "null" || item.Status == "0") {
-        
+    else if (item.Status == null || item.Status == "0") {
+
         actionbutton += `<a onClick="changeRequestStatus('1',${item.RequestId},${item.Type})" style="display:inline-block"  class="btn btn-success text-white requestAcceptButton" style="cursor:pointer;">Accept Request</a>`
         actionbutton += `<a onClick="changeRequestStatus('2',${item.RequestId},1)" style="display:none" class="btn btn-success text-white requestApproveButton" style="cursor:pointer;">Accept Approve Request</a>`
 
     }
-    var modelContent =`  <table class="table">
+    var modelContent = `  <table class="table">
                     <tbody>
                         <tr>
                             <th scope="row">Program Name</th>
@@ -298,7 +332,7 @@ function OpenPopUp(item) {
                         </tr>
                         <tr>
                             <th scope="row">Recieved On</th>
-                            <td>${item.SentOn==null?"":item.SentOn.split("T")[0]}</td>
+                            <td>${item.SentOn == null ? "" : item.SentOn.split("T")[0]}</td>
                         </tr>
                         <tr>
                             <th scope="row">Status</th>
@@ -309,16 +343,15 @@ function OpenPopUp(item) {
                         </tr>
                         <tr>
                             <th scope="row">Title</th>
-                            <td>${item.Type == 3 ? "Revoke request" : "Approval request" }</td>
+                            <td>${item.Type == 3 ? "Revoke request" : "Approval request"}</td>
                         </tr>
                     </tbody>
                 </table>
              ${messageBlock}
 
 ${actionbutton}`
-    
+
     $('#RequestModel .modal-body').html(modelContent)
     $('#RequestModel').modal('show');
+
 }
-
-
