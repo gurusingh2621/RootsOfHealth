@@ -73,7 +73,7 @@
         height: auto;
         padding: 8px 8px;
         font-size: 14px;
-        white-space: nowrap;
+        white-space: normal;
     }
 
     span.s_accepted, span.s_notApproved, span.s_underReview {
@@ -108,7 +108,8 @@
     }
 
     #RequestModel .scroll {
-        max-height: calc(100vh - 140px);
+        max-height: calc(100vh - 100px);
+        padding-bottom: 30px;
     }
 
     div#RequestModel {
@@ -133,11 +134,12 @@
         border: 0;
     }
     .message_block ul li b {
-        display: block;
         font-weight: 500;
         margin: 0 0 2px;
     }
-   
+    .c_table tbody tr td.status_column {
+        white-space: nowrap;
+    }
 </style>
 <section id="content" class="responsive-container pt-0">
     <div class="inner-content mt-0" style="float:none;">
@@ -161,11 +163,11 @@
                                     <thead>
                                         <tr class="table-active">
                                             <th>Careplan name</th>
-                                            <th>Program name</th>
                                             <th>Client name</th>
                                             <th>Title</th>
                                             <th>Sent by</th>
                                             <th>Status</th>
+                                            <th>Received on</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -181,7 +183,6 @@
                                     <thead>
                                         <tr class="table-active">
                                             <th>Careplan name</th>
-                                            <th>Program name</th>
                                             <th>Client name</th>
                                             <th>Title</th>
                                             <th>Approved by</th>

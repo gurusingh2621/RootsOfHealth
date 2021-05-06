@@ -767,6 +767,9 @@ function editCarePlan(Id) {
             $(".care_plan_name_field").val(result.CarePlanName);
             isupdateProgramFields = false;
             $("#ddlcareplanstatus,.care_plan_name_field").removeAttr("disabled");
+            if (IsUserCarePlanApprover == 'False') {
+                $('.requestItem').removeClass('d-none');
+            }
             switch (result.Status) {
                 case carePlanEnum.NotSaved://not saved                    
                     careplanid = result.CarePlanId;                   
@@ -810,12 +813,13 @@ function editCarePlan(Id) {
                     careplanid = result.CarePlanId;
                     getCarePlanBasicFormHtml(result.TemplateID);
                     getCarePlanBasicFormValue(result.CarePlanId, result.TemplateID);
-                  $(".basic-info-actions").hide();
+                    $(".basic-info-actions").hide();
                     $("#ddlcareplanstatus").addClass("show_careplanstatus").val("4");
                     $("a.need-nav,a.summary-nav").parent().removeClass("disabled");
                     $("#carePlansSidebar").removeClass('opened');
                     $("#addNewCarePlansSidebar").addClass('opened');                
                     $("#ddlcareplanstatus,.care_plan_name_field").attr("disabled", true);
+                    $('.requestItem').addClass('d-none');
                     break;
                 default:                 
                     break;
@@ -2162,7 +2166,7 @@ function setCarePlanStatus(obj) {
 
 
 
-
+    
 
     if (model.Status == "4") {
         checkCarePlanStatus();
@@ -2194,6 +2198,7 @@ function setCarePlanStatus(obj) {
                                         $(".txtNeed,.txtOutcome,.txtIntervention").attr("disabled", true);
                                         $(".needsList").sortable('destroy');
                                         $(".goalsList").sortable('destroy');
+                                        $('.requestItem').addClass('d-none');
                                     }
                                     else {
                                         if (model.Status == 1) {
