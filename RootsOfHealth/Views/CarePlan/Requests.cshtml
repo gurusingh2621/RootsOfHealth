@@ -118,7 +118,6 @@
 
     table tr.unread_mess {
         background: #dadada!important;
-        font-weight: 500;
     }
     .message_block ul {
         list-style: none;
@@ -137,9 +136,15 @@
         font-weight: 500;
         margin: 0 0 2px;
     }
-    .c_table tbody tr td.status_column {
+    .c_table tbody tr td.status_column,
+    .noWrapColumn {
         white-space: nowrap;
     }
+    div#tblCarePlanInbox_wrapper,
+    #tblCarePlanHistory_wrapper {
+        min-width: 1050px;
+    }
+
 </style>
 <section id="content" class="responsive-container pt-0">
     <div class="inner-content mt-0" style="float:none;">
@@ -185,8 +190,8 @@
                                             <th>Careplan name</th>
                                             <th>Client name</th>
                                             <th>Status</th>
-                                            <th>Approved by</th>
                                             <th>Approved on</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody class="tblCarePlanHistory">

@@ -38,10 +38,10 @@ function LoadRequest() {
                         }
                        
                         careplansRequest += `<tr id="${item.RequestId}" class="${item.IsRead ? 'unread_mess' :'' }">
-                           <td width="100px"><a onClick="editCarePlan(${item.CarePlanId},PatientId=${item.PatientId})" class="btn btn-link" style="cursor:pointer;">${item.CarePlanName == null ? "" : item.CarePlanName}</a></td>
-                           <td width="100px">${item.ClientName == null ? "" : item.ClientName}</td>
-                           <td width="100px">${item.Type == 3 ? "Revoke request" :"Approval request" }</td>
-                           <td width="100px">${item.UserName == null ? "" : item.UserName}</td>`
+                           <td width="150px"><a onClick="editCarePlan(${item.CarePlanId},PatientId=${item.PatientId})" class="btn btn-link" style="cursor:pointer;">${item.CarePlanName == null ? "" : item.CarePlanName}</a></td>
+                           <td width="150px">${item.ClientName == null ? "" : item.ClientName}</td>
+                           <td width="150px" class="noWrapColumn">${item.Type == 3 ? "Revoke request" :"Approval request" }</td>
+                           <td width="150px">${item.UserName == null ? "" : item.UserName}</td>`
                         var AcceptedBy = item.AcceptedBy == userId ? "myself" : item.AcceptedBy
                         if (item.Status == 1) {
                             status = `<span class="s_accepted">Request Accepted by ${AcceptedBy}</span>`
@@ -50,8 +50,8 @@ function LoadRequest() {
                             status =  '<span class="s_notApproved status_column">Not Accepted</span>'
                         }
                        
-                        careplansRequest += `<td  width="150px" class='status_Accepted status_column'>${status}</td>
-                         <td width="200px" >${SendDate} ${sendTime}</td><td width=""150px""><div>`;
+                        careplansRequest += `<td  width="200px" class='status_Accepted status_column'>${status}</td>
+                         <td width="220px" class="noWrapColumn">${SendDate} ${sendTime}</td><td width="150px"  class="noWrapColumn"><div>`;
                       
                         
                         careplansRequest += `<a onClick="OpenPopUp({CarePlanName:\'${item.CarePlanName}\',Type:\'${item.Type}\',ProgramName:\'${item.ProgramName}\',Message:\'\',ClientName:'${item.ClientName}\',
@@ -115,7 +115,7 @@ function LoadRequestHistory() {
             careplanlist.html("");
             if (result.length) {
                 $.each(result, function (index, item) {
-
+                   
                     if(item.ModifiedOn != null && item.ModifiedOn != "null"){
                         var ModifiedDate = new Date(item.ModifiedOn).toLocaleDateString('en-US')
                         var Timearray = item.ModifiedOn.split("T")[1].split(":");
@@ -134,12 +134,13 @@ function LoadRequestHistory() {
                     }
 
                     careplansRequest += `<td  width="250px">${status}</td>
-                    <td width="200px">${item.AcceptedBy == null ? "" : item.AcceptedBy}</td>
                    `;
-
-
                   
-                    careplansRequest += `<td width="200px">${ModifiedDate} ${MTime}</td></tr>`;
+                    careplansRequest += `<td width="200px">${ModifiedDate} ${MTime}</td>
+                     <td width="150px"><div>
+                    <a data-message="${item.Message}" data-RevertMessage="${item.RevertMessage}" onClick="openHistoryModel({CarePlanName:\'${item.CarePlanName}\',Type:\'${item.Type}\',ProgramName:\'${item.ProgramName}\',Message:\'\',ClientName:'${item.ClientName}\',
+                    UserName:'${item.UserName}',SentOn:'${item.SentOn}',RevokeRequestDate:'${item.RevokeRequestDate}',RevertMessage:'',Status:'${item.Status}',AcceptedBy:'${item.AcceptedBy}',AcceptedById:'${item.AcceptedById}',Status:'${item.Status}',RequestId:'${item.RequestId}',IsRead:'${item.IsRead}'},this)" class="btn btn-success text-white" style="cursor:pointer;">View Message</a>
+                    </div></td></tr>`;
                 });
                 careplanlist.html("").append(careplansRequest);
             } else {
@@ -370,6 +371,96 @@ function BindModel(item) {
              ${messageBlock}
 
 ${actionbutton}`
+
+    $('#RequestModel .modal-body').html(modelContent)
+    $('#RequestModel').modal('show');
+
+}
+
+
+function openHistoryModel(item, message) {
+    item.RevertMessage = $(message).attr('data-RevertMessage');
+    item.Message = $(message).attr('data-message');
+   
+    if (item.SentOn != null && item.SentOn != "null") {
+        var SendDate = new Date(item.SentOn).toLocaleDateString('en-US')
+        var sendTimearray = item.SentOn.split("T")[1].split(":");
+        var sendAmPm = sendTimearray[0] >= 12 ? 'pm' : 'am';
+        var sendTime = sendTimearray[0] + ":" + sendTimearray[1] + ":" + sendTimearray[2].split(".")[0] + " " + sendAmPm;
+    }
+
+    if (item.RevokeRequestDate != null && item.RevokeRequestDate != "null") {
+        var RevokeRequestDate = new Date(item.RevokeRequestDate).toLocaleDateString('en-US')
+        var revokeTimearray = item.RevokeRequestDate.split("T")[1].split(":");
+        var revokeAmPm = revokeTimearray[0] >= 12 ? 'pm' : 'am';
+        var revokeTime = revokeTimearray[0] + ":" + revokeTimearray[1] + ":" + revokeTimearray[2].split(".")[0] + " " + revokeAmPm;
+    }
+
+
+    var status = ''
+    var messageBlock = ''
+    if (item.Type == 3) {
+        messageBlock = `<div class="message_block">
+            <h6>Message</h6>
+            <ul>
+                <li><span><b>Revert request on</b> ${RevokeRequestDate}  ${revokeTime}</span><br><span>${item.RevertMessage = null ? "" : item.RevertMessage}</span></li>
+                <li><span><b>Approval request on</b> ${SendDate}  ${sendTime}</span><br><span>${item.Message == null ? "" : item.Message}</span></li>  
+            </ul>
+        </div>`
+
+    }
+    else {
+        messageBlock = `<div class="message_block">
+            <h6>Message</h6>
+            <ul>
+                <li><b>Approval request on</b><span>${SendDate}  ${sendTime}<br>${item.Message == null ? "" : item.Message}</span></li>
+            </ul>
+        </div>`
+    }
+   
+    if (item.Status == 2 && item.Type==3 ) {
+        status = `<span class="s_accepted Model_Status">Revert request is accepted</span>`
+    }
+    else {
+        status = '<span class="s_accepted Model_Status">Approval request is accepted</span>'
+    }
+
+
+    var modelContent = `  <table class="table">
+                    <tbody>
+                        <tr>
+                            <th scope="row">Program Name</th>
+                            <td>${item.ProgramName == null ? "" : item.ProgramName}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Client Name</th>
+                            <td>${item.ClientName == null ? "" : item.ClientName}</td>
+
+                        </tr>
+                        <tr>
+                            <th scope="row">CarePlan Name</th>
+                            <td>${item.CarePlanName == null ? "" : item.CarePlanName}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Recieved On</th>
+                            <td>${item.SentOn == null ? "" : item.SentOn.split("T")[0]}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Status</th>
+                            <td>
+                                ${status}
+                           </td>
+
+                        </tr>
+                        <tr>
+                            <th scope="row">Title</th>
+                            <td>${item.Type == 3 ? "Revoke request" : "Approval request"}</td>
+                        </tr>
+                    </tbody>
+                </table>
+             ${messageBlock}`
+
+
 
     $('#RequestModel .modal-body').html(modelContent)
     $('#RequestModel').modal('show');
