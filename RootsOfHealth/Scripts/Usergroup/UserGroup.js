@@ -25,9 +25,9 @@ function GetGroupList() {
                         Name: item.GroupName
                     }
                     CreatedGroups.push(group)
-
                     Groups += `<tr>
-                         <td width="15%">${(item.GroupName != null ? item.GroupName:"")}</td>
+                         <td width="15%">${(item.GroupName != null ? item.GroupName : "")}</td>
+                         <td width="15%">${(item.RoleName != null ? item.RoleName : "")}</td>
                          <td width="15%">${item.CreatedDate != null ? item.CreatedDate.split("T")[0] : ""}</td>
                          <td width="15%">${item.ModifiedDate != null ? item.ModifiedDate.split("T")[0] : ""}</td>
                          <td width="10%">${(item.MemberCount == null ? 0 : item.MemberCount)}</td>
@@ -39,9 +39,10 @@ function GetGroupList() {
                 });
                 Grouplist.html("").append(Groups);
             } else {
-                Groups += `<tr><td colspan="5"><p class="text-center">No data found.</p></td>
+                Groups += `<tr><td colspan="6"><p class="text-center">No data found.</p></td>
                             <td style="display: none;"></td>
                             <td style="display: none;">/td>
+                            <td style="display: none;"></td>
                             <td style="display: none;"></td>
                             <td style="display: none;"></td></tr>`;
                 Grouplist.html("").append(Groups);
@@ -51,7 +52,7 @@ function GetGroupList() {
                 retrieve: true,
                 searching: false,
                 'columnDefs': [{
-                    'targets': [4],
+                    'targets': [5],
                     'orderable': false
                 }]
             });
