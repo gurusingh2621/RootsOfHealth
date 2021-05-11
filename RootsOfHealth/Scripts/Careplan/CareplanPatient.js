@@ -101,7 +101,7 @@ function getCareProgramOptions() {
             $('#AddCarePlanModal').modal({ backdrop: 'static', keyboard: false })  
         },
         error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unidentified error");
             $(".loaderOverlay").hide();
         }
     });  
@@ -168,7 +168,7 @@ function getCarePlanList() {
             }
         },
         error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unidentified error");
             $(".loaderOverlay").hide();
         }
     });
@@ -229,7 +229,7 @@ function proceedCarePlan(ProgramId) {
                 });
             }
         }, error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unidentified error");
             $(".loaderOverlay").hide();
         }
     });
@@ -408,7 +408,7 @@ function saveBasicInfo(status) {
                             //updateDefaultneeds(careplanid, templateid);
                         },
                         error: function (e) {
-                            toastr.error("Something happen Wrong");
+                            toastr.error("Unidentified error");
                             $(".loaderOverlay").hide();
                         }
                     });
@@ -462,7 +462,7 @@ function saveCareplan() {
             }                  
         },
         error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unidentified error");
             $(".loaderOverlay").hide();
         }
     });
@@ -510,7 +510,7 @@ function getHeaderAndFooter() {
                             $(".render-basicform").find(".basefooter").html("").append(baseFooter);
                         },
                         error: function (e) {
-                            toastr.error("Something happen Wrong");
+                            toastr.error("Unidentified error");
                             $(".loaderOverlay").hide();
                         }
                     });
@@ -518,7 +518,7 @@ function getHeaderAndFooter() {
             }
         },
         error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unidentified error");
             $(".loaderOverlay").hide();
         }
     });
@@ -580,7 +580,7 @@ function saveBaseFieldInfo() {
             
         },
         error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unidentified error");
             $(".loaderOverlay").hide();
         }
     });
@@ -602,7 +602,7 @@ function updateCareplanStatus(status) {
         success: function (res) {
         },
         error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unidentified error");
             $(".loaderOverlay").hide();
         }
     });
@@ -655,7 +655,7 @@ function getBaseFields() {
             }
         },
         error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unidentified error");
             $(".loaderOverlay").hide();
         }
     });
@@ -749,7 +749,7 @@ function getBaseFieldData() {
             }
         },
         error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unidentified error");
             $(".loaderOverlay").hide();
         }
     });
@@ -826,7 +826,7 @@ function editCarePlan(Id) {
             }
             $(".loaderOverlay").hide();
         }, error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unidentified error");
             $(".loaderOverlay").hide();
         }
     });    
@@ -880,7 +880,7 @@ function getCarePlanBasicFormHtml(id) {
             }
         },
         error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unidentified error");
             $(".loaderOverlay").hide();
         }
     });
@@ -972,7 +972,7 @@ function getCarePlanBasicFormValue(careplanid, templateid) {
                 getBaseFieldData();
             }
         }, error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unidentified error");
             $(".loaderOverlay").hide();
         }
     });
@@ -1050,7 +1050,7 @@ function closecarePlan() {
             }
             $('#addNewCarePlansSidebar').removeClass('opened');
         }, error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unidentified error");
             $(".loaderOverlay").hide();
         }
     });
@@ -1070,7 +1070,7 @@ function isUpdateBaseFields() {
                 isupdateBaseField = false;
             }
         }, error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unidentified error");
             $(".loaderOverlay").hide();
         }
     });
@@ -1089,7 +1089,7 @@ function isUpdateProgramFields(tempid,careplanid) {
                 isupdateProgramFields = false;
             }
         }, error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unidentified error");
             $(".loaderOverlay").hide();
         }
     });
@@ -1311,7 +1311,7 @@ function uploadFiles(Id, fileData) {
         success: function (result, status, xhr) {          
             fileData = new FormData();           
         }, error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unidentified error");
             $(".loaderOverlay").hide();
             return false
         }
@@ -1358,7 +1358,7 @@ function getProgramFiles(careid, Id) {
                 $("#" + Id).next().next().html("").append(selectedFiles);         
             }
         }, error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unidentified error");
             $(".loaderOverlay").hide();
         }
     });
@@ -1394,7 +1394,7 @@ function getBaseFilesReadonly(Id) {
                 $("#" + Id).next().next().html("").append(selectedFiles);           
             }
         }, error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unidentified error");
             $(".loaderOverlay").hide();
         }
     });
@@ -1422,7 +1422,7 @@ function getBaseFiles(Id) {
             }
         },
         error: function () {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unidentified error");
             $(".loaderOverlay").hide();
         }
     });
@@ -1548,7 +1548,7 @@ function saveBasicInfoAsDraft(status) {
             clearFileData();
             getSavedFilesAsDraft();          
         }, error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unidentified error");
             $(".loaderOverlay").hide();
         }
     });
@@ -1925,7 +1925,7 @@ function getDatabaseFieldValues() {
                 });
 
             }, error: function () {
-                toastr.error("Something happen Wrong");
+                toastr.error("Unidentified error");
                 $(".loaderOverlay").hide();
             }
         });
@@ -1943,7 +1943,7 @@ function GetDropDownName() {
             
         },
         error: function () {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unidentified error");
             $(".loaderOverlay").hide();
         }
     });
@@ -2073,7 +2073,7 @@ function getBasehtmlByCarePlanId(careid) {
                             }
                         },
                         error: function (e) {
-                            toastr.error("Something happen Wrong");
+                            toastr.error("Unidentified error");
                             $(".loaderOverlay").hide();
                         }
                     });
@@ -2081,7 +2081,7 @@ function getBasehtmlByCarePlanId(careid) {
             }
         },
         error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unidentified error");
             $(".loaderOverlay").hide();
         }
     });
@@ -2130,7 +2130,7 @@ function updateCarePlanName(obj) {
             }
         },
         error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unidentified error");
             $(".loaderOverlay").hide();
         }
     });
@@ -2217,7 +2217,7 @@ function setCarePlanStatus(obj) {
 
                                 },
                                 error: function (e) {
-                                    toastr.error("Something happen Wrong");
+                                    toastr.error("Unidentified error");
                                     $(".loaderOverlay").hide();
                                 }
                             });
@@ -2264,7 +2264,7 @@ function setCarePlanStatus(obj) {
 
             },
             error: function (e) {
-                toastr.error("Something happen Wrong");
+                toastr.error("Unidentified error");
                 $(".loaderOverlay").hide();
             }
         });
@@ -2281,7 +2281,7 @@ function setCarePlanStatus(obj) {
             success: function (result) {
                 isCarePlanNeedCompleted = result > 0 ? true : false;
             }, error: function () {
-                toastr.error("Something happen Wrong");
+                toastr.error("Unidentified error");
                 $(".loaderOverlay").hide();
             }
         });
@@ -2318,7 +2318,7 @@ function setCarePlanStatus(obj) {
                                         break;
                                 }
                             }, error: function (e) {
-                                toastr.error("Something happen Wrong");
+                                toastr.error("Unidentified error");
                                 $(".loaderOverlay").hide();
                             }
                         })

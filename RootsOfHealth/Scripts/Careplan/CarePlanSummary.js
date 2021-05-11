@@ -95,7 +95,7 @@ function GetSummaries() {
                 $(".loaderOverlay").hide();
             }
         }, error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unidentified error");
             $(".loaderOverlay").hide();
         }
     });
@@ -139,7 +139,7 @@ function AddSummary() {
             clearSummary();
         },
         error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unidentified error");
             $(".loaderOverlay").hide();
         }
     });

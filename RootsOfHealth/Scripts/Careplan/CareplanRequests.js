@@ -88,7 +88,7 @@ function LoadRequest() {
                 $(".loaderOverlay").hide();
         },
         error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unidentified error");
             $(".loaderOverlay").hide();
         }
     });
@@ -160,7 +160,7 @@ function LoadRequestHistory() {
           
         },
         error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unidentified error");
             $(".loaderOverlay").hide();
         }
     });
@@ -209,7 +209,7 @@ function changeRequestStatus(status, requestid,type) {
             },
         error: function (e) {
             isAzaxRequestSent = false
-            toastr.error("Something happen Wrong");
+            toastr.error("Unidentified error");
             $(".loaderOverlay").hide();
         }
     });
@@ -244,7 +244,7 @@ function OpenPopUp(item) {
             }
         },
         error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unidentified error");
         }
     });
 }
@@ -285,7 +285,7 @@ function BindModel(item) {
                 $('#' + item.RequestId).removeClass('unread_mess')
             },
             error: function (e) {
-                toastr.error("Something happen Wrong");
+                toastr.error("Unidentified error");
             }
         });
 
