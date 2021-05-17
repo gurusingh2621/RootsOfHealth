@@ -205,6 +205,7 @@
     <Compile Include="Models\ProgramBO.cs" />
     <Compile Include="Models\ProgramFileBO.cs" />
     <Compile Include="Models\ProgramsForPatientBO.cs" />
+    <Compile Include="Models\ClientFormtemplateBO .cs" />
     <Compile Include="Models\ProgramtemplateBO.cs" />
     <Compile Include="Models\ReleaseAndDisclousureBO.cs" />
     <Compile Include="Models\ScheduleDateBO.cs" />
@@ -302,6 +303,10 @@
     <Content Include="Scripts\Careplan\NeedAndGoal.js" />
     <Content Include="Scripts\Careplan\CarePlanSummary.js" />
     <Content Include="Scripts\chartjs-plugin-labels.min.js" />
+    <Content Include="Scripts\ClientForms\databasecontrol.js" />
+    <Content Include="Scripts\ClientForms\htmlcontrol.js" />
+    <Content Include="Scripts\ClientForms\ClientFormbasetemplatecontrolhtml.js" />
+    <Content Include="Scripts\ClientForms\ClientFormlist.js" />
     <Content Include="Scripts\fullcalendar.min.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -401,6 +406,8 @@
     <Content Include="Views\Shared\Patient\_AMDProfile.cshtml" />
     <Content Include="Views\CarePlan\Requests.cshtml" />
     <Content Include="Views\Shared\CarePlan\_CareplanSidebar.cshtml" />
+    <Content Include="Views\Program\ClientsFormList.cshtml" />
+    <Content Include="Views\Program\ModifyClientFormTemplate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
