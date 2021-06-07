@@ -7,77 +7,89 @@
 }
 
 
-<!-- Housing tab start here  -->
-@{
+    
 
-    Html.RenderPartial("~/Views/Shared/Patient/_PatientHousing.cshtml", Model.PatientHousing);
+    <ul class="nav nav-tabs" style="display:none;" id="myChildTab" role="tablist">
+        
+    </ul>
 
-}
-<!-- Housing tab end here  -->
-<!-- Financial tab start here  -->
-@{
-    Html.RenderPartial("~/Views/Shared/Patient/_PatientFinancial.cshtml", Model.PatientFinancialSecurity);
-}
-<!-- Financial tab end here  -->
-<!-- Employment tab start here  -->
-@{
-    Html.RenderPartial("~/Views/Shared/Patient/_PatientEmployment.cshtml", Model.PatientEmploymentEducation);
-}
-<!-- Employment tab end here  -->
-<!-- Communication tab start here  -->
-@{
-    Html.RenderPartial("~/Views/Shared/Patient/_PatientCommunication.cshtml", Model.PatientCommunicationAndMobility);
-}
+    @if (Model.ClientForm != null)
+    {
 
-<!-- Communication tab end here  -->
-<!-- Healthcare tab start here  -->
-@{
-    Html.RenderPartial("~/Views/Shared/Patient/_PatientHealthcare.cshtml", Model.PatientHealthcare);
-}
+        foreach (var item in Model.ClientForm)
+        {
+            var FormName = item.FormName.Replace(" ", "");
+            <div class="tab-pane fade" id="@(FormName + "only")" role="tabpanel" aria-labelledby="@("a"+FormName)">
+                <div class="inner-content">
+                    <div class="paitent-detail">
+                        <div class="row">
+                            <div id="pat_out_div" class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="paitent-detail-left">
+                                    <div class="detail-heading d-flex">
+                                        @foreach (var items in Model.ClientForm.Where(p=>p.ClientFormID==item.ParentFormID))
+                                        {
+                                        string FormNames = @items.FormName.Replace(" ", "");
+                                            <a id="@("a" + FormNames)" class="nav-link" data-toggle="tab"
+                                               href="@("#" + FormNames + "only")" data-ClientFormID="@items.ClientFormID" data-PatientID="@items.patientID" onclick="loadClient(this)" data-TemplateID="@items.TemplateID" data-FormName=@(FormNames)>@items.FormName >> <span class="check @Html.Raw(items.Saved ? "" : "d-none")"></span></a>
+                                        }
+                                        <h2 style="padding-top:10px">@item.FormName</h2>
+                                        <div class="detail-button ml-auto">
 
-<!-- Healthcare tab end here  -->
-<!-- SocialSupports tab start here  -->
-@{
-    Html.RenderPartial("~/Views/Shared/Patient/_PatientSocialSupport.cshtml", Model.PatientSocialSupport);
-}
-<!-- SocialSupports tab end here  -->
-<!-- Legal Status tab start here  -->
-@{
-    Html.RenderPartial("~/Views/Shared/Patient/_PatientLegalStatus.cshtml", Model.PatientLegalStatus);
-}
-<!-- Legal Status tab end here  -->
-<!-- Alcohol Disorder Tab start here  -->
-@{
-    Html.RenderPartial("~/Views/Shared/Patient/_PatientSubstance.cshtml", Model.PatientSubstanceUse);
-}
-<!-- Alcohol Disorder Tab end here  -->
-<!-- Mental Health Tab start here   -->
-@{
-    Html.RenderPartial("~/Views/Shared/Patient/_PatientMentalHealth.cshtml", Model.PatientMentalHealth);
-}
-<!-- Mental Health Tab end here   -->
-<!-- Food Access Tab start here -->
-@{
-    Html.RenderPartial("~/Views/Shared/Patient/_PatientFoodAccess.cshtml", Model.PatientFoodAccess);
-}
-<!-- Food Access Tab end here -->
-<!-- Programs Tab start here  -->
+                                            <a href="javascript:{}" onclick="return saveProgramBasicInfo('@item.TemplateID','@item.TemplateTable',@item.ClientFormID,@item.patientID);" data-save="@(item.Saved ? "True" : "False")" class="btn btn-success ml-auto btnprogramsave">
+                                                <i class="far fa-save"></i>
+                                                Save
+                                            </a>
+                                            <a href="javascript:{}" onclick="ActivateTab(@ViewBag.PatientID,'ProgramTab','@FormName',@item.ClientFormID)"
+                                               class="btn btn-success label-fields btnProgramEdit">
+                                                <i class="far fa-edit"></i>
+                                                Edit
+                                            </a>
+                                            <a href="javascript:{}" onclick="PrintProgram('@FormName')"
+                                               class="btn btn-success label-fields btnprogramPrint">
+                                                <i class="far fa-save"></i>
+                                                Print
+                                            </a>
+                                        </div>
+                                    </div>
 
-@{
-    Html.RenderPartial("~/Views/Shared/Patient/_PatientPrograms.cshtml", Model.Programs);
-}
+                                    <div class="SidebarScroll scroll inner-main-content">
+                                        <style>
+                                            ul.file_uploaded_list li img {
+                                                max-width: 90px;
+                                                margin-right: 10px;
+                                            }
+                                        </style>
+                                        <div id="@(FormName + "render-basicform")" class="render-basicProgramform" style="padding-bottom:100px"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
 
-<!-- Programs Tab end here  -->
+    }
 
 
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
-@*<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>*@
-@*<script src="~/Scripts/jquery-ui.min.js"></script>*@
-<script>
+    <!-- Programs Tab start here  -->
+
+    @{
+        Html.RenderPartial("~/Views/Shared/Patient/_PatientPrograms.cshtml", Model.Programs);
+    }
+
+    <!-- Programs Tab end here  -->
+
+
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
+    @*<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>*@
+    @*<script src="~/Scripts/jquery-ui.min.js"></script>*@
+    <script>
    var  programUploadedPath="@System.Web.Configuration.WebConfigurationManager.AppSettings["ProgramUploadPath"]";
     var _userID = "@Session["userid"]";
     var _patientID = '@ViewBag.PatientId';
     var programName = '';
+    var formName = '';
     var programElement = '';
     var clinicAddress = "";
     var _ClinicId = "@Model.PatientMain.ClinicID"
@@ -87,7 +99,10 @@
     if (clientMiddleName.trim().length > 0) {
         clientName = '@Model.PatientMain.FirstName' + " " + clientMiddleName+" "+'@Model.PatientMain.LastName'
       }
-      var _dateOfBirth = '@Model.PatientMain.DateOfBirth'
+    var _dateOfBirth = '@Model.PatientMain.DateOfBirth'
+
+
+
 
     $('#datepicker').datepicker({
                 uiLibrary: 'bootstrap'
@@ -633,7 +648,8 @@
 
       $(document).ready(function () {
           //notification changes start here--------------------
-
+          
+          console.log('1 hide controls');
           $('#Programs-tab').click(function () {
 
             if ($("#tabPills .nav-item").length > 0) {
@@ -758,7 +774,7 @@
 
         }
 
-
+          console.log('2 hide controls');
 
      @if (Model.ScheduleDate.IsCommunicationDue == "Red")
       {
@@ -833,7 +849,7 @@
 
         }
 
-
+          console.log('3 hide controls');
 
          @if (Model.ScheduleDate.IsSocialSupportsDue == "Red")
       {
@@ -945,7 +961,7 @@
 
         }
 
-
+          console.log('4 hide controls');
 
                   @if (Model.ScheduleDate.IsAuditDue == "Red")
       {
@@ -982,42 +998,42 @@
 
         }
 
+          console.log('5 hide controls');
+
+        //var DastN = "";
+        //var AuditN = "";
+        //DastN = $("#DastNot").attr('title');
+        //AuditN = $("#AuditNot").attr('title');
+        //if (DastN == undefined)
+        //{
+        //    DastN = ""
+
+        //}
+        //if (AuditN == undefined) {
+        //    AuditN = ""
+
+        //}
+        //$("#SubNot").attr('title', ' Dast=' + DastN + ' & Audit=' + AuditN);
 
 
-        var DastN = "";
-        var AuditN = "";
-        DastN = $("#DastNot").attr('title');
-        AuditN = $("#AuditNot").attr('title');
-        if (DastN == undefined)
-        {
-            DastN = ""
+        //var subnottitle = $("#SubNot").attr('title');
 
-        }
-        if (AuditN == undefined) {
-            AuditN = ""
+        //if (subnottitle.indexOf("Due") == -1)
+        //{
+        //    $("#SubNot").hide();
 
-        }
-        $("#SubNot").attr('title', ' Dast=' + DastN + ' & Audit=' + AuditN);
-
-
-        var subnottitle = $("#SubNot").attr('title');
-
-        if (subnottitle.indexOf("Due") == -1)
-        {
-            $("#SubNot").hide();
-
-        }
-        else
-        {
-               $("#SubNot").attr('class', 'notCountR');
-              //$("#Alcohol-tab").css('border-left', '5px solid #a53333');
-              $("#SubNot").show();
-              $("#SubNot").html('i');
-             $("#SubNot").attr('title', ' Dast=' + DastN + ' & Audit=' + AuditN);
-        }
+        //}
+        //else
+        //{
+        //       $("#SubNot").attr('class', 'notCountR');
+        //      //$("#Alcohol-tab").css('border-left', '5px solid #a53333');
+        //      $("#SubNot").show();
+        //      $("#SubNot").html('i');
+        //     $("#SubNot").attr('title', ' Dast=' + DastN + ' & Audit=' + AuditN);
+        //}
 
 
-
+          console.log('6 hide controls');
 
              @if (Model.ScheduleDate.IsMentalHealthDue == "Red")
           {
@@ -1054,7 +1070,7 @@
 
         }
 
-
+          console.log('7 hide controls');
 
               @if (Model.ScheduleDate.IsFoodAccessDue == "Red")
           {
@@ -1091,6 +1107,7 @@
 
         }
 
+          console.log('9 hide controls');
           //motification changes end here-------------------------
 
         @if (Model.PatientHousing.PatientHousingID == 0)
@@ -1213,7 +1230,7 @@
             @:$("#FoodAccess-tab").find('span').css('display', 'inline');
                 }
 
-           @*@if (Model.PatientProgram.PatientProgramsID == 0)
+      @*@if (Model.PatientProgram.PatientProgramsID == 0)
         {
                @:$("#Programs-tab").find('span').css('display', 'none');
           if (Model.PatientProgram.ClinicOnly.ClinicOnlyID == 0)
@@ -1297,6 +1314,8 @@
                }
 
            }*@
+
+          console.log('hide controls');
         $('.form-control').css('display', 'none');
         $('.Add').css('display', 'none');
         $('.selectboxmultiple').css('display', 'none');
@@ -1481,7 +1500,7 @@
 
           })
 
-        var lblCalRec = $('#lblCalRec').html().trim();
+          var lblCalRec = $('#lblCalRec').html() != "" && undefined ? $('#lblCalRec').html().trim():"";
         if (lblCalRec == "") {
             $('#CalRec').removeClass('fa-times');
             $('#CalRec').removeClass('fa-check');
@@ -1490,7 +1509,7 @@
             $('#CalRec').removeClass('fa-times');
             $('#CalRec').addClass('fa-check');
         }
-        var lblCalPen = $('#lblCalPen').html().trim();
+          var lblCalPen = $('#lblCalPen').html() != "" && undefined ? $('#lblCalPen').html().trim() : "";
         if (lblCalPen == "") {
             $('#CalPen').removeClass('fa-times');
             $('#CalPen').removeClass('fa-check');
@@ -1499,7 +1518,7 @@
             $('#CalPen').removeClass('fa-times');
             $('#CalPen').addClass('fa-check');
         }
-        var lblCalApp = $('#lblCalApp').html().trim();
+          var lblCalApp = $('#lblCalApp').html() != "" && undefined ? $('#lblCalApp').html().trim() : "";
         if (lblCalApp == "") {
             $('#CalApp').removeClass('fa-times');
             $('#CalApp').removeClass('fa-check');
@@ -1508,7 +1527,7 @@
             $('#CalApp').removeClass('fa-times');
             $('#CalApp').addClass('fa-check');
         }
-        var lblCalNev = $('#lblCalNev').html().trim();
+          var lblCalNev = $('#lblCalNev').html() != "" && undefined ? $('#lblCalNev').html().trim() : "";
         if (lblCalNev == "") {
             $('#CalNev').removeClass('fa-times');
             $('#CalNev').removeClass('fa-check');
@@ -1519,7 +1538,7 @@
         }
 
 
-        var lblSSRec = $('#lblSSRec').html().trim();
+          var lblSSRec = $('#lblSSRec').html() != "" && undefined ? $('#lblSSRec').html().trim() : "";
         if (lblSSRec == "") {
             $('#SSRec').removeClass('fa-times');
             $('#SSRec').removeClass('fa-check');
@@ -1528,7 +1547,7 @@
             $('#SSRec').removeClass('fa-times');
             $('#SSRec').addClass('fa-check');
         }
-        var lblSSPen = $('#lblSSPen').html().trim();
+          var lblSSPen = $('#lblSSPen').html() != "" && undefined ? $('#lblSSPen').html().trim() : "";
         if (lblSSPen == "") {
             $('#SSPen').removeClass('fa-times');
             $('#SSPen').removeClass('fa-check');
@@ -1537,7 +1556,7 @@
             $('#SSPen').removeClass('fa-times');
             $('#SSPen').addClass('fa-check');
         }
-        var lblSSApp = $('#lblSSApp').html().trim();
+          var lblSSApp = $('#lblSSApp').html() != "" && undefined ? $('#lblSSApp').html().trim() : "";
         if (lblSSApp == "") {
             $('#SSApp').removeClass('fa-times');
             $('#SSApp').removeClass('fa-check');
@@ -1546,7 +1565,7 @@
             $('#SSApp').removeClass('fa-times');
             $('#SSApp').addClass('fa-check');
         }
-        var lblSSNev = $('#lblSSNev').html().trim();
+          var lblSSNev = $('#lblSSNev').html() != "" && undefined ? $('#lblSSNev').html().trim() : "";
         if (lblSSNev == "") {
             $('#SSNev').removeClass('fa-times');
             $('#SSNev').removeClass('fa-check');
@@ -1557,7 +1576,7 @@
         }
 
 
-        var lblGARec = $('#lblGARec').html().trim();
+          var lblGARec = $('#lblGARec').html() != "" && undefined ? $('#lblGARec').html().trim() : "";
         if (lblGARec == "") {
             $('#GARec').removeClass('fa-times');
             $('#GARec').removeClass('fa-check');
@@ -1566,7 +1585,7 @@
             $('#GARec').removeClass('fa-times');
             $('#GARec').addClass('fa-check');
         }
-        var lblGAPen = $('#lblGAPen').html().trim();
+          var lblGAPen = $('#lblGAPen').html() != "" && undefined ? $('#lblGAPen').html().trim() : "";
         if (lblGAPen == "") {
             $('#GAPen').removeClass('fa-times');
             $('#GAPen').removeClass('fa-check');
@@ -1575,7 +1594,7 @@
             $('#GAPen').removeClass('fa-times');
             $('#GAPen').addClass('fa-check');
         }
-        var lblGAApp = $('#lblGAApp').html().trim();
+          var lblGAApp = $('#lblGAApp').html() != "" && undefined ? $('#lblGAApp').html().trim() : "";
         if (lblGAApp == "") {
             $('#GAApp').removeClass('fa-times');
             $('#GAApp').removeClass('fa-check');
@@ -1585,7 +1604,7 @@
             $('#GAApp').addClass('fa-check');
         }
 
-        var lblGANev = $('#lblGANev').html().trim();
+          var lblGANev = $('#lblGANev').html() != "" && undefined ? $('#lblGANev').html().trim() : "";
         if (lblGANev == "") {
             $('#GANev').removeClass('fa-times');
             $('#GANev').removeClass('fa-check');
@@ -1596,7 +1615,7 @@
         }
 
 
-        var lblWIRec = $('#lblWIRec').html().trim();
+          var lblWIRec = $('#lblWIRec').html() != "" && undefined ? $('#lblWIRec').html().trim() : "";
         if (lblWIRec == "") {
             $('#WIRec').removeClass('fa-times');
             $('#WIRec').removeClass('fa-check');
@@ -1605,7 +1624,7 @@
             $('#WIRec').removeClass('fa-times');
             $('#WIRec').addClass('fa-check');
         }
-        var lblWIPen = $('#lblWIPen').html().trim();
+          var lblWIPen = $('#lblWIPen').html() != "" && undefined ? $('#lblWIPen').html().trim() : "";
         if (lblWIPen == "") {
             $('#WIPen').removeClass('fa-times');
             $('#WIPen').removeClass('fa-check');
@@ -1614,7 +1633,7 @@
             $('#WIPen').removeClass('fa-times');
             $('#WIPen').addClass('fa-check');
         }
-        var lblWIApp = $('#lblWIApp').html().trim();
+          var lblWIApp = $('#lblWIApp').html() != "" && undefined ? $('#lblWIApp').html().trim() : "";
         if (lblWIApp == "") {
             $('#WIApp').removeClass('fa-times');
             $('#WIApp').removeClass('fa-check');
@@ -1623,7 +1642,7 @@
             $('#WIApp').removeClass('fa-times');
             $('#WIApp').addClass('fa-check');
         }
-        var lblWINev = $('#lblWINev').html().trim();
+          var lblWINev = $('#lblWINev').html() != "" && undefined ? $('#lblWINev').html().trim() : "";
         if (lblWINev == "") {
             $('#WINev').removeClass('fa-times');
             $('#WINev').removeClass('fa-check');
@@ -1635,7 +1654,7 @@
 
 
 
-        var lblUnRec = $('#lblUnRec').html().trim();
+          var lblUnRec = $('#lblUnRec').html() != "" && undefined ? $('#lblUnRec').html().trim() : "";
         if (lblUnRec == "") {
             $('#UnRec').removeClass('fa-times');
             $('#UnRec').removeClass('fa-check');
@@ -1644,7 +1663,7 @@
             $('#UnRec').removeClass('fa-times');
             $('#UnRec').addClass('fa-check');
         }
-        var lblUnPen = $('#lblUnPen').html().trim();
+          var lblUnPen = $('#lblUnPen').html() != "" && undefined ? $('#lblUnPen').html().trim() : "";
         if (lblUnPen == "") {
             $('#UnPen').removeClass('fa-times');
             $('#UnPen').removeClass('fa-check');
@@ -1653,7 +1672,7 @@
             $('#UnPen').removeClass('fa-times');
             $('#UnPen').addClass('fa-check');
         }
-        var lblUnApp = $('#lblUnApp').html().trim();
+          var lblUnApp = $('#lblUnApp').html() != "" && undefined ? $('#lblUnApp').html().trim() : "";
         if (lblUnApp == "") {
             $('#UnApp').removeClass('fa-times');
             $('#UnApp').removeClass('fa-check');
@@ -1662,7 +1681,7 @@
             $('#UnApp').removeClass('fa-times');
             $('#UnApp').addClass('fa-check');
         }
-        var lblUnNev = $('#lblUnNev').html().trim();
+          var lblUnNev = $('#lblUnNev').html() != "" && undefined ? $('#lblUnNev').html().trim() : "";
         if (lblUnNev == "") {
             $('#UnNev').removeClass('fa-times');
             $('#UnNev').removeClass('fa-check');
@@ -1673,7 +1692,7 @@
         }
 
 
-        var lblSDRec = $('#lblSDRec').html().trim();
+          var lblSDRec = $('#lblSDRec').html() != "" && undefined ? $('#lblSDRec').html().trim() : "";
         if (lblSDRec == "") {
             $('#SDRec').removeClass('fa-times');
             $('#SDRec').removeClass('fa-check');
@@ -1682,7 +1701,7 @@
             $('#SDRec').removeClass('fa-times');
             $('#SDRec').addClass('fa-check');
         }
-        var lblSDPen = $('#lblSDPen').html().trim();
+          var lblSDPen = $('#lblSDPen').html() != "" && undefined ? $('#lblSDPen').html().trim() : "";
         if (lblSDPen == "") {
             $('#SDPen').removeClass('fa-times');
             $('#SDPen').removeClass('fa-check');
@@ -1691,7 +1710,7 @@
             $('#SDPen').removeClass('fa-times');
             $('#SDPen').addClass('fa-check');
         }
-        var lblSDApp = $('#lblSDApp').html().trim();
+          var lblSDApp = $('#lblSDApp').html() != "" && undefined ? $('#lblSDApp').html().trim() : "";
         if (lblSDApp == "") {
             $('#SDApp').removeClass('fa-times');
             $('#SDApp').removeClass('fa-check');
@@ -1700,7 +1719,7 @@
                 $('#SDApp').removeClass('fa-times');
                 $('#SDApp').addClass('fa-check');
             }
-        var lblSDNev = $('#lblSDNev').html().trim();
+          var lblSDNev = $('#lblSDNev').html() != "" && undefined ? $('#lblSDNev').html().trim() : "";
 
         if (lblSDNev == "") {
             $('#SDNev').removeClass('fa-times');
@@ -1713,7 +1732,7 @@
 
 
 
-        var lblReRec = $('#lblReRec').html().trim();
+          var lblReRec = $('#lblReRec').html() != "" && undefined ? $('#lblReRec').html().trim() : "";
         if (lblReRec == "") {
             $('#ReRec').removeClass('fa-times');
             $('#ReRec').removeClass('fa-check');
@@ -1721,7 +1740,7 @@
             $('#ReRec').removeClass('fa-times');
             $('#ReRec').addClass('fa-check');
         }
-        var lblRePen = $('#lblRePen').html().trim();
+          var lblRePen = $('#lblRePen').html() != "" && undefined ? $('#lblRePen').html().trim() : "";
         if (lblRePen == "") {
             $('#RePen').removeClass('fa-times');
             $('#RePen').removeClass('fa-check');
@@ -1729,7 +1748,7 @@
             $('#RePen').removeClass('fa-times');
             $('#RePen').addClass('fa-check');
         }
-        var lblReApp = $('#lblReApp').html().trim();
+          var lblReApp = $('#lblReApp').html() != "" && undefined ? $('#lblReApp').html().trim() : "";
         if (lblReApp == "") {
             $('#ReApp').removeClass('fa-times');
             $('#ReApp').removeClass('fa-check');
@@ -1737,7 +1756,7 @@
             $('#ReApp').removeClass('fa-times');
             $('#ReApp').addClass('fa-check');
         }
-        var lblReNev = $('#lblReNev').html().trim();
+          var lblReNev = $('#lblReNev').html() != "" && undefined ? $('#lblReNev').html().trim() : "";
         if (lblReNev == "") {
             $('#ReNev').removeClass('fa-times');
             $('#ReNev').removeClass('fa-check');
@@ -1846,10 +1865,6 @@
             $('#divSmoke').show();
         }
 
-
-
-
-
         var lblInPrison = $('#lblInPrison').html();
         if (lblSmoke == "Yes") {
             $('#divPrison').show();
@@ -1878,10 +1893,6 @@
 
         //-------------------Dast start--------------------------//
 
-
-
-
-
         $('#PFirstName').html('@ViewBag.FirstName');
         $('#PDOB').html('@ViewBag.DOB');
 
@@ -1901,13 +1912,9 @@
             $(this).attr("disabled", true);
         });
 
-
-
-
-
         var lblMedical = $('#hdfUsedDrugsForMedicalReasons').val();
 
-        switch (lblMedical.trim()) {
+          switch (lblMedical != "" && undefined ? lblMedical.trim() : "") {
             case "":
                 $('#MedicalYes').removeClass('fa-times');
                 $('#MedicalYes').removeClass('fa-check');
@@ -1925,7 +1932,7 @@
         }
 
         var lblAbuse = $('#hdfOneDrugAtATime').val();
-        switch (lblAbuse.trim()) {
+          switch (lblAbuse != "" && undefined ? lblAbuse.trim() : "") {
             case "":
                 $('#AbuseYes').removeClass('fa-times');
                 $('#AbuseYes').removeClass('fa-check');
@@ -1942,8 +1949,7 @@
                 break;
         }
 
-
-        var lblUnableNo = $('#lblUnableNo').html().trim();
+          var lblUnableNo = $('#lblUnableNo').html() != "" && undefined ? $('#lblUnableNo').html().trim() : "";
 
         if (lblUnableNo == "") {
             $('#UnableNo').removeClass('fa-times');
@@ -1952,7 +1958,7 @@
             $('#UnableNo').removeClass('fa-times');
             $('#UnableNo').addClass('fa-check');
         }
-        var lblUnableYes = $('#lblUnableYes').html().trim();
+          var lblUnableYes = $('#lblUnableYes').html() != "" && undefined ? $('#lblUnableYes').html().trim() : "";
         if (lblUnableYes == "") {
             $('#UnableYes').removeClass('fa-times');
             $('#UnableYes').removeClass('fa-check');
@@ -1961,8 +1967,7 @@
             $('#UnableYes').addClass('fa-check');
         }
 
-
-        var lblBlackoutsNo = $('#lblBlackoutsNo').html().trim();
+          var lblBlackoutsNo = $('#lblBlackoutsNo').html() != "" && undefined ? $('#lblBlackoutsNo').html().trim() : "";
         if (lblBlackoutsNo == "") {
             $('#BlackoutsNo').removeClass('fa-times');
             $('#BlackoutsNo').removeClass('fa-check');
@@ -1970,7 +1975,7 @@
             $('#BlackoutsNo').removeClass('fa-times');
             $('#BlackoutsNo').addClass('fa-check');
         }
-        var lblBlackoutsYes = $('#lblBlackoutsYes').html().trim();
+          var lblBlackoutsYes = $('#lblBlackoutsYes').html() != "" && undefined ? $('#lblBlackoutsYes').html().trim() : "";
         if (lblBlackoutsYes == "") {
             $('#BlackoutsYes').removeClass('fa-times');
             $('#BlackoutsYes').removeClass('fa-check');
@@ -1979,7 +1984,7 @@
             $('#BlackoutsYes').addClass('fa-check');
         }
 
-        var lblGuiltyNo = $('#lblGuiltyNo').html().trim();
+          var lblGuiltyNo = $('#lblGuiltyNo').html() != "" && undefined ? $('#lblGuiltyNo').html().trim() : "";
         if (lblGuiltyNo == "") {
             $('#GuiltyNo').removeClass('fa-times');
             $('#GuiltyNo').removeClass('fa-check');
@@ -1987,7 +1992,7 @@
             $('#GuiltyNo').removeClass('fa-times');
             $('#GuiltyNo').addClass('fa-check');
         }
-        var lblGuiltyYes = $('#lblGuiltyYes').html().trim();
+          var lblGuiltyYes = $('#lblGuiltyYes').html() != "" && undefined ? $('#lblGuiltyYes').html().trim() : "";
         if (lblGuiltyYes == "") {
             $('#GuiltyYes').removeClass('fa-times');
             $('#GuiltyYes').removeClass('fa-check');
@@ -1997,7 +2002,7 @@
         }
 
 
-        var lblSpouseNo = $('#lblSpouseNo').html().trim();
+          var lblSpouseNo = $('#lblSpouseNo').html() != "" && undefined ? $('#lblSpouseNo').html().trim() : "";
         if (lblSpouseNo == "") {
             $('#SpouseNo').removeClass('fa-times');
             $('#SpouseNo').removeClass('fa-check');
@@ -2005,7 +2010,7 @@
             $('#SpouseNo').removeClass('fa-times');
             $('#SpouseNo').addClass('fa-check');
         }
-        var lblSpouseYes = $('#lblSpouseYes').html().trim();
+          var lblSpouseYes = $('#lblSpouseYes').html() != "" && undefined ? $('#lblSpouseYes').html().trim() : "";
         if (lblSpouseYes == "") {
             $('#SpouseYes').removeClass('fa-times');
             $('#SpouseYes').removeClass('fa-check');
@@ -2015,7 +2020,7 @@
         }
 
 
-        var lblNeglectedNo = $('#lblNeglectedNo').html().trim();
+          var lblNeglectedNo = $('#lblNeglectedNo').html()!= "" && undefined ? $('#lblNeglectedNo').html().trim() : "";
         if (lblNeglectedNo == "") {
             $('#NeglectedNo').removeClass('fa-times');
             $('#NeglectedNo').removeClass('fa-check');
@@ -2023,7 +2028,7 @@
             $('#NeglectedNo').removeClass('fa-times');
             $('#NeglectedNo').addClass('fa-check');
         }
-        var lblNeglectedYes = $('#lblNeglectedYes').html().trim();
+          var lblNeglectedYes = $('#lblNeglectedYes').html() != "" && undefined ? $('#lblNeglectedYes').html().trim() : "";
         if (lblNeglectedYes == "") {
             $('#NeglectedYes').removeClass('fa-times');
             $('#NeglectedYes').removeClass('fa-check');
@@ -2032,7 +2037,7 @@
             $('#NeglectedYes').addClass('fa-check');
         }
 
-        var lblEngagedNo = $('#lblEngagedNo').html().trim();
+          var lblEngagedNo = $('#lblEngagedNo').html() != "" && undefined ? $('#lblEngagedNo').html().trim() : "";
         if (lblEngagedNo == "") {
             $('#EngagedNo').removeClass('fa-times');
             $('#EngagedNo').removeClass('fa-check');
@@ -2042,7 +2047,7 @@
         }
 
 
-        var lblEngagedYes = $('#lblEngagedYes').html().trim();
+          var lblEngagedYes = $('#lblEngagedYes').html() != "" && undefined ? $('#lblEngagedYes').html().trim() : "";
         if (lblEngagedYes == "") {
             $('#EngagedYes').removeClass('fa-times');
             $('#EngagedYes').removeClass('fa-check');
@@ -2053,7 +2058,7 @@
 
 
 
-        var lblSymptomsNo = $('#lblSymptomsNo').html().trim();
+          var lblSymptomsNo = $('#lblSymptomsNo').html() != "" && undefined ? $('#lblSymptomsNo').html().trim() : "";
         if (lblSymptomsNo == "") {
             $('#SymptomsNo').removeClass('fa-times');
             $('#SymptomsNo').removeClass('fa-check');
@@ -2061,7 +2066,7 @@
             $('#SymptomsNo').removeClass('fa-times');
             $('#SymptomsNo').addClass('fa-check');
         }
-        var lblSymptomsYes = $('#lblSymptomsYes').html().trim();
+          var lblSymptomsYes = $('#lblSymptomsYes').html() != "" && undefined ? $('#lblSymptomsYes').html().trim() : "";
         if (lblSymptomsYes == "") {
             $('#SymptomsYes').removeClass('fa-times');
             $('#SymptomsYes').removeClass('fa-check');
@@ -2070,7 +2075,7 @@
             $('#SymptomsYes').addClass('fa-check');
         }
 
-        var lblHepatitiesNo = $('#lblHepatitiesNo').html().trim();
+          var lblHepatitiesNo = $('#lblHepatitiesNo').html() != "" && undefined ? $('#lblHepatitiesNo').html().trim() : "";
         if (lblHepatitiesNo == "") {
             $('#HepatitiesNo').removeClass('fa-times');
             $('#HepatitiesNo').removeClass('fa-check');
@@ -2078,7 +2083,7 @@
             $('#HepatitiesNo').removeClass('fa-times');
             $('#HepatitiesNo').addClass('fa-check');
         }
-        var lblHepatitiesYes = $('#lblHepatitiesYes').html().trim();
+          var lblHepatitiesYes = $('#lblHepatitiesYes').html() != "" && undefined ? $('#lblHepatitiesYes').html().trim() : "";
         if (lblHepatitiesYes == "") {
             $('#HepatitiesYes').removeClass('fa-times');
             $('#HepatitiesYes').removeClass('fa-check');
@@ -2172,10 +2177,6 @@
 
         }
 
-
-
-
-
         var option = "";
         var lblMentalHealth = $('#lblMentalHealth').html();
         var lblMentalHealthArray = lblMentalHealth != undefined ? lblMentalHealth.split(','):'';
@@ -2249,7 +2250,7 @@
 
     //===============Proceed functions=======//
 
-    function GetClinicAddress(_patientClinicId, _ProgramName) {
+    function GetClinicAddress(_patientClinicId, formName) {
           $.ajax({
               type: "GET",
               url: Apipath + '/api/PatientMain/getclinicaddress?ClinicID=' + _patientClinicId,
@@ -2258,7 +2259,7 @@
               async: true,
               success: function (data) {
                   clinicAddress = data;
-                  printFunction(_ProgramName);
+                  printFunction(formName);
               },
               error: function (e) {
                   toastr.error("Something happen Wrong");
@@ -2267,20 +2268,20 @@
           });
       }
 
-      function PrintProgram(_ProgramName) {
-
-          if (clinicAddress.trim().length == 0 && _ClinicId > 0) {
-              GetClinicAddress(_ClinicId, _ProgramName);
+    function PrintProgram(formName) {
+        var clinicaddress = clinicAddress != "" && undefined ? clinicAddress.trim() : ""
+        if (clinicaddress.length == 0 && _ClinicId > 0) {
+              GetClinicAddress(_ClinicId, formName);
           }
           else {
-              printFunction(_ProgramName)
+              printFunction(formName)
           }
 
     }
-      function printFunction(_ProgramName) {
+    function printFunction(formName) {
 
-          let htmlToPrint = $("#" + _ProgramName + "render-basicform")[0].outerHTML
-          let Programtitle = $('#a' + _ProgramName).text();
+        let htmlToPrint = $("#" + formName + "render-basicform")[0].outerHTML
+        let Programtitle = $('#a' + formName).text();
           let HeadHtml = $('head').html();
           var stringToAppend = '<h4 class="text-center mb-4">' + Programtitle + '</h4>';
           stringToAppend += '<table  width="40%" style="margin-left:35px;margin-bottom:15px">';
@@ -2309,6 +2310,771 @@
           }, 500);
       }
 
+    function loadClient(item) {
+        
+        //$("#myTab .nav-item a").on('click', function (e) {
+        
+        $(".tab-pane").each(function (index, item) {
+            $(item).removeClass("active show");
+            $(item).removeClass('client-form-margin-top');
+        })
+
+        //$("#myChildTab").css("display", "none");
+        var item = $(item);
+            var ClientFormId = item.attr("data-ClientFormID")
+            formName = item.attr("data-FormName");
+        programElement = $("#" + formName + "render-basicform");
+        var id = item.attr("id");
+        if ($("#"+id).hasClass("Child")) {
+            $(".Child").removeClass('active show');
+            $("#" + id).addClass('active show');
+        }
+            var _IsSaved = $('#' + formName + 'only').find('.btnprogramsave').attr('data-save');
+        $('#' + formName + 'only').find('.Child').removeClass('active show ');
+        $('#' + formName + 'only').find("#a" + formName).addClass('active show ');
+            if (_IsSaved == 'True') {
+                $('#' + formName + 'only').find('.btnprogramPrint').css('display', 'block');
+            }
+            else {
+                $('#' + formName + 'only').find('.btnprogramPrint').css('display', 'none');
+            }
+            $('#' + formName + 'only').addClass('active show');
+            var _templateID = item.attr("data-TemplateID");
+            if (programElement.html() != "" && undefined ? programElement.html().length : "" > 0) {
+                $(".loaderOverlay").hide();
+                return;
+        };
+        LoadChildMenu(ClientFormId);
+            if (_IsSaved == 'False') {
+                LoadClientFormTemplate(ClientFormId)
+            }
+            else {
+                EditClientForm(ClientFormId, _templateID)
+            }
+
+        //})
+    }
+        function LoadChildMenu(ClientFormId) {
+            
+            $.ajax({
+                type: "GET",
+                url: '/Client/GetClientFormChildMenu?ClientFormId=' + ClientFormId + '&PatientId=' + _patientID,
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                beforeSend: function () {
+
+                },
+                async: true,
+                success: function (result) {
+                    
+
+                   
+                    var data = JSON.parse(result.data)
+                    var myChildTab = $("#myChildTab");
+                    if (data.length == 1 && data[0].ParentFormID == null) {
+                        $("#myChildTab").css("display", "none");
+                    } else {
+
+                        var myChildTab = $("#myChildTab");
+                        if (data.length > 1) {
+                            myChildTab.find("li").remove();
+                        }
+
+                        if (data.length > 0) {
+                            
+                            $("#myChildTab").css("display", "flex");
+                            $('#' + formName + 'only').addClass('client-form-margin-top');
+                        }
+                       
+                       
+                        $.each(data, function (i, item) {
+                            if (item.ClientFormID != ClientFormId) {
+                                var formname = item.FormName.replace(/ /g, '');
+                                if (item.Saved == true) {
+                                    myChildTab.append(`<li class="nav-item" style="display: flex;" ><a id="${formname}" style="width: 230px;" data-FormName="${formname}" data-TemplateID="${item.TemplateID}" onclick="loadClient(this)" class="nav-link Child" href="${'#' + formname + 'only'}"data-ClientFormID="${item.ClientFormID}"data-PatientID="${item.PatientID}">
+                                ${item.FormName}<span class="check" ${item.Saved}?"":style='display:none' ><i class="fas fa-check-circle"></i></span></a></li>`
+                                    )
+                                } else {
+                                    myChildTab.append(`<li class="nav-item" style="display: flex;" ><a id="${formname}" style="width: 230px;" data-FormName="${formname}" data-TemplateID="${item.TemplateID}" onclick="loadClient(this)" class="nav-link Child" href="${'#' + formname + 'only'}"data-ClientFormID="${item.ClientFormID}"data-PatientID="${item.PatientID}">
+                                ${item.FormName}<span class="check" ${item.Saved}?"":style='display:none' ></i></span></a></li>`
+                                    )
+                                }
+                            }                           
+                        });
+                    }
+
+                },
+                error: function (e) {
+                    toastr.error("Something happen Wrong");
+                    $(".loaderOverlay").hide();
+                }
+            });
+        }
+
+
+    function LoadClientFormTemplate(ClientFormId) {
+
+        var _ClientFormId = ClientFormId;
+     $.ajax({
+         type: "GET",
+         url: '/Client/GetClientFormTemplateByClientFormId?ClientFormId=' + _ClientFormId,
+         contentType: 'application/json; charset=UTF-8',
+         dataType: "json",
+          beforeSend: function () {
+            $(".loaderOverlay").css('display','flex');
+        },
+         async: true,
+         success: function (result) {
+             if (result.html == "") {
+                 toastr.error("No template found");
+             } else {
+
+                 programElement.html("").append(result.html);
+                 tableName = result.tableName;
+                 templateid = result.TemplateId;
+
+                 if (programElement.find(".basecontentarea").length > 0) {
+                     getClientFormHeaderAndFooter();
+
+                 }
+                 //getClientFormBasicFormValue(ClientFormId, _templateID)
+                 programElement.find(".event-btn-right").remove();
+                 programElement.find(".ck-editor-header").remove();
+                 programElement.find(".question-container").parent().css("border", "none");
+                 programElement.find(".dragresize").find(".question-container").remove();
+                 programElement.find(".dragresize").find(".bootom-form-row").css({ "padding": "7px 0px", "margin": "0" });
+                 programElement.find(".html-content").prev().css("display", "none");
+                 programElement.find(".html-content").parent().parent().parent().addClass("left-control");
+                 programElement.find(".f-g-left").each(function (index, item) {
+                     $(item).parent().parent().addClass("left-control");
+                 });
+
+                 $("textarea.program-control,textarea.base-control").summernote({
+                     toolbar: [
+                         ['para', ['ul', 'ol', 'paragraph']],
+                         ['style', ['bold', 'italic', 'underline', 'clear']],
+                         ['font', ['strikethrough', 'superscript', 'subscript']],
+                     ],
+                     placeholder: "Type here",
+                     callbacks: {
+                         onInit: function (e) {
+                             this.placeholder
+                                 ? e.editingArea.find(".note-placeholder").html(this.placeholder)
+                                 : e.editingArea.remove(".note-placeholder")
+                         }
+                     },
+                     height: 150,
+                 });
+                 toogleProgramToolTip();
+                 makeClientFormBasicInfoReadonly()
+                   if (programElement.find(".basecontentarea").length > 0) {
+                     getClientFormBaseFieldData()
+                 }
+
+
+             }
+              $(".loaderOverlay").hide();
+         },
+        error: function (e) {
+             toastr.error("Something happen Wrong");
+             $(".loaderOverlay").hide();
+         }
+     });
+        }
+
+    function getClientFormHeaderAndFooter() {
+
+    $.ajax({
+        type: "GET",
+        url: Apipath + '/api/PatientMain/getClientFormbasetemplateid',
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        async: false,
+        success: function (result) {
+            switch (result.TemplateID ) {
+                case -1:
+                    break;
+                default:
+
+                    basetemplateid = result;
+                    $.ajax({
+                        type: "GET",
+                        url: '/Client/GetClientFormHtmlById?Id=' + result.TemplateID,
+                        contentType: 'application/json; charset=UTF-8',
+                        dataType: "json",
+                        async: false,
+                        success: function (result) {
+                            var baseHtml = parseHTML(result.html);
+                            var baseHeader = $(baseHtml).find(".baseheader").html();
+                            var baseFooter = $(baseHtml).find(".basefooter").html();
+                           programElement.find(".baseheader").html("").append(baseHeader);
+                            programElement.find(".basefooter").html("").append(baseFooter);
+                        },
+                        error: function (e) {
+                            toastr.error("Something happen Wrong");
+                            $(".loaderOverlay").hide();
+                        }
+                    });
+                    break;
+            }
+        },
+        error: function (e) {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });
+        }
+
+    //Edit functions //
+
+    function EditClientForm(ClientFormId, TemplateID)
+        {
+        getClientFormBasicFormHtml(ClientFormId,TemplateID)
+
+        }
+
+    function getClientFormBasicFormHtml(ClientFormId, id) {
+        
+        if (id != 0 && id!=undefined) {
+            $.ajax({
+                type: "GET",
+                url: '/Client/GetClientFormTemplateById?TemplateId=' + id,
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                beforeSend: function () {
+                    $(".loaderOverlay").css('display', 'flex');
+                },
+                async: true,
+                success: function (result) {
+
+                    if (result.html == "") {
+                        toastr.error("No template found");
+                    } else {
+                        programElement.html("").append(result.html);
+                        tableName = result.tableName;
+                        templateid = id;
+                        if (programElement.find(".basecontentarea").length > 0) {
+
+                            getBasehtmlByClientFormId(ClientFormId);
+
+                        }
+                        programElement.find(".event-btn-right").remove();
+                        programElement.find(".ck-editor-header").remove();
+                        programElement.find(".question-container").parent().css("border", "none");
+                        programElement.find(".dragresize").find(".question-container").remove();
+                        programElement.find(".dragresize").find(".bootom-form-row").css({ "padding": "7px 0px", "margin": "0" });
+                        programElement.find(".html-content").prev().css("display", "none");
+                        programElement.find(".html-content").parent().parent().parent().addClass("left-control");
+                        programElement.find(".f-g-left").each(function (index, item) {
+                            $(item).parent().parent().addClass("left-control");
+                        });
+                        toogleProgramToolTip();
+
+                        $("textarea.program-control,textarea.base-control").summernote({
+                            toolbar: [
+                                ['para', ['ul', 'ol', 'paragraph']],
+                                ['style', ['bold', 'italic', 'underline', 'clear']],
+                                ['font', ['strikethrough', 'superscript', 'subscript']],
+                            ],
+                            placeholder: "Type here",
+                            callbacks: {
+                                onInit: function (e) {
+                                    this.placeholder
+                                        ? e.editingArea.find(".note-placeholder").html(this.placeholder)
+                                        : e.editingArea.remove(".note-placeholder")
+                                }
+                            },
+                            height: 150,
+                        });
+                    }
+                    getClientFormBasicFormValue(ClientFormId, id)
+                    $(".loaderOverlay").hide();
+                },
+                error: function (e) {
+                    toastr.error("Something happen Wrong");
+                    $(".loaderOverlay").hide();
+                }
+            });
+        }
+
+    }
+
+    function toogleProgramToolTip() {
+
+        programElement.find('span.tooltipicon').tooltip({
+            trigger: "click",
+            html: true,
+            container: 'body'
+        });
+        programElement.find('span.tooltipicon').on('show.bs.tooltip', function () {
+            programElement.find('span.tooltipicon').not(this).tooltip('hide');
+        });
+        $('body').on('click', function (e) {
+            if ($(e.target).data('toggle') !== 'tooltip' && $(e.target).parents('[data-toggle="tooltip"]').length === 0
+                && $(e.target).parents('.tooltip.in').length === 0) {
+                (($('[data-toggle="tooltip"]').tooltip('hide').data('bs.tooltip') || {}).inState || {}).click = false;
+            }
+        });
+    }
+
+    function getBasehtmlByClientFormId(ClientFormId) {
+    $.ajax({
+        type: "GET",
+        url: Apipath + '/api/PatientMain/getClientFormbasetemplateidbyClientFormid?ClientFormID=' + ClientFormId + '&&PatientId=' + _patientID,
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        async: false,
+        success: function (result) {
+            
+            switch (result) {
+                case 0:
+                    break;
+                default:
+                    basetemplateid = result;
+                    $.ajax({
+                        type: "GET",
+                        url: '/Client/GetClientFormTemplateById?TemplateId=' + result,
+                        contentType: 'application/json; charset=UTF-8',
+                        dataType: "json",
+                        async: false,
+                        success: function (result) {
+
+                            if (result.html != "") {
+                                var baseHtml = parseHTML(result.html);
+                                var baseHeader = $(baseHtml).find(".baseheader").html();
+                                var baseFooter = $(baseHtml).find(".basefooter").html();
+                               programElement.find(".baseheader").html("").append(baseHeader);
+                               programElement.find(".basefooter").html("").append(baseFooter);
+                            }
+                        },
+                        error: function (e) {
+                            toastr.error("Something happen Wrong");
+                            $(".loaderOverlay").hide();
+                        }
+                    });
+                    break;
+            }
+        },
+        error: function (e) {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });
+}
+
+    function getClientFormBasicFormValue(ClientFormID, templateid) {
+
+
+        $.ajax({
+            type: "GET",
+            url: Apipath + '/api/PatientMain/getfieldvaluebyClientFormid?ClientFormID=' + ClientFormID + "&TemplateId=" + templateid + "&PatientId=" + _patientID,
+            contentType: 'application/json; charset=UTF-8',
+            dataType: "json",
+            async: false,
+            success: function (result) {
+                
+                if (result.length) {
+                    var fields = result[0];
+                    var value = "";
+                    programElement.find(".program-control,input.custom-control-input").each(function (index, item) {
+                        if ($(item).is("input")) {
+                            switch ($(item).attr("type")) {
+                                case "radio":
+                                case "checkbox":
+                                    if ($(item).hasAttr("data-column") && $(item).closest("div.inputContent").parent().hasClass("program-control")) {
+                                        value = fields[$(item).attr("data-column")];
+
+                                        if (value == null || value == "") {
+
+                                            $(item).closest("div.inputContent").find("label.label-program").html("").show();
+                                            $(item).closest("div.inputContent").find("div").first().hide();
+
+                                        } else {
+                                            var valueArr = value.split(',');
+                                            var valueTxt = "";
+
+                                            for (var i = 0; i < valueArr.length; i++) {
+                                                valueTxt += $(item).closest("div.inputContent").find(`input[value=${valueArr[i]}]`).next().text() + ", ";
+                                            }
+                                            valueTxt = valueTxt.slice(0, -2);
+                                            $(item).closest("div.inputContent").find("label.label-program").html("").append(valueTxt).show();
+                                            $(item).closest("div.inputContent").find("div").first().hide();
+
+                                        }
+                                    }
+                                    break;
+                                case "file":
+                                    getClientFormModuleFiles(ClientFormID, $(item).attr("id"));
+
+                                    $(item).hide();
+
+                                    break;
+                                default:
+
+                                    value = fields[$(item).attr("data-column")];
+
+                                    $(item).next().html("").append(value).show();
+                                    $(item).hide();
+
+                                    break;
+                            }
+                        }
+                        if ($(item).is("select")) {
+                            value = fields[$(item).attr("data-column")];
+
+                            if (value == 0) {
+                                value = ''
+                            }
+                            else {
+                                value = $(item).find(`option[value=${value}]`).text();
+                            }
+                            $(item).next().html("").append(value).show();
+                            $(item).hide();
+
+                        }
+                        if ($(item).hasClass("priority")) {
+                            value = fields[$(item).attr("data-column")];
+                            var splitvalues = value.split(',');
+
+                            var result = '';
+
+                            for (let i = 0; i < splitvalues.length; i++) {
+                                if ($(item).find('li[value="' + splitvalues[i] + '"]')) {
+                                    result += $(item).find('li[value="' + splitvalues[i] + '"]')[0].outerHTML;
+                                }
+
+
+                            }
+                            if (result.length > 0) {
+                                $(item).html(result);
+                            }
+                        }
+                        if ($(item).is("textarea")) {
+                            value = fields[$(item).attr("data-column")];
+
+                            $(item).parent().find("label.label-program").html("").append(value).show();
+                            $(item).next().hide();
+
+                        }
+                    });
+                }
+                if (programElement.find(".basecontentarea").length > 0) {
+                    getClientFormBaseFieldData();
+                }
+            }, error: function (e) {
+                toastr.error("Something happen Wrong");
+                $(".loaderOverlay").hide();
+            }
+        })
+
+    }
+
+    function getClientFormBaseFieldData() {
+
+       $.ajax({
+        type: "GET",
+           url: Apipath + '/api/PatientMain/getClientFormbasefieldbypatientid?Patientid=' +_patientID,
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        async: false,
+        success: function (result) {
+            if (result.length) {
+                var baseFields = result[0];
+                var value = "";
+                programElement.find(".form-control.base-control,input.custom-control-input").each(function (index, item) {
+                    if ($(item).is("input")) {
+                        switch ($(item).attr("type")) {
+                            case "radio":
+                            case "checkbox":
+
+                                if ($(item).hasAttr("data-column")) {
+                                    if ($(item).closest("div.inputContent").parent().hasClass("base-control")) {
+                                        value = baseFields[$(item).attr("data-column")];
+                                        if (value == null || value == "" || value == undefined) {
+                                            $(item).closest("div.inputContent").find("label.label-base").html("").show();
+                                                $(item).closest("div.inputContent").find("div").first().hide();
+                                        } else {
+                                            var valueArr = value.split(',');
+                                            var valueTxt = "";
+                                             for (var i = 0; i < valueArr.length; i++) {
+                                                    valueTxt += $(item).closest("div.inputContent").find(`input[value=${valueArr[i]}]`).next().text() + ", ";
+                                                }
+                                                valueTxt = valueTxt.slice(0, -2);
+                                                $(item).closest("div.inputContent").find("label.label-base").html("").append(valueTxt).show();
+                                                $(item).closest("div.inputContent").find("div").first().hide();
+                                        }
+                                    }
+                                }
+                                break;
+                            case "file":
+
+                                    getClientFormBaseFilesReadonly($(item).attr("id"));
+                                    $(item).hide();
+
+                                break;
+                            default:
+
+                                value = baseFields[$(item).attr("data-column")];
+
+                                    $(item).next().html("").append(value).show();
+                                    $(item).hide();
+
+                                break;
+                        }
+                    }
+                    if ($(item).is("select")) {
+                        value = baseFields[$(item).attr("data-column")];
+
+                        if (value == 0) {
+                            value = '';
+                        }
+                        else {
+                            value = $(item).find(`option[value=${value}]`).text();
+                        }
+                            $(item).next().html("").append(value).show();
+                            $(item).hide();
+
+                    }
+                    if ($(item).hasClass("priority")) {
+                        value = baseFields[$(item).attr("data-column")];
+                        var splitvalues = value.split(',');
+
+                        var result = '';
+
+                        for (let i = 0; i < splitvalues.length; i++) {
+                            if($(item).find('li[value="' + splitvalues[i] + '"]'))
+                             {
+                               result += $(item).find('li[value="' + splitvalues[i] + '"]')[0].outerHTML;
+                             }
+
+                        }
+                        if (result.length > 0) {
+                            $(item).html(result);
+                        }
+                    }
+                    if ($(item).is("textarea")) {
+                        value = baseFields[$(item).attr("data-column")];
+
+                            $(item).parent().find("label.label-base").html("").append(value).show();
+                            $(item).next().hide();
+
+                    }
+                });
+            }
+        },
+        error: function (e) {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });
+    }
+
+    function getClientFormBaseFilesReadonly(Id) {
+
+    $.ajax({
+        type: "GET",
+        url: Apipath + '/api/PatientMain/getClientFormbasefilesbypatientid?PatientId=' + _patientID + '&controlid=' + Id,
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        async: false,
+        success: function (result) {
+            if (result != "" && result != null) {
+
+                var filesArr = result.Files.split(',');
+                var namesArr = result.FileNames.split(',');
+                var selectedFiles = `<ul class="file_uploaded_list onlylinkslist">`;
+                var ext = "";
+                for (var i = 0; i < filesArr.length; i++) {
+                     ext = filesArr[i].split('.').pop();
+                    switch (ext) {
+                        case "png":
+                        case "jpg":
+                        case "jpeg":
+                            selectedFiles += '<li><img style="max-width: 90px;margin-right: 10px;" src="/' + programUploadedPath + filesArr[i] + '" alt="Care Plan Upload"><span><a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></span></li>';
+                            break;
+                         default:
+                            selectedFiles += '<li><a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></li>';
+                            break;
+                    }
+
+                }
+                selectedFiles += `</ul>`;
+                programElement.find('#'+Id).next().next().html("").append(selectedFiles);
+            }
+        }, error: function (e) {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });
+}
+
+    function getClientFormModuleFiles(ClientFormId, Id) {
+
+    $.ajax({
+        type: "GET",
+        url: Apipath + '/api/PatientMain/getfilesbyClientFormid?ClientFormID=' + ClientFormId +'&controlid='+Id+'&patientid='+_patientID,
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        async: false,
+        success: function (result) {
+
+            if (result != "" && result != null) {
+                var filesArr = result.Files.split(',');
+                var namesArr = result.FileNames.split(',');
+                var selectedFiles = "";
+                selectedFiles = `<ul class="file_uploaded_list onlylinkslist">`;
+                    var ext = "";
+                    for (var i = 0; i < filesArr.length; i++) {
+                         ext = filesArr[i].split('.').pop();
+                        switch (ext) {
+                            case "png":
+                            case "jpg":
+                            case "jpeg":
+                                selectedFiles += '<li><img style="max-width: 90px;margin-right: 10px;" src="/' + programUploadedPath + filesArr[i] + '" alt="Program Upload"><span><a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></span></li>';
+                                break;
+                            default:
+                                selectedFiles += '<li><a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></li>';
+                                break;
+                        }
+
+                    }
+                    selectedFiles += `</ul>`;
+                programElement.find("#"+ Id).next().next().html("").append(selectedFiles);
+            }
+        }, error: function (e) {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });
+}
+
+    function makeClientFormBasicInfoReadonly() {
+   // $("#ddlcareplanstatus").addClass("show_careplanstatus").val("1");
+
+    var value = "";
+   // isupdateProgramFields = false;
+    $("a.need-nav,a.summary-nav").parent().removeClass("disabled");
+    programElement.find(".program-control,.base-control").each(function (index, item) {
+        if ($(item).is("div")) {
+            var selectedValues = $.map($(item).find("input:checked"), function (n, i) {
+                return n.value;
+            }).join(',');
+            if (selectedValues == "") {
+                if ($(item).hasClass("base-control")) {
+                    $(item).find("label.label-base").html("").show();
+                    $(item).find("div.inputContent").find("div").first().hide();
+                } else {
+                    $(item).find("label.label-program").html("").show();
+                    $(item).find("div.inputContent").find("div").first().hide();
+                }
+            } else {
+                var valueArr = selectedValues.split(',');
+                var valueTxt = "";
+                for (var i = 0; i < valueArr.length; i++) {
+                    valueTxt += $(item).find(`input[value=${valueArr[i]}]`).next().text() + ", ";
+                }
+                valueTxt = valueTxt.slice(0, -2);
+                if ($(item).hasClass("base-control")) {
+                    $(item).find("label.label-base").html("").append(valueTxt).show();
+                    $(item).find("div.inputContent").find("div").first().hide();
+                } else {
+                    $(item).find("label.label-program").html("").append(valueTxt).show();
+                    $(item).find("div.inputContent").find("div").first().hide();
+                }
+
+            }
+        }
+        if ($(item).is("input")) {
+            switch ($(item).attr("type")) {
+                case "file":
+                    if ($(item).hasClass("base-control") && $(item).hasAttr("data-column")) {
+                        getBaseFilesReadonly($(item).attr("id"));
+                    } else if ($(item).hasClass("program-control") && $(item).hasAttr("data-column")) {
+                        getProgramFiles(careplanid, $(item).attr("id"))
+                    }
+                    $(item).hide();
+                    break;
+                default:
+                    value = $(item).val();
+                    $(item).next().html("").append(value).show();
+                    $(item).hide();
+                    break;
+            }
+        }
+        if ($(item).is("select")) {
+            value=$(item).find('option:selected').val();
+            if (value == 0) {
+                value = '';
+            }
+            else {
+                 value = $(item).find('option:selected').text();
+            }
+            $(item).next().html("").append(value).show();
+            $(item).hide();
+        }
+        if ($(item).is("textarea")) {
+            value = $(item).summernote('code');
+            if ($(item).hasClass("base-control")) {
+                $(item).parent().find("label.label-base").html("").append(value).show();
+            } else {
+                $(item).parent().find("label.label-program").html("").append(value).show();
+            }
+            $(item).next().hide();
+        }
+    });
+}
+
+    $('#btnAMDProfile').click(function () {
+       var PatientObject=  @Html.Raw(Json.Encode(Model.PatientMain));
+          $('#AMDProfile .modal-body').html("")
+
+          $.ajax({
+              type: "Post",
+              url: '/Client/GetAMDProfile',
+              data: JSON.stringify(PatientObject),
+              contentType: "application/json; charset=utf-8",
+              dataType: "html",
+              success: function (data) {
+                  if (data == '0') {
+                      toastr.error("No data available");
+                  }
+                  else if (data == '1') {
+                      toastr.error("multiple records available");
+                  }
+                  else {
+                      $('#AMDProfile .modal-body').html(data)
+                      $('#AMDProfile').modal('show');
+                  }
+
+              },
+              error: function (e) {
+                  toastr.error("Error AMDProfile Data.");
+              }
+          });
+
+      })
+
+    function InsertBadge(statusele,status) {
+          var badge=''
+          if (status == 'crisis') {
+              badge = '<span class="badge badge-danger" style="height:10px; position:relative; top:4px;">&nbsp; &nbsp;</span>'
+          }
+          else if (status == 'secure') {
+              badge ='<span class="badge badge-success" style="height:10px; position:relative; top:4px;">&nbsp; &nbsp;</span>'
+          }
+          else if (status =='struggling') {
+              badge ='<span class="badge badge-warning" style="height:10px; position:relative; top:4px;background-color:#ecec04!important">&nbsp; &nbsp;</span>'
+          }
+          else if (status == 'at risk') {
+              badge ='<span class="badge badge-warning"style="height:10px; position:relative; top:4px; background-color:#FF8C00!important">&nbsp; &nbsp;</span>'
+          }
+
+          $(statusele).parent().append(badge)
+    }
+
+
+    // Program code start here ......
+
 
     $("#tabPills .nav-item a").on('click', function (e) {
 
@@ -2330,7 +3096,7 @@
             $('#' + programName + 'only').find('.btnprogramPrint').css('display','none');
         }
          $('#' + programName + 'only').addClass('active show');
-             var _templateID = item.attr("data-TemplateID");
+        var _templateID = item.attr("data-TemplateID");
         if (programElement.html().length > 0) {
              $(".loaderOverlay").hide();
                  return;
@@ -2527,24 +3293,6 @@
         }
     });
 
-    }
-
-    function toogleProgramToolTip() {
-
-        programElement.find('span.tooltipicon').tooltip({
-            trigger: "click",
-            html: true,
-            container: 'body'
-        });
-        programElement.find('span.tooltipicon').on('show.bs.tooltip', function () {
-            programElement.find('span.tooltipicon').not(this).tooltip('hide');
-        });
-        $('body').on('click', function (e) {
-            if ($(e.target).data('toggle') !== 'tooltip' && $(e.target).parents('[data-toggle="tooltip"]').length === 0
-                && $(e.target).parents('.tooltip.in').length === 0) {
-                (($('[data-toggle="tooltip"]').tooltip('hide').data('bs.tooltip') || {}).inState || {}).click = false;
-            }
-        });
     }
 
     function getBasehtmlByProgramId(programid) {
@@ -2952,54 +3700,8 @@
             $(item).next().hide();
         }
     });
+        
+       
 }
 
-    $('#btnAMDProfile').click(function () {
-       var PatientObject=  @Html.Raw(Json.Encode(Model.PatientMain));
-          $('#AMDProfile .modal-body').html("")
-
-          $.ajax({
-              type: "Post",
-              url: '/Dashboard/GetAMDProfile',
-              data: JSON.stringify(PatientObject),
-              contentType: "application/json; charset=utf-8",
-              dataType: "html",
-              success: function (data) {
-                  if (data == '0') {
-                      toastr.error("No data available");
-                  }
-                  else if (data == '1') {
-                      toastr.error("multiple records available");
-                  }
-                  else {
-                      $('#AMDProfile .modal-body').html(data)
-                      $('#AMDProfile').modal('show');
-                  }
-
-              },
-              error: function (e) {
-                  toastr.error("Error AMDProfile Data.");
-              }
-          });
-
-      })
-
-    function InsertBadge(statusele, status) {
-          var badge=''
-          if (status == 'crisis') {
-              badge = '<span class="badge badge-danger" style="height:10px; position:relative; top:4px;">&nbsp; &nbsp;</span>'
-          }
-          else if (status == 'secure') {
-              badge ='<span class="badge badge-success" style="height:10px; position:relative; top:4px;">&nbsp; &nbsp;</span>'
-          }
-          else if (status =='struggling') {
-              badge ='<span class="badge badge-warning" style="height:10px; position:relative; top:4px;background-color:#ecec04!important">&nbsp; &nbsp;</span>'
-          }
-          else if (status == 'at risk') {
-              badge ='<span class="badge badge-warning"style="height:10px; position:relative; top:4px; background-color:#FF8C00!important">&nbsp; &nbsp;</span>'
-          }
-
-          $(statusele).parent().append(badge)
-      }
-
-</script>
+    </script>

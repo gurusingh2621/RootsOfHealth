@@ -24,6 +24,12 @@ namespace RootsOfHealth.Controllers
             return View();
         }
 
+        public ActionResult ClientsFormList()
+        {
+            return View();
+        }
+
+
         [HttpGet]
         public JsonResult GetProgramTemplateById(int TemplateId)
         {
@@ -64,6 +70,8 @@ namespace RootsOfHealth.Controllers
             return Json("");
         }
 
+       
+
         [HttpPost]
         public JsonResult GetProgramTemplateData(ProgramtemplateBO Model)
         {
@@ -89,6 +97,8 @@ namespace RootsOfHealth.Controllers
             ViewBag.TemplatePath = data.TemplatePath;
             return View();
         }
+
+        
 
         [HttpGet]
         public JsonResult GetFormHtmlById(int Id)
@@ -145,6 +155,8 @@ namespace RootsOfHealth.Controllers
                 Isactivated = 0
             }, JsonRequestBehavior.AllowGet);
         }
+
+        
 
         public JsonResult SaveFormTemplate( ProgramtemplateBO Model,string htmlTemplate=null,string TemplatePath=null)
         {
@@ -223,6 +235,7 @@ namespace RootsOfHealth.Controllers
             return Json("");
         }
 
+       
 
         [Authorize(Roles = "navigator,supervisor")]
         public ActionResult ProgramBaseTemplate(int templateid, bool Status)
@@ -270,6 +283,8 @@ namespace RootsOfHealth.Controllers
             return Json("");
         }
 
+     
+
         [HttpGet]
         public JsonResult GetProgramTemplateByProgramId(int ProgramId)
         {
@@ -309,6 +324,63 @@ namespace RootsOfHealth.Controllers
             if (PathName != "" && PathName != null)
             {
                 var gethtml = System.IO.File.ReadAllText(Server.MapPath("~/App_Data/Templates/ProgramsTemplate/" + PathName));
+                var jsonResult = new
+                {
+                    html = gethtml,
+                    tableName = data.TemplateTable,
+                    TemplateId = data.TemplateID
+                };
+                return Json(jsonResult, JsonRequestBehavior.AllowGet);
+            }
+            //var gethtml=   System.IO.File.ReadAllText(Server.MapPath("~/App_Data/data.html"));
+            return Json(new
+            {
+                html = "",
+                tableName = "",
+                TemplateId = ""
+
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GetClientFormTemplateByClientFormId(int ClientFormId)
+        {
+            if (ClientFormId == 0)
+            {
+                return Json(new
+                {
+                    html = "",
+                    tableName = "",
+                    TemplateId = ""
+                }, JsonRequestBehavior.AllowGet);
+            }
+            string PathName = string.Empty;
+            ClientFormtemplateBO data = new ClientFormtemplateBO();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                //HTTP GET
+                var responseTask = client.GetAsync("/api/PatientMain/GetClientFormTemplateByClientFormId?ClientFormId=" + ClientFormId);
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<ClientFormtemplateBO>();
+                    readTask.Wait();
+                    data = readTask.Result;
+                }
+                else //web api sent error response 
+                {
+                    //log response status here..
+
+
+                }
+            }
+            PathName = data.TemplatePath;
+            if (PathName != "" && PathName != null)
+            {
+                var gethtml = System.IO.File.ReadAllText(Server.MapPath("~/App_Data/Templates/ClientFormTemplate/" + PathName));
                 var jsonResult = new
                 {
                     html = gethtml,
@@ -411,6 +483,7 @@ namespace RootsOfHealth.Controllers
             }
             return Json(Paths);
         }
+
     }
 
 
