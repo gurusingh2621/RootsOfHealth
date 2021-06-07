@@ -28,7 +28,7 @@ function GetProgramTemplateList() {
                     if (item.IsBaseTemplate) {
                         ;
                         item.IsActive = item.IsActive == null ? false : true;
-                        programs += `<a href="/program/ProgramBaseTemplate?templateid=${item.TemplateID}&Status=${item.IsActive}"  class="btn btn-success text-white" style="cursor:pointer;">MODIFY</a>`
+                        programs += `<a href="/Client/ClientFormBaseTemplate?templateid=${item.TemplateID}&Status=${item.IsActive}"  class="btn btn-success text-white" style="cursor:pointer;">MODIFY</a>`
 
                     } else {                        
                         programs += `<a href="javascript:void(0)" onclick="ProceedProgram({TemplateID:${item.TemplateID},TemplateTable:\'${item.TemplateTable}\',FormName:\'${item.FormName}\',ClientFormID:${item.ClientFormID},IsBaseTemplate:${item.IsBaseTemplate}})"  class="btn btn-success text-white" style="cursor: pointer; ${item.Isactivated == true ? "display:none;" : ""} ">MODIFY</a>`
@@ -211,7 +211,7 @@ function CreateClientForm() {
     }
     $.ajax({
         type: "GET",
-        url: '/Program/isClientFormNameexist?formName=' + formName + '&&clientFormID=0',
+        url: '/Client/isClientFormNameexist?formName=' + formName + '&&clientFormID=0',
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
@@ -225,7 +225,7 @@ function CreateClientForm() {
                 $(".loaderOverlay").css("display", "flex");
                 $.ajax({
                     type: "POST",
-                    url: '/Program/SaveClientFormTemplate',
+                    url: '/Client/SaveClientFormTemplate',
                     data: JSON.stringify({ Model: model, formName: formName, IsModify: false, TemplatePath: temPath }),
                     contentType: 'application/json; charset=UTF-8',
                     dataType: "json",
@@ -310,7 +310,7 @@ function ProceedProgram(data) {
     
     $.ajax({
         type: "POST",
-        url: '/Program/GetClientFormTemplateData',
+        url: '/Client/GetClientFormTemplateData',
         data: JSON.stringify(model),
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
@@ -354,7 +354,7 @@ function ViewProgramContent(ID,name) {
     $("#PreviewModalTitle").html("").append(name);
     $.ajax({
         type: "GET",
-        url: '/program/GetClientFormTemplateById?TemplateId=' + ID,
+        url: '/Client/GetClientFormTemplateById?TemplateId=' + ID,
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",        
         success: function (result) {
@@ -434,7 +434,7 @@ function ViewHeaderAndFooter() {
                 default:
                     $.ajax({
                         type: "GET",
-                        url: '/program/GetClientFormHtmlById?Id=' + result.TemplateID,
+                        url: '/Client/GetClientFormHtmlById?Id=' + result.TemplateID,
                         contentType: 'application/json; charset=UTF-8',
                         dataType: "json",
                         async: false,

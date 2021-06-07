@@ -158,6 +158,7 @@
     <Compile Include="Commom\Common.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CarePlanController.cs" />
+    <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\DashBoardController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Controllers\ProgramController.cs" />
@@ -203,7 +204,9 @@
     <Compile Include="Models\PHQ9BO.cs" />
     <Compile Include="Models\PotientialPatientBO.cs" />
     <Compile Include="Models\ProgramBO.cs" />
+    <Compile Include="Models\ClientFormFileBO.cs" />
     <Compile Include="Models\ProgramFileBO.cs" />
+    <Compile Include="Models\ClientFormForPatientBO.cs" />
     <Compile Include="Models\ProgramsForPatientBO.cs" />
     <Compile Include="Models\ClientFormtemplateBO .cs" />
     <Compile Include="Models\ProgramtemplateBO.cs" />
@@ -407,7 +410,12 @@
     <Content Include="Views\CarePlan\Requests.cshtml" />
     <Content Include="Views\Shared\CarePlan\_CareplanSidebar.cshtml" />
     <Content Include="Views\Program\ClientsFormList.cshtml" />
-    <Content Include="Views\Program\ModifyClientFormTemplate.cshtml" />
+    <Content Include="Views\Client\Add.cshtml" />
+    <Content Include="Views\Client\Info.cshtml" />
+    <Content Include="Views\Shared\Client\_ClientDetail.cshtml" />
+    <Content Include="Views\Client\ClientsFormList.cshtml" />
+    <Content Include="Views\Client\ModifyClientFormTemplate.cshtml" />
+    <Content Include="Views\Client\ClientFormBaseTemplate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

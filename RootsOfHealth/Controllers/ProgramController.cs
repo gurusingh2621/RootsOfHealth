@@ -70,45 +70,7 @@ namespace RootsOfHealth.Controllers
             return Json("");
         }
 
-        [HttpGet]
-        public JsonResult GetClientFormTemplateById(int TemplateId)
-        {
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri(WebApiKey);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var responseTask = client.GetAsync("api/PatientMain/patientClientFormtemplatebyid?TemplateId=" + TemplateId);
-                responseTask.Wait();
-                var result = responseTask.Result;
-                if (result.IsSuccessStatusCode)
-                {
-                    var data = result.Content.ReadAsAsync<ClientFormtemplateBO>();
-                    if (data.Result != null && data.Result.TemplatePath != null)
-                    {
-                        var gethtml = System.IO.File.ReadAllText(Server.MapPath("~/App_Data/Templates/ClientFormTemplate/" + data.Result.TemplatePath));
-                        var jsonResult = new
-                        {
-                            html = gethtml,
-                            tableName = data.Result.TemplateTable
-                        };
-                        return Json(jsonResult, JsonRequestBehavior.AllowGet);
-                    }
-                    else
-                    {
-                        var jsonResult = new
-                        {
-                            html = "",
-                            tableName = ""
-                        };
-                        return Json(jsonResult, JsonRequestBehavior.AllowGet);
-                    }
-                }
-            };
-
-            //var gethtml=   System.IO.File.ReadAllText(Server.MapPath("~/App_Data/data.html"));
-            return Json("");
-        }
+       
 
         [HttpPost]
         public JsonResult GetProgramTemplateData(ProgramtemplateBO Model)
@@ -136,31 +98,7 @@ namespace RootsOfHealth.Controllers
             return View();
         }
 
-        [HttpPost]
-        public JsonResult GetClientFormTemplateData(ClientFormtemplateBO Model)
-        {
-            Model.formName = Model.formName.TrimEnd();
-            return Json(new
-            {
-                redirectUrl = Url.Action("ModifyClientFormTemplate", "Program", new { Model.TemplateID, Model.formName, Model.IsBaseTemplate, Model.IsModify, Model.TemplateTable, Model.ClientFormID, Model.TemplatePath }),
-                isRedirect = true
-            });
-        }
-
-
-        [Authorize(Roles = "navigator,supervisor")]
-        public ActionResult ModifyClientFormTemplate(ClientFormtemplateBO data)
-        {
-            ViewBag.TemplateId = data.TemplateID;
-            ViewBag.IsModify = data.IsModify;
-            ViewBag.TemplateName = data.formName;
-            ViewBag.IsBaseTemplate = data.IsBaseTemplate;
-            ViewBag.IsBaseTemplate = data.IsBaseTemplate;
-            ViewBag.TemplateTable = data.TemplateTable;
-            ViewBag.ClientFormID = data.ClientFormID;
-            ViewBag.TemplatePath = data.TemplatePath;
-            return View();
-        }
+        
 
         [HttpGet]
         public JsonResult GetFormHtmlById(int Id)
@@ -218,61 +156,7 @@ namespace RootsOfHealth.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpGet]
-        public JsonResult GetClientFormHtmlById(int Id)
-        {
-            if (Id == 0)
-            {
-                return Json(new
-                {
-                    html = "",
-                    IsActive = 0,
-                    Isactivated = 0
-                }, JsonRequestBehavior.AllowGet);
-            }
-            string PathName = string.Empty;
-            ProgramtemplateBO data = new ProgramtemplateBO();
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri(WebApiKey);
-                //HTTP GET
-                var responseTask = client.GetAsync("/api/PatientMain/GetClientFormTemplateByID?ID=" + Id);
-                responseTask.Wait();
-
-                var result = responseTask.Result;
-                if (result.IsSuccessStatusCode)
-                {
-                    var readTask = result.Content.ReadAsAsync<ProgramtemplateBO>();
-                    readTask.Wait();
-                    data = readTask.Result;
-                }
-                else //web api sent error response 
-                {
-                    //log response status here..
-
-
-                }
-            }
-            PathName = data.TemplatePath;
-            if (PathName != "" && PathName != null)
-            {
-                var gethtml = System.IO.File.ReadAllText(Server.MapPath("~/App_Data/Templates/ClientFormTemplate/" + PathName));
-                var jsonResult = new
-                {
-                    html = gethtml,
-                    IsActive = data.IsActive,
-                    Isactivated = data.Isactivated
-                };
-                return Json(jsonResult, JsonRequestBehavior.AllowGet);
-            }
-            //var gethtml=   System.IO.File.ReadAllText(Server.MapPath("~/App_Data/data.html"));
-            return Json(new
-            {
-                html = "",
-                IsActive = 0,
-                Isactivated = 0
-            }, JsonRequestBehavior.AllowGet);
-        }
+        
 
         public JsonResult SaveFormTemplate( ProgramtemplateBO Model,string htmlTemplate=null,string TemplatePath=null)
         {
@@ -351,83 +235,7 @@ namespace RootsOfHealth.Controllers
             return Json("");
         }
 
-        public JsonResult SaveClientFormTemplate(ClientFormtemplateBO Model, string htmlTemplate = null, string TemplatePath = null)
-        {
-            string TemplateName = "";
-            string dataFile = "";
-            string path = "";
-            if (Model.IsBaseTemplate)
-            {
-                Model.formName = "BaseProgramTemplate";
-                TemplateName = Guid.NewGuid().ToString() + ".html";
-
-                path = "~/App_Data/Templates/ClientFormTemplate/BaseTemplate";
-                if (!Directory.Exists(path))
-                {
-                    Directory.CreateDirectory(Server.MapPath(path));
-                }
-
-                dataFile = Server.MapPath(path + "/" + TemplateName);
-                System.IO.File.WriteAllText(@dataFile, htmlTemplate);
-                Model.TemplatePath = "BaseTemplate/" + TemplateName;
-                Model.TemplateTable = "tbl_" + Model.formName;
-                Model.IsBaseTemplate = true;
-            }
-            else
-            {
-
-                if (htmlTemplate != null)
-                {
-                    path = "~/App_Data/Templates/ClientFormTemplate/" + Model.ClientFormID;
-                    if (!Directory.Exists(path))
-                    {
-                        Directory.CreateDirectory(Server.MapPath(path));
-                    }
-                    TemplateName = Guid.NewGuid().ToString() + ".html";
-                    dataFile = Server.MapPath(path + "/" + TemplateName);
-                    System.IO.File.WriteAllText(@dataFile, htmlTemplate);
-                    Model.TemplatePath = Model.ClientFormID + "/" + TemplateName;
-                }
-                if (TemplatePath != null && htmlTemplate == null)
-                {
-                    Model.TemplatePath = TemplatePath;
-                }
-
-
-                if (!Model.IsModify)
-                {
-                    Model.TemplateTable = "tbl_" + Model.formName.Replace(" ", "") + "_ClientForm";
-                }
-
-            }
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri(WebApiKey);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var responseTask = client.PostAsJsonAsync("api/PatientMain/saveClientFormtemplate", Model);
-                responseTask.Wait();
-
-                var result = responseTask.Result;
-                if (result.IsSuccessStatusCode)
-                {
-                    var data = result.Content.ReadAsStringAsync().Result;
-                    if (data == "0")
-                    {
-                        return Json("0");
-                    }
-                    else
-                    {
-
-                        return Json(new
-                        {
-                            id = data,
-                        });
-                    }
-                }
-            }
-            return Json("");
-        }
+       
 
         [Authorize(Roles = "navigator,supervisor")]
         public ActionResult ProgramBaseTemplate(int templateid, bool Status)
@@ -475,43 +283,7 @@ namespace RootsOfHealth.Controllers
             return Json("");
         }
 
-        [HttpGet]
-        public JsonResult isClientFormNameexist(string formName, int clientFormID)
-        {
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri(WebApiKey);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var responseTask = client.GetAsync("api/PatientMain/isClientFormNameexist?formName=" + formName.Replace(" ", "") + "&&clientFormID=" + clientFormID);
-                responseTask.Wait();
-                var result = responseTask.Result;
-                if (result.IsSuccessStatusCode)
-                {
-                    var data = result.Content.ReadAsStringAsync().Result;
-                    if (data == "0")
-                    {
-                        var jsonResult = new
-                        {
-                            formNameExists = false
-                        };
-                        return Json(jsonResult, JsonRequestBehavior.AllowGet);
-                    }
-                    else
-                    {
-                        var jsonResult = new
-                        {
-                            formNameExists = true
-                        };
-                        return Json(jsonResult, JsonRequestBehavior.AllowGet);
-
-                    }
-
-                }
-            };
-
-            return Json("");
-        }
+     
 
         [HttpGet]
         public JsonResult GetProgramTemplateByProgramId(int ProgramId)
@@ -552,6 +324,63 @@ namespace RootsOfHealth.Controllers
             if (PathName != "" && PathName != null)
             {
                 var gethtml = System.IO.File.ReadAllText(Server.MapPath("~/App_Data/Templates/ProgramsTemplate/" + PathName));
+                var jsonResult = new
+                {
+                    html = gethtml,
+                    tableName = data.TemplateTable,
+                    TemplateId = data.TemplateID
+                };
+                return Json(jsonResult, JsonRequestBehavior.AllowGet);
+            }
+            //var gethtml=   System.IO.File.ReadAllText(Server.MapPath("~/App_Data/data.html"));
+            return Json(new
+            {
+                html = "",
+                tableName = "",
+                TemplateId = ""
+
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GetClientFormTemplateByClientFormId(int ClientFormId)
+        {
+            if (ClientFormId == 0)
+            {
+                return Json(new
+                {
+                    html = "",
+                    tableName = "",
+                    TemplateId = ""
+                }, JsonRequestBehavior.AllowGet);
+            }
+            string PathName = string.Empty;
+            ClientFormtemplateBO data = new ClientFormtemplateBO();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                //HTTP GET
+                var responseTask = client.GetAsync("/api/PatientMain/GetClientFormTemplateByClientFormId?ClientFormId=" + ClientFormId);
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<ClientFormtemplateBO>();
+                    readTask.Wait();
+                    data = readTask.Result;
+                }
+                else //web api sent error response 
+                {
+                    //log response status here..
+
+
+                }
+            }
+            PathName = data.TemplatePath;
+            if (PathName != "" && PathName != null)
+            {
+                var gethtml = System.IO.File.ReadAllText(Server.MapPath("~/App_Data/Templates/ClientFormTemplate/" + PathName));
                 var jsonResult = new
                 {
                     html = gethtml,
@@ -654,6 +483,7 @@ namespace RootsOfHealth.Controllers
             }
             return Json(Paths);
         }
+
     }
 
 

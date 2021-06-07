@@ -24,6 +24,10 @@
                         <label>Client Form name:</label>
                         <input type="text" class="form-control templatename-input" value="@ViewBag.TemplateName" />
                     </span>
+                    <span class="templatename-wrap">
+                        <label>Select Parent Form:</label>
+                        <select class="form-control templatename-input" id="SelectParent" style=" height: 23px;"></select>
+                    </span>
                     <div class="detail-button ml-auto">
 
                         <a href="/program/ClientsFormList" class="btn btn-success mr-10 backlist"> <i class="fa fa-arrow-left"></i> Back to list</a>
@@ -186,8 +190,48 @@
         var isBaseTemplate = '@ViewBag.IsBaseTemplate';
         var templateTable = '@ViewBag.TemplateTable'
 
-        var TemplatePath='@ViewBag.TemplatePath'
+        var TemplatePath = '@ViewBag.TemplatePath'
+        var parentFormID = "";
+        
+        var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]'
+        $(document).ready(function () {
+            
+            $.ajax({
 
+                type: "Get",
+                url: '/Client/GetPatientClientForms?ClientFormID=' + ClientFormID,
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",  
+                
+                success: function (result) {
+                    
+                    if (result == null) {
+                        $("#SelectParent").append($("<option></option>").val("0").html("None"));
+                    }
+                    else {
+                        var data = JSON.parse(result.data);
+                        $("#SelectParent").append($("<option></option>").val("0").html("Please select Parent").prop("disabled", true));
+                        $("#SelectParent").val("0");
+                        $.each(data, function (key, value) {
+                            
+                            if (value.ClientFormID != ClientFormID) {
+                                $("#SelectParent").append($("<option></option>").val(value.ClientFormID).html(value.FormName));
+                            }
+                            if (value.ParentFormID != null && value.ClientFormID == ClientFormID) {
+                                $("#SelectParent").val(value.ParentFormID);
+                            }
+                        })
+                        $("#SelectParent").append($("<option></option>").val("").html("None"));
+                    }
+                    
+                },
+                error: function () {
+                    toastr.error("Some error occurred!! or data not found");
+                },
+                
+            });
+        });
+       
 
     </script>
 

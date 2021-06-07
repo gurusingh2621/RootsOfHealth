@@ -1,6 +1,7 @@
 ﻿var new_id = 0;
 var newid = "";
 var connect = '#droppable';
+var parentFormID = "";
 $(function () {
 
     if (sessionStorage.getItem("Id") === null) {
@@ -1999,6 +2000,8 @@ function isLabelNameExist(LabelName, controlid) {
 }
 //saveHtml=>use to save template and create table in database for program
 function saveHtml() {
+    
+    parentFormID =  $("#SelectParent").val();
     var tempid = $("#hdnTemplateId").val();
 
     if ($(".templatename-input").val().trim() == "") {
@@ -2138,7 +2141,7 @@ function CheckAndSaveTemplate(isactive) {
 
     $.ajax({
         type: "GET",
-        url: '/Program/isClientFormNameexist?formName=' + $(".templatename-input").val() + '&&clientFormID=' + ClientFormID,
+        url: '/Client/isClientFormNameexist?formName=' + $(".templatename-input").val() + '&&clientFormID=' + ClientFormID,
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
@@ -2169,14 +2172,14 @@ function saveTemplate(isactive) {
         IsBaseTemplate: isBtemplate,
         ClientFormID: ClientFormID,
         IsModify: isModify,
-        TemplateTable: templateTable
-            
+        TemplateTable: templateTable,
+        parentFormID: parentFormID 
     };
    
     $(".loaderOverlay").css("display", "flex");
     $.ajax({
         type: "POST",
-        url: '/Program/SaveClientFormTemplate',
+        url: '/Client/SaveClientFormTemplate',
         data: JSON.stringify({ htmlTemplate: gethtml, Model: model }),
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
@@ -2280,14 +2283,14 @@ function GetFormHtmlById(Id) {
     $(".loaderOverlay").css("display", "flex");
     $.ajax({
         type: "GET",
-        url: '/program/GetClientFormHtmlById?Id=' + Id,
+        url: '/Client/GetClientFormHtmlById?Id=' + Id,
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
             if (result.Isactivated && isModify == 'True') {
                 $("#droppable").html("");
                 toastr.error("", "Deactiavte this template to modify.", { progressBar: true });
-                setTimeout(function () { window.location.href = '/program/ClientsFormList'; }, 2000);
+                setTimeout(function () { window.location.href = '/Client/ClientsFormList'; }, 2000);
                 return;
             }
             $("#droppable").html(result.html);
@@ -2359,7 +2362,7 @@ function IsColumnNameExist(colname) {
     }
         return $.ajax({
         type: "GET",
-        url: Apipath + '/api/PatientMain/programiscolumnnameexist?TableName=' + tableName + '&ColumnName=' + colname,
+            url: Apipath + '/api/PatientMain/ClientFormiscolumnnameexist?TableName=' + tableName + '&ColumnName=' + colname,
         dataType: "json",
         async: false,
         contentType: "application/json; charset=utf-8",
@@ -2382,7 +2385,7 @@ function getHeaderAndFooter() {
                 default:
                     $.ajax({
                         type: "GET",
-                        url: '/program/GetClientFormHtmlById?Id=' + result.TemplateID,
+                        url: '/Client/GetClientFormHtmlById?Id=' + result.TemplateID,
                         contentType: 'application/json; charset=UTF-8',
                         dataType: "json",
                         async: false,
@@ -2413,7 +2416,7 @@ function getHeaderAndFooterIn_PreviewPopup() {
                 default:
                     $.ajax({
                         type: "GET",
-                        url: '/program/GetClientFormHtmlById?Id=' + result.TemplateID,
+                        url: '/Client/GetClientFormHtmlById?Id=' + result.TemplateID,
                         contentType: 'application/json; charset=UTF-8',
                         dataType: "json",
                         async: false,
@@ -2515,7 +2518,7 @@ function backToList() {
     $(unsavedHtml).find("div.dragresize").removeClass("ui-sortable-handle").removeAttr("style");
     unsavedHtml = unsavedHtml[0].innerHTML;
     if (savedHtml === unsavedHtml) {
-        window.location.href = '/program/ClientsFormList';
+        window.location.href = '/Client/ClientsFormList';
         $(".hiddenSavedHtml").html("");
     } else {
         $.confirm({
@@ -2532,7 +2535,7 @@ function backToList() {
                 },
                 leave: {
                     action: function () {
-                        window.location.href = '/program/ClientsFormList';
+                        window.location.href = '/Client/ClientsFormList';
                         $(".hiddenSavedHtml").html("");
                     }
                 }

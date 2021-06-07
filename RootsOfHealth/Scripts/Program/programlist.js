@@ -5,6 +5,7 @@
 });
 var _programDataTable = '';
 function GetProgramTemplateList() {
+    
     $(".loaderOverlay").css("display", "flex");
     $.ajax({
         type: "GET",
@@ -13,6 +14,7 @@ function GetProgramTemplateList() {
         contentType: "application/json; charset=utf-8",
         success: function (result) {
             var programlist = $(".programlist");
+            
             var programs = "";
             if (result.length) {
                 $.each(result, function (index, item) {

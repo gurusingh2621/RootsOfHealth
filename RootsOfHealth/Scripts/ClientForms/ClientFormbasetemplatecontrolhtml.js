@@ -2025,19 +2025,19 @@ function saveHtml() {
 
     var model = {
         TemplateID: $("#hdnTemplateId").val(),
-        programName: programName,
+        formName: formName,
         IsActive: 1,
         CreatedBy: userId,
         ModifiedBy: userId,
         IsBaseTemplate: true,
-        ProgramID: programId,
+        ClientFormID: ClientFormID,
 
        
     };
     $(".loaderOverlay").css("display", "flex");
     $.ajax({
         type: "POST",
-        url: '/program/SaveFormTemplate',
+        url: '/Client/SaveClientFormTemplate',
         data: JSON.stringify({ htmlTemplate: gethtml, Model: model}),
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
@@ -2104,7 +2104,7 @@ function saveHtml() {
             }
             $.ajax({
                 type: "POST",
-                url: Apipath + '/api/PatientMain/AddProgramTemplateColumn',
+                url: Apipath + '/api/PatientMain/addClientFormtemplatecolumn',
                 contentType: 'application/json; charset=UTF-8',
                 data: JSON.stringify(model),
                 dataType: "json",
@@ -2125,7 +2125,7 @@ function GetFormHtmlById(Id) {
     $(".loaderOverlay").css("display", "flex");
     $.ajax({
         type: "GET",
-        url: '/program/GetFormHtmlById?Id=' + Id,
+        url: '/Client/GetClientFormHtmlById?Id=' + Id,
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
@@ -2164,11 +2164,11 @@ function validateFileSize(obj) {
 }
 function IsColumnNameExist(colname) {
    
-    var tableName = 'tbl_BaseProgramTemplate';
+    var tableName = 'tbl_BaseClientFormTemplate';
            
     return $.ajax({
         type: "GET",
-        url: Apipath + '/api/PatientMain/programiscolumnnameexist?TableName=' + tableName + '&ColumnName=' + colname,
+        url: Apipath + '/api/PatientMain/ClientFormiscolumnnameexist?TableName=' + tableName + '&ColumnName=' + colname,
         dataType: "json",
         async: false,
         contentType: "application/json; charset=utf-8",
@@ -2295,7 +2295,7 @@ function backToList() {
     $(unsavedHtml).find("span.basecontentspan").removeAttr("style");
     unsavedHtml = unsavedHtml[0].innerHTML;
     if (savedHtml === unsavedHtml) {
-        window.location.href = '/program/list';
+        window.location.href = '/Client/ClientsFormList';
         $(".hiddenSavedHtml").html("");
     } else {
         $.confirm({
@@ -2312,7 +2312,7 @@ function backToList() {
                 },
                 leave: {
                     action: function () {
-                        window.location.href = '/program/list';
+                        window.location.href = '/Client/ClientsFormList';
                         $(".hiddenSavedHtml").html("");
                     }
                 }

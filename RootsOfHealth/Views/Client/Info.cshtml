@@ -1,177 +1,156 @@
-﻿
+﻿@model List<RootsOfHealth.Models.ClientFormForPatientBO>
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Info";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <style>
-    .showHide{
-        display:none;
-    }
+        .showHide {
+            display: none;
+        }
 
+        .inner-main-content {
+            height: calc(100vh - 240px);
+        }
 
-    /*.row {
-        margin-right: 0px;
-    }*/
-    /*.inner-content .paitent-detail {
-        height: calc(100vh - 142px);
-    }*/
-    .inner-main-content {
-        height: calc(100vh - 240px);
-    }
-    .paitent-detail-left {
-        height: calc(100vh - 160px);
-        overflow:hidden;
-    }
-    #content .profile-tabs .paitent-detail-left .nav-tabs {
-        border-bottom:0px;
-    }
-    .paitent-detail-left .profile-tabs .nav-tabs:hover, #content .profile-tabs .paitent-detail-left .nav-tabs:hover {
-        overflow-x: hidden !important;
-    }
+        .paitent-detail-left {
+            height: calc(100vh - 160px);
+            overflow: hidden;
+        }
 
-/* New css
--------------------------------------------------*/
+        #content .profile-tabs .paitent-detail-left .nav-tabs {
+            border-bottom: 0px;
+        }
 
+            .paitent-detail-left .profile-tabs .nav-tabs:hover, #content .profile-tabs .paitent-detail-left .nav-tabs:hover {
+                overflow-x: hidden !important;
+            }
 
-#content .profile-tabs .tabs-scroll {
-position: fixed;
-top: 60px;
-right: 0;
-width: 310px;
-z-index: 99;
-flex-direction: column;
-display: block;
-height: calc(100vh - 60px);
-left: auto;
-margin: 0;
-background: #34425a;
-overflow: auto;
-transform: translateX(100%);
--webkit-transform: translateX(100%);
-transition: all ease 0.4s;
-}
-.tabs-scroll > ul#myTab > li > a .notCountR, a .notCountO, a .notCountG, a .notCountR {
-    top: 7px;
-    right: 35px;
-}
-#content {
-padding-top:0px!important;
-}
-#content .inner-content {
-margin-top:0px!important;
-}
-#content.showHidecontent .profile-tabs .tabs-scroll {
-transform: translateX(0%);
--webkit-transform: translateX(0%);
-}
-#content .profile-tabs .tabs-scroll > .nav-tabs {
-display: flex;
-flex-direction: column;
-width: 100%;
-margin: 0;
-position: static;
-height: auto;
-padding: 0;
-background: transparent;
-border: 0px;
-}
-#content .profile-tabs .tabs-scroll > ul#myTab > li {
-margin: 0;
-border-bottom: 1px solid rgba(255,255,255,0.1);
-}
-#content .profile-tabs .tabs-scroll > ul#myTab > li > a {
-margin: 0;
-}
-#content .profile-tabs .tabs-scroll > ul#myTab > li > a:after {
-content: none;
-}
-.tabs-scroll > ul#myTab > li > a .check {
-position: absolute;
-top: 10px;
-right: 15px;
-z-index: 9;
-}
-.inner-main-content {
-height: calc(100vh - 180px);
-}
-.paitent-detail-left {
-height: calc(100vh - 100px);
-}
-#menu-toggle {
-right: 0;
-top: 20px;
-transition: all ease 0.4s;
-}
-div#menu-toggle.open {
-right: 310px;
-}
+        /* New css
+    -------------------------------------------------*/
+
+        #content .profile-tabs .tabs-scroll {
+            position: fixed;
+            top: 60px;
+            right: 0;
+            width: 310px;
+            z-index: 99;
+            flex-direction: column;
+            display: block;
+            height: calc(100vh - 60px);
+            left: auto;
+            margin: 0;
+            background: #34425a;
+            overflow: auto;
+            transform: translateX(100%);
+            -webkit-transform: translateX(100%);
+            transition: all ease 0.4s;
+        }
+
+        .tabs-scroll > ul#myTab > li > a .notCountR, a .notCountO, a .notCountG, a .notCountR {
+            top: 7px;
+            right: 35px;
+        }
+
+        #content {
+            padding-top: 0px !important;
+        }
+
+            #content .inner-content {
+                margin-top: 0px !important;
+            }
+
+            #content.showHidecontent .profile-tabs .tabs-scroll {
+                transform: translateX(0%);
+                -webkit-transform: translateX(0%);
+            }
+
+            #content .profile-tabs .tabs-scroll > .nav-tabs {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                margin: 0;
+                position: static;
+                height: auto;
+                padding: 0;
+                background: transparent;
+                border: 0px;
+            }
+
+            #content .profile-tabs .tabs-scroll > ul#myTab > li {
+                margin: 0;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+
+                #content .profile-tabs .tabs-scroll > ul#myTab > li > a {
+                    margin: 0;
+                }
+
+                    #content .profile-tabs .tabs-scroll > ul#myTab > li > a:after {
+                        content: none;
+                    }
+
+        .tabs-scroll > ul#myTab > li > a .check {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            z-index: 9;
+        }
+
+        .inner-main-content {
+            height: calc(100vh - 180px);
+        }
+
+        .paitent-detail-left {
+            height: calc(100vh - 100px);
+        }
+
+        #menu-toggle {
+            right: 0;
+            top: 20px;
+            transition: all ease 0.4s;
+        }
+
+        div#menu-toggle.open {
+            right: 310px;
+        }
 </style>
 <!-- Content start here -->
 <section id="content" class="responsive-container">
     <div class="profile-tabs">
         <div class="tabs-scroll">
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <ul class="nav nav-tabs showHide" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="Profile-tab" data-toggle="tab" href="#Profile" role="tab"
+                    <a class="nav-link active" id="Profile-tab" data-toggle="tab" data-FormName="Profile" href="#Profile" role="tab"
                        aria-controls="Profile" aria-selected="true">Profile</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="Housing-tab" data-toggle="tab" href="#Housing" role="tab"
-                       aria-controls="Housing" aria-selected="false">Housing<span class="notCount" id="HouNot" style="display:none"></span> <span class="check" style="display:none"><i class="fas fa-check-circle"></i></span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="Financial-tab" data-toggle="tab" href="#Financial" role="tab"
-                       aria-controls="Financial" aria-selected="false">Financial Security<span class="notCount" id="FincNot" style="display:none"></span> <span class="check" style="display:none"><i class="fas fa-check-circle"></i></span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="Employment-tab" data-toggle="tab" href="#Employment" role="tab"
-                       aria-controls="Employment" aria-selected="false">Employment/Education<span class="notCount" id="EmpNot" style="display:none"></span> <span class="check" style="display:none"><i class="fas fa-check-circle"></i></span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="Communication-tab" data-toggle="tab" href="#Communication" role="tab"
-                       aria-controls="Communication" aria-selected="false">Communication & Mobility<span class="notCount" id="CommNot" style="display:none"></span> <span class="check" style="display:none"><i class="fas fa-check-circle"></i></span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="Healthcare-tab" data-toggle="tab" href="#Healthcare" role="tab"
-                       aria-controls="Healthcare" aria-selected="false">Healthcare<span class="notCount" id="HealthNot" style="display:none"></span> <span class="check" style="display:none"><i class="fas fa-check-circle"></i></span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="SocialSupports-tab" data-toggle="tab" href="#SocialSupports"
-                       role="tab" aria-controls="SocialSupports" aria-selected="false">
-                        Social Supports and
-                        Safety
-                        <span class="notCount" id="SocialNot" style="display:none"></span>
-                        <span class="check" style="display:none"><i class="fas fa-check-circle"></i></span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="LegalStatus-tab" data-toggle="tab" href="#LegalStatus" role="tab"
-                       aria-controls="LegalStatus" aria-selected="false">Legal Status<span class="notCount" id="LegalNot" style="display:none"></span> <span class="check" style="display:none"><i class="fas fa-check-circle"></i></span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="Alcohol-tab" data-toggle="tab" href="#AlcoholDisorder" role="tab"
-                       aria-controls="AlcoholDisorder" aria-selected="false">Substance Use<span class="notCount" id="SubNot" style="display:none"></span> <span class="check" style="display:none"><i class="fas fa-check-circle"></i></span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="MentalHealth-tab" data-toggle="tab" href="#MentalHealth" role="tab"
-                       aria-controls="MentalHealth" aria-selected="false">Mental Health<span class="notCount" id="MentalNot" style="display:none"></span> <span class="check" style="display:none"><i class="fas fa-check-circle"></i></span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="FoodAccess-tab" data-toggle="tab" href="#FoodAccess" role="tab"
-                       aria-controls="FoodAccess" aria-selected="false">Food Access<span class="notCount" id="FoodNot" style="display:none"></span> <span class="check" style="display:none"><i class="fas fa-check-circle"></i></span></a>
-                </li>
+                @if (Model != null)
+                {
+                    foreach (var item in Model.Where(p=>p.ParentFormID==null||p.ParentFormID==0))
+                    {
+                        string FormName = @item.FormName.Replace(" ", "");
+                     
+                        <li class="nav-item">
+                            <a id="@("a" + FormName)" class="nav-link" data-toggle="tab"
+                               href="@("#" + FormName + "only")" data-ClientFormID="@item.ClientFormID" data-PatientID="@item.patientID" onclick="loadClient(this)"  data-TemplateID="@item.TemplateID" data-FormName=@(FormName)>@item.FormName<span class="check @Html.Raw(item.Saved ? "" : "d-none")"><i class="fas fa-check-circle"></i></span></a>
 
+                        </li>
+                       
+                    }
+                }
+                
                 <li class="nav-item" id="programtbs" style="display:none;/*left: 155px;*/">
                     <a class="nav-link" id="Programs-tab" data-toggle="tab" href="#Programs" role="tab"
-                       aria-controls="Programs" aria-selected="false">Programs <span class="check" style="display:none"><i class="fas fa-check-circle"></i></span></a>
+                       aria-controls="Programs" aria-selected="false">Programs <span class="check" data-FormName="Profile"  style="display:none"><i class="fas fa-check-circle"></i></span></a>
                 </li>
 
                 <li class="nav-item " style="display:block">
-                    <a class="nav-link" id="RecentClient-tab" href="#" data-toggle="modal" data-target="#recentpatientModal" >Recent Clients</a>
+                    <a class="nav-link" id="RecentClient-tab" href="#"  data-toggle="modal" data-target="#recentpatientModal">Recent Clients</a>
                 </li>
+
             </ul>
-        </div> 
-         @*<div class="scroll-hide">show / hide patient menu </div>*@
+        </div>
+        @*<div class="scroll-hide">show / hide patient menu </div>*@
         <div id="menu-toggle" class="">
             <div id="hamburger">
                 <span></span>
@@ -184,7 +163,7 @@ right: 310px;
             </div>
         </div>
         <div class="tab-content" id="myTabContent">
-           
+
             <div class="inner-content">
 
                 <div class="paitent-detail">
@@ -215,10 +194,10 @@ right: 310px;
         <div class="modal fade" id="recentpatientModal" tabindex="-1" role="dialog" aria-labelledby="recentpatientModalLabel"
              aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:80%;">
-                <div class="modal-content" >
+                <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="recentpatientModalLabel">Recent Client</h5>
-                        <button type="button" data-dismiss="modal" class="close"  aria-label="Close">
+                        <button type="button" data-dismiss="modal" class="close" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -257,9 +236,9 @@ right: 310px;
 
 @section scripts {
 
- 
 
-<script>
+
+    <script>
         // Hamburger menu js
     $('#myTab a').each(function () {
         $(this).click(function () {
@@ -267,6 +246,7 @@ right: 310px;
         })
 
     });
+
         $('#menu-toggle').click(function () {
             $(this).toggleClass('open');
             if ($("#menu-toggle").hasClass("open")) {
@@ -285,17 +265,20 @@ right: 310px;
 
         })
 
-        //$(".scroll-hide").click(function () {
-        //    $("#myTab").toggleClass('showHide');
-        //    $(".inner-content").toggleClass("showHideInner");
-        //    $(".paitent-detail-left").toggleClass("showHidepaitent-detail-left");
-        //    $(".inner-main-content").toggleClass("showHidepaitentinner-main-content");
-        //    $(".body").toggleClass("showHidebody");
-        //    $("#content").toggleClass("showHidecontent");
-        //    $(".scroll-height").toggleClass("showHideappotment");
-        //});
+        $('#btnaddprogram').click(function (e) {
 
-    $(document).ready(function () {
+            GetPatientPrograms()
+            var value = $('#btnaddprogram').attr('data-totalProgramCount')
+            if (value <= 0) {
+                e.preventDefault();
+                e.stopPropagation();
+                toastr.error('No program available')
+            }
+
+        })
+
+        $(document).ready(function () {
+            
             $(".loaderOverlay").css("display","flex");
             var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]'
 
@@ -453,7 +436,7 @@ right: 310px;
                     $("#divIfNoAddress").hide();
                 }
             })
-
+           
             $('.nav-menu').click(function () {
                 if ($(".sidebar-menu").hasClass("sidebar-res")) {
                     $('.sidebar-menu').removeClass('sidebar-res');
@@ -471,7 +454,7 @@ right: 310px;
         $.ajax({
 
             type: "Get",
-            url: '/DashBoard/GetRecentPatients?clinicid='+'@Session["ClinicID"]',
+            url: '/Client/GetRecentClientForm?clinicid='+'@Session["ClinicID"]',
                 dataType: "html",
                 contentType: "application/json; charset=utf-8",
                 success: function (result) {
@@ -493,42 +476,47 @@ right: 310px;
 
         var toppatient = "";
 
-    function bindTopPatient(id) {
-        
+        function bindTopPatient(id) {
+            
+
             if (id == "" || id == undefined || id=='0') {
                 toppatient = $('#topPatientId').val();
             }
             else {
                 toppatient = id;
             }
-
+            $('.nav-item a').removeClass("active");
+            $("#Profile-tab").addClass("active");
             $('div[id^=div_]').css('display', 'block');
             $('#div_' + toppatient).css('display', 'none');
-
+            
             $.ajax({
 
                 type: "Post",
-                url: '/DashBoard/GetPatientDetail',
+                url: '/Client/GetClientFormDetail',
                 data: JSON.stringify({ PatientID: toppatient }),
 
                 dataType: "html",
                 contentType: "application/json; charset=utf-8",
                 success: function (result) {
+                    debugger
+                    var a = result;
                     $('#myTabContent').html(result);
-                   
+                    $('#btnaddprogram').css('display', 'block');
+
                 },
                 error: function () {
                     toastr.error("Some error occurred!! or data not found");
                 },
                 complete: function () {
-
+                    
+                    var a = 0;
                     GetPatientPrograms(toppatient);
 
 
                 }
             });
         }
-
 
         function GetPatientPrograms(toppatient) {
 
@@ -544,7 +532,7 @@ right: 310px;
             $.ajax({
 
                 type: "Post",
-                url: '/DashBoard/GetPatientPrograms',
+                url: '/Client/GetClientFormPrograms',
                 data: JSON.stringify({ PatientID: id }),
 
                 dataType: "html",
@@ -569,7 +557,6 @@ right: 310px;
             });
         }
 
-
         function recentpcloseModel()
         {
             $('.close').click();
@@ -577,11 +564,18 @@ right: 310px;
 
     }
 
-    function ActivateTab(PatientId, Tab,Subtab) {
-        window.location.href = '/Patient/Add?PatientID=' + PatientId + '&CurrentTab=' + Tab +'&SubTab='+Subtab;
+    function ActivateTab(PatientId, Tab,Subtab,ClientFormID) {
+        window.location.href = '/Client/Add?PatientID=' + PatientId + '&CurrentTab=' + Tab + '&SubTab=' + Subtab +'&ClientFormID='+ClientFormID;
 
-    }
-</script>
+        }
+        $("#Profile-tab").click(function () {
+            $("#myChildTab").css("display", "none");
+        })
+        $("#programtbs").click(function () {
+            $("#myChildTab").css("display", "none");
+        })
+        
+    </script>
 
 
 }

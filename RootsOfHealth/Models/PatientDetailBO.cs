@@ -30,8 +30,9 @@ namespace RootsOfHealth.Models
         public ScheduleDateBO ScheduleDate { get; set; }
 
         public List<ProgramsForPatientBO> Programs { get; set; }
+        public List<ClientFormForPatientBO> ClientForm { get; set; }
 
-
+        
 
         public PatientDetailBO()
         {

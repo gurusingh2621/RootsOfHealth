@@ -25,5 +25,6 @@ namespace RootsOfHealth.Models
         public bool IsModify { get; set; }
         public string formName { get; set; }
         public int TempTemplateId { get; set; }
+        public int parentFormID { get; set; }
     }
 }
