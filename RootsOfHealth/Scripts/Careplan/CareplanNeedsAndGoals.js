@@ -2677,3 +2677,79 @@ function updateNeedStatusOnEditNeed(obj) {
     }
 }
 
+
+function LoadCareplanRequestHistory() {
+   
+    if ($("a.need-nav").parent().hasClass("disabled")) {
+        toastr.error("First submit basic information to enable needs and goals");
+        return false;
+    }
+    GetCareplanHistory()
+    $("a.requestHistory-nav").tab('show');
+}
+
+var CarePlanRequestHistotyTable=''
+function GetCareplanHistory() {
+    if (CarePlanRequestHistotyTable != '') {
+        CarePlanRequestHistotyTable.destroy();
+    }
+    $.ajax({
+        type: "GET",
+        url: Apipath + '/api/PatientMain/getcareplanrequesthistory?careplanid=' + careplanid,
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        async: true,
+        success: function (result) {
+            var ApprovalRequestHistory = $(".carePlanRequestHistory");
+            ApprovalRequestHistory.html('')
+
+            var careplansRequestHistory = "";
+            if (result.length) {
+                $.each(result, function (index, item) {
+                  
+                    if (item.CreatedOn) {
+                        var SendDate = new Date(item.CreatedOn).toLocaleDateString('en-US')
+                        var sendTimearray = item.CreatedOn.split("T")[1].split(":");
+                        var sendAmPm = sendTimearray[0] >= 12 ? 'pm' : 'am';
+                       var sendTime = sendTimearray[0] + ":" + sendTimearray[1] + ":" + sendTimearray[2].split(".")[0] + " " + sendAmPm;
+                    }
+
+                    careplansRequestHistory += `<tr>
+                           <td width="150px">${item.CreatedBy}</td>
+                           <td width="150px">${item.Action}</td>
+                           <td width="150px" >${item.Comment}</td>
+                           <td width="150px">${SendDate} ${sendTime}</td></tr>`;
+                 
+                });
+                ApprovalRequestHistory.html("").append(careplansRequestHistory);
+            } else {
+                careplansRequestHistory += `<tr>
+                                      <td colspan="4"><p class="text-center">No data found.</p></td>
+                                      <td style="display: none;"></td>
+                                      <td style="display: none;"></td>
+                                      <td style="display: none;"></td>
+                                      
+                                      </tr>`;
+                ApprovalRequestHistory.html("").append(careplansRequestHistory);
+            }
+
+           
+            CarePlanRequestHistotyTable = $('#CarePlanHistoryTable').DataTable({
+                retrieve: true,
+                searching: false,
+                "ordering": false,
+                'columnDefs': [{
+                    'targets': [3],
+                    'orderable': false
+                }]
+            });
+        
+            $(".loaderOverlay").hide();
+        },
+        error: function (e) {
+            toastr.error("Something happen Wrong");
+        }
+    });
+
+}
+

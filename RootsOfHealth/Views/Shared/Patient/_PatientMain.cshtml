@@ -1922,8 +1922,8 @@
                 <div class="form-group">
                     <textarea class="form-control" id="RequestMessage" style="display:block!important;"></textarea>
                 </div>
-                <button class="btn btn-success" id="btnsendAproval" onclick="ApprovalOrRevertRequestRequest('1');$(this).prop('disabled',true)">Send Request</button>
-                <button class="btn btn-success" id="btnsendRevoke" onclick="ApprovalOrRevertRequestRequest('3');$(this).prop('disabled',true)">Revoke Request</button>
+                <button class="btn btn-success" id="btnsendAproval" onclick="$(this).prop('disabled',true);;ApprovalOrRevertRequestRequest('1');">Send Request</button>
+                <button class="btn btn-success" id="btnsendRevoke" onclick="$(this).prop('disabled', true);ApprovalOrRevertRequestRequest('3');">Revoke Request</button>
             </div>
         </div>
     </div>
@@ -2388,9 +2388,16 @@
    
     function ApprovalOrRevertRequestRequest(type) {
         if (isAzaxRequestSent) {
+            $('#btnsendAproval').prop('disabled', false);
+            $('#btnsendRevoke').prop('disabled', false)
             return
         }
-        isAzaxRequestSent=true
+        isAzaxRequestSent = true
+
+        setTimeout(function () {
+            isAzaxRequestSent = false
+
+        },1000)
         var SelectedUsers = [];
         var SelectedGroups = [];
        
@@ -2407,12 +2414,14 @@
             }
             if (SelectedUsers.length <= 0 && SelectedGroups.length <= 0) {
                 toastr.error("Please select atleast  an user or a group");
+               
                 $('#btnsendAproval').prop('disabled', false);
                 $('#btnsendRevoke').prop('disabled',false)
                 return
             }
             if ($('#RequestMessage').val().trim() == '') {
                 toastr.error("Please write a message");
+               
                 $('#btnsendAproval').prop('disabled', false);
                 $('#btnsendRevoke').prop('disabled', false)
                 return
@@ -2421,6 +2430,7 @@
         if (type == 3) {
             if ($('#RequestMessage').val().trim() == '') {
                 toastr.error("Please write a message");
+               
                 $('#btnsendAproval').prop('disabled', false);
                 $('#btnsendRevoke').prop('disabled', false)
                 return
@@ -2449,7 +2459,7 @@
             async: false,
             success: function (result) {
                 
-                isAzaxRequestSent = false;
+                
                 if (result == 1) {
                     toastr.success("Approval Request has sent successfully");
                     //$('#careplanStatus').css('display', 'block');
@@ -2490,7 +2500,7 @@
                 //$('#btnsendRevoke').prop('disabled',false)
             },
             error: function (e) {
-                isAzaxRequestSent = false;
+               
                 $('#btnsendAproval').prop('disabled', false);
                 $('#btnsendRevoke').prop('disabled', false)
                 toastr.error("Something happen Wrong");
