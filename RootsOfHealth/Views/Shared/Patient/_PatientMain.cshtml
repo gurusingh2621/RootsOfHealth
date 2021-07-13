@@ -180,6 +180,64 @@
         display: block !important;
         min-height: 140px;
     }
+    ul.needGoalsChecklist {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 15px;
+    }
+    ul.needGoalsChecklist label.checkbox_input span {
+        position: relative;
+        padding-left: 26px;
+    }
+    ul.needGoalsChecklist label.checkbox_input {
+        margin: 0;
+    }
+    ul.needGoalsChecklist ul {
+        list-style: none;
+        padding: 0 0 0px 26px;
+    }
+    ul.needGoalsChecklist li .form-group {
+        margin: 0;
+    }
+        ul.needGoalsChecklist > li > .form-group {
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        ul.needGoalsChecklist > li:first-child > .form-group {
+            border-top: 1px solid #eee;
+        }
+    label.checkbox_input input + span::after {
+        height: 20px;
+        width: 20px;
+    }
+    ul.needGoalsChecklist > li ul li .form-group {
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+    }
+    ul.needGoalsChecklist label.checkbox_input {
+       cursor:pointer;
+    }
+    ul.needGoalsChecklist > li ul {
+        padding-top: 0;
+        border-bottom: 1px solid #eee;
+    }
+    #ViewCareplanChanges h4.modal-title {
+        font-size: 20px;
+        text-transform: uppercase;
+    }
+    .selectAll label.checkbox_input {
+        display: block;
+        width: 100%;
+    }
+    .selectAll label.checkbox_input input + span {
+        width: auto;
+        height: auto;
+        padding-left: 30px;
+    }
+    ul.needGoalsChecklist > li ul li:last-child .form-group {
+        border-bottom: 0;
+    }
+
 </style>
 <div onscroll="abc()" class="tab-pane fade test @Html.Raw(ViewBag.CurrentTab == "Profile-tab" ? "show active" : string.IsNullOrWhiteSpace(ViewBag.CurrentTab) ? "show active" : "")" id="Profile" role="tabpanel" aria-labelledby="Profile-tab">
     <!-- Inner content start here  -->
@@ -223,17 +281,17 @@
                                 </a>
 
                                 @*<a href="/Patient/Add" id="btnProfileEdit" class="btn btn-success">
-                            <i class="far fa-edit"></i>
-                            Edit
-                        </a>*@
+                                        <i class="far fa-edit"></i>
+                                        Edit
+                                    </a>*@
                                 @*<a href="#!" id="btnProfileCancel" class="btn btn-info" style="display: none;">
-                            <i class="far fa-edit"></i>
-                            Cancel
-                        </a>
-                        <a href="#!" id="btnProfileSave" class="btn btn-success" style="display: none;">
-                            <i class="far fa-save"></i>
-                            Save
-                        </a>*@
+                                        <i class="far fa-edit"></i>
+                                        Cancel
+                                    </a>
+                                    <a href="#!" id="btnProfileSave" class="btn btn-success" style="display: none;">
+                                        <i class="far fa-save"></i>
+                                        Save
+                                    </a>*@
                             </div>
 
 
@@ -1077,27 +1135,27 @@
 
 
                                     @*<div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                <div class="form-row-first">
-                                    <div class="top-form-row d-flex">
-                                        <div class="two-columns">
-                                            <label>Emergency Contact #2</label>
-                                        </div>
-                                        <div class="two-columns">
-                                            <label>Emergency Contact #2</label>
-                                        </div>
-                                    </div>
-                                    <div class="bootom-form-row d-flex">
-                                        <div class="two-columns">
-                                            <input type="text" id="txtEmergencyContact1" name="EmergencyContact1" class="form-control"
-                                                   placeholder=" ">
-                                        </div>
-                                        <div class="two-columns">
-                                            <input type="text" id="txtEmergencyContact2" name="EmergencyContact2" class="form-control"
-                                                   placeholder="">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>*@
+                                            <div class="form-row-first">
+                                                <div class="top-form-row d-flex">
+                                                    <div class="two-columns">
+                                                        <label>Emergency Contact #2</label>
+                                                    </div>
+                                                    <div class="two-columns">
+                                                        <label>Emergency Contact #2</label>
+                                                    </div>
+                                                </div>
+                                                <div class="bootom-form-row d-flex">
+                                                    <div class="two-columns">
+                                                        <input type="text" id="txtEmergencyContact1" name="EmergencyContact1" class="form-control"
+                                                               placeholder=" ">
+                                                    </div>
+                                                    <div class="two-columns">
+                                                        <input type="text" id="txtEmergencyContact2" name="EmergencyContact2" class="form-control"
+                                                               placeholder="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>*@
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-12">
@@ -1356,128 +1414,128 @@
                                         </div>
 
                                         @*<div class="form-row-first">
-                                    <div class="top-form-row d-flex">
-                                        <div class="three-columns">
-                                            <label>Have you ever been a smoker</label>
-                                        </div>
-                                        <div class="three-columns">
-                                            <label>
-                                                What are your preferred
-                                                pronouns
-                                            </label>
-                                        </div>
-                                        <div class="three-columns">
-                                            <label>Do you think of yourself as</label>
-                                        </div>
-                                    </div>
-                                    <div class="bootom-form-row d-flex">
-                                        <div class="three-columns border-bottom-none">
-                                            <select id="ddSmoker" name="EverBeenSmoker" class="form-control">
-                                                <option value="0">Select</option>
-                                                <option value="true">Yes</option>
-                                                <option value="false">No</option>
-                                            </select>
-                                            <div class="form-row-first mt-2" id="HaveYouQuit" style='display:none'>
                                                 <div class="top-form-row d-flex">
-                                                    <div class="one-columns">
-                                                        <label>Have you Quit?</label>
+                                                    <div class="three-columns">
+                                                        <label>Have you ever been a smoker</label>
                                                     </div>
-
+                                                    <div class="three-columns">
+                                                        <label>
+                                                            What are your preferred
+                                                            pronouns
+                                                        </label>
+                                                    </div>
+                                                    <div class="three-columns">
+                                                        <label>Do you think of yourself as</label>
+                                                    </div>
                                                 </div>
                                                 <div class="bootom-form-row d-flex">
-                                                    <div class="one-columns">
-                                                        <select id="ddQuit" name="QuitSmoking" class="form-control">
+                                                    <div class="three-columns border-bottom-none">
+                                                        <select id="ddSmoker" name="EverBeenSmoker" class="form-control">
                                                             <option value="0">Select</option>
                                                             <option value="true">Yes</option>
                                                             <option value="false">No</option>
                                                         </select>
-                                                    </div>
-                                                </div>
+                                                        <div class="form-row-first mt-2" id="HaveYouQuit" style='display:none'>
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>Have you Quit?</label>
+                                                                </div>
 
-                                            </div>
-
-                                            <div class="form-row-first mt-2" id="QuitDate" style='display:none'>
-                                                <div class="top-form-row d-flex">
-                                                    <div class="one-columns">
-                                                        <label>Quit Date</label>
-                                                    </div>
-
-                                                </div>
-                                                <div class="bootom-form-row d-flex ">
-                                                    <div class="one-columns">
-                                                        <input type="text" id="txtQuitDate" name="SmokingQuitDate" class="form-control"
-                                                               placeholder=""  style="width:100px">
-                                                    </div>
-                                                </div>
-
-                                            </div>
-
-
-                                        </div>
-                                        <div class="three-columns border-bottom-none">
-                                            <select id="ddPreferredPronouns" name="PreferredPronouns" class="form-control">
-                                                <option value="She/Her">She/Her</option>
-                                                <option value="He/Him">He/Him</option>
-                                                <option value="They/Them">They/Them</option>
-                                                <option value="Other">Other</option>
-                                            </select>
-                                            <div class="row">
-                                                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                                    <div class="form-row-first mt-2" id="OtherPronouns" style='display:none'>
-                                                        <div class="top-form-row d-flex">
-                                                            <div class="one-columns">
-                                                                <label>Other Pronouns</label>
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <select id="ddQuit" name="QuitSmoking" class="form-control">
+                                                                        <option value="0">Select</option>
+                                                                        <option value="true">Yes</option>
+                                                                        <option value="false">No</option>
+                                                                    </select>
+                                                                </div>
                                                             </div>
 
                                                         </div>
-                                                        <div class="bootom-form-row d-flex">
-                                                            <div class="one-columns">
-                                                                <input type="text" id="txtOtherPronouns" name="OtherPronouns"
-                                                                       class="form-control"
-                                                                       placeholder="">
+
+                                                        <div class="form-row-first mt-2" id="QuitDate" style='display:none'>
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>Quit Date</label>
+                                                                </div>
+
                                                             </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="three-columns border-bottom-none">
-                                            <select id="ddThinkYourselfAs" name="ThinkYourselfAs" class="form-control">
-                                                <option value="Straight or Heterosexual">
-                                                    Straight or Heterosexual
-                                                </option>
-                                                <option value="Lesbian">Lesbian</option>
-                                                <option value="Gay">Gay</option>
-                                                <option value="Bisexual">Bisexual</option>
-                                                <option value="Queer">Queer</option>
-                                                <option value="Questioning">Questioning</option>
-                                                <option value="Unspecified/Other">Unspecified/Other</option>
-                                            </select>
-                                            <div class="row">
-                                                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                                    <div class="form-row-first mt-2" id="OtherThinkYouself" style='display:none'>
-                                                        <div class="top-form-row d-flex">
-                                                            <div class="one-columns">
-                                                                <label>
-                                                                    Other you think yourself
-                                                                    as
-                                                                </label>
+                                                            <div class="bootom-form-row d-flex ">
+                                                                <div class="one-columns">
+                                                                    <input type="text" id="txtQuitDate" name="SmokingQuitDate" class="form-control"
+                                                                           placeholder=""  style="width:100px">
+                                                                </div>
                                                             </div>
 
                                                         </div>
-                                                        <div class="bootom-form-row d-flex">
-                                                            <div class="one-columns">
-                                                                <input type="text" id="txtOtherThinkYourself" name="OtherThinkYourselfAs"
-                                                                       class="form-control"
-                                                                       placeholder="">
+
+
+                                                    </div>
+                                                    <div class="three-columns border-bottom-none">
+                                                        <select id="ddPreferredPronouns" name="PreferredPronouns" class="form-control">
+                                                            <option value="She/Her">She/Her</option>
+                                                            <option value="He/Him">He/Him</option>
+                                                            <option value="They/Them">They/Them</option>
+                                                            <option value="Other">Other</option>
+                                                        </select>
+                                                        <div class="row">
+                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                                                <div class="form-row-first mt-2" id="OtherPronouns" style='display:none'>
+                                                                    <div class="top-form-row d-flex">
+                                                                        <div class="one-columns">
+                                                                            <label>Other Pronouns</label>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="bootom-form-row d-flex">
+                                                                        <div class="one-columns">
+                                                                            <input type="text" id="txtOtherPronouns" name="OtherPronouns"
+                                                                                   class="form-control"
+                                                                                   placeholder="">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="three-columns border-bottom-none">
+                                                        <select id="ddThinkYourselfAs" name="ThinkYourselfAs" class="form-control">
+                                                            <option value="Straight or Heterosexual">
+                                                                Straight or Heterosexual
+                                                            </option>
+                                                            <option value="Lesbian">Lesbian</option>
+                                                            <option value="Gay">Gay</option>
+                                                            <option value="Bisexual">Bisexual</option>
+                                                            <option value="Queer">Queer</option>
+                                                            <option value="Questioning">Questioning</option>
+                                                            <option value="Unspecified/Other">Unspecified/Other</option>
+                                                        </select>
+                                                        <div class="row">
+                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                                                <div class="form-row-first mt-2" id="OtherThinkYouself" style='display:none'>
+                                                                    <div class="top-form-row d-flex">
+                                                                        <div class="one-columns">
+                                                                            <label>
+                                                                                Other you think yourself
+                                                                                as
+                                                                            </label>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="bootom-form-row d-flex">
+                                                                        <div class="one-columns">
+                                                                            <input type="text" id="txtOtherThinkYourself" name="OtherThinkYourselfAs"
+                                                                                   class="form-control"
+                                                                                   placeholder="">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>*@
+                                            </div>*@
 
 
 
@@ -1712,89 +1770,89 @@
                     </div>
 
                     @*<div class="recent-paitents" style="display:none">
-                <h2 class="mb-3">Recent Patients</h2>
-                <div class="recent-paitent-row d-flex">
-                    <div class="recent-paitents-img">
-                        <img class="img-fluid" src="images/recent-paitent-img.png" alt="">
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th scope="col" style="width:160px;">Name</th>
-                                    <th scope="col" style="width:268px;">Email</th>
-                                    <th scope="col" style="width:160px;">Phone</th>
-                                    <th scope="col" style="width:160px;">Last Modify</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                            <h2 class="mb-3">Recent Patients</h2>
+                            <div class="recent-paitent-row d-flex">
+                                <div class="recent-paitents-img">
+                                    <img class="img-fluid" src="images/recent-paitent-img.png" alt="">
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th scope="col" style="width:160px;">Name</th>
+                                                <th scope="col" style="width:268px;">Email</th>
+                                                <th scope="col" style="width:160px;">Phone</th>
+                                                <th scope="col" style="width:160px;">Last Modify</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
-                                <tr>
-                                    <td style="width:160px;">Omnis iste</td>
-                                    <td style="width:268px;">Omnisiste@gmail.com</td>
-                                    <td style="width:160px;">98756 45365</td>
-                                    <td style="width:160px;">23-4-2019</td>
-                                </tr>
+                                            <tr>
+                                                <td style="width:160px;">Omnis iste</td>
+                                                <td style="width:268px;">Omnisiste@gmail.com</td>
+                                                <td style="width:160px;">98756 45365</td>
+                                                <td style="width:160px;">23-4-2019</td>
+                                            </tr>
 
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="recent-paitent-row d-flex">
-                    <div class="recent-paitents-img">
-                        <img class="img-fluid" src="images/recent-paitent-img-1.png" alt="">
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th scope="col" style="width:160px;">Name</th>
-                                    <th scope="col" style="width:268px;">Email</th>
-                                    <th scope="col" style="width:160px;">Phone</th>
-                                    <th scope="col" style="width:160px;">Last Modify</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="recent-paitent-row d-flex">
+                                <div class="recent-paitents-img">
+                                    <img class="img-fluid" src="images/recent-paitent-img-1.png" alt="">
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th scope="col" style="width:160px;">Name</th>
+                                                <th scope="col" style="width:268px;">Email</th>
+                                                <th scope="col" style="width:160px;">Phone</th>
+                                                <th scope="col" style="width:160px;">Last Modify</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
-                                <tr>
-                                    <td style="width:160px;">praesentium</td>
-                                    <td style="width:268px;">praesentium@gmail.com</td>
-                                    <td style="width:160px;">68756 45365</td>
-                                    <td style="width:160px;">20-4-2019</td>
-                                </tr>
+                                            <tr>
+                                                <td style="width:160px;">praesentium</td>
+                                                <td style="width:268px;">praesentium@gmail.com</td>
+                                                <td style="width:160px;">68756 45365</td>
+                                                <td style="width:160px;">20-4-2019</td>
+                                            </tr>
 
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="recent-paitent-row d-flex">
-                    <div class="recent-paitents-img">
-                        <img class="img-fluid" src="images/recent-paitent-img-2.png" alt="">
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th scope="col" style="width:160px;">Name</th>
-                                    <th scope="col" style="width:268px;">Email</th>
-                                    <th scope="col" style="width:160px;">Phone</th>
-                                    <th scope="col" style="width:160px;">Last Modify</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="recent-paitent-row d-flex">
+                                <div class="recent-paitents-img">
+                                    <img class="img-fluid" src="images/recent-paitent-img-2.png" alt="">
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th scope="col" style="width:160px;">Name</th>
+                                                <th scope="col" style="width:268px;">Email</th>
+                                                <th scope="col" style="width:160px;">Phone</th>
+                                                <th scope="col" style="width:160px;">Last Modify</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
-                                <tr>
-                                    <td style="width:160px;">voluptatum</td>
-                                    <td style="width:268px;">voluptatum@gmail.com</td>
-                                    <td style="width:160px;">78756 45365</td>
-                                    <td style="width:160px;">18-4-2019</td>
-                                </tr>
+                                            <tr>
+                                                <td style="width:160px;">voluptatum</td>
+                                                <td style="width:268px;">voluptatum@gmail.com</td>
+                                                <td style="width:160px;">78756 45365</td>
+                                                <td style="width:160px;">18-4-2019</td>
+                                            </tr>
 
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>*@
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>*@
 
                 </div>
 
@@ -1903,415 +1961,431 @@
 
             </div>
 
-    </div>
-</div>
-<div class="modal fade" id="RequestUserModel" tabindex="-1" role="dialog" aria-labelledby="RequestUserModel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered preview-modal" role="document">
-        <div class="modal-content" style="height:90%">
-
-            <div class="modal-header preview-header">
-                <h5 class="modal-title" id="PreviewModalTitle">Request</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body preview-body scroll">
-                <div class="form-group">
-                    <select class="form-control selectpicker" id="UserAndGroups" title="Select members to add" data-live-search="true" data-selected-text-format="count>0" data-actions-box="true" multiple></select>
-                </div>
-                <div class="form-group">
-                    <textarea class="form-control" id="RequestMessage" style="display:block!important;"></textarea>
-                </div>
-                <button class="btn btn-success" id="btnsendAproval" onclick="$(this).prop('disabled',true);;ApprovalOrRevertRequestRequest('1');">Send Request</button>
-                <button class="btn btn-success" id="btnsendRevoke" onclick="$(this).prop('disabled', true);ApprovalOrRevertRequestRequest('3');">Revoke Request</button>
-            </div>
         </div>
     </div>
-</div>
-  
-<div class="modal fade" id="AMDProfile" data-toggle="modal" tabindex="-1" role="dialog" aria-labelledby="AMDProfileModal"
-     aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content" style="min-height:600px">
-            <div class="modal-header">
-                <h5 style="margin: 0;padding: 4px 0;">AMD Profile</h5>
-                <div class="ml-auto">
-                   
+    <div class="modal fade" id="ViewCareplanChanges" tabindex="-1" role="dialog" aria-labelledby="ViewCareplanChanges" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered preview-modal" role="document">
+            <div class="modal-content" style="height:90%">
+
+                <div class="modal-header preview-header">
+                    <h4 class="modal-title">Select Needs and Goals</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-            </div>
-
-            <div class="modal-body">
-               
-
+                <div class="modal-body preview-body scroll">
+                    
+                </div>
             </div>
         </div>
     </div>
+    <div class="modal fade" id="RequestUserModel" tabindex="-1" role="dialog" aria-labelledby="RequestUserModel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered preview-modal" role="document">
+            <div class="modal-content" style="height:90%">
 
-</div>
-<!-- Inner content end here  -->
-<!--Notes Modal start here-->
-<div class="modal fade" id="notesModal" tabindex="-1" role="dialog" aria-labelledby="notesModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="notesModalLabel">Client Note</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="formNotes" class="appointement-form">
-                    <div class="NotesScroll">
-                        <div class="form-group">
-                            <label>Select Program:</label>
-                            <select id="ddlProgramType" class="form-control" onchange="GetFieldsByProgramID()">
-                                <option value='0'>None</option>
-                                <option value='1'>Clinic</option>
-                                <option value='2'>Dream</option>
-                                <option value='3'>OU</option>
-                                <option value='4'>Peralta College</option>
-                            </select>
-                        </div>
-                        <input hidden="hidden" id="noteshdnID" value="0" />
-                        <div class="form-group">
-                            <label>Description</label>
-                            <textarea cols="2" id="txtNotes1" rows="2" style="height:38px !important" class="form-control"></textarea>
-
-                        </div>
-                        <div class="tmpdiv">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" onclick="notescloseModel()" class="btn btn-secondary">Cancel</button>
-                        <button type="button" onclick="notesSave()" class="btn btn-primary">Save</button>
-                    </div>
-                </form>
-            </div>
-
-        </div>
-    </div>
-</div>
-<!--Notes mOdal End Here-->
-<!--Notes Modal Readonly start here-->
-<div class="modal fade" id="notesreadonlyModal" tabindex="-1" role="dialog" aria-labelledby="notesreadonlyModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="notesreadonlyModalLabel">Client Note</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="ReadonlyformNotes" class="appointement-form">
-                    <div class="ReadonlyNotesScroll">
-
-                        <div class="form-group">
-                            <label>Description</label>
-
-                            <label id="txtNotesReadonly1"></label>
-                        </div>
-                        <div class="tmpdivreadonly">
-                        </div>
-                    </div>
-                    <div class="modal-footer" hidden="hidden">
-                        <button type="button" onclick="notescloseModel()" class="btn btn-secondary">Cancel</button>
-                        <button type="button" onclick="notesSave()" class="btn btn-primary">Save</button>
-                    </div>
-                </form>
-            </div>
-
-        </div>
-    </div>
-</div>
-<!--Notes mOdal Readonly End Here-->
-<!-- Programe Modal start here  -->
-<div class="programeModal">
-    <div class="modal fade" id="myModal">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add/Remove Client Programs</h5>
+                <div class="modal-header preview-header">
+                    <h5 class="modal-title" id="PreviewModalTitle">Request</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
+                        <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body" id="programList">
-
+                <div class="modal-body preview-body scroll">
+                    <div class="form-group">
+                        <select class="form-control selectpicker" id="UserAndGroups" title="Select members to add" data-live-search="true" data-selected-text-format="count>0" data-actions-box="true" multiple></select>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" id="RequestMessage" style="display:block!important;"></textarea>
+                    </div>
+                    <button class="btn btn-success" id="btnsendAproval" onclick="$(this).prop('disabled',true);;ApprovalOrRevertRequestRequest('1');">Send Request</button>
+                    <button class="btn btn-success" id="btnsendRevoke" onclick="$(this).prop('disabled', true);ApprovalOrRevertRequestRequest('3');">Revoke Request</button>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- Programe Modal end here -->
-<!--Appointment Modal Starts Here-->
-<div class="modal fade" id="AppointmentModal" tabindex="-1" role="dialog" aria-labelledby="AppointmentModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel"> Appointment</h5>
-                <button type="button" class="close" data-dismiss="modal" onclick="closeModel()" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="formAppointment" class="appointement-form">
-                    <div class="form-group d-flex align-items-center">
-                        <label for="staticEmail" class="m-0"> Date:</label>
-                        <input type="text" class="form-control dispaly-input-select" id="datepicker" placeholder="">
-                    </div>
 
-                    <div class="form-group d-flex align-items-center">
-                        <label for="inputPassword" class="m-0"> Start Time:</label>
-                        <input type="text" class="form-control timepicker _time_picker dispaly-input-select" id="timepicker" placeholder="">
-                    </div>
+    <div class="modal fade" id="AMDProfile" data-toggle="modal" tabindex="-1" role="dialog" aria-labelledby="AMDProfileModal"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content" style="min-height:600px">
+                <div class="modal-header">
+                    <h5 style="margin: 0;padding: 4px 0;">AMD Profile</h5>
+                    <div class="ml-auto">
 
-                    <div class="form-group d-flex align-items-center">
-                        <label for="inputPassword" class="m-0"> End Time:</label>
-                        <input type="text" class="form-control timepicker _time_picker dispaly-input-select" id="endtimepicker" placeholder="">
-                    </div>
-
-                    @*<div class="form-group d-flex align-items-center">
-                        <label for="inputPassword">Select Patient</label>
-                        <input id="autoPatientList" class="form-control" />*@
-
-                    @*<select class="form-control select2" id="example1" name="state">
-
-                            <option value="">John</option>
-                            <option>Eric Jones</option>
-                            <option>Elina</option>
-                            <option>Thomas</option>
-
-                        </select>*@
-
-
-                    @*</div>*@
-                    <div class="form-group d-flex align-items-center">
-                        <label for="inputPassword">Type:</label>
-                        <select tabindex="13" id="ddlTypeOfAppointment" class="form-control dispaly-input-select"></select>
-                    </div>
-                    <div class="form-group d-flex align-items-center">
-                        <label for="inputPassword">Location:</label>
-                        <select tabindex="13" id="ddlLocationOfAppointment" class="form-control dispaly-input-select"></select>
-                    </div>
-
-                    <div class="form-group mb-0 d-flex align-items-center">
-                        <label for="inputPassword">Notes</label>
-                        <textarea cols="10" id="txtNotes" rows="5" class="form-control dispaly-input-select"></textarea>
-                        <input type="hidden" value="0" id="hdnAppointmentID" />
-                        <input type="hidden" value="0" id="hdnPatientId" />
-                    </div>
-                    <div class="modal-footer">
-                        <button id="closeAppointmentModel" type="button" onclick="closeModel()" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel</button>
-                        <button type="button" onclick="saveAppointment()" class="btn btn-primary">Save</button>
-                    </div>
-                </form>
-            </div>
-
-        </div>
-    </div>
-</div>
-<!-- Appointment Modal end here -->
-<!--AddCarePlan Modal Starts Here-->
-<div class="modal fade" id="AddCarePlanModal" tabindex="-1" role="dialog" aria-labelledby="AddCarePlanModal"
-     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"> Add Care plan</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form createtemplate">
-                    <div class="form-group col-md-12">
-                        <label for="templateName">Care plan name</label>
-                        <input type="text" class="form-control form-control-sm" id="carePlanName">
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label for="ddlProgram">Select program</label>
-                        <select class="form-control form-control-sm" id="ddlProgram"></select>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
                 </div>
-                <div class="notemplate" style="display: block;">
-                    <p class="text-center">No programs available for careplan creation.</p>
+
+                <div class="modal-body">
+
+
                 </div>
-            </div>
-            <div class="modal-footer">
-                <a href='javascript:{}' class="btn btn-success label-fields btnCareplanProceed" onclick="saveCareplan()">Proceed</a>
             </div>
         </div>
+
     </div>
-</div>
-<!-- AddCarePlan Modal end here -->
-<!--CarePlan Change Status Modal Starts Here-->
-<div class="modal fade" id="CarePlanChangeStatusModal" tabindex="-1" role="dialog" aria-labelledby="CarePlanChangeStatusModal"
-     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Change Status</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="status_description">
-                    <label>Description</label>
-                    <p>Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy.</p>
+    <!-- Inner content end here  -->
+    <!--Notes Modal start here-->
+    <div class="modal fade" id="notesModal" tabindex="-1" role="dialog" aria-labelledby="notesModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notesModalLabel">Client Note</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="form row">
-                    <div class="form-group col-md-12">
-                        <label>Select Status</label>
-                        <select class="form-control form-control-sm ddlStatus">
-                            <option value="0">Not Started</option>
-                            <option value="1">In Progress</option>
-                            <option value="2">Completed</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label for="ddlProgram">Add Note</label>
-                        <textarea class="form-control form-control-sm needNote"></textarea>
-                        <textarea class="form-control form-control-sm goalNote"></textarea>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <a href='javascript:{}' class="btn btn-success label-fields submitNeedStatus" onclick="UpdateNeedStatus()">Submit</a>
-                <a href='javascript:{}' class="btn btn-success label-fields submitGoalStatus" onclick="UpdateGoalStatus()">Submit</a>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- CarePlan Change Status Modal end here -->
-<!--CarePlan Outcome Modal Starts Here-->
-<div class="modal fade carePlanOutcomes" id="carePlanOutcomes" tabindex="-1" role="dialog" aria-labelledby="carePlanOutcomes"
-     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title outcomeTitle">Outcomes(<span class="outcomecount">0</span>)</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="addOutcomeWrap">
-                    <div class="addNewOutcome">
-                        <div class="a_outcome_item">
-                            <div class="a_o_head">
-                                <div class="a_o_head_name">
-                                    <span class="name_thumb c_blue">@Session["OutcomeAddedBy"]</span>
-                                    @*<input type="text" name="add-New-Outcome" class="txtOutcome" placeholder="+ Add New Outcomes">*@
-                                    <textarea class="txtOutcome" placeholder="+ Add New Outcomes" onkeyup="textAreaAdjust(this)"></textarea>
-                                    <textarea class="txtIntervention" placeholder="+ Add New Intervention" onkeyup="textAreaAdjust(this)"></textarea>
-                                </div>
+                <div class="modal-body">
+                    <form id="formNotes" class="appointement-form">
+                        <div class="NotesScroll">
+                            <div class="form-group">
+                                <label>Select Program:</label>
+                                <select id="ddlProgramType" class="form-control" onchange="GetFieldsByProgramID()">
+                                    <option value='0'>None</option>
+                                    <option value='1'>Clinic</option>
+                                    <option value='2'>Dream</option>
+                                    <option value='3'>OU</option>
+                                    <option value='4'>Peralta College</option>
+                                </select>
                             </div>
-                            <div class="addNewHeadAction">
-                                <button type="button" class="checkBtn btnOutcome" onclick="SaveOutCome(this)"><i class="fa fa-check"></i></button>
-                                <button type="button" class="checkBtn btnIntervention" onclick="SaveIntervention(this)"><i class="fa fa-check"></i></button>
+                            <input hidden="hidden" id="noteshdnID" value="0" />
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea cols="2" id="txtNotes1" rows="2" style="height:38px !important" class="form-control"></textarea>
+
+                            </div>
+                            <div class="tmpdiv">
                             </div>
                         </div>
+                        <div class="modal-footer">
+                            <button type="button" onclick="notescloseModel()" class="btn btn-secondary">Cancel</button>
+                            <button type="button" onclick="notesSave()" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--Notes mOdal End Here-->
+    <!--Notes Modal Readonly start here-->
+    <div class="modal fade" id="notesreadonlyModal" tabindex="-1" role="dialog" aria-labelledby="notesreadonlyModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notesreadonlyModalLabel">Client Note</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="ReadonlyformNotes" class="appointement-form">
+                        <div class="ReadonlyNotesScroll">
+
+                            <div class="form-group">
+                                <label>Description</label>
+
+                                <label id="txtNotesReadonly1"></label>
+                            </div>
+                            <div class="tmpdivreadonly">
+                            </div>
+                        </div>
+                        <div class="modal-footer" hidden="hidden">
+                            <button type="button" onclick="notescloseModel()" class="btn btn-secondary">Cancel</button>
+                            <button type="button" onclick="notesSave()" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--Notes mOdal Readonly End Here-->
+    <!-- Programe Modal start here  -->
+    <div class="programeModal">
+        <div class="modal fade" id="myModal">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add/Remove Client Programs</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
                     </div>
-                    <div class="a_outcome_list_wrap">
-                        <div class="a_outcome_list scroll">
+                    <div class="modal-body" id="programList">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Programe Modal end here -->
+    <!--Appointment Modal Starts Here-->
+    <div class="modal fade" id="AppointmentModal" tabindex="-1" role="dialog" aria-labelledby="AppointmentModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"> Appointment</h5>
+                    <button type="button" class="close" data-dismiss="modal" onclick="closeModel()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formAppointment" class="appointement-form">
+                        <div class="form-group d-flex align-items-center">
+                            <label for="staticEmail" class="m-0"> Date:</label>
+                            <input type="text" class="form-control dispaly-input-select" id="datepicker" placeholder="">
+                        </div>
+
+                        <div class="form-group d-flex align-items-center">
+                            <label for="inputPassword" class="m-0"> Start Time:</label>
+                            <input type="text" class="form-control timepicker _time_picker dispaly-input-select" id="timepicker" placeholder="">
+                        </div>
+
+                        <div class="form-group d-flex align-items-center">
+                            <label for="inputPassword" class="m-0"> End Time:</label>
+                            <input type="text" class="form-control timepicker _time_picker dispaly-input-select" id="endtimepicker" placeholder="">
+                        </div>
+
+                        @*<div class="form-group d-flex align-items-center">
+                            <label for="inputPassword">Select Patient</label>
+                            <input id="autoPatientList" class="form-control" />*@
+
+                        @*<select class="form-control select2" id="example1" name="state">
+
+                                <option value="">John</option>
+                                <option>Eric Jones</option>
+                                <option>Elina</option>
+                                <option>Thomas</option>
+
+                            </select>*@
+
+
+                        @*</div>*@
+                        <div class="form-group d-flex align-items-center">
+                            <label for="inputPassword">Type:</label>
+                            <select tabindex="13" id="ddlTypeOfAppointment" class="form-control dispaly-input-select"></select>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label for="inputPassword">Location:</label>
+                            <select tabindex="13" id="ddlLocationOfAppointment" class="form-control dispaly-input-select"></select>
+                        </div>
+
+                        <div class="form-group mb-0 d-flex align-items-center">
+                            <label for="inputPassword">Notes</label>
+                            <textarea cols="10" id="txtNotes" rows="5" class="form-control dispaly-input-select"></textarea>
+                            <input type="hidden" value="0" id="hdnAppointmentID" />
+                            <input type="hidden" value="0" id="hdnPatientId" />
+                        </div>
+                        <div class="modal-footer">
+                            <button id="closeAppointmentModel" type="button" onclick="closeModel()" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel</button>
+                            <button type="button" onclick="saveAppointment()" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Appointment Modal end here -->
+    <!--AddCarePlan Modal Starts Here-->
+    <div class="modal fade" id="AddCarePlanModal" tabindex="-1" role="dialog" aria-labelledby="AddCarePlanModal"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"> Add Care plan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form createtemplate">
+                        <div class="form-group col-md-12">
+                            <label for="templateName">Care plan name</label>
+                            <input type="text" class="form-control form-control-sm" id="carePlanName">
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="ddlProgram">Select program</label>
+                            <select class="form-control form-control-sm" id="ddlProgram"></select>
+                        </div>
+                    </div>
+                    <div class="notemplate" style="display: block;">
+                        <p class="text-center">No programs available for careplan creation.</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href='javascript:{}' class="btn btn-success label-fields btnCareplanProceed" onclick="saveCareplan()">Proceed</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- AddCarePlan Modal end here -->
+    <!--CarePlan Change Status Modal Starts Here-->
+    <div class="modal fade" id="CarePlanChangeStatusModal" tabindex="-1" role="dialog" aria-labelledby="CarePlanChangeStatusModal"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Change Status</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="status_description">
+                        <label>Description</label>
+                        <p>Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy.</p>
+                    </div>
+                    <div class="form row">
+                        <div class="form-group col-md-12">
+                            <label>Select Status</label>
+                            <select class="form-control form-control-sm ddlStatus">
+                                <option value="0">Not Started</option>
+                                <option value="1">In Progress</option>
+                                <option value="2">Completed</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="ddlProgram">Add Note</label>
+                            <textarea class="form-control form-control-sm needNote"></textarea>
+                            <textarea class="form-control form-control-sm goalNote"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href='javascript:{}' class="btn btn-success label-fields submitNeedStatus" onclick="UpdateNeedStatus()">Submit</a>
+                    <a href='javascript:{}' class="btn btn-success label-fields submitGoalStatus" onclick="UpdateGoalStatus()">Submit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- CarePlan Change Status Modal end here -->
+    <!--CarePlan Outcome Modal Starts Here-->
+    <div class="modal fade carePlanOutcomes" id="carePlanOutcomes" tabindex="-1" role="dialog" aria-labelledby="carePlanOutcomes"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title outcomeTitle">Outcomes(<span class="outcomecount">0</span>)</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="addOutcomeWrap">
+                        <div class="addNewOutcome">
                             <div class="a_outcome_item">
                                 <div class="a_o_head">
                                     <div class="a_o_head_name">
-                                        <span class="name_thumb c_blue">AD</span><strong>Amardeep Singh</strong>
+                                        <span class="name_thumb c_blue">@Session["OutcomeAddedBy"]</span>
+                                        @*<input type="text" name="add-New-Outcome" class="txtOutcome" placeholder="+ Add New Outcomes">*@
+                                        <textarea class="txtOutcome" placeholder="+ Add New Outcomes" onkeyup="textAreaAdjust(this)"></textarea>
+                                        <textarea class="txtIntervention" placeholder="+ Add New Intervention" onkeyup="textAreaAdjust(this)"></textarea>
                                     </div>
-                                    <div class="a_o_date">Jan 08, 2020 at 11:10 AM</div>
                                 </div>
-                                <div class="a_o_content">
-                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
-                                    <div class="status_changed"><b>Status Changed:</b> From Not Started To In Progress</div>
+                                <div class="addNewHeadAction">
+                                    <button type="button" class="checkBtn btnOutcome" onclick="SaveOutCome(this)"><i class="fa fa-check"></i></button>
+                                    <button type="button" class="checkBtn btnIntervention" onclick="SaveIntervention(this)"><i class="fa fa-check"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="a_outcome_list_wrap">
+                            <div class="a_outcome_list scroll">
+                                <div class="a_outcome_item">
+                                    <div class="a_o_head">
+                                        <div class="a_o_head_name">
+                                            <span class="name_thumb c_blue">AD</span><strong>Amardeep Singh</strong>
+                                        </div>
+                                        <div class="a_o_date">Jan 08, 2020 at 11:10 AM</div>
+                                    </div>
+                                    <div class="a_o_content">
+                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
+                                        <div class="status_changed"><b>Status Changed:</b> From Not Started To In Progress</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
+            </div>
         </div>
     </div>
-</div>
-<!-- CarePlan Outcome Modal end here -->
-<!--CarePlan Summary Modal Starts Here-->
-<div class="modal fade" id="AddSummaryModal" tabindex="-1" role="dialog" aria-labelledby="AddSummaryModal"
-     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Add Care Plan Summary</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form">
-                    <div class="form-group col-md-12">
-                        <label>Next Review Date</label>
-                        <input type="text" class="form-control txtNextReviewDate" />
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label>Summary</label>
-                        <textarea class="form-control form-control-sm txtSummaryNote"></textarea>
+    <!-- CarePlan Outcome Modal end here -->
+    <!--CarePlan Summary Modal Starts Here-->
+    <div class="modal fade" id="AddSummaryModal" tabindex="-1" role="dialog" aria-labelledby="AddSummaryModal"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Care Plan Summary</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form">
+                        <div class="form-group col-md-12">
+                            <label>Next Review Date</label>
+                            <input type="text" class="form-control txtNextReviewDate" />
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label>Summary</label>
+                            <textarea class="form-control form-control-sm txtSummaryNote"></textarea>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <a href='javascript:{}' class="btn btn-default label-fields" onclick="clearSummary()">Cancel</a>
-                <a href='javascript:{}' class="btn btn-success label-fields" onclick="AddSummary()">Submit</a>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- CarePlan Summary Modal end here -->
-<!--Default need popup start here-->
-<div class="modal fade defaultsNeedsGoals" id="DefaultNeedsPopUp" tabindex="-1" role="dialog" aria-labelledby="DefaultNeedsPopUp"
-     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title defaultNeedTitle">Default Needs</h5>
-                <button type="button" class="close"  aria-label="Close">
-                    <span aria-hidden="true" class="closeDefaultNeed">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="defaultsNeedsGoals_div">
-                    <div class="d_n_actions defaultNeedAction d-flex">
-                        <label class="checkbox_input"><input class="defaultallneed" type="checkbox" onchange="checkAllDefaultNeed(this)" name="defaultNeeds" value="" /><span>Select All </span></label>
-                        <a href="#" class="btn btn-success ml-auto" onclick="AddDefaultneeds()">Add to care plan</a>
-                        <a href="#" class="btn btn-success" onclick="closeDefaultNeed()">Add new need</a>
-                        <a href="#" class="btn btn-success btn-cancel" onclick="closeDefaultNeed()">Cancel</a>
-                    </div>
-                    <div class="d_n_actions defaultGoalAction d-none">
-                        <label class="checkbox_input"><input class="defaultallneed" type="checkbox" onchange="checkAllDefaultNeed(this)" name="defaultNeeds" value="" /><span>Select All </span></label>
-                        <a href="#" class="btn btn-success ml-auto" onclick="AddDefaultgoals()">Add to need</a>
-                        <a href="#" class="btn btn-success" onclick="focusAddGoals()">Add new goal</a>
-                        <a href="#" class="btn btn-success btn-cancel" onclick="closeDefaultGoals()">Cancel</a>
-                    </div>
-                    <ul class="defaultneedul scroll">
-                        <li>
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text</p>
-                            <label class="checkbox_input"><input type="checkbox" name="defaultNeeds" value="" /><span></span></label>
-                        </li>
-                    </ul>
+                <div class="modal-footer">
+                    <a href='javascript:{}' class="btn btn-default label-fields" onclick="clearSummary()">Cancel</a>
+                    <a href='javascript:{}' class="btn btn-success label-fields" onclick="AddSummary()">Submit</a>
                 </div>
             </div>
+        </div>
+    </div>
+    <!-- CarePlan Summary Modal end here -->
+    <!--Default need popup start here-->
+    <div class="modal fade defaultsNeedsGoals" id="DefaultNeedsPopUp" tabindex="-1" role="dialog" aria-labelledby="DefaultNeedsPopUp"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title defaultNeedTitle">Default Needs</h5>
+                    <button type="button" class="close"  aria-label="Close">
+                        <span aria-hidden="true" class="closeDefaultNeed">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="defaultsNeedsGoals_div">
+                        <div class="d_n_actions defaultNeedAction d-flex">
+                            <label class="checkbox_input"><input class="defaultallneed" type="checkbox" onchange="checkAllDefaultNeed(this)" name="defaultNeeds" value="" /><span>Select All </span></label>
+                            <a href="#" class="btn btn-success ml-auto" onclick="AddDefaultneeds()">Add to care plan</a>
+                            <a href="#" class="btn btn-success" onclick="closeDefaultNeed()">Add new need</a>
+                            <a href="#" class="btn btn-success btn-cancel" onclick="closeDefaultNeed()">Cancel</a>
+                        </div>
+                        <div class="d_n_actions defaultGoalAction d-none">
+                            <label class="checkbox_input"><input class="defaultallneed" type="checkbox" onchange="checkAllDefaultNeed(this)" name="defaultNeeds" value="" /><span>Select All </span></label>
+                            <a href="#" class="btn btn-success ml-auto" onclick="AddDefaultgoals()">Add to need</a>
+                            <a href="#" class="btn btn-success" onclick="focusAddGoals()">Add new goal</a>
+                            <a href="#" class="btn btn-success btn-cancel" onclick="closeDefaultGoals()">Cancel</a>
+                        </div>
+                        <ul class="defaultneedul scroll">
+                            <li>
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text</p>
+                                <label class="checkbox_input"><input type="checkbox" name="defaultNeeds" value="" /><span></span></label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
 
+            </div>
         </div>
     </div>
 </div>
-    </div>
 <!--Default need popup end here-->
 <script>
     var userId = "@Session["userid"]";
@@ -2334,10 +2408,83 @@
 <script>
     var isAzaxRequestSent = false;
     $('#UserAndGroups').closest('.form-group').show();
+    var selectedNeeds = [];
+    var selectedGoals = [];
+    function OpenViewCarePlanChanges() {
+        $.ajax({
+            type: "Get",
+            url: Apipath + '/api/PatientMain/getchangedneedsandgoals?careplanid=' + careplanid +'&isChecked=false',
+            contentType: 'application/json; charset=UTF-8',
+            dataType: "json",
+            async: false,
+            success: function (result) {
+                if(result.length>0){
+
+                var html=""
+                var needs = result.filter(c => !c.IsGoal);
+                var goals = result.filter(c => c.IsGoal);
+                html += `<div class="selectAll"><div class="form-group"><label class="checkbox_input"><input class="Need" id="selectAllNeedsGoals" onchange="SelectAllNeedGoals()" type="checkbox" name="select-all" value=""><span>Select All</span></label></div></div><ul class="needGoalsChecklist">`
+                for (let i = 0; i < needs.length; i++) {
+
+                    html += `<li><div class="form-group"><label class="checkbox_input" for="${needs[i].NeedId + 'need'}"><input class="Need" type="checkbox" id="${needs[i].NeedId + 'need'}" name="needs" value="${needs[i].NeedId}">
+                              <span>${needs[i].Description}</span></label></div>`
+                    var NeedGoals = goals.filter(c => c.NeedId == needs[i].NeedId);
+                    if (NeedGoals.length > 0) {
+                        html+=`<ul>`
+                        for (let j = 0; j < NeedsGoals.length; j++) {
+                            html += `<li><div class="form-group"><label class="checkbox_input"for="${NeedGoals[j].GoalId + 'goal'}"><input class="goal" type="checkbox" id="${NeedGoals[j].GoalId + 'goal'}" name="goals" value="${NeedGoals[j].GoalId}">
+                             <span> ${NeedGoals[j].Description}</span></label></div></li>`
+                        }
+                        html +=`</ul>`
+                    }
+                    html += `</li>`
+                }
+                html += `</ul>`
+                
+                html +=`<button class="btn-success"  onclick="ChooseUsersPopUp('1')">Continue</button>`
+                $('#ViewCareplanChanges .modal-body').html(html)
+               
+                  }else{
+              $('#ViewCareplanChanges .modal-body').html("<div>No change in needs and goals</div>")
+                  }
+                 $('#ViewCareplanChanges').modal('show');
+            },
+            error: function (e) {
+                toastr.error("Something happen Wrong");
+                $(".loaderOverlay").hide();
+            }
+        });
+       
+        
+
+    }
+
+
+    function SelectAllNeedGoals(){
     
-   
+   if($('#selectAllNeedsGoals').prop("checked")){
+     $("input:checkbox[name=needs]").prop('checked',true);
+     $("input:checkbox[name=goals]").prop('checked',true);
+    }else{
+    $("input:checkbox[name=needs]").prop('checked',false);
+     $("input:checkbox[name=goals]").prop('checked',false);
+
+    }
+    }
 
     function ChooseUsersPopUp(type) {
+        selectedNeeds = [];
+        selectedGoals = [];
+
+        //Selected checkBox here
+        $("input:checkbox[name=needs]:checked").each(function () {
+            selectedNeeds.push($(this).val());
+        });
+        $("input:checkbox[name=goals]:checked").each(function () {
+            selectedGoals.push($(this).val());
+        });
+
+        $('#ViewCareplanChanges').modal('hide');
         $('#RequestMessage').val("")
         if (type == '1') {
             $('#btnsendAproval').show();
@@ -2447,6 +2594,8 @@
             CareplanId: careplanid,
             UserIds: SelectedUsers,
             GroupIds: SelectedGroups,
+            Needs: selectedNeeds,
+            Goals: selectedGoals,
             Type: type
         };
         hideAprovalBtnStatus();

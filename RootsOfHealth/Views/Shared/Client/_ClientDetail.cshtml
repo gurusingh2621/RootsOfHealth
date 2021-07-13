@@ -39,7 +39,7 @@
                                                 <i class="far fa-save"></i>
                                                 Save
                                             </a>
-                                            <a href="javascript:{}" onclick="ActivateTab(@ViewBag.PatientID,'ProgramTab','@FormName',@item.ClientFormID)"
+                                            <a href="javascript:{}" onclick="ActivateTab(@ViewBag.PatientID,'','@FormName',@item.ClientFormID)"
                                                class="btn btn-success label-fields btnProgramEdit">
                                                 <i class="far fa-edit"></i>
                                                 Edit
@@ -87,7 +87,7 @@
     <script>
    var  programUploadedPath="@System.Web.Configuration.WebConfigurationManager.AppSettings["ProgramUploadPath"]";
     var _userID = "@Session["userid"]";
-    var _patientID = '@ViewBag.PatientId';
+        var _patientID = '@ViewBag.PatientId';
     var programName = '';
     var formName = '';
     var programElement = '';
@@ -99,8 +99,9 @@
     if (clientMiddleName.trim().length > 0) {
         clientName = '@Model.PatientMain.FirstName' + " " + clientMiddleName+" "+'@Model.PatientMain.LastName'
       }
-    var _dateOfBirth = '@Model.PatientMain.DateOfBirth'
-
+        var _dateOfBirth = '@Model.PatientMain.DateOfBirth'
+        
+        $('#btnaddprogram').addClass('d-none')
 
 
 
@@ -2368,10 +2369,10 @@
                 success: function (result) {
                     
 
-                   
+                    
                     var data = JSON.parse(result.data)
                     var myChildTab = $("#myChildTab");
-                    if (data.length == 1 && data[0].ParentFormID == null) {
+                    if (data.length == 1 && (data[0].ParentFormID == null || data[0].ParentFormID==0)) {
                         $("#myChildTab").css("display", "none");
                     } else {
 

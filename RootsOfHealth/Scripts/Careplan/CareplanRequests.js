@@ -190,6 +190,7 @@ function changeRequestStatus(status, requestid,type) {
                 if (status == 1) {
                     toastr.success("Request is accepted");
                     $('.requestApproveButton').css('display', 'inline-block')
+                    $('.requestViewChanges').css('display', 'inline-block')
                     $('.requestAcceptButton').css('display', 'none')
 
                     $('.Model_Status').text('Accepted by myself');
@@ -327,24 +328,26 @@ function BindModel(item) {
     else {
         status = '<span class="s_notApproved Model_Status">Not Accepted</span>'
     }
-
+    
 
     if (item.Status == "1" && item.AcceptedById == userId && item.Type == 3) {
         actionbutton += `<a  style="display:inline-block" class="btn btn-success text-white ViewCareplan" onClick="ViewCareplan(${item.RequestId}, ${item.IsCarePlanViewed});editCarePlan(${item.CarePlanId},${item.PatientId})" style="cursor:pointer;">View Careplan</a>`
         actionbutton += `<a onClick="changeRequestStatus('2',${item.RequestId},1)" style="display:inline-block" class="btn btn-success text-white requestApproveButton ${item.IsCarePlanViewed ? '' :'disabled'}" style="cursor:pointer;">Approve Request</a>`
         actionbutton += `<a onClick="changeRequestStatus('2',${item.RequestId},3)" style="display:inline-block" class="btn btn-success text-white requestRevokeButton ${item.IsCarePlanViewed ? '' : 'disabled'}" style="cursor:pointer;">Accept Revoke Request</a>`
+        actionbutton += `<a onClick="ViewRequestChanges(${item.CarePlanId})" style="display:inline-block" class="btn btn-success text-white requestViewChanges " style="cursor:pointer;">View Change</a>`
 
     }
     else if (item.Status == "1" && item.AcceptedById == userId && item.Type == 1) {
         actionbutton += `<a  style="display:inline-block" class="btn btn-success text-white ViewCareplan"onClick="ViewCareplan(${item.RequestId}, ${item.IsCarePlanViewed});editCarePlan(${item.CarePlanId},${item.PatientId})" style="cursor:pointer;">View Careplan</a>`
         actionbutton += `<a onClick="changeRequestStatus('2',${item.RequestId},1)" style="display:inline-block" class="btn btn-success text-white requestApproveButton ${item.IsCarePlanViewed ? '' : 'disabled'}" style="cursor:pointer;">Approve Request</a>`
+        actionbutton += `<a onClick="ViewRequestChanges(${item.CarePlanId})" style="display:inline-block" class="btn btn-success text-white requestViewChanges " style="cursor:pointer;">View Change</a>`
 
     }
     else if (item.Status == null || item.Status == "0") {
         actionbutton += `<a onClick="changeRequestStatus('1',${item.RequestId},${item.Type})" style="display:inline-block"  class="btn btn-success text-white requestAcceptButton" style="cursor:pointer;">Accept Request</a>`
         actionbutton += `<a  style="display:none" class="btn btn-success text-white ViewCareplan" onClick="ViewCareplan(${item.RequestId}, ${item.IsCarePlanViewed});editCarePlan(${item.CarePlanId},${item.PatientId})" style="cursor:pointer;">View Careplan</a>`
         actionbutton += `<a onClick="changeRequestStatus('2',${item.RequestId},1)" style="display:none" class="btn btn-success text-white requestApproveButton ${item.IsCarePlanViewed ? '' : 'disabled'}" style="cursor:pointer;">Approve Request</a>`
-
+        actionbutton += `<a onClick="ViewRequestChanges(${item.CarePlanId})" style="display:none" class="btn btn-success text-white requestViewChanges " style="cursor:pointer;">View Change</a>`
     }
     var modelContent = `  <table class="table">
                     <tbody>
@@ -529,6 +532,53 @@ function ViewCareplan(requestId, IsViewCareplan) {
         },
         error: function (e) {
             toastr.error("Something happen Wrong");
+        }
+    });
+}
+function ViewRequestChanges(_careplanid) {
+    $.ajax({
+        type: "Get",
+        url: Apipath + '/api/PatientMain/getchangedneedsandgoals?careplanid=' + _careplanid + '&isChecked=true',
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        async: false,
+        success: function (result) {
+            
+            if (result.length > 0) {
+                
+                var html = ""
+                var needs = result.filter(c => !c.IsGoal);
+                var goals = result.filter(c => c.IsGoal);
+                html += `<ul class="needGoalsChecklist">`
+                for (let i = 0; i < needs.length; i++) {
+
+                    html += `<li><div class="form-group"><label><span>${needs[i].Description}</span></label></div>`
+                    var NeedGoals = goals.filter(c => c.NeedId == needs[i].NeedId);
+                    if (NeedGoals.length > 0) {
+                        html += `<ul>`
+                        for (let j = 0; j < NeedsGoals.length; j++) {
+                            html += `<li><div class="form-group"><label><span> ${NeedGoals[j].Description}</span></label></div></li>`
+                        }
+                        html += `</ul>`
+                    }
+                    html += `</li>`
+                }
+                html += `</ul>`
+                
+                
+                 $('#ViewRequestCareplanChanges .modal-body').html(html)
+                $('#RequestModel').modal('hide');
+                $('#ViewRequestCareplanChanges').modal('show');
+            }else{
+              
+                 toastr.error("There are no changes to view");
+              
+
+                  }
+        },
+        error: function (e) {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
         }
     });
 }
