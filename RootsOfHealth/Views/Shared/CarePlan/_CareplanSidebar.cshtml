@@ -33,6 +33,7 @@
                 <li class="nav-item disabled"><a class="nav-link show need-nav" href="#a_p_needAndGoal" onclick="GetNeedAndGoalList()">Needs & Goals</a></li>
                 <li class="nav-item disabled"><a class="nav-link show summary-nav" href="#a_p_plan_summery" onclick="showSummary()">Plan Summary</a></li>
                 <li class="nav-item requestItem disabled d-none"><a class="nav-link show request-nav" href="#a_p_request_summery" onclick="actionRequest()">APPROVAL REQUEST</a></li>
+                <li class="nav-item  disabled"><a class="nav-link show requestHistory-nav" href="#a_p_request_history" onclick="LoadCareplanRequestHistory()">History</a></li>
             </ul>
             <div class="tab-content">
                 <div id="a_p_basic_info" class="tab-pane active show ">
@@ -122,8 +123,8 @@
                 <div id="a_p_request_summery" class="tab-pane show">
                     <div class="plan_summery_wrap summaryContent">
                         @*<div class="tab_heading">
-                            <h5><i class="fas fa-file-alt"></i>Request Detail</h5>
-                        </div>*@
+                    <h5><i class="fas fa-file-alt"></i>Request Detail</h5>
+                </div>*@
                         <div class="cp_request_status">
                             <div id="careplanStatus">
                                 <div class="careplanStatusDiv">
@@ -146,10 +147,27 @@
                                     <span style="display:none" class="notApproved">Careplan is not approved</span>
                                 </div>
                             </div>
-                            <button style="display:none" class="btn-success" id="btnApproval" onclick="ChooseUsersPopUp('1')">Send Approval Request</button>
+                            <button style="display:none" class="btn-success" id="btnApproval" onclick="OpenViewCarePlanChanges()">Send Approval Request</button>
                             <button style="display:none" class="btn-success" id="btnRevertRequest" onclick="ApprovalOrRevertRequestRequest('2')">Revert Approval Request</button>
                             <button style="display:none" class="btn-success" id="btnRevokeRequest" onclick="ChooseUsersPopUp('2')">Send Revoke Request</button>
                         </div>
+                    </div>
+                </div>
+                <div id="a_p_request_history" class="tab-pane show">
+                    <div class="table-responsive">
+                        <table id="CarePlanHistoryTable" class="table border c_table table-striped">
+                            <thead>
+                                <tr class="table-active">
+                                    <th>USER</th>
+                                    <th>ACTION</th>
+                                    <th>COMMENT</th>
+                                    <th>WHEN</th>
+                                </tr>
+                            </thead>
+                            <tbody class="carePlanRequestHistory">
+                                <tr></tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

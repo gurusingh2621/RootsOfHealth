@@ -5,34 +5,33 @@
 });
 var _programDataTable = '';
 function GetProgramTemplateList() {
-    
     $(".loaderOverlay").css("display", "flex");
     $.ajax({
         type: "GET",
-        url: Apipath + '/api/PatientMain/getprogramtemplatelist',
+        url: Apipath + '/api/PatientMain/getClientFormtemplatelist',
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         success: function (result) {
-            var programlist = $(".programlist");
             
+            var programlist = $(".programlist");
             var programs = "";
             if (result.length) {
                 $.each(result, function (index, item) {
                     
                     programs += `<tr>
-                         <td width="15%">${(item.ProgramsName == null && item.IsBaseTemplate == true) ? "Base Template" : item.ProgramsName}</td>
+                         <td width="15%">${(item.FormName == null && item.IsBaseTemplate == true) ? "Base Template" : item.FormName}</td>
                          <td width="10%">${(item.IsActive == null) ? "Not Started" : (item.IsActive == 0)?"In Progress":"Completed"}</td >
                          <td width="15%">${item.ModifiedDate != null ? item.ModifiedDate.split("T")[0] : ""}</td>
                          <td width="10%">${(item.IsActive==1 && item.IsBaseTemplate == false) ? (item.Isactivated == 1 ? "Yes" : "No") : ""}</td>
                             <td width="30%"><div>`;
-                    programs += `<a href="javascript:void(0)" onclick="ViewProgramContent(${item.TemplateID},\'${(item.ProgramsName == null && item.IsBaseTemplate == true) ? "Base Template" : item.ProgramsName}'\)" class="btn btn-success text-white" style="cursor:pointer;">VIEW</a>`
+                    programs += `<a href="javascript:void(0)" onclick="ViewProgramContent(${item.TemplateID},\'${(item.FormName == null && item.IsBaseTemplate == true) ? "Base Template" : item.FormName}'\)" class="btn btn-success text-white" style="cursor:pointer;">VIEW</a>`
                     if (item.IsBaseTemplate) {
                         ;
                         item.IsActive = item.IsActive == null ? false : true;
-                        programs += `<a href="/program/ProgramBaseTemplate?templateid=${item.TemplateID}&Status=${item.IsActive}"  class="btn btn-success text-white" style="cursor:pointer;">MODIFY</a>`
+                        programs += `<a href="/Client/ClientFormBaseTemplate?templateid=${item.TemplateID}&Status=${item.IsActive}"  class="btn btn-success text-white" style="cursor:pointer;">MODIFY</a>`
 
                     } else {                        
-                        programs += `<a href="javascript:void(0)" onclick="ProceedProgram({TemplateID:${item.TemplateID},TemplateTable:\'${item.TemplateTable}\',ProgramName:\'${item.ProgramsName}\',ProgramID:${item.ProgramID},IsBaseTemplate:${item.IsBaseTemplate}})"  class="btn btn-success text-white" style="cursor: pointer; ${item.Isactivated == true ? "display:none;" : ""} ">MODIFY</a>`
+                        programs += `<a href="javascript:void(0)" onclick="ProceedProgram({TemplateID:${item.TemplateID},TemplateTable:\'${item.TemplateTable}\',FormName:\'${item.FormName}\',ClientFormID:${item.ClientFormID},IsBaseTemplate:${item.IsBaseTemplate}})"  class="btn btn-success text-white" style="cursor: pointer; ${item.Isactivated == true ? "display:none;" : ""} ">MODIFY</a>`
                     }
                     
                     if (item.IsActive == 1 && item.IsBaseTemplate == false) {
@@ -46,7 +45,7 @@ function GetProgramTemplateList() {
                     }
 
                     if (!item.IsBaseTemplate) {
-                        programs += `<a href="javascript:void(0)" onclick="DeleteProgram(${item.ProgramID},this)"  class="btn btn-success text-white" style="cursor:pointer;">Delete</a>`;
+                        programs += `<a href="javascript:void(0)" onclick="DeleteProgram(${item.ClientFormID},this)"  class="btn btn-success text-white" style="cursor:pointer;">Delete</a>`;
                     }
                  
                     programs += `</div></td></tr>`;
@@ -69,7 +68,7 @@ function GetProgramTemplateList() {
             $(".loaderOverlay").hide();
         },
         error: function (e) {
-            toastr.error("Unidentified error");
+            toastr.error("Something Happen Wrong");
         }
     });
 }
@@ -99,7 +98,7 @@ function SetTemplateStatus(Templateid, Status) {
                     $(".loaderOverlay").css("display", "flex");
                     $.ajax({
                         type: "GET",
-                        url: Apipath + '/api/PatientMain/updateprogramtemplatestatus?Templateid=' + Templateid + '&status=' + Status,
+                        url: Apipath + '/api/PatientMain/updateClientFormtemplatestatus?Templateid=' + Templateid + '&status=' + Status,
                         contentType: 'application/json; charset=UTF-8',
                         dataType: "json",
                         success: function (result) {
@@ -116,7 +115,7 @@ function SetTemplateStatus(Templateid, Status) {
     });
 
 }
-function DeleteProgram(_programId, button) {
+function DeleteProgram(ClientFormID, button) {
 
     $.confirm({
         icon: 'fas fa-exclamation-triangle',
@@ -133,7 +132,7 @@ function DeleteProgram(_programId, button) {
 
                     $.ajax({
                         type: "Post",
-                        url: Apipath + '/api/PatientMain/deleteprogram?Programid=' + _programId,
+                        url: Apipath + '/api/PatientMain/deleteClientForm?ClientFormID=' + ClientFormID,
                         contentType: 'application/json; charset=UTF-8',
                         dataType: "json",
                         success: function (result) {
@@ -158,7 +157,7 @@ function getTemplates(obj) {
     if ($(obj).prop("checked")) {
         $.ajax({
             type: "GET",
-            url: Apipath + '/api/PatientMain/getprogramtemplatedropdownlist',
+            url: Apipath + '/api/PatientMain/getClientFormtemplatedropdownlist',
             contentType: 'application/json; charset=UTF-8',
             dataType: "json",
             success: function (result) {
@@ -166,11 +165,11 @@ function getTemplates(obj) {
                     var templates = $("#ddlTemplate");
                     templates.html("");
                     $.each(result, function (data, value) {
-                        templates.append($("<option></option>").val(value.TemplateID +':'+value.TemplatePath).html(value.ProgramsName));
+                        templates.append($("<option></option>").val(value.TemplateID + ':' + value.TemplatePath).html(value.FormName));
                     });
                     $(".templateDiv").removeClass("hide");
                 } else {
-                    toastr.error("", "No program template available.", { progressBar: true });
+                    toastr.error("", "No Client Form template available.", { progressBar: true });
                 }
             },
         });
@@ -182,18 +181,18 @@ function getTemplates(obj) {
 
 //save program and call proceed to modify it,
 
-function CreateProgram() {
-    
-    let ProgramName = $("#templateName").val().trim();
+function CreateClientForm() {
+   
+    let formName = $("#templateName").val().trim();
    // var isBtemplate = isBaseTemplate == 'true'
     //programName = $(".templatename-input").val();
     var model = {
         TemplateID: 0,
-        ProgramName: ProgramName,
+        formName: formName,
         CreatedBy: userId,
         ModifiedBy: userId,
         IsBaseTemplate: false,
-        ProgramID: 0,
+        ClientFormID: 0,
         IsModify: false
     };
     var temPath =''
@@ -212,12 +211,13 @@ function CreateProgram() {
     }
     $.ajax({
         type: "GET",
-        url: '/Program/IsProgramExist?ProgramName=' + ProgramName + '&&ProgramId=0',
+        url: '/Client/isClientFormNameexist?formName=' + formName + '&&clientFormID=0',
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
-            if (result.programExists) {
-                toastr.error("", "Program already exists", { progressBar: true });
+           
+            if (result.formNameExists) {
+                toastr.error("", "Client Form already exists", { progressBar: true });
                 return;
             }
             else {
@@ -225,21 +225,22 @@ function CreateProgram() {
                 $(".loaderOverlay").css("display", "flex");
                 $.ajax({
                     type: "POST",
-                    url: '/Program/SaveFormTemplate',
-                    data: JSON.stringify({ Model: model, ProgramName: ProgramName, IsModify: false, TemplatePath: temPath }),
+                    url: '/Client/SaveClientFormTemplate',
+                    data: JSON.stringify({ Model: model, formName: formName, IsModify: false, TemplatePath: temPath }),
                     contentType: 'application/json; charset=UTF-8',
                     dataType: "json",
                     success: function (result) {
-                        
+                       
                         var Res = JSON.parse(result.id);
 
                         if (Res.TemplateID == 0) {
-                            toastr.error("Program Already Exist.");
+                            toastr.error("Client Form Already Exist.");
                             $(".loaderOverlay").hide();
                             return false;
                         }
                     }
                 }).done(function (result) {
+                 
                     var _result = JSON.parse(result.id);
                     
                     if (_result.TemplateID != 0) {
@@ -260,16 +261,17 @@ function CreateProgram() {
                         }
                         $.ajax({
                             type: "POST",
-                            url: Apipath + '/api/PatientMain/AddProgramTemplateColumn',
+                            url: Apipath + '/api/PatientMain/addClientFormtemplatecolumn',
                             contentType: 'application/json; charset=UTF-8',
                             data: JSON.stringify(model),
                             dataType: "json",
                             success: function (res) {
+                                
                                 toastr.success("Saved successfully.");
                                 $(".loaderOverlay").hide();
                                 let data = {
                                     TemplateTable: _result.TemplateTable,
-                                    ProgramID: _result.ProgramID,
+                                    ClientFormID: _result.ClientFormID,
                                     TemplateID: _result.TemplateID,
                                     IsBaseTemplate: false
                                 }
@@ -286,28 +288,29 @@ function CreateProgram() {
 
 
 function ProceedProgram(data) {
-    data.programName
-    let ProgramName = $("#templateName").val().trim();
+  
+    data.FormName
+    let FormName = $("#templateName").val().trim();
     let model = {};
     
-    if (data.ProgramName != undefined) {
-        ProgramName = data.ProgramName
+    if (data.FormName != undefined) {
+        FormName = data.FormName
     }
    
         model = {
-            ProgramName: ProgramName,
+            FormName: FormName,
             TemplateID: data.TemplateID,
             IsBaseTemplate: data.IsBaseTemplate,
             TemplateTable: data.TemplateTable,
             IsModify: true,
-            ProgramID: data.ProgramID
+            ClientFormID: data.ClientFormID
         }
      
     
     
     $.ajax({
         type: "POST",
-        url: '/Program/GetProgramTemplateData',
+        url: '/Client/GetClientFormTemplateData',
         data: JSON.stringify(model),
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
@@ -324,7 +327,7 @@ function ProceedProgram(data) {
 function GetBaseTemplateId() {
     $.ajax({
         type: "GET",
-        url: Apipath + '/api/PatientMain/getprogrambasetemplateid',
+        url: Apipath + '/api/PatientMain/getClientFormbasetemplateid',
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
@@ -351,7 +354,7 @@ function ViewProgramContent(ID,name) {
     $("#PreviewModalTitle").html("").append(name);
     $.ajax({
         type: "GET",
-        url: '/program/GetProgramTemplateById?TemplateId=' + ID,
+        url: '/Client/GetClientFormTemplateById?TemplateId=' + ID,
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",        
         success: function (result) {
@@ -412,7 +415,7 @@ function ViewProgramContent(ID,name) {
             $(".loaderOverlay").hide();
         },
         error: function (e) {
-            toastr.error("Unidentified error");
+            toastr.error("Something happen Wrong");
             $(".loaderOverlay").hide();
         }
     });   
@@ -420,7 +423,7 @@ function ViewProgramContent(ID,name) {
 function ViewHeaderAndFooter() {
     $.ajax({
         type: "GET",
-        url: Apipath + '/api/PatientMain/GetProgramBaseTemplateId',
+        url: Apipath + '/api/PatientMain/getClientFormbasetemplateid',
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         async: false,
@@ -431,7 +434,7 @@ function ViewHeaderAndFooter() {
                 default:
                     $.ajax({
                         type: "GET",
-                        url: '/program/GetFormHtmlById?Id=' + result.TemplateID,
+                        url: '/Client/GetClientFormHtmlById?Id=' + result.TemplateID,
                         contentType: 'application/json; charset=UTF-8',
                         dataType: "json",
                         async: false,
@@ -446,7 +449,7 @@ function ViewHeaderAndFooter() {
                     break;
             }
         }, error: function (e) {
-            toastr.error("Unidentified error");
+            toastr.error("Something happen Wrong");
             $(".loaderOverlay").hide();
         }
     });

@@ -1,0 +1,124 @@
+﻿
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/css/programlist.css" rel="stylesheet" />
+<link href="~/css/previewinpopup.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
+
+<section id="content" class="responsive-container pt-0">
+
+    <div class="inner-content mt-0">
+
+        <div class="container-fluid pl-0 pr-0">
+
+            <div class="appointment scroll">
+                <div class="detail-heading d-flex templatelist">
+                    <h2>Client Form</h2>
+                </div>
+                <a href="javascript:void(0)" class="btn btn-success mb-2" data-toggle="modal" data-target="#CreateClientFormModal">Create Form</a>
+                <table id="tblProgramTemplateList" class="table table-striped border">
+                    <thead>
+                        <tr class="table-active">
+
+                            <th>Name</th>
+                            <th>STATUS</th>
+                            <th>MODIFIED DATE</th>
+                            <th>ACTIVE</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody class="programlist">
+
+                        <tr></tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="modal fade" id="CreateClientFormModal" tabindex="-1" role="dialog" aria-labelledby="CreateClientFormModal"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:56%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> Create Client Form</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form createtemplate">
+                    <div class="form-row" style="height:85px">
+                        <div class="form-group col-md-6">
+                            <label for="templateName">Form name</label>
+                            <input type="text" class="form-control form-control-sm" maxlength="100" id="templateName">
+                            <span class="hidden" id="warning"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <div class="radiobuttonWrap">
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input" id="radioScratch" name="radio" checked>
+                                    <label class="custom-control-label" for="radioScratch">Create from scratch</label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input" id="radioExistTemplate" name="radio" onchange="getTemplates(this)">
+                                    <label class="custom-control-label" for="radioExistTemplate">Copy from existing form template</label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input" id="radioBaseTemplate" name="radio">
+                                    <label class="custom-control-label" for="radioBaseTemplate">Use base form template</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <div class="templateDiv form-group hide">
+                                <label for="templatedropdown">Select template</label>
+                                <select class="form-control form-control-sm" id="ddlTemplate">
+                                    <option value="0">Select Template</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="notemplate" style="display:none">
+                    <p class="text-center">No programs available for careplan creation.</p>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href='javascript:{}' class="btn btn-success label-fields btnProceed" onclick="CreateClientForm()">Save and Proceed</a>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="PreviewModal" tabindex="-1" role="dialog" aria-labelledby="PreviewModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered preview-modal" role="document" style="max-width: 80%;height:90%">
+        <div class="modal-content" style="height:90%">
+            <div class="modal-header preview-header">
+                <h5 class="modal-title" id="PreviewModalTitle">Preview</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body preview-body scroll">
+
+            </div>
+            <div class="modal-footer preview-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.js"></script>
+    <script>
+        var userId = "@Session["userid"]";
+    </script>
+    <script src="~/Scripts/ClientForms/ClientFormlist.js"></script>
+}

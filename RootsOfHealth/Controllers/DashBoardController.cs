@@ -18,6 +18,7 @@ namespace RootsOfHealth.Controllers
         // GET: DashBoard
         public ActionResult Index(int patientid=0)
         {
+            
             ViewBag.PatientID = patientid;
             return View();
         }
@@ -885,12 +886,6 @@ namespace RootsOfHealth.Controllers
                 return PartialView("~/Views/Shared/Patient/_PatientDetail.cshtml", patientdetailobj);
             }
         
-
-
-
-
-
-
 
         [HttpGet]
         public ActionResult GetRecentPatients()

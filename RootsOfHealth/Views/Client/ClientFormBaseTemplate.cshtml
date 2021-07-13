@@ -1,0 +1,230 @@
+﻿
+@{
+    ViewBag.Title = "BaseTemplate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/css/programtemplate.css" rel="stylesheet" />
+<link href="~/css/previewinpopup.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
+<style>
+    .contentbtn {
+        margin-bottom: 20px !important;
+    }
+
+    .preview-body .basecontentarea {
+        border: 2px dashed #e2e2e2;
+        min-height: 100px;
+        padding: 5px 5px;
+        align-content: baseline;
+        display: flex;
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    span.basecontentspan {
+        display: inline;
+    }
+
+    .baseheader, .basefooter {
+        border-color: #39be19;
+    }
+
+    .contentarea1, .contentarea2, .contentarea3 {
+        border-color: #df1e1e;
+    }
+</style>
+<section id="content" class="responsive-container pt-0">
+
+    <div class="inner-content mt-0">
+
+        <div class="container-fluid pl-0 pr-0">
+
+            <div class="appointment programWrap">
+                <div class="detail-heading d-flex">
+                    <h2><span class="programcaption">Base Template for <span>Client Form</span> </span></h2>
+
+
+
+                    <div class="detail-button ml-auto">
+                        <a href="/Client/ClientsFormList" class="btn btn-success mr-10 backlist"> <i class="fa fa-arrow-left"></i> Back to list</a>
+                        <a href="javascript:{}" onclick="return PreviewInPopUp();" class="btn btn-success mr-10 preview-inpopup">
+                            <i class="far fa-save"></i>
+                            Preview
+                        </a>
+                        <a href="javascript:{}" onclick="return saveHtml();" class="btn btn-success mr-0 savehtml">
+                            <i class="far fa-save"></i>
+                            Save
+                        </a>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div id="frmb-cb-wrap" class="col-md-3">
+                        <div class="controlsTabWrap profile-tabs">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#htmlTab" onclick="CheckSortableHtml()">HTML Field</a>
+                                </li>
+                                <li class="nav-item d-none">
+                                    <a class="nav-link" data-toggle="tab" href="#databaseTab" onclick="CheckSortableDatabase()">Database Field</a>
+                                </li>
+                            </ul>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div class="tab-pane active container" id="htmlTab">
+                                    <ul id="control-box">
+                                        <li data-type="label"><span><i class="fa fa-tasks" aria-hidden="true"></i>Html</span></li>
+                                        <li data-type="checkbox-group"><span><i class="fa fa-check-square" aria-hidden="true"></i>Checkbox</span></li>
+                                        <li data-type="date"><span><i class="fa fa-calendar" aria-hidden="true"></i>Date Field</span></li>
+                                        <li data-type="file"><span><i class="fa fa-file" aria-hidden="true"></i>File Upload</span></li>
+                                        <li data-type="number"><span><i class="fa fa-list-ol" aria-hidden="true"></i>Number</span></li>
+                                        <li data-type="radio-group"><span><i class="fa fa-stop-circle" aria-hidden="true"></i>Radio</span></li>
+                                        <li data-type="select"><span><i class="fa fa-text-width" aria-hidden="true"></i>Dropdown</span></li>
+                                        <li data-type="text"><span><i class="fa fa-text-width" aria-hidden="true"></i>Short Text</span></li>
+                                        <li data-type="textarea"><span><i class="fa fa-text-width" aria-hidden="true"></i>Long Text</span></li>
+                                        <li data-type="priority"><span><i class="fa fa-text-width" aria-hidden="true"></i>Priority</span></li>
+                                    </ul>
+                                </div>
+                                <div class="tab-pane container" id="databaseTab">
+                                    <div class="form-group databseSelectControl">
+                                        <label>Select from database</label>
+                                        <select id="ddlform" class="form-control" onchange="DatabaseFormFields()">
+                                            <option value="0">Select Option</option>
+                                            <option value="1">Client profile</option>
+                                            <option value="2">Client Housing</option>
+                                            <option value="3">Client Financial Security</option>
+                                            <option value="4">Client Employment/Education</option>
+                                            <option value="5">Client Communication & Mobility</option>
+                                            <option value="6">Client Healthcare</option>
+                                            <option value="7">Client Social Supports and Safety</option>
+                                            <option value="8">Client Legal Status</option>
+                                            <option value="9">DAST</option>
+                                            <option value="10">AUDIT</option>
+                                            <option value="11">Client Health Questionnaire (PHQ-9)</option>
+                                            <option value="12">Client Food Access</option>
+                                        </select>
+                                        <ul id="database-control-box" class="scroll"></ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-9 scroll" style="height:570px;overflow-y:auto;">
+                        <div class="row">
+
+                            <div id="droppable" class="draggablediv rounded">
+                                <input id="hdnbasetempid" hidden="hidden" class="basecontrol-id" type="text" value="0" />
+                                <div class="dragresize col-md-12">
+                                    <div class="contentbtn">
+                                        <div class="basecontentarea contentarea1"></div>
+                                        <span class="basecontentspan">Content area, you can not drop here</span>
+                                    </div>
+                                </div>
+                                <div class="dragresize col-md-12">
+                                    <div class="contentbtn">
+                                        <div class="baseheader basecontentarea"></div>
+                                        <span class="basecontentspan">Base header, you can drop content here</span>
+                                    </div>
+                                </div>
+                                <div class="dragresize col-md-12">
+                                    <div class="contentbtn">
+                                        <div class="basecontentarea contentarea2"></div>
+                                        <span class="basecontentspan">Content area, you can not drop here</span>
+                                    </div>
+                                </div>
+                                <div class="dragresize col-md-12">
+                                    <div class="contentbtn">
+                                        <div class="basefooter basecontentarea"></div>
+                                        <span class="basecontentspan">Base footer, you can drop content here</span>
+                                    </div>
+                                </div>
+                                <div class="dragresize col-md-12">
+                                    <div class="contentbtn">
+                                        <div class="basecontentarea contentarea3"></div>
+                                        <span class="basecontentspan">Content area, you can not drop here</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div hidden="hidden">
+        <input type="text" hidden="hidden" id="hdnTemplateId" value="@Html.Raw(ViewBag.TemplateId)" />
+        <div hidden class="hiddenSavedHtml"></div>
+    </div>
+</section>
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered edithtml-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Edit Field</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body edithtml-body scroll">
+                <div class="modal-row">
+                    <label>Label Text</label>
+                    <textarea control-id="label1" class="form-control lbltext" value="">Html</textarea>
+                </div>
+                <div class="modal-row">
+                    <label class="control-label"> Input Size </label>
+                    <div class="form-group">
+                        <select class="form-control" id="inputsize">
+                            <option value="col-md-4"> Small</option>
+                            <option value="col-md-6">Medium</option>
+                            <option value="col-md-12" selected="">Large</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="validatepopup(this)" hidden>Close</button>
+                <button type="button" class="btn btn-primary" id="btnSave">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="PreviewModal" tabindex="-1" role="dialog" aria-labelledby="PreviewModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered preview-modal" role="document" style="max-width: 80%;height:90%">
+        <div class="modal-content" style="height:90%">
+            <div class="modal-header preview-header">
+                <h5 class="modal-title" id="PreviewModalTitle">Preview</h5>
+                <button type="button" class="close" aria-label="Close" onclick="closePreview()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body preview-body scroll">
+
+            </div>
+            <div class="modal-footer preview-footer">
+
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    var isBaseTemplate='True';
+    <script src="~/Scripts/jquery-ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.js"></script>
+    <script src="~/Scripts/ClientForms/ClientFormbasetemplatecontrolhtml.js"></script>
+    <script src="~/Scripts/ClientForms/databasecontrol.js"></script>
+    <script>
+        var templateId =@ViewBag.TemplateId;
+        var userId = '@Session["userid"]';
+        var ClientFormID = '0';
+        var programName = '';
+        var formName = 'Base Template';
+
+    </script>
+}
+
