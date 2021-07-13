@@ -1065,7 +1065,10 @@
             if (@ViewBag.PatientID != "0" || @ViewBag.PatientID != null) {
                 isprofilesave = true;
             }
-
+            if (currenttab != 'Profile-tab' && currenttab != 'ProgramTab') {
+                RebindClientFormEvent();
+            }
+            
             $('#programtbs').click(function () {
                 $(".loaderOverlay").css('display','flex');
                 $('Programs').html('')
@@ -1080,10 +1083,12 @@
                     $('#Programs')[0].outerHTML = result;
 
                     $('#Programs').addClass('active show')
-                    
+                    $('#myTab .nav-link').each(function () {
+                        $(this).removeClass('active show')
+                    })
+                    $('#Programs-tab').addClass('active show')
                     RebindEvent();
-                    RebindClientFormEvent();
-
+                   
                     if ($("#tabPills .nav-item").length > 0) {
                         if (currentSubtab == 'undefined') {
                             $("#tabPills .nav-item a").get(0).click();
@@ -4699,13 +4704,17 @@
                 }
                 LoadChildMenu(ClientFormID);
                     formName = item.attr("data-FormName");
-
+              
                     var id = item.attr("id");
-                    if ($("#" + id).hasClass("Child")) {
+                if ($("#" + id).hasClass("Child")) {
+                    $("#myChildTab li").each(function (index, item) {
+                        $(item).removeClass("active show");
+                    })
                         $(".Child").removeClass('active show');
                         $("#" + id).addClass('active show');
-                    }
-                
+                }
+               
+                if (formName != undefined) {
                     $('#' + formName + 'only').find('.Child').removeClass('active show ');
                     $('#' + formName + 'only').find("#a" + formName).addClass('active show ');
                     _programelement = $("#" + formName + "render-basicform")
@@ -4714,14 +4723,15 @@
                     var _templateID = item.attr("data-TemplateID");
                     $('.btnprogramPrint').addClass('d-none')
 
-                    
-                   
+
+
                     if (_IsSaved == 'False') {
                         LoadClientFormTemplate(ClientFormID)
                     }
                     else {
                         EditClientForm(ClientFormID, _templateID)
                     }
+                }
                 //})
             }
 
@@ -4739,9 +4749,10 @@
                 },
                 async: true,
                 success: function (result) {
-                    
-
-
+                   
+                  
+                    var parentTabWChild = ''
+                    var parentTabWoChild = ''
                     var data = JSON.parse(result.data)
                     var myChildTab = $("#myChildTab");
                     if (data.length == 0) {
@@ -4756,16 +4767,23 @@
                                 formName = formname;
                             }
 
+                            if (item.ClientFormID == ClientFormID && item.ParentFormID == 0) {
+                                 parentTabWChild = item.FormName.replace(/ /g, '');
+                            }
+                            if (item.ParentFormID == 0) {
+                                parentTabWoChild = item.FormName.replace(/ /g, '');
+                            }
+                           
                             $('#' + formName + 'only').addClass('active show');
 
                             if (item.ParentFormID != 0 || item.ParentFormID != null) {
-                                var formnames = item.FormName.replace(/ /g, '');
+                                 var formnames = item.FormName.replace(/ /g, '');
                                 if (item.ParentFormID == 0 || item.ParentFormID == null) {
                                     $("#myTab .nav-link").each(function (index, item) {
                                         $(item).removeClass("active show");
                                         
                                     })
-                                    $("#a" + formnames).addClass('active show')
+                                   // $("#a" + formnames).addClass('active show')
                                 }
                                 else if (item.ClientFormID == ClientFormID) {
                                     if (item.Saved == true) {
@@ -4804,7 +4822,7 @@
                         }
                         $.each(data, function (i, item) {
                             if (item.ClientFormID == ClientFormID) {
-                                
+
                                 _IsSaved = $('#' + formName + 'only').find('.btnprogramsave').attr('data-save');
                                 _programelement = $("#" + formName + "render-basicform")
                                 if (_IsSaved == 'False') {
@@ -4818,7 +4836,13 @@
                             }
                         });
                     }
-
+                    
+                    if (parentTabWChild != '') {
+                        $('#a' + parentTabWChild).addClass('active show');
+                    }
+                    else { $('#a' + parentTabWoChild).addClass('active show'); }
+                  
+                 
                 },
                 error: function (e) {
                     toastr.error("Something happen Wrong");
@@ -6795,11 +6819,11 @@
                 async: true,
                 success: function (result) {
                     
-
+                    var activeChildForm='';
 
                     var data = JSON.parse(result.data)
                     var myChildTab = $("#myChildTab");
-                    if (data.length == 1 && data[0].ParentFormID == null) {
+                    if (data.length == 1 && (data[0].ParentFormID == null || data[0].ParentFormID == 0)) {
                         $("#myChildTab").css("display", "none");
                     } else {
 
@@ -6828,9 +6852,12 @@
                                     )
                                 }
                             }
+                            else {
+                                activeChildForm = item.FormName.replace(/ /g, '');
+                            }
                         });
                     }
-
+                   
                 },
                 error: function (e) {
                     toastr.error("Something happen Wrong");
