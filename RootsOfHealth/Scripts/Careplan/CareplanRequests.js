@@ -322,7 +322,7 @@ function BindModel(item) {
         messageBlock = `<div class="message_block">
             <h6>Messages</h6>
             <ul>
-                <li><b>Approval request on </b><span>${SendDate}  ${sendTime} by ${item.UserName == null ? "" : item.UserName} (${item.UserEmail == null ? "" : item.UserEmail})<br>${item.Message == null ? "" : item.Message} </span></li>
+                <li><b>Approval request on </b><span>${SendDate}  ${sendTime} by ${item.UserName == null ? "" : item.UserName} (${item.UserEmail == null ? "" : item.UserEmail})<span/><br><span>${item.Message == null ? "" : item.Message} </span></li>
             </ul>
         </div>`
     }
@@ -339,20 +339,20 @@ function BindModel(item) {
         actionbutton += `<a  style="display:inline-block" class="btn btn-success text-white ViewCareplan" onClick="ViewCareplan(${item.RequestId}, ${item.IsCarePlanViewed});editCarePlan(${item.CarePlanId},${item.PatientId})" style="cursor:pointer;">View Careplan</a>`
         actionbutton += `<a onClick="changeRequestStatus('2',${item.RequestId},1)" style="display:inline-block" class="btn btn-success text-white requestApproveButton ${item.IsCarePlanViewed ? '' :'disabled'}" style="cursor:pointer;">Approve Request</a>`
         actionbutton += `<a onClick="changeRequestStatus('2',${item.RequestId},3)" style="display:inline-block" class="btn btn-success text-white requestRevokeButton ${item.IsCarePlanViewed ? '' : 'disabled'}" style="cursor:pointer;">Accept Revoke Request</a>`
-        actionbutton += `<a onClick="ViewRequestChanges(${item.CarePlanId})" style="display:inline-block" class="btn btn-success text-white requestViewChanges " style="cursor:pointer;">View Change</a>`
+        actionbutton += `<a onClick="ViewRequestChanges(${item.CarePlanId},${item.RequestId})" style="display:inline-block" class="btn btn-success text-white requestViewChanges " style="cursor:pointer;">View Change</a>`
 
     }
     else if (item.Status == "1" && item.AcceptedById == userId && item.Type == 1) {
         actionbutton += `<a  style="display:inline-block" class="btn btn-success text-white ViewCareplan"onClick="ViewCareplan(${item.RequestId}, ${item.IsCarePlanViewed});editCarePlan(${item.CarePlanId},${item.PatientId})" style="cursor:pointer;">View Careplan</a>`
         actionbutton += `<a onClick="changeRequestStatus('2',${item.RequestId},1)" style="display:inline-block" class="btn btn-success text-white requestApproveButton ${item.IsCarePlanViewed ? '' : 'disabled'}" style="cursor:pointer;">Approve Request</a>`
-        actionbutton += `<a onClick="ViewRequestChanges(${item.CarePlanId})" style="display:inline-block" class="btn btn-success text-white requestViewChanges " style="cursor:pointer;">View Change</a>`
+        actionbutton += `<a onClick="ViewRequestChanges(${item.CarePlanId},${item.RequestId})" style="display:inline-block" class="btn btn-success text-white requestViewChanges " style="cursor:pointer;">View Change</a>`
 
     }
     else if (item.Status == null || item.Status == "0") {
         actionbutton += `<a onClick="changeRequestStatus('1',${item.RequestId},${item.Type})" style="display:inline-block"  class="btn btn-success text-white requestAcceptButton" style="cursor:pointer;">Accept Request</a>`
         actionbutton += `<a  style="display:none" class="btn btn-success text-white ViewCareplan" onClick="ViewCareplan(${item.RequestId}, ${item.IsCarePlanViewed});editCarePlan(${item.CarePlanId},${item.PatientId})" style="cursor:pointer;">View Careplan</a>`
         actionbutton += `<a onClick="changeRequestStatus('2',${item.RequestId},1)" style="display:none" class="btn btn-success text-white requestApproveButton ${item.IsCarePlanViewed ? '' : 'disabled'}" style="cursor:pointer;">Approve Request</a>`
-        actionbutton += `<a onClick="ViewRequestChanges(${item.CarePlanId})" style="display:none" class="btn btn-success text-white requestViewChanges " style="cursor:pointer;">View Change</a>`
+        actionbutton += `<a onClick="ViewRequestChanges(${item.CarePlanId},${item.RequestId})" style="display:none" class="btn btn-success text-white requestViewChanges " style="cursor:pointer;">View Change</a>`
     }
     var modelContent = `  <table class="table">
                     <tbody>
@@ -430,7 +430,7 @@ function openHistoryModel(item, message) {
         var ModifiedTime = ModifiedTimearray[0] + ":" + ModifiedTimearray[1] + ":" + ModifiedTimearray[2].split(".")[0] + " " + ModifiedAmPm;
     }
 
-
+    
     var status = ''
     var messageBlock = ''
     var ResponseMessageBlock=""
@@ -438,9 +438,9 @@ function openHistoryModel(item, message) {
         messageBlock = `<div class="message_block">
             <h6>Message</h6>
             <ul>
-                <li><span><b>Revoke request on </b> ${RevokeRequestDate}  ${revokeTime}</span><br><span>${item.RevertMessage = null ? "" : item.RevertMessage}</span></li>
-                <li><span><b>Approval request on </b> ${SendDate}  ${sendTime}</span><br><span>${item.Message == null ? "" : item.Message}</span></li> 
-               <li><span><b>Revoke request is accepted on </b> ${ModifiedDate}  ${ModifiedTime}</span><br><span>${item.ResponseMessage == null ? "" : item.ResponseMessage}</span></li>  
+                <li><span><b>Revoke request on </b> ${RevokeRequestDate}  ${revokeTime}</span><br><span>${item.RevertMessage == "null" ? "" : item.RevertMessage}</span></li>
+                <li><span><b>Approval request on </b> ${SendDate}  ${sendTime}</span><br><span>${item.Message == "null" ? "" : item.Message}</span></li> 
+               <li><span><b>Revoke request is accepted on </b> ${ModifiedDate}  ${ModifiedTime}</span><br><span>${item.ResponseMessage == "null" ? "" : item.ResponseMessage}</span></li>  
             </ul>
         </div>`
 
@@ -450,8 +450,8 @@ function openHistoryModel(item, message) {
         messageBlock = `<div class="message_block">
             <h6>Messages</h6>
             <ul>
-                <li><b>Approval request on </b><span>${SendDate}  ${sendTime}<br>${item.Message == null ? "" : item.Message}</span></li>
-           <li><span><b>Approval request is accepted on </b> ${ModifiedDate}  ${ModifiedTime}</span><br><span>${item.ResponseMessage == null ? "" : item.ResponseMessage}</span></li>  
+                <li><b>Approval request on </b><span>${SendDate}  ${sendTime}<span/><br><span>${item.Message == "null" ? "" : item.Message}</span></li>
+           <li><span><b>Approval request is accepted on </b> ${ModifiedDate}  ${ModifiedTime}</span><br><span>${item.ResponseMessage == "null" ? "" : item.ResponseMessage}</span></li>  
             </ul>
         </div>`
     }
@@ -541,7 +541,8 @@ function ViewCareplan(requestId, IsViewCareplan) {
         }
     });
 }
-function ViewRequestChanges(_careplanid) {
+function ViewRequestChanges(_careplanid, requestId) {
+    reopenRequestId = requestId;
     $.ajax({
         type: "Get",
         url: Apipath + '/api/PatientMain/getchangedneedsandgoals?careplanid=' + _careplanid + '&isChecked=true',
@@ -557,9 +558,9 @@ function ViewRequestChanges(_careplanid) {
                 var goals = result.filter(c => c.IsGoal);
                 html += `<ul class="needGoalsChecklist">`
                 for (let i = 0; i < needs.length; i++) {
-
-                    html += `<li><div class="form-group active"><label><span>${needs[i].Description}</span></label>`
                     var NeedGoals = goals.filter(c => c.NeedId == needs[i].NeedId);
+                    html += `<li><div class="form-group active ${NeedGoals.length > 0 ? 'hasGoal' : ''}""><label><span>${needs[i].Description}</span></label>`
+                   
                     if (NeedGoals.length > 0) {
                         html += `<i class="down_arrow fa fa-chevron-down "></i>`
                     }
@@ -603,4 +604,8 @@ function ViewRequestChanges(_careplanid) {
 $('#addNewCarePlansSidebar .close_right_sidebar').click(function () {
     $('#tblCarePlanInbox #' + reopenRequestId + '').find('a.openPopUp').click();
 
+})
+
+$('#ViewRequestCareplanChanges').on('hidden.bs.modal', function (e) {
+    $('#tblCarePlanInbox #' + reopenRequestId + '').find('a.openPopUp').click();
 })

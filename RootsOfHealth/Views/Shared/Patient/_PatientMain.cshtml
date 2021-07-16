@@ -188,7 +188,12 @@
     ul.needGoalsChecklist label.checkbox_input span {
         position: relative;
         padding-left: 26px;
+        height:auto;
+        width:auto;
     }
+        ul.needGoalsChecklist li .form-group.hasGoal {
+            padding-right: 30px;
+        }
     ul.needGoalsChecklist label.checkbox_input {
         margin: 0;
     }
@@ -253,6 +258,7 @@
         color: #a1a1a1;
         transition: all ease 0.4s;
         -webkit-transition: all ease 0.4s;
+        cursor:pointer;
     }
     ul.needGoalsChecklist li .form-group.active i.down_arrow {
         transform: rotate( -180deg );
@@ -2444,10 +2450,10 @@
                 var goals = result.filter(c => c.IsGoal);
                 html += `<div class="selectAll"><div class="form-group"><label class="checkbox_input"><input class="Need" id="selectAllNeedsGoals" onchange="SelectAllNeedGoals()" type="checkbox" name="select-all" value="" checked><span>Select All</span></label></div></div><ul class="needGoalsChecklist">`
                 for (let i = 0; i < needs.length; i++) {
-
-                    html += `<li><div class="form-group active"><label class="checkbox_input" for="${needs[i].NeedId + 'need'}"><input class="Need" type="checkbox" id="${needs[i].NeedId + 'need'}" name="needs" value="${needs[i].NeedId}" checked>
-                              <span>${needs[i].Description}</span></label>`
                     var NeedGoals = goals.filter(c => c.NeedId == needs[i].NeedId);
+                    html += `<li><div class="form-group active ${NeedGoals.length>0?'hasGoal':''}"><label class="checkbox_input" for="${needs[i].NeedId + 'need'}"><input class="Need" type="checkbox" id="${needs[i].NeedId + 'need'}" name="needs" value="${needs[i].NeedId}" checked>
+                              <span>${needs[i].Description}</span></label>`
+                    
                     if (NeedGoals.length > 0) {
                         html += `<i class="down_arrow fa fa-chevron-down "></i>`
                     }
@@ -2474,10 +2480,10 @@
                 $('#ViewCareplanChanges').modal('show');
                 $('ul.needGoalsChecklist > li > .form-group').off('click');
 
-                $('ul.needGoalsChecklist > li > .form-group').on('click', function () {
+                $('ul.needGoalsChecklist > li > .form-group .down_arrow').on('click', function () {
                     
-                    $(this).toggleClass('active');
-                    $(this).next('ul').slideToggle();
+                    $(this).parents('.form-group').toggleClass('active');
+                    $(this).parents('li').find('ul').slideToggle();
 
                 })
 
