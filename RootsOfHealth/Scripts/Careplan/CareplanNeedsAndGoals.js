@@ -2737,6 +2737,7 @@ function GetCareplanHistory() {
             CarePlanRequestHistotyTable = $('#CarePlanHistoryTable').DataTable({
                 retrieve: true,
                 searching: false,
+                "scrollY": "calc(100vh - 360px)",
                 "ordering": false,
                 'columnDefs': [{
                     'targets': [3],

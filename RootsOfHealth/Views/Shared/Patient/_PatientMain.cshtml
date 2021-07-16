@@ -198,6 +198,7 @@
     }
     ul.needGoalsChecklist li .form-group {
         margin: 0;
+        position:relative;
     }
         ul.needGoalsChecklist > li > .form-group {
             padding: 15px 0;
@@ -237,9 +238,27 @@
     ul.needGoalsChecklist > li ul li:last-child .form-group {
         border-bottom: 0;
     }
-
+    #ViewCareplanChanges .modal-dialog {
+        width: 100%;
+        max-width: 900px;
+    }  
+    #ViewCareplanChanges .modal-body {
+        max-height: calc(100vh - 125px);
+        overflow:auto;
+    }
+    ul.needGoalsChecklist li .form-group i.down_arrow {
+        position: absolute;
+        right: 5px;
+        top: 19px;
+        color: #a1a1a1;
+        transition: all ease 0.4s;
+        -webkit-transition: all ease 0.4s;
+    }
+    ul.needGoalsChecklist li .form-group.active i.down_arrow {
+        transform: rotate( -180deg );
+    }
 </style>
-<div onscroll="abc()" class="tab-pane fade test @Html.Raw(ViewBag.CurrentTab == "Profile-tab" ? "show active" : string.IsNullOrWhiteSpace(ViewBag.CurrentTab) ? "show active" : "")" id="Profile" role="tabpanel" aria-labelledby="Profile-tab">
+<div  class="tab-pane fade test @Html.Raw(ViewBag.CurrentTab == "Profile-tab" ? "show active" : string.IsNullOrWhiteSpace(ViewBag.CurrentTab) ? "show active" : "")" id="Profile" role="tabpanel" aria-labelledby="Profile-tab">
     <!-- Inner content start here  -->
     <div class="inner-content">
         <div class="paitent-detail">
@@ -2419,20 +2438,25 @@
             async: false,
             success: function (result) {
                 if(result.length>0){
-
+                    
                 var html=""
                 var needs = result.filter(c => !c.IsGoal);
                 var goals = result.filter(c => c.IsGoal);
-                html += `<div class="selectAll"><div class="form-group"><label class="checkbox_input"><input class="Need" id="selectAllNeedsGoals" onchange="SelectAllNeedGoals()" type="checkbox" name="select-all" value=""><span>Select All</span></label></div></div><ul class="needGoalsChecklist">`
+                html += `<div class="selectAll"><div class="form-group"><label class="checkbox_input"><input class="Need" id="selectAllNeedsGoals" onchange="SelectAllNeedGoals()" type="checkbox" name="select-all" value="" checked><span>Select All</span></label></div></div><ul class="needGoalsChecklist">`
                 for (let i = 0; i < needs.length; i++) {
 
-                    html += `<li><div class="form-group"><label class="checkbox_input" for="${needs[i].NeedId + 'need'}"><input class="Need" type="checkbox" id="${needs[i].NeedId + 'need'}" name="needs" value="${needs[i].NeedId}">
-                              <span>${needs[i].Description}</span></label></div>`
+                    html += `<li><div class="form-group active"><label class="checkbox_input" for="${needs[i].NeedId + 'need'}"><input class="Need" type="checkbox" id="${needs[i].NeedId + 'need'}" name="needs" value="${needs[i].NeedId}" checked>
+                              <span>${needs[i].Description}</span></label>`
                     var NeedGoals = goals.filter(c => c.NeedId == needs[i].NeedId);
                     if (NeedGoals.length > 0) {
+                        html += `<i class="down_arrow fa fa-chevron-down "></i>`
+                    }
+                    html += `</div>`
+                    
+                    if (NeedGoals.length > 0) {
                         html+=`<ul>`
-                        for (let j = 0; j < NeedsGoals.length; j++) {
-                            html += `<li><div class="form-group"><label class="checkbox_input"for="${NeedGoals[j].GoalId + 'goal'}"><input class="goal" type="checkbox" id="${NeedGoals[j].GoalId + 'goal'}" name="goals" value="${NeedGoals[j].GoalId}">
+                        for (let j = 0; j < NeedGoals.length; j++) {
+                            html += `<li><div class="form-group"><label class="checkbox_input"for="${NeedGoals[j].GoalId + 'goal'}"><input class="goal" type="checkbox" id="${NeedGoals[j].GoalId + 'goal'}" name="goals" value="${NeedGoals[j].GoalId}" checked>
                              <span> ${NeedGoals[j].Description}</span></label></div></li>`
                         }
                         html +=`</ul>`
@@ -2447,7 +2471,21 @@
                   }else{
               $('#ViewCareplanChanges .modal-body').html("<div>No change in needs and goals</div>")
                   }
-                 $('#ViewCareplanChanges').modal('show');
+                $('#ViewCareplanChanges').modal('show');
+                $('ul.needGoalsChecklist > li > .form-group').off('click');
+
+                $('ul.needGoalsChecklist > li > .form-group').on('click', function () {
+                    
+                    $(this).toggleClass('active');
+                    $(this).next('ul').slideToggle();
+
+                })
+
+                $('#ViewCareplanChanges input:checkbox[name=needs],#ViewCareplanChanges input:checkbox[name=goals]').off('change')
+                $('#ViewCareplanChanges input:checkbox[name=needs],#ViewCareplanChanges input:checkbox[name=goals]').on('change', function () {
+                    $('#selectAllNeedsGoals').prop('checked',false)
+                })
+
             },
             error: function (e) {
                 toastr.error("Something happen Wrong");
