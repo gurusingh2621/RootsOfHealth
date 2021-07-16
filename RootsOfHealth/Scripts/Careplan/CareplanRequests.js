@@ -55,7 +55,7 @@ function LoadRequest() {
                       
                         
                         careplansRequest += `<a onClick="OpenPopUp({CarePlanName:\'${item.CarePlanName}\',ClientEmail:\'${item.ClientEmail}\',UserEmail:\'${item.UserEmail}\',Type:\'${item.Type}\',ProgramName:\'${item.ProgramName}\',Message:\'\',ClientName:'${item.ClientName}\',
-                    UserName:'${item.UserName}',SentOn:'${item.SentOn}',RevokeRequestDate:'${item.RevokeRequestDate}',RevertMessage:'',Status:'${item.Status}',AcceptedBy:'${item.AcceptedBy}',AcceptedById:'${item.AcceptedById}',Status:'${item.Status}',RequestId:'${item.RequestId}',IsRead:'${item.IsRead}',CarePlanId:'${item.CarePlanId}',PatientId:'${item.PatientId}'})" class="btn btn-success text-white" style="cursor:pointer;">View Message</a>`
+                    UserName:'${item.UserName}',SentOn:'${item.SentOn}',RevokeRequestDate:'${item.RevokeRequestDate}',RevertMessage:'',Status:'${item.Status}',AcceptedBy:'${item.AcceptedBy}',AcceptedById:'${item.AcceptedById}',Status:'${item.Status}',RequestId:'${item.RequestId}',IsRead:'${item.IsRead}',CarePlanId:'${item.CarePlanId}',PatientId:'${item.PatientId}'})" class="openPopUp btn btn-success text-white" style="cursor:pointer;">View Message</a>`
                         careplansRequest += `</div></td></tr>`;
                     });
                     careplanlist.html("").append(careplansRequest);
@@ -77,6 +77,7 @@ function LoadRequest() {
                 retrieve: true,
                 searching: false,
                 "ordering": false,
+                "scrollY": "calc(100vh - 360px)",
                 'columnDefs': [{
                     'targets': [6],
                     'orderable': false
@@ -97,7 +98,7 @@ function LoadRequest() {
    
    
 }
-
+var reopenRequestId = 0;
 function LoadRequestHistory() {
     $(".loaderOverlay").css("display", "flex");
     $.ajax({
@@ -153,9 +154,13 @@ function LoadRequestHistory() {
                 careplanlist.html("").append(careplansRequest);
             }
             HistoryTable = $('#tblCarePlanHistory').DataTable({
-                retrieve: true,
-                searching: false,
-                "ordering": false,
+                "searching": false,
+                "scrollY": "calc(100vh - 360px)",
+                "paging": true,
+                'columnDefs': [{
+                    'targets': [4],
+                    'orderable': false
+                }]
             });
                 $(".loaderOverlay").hide();
           
@@ -307,8 +312,8 @@ function BindModel(item) {
         messageBlock = `<div class="message_block">
             <h6>Messages</h6>
             <ul>
-                <li><span><b>Revert request on</b> ${RevokeRequestDate}  ${revokeTime}</span><br><span>${item.RevertMessage = null ? "" : item.RevertMessage}</span></li>
-                <li><span><b>Approval request on</b> ${SendDate}  ${sendTime}</span><br><span>${item.Message == null ? "" : item.Message}</span></li>  
+                <li><span><b>Revert request on </b> ${RevokeRequestDate}  ${revokeTime} by ${item.UserName == null ? "" : item.UserName} (${item.UserEmail == null ? "" : item.UserEmail})</span><br><span>${item.RevertMessage = null ? "" : item.RevertMessage}</span></li>
+                <li><span><b>Approval request on </b> ${SendDate}  ${sendTime} by ${item.UserName == null ? "" : item.UserName} (${item.UserEmail == null ? "" : item.UserEmail})</span><br><span>${item.Message == null ? "" : item.Message}</span></li>  
             </ul>
         </div>`
 
@@ -317,7 +322,7 @@ function BindModel(item) {
         messageBlock = `<div class="message_block">
             <h6>Messages</h6>
             <ul>
-                <li><b>Approval request on</b><span>${SendDate}  ${sendTime}<br>${item.Message == null ? "" : item.Message}</span></li>
+                <li><b>Approval request on </b><span>${SendDate}  ${sendTime} by ${item.UserName == null ? "" : item.UserName} (${item.UserEmail == null ? "" : item.UserEmail})<br>${item.Message == null ? "" : item.Message} </span></li>
             </ul>
         </div>`
     }
@@ -361,7 +366,7 @@ function BindModel(item) {
 
                         </tr>
                          <tr>
-                            <th scope="row">Send By</th>
+                            <th scope="row">Sent By</th>
                             <td>${item.UserName == null ? "" : item.UserName} (${item.UserEmail == null ? "" : item.UserEmail})</td>
 
                         </tr>
@@ -387,7 +392,7 @@ function BindModel(item) {
                     </tbody>
                 </table>
              ${messageBlock}
-            <div class="form-group ${item.Status==1?'':'d-none'}">
+            <div class="form-group ${(item.Status == "1" && item.AcceptedById == userId) ?'':'d-none'}">
                 <label>Comments</label>
                 <textarea id="approveRejectTextbox" class="form-control" placeholder="Comments"></textarea>
             </div>
@@ -433,9 +438,9 @@ function openHistoryModel(item, message) {
         messageBlock = `<div class="message_block">
             <h6>Message</h6>
             <ul>
-                <li><span><b>Revoke request on</b> ${RevokeRequestDate}  ${revokeTime}</span><br><span>${item.RevertMessage = null ? "" : item.RevertMessage}</span></li>
-                <li><span><b>Approval request on</b> ${SendDate}  ${sendTime}</span><br><span>${item.Message == null ? "" : item.Message}</span></li> 
-               <li><span><b>Revoke request is accepted on</b> ${ModifiedDate}  ${ModifiedTime}</span><br><span>${item.ResponseMessage == null ? "" : item.ResponseMessage}</span></li>  
+                <li><span><b>Revoke request on </b> ${RevokeRequestDate}  ${revokeTime}</span><br><span>${item.RevertMessage = null ? "" : item.RevertMessage}</span></li>
+                <li><span><b>Approval request on </b> ${SendDate}  ${sendTime}</span><br><span>${item.Message == null ? "" : item.Message}</span></li> 
+               <li><span><b>Revoke request is accepted on </b> ${ModifiedDate}  ${ModifiedTime}</span><br><span>${item.ResponseMessage == null ? "" : item.ResponseMessage}</span></li>  
             </ul>
         </div>`
 
@@ -445,8 +450,8 @@ function openHistoryModel(item, message) {
         messageBlock = `<div class="message_block">
             <h6>Messages</h6>
             <ul>
-                <li><b>Approval request on</b><span>${SendDate}  ${sendTime}<br>${item.Message == null ? "" : item.Message}</span></li>
-           <li><span><b>Approval request is accepted on</b> ${ModifiedDate}  ${ModifiedTime}</span><br><span>${item.ResponseMessage == null ? "" : item.ResponseMessage}</span></li>  
+                <li><b>Approval request on </b><span>${SendDate}  ${sendTime}<br>${item.Message == null ? "" : item.Message}</span></li>
+           <li><span><b>Approval request is accepted on </b> ${ModifiedDate}  ${ModifiedTime}</span><br><span>${item.ResponseMessage == null ? "" : item.ResponseMessage}</span></li>  
             </ul>
         </div>`
     }
@@ -456,7 +461,7 @@ function openHistoryModel(item, message) {
     ResponseMessageBlock = `<div class="message_block">
         <h6></h6>
         <ul>
-            <li><b>Approval request on</b><span>${SendDate}  ${sendTime}<br>${item.Message == null ? "" : item.Message}</span></li>
+            <li><b>Approval request on </b><span>${SendDate}  ${sendTime}<br>${item.Message == null ? "" : item.Message}</span></li>
             </ul>
         </div>`
    
@@ -480,7 +485,7 @@ function openHistoryModel(item, message) {
 
                         </tr>
                          <tr>
-                            <th scope="row">Send By</th>
+                            <th scope="row">Sent By</th>
                             <td>${item.UserName == null ? "" : item.UserName}  (${item.UserEmail == null ? "" : item.UserEmail})</td>
 
                         </tr>
@@ -516,6 +521,7 @@ function openHistoryModel(item, message) {
 
 
 function ViewCareplan(requestId, IsViewCareplan) {
+    reopenRequestId = requestId
     $('#RequestModel').modal('hide');
     if (IsViewCareplan) {
         return;
@@ -552,11 +558,16 @@ function ViewRequestChanges(_careplanid) {
                 html += `<ul class="needGoalsChecklist">`
                 for (let i = 0; i < needs.length; i++) {
 
-                    html += `<li><div class="form-group"><label><span>${needs[i].Description}</span></label></div>`
+                    html += `<li><div class="form-group active"><label><span>${needs[i].Description}</span></label>`
                     var NeedGoals = goals.filter(c => c.NeedId == needs[i].NeedId);
                     if (NeedGoals.length > 0) {
+                        html += `<i class="down_arrow fa fa-chevron-down "></i>`
+                    }
+                    html += `</div>`
+
+                    if (NeedGoals.length > 0) {
                         html += `<ul>`
-                        for (let j = 0; j < NeedsGoals.length; j++) {
+                        for (let j = 0; j < NeedGoals.length; j++) {
                             html += `<li><div class="form-group"><label><span> ${NeedGoals[j].Description}</span></label></div></li>`
                         }
                         html += `</ul>`
@@ -569,6 +580,12 @@ function ViewRequestChanges(_careplanid) {
                  $('#ViewRequestCareplanChanges .modal-body').html(html)
                 $('#RequestModel').modal('hide');
                 $('#ViewRequestCareplanChanges').modal('show');
+                $('ul.needGoalsChecklist > li > .form-group').off('click');
+
+                $('ul.needGoalsChecklist > li > .form-group').on('click', function () {
+                    $(this).toggleClass('active');
+                    $(this).next('ul').slideToggle();
+                })
             }else{
               
                  toastr.error("There are no changes to view");
@@ -582,3 +599,8 @@ function ViewRequestChanges(_careplanid) {
         }
     });
 }
+
+$('#addNewCarePlansSidebar .close_right_sidebar').click(function () {
+    $('#tblCarePlanInbox #' + reopenRequestId + '').find('a.openPopUp').click();
+
+})
