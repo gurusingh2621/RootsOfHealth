@@ -13,7 +13,7 @@ namespace RootsOfHealth.Controllers
     [Authorize]
     public class DashBoardController : Controller
     {
-        string WebApiKey = WebConfigurationManager.AppSettings["WebApi"];
+        string WebApiKey = WebConfigurationManager.AppSettings["WebApiForBackend"];
 
         // GET: DashBoard
         public ActionResult Index(int patientid=0)

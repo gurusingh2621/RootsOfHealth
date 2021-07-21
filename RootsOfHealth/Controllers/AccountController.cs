@@ -17,7 +17,7 @@ namespace RootsOfHealth.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        string WebApiKey = WebConfigurationManager.AppSettings["WebApi"];
+        string WebApiKey = WebConfigurationManager.AppSettings["WebApiForBackend"];
         // GET: Account
        
         public ActionResult Index()
@@ -78,7 +78,7 @@ namespace RootsOfHealth.Controllers
                     client.BaseAddress = new Uri(WebApiKey);
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    var responseTask = client.PostAsJsonAsync("api/PatientMain/validateuser", model);
+                    var responseTask = client.PostAsJsonAsync("/api/PatientMain/validateuser", model);
                     responseTask.Wait();
 
                     var result = responseTask.Result;

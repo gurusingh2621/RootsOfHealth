@@ -15,7 +15,7 @@ namespace RootsOfHealth.Controllers
     public class ProgramController : Controller
     {
 
-         string WebApiKey = WebConfigurationManager.AppSettings["WebApi"];
+         string WebApiKey = WebConfigurationManager.AppSettings["WebApiForBackend"];
         string ProgramUploadPath = WebConfigurationManager.AppSettings["ProgramUploadPath"];
 
         // GET: Program

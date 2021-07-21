@@ -14,7 +14,7 @@ namespace RootsOfHealth.Controllers
 {
     public class ClientController : Controller
     {
-        string WebApiKey = WebConfigurationManager.AppSettings["WebApi"];
+        string WebApiKey = WebConfigurationManager.AppSettings["WebApiForBackend"];
         string ProgramUploadPath = WebConfigurationManager.AppSettings["ProgramUploadPath"];
         // GET: Client
         public ActionResult Index()

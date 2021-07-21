@@ -14,7 +14,7 @@ namespace RootsOfHealth.Commom
 
     public class Common
     {
-        string WebApiKey = WebConfigurationManager.AppSettings["WebApi"];
+        string WebApiKey = WebConfigurationManager.AppSettings["WebApiForBackend"];
 
         List<string> SafetyOptions = new List<string>();
         List<string> EmploymentOptions = new List<string>();

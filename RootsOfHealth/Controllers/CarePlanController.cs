@@ -12,7 +12,7 @@ namespace RootsOfHealth.Controllers
 {    [Authorize]
     public class CarePlanController : Controller
     {
-        string WebApiKey = WebConfigurationManager.AppSettings["WebApi"];
+        string WebApiKey = WebConfigurationManager.AppSettings["WebApiForBackend"];
         string CarePlanUploadPath= WebConfigurationManager.AppSettings["CarePlanUploadPath"];
         // GET: CarePlan
         #region[CarePlanTemplate]     

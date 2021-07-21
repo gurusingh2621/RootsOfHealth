@@ -14,7 +14,7 @@ namespace RootsOfHealth.Controllers
     [Authorize]
     public class PatientController : Controller
     {
-        string WebApiKey = WebConfigurationManager.AppSettings["WebApi"];
+        string WebApiKey = WebConfigurationManager.AppSettings["WebApiForBackend"];
 
 
         // GET: RootsOfHealth

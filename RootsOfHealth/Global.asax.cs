@@ -33,7 +33,7 @@ namespace RootsOfHealth
                         UserBO user = new UserBO();
                         string username = FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name;
                         string roles = string.Empty;
-                        string WebApiKey = WebConfigurationManager.AppSettings["WebApi"];
+                        string WebApiKey = WebConfigurationManager.AppSettings["WebApiForBackend"];
                         using (var client = new System.Net.Http.HttpClient())
                         {
                             client.BaseAddress = new Uri(WebApiKey);
