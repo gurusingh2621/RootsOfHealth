@@ -14,7 +14,10 @@ function GetProgramTemplateList() {
         contentType: "application/json; charset=utf-8",
         success: function (result) {
             var programlist = $(".programlist");
-            
+            if (_programDataTable != '') {
+                $('#tblProgramTemplateList').DataTable().clear();
+                $('#tblProgramTemplateList').DataTable().destroy();
+            }
             var programs = "";
             if (result.length) {
                 $.each(result, function (index, item) {
@@ -59,7 +62,8 @@ function GetProgramTemplateList() {
             
           _programDataTable= $('#tblProgramTemplateList').DataTable({
                 retrieve: true,
-                searching: false,
+              searching: false,
+              "scrollY": "calc(100vh - 380px)",
                 'columnDefs': [{
                     'targets': [4],
                     'orderable': false                  
