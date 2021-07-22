@@ -457,11 +457,13 @@
         var ShortDate = "";
         var OneYouAre = "";
         var isprofilesave = false;
-        
+
         var modeldetail ="";
 
         var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]'
-
+         if (@ViewBag.PatientID != "0" && @ViewBag.PatientID != null) {
+                isprofilesave = true;
+            }
         var options = {
             onComplete: function (cep) {
                 console.log('CEP Completed!:' , cep);
@@ -859,8 +861,8 @@
 
                   }
 
-            
-        
+
+
 
              @if (Model.ScheduleDate.IsMentalHealthDue == "Red")
              {
@@ -1057,18 +1059,16 @@
 @:$("#FoodAccess-tab").find('span').css('display', 'inline');
                 }
 
-          
+
         }
         $(document).ready(function () {
             var currenttab = '@ViewBag.CurrentTab';
             var currentSubtab = '@ViewBag.CurrentSubtab'
-            if (@ViewBag.PatientID != "0" || @ViewBag.PatientID != null) {
-                isprofilesave = true;
-            }
+
             if (currenttab != 'Profile-tab' && currenttab != 'ProgramTab') {
                 RebindClientFormEvent();
             }
-            
+
             $('#programtbs').click(function () {
                 $(".loaderOverlay").css('display','flex');
                 $('Programs').html('')
@@ -1088,7 +1088,7 @@
                     })
                     $('#Programs-tab').addClass('active show')
                     RebindEvent();
-                   
+
                     if ($("#tabPills .nav-item").length > 0) {
                         if (currentSubtab == 'undefined') {
                             $("#tabPills .nav-item a").get(0).click();
@@ -1304,41 +1304,41 @@
         //var lblPayingBills = $('#lblPayingBills').html();
         //$('#ddPayingBills').val('' + lblPayingBills);
 
-            
-           
+
+
                 var lblHouseholdExpenses = $('#lblHouseholdExpenses').html()!="" && undefined?$('#lblHouseholdExpenses').html().toLocaleLowerCase():"";
                 $("input[name=HouseholdExpensesRadio][value='" + lblHouseholdExpenses + "']").prop('checked', true);
-          
+
         //var lblSkipMeals = $('#lblSkipMeals').html();
         //$('#ddSkipMeals').val('' + lblSkipMeals);
-       
+
                 var lblCalRec = $('#lblCalRec').html() != "" && undefined ? $('#lblCalRec').html().replace(/&amp;/g, '&').trim() : "";
                 $("input[name=Calworks][value='" + lblCalRec + "']").prop('checked', true);
-            
-          
+
+
                 var lblSSRec = $('#lblSSRec').html() != "" && undefined ? $('#lblSSRec').html().replace(/&amp;/g, '&'):"";
                 $("input[name=SSIRadio][value='" + lblSSRec + "']").prop('checked', true);
-           
-           
+
+
                 var lblGARec = $('#lblGARec').html() != "" && undefined ? $('#lblGARec').html().replace(/&amp;/g, '&'):"";
                 $("input[name=GARadio][value='" + lblGARec + "']").prop('checked', true);
-            
-            
+
+
                 var lblWIRec = $('#lblWIRec').html() != "" && undefined ? $('#lblWIRec').html().replace(/&amp;/g, '&'):"";
                 $("input[name=WICRadio][value='" + lblWIRec + "']").prop('checked', true);
-            
-            
+
+
                 var lblUnRec = $('#lblUnRec').html() != "" && undefined ? $('#lblUnRec').html().replace(/&amp;/g, '&'):"";
                 $("input[name=Unemployment][value='" + lblUnRec + "']").prop('checked', true);
-          
-            
+
+
                 var lblSDRec = $('#lblSDRec').html() != "" && undefined ? $('#lblSDRec').html().replace(/&amp;/g, '&'):"";
                 $("input[name=SDIRadio][value='" + lblSDRec + "']").prop('checked', true);
-          
-           
+
+
                 var lblReRec = $('#lblReRec').html() != "" && undefined ? $('#lblReRec').html().replace(/&amp;/g, '&'):"";
                 $("input[name=RentalAssistance][value='" + lblReRec + "']").prop('checked', true);
-         
+
 
         //-----------------Financial end-------------------------------//
 
@@ -1396,10 +1396,10 @@
 
         //-----------------Communication Start-------------------------------//
 
-            
+
             var lblPersonalPhone = $('#lblPersonalPhone').html() != "" && undefined ? $('#lblPersonalPhone').html().toLocaleLowerCase():"";
                 $("input[name=Phone][value='" + lblPersonalPhone + "']").prop('checked', true);
-           
+
         //var lblDifficultyPlaces = $('#lblDifficultyPlaces').html();
         //$('#ddDifficultyGoingPlaces').val('' + lblDifficultyPlaces);
 
@@ -1418,50 +1418,50 @@
 
         $('#txtSSN').val('@ViewBag.SSNNumber');
         $('#lblssn').val('@ViewBag.SSNNumber');
-           
+
                 var lblInsuranceRadio = $('#lblInsuranceRadio').html() != "" && undefined ? $('#lblInsuranceRadio').html().toLocaleLowerCase():"";
                 $("input[name=InsuranceRadio][value='" + lblInsuranceRadio + "']").prop('checked', true);
 
                 if (lblInsuranceRadio == "true") {
                     $('#divInsuranceYes').show();
                 }
-           
-         
+
+
                 var lblDoctorRadio = $('#lblDoctorRadio').html() != "" && undefined ? $('#lblDoctorRadio').html().toLocaleLowerCase():"";
                 $("input[name=RegularDoctorRadio][value='" + lblDoctorRadio + "']").prop('checked', true);
                 if (lblDoctorRadio == "true") {
                     $('#divRegularDoctorYes').show();
                 }
-            
+
 
         //var lblLastSeeDoctor = $('#lblLastSeeDoctor').html().trim();
         //$('#ddLastSeeDoctor').val('' + lblLastSeeDoctor);
 
 
-         
+
                 var lblDentistRadio = $('#lblDentistRadio').html() != "" && undefined ? $('#lblDentistRadio').html().toLocaleLowerCase():"";
                 $("input[name=RegularDentistRadio][value='" + lblDentistRadio + "']").prop('checked', true);
                 if (lblDentistRadio == "true") {
                     $('#divRegularDentistYes').show();
                 }
-            
+
 
         //var lblLastSeeDentist = $('#lblLastSeeDentist').html();
         //$('#ddLastSeeDentist').val('' + lblLastSeeDentist);
-         
+
                 var lblOtherDoctorsRadio = $('#lblOtherDoctorsRadio').html() != "" && undefined ? $('#lblOtherDoctorsRadio').html().toLocaleLowerCase():"";
                 $("input[name=OtherDoctorsRadio][value='" + lblOtherDoctorsRadio + "']").prop('checked', true);
                 if (lblOtherDoctorsRadio == "true") {
                     $('#divOtherDoctorsYes').show();
                 }
-         
-           
+
+
                 var lblSocialWorkerRadio = $('#lblSocialWorkerRadio').html() != "" && undefined ? $('#lblSocialWorkerRadio').html().toLocaleLowerCase():"";
                 $("input[name=SocialWorkerRadio][value='" + lblSocialWorkerRadio + "']").prop('checked', true);
                 if (lblSocialWorkerRadio == "true") {
                     $('#divSocialWorker').show();
                 }
-        
+
 
         //var lblYourHealthIs = $('#lblYourHealthIs').html();
         //$('#ddYourHealthIs').val('' + lblYourHealthIs);
@@ -1490,22 +1490,22 @@
         //var lblYearEmergency = $('#lblYearEmergency').html();
         //$('#ddPastYearEmergency').val('' + lblYearEmergency);
 
-        
+
                 var lblSmokeCigarettes = $('#lblSmokeCigarettes').html() != "" && undefined ? $('#lblSmokeCigarettes').html().toLocaleLowerCase():"";
                 $("input[name=SmokeRadio][value='" + lblSmokeCigarettes + "']").prop('checked', true);
                 if (lblSmokeCigarettes == "true") {
                     $('#divSmoke').show();
                 }
-            
+
         //var lblSmokePerDay = $('#lblSmokePerDay').html();
         //$('#ddSmokePerDay').val('' + lblSmokePerDay);
 
         //var lblFrequentlySmoke = $('#lblFrequentlySmoke').html();
         //$('#ddFrequentlySmoke').val('' +lblFrequentlySmoke);
-            
+
                 var lblTobaccoProducts = $('#lblTobaccoProducts').html() != "" && undefined ? $('#lblTobaccoProducts').html().toLocaleLowerCase():"";
                 $("input[name=TobaccoProductsRadio][value='" + lblTobaccoProducts + "']").prop('checked', true);
-            
+
       //-----------------Healthcare end-------------------------------//
 
 
@@ -1513,18 +1513,18 @@
 
         var lblYouCanDependOn = $('#lblYouCanDependOn').html();
         $("input[name=DependOnRadio][value='" + lblYouCanDependOn + "']").prop('checked', true);
-            
+
                 var lblCommunityGroup = $('#lblCommunityGroup').html() != "" && undefined ? $('#lblCommunityGroup').html().toLocaleLowerCase():"";
                 $("input[name=CommunityGroup][value='" + lblCommunityGroup + "']").prop('checked', true);
-           
-    
+
+
                 var lblYouCanCall = $('#lblYouCanCall').html() != "" && undefined ? $('#lblYouCanCall').html().toLocaleLowerCase():"";
                 $("input[name=CallRadio][value='" + lblYouCanCall + "']").prop('checked', true);
-            
-            
+
+
                 var lblThreatenYou = $('#lblThreatenYou').html() != "" && undefined ? $('#lblThreatenYou').html().toLocaleLowerCase():"";
                 $("input[name=ThreatenYouRadio][value='" + lblThreatenYou + "']").prop('checked', true);
-            
+
         var lblNeighborhood = $('#lblNeighborhood').html();
         $('#ddFeelSafeNeighborhood').val('' + lblNeighborhood);
 
@@ -1553,17 +1553,17 @@
 
             //var lblLastReleased = $('#lblLastReleased').html();
             //$('#ddLastReleased').val('' + lblLastReleased);
-            
+
                 var lblRecordClearing = $('#lblRecordClearing').html() != "" && undefined ? $('#lblRecordClearing').html().toLocaleLowerCase():"";
                 $("input[name=RecordClearingRadio][value='" + lblRecordClearing + "']").prop('checked', true);
-            
-            
+
+
                 var lblOweRestitution = $('#lblOweRestitution').html() != "" && undefined ? $('#lblOweRestitution').html().toLocaleLowerCase():"";
                 $("input[name=RestitutionRadio][value='" + lblOweRestitution + "']").prop('checked', true);
                 if (lblOweRestitution == "true") {
                     $('#divOwe').show();
                 }
-            
+
         }
 
         var lblCurrentlyOnParole = $('#lblCurrentlyOnParole').html();
@@ -1578,21 +1578,21 @@
 
         var lblGettingAJob = $('#lblGettingAJob').html();
         $("input[name=GettingAJobRadio][value='" + lblGettingAJob + "']").prop('checked', true);
-          
+
                 var lblIssuedID = $('#lblIssuedID').html() != "" && undefined ? $('#lblIssuedID').html().toLocaleLowerCase():"";
                 $("input[name=GovernmentIDRadio][value='" + lblIssuedID + "']").prop('checked', true);
                 if (lblIssuedID == "true") {
                     $('#divGovernmentImg').show();
                 }
-            
-            
+
+
                 var lblImmigrationStatus = $('#lblImmigrationStatus').html() != "" && undefined ? $('#lblImmigrationStatus').html().toLocaleLowerCase():"";
                 $("input[name=ImmigrationStatusRadio][value='" + lblImmigrationStatus + "']").prop('checked', true);
-            
-            
+
+
                 var lblLandlord = $('#lblLandlord').html() != "" && undefined ? $('#lblLandlord').html().toLocaleLowerCase():"";
                 $("input[name=LandlordRadio][value='" + lblLandlord + "']").prop('checked', true);
-            
+
         var lblIDImg = $('#lblIDImg').html();
         $('#lblGovernmentImg').html(lblIDImg);
 
@@ -1926,7 +1926,7 @@
 
         $('#ddRace').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
             // do something...
-            
+
             //  var selected = $('#ddRace option:selected').val();
             var divOtherRace = $('#OtherRace');
 

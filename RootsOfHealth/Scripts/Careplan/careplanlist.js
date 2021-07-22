@@ -13,6 +13,10 @@ function GetCarePlanTemplateList() {
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         success: function (result) {
+            if (_careplanListTable != '') {
+                $('#tblCarePlanTemplateList').DataTable().clear();
+                $('#tblCarePlanTemplateList').DataTable().destroy();
+            }
             var careplanlist = $(".careplanlist");
             var careplans = "";
             if (result.length) {
@@ -56,6 +60,7 @@ function GetCarePlanTemplateList() {
             _careplanListTable=    $('#tblCarePlanTemplateList').DataTable({
                 paging: false,
                 retrieve: true,
+                "scrollY": "calc(100vh - 380px)",
                 searching: false,
                 'columnDefs': [{
                     'targets': [5],
@@ -184,7 +189,9 @@ function getTemplates(obj) {
                     });
                     $(".templateDiv").removeClass("hide");
                 } else {
+
                     toastr.error("", "No careplan template available.", { progressBar: true });
+                   
                 }
             },
         });
