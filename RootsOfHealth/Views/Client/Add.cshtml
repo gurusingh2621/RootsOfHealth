@@ -463,7 +463,10 @@
         var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]'
          if (@ViewBag.PatientID != "0" && @ViewBag.PatientID != null) {
                 isprofilesave = true;
-            }
+        }
+        if ('@ViewBag.CurrentSubtab' == '') {
+            isprofilesave = false;
+        }
         var options = {
             onComplete: function (cep) {
                 console.log('CEP Completed!:' , cep);
@@ -4684,36 +4687,36 @@
             
             if (isprofilesave == true) {
                 //$(".nav-item a").on('click', function (e) {
-                    $(".tab-pane").each(function (index, item) {
-                        $(item).removeClass("active show");
-                        $(item).removeClass('client-form-margin-top');
-                    })
+                $(".tab-pane").each(function (index, item) {
+                    $(item).removeClass("active show");
+                    $(item).removeClass('client-form-margin-top');
+                })
 
 
-                    $(".render-basicProgramform").each(function (index, item) {
-                        $(item).html("");
-                    });
+                $(".render-basicProgramform").each(function (index, item) {
+                    $(item).html("");
+                });
                 var item = $(item);
                 var ClientFormID = item.attr("data-ClientFormID")
                 if (ClientFormID == undefined) {
-                    
+
                     if (@ViewBag.ClientFormID!=0) {
                         ClientFormID =@ViewBag.ClientFormID;
                         getParentForm(ClientFormID);
                     }
                 }
                 LoadChildMenu(ClientFormID);
-                    formName = item.attr("data-FormName");
-              
-                    var id = item.attr("id");
+                formName = item.attr("data-FormName");
+
+                var id = item.attr("id");
                 if ($("#" + id).hasClass("Child")) {
                     $("#myChildTab li").each(function (index, item) {
                         $(item).removeClass("active show");
                     })
-                        $(".Child").removeClass('active show');
-                        $("#" + id).addClass('active show');
+                    $(".Child").removeClass('active show');
+                    $("#" + id).addClass('active show');
                 }
-               
+
                 if (formName != undefined) {
                     $('#' + formName + 'only').find('.Child').removeClass('active show ');
                     $('#' + formName + 'only').find("#a" + formName).addClass('active show ');
@@ -4734,7 +4737,8 @@
                 }
                 //})
             }
-
+            isprofilesave = true;
+           
         }
 
         function getParentForm(ClientFormID) {
