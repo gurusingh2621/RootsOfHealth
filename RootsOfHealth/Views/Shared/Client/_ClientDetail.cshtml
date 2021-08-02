@@ -84,7 +84,7 @@
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
     @*<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>*@
     @*<script src="~/Scripts/jquery-ui.min.js"></script>*@
-    <script>
+<script>
    var  programUploadedPath="@System.Web.Configuration.WebConfigurationManager.AppSettings["ProgramUploadPath"]";
     var _userID = "@Session["userid"]";
         var _patientID = '@ViewBag.PatientId';
@@ -100,7 +100,7 @@
         clientName = '@Model.PatientMain.FirstName' + " " + clientMiddleName+" "+'@Model.PatientMain.LastName'
       }
         var _dateOfBirth = '@Model.PatientMain.DateOfBirth'
-        
+
         $('#btnaddprogram').addClass('d-none')
 
 
@@ -421,7 +421,7 @@
             },
                         complete: function () {
                             $.ajax({
-                type: "GET",
+                              type: "GET",
                                 url: Apipath + '/api/PatientMain/EditNotesTemplateFieldValueByNoteID?noteid=' + id,
                                 contentType: 'application/json; charset=UTF-8',
                                 dataType: "json",
@@ -650,9 +650,19 @@
       $(document).ready(function () {
           //notification changes start here--------------------
           
+          if (ViewBagClientFormId != "0" && currenttab != '' && currenttab != 'Profile-tab' && currenttab != 'ProgramTab') {
+              loadClient()
+          }
+          RebindProgramsEvents()
+          
+
+          if (ViewBagClientFormId == "0" && (currenttab == '' || currenttab == 'Profile-tab') && currenttab != 'ProgramTab') {
+              
+              $('#Profile').addClass('show active');
+          }
           console.log('1 hide controls');
           $('#Programs-tab').click(function () {
-
+             
             if ($("#tabPills .nav-item").length > 0) {
 
                 var FirstTab = $("#tabPills .nav-item a").get(0);
@@ -660,7 +670,61 @@
                 FirstTab.click()
           }
         })
+           if (currenttab == 'ProgramTab') {
+             
+                if (@Model.Programs.Count> 0) {
+                    LoadPrograms();
+                }
+                else {
+                    $('#Profile-tab').click();
+                }
+            }
+          function LoadPrograms() {
 
+                $(".loaderOverlay").css('display', 'flex');
+                $('Programs').html('')
+                $.ajax({
+
+                    type: "Get",
+                    url: '/Patient/GetProgramsForPatient?PatientID=' + _PatientId,
+                    dataType: "html",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (result) {
+                        
+                        $('#Programs')[0].outerHTML = result;
+                        $('#myTabContent .tab-pane').each(function () {
+                            $(this).removeClass('active show')
+                        })
+                        $('#Programs').addClass('active show')
+                        $('#myTab .nav-link').each(function () {
+                            $(this).removeClass('active show')
+                        })
+
+                        RebindProgramsEvents();
+                        $('#Programs-tab').addClass('active show')
+
+                        if ($("#tabPills .nav-item").length > 0) {
+                            if (currentSubtab == 'undefined') {
+                                $("#tabPills .nav-item a").get(0).click();
+                            }
+                            else {
+                                if ($("#a" + currentSubtab).length > 0) {
+                                    $("#a" + currentSubtab).click();
+                                }
+                                else {
+                                    $("#tabPills .nav-item a").get(0).click();
+                                }
+                            }
+                        }
+                        
+
+                    },
+                    error: function () {
+                        $(".loaderOverlay").hide()
+                        toastr.error("Some error occurred!! or data not found");
+                    }
+                });
+            }
 
           @if (Model.ScheduleDate.IsHousingDue=="Red")
         {
@@ -2312,9 +2376,9 @@
       }
 
     function loadClient(item) {
-        
+
         //$("#myTab .nav-item a").on('click', function (e) {
-        
+
         $(".tab-pane").each(function (index, item) {
             $(item).removeClass("active show");
             $(item).removeClass('client-form-margin-top');
@@ -2325,14 +2389,28 @@
             var ClientFormId = item.attr("data-ClientFormID")
             formName = item.attr("data-FormName");
         programElement = $("#" + formName + "render-basicform");
+        if (ClientFormId == undefined) {
+            if (ViewBagClientFormId != 0) {
+                ClientFormId = ViewBagClientFormId
+                getParentForm(ClientFormId);
+            }
+            setTimeout(function () {
+                LoadChildMenu(ClientFormId);
+            },1000)
+        }
+        else {
+            LoadChildMenu(ClientFormId);
+        }
         var id = item.attr("id");
         if ($("#"+id).hasClass("Child")) {
             $(".Child").removeClass('active show');
             $("#" + id).addClass('active show');
         }
+       
+        if (formName != undefined) {
             var _IsSaved = $('#' + formName + 'only').find('.btnprogramsave').attr('data-save');
-        $('#' + formName + 'only').find('.Child').removeClass('active show ');
-        $('#' + formName + 'only').find("#a" + formName).addClass('active show ');
+            $('#' + formName + 'only').find('.Child').removeClass('active show ');
+            $('#' + formName + 'only').find("#a" + formName).addClass('active show ');
             if (_IsSaved == 'True') {
                 $('#' + formName + 'only').find('.btnprogramPrint').css('display', 'block');
             }
@@ -2341,22 +2419,138 @@
             }
             $('#' + formName + 'only').addClass('active show');
             var _templateID = item.attr("data-TemplateID");
-            if (programElement.html() != "" && undefined ? programElement.html().length : "" > 0) {
+            if (programElement.html() != "" ) {
                 $(".loaderOverlay").hide();
                 return;
-        };
-        LoadChildMenu(ClientFormId);
+            };
+
             if (_IsSaved == 'False') {
                 LoadClientFormTemplate(ClientFormId)
             }
             else {
                 EditClientForm(ClientFormId, _templateID)
             }
-
+        }
         //})
     }
+
+
+    function getParentForm(ClientFormID) {
+
+        $.ajax({
+            type: "GET",
+            url: '/Client/getParentForm?ClientFormId=' + ClientFormID + '&PatientId=' + _PatientId,
+            contentType: 'application/json; charset=UTF-8',
+            dataType: "json",
+            beforeSend: function () {
+
+            },
+            async: true,
+            success: function (result) {
+
+
+                var parentTabWChild = ''
+                var parentTabWoChild = ''
+                var data = JSON.parse(result.data)
+                var myChildTab = $("#myChildTab");
+                if (data.length == 0) {
+
+                } else {
+                    if (data.length > 1) {
+                        myChildTab.find("li").remove();
+                    }
+                    $.each(data, function (i, item) {
+                        if (item.ClientFormID == ClientFormID) {
+                            var formname = item.FormName.replace(/ /g, '');
+                            formName = formname;
+                        }
+
+                        if (item.ClientFormID == ClientFormID && item.ParentFormID == 0) {
+                            parentTabWChild = item.FormName.replace(/ /g, '');
+                        }
+                        if (item.ParentFormID == 0) {
+                            parentTabWoChild = item.FormName.replace(/ /g, '');
+                        }
+
+                        $('#' + formName + 'only').addClass('active show');
+
+                        if (item.ParentFormID != 0 || item.ParentFormID != null) {
+                            var formnames = item.FormName.replace(/ /g, '');
+                            if (item.ParentFormID == 0 || item.ParentFormID == null) {
+                                $("#myTab .nav-link").each(function (index, item) {
+                                    $(item).removeClass("active show");
+
+                                })
+                                // $("#a" + formnames).addClass('active show')
+                            }
+                            else if (item.ClientFormID == ClientFormID) {
+                                if (item.Saved == true) {
+                                    myChildTab.append(`<li class="nav-item active show" style="display: flex;" ><a id="${formnames}" style="width: 230px;" data-FormName="${formnames}" data-TemplateID="${item.TemplateID}" onclick="RebindClientFormEvent(this)" class="nav-link Child" href="${'#' + formnames + 'only'}"data-ClientFormID="${item.ClientFormID}"data-PatientID="${item.PatientID}">
+                                ${item.FormName}<span class="check" ${item.Saved}?"":style='display:none' ><i class="fas fa-check-circle"></i></span></a></li>`
+                                    )
+                                } else {
+                                    myChildTab.append(`<li class="nav-item active show" style="display: flex;" ><a id="${formnames}" style="width: 230px;" data-FormName="${formnames}" data-TemplateID="${item.TemplateID}" onclick="RebindClientFormEvent(this)" class="nav-link Child" href="${'#' + formnames + 'only'}"data-ClientFormID="${item.ClientFormID}"data-PatientID="${item.PatientID}">
+                                ${item.FormName}<span class="check" ${item.Saved}?"":style='display:none' ></i></span></a></li>`
+                                    )
+                                }
+                            }
+                            else {
+
+                                if (item.Saved == true) {
+                                    myChildTab.append(`<li class="nav-item" style="display: flex;" ><a id="${formnames}" style="width: 230px;" data-FormName="${formnames}" data-TemplateID="${item.TemplateID}" onclick="RebindClientFormEvent(this)" class="nav-link Child" href="${'#' + formnames + 'only'}"data-ClientFormID="${item.ClientFormID}"data-PatientID="${item.PatientID}">
+                                ${item.FormName}<span class="check" ${item.Saved}?"":style='display:none' ><i class="fas fa-check-circle"></i></span></a></li>`
+                                    )
+                                } else {
+                                    myChildTab.append(`<li class="nav-item" style="display: flex;" ><a id="${formnames}" style="width: 230px;" data-FormName="${formnames}" data-TemplateID="${item.TemplateID}" onclick="RebindClientFormEvent(this)" class="nav-link Child" href="${'#' + formnames + 'only'}"data-ClientFormID="${item.ClientFormID}"data-PatientID="${item.PatientID}">
+                                ${item.FormName}<span class="check" ${item.Saved}?"":style='display:none' ></i></span></a></li>`
+                                    )
+                                }
+                            }
+                        }
+
+
+                    });
+                    if (data.length == 1 && data[0].ParentFormID == null) {
+                        $("#myChildTab").css("display", "none");
+                    }
+                    if (data.length > 0) {
+
+                        $("#myChildTab").css("display", "flex");
+                        $('#' + formName + 'only').addClass('client-form-margin-top');
+                    }
+                    $.each(data, function (i, item) {
+                        if (item.ClientFormID == ClientFormID) {
+
+                            _IsSaved = $('#' + formName + 'only').find('.btnprogramsave').attr('data-save');
+                            programElement = $("#" + formName + "render-basicform")
+
+                            if (_IsSaved == 'False') {
+                                LoadClientFormTemplate(ClientFormID)
+                                result = true;
+                            }
+                            else {
+                                EditClientForm(ClientFormID, item.TemplateID)
+                                result = true;
+                            }
+                        }
+                    });
+                }
+
+                if (parentTabWChild != '') {
+                    $('#a' + parentTabWChild).addClass('active show');
+                }
+                else { $('#a' + parentTabWoChild).addClass('active show'); }
+
+
+            },
+            error: function (e) {
+                toastr.error("Something happen Wrong");
+                $(".loaderOverlay").hide();
+            }
+        });
+    }
         function LoadChildMenu(ClientFormId) {
-            
+
             $.ajax({
                 type: "GET",
                 url: '/Client/GetClientFormChildMenu?ClientFormId=' + ClientFormId + '&PatientId=' + _patientID,
@@ -2367,9 +2561,9 @@
                 },
                 async: true,
                 success: function (result) {
-                    
 
-                    
+
+
                     var data = JSON.parse(result.data)
                     var myChildTab = $("#myChildTab");
                     if (data.length == 1 && (data[0].ParentFormID == null || data[0].ParentFormID==0)) {
@@ -2382,12 +2576,12 @@
                         }
 
                         if (data.length > 0) {
-                            
+
                             $("#myChildTab").css("display", "flex");
                             $('#' + formName + 'only').addClass('client-form-margin-top');
                         }
-                       
-                       
+
+
                         $.each(data, function (i, item) {
                             if (item.ClientFormID != ClientFormId) {
                                 var formname = item.FormName.replace(/ /g, '');
@@ -2400,10 +2594,12 @@
                                 ${item.FormName}<span class="check" ${item.Saved}?"":style='display:none' ></i></span></a></li>`
                                     )
                                 }
-                            }                           
+                            }
                         });
                     }
-
+                    if (myChildTab.find("li").length == 0) {
+                        $('#' + formName + 'only').removeClass('client-form-margin-top');
+                    }
                 },
                 error: function (e) {
                     toastr.error("Something happen Wrong");
@@ -2535,7 +2731,7 @@
         }
 
     function getClientFormBasicFormHtml(ClientFormId, id) {
-        
+
         if (id != 0 && id!=undefined) {
             $.ajax({
                 type: "GET",
@@ -2626,7 +2822,7 @@
         dataType: "json",
         async: false,
         success: function (result) {
-            
+
             switch (result) {
                 case 0:
                     break;
@@ -2673,7 +2869,7 @@
             dataType: "json",
             async: false,
             success: function (result) {
-                
+
                 if (result.length) {
                     var fields = result[0];
                     var value = "";
@@ -3076,41 +3272,43 @@
 
     // Program code start here ......
 
-
-    $("#tabPills .nav-item a").on('click', function (e) {
-
-               $('#Programs .tab-pane').each(function (index, item) {
-                    $(item).removeClass("active show");
-               });
-
-        var item = $(this);
+    function RebindProgramsEvents() {
         
-        var _programId = item.attr("data-ProgramID")
-        programName = item.attr("data-programName");
-        programElement = $("#" + programName + "render-basicform");
-        var _IsSaved =$('#' + programName + 'only').find('.btnprogramsave').attr('data-save');
-        
-        if (_IsSaved == 'True') {
-            $('#' + programName + 'only').find('.btnprogramPrint').css('display','block');
-        }
-        else {
-            $('#' + programName + 'only').find('.btnprogramPrint').css('display','none');
-        }
-         $('#' + programName + 'only').addClass('active show');
-        var _templateID = item.attr("data-TemplateID");
-        if (programElement.html().length > 0) {
-             $(".loaderOverlay").hide();
-                 return;
-             } ;
-        if (_IsSaved == 'False') {
-            LoadProgramTemplate(_programId)
-        }
-        else {
-            EditPrograms(_programId,_templateID)
-        }
+       
+        $("#tabPills .nav-item a").on('click', function (e) {
+            
+            $('#Programs .tab-pane').each(function (index, item) {
+                $(item).removeClass("active show");
+            });
 
-    })
+            var item = $(this);
 
+            var _programId = item.attr("data-ProgramID")
+            programName = item.attr("data-programName");
+            programElement = $("#" + programName + "render-basicform");
+            var _IsSaved =$('#' + programName + 'only').find('.btnprogramsave').attr('data-save');
+
+            if (_IsSaved == 'True') {
+                $('#' + programName + 'only').find('.btnprogramPrint').css('display', 'block');
+            }
+            else {
+                $('#' + programName + 'only').find('.btnprogramPrint').css('display', 'none');
+            }
+            $('#' + programName + 'only').addClass('active show');
+            var _templateID = item.attr("data-TemplateID");
+            if (programElement.html().length > 0) {
+                $(".loaderOverlay").hide();
+                return;
+            };
+            if (_IsSaved == 'False') {
+                LoadProgramTemplate(_programId)
+            }
+            else {
+                EditPrograms(_programId,_templateID)
+            }
+
+        })
+    }
     function LoadProgramTemplate(_programId) {
 
     var programid = _programId;
@@ -3701,8 +3899,8 @@
             $(item).next().hide();
         }
     });
-        
-       
+
+
 }
 
-    </script>
+</script>

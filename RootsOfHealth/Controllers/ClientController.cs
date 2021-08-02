@@ -26,7 +26,7 @@ namespace RootsOfHealth.Controllers
         {
             return View();
         }
-        public ActionResult Info(string PatientID)
+        public ActionResult Info(string PatientID, string CurrentTab = null, string Subtab = null, int ClientFormID = 0)
         {
 
             double sub;
@@ -65,6 +65,9 @@ namespace RootsOfHealth.Controllers
                 }
             }
             ViewBag.PatientID = PatientID;
+            ViewBag.CurrentTab = CurrentTab;
+            ViewBag.CurrentSubtab = Subtab;
+            ViewBag.ClientFormID = ClientFormID;
 
             HttpCookie PatientIdCookie = new HttpCookie("patientid");
             Response.Cookies.Add(PatientIdCookie);

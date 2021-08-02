@@ -264,7 +264,7 @@
         transform: rotate( -180deg );
     }
 </style>
-<div  class="tab-pane fade test @Html.Raw(ViewBag.CurrentTab == "Profile-tab" ? "show active" : string.IsNullOrWhiteSpace(ViewBag.CurrentTab) ? "show active" : "")" id="Profile" role="tabpanel" aria-labelledby="Profile-tab">
+<div  class="tab-pane fade test"  id="Profile" role="tabpanel" aria-labelledby="Profile-tab">
     <!-- Inner content start here  -->
     <div class="inner-content">
         <div class="paitent-detail">
@@ -298,25 +298,31 @@
                                     <i class="far fa-edit"></i>
                                     Edit
                                 </a>
+                                
+                                
 
-                                <a style="display:none" class="btn btn-success" href="javascript:{}" id="btnaddprogram" data-toggle="modal" data-target="#myModal"><span class="add-icon"></span> Add/Remove Client Programs</a>
-                                <a tabindex="57" href="javascript:{}" onclick="return ProfileSave();" id="ProfileSave" class="btn btn-success">
+                                <a style="display:none" class="btn btn-success " href="javascript:{}" id="btnaddprogram" data-toggle="modal" data-target="#myModal"><span class="add-icon"></span> Add/Remove Client Programs</a>
+                                <a href="javascript:{}" onclick="DisplayForm(@Model.PatientID,'Profile-tab')" class="btn btn-success btnDisplayProgram ">
+                                    <i class="far fa-edit"></i>
+                                    Display
+                                </a>
+                                <a tabindex="57" href="javascript:{}"    style = "border: 1px solid rgb(161, 161, 161); background-color: rgb(161, 161, 161);" onclick="return ProfileSave();" id="ProfileSave" class="btn btn-success btnprogramsave disabled">
                                     <i class="far fa-save"></i>
                                     Save
                                 </a>
 
                                 @*<a href="/Patient/Add" id="btnProfileEdit" class="btn btn-success">
-                                        <i class="far fa-edit"></i>
-                                        Edit
-                                    </a>*@
+            <i class="far fa-edit"></i>
+            Edit
+        </a>*@
                                 @*<a href="#!" id="btnProfileCancel" class="btn btn-info" style="display: none;">
-                                        <i class="far fa-edit"></i>
-                                        Cancel
-                                    </a>
-                                    <a href="#!" id="btnProfileSave" class="btn btn-success" style="display: none;">
-                                        <i class="far fa-save"></i>
-                                        Save
-                                    </a>*@
+            <i class="far fa-edit"></i>
+            Cancel
+        </a>
+        <a href="#!" id="btnProfileSave" class="btn btn-success" style="display: none;">
+            <i class="far fa-save"></i>
+            Save
+        </a>*@
                             </div>
 
 

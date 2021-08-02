@@ -215,7 +215,7 @@
             <ul class="nav nav-tabs showHide" id="myTab" role="tablist">
 
                 <li class="nav-item">
-                    <a class="nav-link active" id="Profile-tab" data-toggle="tab" data-FormName="Profile" href="#Profile" role="tab"
+                    <a class="nav-link" id="Profile-tab" data-toggle="tab" data-FormName="Profile" href="#Profile" role="tab"
                        aria-controls="Profile" aria-selected="true">Profile</a>
                 </li>
 
@@ -298,14 +298,14 @@
                                                 }
                                                 <h2 style="padding-top:10px">@item.FormName</h2>
                                                 <div class="detail-button ml-auto">
+                                                    <a href="javascript:{}" onclick="DisplayForm(@ViewBag.PatientID,'@item.FormName'+'Tab','@FormName',@item.ClientFormID)"
+                                                       class="btn btn-success  btnDisplayProgram">
+                                                        <i class="far fa-edit"></i>
+                                                        Display
+                                                    </a>
                                                     <a href="javascript:{}" onclick="return saveClientFormBasicInfo('@item.TemplateID','@item.TemplateTable',@item.ClientFormID,@item.patientID);" data-save="@(item.Saved ? "True" : "False")" class="btn btn-success ml-auto btnprogramsave">
                                                         <i class="far fa-save"></i>
                                                         Save
-                                                    </a>
-                                                    <a href="javascript:{}" onclick="ActivateTab(@item.patientID,@item.FormName+'Tab','@FormName')"
-                                                       class="btn btn-success label-fields btnProgramEdit">
-                                                        <i class="far fa-edit"></i>
-                                                        Edit
                                                     </a>
                                                     <a href="javascript:{}" onclick="PrintProgram('@FormName')"
                                                        class="btn btn-success label-fields btnprogramPrint">
@@ -369,6 +369,10 @@
             })
 
         });
+        
+        if (_PatientId == 0) {
+            $('.btnDisplayProgram').hide();
+        }
         $("#Profile-tab").click(function () {
             $("#myChildTab").css("display", "none");
         })
@@ -1067,9 +1071,14 @@
         $(document).ready(function () {
             var currenttab = '@ViewBag.CurrentTab';
             var currentSubtab = '@ViewBag.CurrentSubtab'
-
+         
             if (currenttab != 'Profile-tab' && currenttab != 'ProgramTab') {
                 RebindClientFormEvent();
+            }
+            
+            if ((currenttab == 'Profile-tab' || currenttab == '') && '@ViewBag.ClientFormID' == '0') {
+                $('#Profile').addClass('show active')
+                $('#Profile-tab').addClass('show active')
             }
 
             $('#programtbs').click(function () {
@@ -1105,7 +1114,7 @@
                             }
                         }
                     }
-                    $(".btnProgramEdit").css('display', 'none')
+                   $(".btnProgramEdit").css('display', 'none')
 
                 },
                   error: function () {
@@ -4684,7 +4693,7 @@
         ///    Client Form Functionality here.
 
         function RebindClientFormEvent(item) {
-            
+
             if (isprofilesave == true) {
                 //$(".nav-item a").on('click', function (e) {
                 $(".tab-pane").each(function (index, item) {
@@ -4700,12 +4709,17 @@
                 var ClientFormID = item.attr("data-ClientFormID")
                 if (ClientFormID == undefined) {
 
-                    if (@ViewBag.ClientFormID!=0) {
+                    if ('@ViewBag.ClientFormID' != 0) {
                         ClientFormID =@ViewBag.ClientFormID;
                         getParentForm(ClientFormID);
                     }
+                    setTimeout(function () {
+                        LoadChildMenu(ClientFormID);
+                    }, 1000)
                 }
-                LoadChildMenu(ClientFormID);
+                else {
+                    LoadChildMenu(ClientFormID);
+                }
                 formName = item.attr("data-FormName");
 
                 var id = item.attr("id");
@@ -4738,11 +4752,11 @@
                 //})
             }
             isprofilesave = true;
-           
+
         }
 
         function getParentForm(ClientFormID) {
-            
+
             $.ajax({
                 type: "GET",
                 url: '/Client/getParentForm?ClientFormId=' + ClientFormID + '&PatientId=' + _PatientId,
@@ -4753,14 +4767,14 @@
                 },
                 async: true,
                 success: function (result) {
-                   
-                  
+                    
+
                     var parentTabWChild = ''
                     var parentTabWoChild = ''
                     var data = JSON.parse(result.data)
                     var myChildTab = $("#myChildTab");
                     if (data.length == 0) {
-                        
+
                     } else {
                         if (data.length > 1) {
                             myChildTab.find("li").remove();
@@ -4777,7 +4791,7 @@
                             if (item.ParentFormID == 0) {
                                 parentTabWoChild = item.FormName.replace(/ /g, '');
                             }
-                           
+
                             $('#' + formName + 'only').addClass('active show');
 
                             if (item.ParentFormID != 0 || item.ParentFormID != null) {
@@ -4785,7 +4799,7 @@
                                 if (item.ParentFormID == 0 || item.ParentFormID == null) {
                                     $("#myTab .nav-link").each(function (index, item) {
                                         $(item).removeClass("active show");
-                                        
+
                                     })
                                    // $("#a" + formnames).addClass('active show')
                                 }
@@ -4813,8 +4827,8 @@
                                     }
                                 }
                             }
-                           
-                            
+
+
                         });
                         if (data.length == 1 && data[0].ParentFormID == null) {
                             $("#myChildTab").css("display", "none");
@@ -4840,13 +4854,13 @@
                             }
                         });
                     }
-                    
+
                     if (parentTabWChild != '') {
                         $('#a' + parentTabWChild).addClass('active show');
                     }
                     else { $('#a' + parentTabWoChild).addClass('active show'); }
-                  
-                 
+
+
                 },
                 error: function (e) {
                     toastr.error("Something happen Wrong");
@@ -5858,6 +5872,7 @@
                 $('#Programs .tab-pane').each(function (index, item) {
                     $(item).removeClass("active show");
                 });
+                
 
 
                 $(".render-basicProgramform").each(function (index, item) {
@@ -5871,7 +5886,9 @@
                 $('#' + _programName + 'only').addClass('active show');
                 var _templateID = item.attr("data-TemplateID");
                 $('.btnprogramPrint').addClass('d-none')
-
+                if ('@ViewBag.PatientID' == 0) {
+                    $('.btnDisplayProgram').hide();
+                }
 
                 if (_IsSaved == 'False') {
                     LoadProgramTemplate(_programId)
@@ -6811,7 +6828,7 @@
         }
 
         function LoadChildMenu(ClientFormId) {
-            
+
             $.ajax({
                 type: "GET",
                 url: '/Client/GetClientFormChildMenu?ClientFormId=' + ClientFormId + '&PatientId=' + _PatientId,
@@ -6824,7 +6841,7 @@
                 success: function (result) {
                     
                     var activeChildForm='';
-
+                    
                     var data = JSON.parse(result.data)
                     var myChildTab = $("#myChildTab");
                     if (data.length == 1 && (data[0].ParentFormID == null || data[0].ParentFormID == 0)) {
@@ -6860,8 +6877,13 @@
                                 activeChildForm = item.FormName.replace(/ /g, '');
                             }
                         });
+                        
                     }
-                   
+                    
+                    if (myChildTab.find("li").length == 0) {
+                        $('#' + formName + 'only').removeClass('client-form-margin-top');
+                    }
+
                 },
                 error: function (e) {
                     toastr.error("Something happen Wrong");
@@ -6870,6 +6892,30 @@
             });
         }
 
+
+        function DisplayForm(PatientId, Tab, Subtab, ClientFormID) {
+
+                window.location.href = '/Client/Info?PatientID=' + PatientId + '&CurrentTab=' + Tab + '&SubTab=' + Subtab + '&ClientFormID=' + ClientFormID;
+
+            }
+            $("#Profile-tab").click(function () {
+                $("#myChildTab").css("display", "none");
+            })
+            $("#programtbs").click(function () {
+                $("#myChildTab").css("display", "none");
+            })
+
+
+
+        $('#Profile').find('input').on('input change', function () {
+
+            $('#Profile').find('#ProfileSave').removeClass('disabled').css({ 'border': '1px solid rgb(34, 186, 160)', 'background-color':'rgb(34, 186, 160)'})
+        })
+
+
+        $('#Profile').find('select').on('change', function () {
+            $('#Profile').find('#ProfileSave').removeClass('disabled').css({ 'border': '1px solid rgb(34, 186, 160)', 'background-color': 'rgb(34, 186, 160)' })
+        })
 
     </script>
 
