@@ -114,6 +114,13 @@
         div#menu-toggle.open {
             right: 310px;
         }
+    .btnDisplayProgram, .btnprogramsave {
+        display: none !important
+    }
+    .btnProgramEdit {
+        display: block !important
+    }
+   
 </style>
 <!-- Content start here -->
 <section id="content" class="responsive-container">
@@ -239,6 +246,10 @@
 
 
     <script>
+       var ViewBagClientFormId = '@ViewBag.ClientFormID'
+        var _PatientId = '@ViewBag.PatientID'
+         var currenttab = '@ViewBag.CurrentTab';
+         var currentSubtab = '@ViewBag.CurrentSubtab'
         // Hamburger menu js
     $('#myTab a').each(function () {
         $(this).click(function () {
@@ -278,7 +289,7 @@
         })
 
         $(document).ready(function () {
-            
+
             $(".loaderOverlay").css("display","flex");
             var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]'
 
@@ -378,9 +389,8 @@
                 }
                 else {
                     $("#divQuitDate").hide();
-                }
+               }
             })
-
 
 
 
@@ -436,7 +446,7 @@
                     $("#divIfNoAddress").hide();
                 }
             })
-           
+
             $('.nav-menu').click(function () {
                 if ($(".sidebar-menu").hasClass("sidebar-res")) {
                     $('.sidebar-menu').removeClass('sidebar-res');
@@ -477,7 +487,7 @@
         var toppatient = "";
 
         function bindTopPatient(id) {
-            
+
 
             if (id == "" || id == undefined || id=='0') {
                 toppatient = $('#topPatientId').val();
@@ -489,7 +499,7 @@
             $("#Profile-tab").addClass("active");
             $('div[id^=div_]').css('display', 'block');
             $('#div_' + toppatient).css('display', 'none');
-            
+
             $.ajax({
 
                 type: "Post",
@@ -499,7 +509,7 @@
                 dataType: "html",
                 contentType: "application/json; charset=utf-8",
                 success: function (result) {
-                    
+
                     var a = result;
                     $('#myTabContent').html(result);
                     $('#btnaddprogram').css('display', 'block');
@@ -509,7 +519,7 @@
                     toastr.error("Some error occurred!! or data not found");
                 },
                 complete: function () {
-                    
+
                     var a = 0;
                     GetPatientPrograms(toppatient);
 
@@ -574,7 +584,7 @@
         $("#programtbs").click(function () {
             $("#myChildTab").css("display", "none");
         })
-        
+
     </script>
 
 
