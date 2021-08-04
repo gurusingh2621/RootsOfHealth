@@ -369,7 +369,7 @@
             })
 
         });
-        
+
         if (_PatientId == 0) {
             $('.btnDisplayProgram').hide();
         }
@@ -1071,11 +1071,11 @@
         $(document).ready(function () {
             var currenttab = '@ViewBag.CurrentTab';
             var currentSubtab = '@ViewBag.CurrentSubtab'
-         
+
             if (currenttab != 'Profile-tab' && currenttab != 'ProgramTab') {
                 RebindClientFormEvent();
             }
-            
+
             if ((currenttab == 'Profile-tab' || currenttab == '') && '@ViewBag.ClientFormID' == '0') {
                 $('#Profile').addClass('show active')
                 $('#Profile-tab').addClass('show active')
@@ -1091,7 +1091,7 @@
                 dataType: "html",
                 contentType: "application/json; charset=utf-8",
                 success: function (result) {
-
+                    
                     $('#Programs')[0].outerHTML = result;
 
                     $('#Programs').addClass('active show')
@@ -1106,8 +1106,8 @@
                             $("#tabPills .nav-item a").get(0).click();
                         }
                         else {
-                            if ($("#a" + currentSubtab).length > 0) {
-                                $("#a" + currentSubtab).click();
+                            if ($("#tabPills .nav-item   #a" + currentSubtab).length > 0) {
+                                $("#tabPills .nav-item  #a" + currentSubtab).click();
                             }
                             else {
                                 $("#tabPills .nav-item a").get(0).click();

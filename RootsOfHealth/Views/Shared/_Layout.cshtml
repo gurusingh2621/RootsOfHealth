@@ -631,16 +631,20 @@
             }
 
         });
+        var SearchRequest=null
         function SearchPatient() {
 
             var keyword = $("#searchPatient").val();
-            $.ajax({
+            if (SearchRequest != null) {
+                SearchRequest.abort()
+            }
+            SearchRequest=  $.ajax({
                 type: "GET",
                 url: Apipath + '/api/PatientMain/SearchPatient?keyword=' + keyword +'&clinicid='+'@Session["ClinicID"]',
                 contentType: 'application/json; charset=UTF-8',
                 dataType: "json",
                 success: function (result) {
-
+                    
                     if (result.length) {
                         $("#patientList").html('');
                         var tbl = '';
@@ -677,7 +681,7 @@
                 },
                 error: function () {
 
-                    toastr.error("Error while checking record");
+                 //   toastr.error("Error while checking record");
                 }
             });
         }
