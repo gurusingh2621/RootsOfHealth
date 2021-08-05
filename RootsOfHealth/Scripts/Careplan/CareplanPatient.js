@@ -117,7 +117,13 @@ function getCarePlanList() {
             if (intervalStatus != "") {
                 clearInterval(intervalStatus);
             }
-            $("span.careplanCount").html("").append(result.length);
+            
+            if (result.length > 0) {
+                $("span.careplanCount").html("").append('('+result.length+')');
+            } else {
+                $("span.careplanCount").html("")
+            }
+            $("span.careplanCount").attr('data-count', result.length)
             if (result.length) {
                 var careplanList = "";
                 for (var i = 0; i < result.length; i++) {
@@ -457,7 +463,16 @@ function saveCareplan() {
                     $("#ddlcareplanstatus,.care_plan_name_field").removeAttr("disabled");
                     $("#ddlcareplanstatus").removeClass("show_careplanstatus").val("-1");
                     $("a.need-nav,a.summary-nav").parent().addClass("disabled");
+                    $('.requestItem').removeClass('d-none');
                     $(".loaderOverlay").hide();
+                    
+                    var value = $('.careplanCount').attr('data-count');
+                    if (value != '') {
+                        value = parseInt(value)
+                        value++;
+                    }
+                    $('span.careplanCount').attr('data-count', value);
+                    $('span.careplanCount').html("").append('(' + value + ')');
                     break;
             }                  
         },
@@ -767,7 +782,8 @@ function editCarePlan(Id) {
             $(".care_plan_name_field").val(result.CarePlanName);
             isupdateProgramFields = false;
             $("#ddlcareplanstatus,.care_plan_name_field").removeAttr("disabled");
-            if (IsUserCarePlanApprover == 'False') {
+            
+            if (IsUserCarePlanApprover == 'False' || userId == result.CreatedBy) {
                 $('.requestItem').removeClass('d-none');
             }
             switch (result.Status) {
@@ -998,8 +1014,14 @@ function closecarePlan() {
             basetemplateid = "0";
              intervalStatus = "";             
             isupdateProgramFields = false;
-            $("#carePlanName").val("");           
-            $("span.careplanCount").html("").append(result.length);
+            $("#carePlanName").val("");     
+            
+            if (result.length > 0) {
+                $("span.careplanCount").html("").append('('+result.length+')');
+            } else {
+                $("span.careplanCount").html("")
+            }
+            $("span.careplanCount").attr('data-count', result.length)
             if (result.length) {
                 var careplanList = "";
                 for (var i = 0; i < result.length; i++) {
@@ -2171,6 +2193,7 @@ function setCarePlanStatus(obj) {
     if (model.Status == "4") {
         checkCarePlanStatus();
         if (isCarePlanNeedCompleted) {
+            var prevStatusValue = prevSelectedCarePlan;
             $.confirm({
                 icon: 'fas fa-exclamation-triangle',
                 title: 'Confirm',
@@ -2188,6 +2211,7 @@ function setCarePlanStatus(obj) {
                                 data: JSON.stringify(model),
                                 dataType: "json",
                                 success: function (res) {
+                                    
                                     if (res.status == 1) {
                                         prevSelectedCarePlan = model.Status;
                                         toastr.success("Changes saved successfully");
@@ -2212,13 +2236,14 @@ function setCarePlanStatus(obj) {
                                             toastr.error("Status cant be changed to Completed");
                                         }
 
-                                        $("#ddlcareplanstatus").val(prevSelectedCarePlan);
+                                        $("#ddlcareplanstatus").val(prevStatusValue);
                                     }
-
+                                    prevSelectedCarePlan = prevStatusValue;
                                 },
                                 error: function (e) {
                                     toastr.error("Unidentified error");
                                     $(".loaderOverlay").hide();
+                                    prevSelectedCarePlan = prevStatusValue;
                                 }
                             });
                         }
@@ -2314,6 +2339,17 @@ function setCarePlanStatus(obj) {
                                         break;
                                     default:
                                         $(obj).closest("tr").remove();
+                                        var value = $('.careplanCount').attr('data-count');
+                                        if (value != '') {
+                                            value = parseInt(value)
+                                            value--;
+                                        }
+                                        $('span.careplanCount').attr('data-count', value);
+                                        $('span.careplanCount').html("")
+                                        if (value> 0) {
+                                            $('span.careplanCount').append('(' + value + ')');
+                                        }
+                                       
                                         toastr.success("Changes saved successfully");
                                         break;
                                 }
