@@ -409,7 +409,7 @@ function EditHtml(type, ID) {
                 var option_data = "<div class='inputContent'><div class='checkbox-html'>";
                 $(".option-block").each(function (index) {
                     option_data += `<div class="custom-control custom-checkbox  d-inline-block mr-2">
-                     <input  type="checkbox" class="custom-control-input" id="${ID + index}"  name="${ID}"  value="${$(this).find("input.option-value").val().trim()}">
+                     <input  type="checkbox" class="custom-control-input" id="${ID + index}"  name="${ID}"  value="${$(this).find("input.option-text").val().trim()}">
                      <label class="custom-control-label" for="${ID + index}">${$(this).find("input.option-text").val().trim()}</label></div>
                      `;
                 });
@@ -1072,7 +1072,7 @@ function EditHtml(type, ID) {
                 var option_data = "<div class='inputContent'><div class='radio-html'>";
                 $(".option-block").each(function (index) {
                     option_data += `<div class="custom-control custom-radio d-inline-block mr-2">
-    <input  type="radio" class="custom-control-input" id="${ID + index}"  name="${ID}"  value="${$(this).find("input.option-value").val()}">
+    <input  type="radio" class="custom-control-input" id="${ID + index}"  name="${ID}"  value="${$(this).find("input.option-text").val()}">
     <label class="custom-control-label" for="${ID + index}">${$(this).find("input.option-text").val()}</label></div>
     `;
                 });
@@ -1306,7 +1306,7 @@ function EditHtml(type, ID) {
                 $(controlId).parent().prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span><span class="desc"></span>`);
                 $(controlId).html("");
                 $(".option-block").each(function (index) {
-                    var option_data = "<option value=" + $(this).find("input.option-value").val() + ">" + $(this).find("input.option-text").val() + "</option>";
+                    var option_data = "<option value=" + $(this).find("input.option-text").val() + ">" + $(this).find("input.option-text").val() + "</option>";
                     $(option_data).appendTo('#' + ID);
                 });
                 if ($("#required-input").prop("checked")) {
@@ -2205,42 +2205,67 @@ function saveTemplate(isactive) {
         }
     }).done(function (result) {
         var _result = JSON.parse(result.id);
+         
         if (_result.TemplateID != 0) {
+            var title = ''
+            var controlId = ''
+            var type=''
             var models = [];
             models.push({ ColDataType: "int", ColumnName: "PatientID" });
             $("#droppable [type=text]").each(function (index, item) {
                 if ($(item).hasClass("database-field") || $(item).hasClass("base-control") || $(item).hasClass("basecontrol-id")) return;
-                models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column") });
+                title = $(item).parents('.frmbtn').find('.title');
+                type = $(item).attr('type')
+                controlId = $(item).attr('id')
+                models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column"), Title: getTitle(title), type: type, ControlId: controlId });
             });
             $("#droppable [type=number],[type=file],[type=date]").each(function (index, item) {
                 if ($(item).hasClass("base-control")) return;
-                models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column") });
+                title = $(item).parents('.frmbtn').find('.title');
+                type = $(item).attr('type')
+                controlId = $(item).attr('id')
+                models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column"), Title: getTitle(title), type: type, ControlId: controlId  });
             });
             $("#droppable select").each(function (index, item) {
                 if ($(item).hasClass("base-control")) return;
-                models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column") });
+                title = $(item).parents('.frmbtn').find('.title');
+                type = $(item).attr('type')
+                controlId = $(item).attr('id')
+                models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column"), Title: getTitle(title), type: type, ControlId: controlId  });
             });
             $("#droppable [type=radio]").each(function (index, item) {
                 var radioitem = $(item).attr("data-column");
                 if (typeof radioitem !== typeof undefined && radioitem !== false) {
                     if ($(item).closest(".form-group").hasClass("base-control")) return;
-                    models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column") });
+                    title = $(item).parents('.frmbtn').find('.title');
+                    type = $(item).attr('type')
+                    controlId = $(item).attr('id')
+                    models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column"), Title: getTitle(title), type: type, ControlId: controlId  });
                 }
             });
             $("#droppable [type=checkbox]").each(function (index, item) {
                 var checkitem = $(item).attr("data-column");
                 if (typeof checkitem !== typeof undefined && checkitem !== false) {
                     if ($(item).closest(".form-group").hasClass("base-control")) return;
-                    models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column") });
+                    title = $(item).parents('.frmbtn').find('.title');
+                    type = $(item).attr('type')
+                    controlId = $(item).attr('id')
+                    models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column"), Title: getTitle(title), type: type, ControlId: controlId  });
                 }
             });
             $("#droppable textarea").each(function (index, item) {
                 if ($(item).hasClass("base-control")) return;
-                models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column") });
+                title = $(item).parents('.frmbtn').find('.title');
+                type = $(item).attr('type')
+                controlId = $(item).attr('id')
+                models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column"), Title: getTitle(title), type: type, ControlId: controlId  });
             });
             $("#droppable .priority").each(function (index, item) {
                 if ($(item).hasClass("base-control")) return;
-                models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column") });
+                title = $(item).parents('.frmbtn').find('.title');
+                type = $(item).attr('type')
+                controlId = $(item).attr('id')
+                models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column"), Title: getTitle(title), type: type, ControlId: controlId });
             });
             var UniqueItems = models.reduce(function (item, e1) {
                 var matches = item.filter(function (e2) { return e1.ColumnName == e2.ColumnName });

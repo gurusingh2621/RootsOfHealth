@@ -302,6 +302,7 @@
     <Content Include="Scripts\Careplan\CareplanPatient.js" />
     <Content Include="Scripts\Careplan\CareplanRequests.js" />
     <Content Include="Scripts\Careplan\databasecontrol.js" />
+    <Content Include="Scripts\Careplan\dynamicDatabaseControl.js" />
     <Content Include="Scripts\Careplan\htmlcontrol.js" />
     <Content Include="Scripts\Careplan\NeedAndGoal.js" />
     <Content Include="Scripts\Careplan\CarePlanSummary.js" />
