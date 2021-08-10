@@ -1589,14 +1589,27 @@ function getDatabaseFieldValues() {
                 var formName = ''
                 var key = ''
                 var controlId=''
-                var datatype=''
+                var datatype = ''
+                var priorityList=''
+
                 $(".render-basicform  label.database-field").each(function (index, item) {
                     key = $(item).attr("id").substring(0, $(this).attr("id").lastIndexOf("_"));
                     
                     formName = $(item).attr("data-index");
                     keyValue = result.filter(c => c.FormName == formName && c.Field == key)[0].FieldValue;
                     datatype = $(item).attr("data-columnType");
-                    if (datatype != 'file') {
+                    
+                    if (datatype == 'Priority') {
+                        priorityList = `<ul>`;
+                        var listValues = keyValue.split(',');
+                        for (let i = 0; i < listValues.length; i++) {
+                            priorityList += `<li>${listValues[i]}</li>`
+
+                        }
+                        priorityList += `</ul>`
+                        $(item).html("").append(priorityList);
+                    }
+                    else if (datatype != 'file' || datatype==undefined) {
 
                         if (formName == 'PatientMain') {
                             switch (key) {
@@ -1621,11 +1634,11 @@ function getDatabaseFieldValues() {
 
                         }
                         $(item).html("").append(keyValue);
-                    } else {
-                         controlId = $(item).attr("data-controlId"); 
+                    } else if (datatype == 'file') {
+                        controlId = $(item).attr("data-controlId");
                         getClientFormCareplanFiles(controlId, $(item))
                     }
-
+                    
 
                 });
 

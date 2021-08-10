@@ -1512,7 +1512,7 @@ function EditHtml(type, ID) {
                 $(controlId).parent().prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span><span class="desc"></span>`);
                 $(controlId).html("");
                 $(".option-block").each(function (index) {
-                    var option_data = "<li style='margin-bottom:5px' value=" + $(this).find("input.option-value").val() + ">" + $(this).find("input.option-text").val() + "</li>";
+                    var option_data = "<li style='margin-bottom:5px' value=" + $(this).find("input.option-text").val() + ">" + $(this).find("input.option-text").val() + "</li>";
                     $(option_data).appendTo('#' + ID);
                 });
                 
@@ -2104,7 +2104,7 @@ function saveHtml() {
             });
             $("#droppable .priority").each(function (index, item) {
                 title = $(item).parents('.frmbtn').find('.title');
-                type = $(item).attr('type')
+                type = 'Priority'
                 controlId = $(item).attr('id')
                 models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column"), Title: getTitle(title), type: type, ControlId: controlId });
             });

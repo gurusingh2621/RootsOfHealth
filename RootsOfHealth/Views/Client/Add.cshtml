@@ -5178,8 +5178,9 @@
 
                             }
                             if ($(item).hasClass("priority")) {
+                                
                                 value = fields[$(item).attr("data-column")];
-                                var splitvalues = value!=""&&undefined?value.split(','):"";
+                                var splitvalues = (value != "" && value!=undefined)?value.split(','):"";
 
                                 var result = '';
 
@@ -5272,7 +5273,7 @@
                             }
 
                             if ($(item).hasClass("priority")) {
-
+                               
                                 value = baseFields[$(item).attr("data-column")];
                                 var splitvalues = value.split(',');
 
@@ -5593,13 +5594,15 @@
                 }
             });
             _programelement.find(".priority").each(function (index, item) {
-
+               
                 if ($(item).hasAttr("data-column") && $(item).hasClass("program-control")) {
                     var id = $(item).attr("id")
+                    
                     var strvalue = ''
-                    $.each($('#' + id).find('li'), function () {
-                        strvalue += $(this).val() + ','
+                    $.each($('#' + id + ' li'), function () {
+                        strvalue += $(this).attr('value') + ','
                     });
+                    
                     strvalue = strvalue.substr(0, strvalue.length - 1)
                     fieldmodel.push({ ColumnName: $(item).attr("data-column"), FieldValue: strvalue });
                 }
@@ -5728,7 +5731,7 @@
                     var id = $(item).attr("id")
                     var strvalue = ''
                     $.each($('#' + id).find('li'), function () {
-                        strvalue += $(this).val() + ','
+                        strvalue += $(this).attr('value') + ','
                     });
                     strvalue = strvalue.substr(0, strvalue.length - 1)
                     fieldmodel.push({ ColumnName: $(item).attr("data-column"), FieldValue: strvalue });
@@ -6224,6 +6227,7 @@
 
                             }
                             if ($(item).hasClass("priority")) {
+                               
                                 value = fields[$(item).attr("data-column")];
                                 var splitvalues = value.split(',');
 
@@ -6318,7 +6322,7 @@
                             }
 
                             if ($(item).hasClass("priority")) {
-
+                               
                                 value = baseFields[$(item).attr("data-column")];
                                 var splitvalues = value.split(',');
 
