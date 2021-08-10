@@ -631,6 +631,15 @@
             }
 
         });
+
+        function getTitle(title) {
+           
+            if (title.length > 0) {
+                return title.text();
+            } else {
+                return ''
+            }
+        }
         var SearchRequest=null
         function SearchPatient() {
 

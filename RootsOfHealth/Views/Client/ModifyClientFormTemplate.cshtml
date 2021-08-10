@@ -179,7 +179,7 @@
     <script src="~/Scripts/jquery-ui.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.js"></script>
     <script src="~/Scripts/ClientForms/htmlcontrol.js"></script>
-    <script src="~/Scripts/ClientForms/databasecontrol.js"></script>
+    <script src="~/Scripts/Careplan/dynamicDatabaseControl.js"></script>
     <script>
         var templateId =@ViewBag.TemplateId;
         var isModify = '@ViewBag.IsModify';
@@ -192,19 +192,19 @@
 
         var TemplatePath = '@ViewBag.TemplatePath'
         var parentFormID = "";
-        
+
         var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]'
         $(document).ready(function () {
-            
+
             $.ajax({
 
                 type: "Get",
                 url: '/Client/GetPatientClientForms?ClientFormID=' + ClientFormID,
                 contentType: 'application/json; charset=UTF-8',
-                dataType: "json",  
-                
+                dataType: "json",
+
                 success: function (result) {
-                    
+
                     if (result == null) {
                         $("#SelectParent").append($("<option></option>").val("0").html("None"));
                     }
@@ -213,7 +213,7 @@
                         $("#SelectParent").append($("<option></option>").val("0").html("Please select Parent").prop("disabled", true));
                         $("#SelectParent").val("0");
                         $.each(data, function (key, value) {
-                            
+
                             if (value.ClientFormID != ClientFormID) {
                                 $("#SelectParent").append($("<option></option>").val(value.ClientFormID).html(value.FormName));
                             }
@@ -223,15 +223,15 @@
                         })
                         $("#SelectParent").append($("<option></option>").val("").html("None"));
                     }
-                    
+
                 },
                 error: function () {
                     toastr.error("Some error occurred!! or data not found");
                 },
-                
+
             });
         });
-       
+
 
     </script>
 
