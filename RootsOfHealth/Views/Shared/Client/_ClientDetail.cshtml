@@ -7,83 +7,82 @@
 }
 
 
-    
 
-    <ul class="nav nav-tabs" style="display:none;" id="myChildTab" role="tablist">
-        
-    </ul>
 
-    @if (Model.ClientForm != null)
+<ul class="nav nav-tabs" style="display:none;" id="myChildTab" role="tablist">
+</ul>
+
+@if (Model.ClientForm != null)
+{
+
+    foreach (var item in Model.ClientForm)
     {
-
-        foreach (var item in Model.ClientForm)
-        {
-            var FormName = item.FormName.Replace(" ", "");
-            <div class="tab-pane fade" id="@(FormName + "only")" role="tabpanel" aria-labelledby="@("a"+FormName)">
-                <div class="inner-content">
-                    <div class="paitent-detail">
-                        <div class="row">
-                            <div id="pat_out_div" class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                <div class="paitent-detail-left">
-                                    <div class="detail-heading d-flex">
-                                        @foreach (var items in Model.ClientForm.Where(p=>p.ClientFormID==item.ParentFormID))
-                                        {
+        var FormName = item.FormName.Replace(" ", "");
+        <div class="tab-pane fade" id="@(FormName + "only")" role="tabpanel" aria-labelledby="@("a"+FormName)">
+            <div class="inner-content">
+                <div class="paitent-detail">
+                    <div class="row">
+                        <div id="pat_out_div" class="col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="paitent-detail-left">
+                                <div class="detail-heading d-flex">
+                                    @foreach (var items in Model.ClientForm.Where(p => p.ClientFormID == item.ParentFormID))
+                                    {
                                         string FormNames = @items.FormName.Replace(" ", "");
-                                            <a id="@("a" + FormNames)" class="nav-link" data-toggle="tab"
-                                               href="@("#" + FormNames + "only")" data-ClientFormID="@items.ClientFormID" data-PatientID="@items.patientID" onclick="loadClient(this)" data-TemplateID="@items.TemplateID" data-FormName=@(FormNames)>@items.FormName >> <span class="check @Html.Raw(items.Saved ? "" : "d-none")"></span></a>
+                                        <a id="@("a" + FormNames)" class="nav-link" data-toggle="tab"
+                                           href="@("#" + FormNames + "only")" data-ClientFormID="@items.ClientFormID" data-PatientID="@items.patientID" onclick="loadClient(this)" data-TemplateID="@items.TemplateID" data-FormName=@(FormNames)>@items.FormName >> <span class="check @Html.Raw(items.Saved ? "" : "d-none")"></span></a>
+                                    }
+                                    <h2 style="padding-top:10px">@item.FormName</h2>
+                                    <div class="detail-button ml-auto">
+
+                                        <a href="javascript:{}" onclick="return saveProgramBasicInfo('@item.TemplateID','@item.TemplateTable',@item.ClientFormID,@item.patientID);" data-save="@(item.Saved ? "True" : "False")" class="btn btn-success ml-auto btnprogramsave">
+                                            <i class="far fa-save"></i>
+                                            Save
+                                        </a>
+                                        <a href="javascript:{}" onclick="ActivateTab(@ViewBag.PatientID,'','@FormName',@item.ClientFormID)"
+                                           class="btn btn-success label-fields btnProgramEdit">
+                                            <i class="far fa-edit"></i>
+                                            Edit
+                                        </a>
+                                        <a href="javascript:{}" onclick="PrintProgram('@FormName')"
+                                           class="btn btn-success label-fields btnprogramPrint">
+                                            <i class="far fa-save"></i>
+                                            Print
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="SidebarScroll scroll inner-main-content">
+                                    <style>
+                                        ul.file_uploaded_list li img {
+                                            max-width: 90px;
+                                            margin-right: 10px;
                                         }
-                                        <h2 style="padding-top:10px">@item.FormName</h2>
-                                        <div class="detail-button ml-auto">
-
-                                            <a href="javascript:{}" onclick="return saveProgramBasicInfo('@item.TemplateID','@item.TemplateTable',@item.ClientFormID,@item.patientID);" data-save="@(item.Saved ? "True" : "False")" class="btn btn-success ml-auto btnprogramsave">
-                                                <i class="far fa-save"></i>
-                                                Save
-                                            </a>
-                                            <a href="javascript:{}" onclick="ActivateTab(@ViewBag.PatientID,'','@FormName',@item.ClientFormID)"
-                                               class="btn btn-success label-fields btnProgramEdit">
-                                                <i class="far fa-edit"></i>
-                                                Edit
-                                            </a>
-                                            <a href="javascript:{}" onclick="PrintProgram('@FormName')"
-                                               class="btn btn-success label-fields btnprogramPrint">
-                                                <i class="far fa-save"></i>
-                                                Print
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div class="SidebarScroll scroll inner-main-content">
-                                        <style>
-                                            ul.file_uploaded_list li img {
-                                                max-width: 90px;
-                                                margin-right: 10px;
-                                            }
-                                        </style>
-                                        <div id="@(FormName + "render-basicform")" class="render-basicProgramform" style="padding-bottom:100px"></div>
-                                    </div>
+                                    </style>
+                                    <div id="@(FormName + "render-basicform")" class="render-basicProgramform" style="padding-bottom:100px"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        }
-
+        </div>
     }
 
-
-    <!-- Programs Tab start here  -->
-
-    @{
-        Html.RenderPartial("~/Views/Shared/Patient/_PatientPrograms.cshtml", Model.Programs);
-    }
-
-    <!-- Programs Tab end here  -->
+}
 
 
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
-    @*<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>*@
-    @*<script src="~/Scripts/jquery-ui.min.js"></script>*@
+<!-- Programs Tab start here  -->
+
+@{
+    Html.RenderPartial("~/Views/Shared/Patient/_PatientPrograms.cshtml", Model.Programs);
+}
+
+<!-- Programs Tab end here  -->
+
+
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
+@*<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>*@
+@*<script src="~/Scripts/jquery-ui.min.js"></script>*@
 <script>
    var  programUploadedPath="@System.Web.Configuration.WebConfigurationManager.AppSettings["ProgramUploadPath"]";
     var _userID = "@Session["userid"]";
@@ -649,20 +648,20 @@
 
       $(document).ready(function () {
           //notification changes start here--------------------
-          
+
           if (ViewBagClientFormId != "0" && currenttab != '' && currenttab != 'Profile-tab' && currenttab != 'ProgramTab') {
               loadClient()
           }
           RebindProgramsEvents()
-          
+
 
           if (ViewBagClientFormId == "0" && (currenttab == '' || currenttab == 'Profile-tab') && currenttab != 'ProgramTab') {
-              
+
               $('#Profile').addClass('show active');
           }
           console.log('1 hide controls');
           $('#Programs-tab').click(function () {
-             
+
             if ($("#tabPills .nav-item").length > 0) {
 
                 var FirstTab = $("#tabPills .nav-item a").get(0);
@@ -671,7 +670,7 @@
           }
         })
            if (currenttab == 'ProgramTab') {
-             
+
                 if (@Model.Programs.Count> 0) {
                     LoadPrograms();
                 }
@@ -690,7 +689,7 @@
                     dataType: "html",
                     contentType: "application/json; charset=utf-8",
                     success: function (result) {
-                        
+
                         $('#Programs')[0].outerHTML = result;
                         $('#myTabContent .tab-pane').each(function () {
                             $(this).removeClass('active show')
@@ -716,7 +715,7 @@
                                 }
                             }
                         }
-                        
+
 
                     },
                     error: function () {
@@ -2406,7 +2405,7 @@
             $(".Child").removeClass('active show');
             $("#" + id).addClass('active show');
         }
-       
+
         if (formName != undefined) {
             var _IsSaved = $('#' + formName + 'only').find('.btnprogramsave').attr('data-save');
             $('#' + formName + 'only').find('.Child').removeClass('active show ');
@@ -2887,12 +2886,13 @@
                                             $(item).closest("div.inputContent").find("div").first().hide();
 
                                         } else {
-                                            var valueArr = value.split(',');
+                                            var valueArr = value.split(SeperationString);
                                             var valueTxt = "";
 
                                             for (var i = 0; i < valueArr.length; i++) {
-                                                valueTxt += $(item).closest("div.inputContent").find(`input[value=${valueArr[i]}]`).next().text() + ", ";
+                                                valueTxt += $(item).closest("div.inputContent").find(`input[value="${valueArr[i]}"]`).next().text() + ", ";
                                             }
+                                            debugger
                                             valueTxt = valueTxt.slice(0, -2);
                                             $(item).closest("div.inputContent").find("label.label-program").html("").append(valueTxt).show();
                                             $(item).closest("div.inputContent").find("div").first().hide();
@@ -2931,7 +2931,7 @@
                         }
                         if ($(item).hasClass("priority")) {
                             value = fields[$(item).attr("data-column")];
-                            var splitvalues = value.split(',');
+                            var splitvalues = value.split(SeperationString);
 
                             var result = '';
 
@@ -2991,11 +2991,12 @@
                                             $(item).closest("div.inputContent").find("label.label-base").html("").show();
                                                 $(item).closest("div.inputContent").find("div").first().hide();
                                         } else {
-                                            var valueArr = value.split(',');
+                                            var valueArr = value.split(SeperationString);
                                             var valueTxt = "";
                                              for (var i = 0; i < valueArr.length; i++) {
-                                                    valueTxt += $(item).closest("div.inputContent").find(`input[value=${valueArr[i]}]`).next().text() + ", ";
-                                                }
+                                                    valueTxt += $(item).closest("div.inputContent").find(`input[value="${valueArr[i]}"]`).next().text() + ", ";
+                                            }
+                                            debugger
                                                 valueTxt = valueTxt.slice(0, -2);
                                                 $(item).closest("div.inputContent").find("label.label-base").html("").append(valueTxt).show();
                                                 $(item).closest("div.inputContent").find("div").first().hide();
@@ -3034,7 +3035,7 @@
                     }
                     if ($(item).hasClass("priority")) {
                         value = baseFields[$(item).attr("data-column")];
-                        var splitvalues = value.split(',');
+                        var splitvalues = value.split(SeperationString);
 
                         var result = '';
 
@@ -3273,10 +3274,10 @@
     // Program code start here ......
 
     function RebindProgramsEvents() {
-        
-       
+
+
         $("#tabPills .nav-item a").on('click', function (e) {
-            
+
             $('#Programs .tab-pane').each(function (index, item) {
                 $(item).removeClass("active show");
             });

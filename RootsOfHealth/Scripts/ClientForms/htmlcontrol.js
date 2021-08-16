@@ -239,6 +239,7 @@ function EditHtml(type, ID) {
             });
             break;
         case "checkbox-group":
+            var isScored = $(controlId).find(".isScoreable");
             var isrequired = $(controlId).find(".required-asterisk");
             var tooltiptext = $(controlId).find("label").first().find("span.tooltipicon").attr("title");
             tooltiptext = tooltiptext === undefined ? "" : tooltiptext == '' ? $(controlId).find("label").first().find("span.tooltipicon").attr("data-original-title") : tooltiptext;
@@ -265,6 +266,17 @@ function EditHtml(type, ID) {
                 popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" >'
             }
             popupString += `<label class="custom-control-label" for="required-input">Required</label></div>`;
+
+            popupString += `<div class="modal-row custom-control custom-checkbox">`;
+            if (isScored.length) {
+                popupString += '<input type="checkbox" onclick="CheckScoreable(this)" class="custom-control-input"  id="score-input" name="checkbox" checked>';
+            } else {
+                popupString += '<input type="checkbox" onclick="CheckScoreable(this)" class="custom-control-input"  id="score-input" name="checkbox" >'
+            }
+            popupString += `<label class="custom-control-label" for="score-input">Score</label></div>`;
+
+
+
             popupString += `<div class="modal-row"><label>Label position: </label><div class="custom-control custom-radio d-inline-block mr-2">
     <input type="radio" class="custom-control-input labeltop" id="label-top" name="radio-position" value="top" ${ $(controlId).hasClass("f-g-left") ? "" : "checked"}>
     <label class="custom-control-label" for="label-top">top</label></div>
@@ -273,7 +285,7 @@ function EditHtml(type, ID) {
     <label class="custom-control-label" for="label-left">left</label></div>
     </div>`;
             popupString += '<div class="modal-row">' +
-                '<label class="required-asterisk">Label Text</label>' +
+                '<label class="required-asterisk isScoreable">Label Text</label>' +
                 '<input  type="text"  class="form-control lbltext"  value="' + labelText + '"/>' +
                 '</div>';
 
@@ -318,13 +330,14 @@ function EditHtml(type, ID) {
     <label class="custom-control-label" for="radio-vertical">Vertical</label></div>
     </div>`;
             popupString += '<div class="modal-row">' +
-                '<label>Options<span class="addoptions" onclick="addoption(this)"><i class="fas fa-plus"></i></span></label>';
-            popupString += '<div class="optionHeading"><label>Text</label><label>Value</label></div>';
+                '<label>Options<span class="addoptions" onclick="addScoreableoption(this)"><i class="fas fa-plus"></i></span></label>';
+            popupString += `<div class="optionHeading"><label>Text</label><label>Value</label><label class="ScoreHeading ${isScored.length > 0 ? '' : 'd - none'}">Score</label></div>`;
             $(controlId).find("input[type=checkbox]").each(function (index, item) {
                 popupString += '<div class="option-block">' +
                     '<div class="option-fields">' +
                     `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${($(item).next().text() == "option 1" || $(item).next().text() == "option 2") && $(controlId).find("input.custom-control-input").first().attr("data-column") === undefined ? "" : $(item).next().text()}"/>` +
                     ' <input type="text" placeholder="Value" class="form-control option-value" disabled  value="' + $(item).attr("value") + '"/>' +
+                    ` <input type="text" placeholder="Score" class="form-control option-score ${isScored.length > 0 ? '' : 'd-none'}"  value="${$(item).attr("data-score") == undefined ? '0' : $(item).attr("data-score")}"/>` +
                     '</div>' +
                     '<div class="popup-event-btn">' +
                     `<button  class="event-btn file-remove" onclick="RemoveOption(this)" ${index == 0 ? "disabled" : ""}><i class="fa fa-minus-circle" aria-hidden="true"></i></button >` +
@@ -346,7 +359,7 @@ function EditHtml(type, ID) {
                 }
                 var breakout = false;
                 $('.option-block').each(function () {
-                    if ($(this).find("input.option-text").val().trim() == '' || $(this).find("input.option-value").val().trim() == '') {
+                    if ($(this).find("input.option-text").val().trim() == '' || $(this).find("input.option-value").val().trim() == '' ||  ($(this).find("input.option-score").val().trim() == '' && $("#score-input").prop("checked"))) {
                         breakout = true;
                         return false;
                     }
@@ -409,7 +422,7 @@ function EditHtml(type, ID) {
                 var option_data = "<div class='inputContent'><div class='checkbox-html'>";
                 $(".option-block").each(function (index) {
                     option_data += `<div class="custom-control custom-checkbox  d-inline-block mr-2">
-                     <input  type="checkbox" class="custom-control-input" id="${ID + index}"  name="${ID}"  value="${$(this).find("input.option-text").val().trim()}">
+                     <input  type="checkbox"  data-score="${$(this).find("input.option-score").val()}" class="custom-control-input" id="${ID + index}"  name="${ID}"  value="${$(this).find("input.option-text").val().trim()}">
                      <label class="custom-control-label" for="${ID + index}">${$(this).find("input.option-text").val().trim()}</label></div>
                      `;
                 });
@@ -427,6 +440,12 @@ function EditHtml(type, ID) {
                     $(controlId).find('label:first-child').addClass("required-asterisk");
                 } else {
                     $(controlId).find('label:first-child').removeClass("required-asterisk");
+                }
+
+                if ($("#score-input").prop("checked")) {
+                    $(controlId).find('label:first-child').addClass("isScoreable");
+                } else {
+                    $(controlId).find('label:first-child').removeClass("isScoreable");
                 }
                 if ($("#help-input").prop("checked")) {
                     $(controlId).find(".checkbox-group").find("span.title").append('<span data-toggle="tooltip"  data-placement="top"  title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
@@ -906,6 +925,7 @@ function EditHtml(type, ID) {
             break;
         case "radio-group":
             var isrequired = $(controlId).find(".required-asterisk");
+            var isScored = $(controlId).find(".isScoreable");
             var tooltiptext = $(controlId).find("label").first().find("span.tooltipicon").attr("title");
             tooltiptext = tooltiptext === undefined ? "" : tooltiptext == '' ? $(controlId).find("label").first().find("span.tooltipicon").attr("data-original-title") : tooltiptext;
             if (tooltiptext.indexOf("_blank") != -1) {
@@ -931,6 +951,17 @@ function EditHtml(type, ID) {
                 popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" >'
             }
             popupString += `<label class="custom-control-label" for="required-input">Required</label></div>`;
+
+            popupString += `<div class="modal-row custom-control custom-checkbox">`;
+            if (isScored.length) {
+                popupString += '<input type="checkbox" onclick="CheckScoreable(this)" class="custom-control-input"  id="score-input" name="checkbox" checked>';
+            } else {
+                popupString += '<input type="checkbox" onclick="CheckScoreable(this)" class="custom-control-input"  id="score-input" name="checkbox" >'
+            }
+            popupString += `<label class="custom-control-label" for="score-input">Score</label></div>`;
+
+
+
             popupString += `<div class="modal-row"><label>Label position: </label><div class="custom-control custom-radio d-inline-block mr-2">
                            <input type="radio" class="custom-control-input labeltop" id="label-top" name="radio-position" value="top" ${ $(controlId).hasClass("f-g-left") ? "" : "checked"}>
                            <label class="custom-control-label" for="label-top">top</label></div>
@@ -939,7 +970,7 @@ function EditHtml(type, ID) {
                            <label class="custom-control-label" for="label-left">left</label></div>
                            </div>`;
             popupString += '<div class="modal-row">' +
-                '<label class="required-asterisk">Label Text</label>' +
+                '<label class="required-asterisk isScoreable">Label Text</label>' +
                 '<input  type="text"  class="form-control lbltext" value="' + labelText + '"/>' +
                 '</div>';
             if (tooltiptext != '') {
@@ -982,13 +1013,14 @@ function EditHtml(type, ID) {
                             <label class="custom-control-label" for="radio-vertical">Vertical</label></div>
                             </div>`;
             popupString += '<div class="modal-row">' +
-                '<label>Options<span class="addoptions" onclick="addoption(this)"><i class="fas fa-plus"></i></span></label>';
-            popupString += '<div class="optionHeading"><label>Text</label><label>Value</label></div>';
+                '<label>Options<span class="addoptions" onclick="addScoreableoption(this)"><i class="fas fa-plus"></i></span></label>';
+            popupString += `<div class="optionHeading"><label>Text</label><label>Value</label><label class="ScoreHeading ${isScored.length > 0 ? '' : 'd-none'}">Score</label></div>`;
             $(controlId).find("input[type=radio]").each(function (index, item) {
                 popupString += '<div class="option-block">' +
                     '<div class="option-fields">' +
                     `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${($(item).next().text() == "option 1" || $(item).next().text() == "option 2") && $(controlId).find("input.custom-control-input").first().attr("data-column") === undefined ? "" : $(item).next().text()}"/>` +
                     ' <input type="text" placeholder="Value" class="form-control option-value" disabled value="' + $(item).attr("value") + '"/>' +
+                    ` <input type="text" placeholder="Score" class="form-control option-score ${isScored.length > 0 ? '' : 'd-none'}"  value="${$(item).attr("data-score") == undefined ? '0' : $(item).attr("data-score")}"/>` +
                     '</div>' +
                     '<div class="popup-event-btn">' +
                     `<button class="event-btn file-remove" onclick="RemoveOption(this)" ${index == 0 ? "disabled" : ""}><i class="fa fa-minus-circle" aria-hidden="true"></i></button >` +
@@ -1010,7 +1042,7 @@ function EditHtml(type, ID) {
                 }
                 var breakout = false;
                 $('.option-block').each(function () {
-                    if ($(this).find("input.option-text").val().trim() == '' || $(this).find("input.option-value").val().trim() == '') {
+                    if ($(this).find("input.option-text").val().trim() == '' || $(this).find("input.option-value").val().trim() == '' || ($(this).find("input.option-score").val().trim() == '' && $("#score-input").prop("checked"))) {
                         breakout = true;
                         return false;
                     }
@@ -1072,9 +1104,9 @@ function EditHtml(type, ID) {
                 var option_data = "<div class='inputContent'><div class='radio-html'>";
                 $(".option-block").each(function (index) {
                     option_data += `<div class="custom-control custom-radio d-inline-block mr-2">
-    <input  type="radio" class="custom-control-input" id="${ID + index}"  name="${ID}"  value="${$(this).find("input.option-text").val()}">
-    <label class="custom-control-label" for="${ID + index}">${$(this).find("input.option-text").val()}</label></div>
-    `;
+                    <input  type="radio" class="custom-control-input" id="${ID + index}"  name="${ID}" data-score="${$(this).find("input.option-score").val()}"  value="${$(this).find("input.option-text").val()}">
+                    <label class="custom-control-label" for="${ID + index}">${$(this).find("input.option-text").val()}</label></div>
+                      `;
                 });
                 option_data += "</div><label class='label-program'></label></div>";
                 $(controlId).find("div").html("");
@@ -1093,6 +1125,12 @@ function EditHtml(type, ID) {
                 } else {
                     $(controlId).find('label:first-child').removeClass("required-asterisk");
                 }
+                if ($("#score-input").prop("checked")) {
+                    $(controlId).find('label:first-child').addClass("isScoreable");
+                } else {
+                    $(controlId).find('label:first-child').removeClass("isScoreable");
+                }
+                
                 if ($("#help-input").prop("checked")) {
                     $(controlId).find("label").first().find("span.title").append('<span tabindex="0" data-toggle="tooltip"  data-placement="top"  title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
                     toogleToolTip();
@@ -1119,6 +1157,7 @@ function EditHtml(type, ID) {
             });
             break;
         case "select":
+            var isScored = $(controlId).find(".isScoreable");
             var isrequired = $(controlId).parent().prev().hasClass("required-asterisk");
             var tooltiptext = $(controlId).parent().prev().find("span.tooltipicon").attr("data-original-title");
             tooltiptext = tooltiptext === undefined ? "" : tooltiptext;
@@ -1145,6 +1184,18 @@ function EditHtml(type, ID) {
                 popupString += '<input type="checkbox" class="custom-control-input"  id="required-input" name="checkbox" >'
             }
             popupString += `<label class="custom-control-label" for="required-input">Required</label></div>`;
+
+            popupString += `<label class="custom-control-label" for="required-input">Required</label></div>`;
+
+            popupString += `<div class="modal-row custom-control custom-checkbox">`;
+            if (isScored.length) {
+                popupString += '<input type="checkbox" onclick="CheckScoreable(this)" class="custom-control-input"  id="score-input" name="checkbox" checked>';
+            } else {
+                popupString += '<input type="checkbox" onclick="CheckScoreable(this)" class="custom-control-input"  id="score-input" name="checkbox" >'
+            }
+            popupString += `<label class="custom-control-label" for="score-input">Score</label></div>`;
+
+
             popupString += `<div class="modal-row"><label>Label position: </label><div class="custom-control custom-radio d-inline-block mr-2">
     <input type="radio" class="custom-control-input labeltop" id="label-top" name="radio-position" value="top" ${ $(controlId).closest(".form-group").hasClass("f-g-left") ? "" : "checked"}>
     <label class="custom-control-label" for="label-top">top</label></div>
@@ -1153,7 +1204,7 @@ function EditHtml(type, ID) {
     <label class="custom-control-label" for="label-left">left</label></div>
     </div>`;
             popupString += '<div class="modal-row">' +
-                '<label class="required-asterisk">Label Text</label>' +
+                '<label class="required-asterisk isScoreable">Label Text</label>' +
                 '<input  type="text"  class="form-control lbltext" value="' + labelText + '"/>' +
                 '</div>';
             if (tooltiptext != '') {
@@ -1202,14 +1253,15 @@ function EditHtml(type, ID) {
                 '</select></div></div>';
 
             popupString += '<div class="modal-row">' +
-                '<label>Options<span class="addoptions" onclick="addoption(this)"><i class="fas fa-plus"></i></span></label>';
-            popupString += '<div class="optionHeading"><label>Text</label><label>Value</label></div>';
+                '<label>Options<span class="addoptions" onclick="addScoreableoption(this)"><i class="fas fa-plus"></i></span></label>';
+            popupString += `<div class="optionHeading"><label>Text</label><label>Value</label><label class="ScoreHeading ${isScored.length > 0 ? '' : 'd-none'}">Score</label></div>`;
             $(controlId).find('option').each(function (index, item) {
                 if ($(item).val() == 0) {
                     popupString += '<div class="option-block  d-none">' +
                         '<div class="option-fields">' +
                         `<input type="text"  class="form-control option-text"  value="Select.." disabled/>` +
                         ' <input type="text" placeholder="Value" class="form-control option-value" disabled  value="0"/>' +
+                        ` <input type="text" placeholder="Score" class="form-control option-score ${isScored.length > 0 ? '' : 'd-none'}"   value="0"/>` +
                         '</div>' +
                         '</div>'
                 }
@@ -1218,6 +1270,7 @@ function EditHtml(type, ID) {
                         '<div class="option-fields">' +
                         `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${($(item).text() == "option 2" || $(item).text() == "option 3") && $(controlId).attr("data-column") === undefined ? "" : $(item).text()}"/>` +
                         ' <input type="text" placeholder="Value" class="form-control option-value" disabled  value="' + $(item).val() + '"/>' +
+                        ` <input type="text" placeholder="Score" class="form-control option-score ${isScored.length > 0 ? '' : 'd-none'}"  value="${$(item).attr("data-score") == undefined ? '0' : $(item).attr("data-score")}"/>` +
                         '</div>' +
                         '<div class="popup-event-btn">' +
                         `<button class="event-btn file-remove" onclick="RemoveOption(this,'true')" ${index == 0 ? "disabled" : ""}><i class="fa fa-minus-circle" aria-hidden="true"></i></button >` +
@@ -1244,7 +1297,7 @@ function EditHtml(type, ID) {
                     if ($(this).find("input.option-value").val().trim() == '0' && $(this).find("input.option-text").val().trim() == 'Select..') {
 
                     } else {
-                        if ($(this).find("input.option-text").val().trim() == '' || $(this).find("input.option-value").val().trim() == '') {
+                        if ($(this).find("input.option-text").val().trim() == '' || $(this).find("input.option-value").val().trim() == '' ||  ($(this).find("input.option-score").val().trim() == '' && $("#score-input").prop("checked"))) {
                             breakout = true;
                             return false;
                         }
@@ -1306,7 +1359,9 @@ function EditHtml(type, ID) {
                 $(controlId).parent().prev().html("").append(`<span class="title">${$(".lbltext").val().trim()}</span><span class="desc"></span>`);
                 $(controlId).html("");
                 $(".option-block").each(function (index) {
-                    var option_data = "<option value=" + $(this).find("input.option-text").val() + ">" + $(this).find("input.option-text").val() + "</option>";
+            
+                    var option_data = `<option  data-score="${$(this).find("input.option-score").val()}" value="${$(this).find("input.option-text").val()}">${$(this).find("input.option-text").val()}</option>`    ;
+
                     $(option_data).appendTo('#' + ID);
                 });
                 if ($("#required-input").prop("checked")) {
@@ -1314,6 +1369,13 @@ function EditHtml(type, ID) {
                 } else {
                     $(controlId).parent().prev().removeClass("required-asterisk");
                 }
+
+                if ($("#score-input").prop("checked")) {
+                    $(controlId).parent().prev().addClass("isScoreable");
+                } else {
+                    $(controlId).parent().prev().removeClass("isScoreable");
+                }
+
                 if ($("#help-input").prop("checked")) {
                     $(controlId).parent().prev().find("span.title").append('<span  data-toggle="tooltip"  data-placement="top"   title="' + convertToUrl() + '" class="tooltipicon"><i class="far fa-question-circle"></i></span>');
                     toogleToolTip();
@@ -1877,6 +1939,23 @@ function EditHtml(type, ID) {
     $("#exampleModalCenter").modal("show");
 
 }
+function CheckScoreable(obj) {
+    
+    if ($(obj).is(":checked")) {
+        $(obj).parents('.edithtml-dialog').find('.ScoreHeading').removeClass('d-none')
+        $(obj).parents('.edithtml-dialog').find('.option-score').each(function (index, item) {
+            $(item).removeClass('d-none');
+
+        })
+    }
+    else {
+        $(obj).parents('.edithtml-dialog').find('.ScoreHeading').addClass('d-none')
+        $(obj).parents('.edithtml-dialog').find('.option-score').each(function (index, item) {
+            $(item).addClass('d-none');
+
+        })
+    }
+}
 //RemoveOption=>use to remove option of select,radio,checkbox inside popup
 function RemoveOption(obj, isdropdown) {
     let len = $(obj).parent().parent().parent().find("div.option-block").length;
@@ -1920,6 +1999,21 @@ function addoption(obj) {
         '<div class="option-fields">' +
         ' <input type="text" placeholder="Option Text" class="form-control option-text"/>' +
         ' <input type="text" placeholder="Value" class="form-control option-value" disabled value="' + optionvalue + '"/>' +
+        '</div>' +
+        '<div class="popup-event-btn">' +
+        '<button class="event-btn file-remove" onclick="RemoveOption(this)"> <i class="fa fa-minus-circle" aria-hidden="true"></i></button > ' +
+        '</div></div>';
+    $(obj).parent().siblings().last().after(parseHTML(popupString));
+    $(obj).parent().siblings().last().find("input.option-text").focus();
+}
+function addScoreableoption(obj) {
+    var optionvalue = parseInt($(obj).parent().siblings(".option-block").length) + 1;
+    var isScorable=$('#score-input').is(':checked');
+    var popupString = '<div class="option-block">' +
+        '<div class="option-fields">' +
+        ' <input type="text" placeholder="Option Text" class="form-control option-text"/>' +
+        ' <input type="text" placeholder="Value" class="form-control option-value" disabled value="' + optionvalue + '"/>' +
+        ` <input type="text" placeholder="Score" class="form-control option-score ${isScorable?'':'d-none'}"   value="0"/>` +
         '</div>' +
         '<div class="popup-event-btn">' +
         '<button class="event-btn file-remove" onclick="RemoveOption(this)"> <i class="fa fa-minus-circle" aria-hidden="true"></i></button > ' +
@@ -2159,6 +2253,7 @@ function CheckAndSaveTemplate(isactive) {
 
 
 }
+var scoreModel = []
 function saveTemplate(isactive) {
     var gethtml = $("#droppable").html();
     var isBtemplate = isBaseTemplate == 'true'
@@ -2211,12 +2306,15 @@ function saveTemplate(isactive) {
             var controlId = ''
             var type=''
             var models = [];
+            scoreModel=[]
+            var IsScorebale;
             models.push({ ColDataType: "int", ColumnName: "PatientID" });
             $("#droppable [type=text]").each(function (index, item) {
+                IsScorebale = false;
                 if ($(item).hasClass("database-field") || $(item).hasClass("base-control") || $(item).hasClass("basecontrol-id")) return;
                 title = $(item).parents('.frmbtn').find('.title');
                 type = $(item).attr('type')
-                controlId = $(item).attr('id')
+                controlId = $(item).attr('id');
                 models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column"), Title: getTitle(title), type: type, ControlId: controlId });
             });
             $("#droppable [type=number],[type=file],[type=date]").each(function (index, item) {
@@ -2229,9 +2327,13 @@ function saveTemplate(isactive) {
             $("#droppable select").each(function (index, item) {
                 if ($(item).hasClass("base-control")) return;
                 title = $(item).parents('.frmbtn').find('.title');
-                type = $(item).attr('type')
+                type = 'select'
                 controlId = $(item).attr('id')
-                models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column"), Title: getTitle(title), type: type, ControlId: controlId  });
+                IsScorebale = IsScoreable(item);
+                if (IsScorebale) {
+                    GetScoreObject(item, true)
+                }
+                models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column"), Title: getTitle(title), type: type, ControlId: controlId, IsScoreable: IsScorebale  });
             });
             $("#droppable [type=radio]").each(function (index, item) {
                 var radioitem = $(item).attr("data-column");
@@ -2240,7 +2342,11 @@ function saveTemplate(isactive) {
                     title = $(item).parents('.frmbtn').find('.title');
                     type = $(item).attr('type')
                     controlId = $(item).attr('id')
-                    models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column"), Title: getTitle(title), type: type, ControlId: controlId  });
+                    IsScorebale = IsScoreable(item);
+                    if (IsScorebale) {
+                        GetScoreObject($(item).parents('.frmbtn'), false, $(item).attr("data-column"))
+                    }
+                    models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column"), Title: getTitle(title), type: type, ControlId: controlId, IsScoreable: IsScorebale });
                 }
             });
             $("#droppable [type=checkbox]").each(function (index, item) {
@@ -2250,7 +2356,11 @@ function saveTemplate(isactive) {
                     title = $(item).parents('.frmbtn').find('.title');
                     type = $(item).attr('type')
                     controlId = $(item).attr('id')
-                    models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column"), Title: getTitle(title), type: type, ControlId: controlId  });
+                    IsScorebale = IsScoreable(item);
+                    if (IsScorebale) {
+                        GetScoreObject($(item).parents('.frmbtn'),false, $(item).attr("data-column"))
+                    }
+                    models.push({ ColDataType: "nvarchar(max)", ColumnName: $(item).attr("data-column"), Title: getTitle(title), type: type, ControlId: controlId, IsScoreable: IsScorebale});
                 }
             });
             $("#droppable textarea").each(function (index, item) {
@@ -2274,10 +2384,12 @@ function saveTemplate(isactive) {
                 }
                 return item;
             }, []);
-
+           
             var model = {
                 TableName: _result.TemplateTable,
-                ColumnData: UniqueItems
+                ColumnData: UniqueItems,
+                ColumnScore: scoreModel
+
             }
             $.ajax({
                 type: "POST",
@@ -2303,6 +2415,45 @@ function saveTemplate(isactive) {
         }
     });
 }
+
+
+function IsScoreable(element) {
+    debugger;
+    var result = $(element).parents('.frmbtn').find('.isScoreable');
+    return result.length > 0;
+}
+
+function GetScoreObject(item,isSelect=false,columnName='') {
+    
+    if (isSelect) {
+        $(item).find('option').each(function () {
+            var value = $(this).attr('value')
+            if (value != 'Select..') {
+                let res = {
+                    Value: value ,
+                    Score: $(this).attr('data-score'),
+                    DatabaseField: $(item).attr('data-column')
+                }
+                scoreModel.push(res);
+            }
+            
+           
+        })
+    } else {
+        $(item).find('input').each(function () {
+            let res = {
+                Value: $(this).attr('value'),
+                Score: $(this).attr('data-score'),
+                DatabaseField: columnName
+            }
+            scoreModel.push(res);
+        })
+    }
+    
+   
+}
+
+
 //GetFormHtmlById=>use to get template by template name
 function GetFormHtmlById(Id) {
     $(".loaderOverlay").css("display", "flex");

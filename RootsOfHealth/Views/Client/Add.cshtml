@@ -7,206 +7,206 @@
 
 
 <style>
-        .showHide {
-            display: none;
-        }
+    .showHide {
+        display: none;
+    }
 
 
 
-        .inner-main-content {
-            height: calc(100vh - 240px);
-        }
+    .inner-main-content {
+        height: calc(100vh - 240px);
+    }
 
-        .paitent-detail-left {
-            height: calc(100vh - 160px);
-            overflow: hidden;
-        }
-        /*.row {
+    .paitent-detail-left {
+        height: calc(100vh - 160px);
+        overflow: hidden;
+    }
+    /*.row {
             margin-right: 0px;
         }*/
 
-        .divAnyVaccinations button.multiselect {
-            background-color: transparent;
-            color: #999;
-            background: url(../images/chevron-arrow-down.svg) no-repeat;
-            background-position: 95% 13px;
-            background-size: 12px;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
+    .divAnyVaccinations button.multiselect {
+        background-color: transparent;
+        color: #999;
+        background: url(../images/chevron-arrow-down.svg) no-repeat;
+        background-position: 95% 13px;
+        background-size: 12px;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        line-height: normal;
+        /* color: #818181; */
+        width: 100% !important;
+        padding: 5px 20px 5px 10px;
+        border-radius: 0;
+        border: 1px solid #e2e2e2;
+        border-radius: 0;
+        font-size: 14px;
+        height: 42px;
+        text-align: left;
+    }
+
+    .render-basicProgramform .priority > li {
+        cursor: move
+    }
+
+    .divAnyVaccinations ul.multiselect-container.dropdown-menu.show {
+        padding: 8px 2px;
+        width: 100%;
+    }
+
+        .divAnyVaccinations ul.multiselect-container.dropdown-menu.show li a {
+            /* padding: 0px 8px; */
+            font-style: normal;
+            font-weight: normal;
+            font-size: 12px;
             line-height: normal;
-            /* color: #818181; */
-            width: 100% !important;
-            padding: 5px 20px 5px 10px;
-            border-radius: 0;
-            border: 1px solid #e2e2e2;
-            border-radius: 0;
-            font-size: 14px;
-            height: 42px;
-            text-align: left;
+            color: #5d5d5d;
+            height: 23px;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            padding: .25rem .5rem;
         }
 
-        .render-basicProgramform .priority > li {
-            cursor: move
-        }
+    .divAnyVaccinations ul.multiselect-container li label {
+        margin-bottom: 0px;
+    }
 
-        .divAnyVaccinations ul.multiselect-container.dropdown-menu.show {
-            padding: 8px 2px;
-            width: 100%;
-        }
-
-            .divAnyVaccinations ul.multiselect-container.dropdown-menu.show li a {
-                /* padding: 0px 8px; */
-                font-style: normal;
-                font-weight: normal;
-                font-size: 12px;
-                line-height: normal;
-                color: #5d5d5d;
-                height: 23px;
-                display: -webkit-box;
-                display: -ms-flexbox;
-                display: flex;
-                -webkit-box-align: center;
-                -ms-flex-align: center;
-                align-items: center;
-                padding: .25rem .5rem;
-            }
-
-        .divAnyVaccinations ul.multiselect-container li label {
-            margin-bottom: 0px;
-        }
-
-            .divAnyVaccinations ul.multiselect-container li label input[type="checkbox"] {
-                position: absolute;
-                left: 10px;
-                width: 18px;
-                height: 18px;
-                opacity: 0;
-            }
-
-            .divAnyVaccinations ul.multiselect-container li label input[type="checkbox"] {
-                position: absolute;
-                left: 10px;
-                width: 18px;
-                height: 18px;
-                opacity: 0;
-            }
-
-        .divAnyVaccinations .dropdown-menu li.active span:before {
-            content: "";
-            background: url(../images/checkbox.svg) no-repeat center #22baa0;
-            display: inline-block;
+        .divAnyVaccinations ul.multiselect-container li label input[type="checkbox"] {
+            position: absolute;
+            left: 10px;
             width: 18px;
             height: 18px;
-            vertical-align: middle;
-            border-radius: 3px;
-            text-align: center;
-            float: left;
-            padding: 4px 7px;
+            opacity: 0;
+        }
+
+        .divAnyVaccinations ul.multiselect-container li label input[type="checkbox"] {
             position: absolute;
-            left: 0;
-            top: 0;
-            background-size: 15px;
+            left: 10px;
+            width: 18px;
+            height: 18px;
+            opacity: 0;
         }
 
-        .divAnyVaccinations a {
-            text-decoration: none;
-        }
+    .divAnyVaccinations .dropdown-menu li.active span:before {
+        content: "";
+        background: url(../images/checkbox.svg) no-repeat center #22baa0;
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        vertical-align: middle;
+        border-radius: 3px;
+        text-align: center;
+        float: left;
+        padding: 4px 7px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        background-size: 15px;
+    }
 
-        .list-height {
-            height: calc(100vh - 300px);
-        }
+    .divAnyVaccinations a {
+        text-decoration: none;
+    }
+
+    .list-height {
+        height: calc(100vh - 300px);
+    }
 
 
-        /* New css
+    /* New css
     -------------------------------------------------*/
-        #content .profile-tabs .tabs-scroll {
-            position: fixed;
-            top: 60px;
-            right: 0;
-            width: 310px;
-            z-index: 9990;
+    #content .profile-tabs .tabs-scroll {
+        position: fixed;
+        top: 60px;
+        right: 0;
+        width: 310px;
+        z-index: 9990;
+        flex-direction: column;
+        display: block;
+        height: calc(100vh - 60px);
+        left: auto;
+        margin: 0;
+        background: #34425a;
+        overflow: auto;
+        transform: translateX(100%);
+        -webkit-transform: translateX(100%);
+        transition: all ease 0.4s;
+    }
+
+    .tabs-scroll > ul#myTab > li > a .notCountR, a .notCountO, a .notCountG, a .notCountR {
+        top: 7px;
+        right: 35px;
+    }
+
+    #content {
+        padding-top: 0px !important;
+    }
+
+        #content .inner-content {
+            margin-top: 0px !important;
+        }
+
+        #content.showHidecontent .profile-tabs .tabs-scroll {
+            transform: translateX(0%);
+            -webkit-transform: translateX(0%);
+        }
+
+        #content .profile-tabs .tabs-scroll > .nav-tabs {
+            display: flex;
             flex-direction: column;
-            display: block;
-            height: calc(100vh - 60px);
-            left: auto;
+            width: 100%;
             margin: 0;
-            background: #34425a;
-            overflow: auto;
-            transform: translateX(100%);
-            -webkit-transform: translateX(100%);
-            transition: all ease 0.4s;
+            position: static;
+            height: auto;
+            padding: 0;
+            background: transparent;
+            border: 0px;
+            overflow: hidden;
         }
 
-        .tabs-scroll > ul#myTab > li > a .notCountR, a .notCountO, a .notCountG, a .notCountR {
-            top: 7px;
-            right: 35px;
+        #content .profile-tabs .tabs-scroll > ul#myTab > li {
+            margin: 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
-        #content {
-            padding-top: 0px !important;
-        }
-
-            #content .inner-content {
-                margin-top: 0px !important;
-            }
-
-            #content.showHidecontent .profile-tabs .tabs-scroll {
-                transform: translateX(0%);
-                -webkit-transform: translateX(0%);
-            }
-
-            #content .profile-tabs .tabs-scroll > .nav-tabs {
-                display: flex;
-                flex-direction: column;
+            #content .profile-tabs .tabs-scroll > ul#myTab > li > a {
+                margin: 0;
                 width: 100%;
-                margin: 0;
-                position: static;
-                height: auto;
-                padding: 0;
-                background: transparent;
-                border: 0px;
-                overflow: hidden;
             }
 
-            #content .profile-tabs .tabs-scroll > ul#myTab > li {
-                margin: 0;
-                border-bottom: 1px solid rgba(255,255,255,0.1);
-            }
-
-                #content .profile-tabs .tabs-scroll > ul#myTab > li > a {
-                    margin: 0;
-                    width: 100%;
+                #content .profile-tabs .tabs-scroll > ul#myTab > li > a:after {
+                    content: none;
                 }
 
-                    #content .profile-tabs .tabs-scroll > ul#myTab > li > a:after {
-                        content: none;
-                    }
+    .tabs-scroll > ul#myTab > li > a .check {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        z-index: 9;
+    }
 
-        .tabs-scroll > ul#myTab > li > a .check {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            z-index: 9;
-        }
+    .inner-main-content {
+        height: calc(100vh - 180px);
+    }
 
-        .inner-main-content {
-            height: calc(100vh - 180px);
-        }
+    .paitent-detail-left {
+        height: calc(100vh - 100px);
+    }
 
-        .paitent-detail-left {
-            height: calc(100vh - 100px);
-        }
+    #menu-toggle {
+        right: 0;
+        top: 20px;
+        transition: all ease 0.4s;
+    }
 
-        #menu-toggle {
-            right: 0;
-            top: 20px;
-            transition: all ease 0.4s;
-        }
-
-        div#menu-toggle.open {
-            right: 310px;
-        }
+    div#menu-toggle.open {
+        right: 310px;
+    }
 </style>
 <!-- Content start here -->
 <section id="content" class="responsive-container ">
@@ -224,7 +224,7 @@
                 {
                     foreach (var item in Model.ClientForm.Where(p => p.ParentFormID == null || p.ParentFormID == 0))
                     {
-                        if (ViewBag.PatientID == "0" || ViewBag.PatientID ==null)
+                        if (ViewBag.PatientID == "0" || ViewBag.PatientID == null)
                         {
                             var FormName = @item.FormName.Replace(" ", "");
                             <li class="nav-item">
@@ -235,10 +235,10 @@
                         }
                         else
                         {
-                                var FormName = @item.FormName.Replace(" ", "");
-                                <li class="nav-item">
+                            var FormName = @item.FormName.Replace(" ", "");
+                            <li class="nav-item">
                                 <a id="@("a" + FormName)" class="nav-link ProfileNotSaved isProfileSaved" data-toggle="tab"
-                                 href="@("#" + FormName + "only")" data-ClientFormID="@item.ClientFormID" onclick="RebindClientFormEvent(this)" data-PatientID="@item.patientID" data-TemplateID="@item.TemplateID" data-FormName=@(FormName)>@item.FormName<span class="check @Html.Raw(item.Saved ? "" : "d-none")"><i class="fas fa-check-circle"></i></span></a>
+                                   href="@("#" + FormName + "only")" data-ClientFormID="@item.ClientFormID" onclick="RebindClientFormEvent(this)" data-PatientID="@item.patientID" data-TemplateID="@item.TemplateID" data-FormName=@(FormName)>@item.FormName<span class="check @Html.Raw(item.Saved ? "" : "d-none")"><i class="fas fa-check-circle"></i></span></a>
 
                             </li>
                         }
@@ -1091,7 +1091,7 @@
                 dataType: "html",
                 contentType: "application/json; charset=utf-8",
                 success: function (result) {
-                    
+
                     $('#Programs')[0].outerHTML = result;
 
                     $('#Programs').addClass('active show')
@@ -4767,7 +4767,7 @@
                 },
                 async: true,
                 success: function (result) {
-                    
+
 
                     var parentTabWChild = ''
                     var parentTabWoChild = ''
@@ -5148,11 +5148,12 @@
                                             if (value == null || value == "") {
 
                                             } else {
-                                                var valueArr = value.split(',');
+                                                
+                                                var valueArr = value.split(SeperationString);
                                                 var valueTxt = "";
 
                                                 for (var i = 0; i < valueArr.length; i++) {
-                                                    $(item).closest("div.inputContent").find(`input[value=${valueArr[i]}]`).prop("checked", true);
+                                                    $(item).closest("div.inputContent").find(`input[value="${valueArr[i]}"]`).prop("checked", true);
                                                 }
 
                                             }
@@ -5180,7 +5181,7 @@
                             if ($(item).hasClass("priority")) {
                                 
                                 value = fields[$(item).attr("data-column")];
-                                var splitvalues = (value != "" && value!=undefined)?value.split(','):"";
+                                var splitvalues = (value != "" && value != undefined) ? value.split(SeperationString):"";
 
                                 var result = '';
 
@@ -5238,10 +5239,11 @@
 
                                                 if (value == null || value == "" || value == undefined) {
                                                 } else {
-                                                    var valueArr = value.split(',');
+                                                    
+                                                    var valueArr = value.split(SeperationString);
                                                     var valueTxt = "";
                                                     for (var i = 0; i < valueArr.length; i++) {
-                                                        $(item).closest("div.inputContent").find(`input[value=${valueArr[i]}]`).prop("checked", true);
+                                                        $(item).closest("div.inputContent").find(`input[value="${valueArr[i]}"]`).prop("checked", true);
                                                     }
                                                 }
                                             }
@@ -5273,9 +5275,9 @@
                             }
 
                             if ($(item).hasClass("priority")) {
-                               
+                                debugger
                                 value = baseFields[$(item).attr("data-column")];
-                                var splitvalues = value.split(',');
+                                var splitvalues = value.split(SeperationString);
 
                                 var result = '';
 
@@ -5594,16 +5596,16 @@
                 }
             });
             _programelement.find(".priority").each(function (index, item) {
-               
+
                 if ($(item).hasAttr("data-column") && $(item).hasClass("program-control")) {
                     var id = $(item).attr("id")
-                    
+
                     var strvalue = ''
                     $.each($('#' + id + ' li'), function () {
-                        strvalue += $(this).attr('value') + ','
+                        strvalue += $(this).attr('value') + SeperationString
                     });
-                    
-                    strvalue = strvalue.substr(0, strvalue.length - 1)
+
+                    strvalue = strvalue.substr(0, strvalue.length - SeperationString.length)
                     fieldmodel.push({ ColumnName: $(item).attr("data-column"), FieldValue: strvalue });
                 }
             });
@@ -5611,7 +5613,7 @@
                 if ($(item).hasAttr("data-column") && $(item).closest("div.inputContent").find("input:checked").length && $(item).closest(".form-group").hasClass("program-control")) {
                     var selectedValues = $.map($(item).closest("div.inputContent").find("input:checked"), function (n, i) {
                         return n.value;
-                    }).join(',');
+                    }).join(SeperationString);
                     fieldmodel.push({ ColumnName: $(item).attr("data-column"), FieldValue: selectedValues });
                 }
             });
@@ -5731,9 +5733,9 @@
                     var id = $(item).attr("id")
                     var strvalue = ''
                     $.each($('#' + id).find('li'), function () {
-                        strvalue += $(this).attr('value') + ','
+                        strvalue += $(this).attr('value') + SeperationString
                     });
-                    strvalue = strvalue.substr(0, strvalue.length - 1)
+                    strvalue = strvalue.substr(0, strvalue.length - SeperationString.length)
                     fieldmodel.push({ ColumnName: $(item).attr("data-column"), FieldValue: strvalue });
                 }
             });
@@ -5741,7 +5743,7 @@
                 if ($(item).hasAttr("data-column") && $(item).closest("div.inputContent").find("input:checked").length && $(item).closest(".form-group").hasClass("base-control")) {
                     var selectedValues = $.map($(item).closest("div.inputContent").find("input:checked"), function (n, i) {
                         return n.value;
-                    }).join(',');
+                    }).join(SeperationString);
                     fieldmodel.push({ ColumnName: $(item).attr("data-column"), FieldValue: selectedValues });
                 }
             });
@@ -5875,7 +5877,7 @@
                 $('#Programs .tab-pane').each(function (index, item) {
                     $(item).removeClass("active show");
                 });
-                
+
 
 
                 $(".render-basicProgramform").each(function (index, item) {
@@ -6227,7 +6229,7 @@
 
                             }
                             if ($(item).hasClass("priority")) {
-                               
+
                                 value = fields[$(item).attr("data-column")];
                                 var splitvalues = value.split(',');
 
@@ -6322,7 +6324,7 @@
                             }
 
                             if ($(item).hasClass("priority")) {
-                               
+                                
                                 value = baseFields[$(item).attr("data-column")];
                                 var splitvalues = value.split(',');
 
@@ -6843,9 +6845,9 @@
                 },
                 async: true,
                 success: function (result) {
-                    
+
                     var activeChildForm='';
-                    
+
                     var data = JSON.parse(result.data)
                     var myChildTab = $("#myChildTab");
                     if (data.length == 1 && (data[0].ParentFormID == null || data[0].ParentFormID == 0)) {
@@ -6881,9 +6883,9 @@
                                 activeChildForm = item.FormName.replace(/ /g, '');
                             }
                         });
-                        
+
                     }
-                    
+
                     if (myChildTab.find("li").length == 0) {
                         $('#' + formName + 'only').removeClass('client-form-margin-top');
                     }

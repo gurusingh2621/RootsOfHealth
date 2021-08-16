@@ -51,6 +51,9 @@ function GetProgramTemplateList() {
                     if (!item.IsBaseTemplate) {
                         programs += `<a href="javascript:void(0)" onclick="DeleteProgram(${item.ClientFormID},this)"  class="btn btn-success text-white" style="cursor:pointer;">Delete</a>`;
                     }
+                    if (!item.IsBaseTemplate && item.IsActive == 1) {
+                        programs += `<a href="javascript:void(0)" onclick="SetStatus(${item.ClientFormID})"  class="btn btn-success text-white" style="cursor:pointer;">Manage Status</a>`;
+                    }
                  
                     programs += `</div></td></tr>`;
                 });
@@ -462,6 +465,217 @@ function ViewHeaderAndFooter() {
         }, error: function (e) {
             toastr.error("Something happen Wrong");
             $(".loaderOverlay").hide();
+        }
+    });
+}
+var totalScore=0
+function SetStatus(clientformid) {
+    debugger;
+    $.ajax({
+        type: "GET",
+        url: Apipath + '/api/PatientMain/getstatusscoreclientforms?clientformid=' + clientformid,
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        async: false,
+        success: function (res) {
+            var result = res[0]
+            if (result.TotalScore) {
+
+                if (result.TotalScore == null || result.TotalScore == '' || result.TotalScore == 0) {
+                    toastr.error("There is no scorable field in this column");
+
+                } else {
+                    totalScore = result.TotalScore
+                    if (result.AtRisk != '') {
+
+                        var crisis = result.Crisis.split('-');
+                        var struggling = result.Struggling.split('-');
+                        var secure = result.Secure.split('-');
+                        var atRisk = result.AtRisk.split('-');
+                        $('#atRiskMin').val(atRisk[0])
+                        $('#atRiskMax').val(atRisk[1])
+                        $('#crisisMin').val(crisis[0])
+                        $('#crisisMax').val(crisis[1])
+                        $('#StrugglingMin').val(struggling[0])
+                        $('#StrugglingMax').val(struggling[1])
+                        $('#SecureMin').val(secure[0])
+                        $('#SecureMax').val(secure[1])
+                    } else {
+                        $('#atRiskMin').val(0)
+                        $('#atRiskMax').val(0)
+                        $('#crisisMin').val(0)
+                        $('#crisisMax').val(0)
+                        $('#StrugglingMin').val(0)
+                        $('#StrugglingMax').val(0)
+                        $('#SecureMin').val(0)
+                        $('#SecureMax').val(result.TotalScore)
+                    }
+                    $('#saveStatusForForm').attr('onclick', 'saveStatusForForm(' + clientformid + ')')
+                    $('#saveStatusForForm').addClass('disabled')
+                    $('#saveStatusForForm').css('pointer-events', 'none')
+                    $('#ClientScore').modal('show')
+                    
+                }
+            }
+
+        }, error: function (e) {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });
+}
+
+$('#atRiskMax,#crisisMax,#StrugglingMax').keyup(function (e) {
+    var item=$(this)
+    var isValid = true;
+    var message = ''
+    var value = item.val()
+    var id = item[0].id
+    var crisisValue = $('#crisisMax').val()
+    var strugglingValue = $('#StrugglingMax').val();
+    var atRiskValue = $('#atRiskMax').val();
+
+    crisisValue = crisisValue == '' ? 0 : +crisisValue;
+    strugglingValue = strugglingValue == '' ? 0 : +strugglingValue;
+    atRiskValue = atRiskValue == '' ? 0 : +atRiskValue;
+
+
+    if (id == 'crisisMax') {
+        if (value >= totalScore) {
+            isValid = false;
+            message = 'Value Should be less than total score';
+        }
+        else if (atRiskValue != 0 || strugglingValue != 0) {
+            if (atRiskValue != 0 && atRiskValue <= value) {
+                isValid = false;
+                message = 'Value cant be bigger than atRisk max value';
+            } else if (strugglingValue != 0 && strugglingValue<= value) {
+                isValid = false;
+                message = 'Value cant be bigger than StrugglingMax max value';
+            } 
+        }
+    }
+    if (id == 'atRiskMax') {
+        if (value >= totalScore) {
+            isValid = false;
+            message = 'Value Should be less than total score';
+        }
+        else if (crisisValue != 0|| strugglingValue != 0) {
+            if (crisisValue != 0 && crisisValue >= value) {
+                isValid = false;
+                message = 'Value cant be less than Crisis max value';
+            } else if (strugglingValue != 0 && strugglingValue <= value) {
+                isValid = false;
+                message = 'Value cant be bigger than Struggling Max max value';
+            } 
+        }
+    } 
+   
+    if (id == 'StrugglingMax') {
+        if (value >= totalScore) {
+            isValid = false;
+            message = 'Value Should be less than total score';
+        }
+        else if (crisisValue!= 0 || atRiskValue != 0) {
+            if (atRiskValue != 0 && atRiskValue >= value) {
+                isValid = false;
+                message = 'Value cant be less than atRisk max value';
+            } else if (crisisValue != 0 && crisisValue >= value) {
+                isValid = false;
+                message = 'Value cant be bigger than crisis max value';
+            }
+        }
+    }
+    
+    if (id == 'crisisMax' && isValid) {
+        $('#atRiskMin').val(crisisValue);
+    }
+    if (id == 'atRiskMax' && isValid) {
+        $('#StrugglingMin').val(atRiskValue);
+    }
+    if (id == 'StrugglingMax' && isValid) {
+        $('#SecureMin').val(strugglingValue);
+    }
+    if (!isValid) {
+        toastr.error(message);
+        $(this).css('backgroud', 'red')
+    } else {
+        $(this).css('backgroud','')
+    }
+    ValidateFuctionBeforeSave()
+    
+})
+
+function ValidateFuctionBeforeSave() {
+    
+    var crisisValue = $('#crisisMax').val()
+    var strugglingValue = $('#StrugglingMax').val();
+    var atRiskValue = $('#atRiskMax').val();
+    crisisValue = crisisValue == '' ? 0 : +crisisValue;
+    strugglingValue = strugglingValue == '' ? 0 : +strugglingValue;
+    atRiskValue = atRiskValue == '' ? 0 : +atRiskValue;
+
+    var IsValid=true
+    if (crisisValue == '' || crisisValue == 0) {
+        IsValid = false
+    }
+    if (strugglingValue == '' || strugglingValue == 0) {
+        IsValid = false
+    }
+    if (atRiskValue == '' || atRiskValue == 0) {
+        IsValid = false
+    }
+    if (crisisValue >= totalScore) {
+        IsValid = false
+    }
+    if (strugglingValue >= totalScore) {
+        IsValid = false 
+    }
+    if (atRiskValue >= totalScore) {
+        IsValid = false
+    }
+    if ((crisisValue >= strugglingValue || crisisValue >= atRiskValue)) {
+        IsValid = false
+    }
+    if (crisisValue >= atRiskValue || strugglingValue <= atRiskValue) {
+        IsValid = false
+
+    }
+    if (atRiskValue >= strugglingValue || crisisValue >= strugglingValue) {
+        IsValid = false
+
+    }
+    if (IsValid) {
+        $('#saveStatusForForm').removeClass('disabled')
+        $('#saveStatusForForm').css('pointer-events','all')
+    } else {
+        $('#saveStatusForForm').addClass('disabled')
+        $('#saveStatusForForm').css('pointer-events', 'none')
+    }
+   
+}
+
+function saveStatusForForm(clientFormId = 0) {
+    debugger
+    let model = {
+        ClientFormId: clientFormId,
+        Crisis: $('#crisisMin').val() + '-' + $('#crisisMax').val(),
+        Struggling: $('#StrugglingMin').val() + '-' + $('#StrugglingMax').val(),
+        AtRisk: $('#atRiskMin').val() + '-' + $('#atRiskMax').val(),
+        Secure: $('#SecureMin').val() + '-' + $('#SecureMax').val()
+    }
+    $.ajax({
+        type: "Post",
+        url: Apipath + '/api/PatientMain/saveclientformstatus',
+        contentType: 'application/json; charset=UTF-8',
+        data: JSON.stringify(model),
+        dataType: "json",
+        success: function (result) {
+
+            $('#ClientScore').modal('hide');
+            
+        }, error: function () {
+            toastr.error("Something happen Wrong");
         }
     });
 }

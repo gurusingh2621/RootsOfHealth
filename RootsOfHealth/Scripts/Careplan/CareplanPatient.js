@@ -1598,10 +1598,10 @@ function getDatabaseFieldValues() {
                     formName = $(item).attr("data-index");
                     keyValue = result.filter(c => c.FormName == formName && c.Field == key)[0].FieldValue;
                     datatype = $(item).attr("data-columnType");
-                    
+                 
                     if (datatype == 'Priority') {
                         priorityList = `<ul>`;
-                        var listValues = keyValue.split(',');
+                        var listValues = keyValue.split(SeperationString);
                         for (let i = 0; i < listValues.length; i++) {
                             priorityList += `<li>${listValues[i]}</li>`
 
@@ -1609,8 +1609,11 @@ function getDatabaseFieldValues() {
                         priorityList += `</ul>`
                         $(item).html("").append(priorityList);
                     }
-                    else if (datatype != 'file' || datatype==undefined) {
+                    else if (datatype != 'file' || datatype == undefined) {
 
+                        if (keyValue != undefined && keyValue != '' && keyValue != null) {
+                            keyValue = keyValue.replace(SeperationString,',')
+                        }
                         if (formName == 'PatientMain') {
                             switch (key) {
                                 case "QuitSmoking":
@@ -1665,7 +1668,7 @@ function getClientFormCareplanFiles(Id,item) {
                 var filesArr = result.Files.split(',');
                 var namesArr = result.FileNames.split(',');
                 var selectedFiles = "";
-                selectedFiles = `<ul class="file_uploaded_list onlylinkslist">`;
+                selectedFiles = `<ul class="file_uploaded_list onlylinkslist ">`;
                 var ext = "";
                 for (var i = 0; i < filesArr.length; i++) {
                     ext = filesArr[i].split('.').pop();
@@ -1674,10 +1677,10 @@ function getClientFormCareplanFiles(Id,item) {
                         case "png":
                         case "jpg":
                         case "jpeg":
-                            selectedFiles += '<li><img style="max-width: 90px;margin-right: 10px;" src="/' + programUploadedPath + filesArr[i] + '" alt="Program Upload"><span><a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></span></li>';
+                            selectedFiles += '<li class="mt-2"><img style="max-width: 90px;margin-right: 10px;" src="/' + programUploadedPath + filesArr[i] + '" alt="Program Upload"><span><a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></span></li>';
                             break;
                         default:
-                            selectedFiles += '<li><a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></li>';
+                            selectedFiles += '<li class="mt-2"><a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></li>';
                             break;
                     }
 

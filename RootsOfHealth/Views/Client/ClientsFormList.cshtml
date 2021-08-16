@@ -18,6 +18,7 @@
                     <h2>Client Form</h2>
                 </div>
                 <a href="javascript:void(0)" class="btn btn-success mb-2" data-toggle="modal" data-target="#CreateClientFormModal">Create Form</a>
+                <a href="javascript:void(0)" onclick="SetStatus(0)" class="btn btn-success mb-2" style="cursor:pointer;">Manage Overall status</a>
                 <table id="tblProgramTemplateList" class="table c_table  table-striped border">
                     <thead>
                         <tr class="table-active">
@@ -92,6 +93,49 @@
             </div>
             <div class="modal-footer">
                 <a href='javascript:{}' class="btn btn-success label-fields btnProceed" onclick="CreateClientForm()">Save and Proceed</a>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ClientScore" tabindex="-1" role="dialog" aria-labelledby="SaveStatusForm"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:56%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> Client Form Status</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <label>Crisis :</label>
+                    <input type="number" id="crisisMin" disabled>
+                    <input type="number" id="crisisMax">
+
+                </div>
+                <div>
+                    <label>At risk :</label>
+                    <input type="number" id="atRiskMin" disabled>
+                    <input type="number" id="atRiskMax">
+
+                </div>
+                <div>
+                    <label>Struggling :</label>
+                    <input type="number" id="StrugglingMin" disabled>
+                    <input type="number" id="StrugglingMax">
+
+                </div>
+                <div>
+                    <label f>Secure :</label>
+                    <input type="number" id="SecureMin" disabled>
+                    <input type="number" id="SecureMax" disabled>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href='javascript:{}' id="saveStatusForForm" class="btn btn-success label-fields" onclick="saveStatusForForm()">Save status</a>
 
             </div>
         </div>
