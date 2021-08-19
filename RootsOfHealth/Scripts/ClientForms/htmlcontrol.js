@@ -239,6 +239,7 @@ function EditHtml(type, ID) {
             });
             break;
         case "checkbox-group":
+            
             var isScored = $(controlId).find(".isScoreable");
             var isrequired = $(controlId).find(".required-asterisk");
             var tooltiptext = $(controlId).find("label").first().find("span.tooltipicon").attr("title");
@@ -337,7 +338,7 @@ function EditHtml(type, ID) {
                     '<div class="option-fields">' +
                     `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${($(item).next().text() == "option 1" || $(item).next().text() == "option 2") && $(controlId).find("input.custom-control-input").first().attr("data-column") === undefined ? "" : $(item).next().text()}"/>` +
                     ' <input type="text" placeholder="Value" class="form-control option-value" disabled  value="' + $(item).attr("value") + '"/>' +
-                    ` <input type="text" placeholder="Score" class="form-control option-score ${isScored.length > 0 ? '' : 'd-none'}"  value="${$(item).attr("data-score") == undefined ? '0' : $(item).attr("data-score")}"/>` +
+                    ` <input type="text" placeholder="Score" onkeypress="return isNumber(event)" class="form-control option-score ${isScored.length > 0 ? '' : 'd-none'}"  value="${$(item).attr("data-score") == undefined ? '0' : $(item).attr("data-score")}"/>` +
                     '</div>' +
                     '<div class="popup-event-btn">' +
                     `<button  class="event-btn file-remove" onclick="RemoveOption(this)" ${index == 0 ? "disabled" : ""}><i class="fa fa-minus-circle" aria-hidden="true"></i></button >` +
@@ -1020,7 +1021,7 @@ function EditHtml(type, ID) {
                     '<div class="option-fields">' +
                     `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${($(item).next().text() == "option 1" || $(item).next().text() == "option 2") && $(controlId).find("input.custom-control-input").first().attr("data-column") === undefined ? "" : $(item).next().text()}"/>` +
                     ' <input type="text" placeholder="Value" class="form-control option-value" disabled value="' + $(item).attr("value") + '"/>' +
-                    ` <input type="text" placeholder="Score" class="form-control option-score ${isScored.length > 0 ? '' : 'd-none'}"  value="${$(item).attr("data-score") == undefined ? '0' : $(item).attr("data-score")}"/>` +
+                    ` <input type="text" placeholder="Score" onkeypress="return isNumber(event)"  class="form-control option-score ${isScored.length > 0 ? '' : 'd-none'}"  value="${$(item).attr("data-score") == undefined ? '0' : $(item).attr("data-score")}"/>` +
                     '</div>' +
                     '<div class="popup-event-btn">' +
                     `<button class="event-btn file-remove" onclick="RemoveOption(this)" ${index == 0 ? "disabled" : ""}><i class="fa fa-minus-circle" aria-hidden="true"></i></button >` +
@@ -1157,7 +1158,7 @@ function EditHtml(type, ID) {
             });
             break;
         case "select":
-            var isScored = $(controlId).find(".isScoreable");
+            var isScored = $(controlId).parent().prev().hasClass("isScoreable");
             var isrequired = $(controlId).parent().prev().hasClass("required-asterisk");
             var tooltiptext = $(controlId).parent().prev().find("span.tooltipicon").attr("data-original-title");
             tooltiptext = tooltiptext === undefined ? "" : tooltiptext;
@@ -1185,10 +1186,10 @@ function EditHtml(type, ID) {
             }
             popupString += `<label class="custom-control-label" for="required-input">Required</label></div>`;
 
-            popupString += `<label class="custom-control-label" for="required-input">Required</label></div>`;
+          
 
             popupString += `<div class="modal-row custom-control custom-checkbox">`;
-            if (isScored.length) {
+            if (isScored) {
                 popupString += '<input type="checkbox" onclick="CheckScoreable(this)" class="custom-control-input"  id="score-input" name="checkbox" checked>';
             } else {
                 popupString += '<input type="checkbox" onclick="CheckScoreable(this)" class="custom-control-input"  id="score-input" name="checkbox" >'
@@ -1254,14 +1255,14 @@ function EditHtml(type, ID) {
 
             popupString += '<div class="modal-row">' +
                 '<label>Options<span class="addoptions" onclick="addScoreableoption(this)"><i class="fas fa-plus"></i></span></label>';
-            popupString += `<div class="optionHeading"><label>Text</label><label>Value</label><label class="ScoreHeading ${isScored.length > 0 ? '' : 'd-none'}">Score</label></div>`;
+            popupString += `<div class="optionHeading"><label>Text</label><label>Value</label><label class="ScoreHeading ${isScored ? '' : 'd-none'}">Score</label></div>`;
             $(controlId).find('option').each(function (index, item) {
                 if ($(item).val() == 0) {
                     popupString += '<div class="option-block  d-none">' +
                         '<div class="option-fields">' +
                         `<input type="text"  class="form-control option-text"  value="Select.." disabled/>` +
                         ' <input type="text" placeholder="Value" class="form-control option-value" disabled  value="0"/>' +
-                        ` <input type="text" placeholder="Score" class="form-control option-score ${isScored.length > 0 ? '' : 'd-none'}"   value="0"/>` +
+                        ` <input type="text" placeholder="Score" onkeypress="return isNumber(event)" class="form-control option-score ${isScored ? '' : 'd-none'}"   value="0"/>` +
                         '</div>' +
                         '</div>'
                 }
@@ -1270,7 +1271,7 @@ function EditHtml(type, ID) {
                         '<div class="option-fields">' +
                         `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${($(item).text() == "option 2" || $(item).text() == "option 3") && $(controlId).attr("data-column") === undefined ? "" : $(item).text()}"/>` +
                         ' <input type="text" placeholder="Value" class="form-control option-value" disabled  value="' + $(item).val() + '"/>' +
-                        ` <input type="text" placeholder="Score" class="form-control option-score ${isScored.length > 0 ? '' : 'd-none'}"  value="${$(item).attr("data-score") == undefined ? '0' : $(item).attr("data-score")}"/>` +
+                        ` <input type="text" placeholder="Score" onkeypress="return isNumber(event)" class="form-control option-score ${isScored > 0 ? '' : 'd-none'}"  value="${$(item).attr("data-score") == undefined ? '0' : $(item).attr("data-score")}"/>` +
                         '</div>' +
                         '<div class="popup-event-btn">' +
                         `<button class="event-btn file-remove" onclick="RemoveOption(this,'true')" ${index == 0 ? "disabled" : ""}><i class="fa fa-minus-circle" aria-hidden="true"></i></button >` +
@@ -2418,7 +2419,7 @@ function saveTemplate(isactive) {
 
 
 function IsScoreable(element) {
-    debugger;
+   
     var result = $(element).parents('.frmbtn').find('.isScoreable');
     return result.length > 0;
 }

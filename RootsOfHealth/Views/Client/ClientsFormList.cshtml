@@ -7,6 +7,61 @@
 <link href="~/css/previewinpopup.css" rel="stylesheet" />
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
 
+<style>
+.clientFormStatus .form-group {
+    display: flex;
+    align-items: flex-start;
+}
+.clientFormStatus .minMaxValue {
+    position: relative;
+    margin-left: 10px;
+}
+.clientFormStatus .minMaxValue > span {
+    position: absolute;
+    left: 1px;
+    top: 1px;
+    height: 28px;
+    background: #d8d8d8;
+    width: 50px;
+    color: #555;
+    font-size: 14px;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 30px;
+    border-radius: 4px 0px 0 4px;
+}
+.clientFormStatus .minMaxValue > input {
+    height: 30px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    padding-left: 60px;
+    max-width: 120px;
+}
+.clientFormStatus .form-group label {
+    min-width: 75px;
+}
+    #ClientScore .modal-dialog {
+        max-width: 400px;
+    }
+#saveStatusForForm.disabled {
+    border: 1px solid rgb(161, 161, 161);
+    background-color: rgb(161, 161, 161);
+}
+span.errorMessage {
+    text-align: center;
+    display: block;
+    font-size: 13px;
+    background: rgb(230 21 21 / 18%);
+    color: #e61414;
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin: 0 0 5px;
+}
+</style>
+
+
+
+
 <section id="content" class="responsive-container pt-0">
 
     <div class="inner-content mt-0">
@@ -42,7 +97,7 @@
 </section>
 <div class="modal fade" id="CreateClientFormModal" tabindex="-1" role="dialog" aria-labelledby="CreateClientFormModal"
      aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:56%">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:56%;">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"> Create Client Form</h5>
@@ -91,6 +146,7 @@
 
                 </div>
             </div>
+            
             <div class="modal-footer">
                 <a href='javascript:{}' class="btn btn-success label-fields btnProceed" onclick="CreateClientForm()">Save and Proceed</a>
 
@@ -101,7 +157,7 @@
 
 <div class="modal fade" id="ClientScore" tabindex="-1" role="dialog" aria-labelledby="SaveStatusForm"
      aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:56%">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"> Client Form Status</h5>
@@ -109,29 +165,53 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <div>
-                    <label>Crisis :</label>
-                    <input type="number" id="crisisMin" disabled>
-                    <input type="number" id="crisisMax">
-
+            <div class="modal-body clientFormStatus">
+                <div class="form-group">
+                    <label>Secure :</label>
+                    <div class="minMaxValue">
+                        <span>Min</span>
+                        <input type="number" id="secureMin" disabled>
+                    </div>
+                    <div class="minMaxValue">
+                        <span>Max</span>
+                        <input type="number" id="secureMax" onkeypress="return isNumber(event)">
+                    </div>
                 </div>
-                <div>
-                    <label>At risk :</label>
-                    <input type="number" id="atRiskMin" disabled>
-                    <input type="number" id="atRiskMax">
-
-                </div>
-                <div>
+                <div class="form-group">
                     <label>Struggling :</label>
-                    <input type="number" id="StrugglingMin" disabled>
-                    <input type="number" id="StrugglingMax">
-
+                    <div class="minMaxValue">
+                        <span>Min</span>
+                        <input type="number" id="StrugglingMin" disabled>
+                    </div>
+                    <div class="minMaxValue">
+                        <span>Max</span>
+                        <input type="number" id="StrugglingMax" onkeypress="return isNumber(event)">
+                    </div>
                 </div>
-                <div>
-                    <label f>Secure :</label>
-                    <input type="number" id="SecureMin" disabled>
-                    <input type="number" id="SecureMax" disabled>
+                <div class="form-group">
+                    <label>At risk :</label>
+                    <div class="minMaxValue">
+                        <span>Min</span>
+                        <input type="number" id="atRiskMin" disabled>
+                    </div>
+                    <div class="minMaxValue">
+                        <span>Max</span>
+                        <input type="number" id="atRiskMax" onkeypress="return isNumber(event)">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Crisis :</label>
+                    <div class="minMaxValue">
+                        <span>Min</span>
+                        <input type="number" id="crisisMin" disabled>
+                    </div>
+                    <div class="minMaxValue">
+                        <span>Max</span>
+                        <input type="number" id="crisisMax" onkeypress="return isNumber(event)">
+                    </div>
+                </div>
+                <div class="errorMessageWrap" style="display:none;">
+                    <span class="errorMessage"></span>
                 </div>
             </div>
             <div class="modal-footer">

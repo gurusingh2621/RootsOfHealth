@@ -463,7 +463,7 @@ function saveCareplan() {
                     $("#ddlcareplanstatus,.care_plan_name_field").removeAttr("disabled");
                     $("#ddlcareplanstatus").removeClass("show_careplanstatus").val("-1");
                     $("a.need-nav,a.summary-nav").parent().addClass("disabled");
-                    $('.requestItem').removeClass('d-none');
+                   // $('.requestItem').removeClass('d-none');
                     $(".loaderOverlay").hide();
                     
                     var value = $('.careplanCount').attr('data-count');
@@ -783,9 +783,6 @@ function editCarePlan(Id) {
             isupdateProgramFields = false;
             $("#ddlcareplanstatus,.care_plan_name_field").removeAttr("disabled");
             
-            if (IsUserCarePlanApprover == 'False' || userId == result.CreatedBy) {
-                $('.requestItem').removeClass('d-none');
-            }
             switch (result.Status) {
                 case carePlanEnum.NotSaved://not saved                    
                     careplanid = result.CarePlanId;                   
@@ -835,7 +832,7 @@ function editCarePlan(Id) {
                     $("#carePlansSidebar").removeClass('opened');
                     $("#addNewCarePlansSidebar").addClass('opened');                
                     $("#ddlcareplanstatus,.care_plan_name_field").attr("disabled", true);
-                    $('.requestItem').addClass('d-none');
+                    //$('.requestItem').addClass('d-none');
                     break;
                 default:                 
                     break;
@@ -1963,7 +1960,7 @@ function setCarePlanStatus(obj) {
                                         $(".txtNeed,.txtOutcome,.txtIntervention").attr("disabled", true);
                                         $(".needsList").sortable('destroy');
                                         $(".goalsList").sortable('destroy');
-                                        $('.requestItem').addClass('d-none');
+                                       // $('.requestItem').addClass('d-none');
                                     }
                                     else {
                                         if (model.Status == 1) {

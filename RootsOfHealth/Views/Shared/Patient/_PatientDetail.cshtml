@@ -1360,11 +1360,13 @@
          //-----------------Food Access score end----------------------//
 
           //----------------Profile(Overall) score start----------------------//
-          $('#txtoverallscore').html(@Model.PatientScore.OverallScore+"/200");
+         // $('#txtoverallscore').html(@Model.PatientScore.OverallScore+"/200");
 
          @*$('#txtoverallstatus').html('@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Model.PatientScore.OverallStatus.ToLower())');*@
-          $('#txtoverallstatus').html('@Model.PatientScore.OverallStatus');
-          InsertBadge( $('#txtoverallstatus'),'@Model.PatientScore.OverallStatus')
+        //  $('#txtoverallstatus').html('@Model.PatientScore.OverallStatus');
+         // InsertBadge( $('#txtoverallstatus'),'@Model.PatientScore.OverallStatus')
+
+          GetScoreClient(0)
          //-----------------Profile(Overall) score end----------------------//
 
 
@@ -2985,21 +2987,21 @@
       })
 
     function InsertBadge(statusele, status) {
-          var badge=''
-          if (status == 'crisis') {
-              badge = '<span class="badge badge-danger" style="height:10px; position:relative; top:4px;">&nbsp; &nbsp;</span>'
-          }
-          else if (status == 'secure') {
-              badge ='<span class="badge badge-success" style="height:10px; position:relative; top:4px;">&nbsp; &nbsp;</span>'
-          }
-          else if (status =='struggling') {
-              badge ='<span class="badge badge-warning" style="height:10px; position:relative; top:4px;background-color:#ecec04!important">&nbsp; &nbsp;</span>'
-          }
-          else if (status == 'at risk') {
-              badge ='<span class="badge badge-warning"style="height:10px; position:relative; top:4px; background-color:#FF8C00!important">&nbsp; &nbsp;</span>'
-          }
+          //var badge=''
+          //if (status == 'crisis') {
+          //    badge = '<span class="badge badge-danger" style="height:10px; position:relative; top:4px;">&nbsp; &nbsp;</span>'
+          //}
+          //else if (status == 'secure') {
+          //    badge ='<span class="badge badge-success" style="height:10px; position:relative; top:4px;">&nbsp; &nbsp;</span>'
+          //}
+          //else if (status =='struggling') {
+          //    badge ='<span class="badge badge-warning" style="height:10px; position:relative; top:4px;background-color:#ecec04!important">&nbsp; &nbsp;</span>'
+          //}
+          //else if (status == 'at risk') {
+          //    badge ='<span class="badge badge-warning"style="height:10px; position:relative; top:4px; background-color:#FF8C00!important">&nbsp; &nbsp;</span>'
+          //}
 
-          $(statusele).parent().append(badge)
+          //$(statusele).parent().append(badge)
       }
 
 </script>

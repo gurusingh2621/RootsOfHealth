@@ -5275,7 +5275,7 @@
                             }
 
                             if ($(item).hasClass("priority")) {
-                                debugger
+                                
                                 value = baseFields[$(item).attr("data-column")];
                                 var splitvalues = value.split(SeperationString);
 
@@ -5610,12 +5610,14 @@
                 }
             });
             _programelement.find("[type=checkbox], [type=radio]").each(function (index, item) {
-                if ($(item).hasAttr("data-column") && $(item).closest("div.inputContent").find("input:checked").length && $(item).closest(".form-group").hasClass("program-control")) {
-                    var selectedValues = $.map($(item).closest("div.inputContent").find("input:checked"), function (n, i) {
+                var selectedValues=''
+                if ($(item).hasAttr("data-column")  && $(item).closest(".form-group").hasClass("program-control")) {
+                     selectedValues = $.map($(item).closest("div.inputContent").find("input:checked"), function (n, i) {
                         return n.value;
-                    }).join(SeperationString);
+                     }).join(SeperationString);
                     fieldmodel.push({ ColumnName: $(item).attr("data-column"), FieldValue: selectedValues });
                 }
+                
             });
             _programelement.find("textarea").each(function (index, item) {
                 if ($(item).hasAttr("data-column") && $(item).val() != "" && $(item).hasClass("program-control")) {
