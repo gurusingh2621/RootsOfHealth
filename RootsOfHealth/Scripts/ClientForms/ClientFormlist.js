@@ -51,6 +51,9 @@ function GetProgramTemplateList() {
                     if (!item.IsBaseTemplate) {
                         programs += `<a href="javascript:void(0)" onclick="DeleteProgram(${item.ClientFormID},this)"  class="btn btn-success text-white" style="cursor:pointer;">Delete</a>`;
                     }
+                    if (!item.IsBaseTemplate && item.IsActive == 1) {
+                        programs += `<a href="javascript:void(0)" onclick="SetStatus(${item.ClientFormID})"  class="btn btn-success text-white" style="cursor:pointer;">Manage Status</a>`;
+                    }
                  
                     programs += `</div></td></tr>`;
                 });
@@ -92,7 +95,8 @@ function SetTemplateStatus(Templateid, Status) {
     $.confirm({
         icon: 'fas fa-exclamation-triangle',
         title: 'Confirm',
-        content: Status == true ? 'This template will be activated and users will have access. Do you want to continue?' : 'Are you sure you want to de-activate.?',
+        content: Status == true ? 'This template will be activated and users will have access</br>You have to readjust the overall status values </br> Do you want to continue?' :
+            'You have to readjust the overall status values. </br>Are you sure you want to de-activate.?',
         type: Status == true ? 'green' : 'red',
         columnClass: 'col-md-6 col-md-offset-3',
         typeAnimated: true,
@@ -462,6 +466,249 @@ function ViewHeaderAndFooter() {
         }, error: function (e) {
             toastr.error("Something happen Wrong");
             $(".loaderOverlay").hide();
+        }
+    });
+}
+var totalScore=0
+function SetStatus(clientformid) {
+   
+    $.ajax({
+        type: "GET",
+        url: Apipath + '/api/PatientMain/getstatusscoreclientforms?clientformid=' + clientformid,
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        async: false,
+        success: function (res) {
+            var result = res[0]
+            if (result.TotalScore) {
+
+                if (result.TotalScore == null || result.TotalScore == '' || result.TotalScore == 0) {
+                    toastr.error("There is no scorable field");
+
+                } else {
+                    totalScore = result.TotalScore
+                    if (result.AtRisk != '') {
+
+                        var crisis = result.Crisis.split('-');
+                        var struggling = result.Struggling.split('-');
+                        var secure = result.Secure.split('-');
+                        var atRisk = result.AtRisk.split('-');
+                        $('#atRiskMin').val(atRisk[0])
+                        $('#atRiskMax').val(atRisk[1])
+                        $('#crisisMin').val(crisis[0])
+                        $('#crisisMax').val(crisis[1])
+                        $('#StrugglingMin').val(struggling[0])
+                        $('#StrugglingMax').val(struggling[1])
+                        $('#secureMin').val(secure[0])
+                        $('#secureMax').val(secure[1])
+                    } else {
+                        $('#atRiskMin').val(0)
+                        $('#atRiskMax').val(0)
+                        $('#crisisMin').val(0)
+                        $('#crisisMax').val(0)
+                        $('#StrugglingMin').val(0)
+                        $('#StrugglingMax').val(0)
+                        $('#secureMin').val(0)
+                        $('#secureMax').val(0)
+                    }
+                    $('#saveStatusForForm').attr('onclick', 'saveStatusForForm(' + clientformid + ')')
+                    $('#saveStatusForForm').addClass('disabled')
+                    $('#saveStatusForForm').css('pointer-events', 'none')
+                    $('#ClientScore').modal('show')
+
+                }
+            }
+            else {
+                toastr.error("There is no scorable field");
+            }
+
+        }, error: function (e) {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        }
+    });
+}
+
+$('#atRiskMax,#secureMax,#StrugglingMax,#crisisMax').on('keyup change',function (e) {
+    var item=$(this)
+    var isValid = true;
+    var message = ''
+    var value = item.val()
+    var id = item[0].id
+    var secureValue = $('#secureMax').val()
+    var strugglingValue = $('#StrugglingMax').val();
+    var atRiskValue = $('#atRiskMax').val();
+
+    secureValue = secureValue == '' ? 0 : +secureValue;
+    strugglingValue = strugglingValue == '' ? 0 : +strugglingValue;
+    atRiskValue = atRiskValue == '' ? 0 : +atRiskValue;
+    value = value == '' ? 0 : +value;
+
+    if (id == 'secureMax') {
+        if (value >= totalScore) {
+            isValid = false;
+            message = 'Value Should be less than total score';
+        }
+        else if (atRiskValue != 0 || strugglingValue != 0) {
+            if (atRiskValue != 0 && atRiskValue <= value) {
+                isValid = false;
+                message = 'Value cant be bigger than atRisk max value';
+            } else if (strugglingValue != 0 && strugglingValue<= value) {
+                isValid = false;
+                message = 'Value cant be bigger than StrugglingMax max value';
+            } 
+        }
+    }
+    if (id == 'atRiskMax') {
+        if (value >= totalScore) {
+            isValid = false;
+            message = 'Value Should be less than total score';
+        }
+        else if (secureValue != 0|| strugglingValue != 0) {
+            if (secureValue != 0 && secureValue >= value) {
+                isValid = false;
+                message = 'Value cant be less than Secure max value';
+            } else if (strugglingValue != 0 && strugglingValue >= value) {
+                isValid = false;
+                message = 'Value cant be more than Struggling Max value';
+            } 
+        }
+    } 
+   
+    if (id == 'StrugglingMax') {
+        if (value >= totalScore) {
+            isValid = false;
+            message = 'Value Should be less than total score';
+        }
+        else if (secureValue!= 0 || atRiskValue != 0) {
+            if (atRiskValue != 0 && atRiskValue <= value) {
+                isValid = false;
+                message = 'Value cant be less than atRisk max value';
+            } else if (secureValue != 0 && secureValue >= value) {
+                isValid = false;
+                message = 'Value cant be bigger than secure max value';
+            }
+        }
+    }
+    
+    if (id == 'secureMax' && isValid) {
+        $('#StrugglingMin').val(secureValue+1);
+    }
+    if (id == 'atRiskMax' && isValid) {
+        $('#crisisMin').val(atRiskValue+1);
+    }
+    if (id == 'StrugglingMax' && isValid) {
+        $('#atRiskMin').val(strugglingValue+1);
+    }
+
+    //if (!isValid) {
+    //    $('.errorMessageWrap').show()
+    //    $('#ClientScore .errorMessage').html(message);
+    //} else {
+    //    $('.errorMessageWrap').hide()
+    //}
+    ValidateFuctionBeforeSave()
+    
+})
+
+
+function ValidateFuctionBeforeSave() {
+    
+    var secureValue = $('#secureMax').val()
+    var strugglingValue = $('#StrugglingMax').val();
+    var atRiskValue = $('#atRiskMax').val();
+    var crisisValue = $('#crisisMax').val();
+    secureValue = secureValue == '' ? 0 : +secureValue;
+    strugglingValue = strugglingValue == '' ? 0 : +strugglingValue;
+    atRiskValue = atRiskValue == '' ? 0 : +atRiskValue;
+    crisisValue = crisisValue == '' ? 0 : +crisisValue;
+    var message = '';
+    var IsValid = true
+    
+    if (secureValue == '' || secureValue == 0) {
+        IsValid = false
+        message = +'<span class="errorMessage">Secure Max cant be empty or zero</span>'
+
+    }
+    if (strugglingValue == '' || strugglingValue == 0) {
+        IsValid = false
+        message = +'<span class="errorMessage">Struggling Max cant be empty or zero</span>'
+    }
+    if (atRiskValue == '' || atRiskValue == 0) {
+        IsValid = false
+        message = +'<span class="errorMessage">At risk Max cant be empty or zero</span>'
+    }
+    if (crisisValue == '' || crisisValue == 0) {
+        IsValid = false
+        message = +'<span class="errorMessage">At risk Max cant be empty or zero</span>'
+    }
+    if (secureValue >= totalScore) {
+        IsValid = false
+        message = +'<span class="errorMessage">Secure Max cant be more than total score</span>'
+    }
+    if (crisisValue > totalScore) {
+        IsValid = false
+        message = +'<span class="errorMessage">Secure Max cant be more than total score</span>'
+    }
+    if (strugglingValue >= totalScore) {
+        IsValid = false
+        message = +'<span class="errorMessage">Struglling Max cant be more than total score</span>'
+    }
+    if (atRiskValue >= totalScore) {
+        IsValid = false
+        message = +'<span class="errorMessage">At Risk Max cant be more than total score</span>'
+    }
+    if ((secureValue >= strugglingValue || secureValue >= atRiskValue)) {
+        IsValid = false
+        message = +'<span class="errorMessage">Secure Max cant be more than Struggling Max and AtRisk Max</span>'
+    }
+    if (secureValue >= atRiskValue || strugglingValue >= atRiskValue) {
+        IsValid = false
+        message = +'<span class="errorMessage">At Risk Max cant be more than Struggling Max and less than Secure Max</span>'
+
+    }
+    if (atRiskValue <= strugglingValue || secureValue >= strugglingValue) {
+        IsValid = false
+        message = +'<span class="errorMessage">Struggling Max cant be less than Secure Max and AtRisk Max</span>'
+    }
+    if (crisisValue <= strugglingValue || crisisValue <= secureValue || crisisValue <= atRiskValue) {
+        IsValid = false
+    }
+    if (IsValid) {
+        $('#saveStatusForForm').removeClass('disabled')
+        $('#saveStatusForForm').css('pointer-events', 'all')
+       // $('.errorMessageWrap').hide()
+    } else {
+        $('#saveStatusForForm').addClass('disabled')
+        $('#saveStatusForForm').css('pointer-events', 'none')
+       // $('.errorMessageWrap').show()
+        //$('#ClientScore .errorMessage').html(message);
+    }
+   
+}
+
+
+
+function saveStatusForForm(clientFormId = 0) {
+    let model = {
+        ClientFormId: clientFormId,
+        Crisis: $('#crisisMin').val() + '-' + $('#crisisMax').val(),
+        Struggling: $('#StrugglingMin').val() + '-' + $('#StrugglingMax').val(),
+        AtRisk: $('#atRiskMin').val() + '-' + $('#atRiskMax').val(),
+        Secure: $('#secureMin').val() + '-' + $('#secureMax').val()
+    }
+    $.ajax({
+        type: "Post",
+        url: Apipath + '/api/PatientMain/saveclientformstatus',
+        contentType: 'application/json; charset=UTF-8',
+        data: JSON.stringify(model),
+        dataType: "json",
+        success: function (result) {
+
+            $('#ClientScore').modal('hide');
+            
+        }, error: function () {
+            toastr.error("Something happen Wrong");
         }
     });
 }
