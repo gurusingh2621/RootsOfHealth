@@ -13,7 +13,7 @@
                             { var programName = @item.ProgramName.Replace(" ", "");
                                 <li class="nav-item" >
                                  <a id="@("a"+programName)" class="nav-link" data-toggle="tab"
-                                    href="@("#" + programName + "only")" data-ProgramID="@item.ProgramID" data-PatientID="@item.patientID" data-TemplateID="@item.TemplateID" data-programName=@(programName)>@item.ProgramName<span class="check @Html.Raw(item.Saved?"":"d-none")"><i class="fas fa-check-circle"></i></span></a>
+                                    href="@("#" + programName + "only")" data-ProgramID="@item.ProgramID" data-PatientID="@item.patientID" data-TemplateID="@item.TemplateID" data-programName=@(programName)>@item.ProgramName<span class="notCount" id="@(programName+"Notify")" style="display:none"></span><span class="check @Html.Raw(item.Saved?"":"d-none")"><i class="fas fa-check-circle"></i></span></a>
                               </li>
 
                             }

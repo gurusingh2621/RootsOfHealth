@@ -31,8 +31,9 @@ namespace RootsOfHealth.Models
 
         public List<ProgramsForPatientBO> Programs { get; set; }
         public List<ClientFormForPatientBO> ClientForm { get; set; }
+        public List<Form_ScheduleResultBO> FormScheduling { get; set; }
 
-        
+
 
         public PatientDetailBO()
         {
@@ -58,6 +59,7 @@ namespace RootsOfHealth.Models
             PeraltaCollege = new PeraltaCollegeBO();
             PatientScore = new PatientScoreBO();
             ScheduleDate = new ScheduleDateBO();
+            FormScheduling = new List<Form_ScheduleResultBO>();
 
 
 

@@ -144,7 +144,7 @@
                      
                         <li class="nav-item">
                             <a id="@("a" + FormName)" class="nav-link" data-toggle="tab"
-                               href="@("#" + FormName + "only")" data-ClientFormID="@item.ClientFormID" data-PatientID="@item.patientID" onclick="loadClient(this)"  data-TemplateID="@item.TemplateID" data-FormName=@(FormName)>@item.FormName<span class="check @Html.Raw(item.Saved ? "" : "d-none")"><i class="fas fa-check-circle"></i></span></a>
+                               href="@("#" + FormName + "only")" data-ClientFormID="@item.ClientFormID" data-PatientID="@item.patientID" onclick="loadClient(this)"  data-TemplateID="@item.TemplateID" data-FormName=@(FormName)>@item.FormName<span class="notCount" id="@(FormName + "Notify")" style="display:none"></span><span class="check @Html.Raw(item.Saved ? "" : "d-none")"><i class="fas fa-check-circle"></i></span></a>
 
                         </li>
                        

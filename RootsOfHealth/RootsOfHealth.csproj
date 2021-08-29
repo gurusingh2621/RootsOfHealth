@@ -178,6 +178,7 @@
     <Compile Include="Models\DastBO.cs" />
     <Compile Include="Models\DreamOnlyBO.cs" />
     <Compile Include="Models\FormSchedulingBO.cs" />
+    <Compile Include="Models\Form_ScheduleResultBO.cs" />
     <Compile Include="Models\LocationOfAppointmentBO.cs" />
     <Compile Include="Models\LookUpFieldBO.cs" />
     <Compile Include="Models\LookUpFieldOptionBO.cs" />
@@ -311,6 +312,7 @@
     <Content Include="Scripts\ClientForms\htmlcontrol.js" />
     <Content Include="Scripts\ClientForms\ClientFormbasetemplatecontrolhtml.js" />
     <Content Include="Scripts\ClientForms\ClientFormlist.js" />
+    <Content Include="Scripts\FormSchedule\formscheduling.js" />
     <Content Include="Scripts\fullcalendar.min.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />

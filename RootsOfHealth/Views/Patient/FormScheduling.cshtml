@@ -9,69 +9,206 @@
     .SidebarScroll.scroll.inner-main-content.overite-prorperty {
         height: calc(100vh - 202px) !important;
     }
-    #content .inner-content .paitent-detail-left {padding:0;
+
+    #content .inner-content .paitent-detail-left {
+        padding: 0;
     }
 </style>
 <!-- Form scheduling Tab Start here  -->
 
 <section id="content" class="responsive-container p-0">
     <div class="inner-content mt-0">
-        <div class="paitent-detail">
+
+        <div class="profile-tabs">
+            <div class="tabs-scroll">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="ClientFormSchedule-tab" data-toggle="tab" href="#ClientFormSchedule" role="tab" aria-controls="ClientFormSchedule" aria-selected="true">Client form Schedule</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="ProgramFormScheduling-tab" data-toggle="tab" href="#ProgramFormScheduling" role="tab" aria-controls="ProgramFormScheduling" aria-selected="false">Program form Schedule</a>
+                    </li>
+
+
+                </ul>
+            </div>
+            <div class="tab-content " id="myTabContent">
+
+                <div class="tab-pane active" id="ClientFormSchedule" role="tabpanel" aria-labelledby="ClientFormSchedule-tab">
+
+                    <div class="appointment mt-5">
+                        <div class="container-fluid pl-0 pr-0">
+
+                            <div class="paitent-detail-left">
+                                <div class="detail-heading d-flex">
+                                    <h2>Form scheduling </h2>
+                                </div>
+                                <div class="form-schedule mt-3 SidebarScroll scroll inner-main-content overite-prorperty">
+                                    <table class="table" id="tbl_formScheduling">
+                                        <thead class="thead-light">
+                                            <tr>
+
+                                                <th scope="col" style="width:25%">Schedule Form</th>
+                                                <th scope="col" style="width:25%">Secure</th>
+                                                <th scope="col" style="width:25%">Struggling</th>
+                                                <th scope="col" style="width:25%">At Risk</th>
+                                                <th scope="col" style="width:25%">Crisis</th>
+                                                <th scope="col" style="width:25%">No Status</th>
+                                                <th scope="col" style="width:25%">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="formSchedulinglist">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+                <div class="tab-pane fade" id="ProgramFormScheduling" role="tabpanel" aria-labelledby="ProgramFormScheduling-tab">
+
+                    <div class="appointment mt-5" style="padding:0">
+                        <div class="container-fluid pl-0 pr-0">
+                            <div class="paitent-detail-left">
+                                <div class="detail-heading d-flex">
+                                    <h2>Form scheduling </h2>
+                                </div>
+                                <div class="form-schedule mt-3 SidebarScroll scroll inner-main-content overite-prorperty">
+                                    <table class="table" id="tbl_programformScheduling">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th scope="col" style="width:25%">Schedule Form</th>
+                                                <th scope="col" style="width:25%">No Status</th>
+                                                <th scope="col" style="width:25%">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="programformSchedulinglist">
+
+
+                                            @*@foreach (var form in Model)
+                                                {
+                                                    <tr>
+
+                                                        <td>
+                                                            @form.FormName
+                                                        </td>
+                                                        <td>
+                                                            <ul class="days">
+                                                                <li><a href="#!">@form.ForEvery @form.ForType</a></li>
+                                                            </ul>
+                                                        </td>
+
+
+
+                                                        <td>
+                                                            <a href="#!" onclick="EditFormScheduling(@form.FormSchedulingID)" class="btn btn-success" data-toggle="modal" data-target="#FormModal">
+                                                                <i class="far fa-edit"></i>
+                                                                Edit
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                }*@
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!--<div class="paitent-detail">
 
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-12">
 
                     <div class="authorization">
                         <div class="paitent-detail-left">
-                        <div class="detail-heading d-flex">
-                            <h2>Form scheduling </h2>
-                        </div>
-                        <div class="form-schedule mt-3 SidebarScroll scroll inner-main-content overite-prorperty">
-                            <table class="table">
-                                <thead class="thead-light">
-                                    <tr>
-
-                                        <th scope="col" style="width:25%">Schedule Form</th>
-                                        <th scope="col" style="width:25%">For Every</th>
-                                       
-                                        <th scope="col" style="width:25%">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var form in Model)
-                                    {
+                            <div class="detail-heading d-flex">
+                                <h2>Form scheduling </h2>
+                            </div>
+                            <div class="form-schedule mt-3 SidebarScroll scroll inner-main-content overite-prorperty">
+                                <table class="table" if="tbl_formScheduling">
+                                    <thead class="thead-light">
                                         <tr>
 
-                                            <td>
-                                                @form.FormName
-                                            </td>
-                                            <td>
-                                                <ul class="days">
-                                                    <li><a href="#!">@form.ForEvery @form.ForType</a></li>
-                                                </ul>
-                                            </td>
-
-                                          
-
-                                            <td>
-                                                <a href="#!" onclick="EditFormScheduling(@form.FormSchedulingID)" class="btn btn-success" data-toggle="modal" data-target="#FormModal">
-                                                    <i class="far fa-edit"></i>
-                                                    Edit
-                                                </a>
-                                            </td>
+                                            <th scope="col" style="width:25%">Schedule Form</th>
+                                            <th scope="col" style="width:25%">Secure</th>
+                                            <th scope="col" style="width:25%">Struggling</th>
+                                            <th scope="col" style="width:25%">At Risk</th>
+                                            <th scope="col" style="width:25%">Crisis</th>
+                                            <th scope="col" style="width:25%">No Status</th>
+                                            <th scope="col" style="width:25%">Action</th>
                                         </tr>
-                                    }
+                                    </thead>
+                                    <tbody class="formSchedulinglist">-->
+        @*@foreach (var form in Model)
+            {
+                <tr>
+
+                    <td>
+                        @form.FormName
+                    </td>
+                    <td>
+                        <ul class="days">
+                            <li><a href="#!">@form.ForEvery @form.ForType</a></li>
+                        </ul>
+                    </td>
 
 
-                                </tbody>
-                            </table>
+
+                    <td>
+                        <a href="#!" onclick="EditFormScheduling(@form.FormSchedulingID)" class="btn btn-success" data-toggle="modal" data-target="#FormModal">
+                            <i class="far fa-edit"></i>
+                            Edit
+                        </a>
+                    </td>
+                </tr>
+            }*@
+
+
+        <!--</tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
 
+                </div>
             </div>
-        </div>
-</div>
+        </div>-->
     </div>
 </section>
 
@@ -93,33 +230,56 @@
                     <div class="formModalEdit">
 
                         <form class="appointement-form">
-                            <input type="text" hidden="hidden" id="txtFormSchedulingID" class="form-control" placeholder="">
                             <div class="form-group d-flex align-items-center">
-                                <label for="staticEmail" class="m-0">Form Name</label>
+                                <label for="programName" class="m-0">Form Name:</label>
                                 @*<input type="text" class="form-control w-40" id="txtFormName">*@
-                                <label for="staticEmail" class="m-0" style="white-space:nowrap" id="lblFormName"></label>
+                                <label for="staticEmail" class="m-0" style="white-space:nowrap" id="programName"></label>
                             </div>
-
+                            <div class="modal-row custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="NoSchedule" name="checkbox">
+                                <label class="custom-control-label" for="NoSchedule">No Schedule</label>
+                            </div>
                             <div class="form-group">
                                 <div class="d-flex formGrowRow">
-                                    <label for="inputPassword" class="m-0">For every</label>
-                                    <input type="text" class="form-control"  style="height:25px;width:25px;" id="txtEvery">
-                                    <select class="form-control" style="height:25px !important;padding: 0;" id="ddType">
-                                        <option>Week</option>
-                                        <option>Days</option>
-                                        <option>Month</option>
+                                    <label for="inputPassword" class="m-0">Score Criteria</label>
+                                    <select class="form-control" style="height:25px !important;padding: 0;" id="ddStatus">
+                                        <option value="5">No Status</option>
+                                        <option value="1">Secure</option>
+                                        <option value="2">Struggling</option>
+                                        <option value="3">At Risk</option>
+                                        <option value="4">Crisis</option>
                                     </select>
                                 </div>
 
                             </div>
+                            <div class="form-group">
+                                <div class="d-flex formGrowRow">
+                                    <label for="inputPassword" class="m-0">For every</label>
+                                    <input type="number" class="form-control" onkeyup="isNumber(this)" style="height:25px;width:25px;" id="txtEvery">
+                                    <select class="form-control" style="height:25px !important;padding: 0;" id="ddType">
+                                        <option value="1">Days</option>
+                                        <option value="2">Week</option>
+                                        <option value="3">Month</option>
+                                    </select>
+                                </div>
 
-
-
-
+                            </div>
+                            <button type="button" id="addSchedule" onclick="AddSchedule()" class="btn btn-success" disabled>Add</button>
                             <div class="modal-footer">
                                 <button type="button" onclick="closeModel()" class="btn btn-secondary">Cancel</button>
-                                <button type="button" onclick="UpdateFormScheduling()" class="btn btn-primary">Update</button>
+                                <button type="button" id="updateFormScheduling" onclick="UpdateFormScheduling()" class="btn btn-primary" disabled>Update</button>
                             </div>
+                            <table class="table" id="tbl_ScoreSchedule">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Score Criteria</th>
+                                        <th scope="col">Schedule</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+
                         </form>
                     </div>
                 </div>
@@ -128,15 +288,64 @@
     </div>
 </div>
 <!-- Form Modal end here -->
+<div class="FormModal">
+    <div class="modal fade" id="ProgramFormModal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Program Form Schedule Edit</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="formModalEdit">
+
+                        <form class="appointement-form">
+                            <input type="text" hidden="hidden" id="txtProgramFormSchedulingID" class="form-control" placeholder="">
+                            <div class="form-group d-flex align-items-center">
+                                <label for="staticEmail" class="m-0">Form Name</label>
+                                @*<input type="text" class="form-control w-40" id="txtFormName">*@
+                                <label for="staticEmail" class="m-0" style="white-space:nowrap" id="lblProgramFormName"></label>
+                            </div>
+                            <div class="modal-row custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="NoProgramSchedule" name="checkbox">
+                                <label class="custom-control-label" for="NoProgramSchedule">No Schedule</label>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="d-flex formGrowRow">
+                                    <label for="inputPassword" class="m-0">For every</label>
+                                    <input type="text" class="form-control" style="height:25px;width:25px;" id="txtEveryprogram">
+                                    <select class="form-control" style="height:25px !important;padding: 0;" id="ddTypeprogram">
+                                        <option value="1">Days</option>
+                                        <option value="2">Week</option>
+                                        <option value="3">Month</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" onclick="closeModel()" class="btn btn-secondary">Cancel</button>
+                                <button type="button" id="tblProgramUpdate" onclick="UpdateProgramFormScheduling()" class="btn btn-primary">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section scripts{
-<script>
+    <script>
 
     var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
 
     //----- get Form Scheduling  detail by  id
     function EditFormScheduling(id) {
-       
-        
+
+
         var data = {
             ID: id
         };
@@ -147,12 +356,12 @@
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             success: function (result) {
-               
+
                 $("#txtFormSchedulingID").val(result.FormSchedulingID);
                 $("#lblFormName").html(result.FormName);
                 $("#txtEvery").val(result.ForEvery);
                 $("#ddType").val('' + result.ForType);
-               
+
 
             },
             error: function (e) {
@@ -163,54 +372,54 @@
 
 
     //--------Update FormScheduling
-    function UpdateFormScheduling() {
-
-        
-        var d = new Date();
-       
-
-        var model = {
-
-            FormSchedulingID: $("#txtFormSchedulingID").val(),
-            ForEvery: $("#txtEvery").val(),
-            ForType: $("#ddType").val(),
-            ModifiedDate: d.toJSON(),
-            IsDeleted: false,
-        };
-
-        if ($("#txtEvery").val().trim() == "") {
-            toastr.error("Please Fill ForEvery Detail");
-            $('#txtEvery').focus();
-        }
-        else {
-            $.ajax({
-                type: "POST",
-                url: Apipath + '/api/PatientMain/UpdateFormScheduling',
-                data: JSON.stringify(model),
-                contentType: 'application/json; charset=UTF-8',
-                dataType: "json",
-                success: function (result) {
-                   
-                    if (result != '') {
-
-                        toastr.success("Form scheduling saved successfully");
-                        closeModel();
-                        location.href = '/Patient/FormScheduling';
-
-                    }
-                    else {
-                        toastr.error("Error while Saved data");
-                    }
-                },
-                error: function () {
-
-                    toastr.error("Error while Saved data");
-                }
-            });
-        }
+    //function UpdateFormScheduling() {
 
 
-    }
+    //    var d = new Date();
+
+
+    //    var model = {
+
+    //        FormSchedulingID: $("#txtFormSchedulingID").val(),
+    //        ForEvery: $("#txtEvery").val(),
+    //        ForType: $("#ddType").val(),
+    //        ModifiedDate: d.toJSON(),
+    //        IsDeleted: false,
+    //    };
+
+    //    if ($("#txtEvery").val().trim() == "") {
+    //        toastr.error("Please Fill ForEvery Detail");
+    //        $('#txtEvery').focus();
+    //    }
+    //    else {
+    //        $.ajax({
+    //            type: "POST",
+    //            url: Apipath + '/api/PatientMain/UpdateFormScheduling',
+    //            data: JSON.stringify(model),
+    //            contentType: 'application/json; charset=UTF-8',
+    //            dataType: "json",
+    //            success: function (result) {
+
+    //                if (result != '') {
+
+    //                    toastr.success("Form scheduling saved successfully");
+    //                    closeModel();
+    //                    location.href = '/Patient/FormScheduling';
+
+    //                }
+    //                else {
+    //                    toastr.error("Error while Saved data");
+    //                }
+    //            },
+    //            error: function () {
+
+    //                toastr.error("Error while Saved data");
+    //            }
+    //        });
+    //    }
+
+
+    //}
 
 
     //--- empty modal fields
@@ -233,5 +442,7 @@
 
 
 
-</script>
-       }
+    </script>
+}
+
+<script src="~/Scripts/FormSchedule/formscheduling.js"></script>
