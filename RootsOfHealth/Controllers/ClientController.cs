@@ -115,6 +115,7 @@ namespace RootsOfHealth.Controllers
                         patientdetailobj.PatientProgram.DreamOnly = patientdetailobj.DreamOnly;
                         patientdetailobj.PatientProgram.OUOnly = patientdetailobj.OUOnly;
                         patientdetailobj.PatientProgram.PeraltaCollege = patientdetailobj.PeraltaCollege;
+                        patientdetailobj.FormScheduling = readTask.Result.FormSchedulingResult;
 
                         ViewBag.FirstName = patientdetailobj.PatientMain.FirstName + " " + patientdetailobj.PatientMain.MiddleName + " " + patientdetailobj.PatientMain.LastName;
                         ViewBag.DOB = patientdetailobj.PatientMain.DateOfBirth;
@@ -1041,7 +1042,7 @@ namespace RootsOfHealth.Controllers
                     patientdetailobj.PatientProgram.DreamOnly = patientdetailobj.DreamOnly;
                     patientdetailobj.PatientProgram.OUOnly = patientdetailobj.OUOnly;
                     patientdetailobj.PatientProgram.PeraltaCollege = patientdetailobj.PeraltaCollege;
-
+                    patientdetailobj.FormScheduling = readTask.Result.FormSchedulingResult;
 
                     ViewBag.PatientId = patientdetailobj.PatientMain.PatientID;
                     ViewBag.FirstName = patientdetailobj.PatientMain.FirstName + " " + patientdetailobj.PatientMain.MiddleName + " " + patientdetailobj.PatientMain.LastName;
@@ -1691,7 +1692,7 @@ namespace RootsOfHealth.Controllers
 
                     }
 
-
+                   
                     patientdetailobj.ScheduleDate = sheduleobj;
                     objCommon.BindDBOptions(ref patientdetailobj);
 

@@ -130,7 +130,10 @@
     var _ClinicId = "@Model.PatientMain.ClinicID"
     var _amdMedRecordNo = '@Model.PatientMain.AmdMedicalRecordNumber';
     var clientMiddleName = '@Model.PatientMain.MiddleName';
-     var clientName = '@Model.PatientMain.FirstName'+" "+'@Model.PatientMain.LastName'
+    var clientName = '@Model.PatientMain.FirstName'+" "+'@Model.PatientMain.LastName'
+  
+    var SchedulingList = JSON.parse('@Html.Raw(Json.Encode(Model.FormScheduling))');
+
     if (clientMiddleName.trim().length > 0) {
         clientName = '@Model.PatientMain.FirstName' + " " + clientMiddleName+" "+'@Model.PatientMain.LastName'
       }
@@ -349,7 +352,7 @@
             ModifiedBy: parseInt(@Session["userid"].ToString())
         };
         $.ajax({
-    type: "POST",
+          type: "POST",
             url: Apipath + '/api/PatientMain/savenotes',
             data: JSON.stringify(data),
             contentType: 'application/json; charset=UTF-8',
@@ -2422,8 +2425,8 @@
 
         //$("#myChildTab").css("display", "none");
         var item = $(item);
-            var ClientFormId = item.attr("data-ClientFormID")
-            formName = item.attr("data-FormName");
+        var ClientFormId = item.attr("data-ClientFormID")
+        formName = item.attr("data-FormName");
         programElement = $("#" + formName + "render-basicform");
         if (ClientFormId == undefined) {
             if (ViewBagClientFormId != 0) {
@@ -2432,17 +2435,17 @@
             }
             setTimeout(function () {
                 LoadChildMenu(ClientFormId);
-            },1000)
+            }, 1000)
         }
         else {
             LoadChildMenu(ClientFormId);
         }
         var id = item.attr("id");
-        if ($("#"+id).hasClass("Child")) {
+        if ($("#" + id).hasClass("Child")) {
             $(".Child").removeClass('active show');
             $("#" + id).addClass('active show');
         }
-
+        
         if (formName != undefined) {
             var _IsSaved = $('#' + formName + 'only').find('.btnprogramsave').attr('data-save');
             $('#' + formName + 'only').find('.Child').removeClass('active show ');
@@ -2455,7 +2458,7 @@
             }
             $('#' + formName + 'only').addClass('active show');
             var _templateID = item.attr("data-TemplateID");
-            if (programElement.html() != "" ) {
+            if (programElement.html() != "") {
                 $(".loaderOverlay").hide();
                 return;
             };
@@ -2522,11 +2525,11 @@
                             else if (item.ClientFormID == ClientFormID) {
                                 if (item.Saved == true) {
                                     myChildTab.append(`<li class="nav-item active show" style="display: flex;" ><a id="${formnames}" style="width: 230px;" data-FormName="${formnames}" data-TemplateID="${item.TemplateID}" onclick="RebindClientFormEvent(this)" class="nav-link Child" href="${'#' + formnames + 'only'}"data-ClientFormID="${item.ClientFormID}"data-PatientID="${item.PatientID}">
-                                ${item.FormName}<span class="check" ${item.Saved}?"":style='display:none' ><i class="fas fa-check-circle"></i></span></a></li>`
+                                ${item.FormName}<span class="notCount" id="${formnames}Notify" style="display:none"></span><span class="check" ${item.Saved}?"":style='display:none' ><i class="fas fa-check-circle"></i></span></a></li>`
                                     )
                                 } else {
                                     myChildTab.append(`<li class="nav-item active show" style="display: flex;" ><a id="${formnames}" style="width: 230px;" data-FormName="${formnames}" data-TemplateID="${item.TemplateID}" onclick="RebindClientFormEvent(this)" class="nav-link Child" href="${'#' + formnames + 'only'}"data-ClientFormID="${item.ClientFormID}"data-PatientID="${item.PatientID}">
-                                ${item.FormName}<span class="check" ${item.Saved}?"":style='display:none' ></i></span></a></li>`
+                                ${item.FormName}<span class="notCount" id="${formnames}Notify" style="display:none"></span><span class="check" ${item.Saved}?"":style='display:none' ></i></span></a></li>`
                                     )
                                 }
                             }
@@ -2534,11 +2537,11 @@
 
                                 if (item.Saved == true) {
                                     myChildTab.append(`<li class="nav-item" style="display: flex;" ><a id="${formnames}" style="width: 230px;" data-FormName="${formnames}" data-TemplateID="${item.TemplateID}" onclick="RebindClientFormEvent(this)" class="nav-link Child" href="${'#' + formnames + 'only'}"data-ClientFormID="${item.ClientFormID}"data-PatientID="${item.PatientID}">
-                                ${item.FormName}<span class="check" ${item.Saved}?"":style='display:none' ><i class="fas fa-check-circle"></i></span></a></li>`
+                                ${item.FormName}<span class="notCount" id="${formname}Notify" style="display:none"></span><span class="check" ${item.Saved}?"":style='display:none' ><i class="fas fa-check-circle"></i></span></a></li>`
                                     )
                                 } else {
                                     myChildTab.append(`<li class="nav-item" style="display: flex;" ><a id="${formnames}" style="width: 230px;" data-FormName="${formnames}" data-TemplateID="${item.TemplateID}" onclick="RebindClientFormEvent(this)" class="nav-link Child" href="${'#' + formnames + 'only'}"data-ClientFormID="${item.ClientFormID}"data-PatientID="${item.PatientID}">
-                                ${item.FormName}<span class="check" ${item.Saved}?"":style='display:none' ></i></span></a></li>`
+                                ${item.FormName}<span class="notCount" id="${formname}Notify" style="display:none"></span><span class="check" ${item.Saved}?"":style='display:none' ></i></span></a></li>`
                                     )
                                 }
                             }
@@ -2552,6 +2555,8 @@
                     if (data.length > 0) {
 
                         $("#myChildTab").css("display", "flex");
+                       
+                        SetScheduling()
                         $('#' + formName + 'only').addClass('client-form-margin-top');
                     }
                     $.each(data, function (i, item) {
@@ -2623,18 +2628,23 @@
                                 var formname = item.FormName.replace(/ /g, '');
                                 if (item.Saved == true) {
                                     myChildTab.append(`<li class="nav-item" style="display: flex;" ><a id="${formname}" style="width: 230px;" data-FormName="${formname}" data-TemplateID="${item.TemplateID}" onclick="loadClient(this)" class="nav-link Child" href="${'#' + formname + 'only'}"data-ClientFormID="${item.ClientFormID}"data-PatientID="${item.PatientID}">
-                                ${item.FormName}<span class="check" ${item.Saved}?"":style='display:none' ><i class="fas fa-check-circle"></i></span></a></li>`
+                                ${item.FormName}<span class="notCount" id="${formname}Notify" style="display:none"></span><span class="check" ${item.Saved}?"":style='display:none' ><i class="fas fa-check-circle"></i></span></a></li>`
                                     )
                                 } else {
                                     myChildTab.append(`<li class="nav-item" style="display: flex;" ><a id="${formname}" style="width: 230px;" data-FormName="${formname}" data-TemplateID="${item.TemplateID}" onclick="loadClient(this)" class="nav-link Child" href="${'#' + formname + 'only'}"data-ClientFormID="${item.ClientFormID}"data-PatientID="${item.PatientID}">
-                                ${item.FormName}<span class="check" ${item.Saved}?"":style='display:none' ></i></span></a></li>`
+                                ${item.FormName}<span class="notCount" id="${formname}Notify" style="display:none"></span><span class="check" ${item.Saved}?"":style='display:none' ></i></span></a></li>`
                                     )
                                 }
                             }
                         });
                     }
                     if (myChildTab.find("li").length == 0) {
+
+
                         $('#' + formName + 'only').removeClass('client-form-margin-top');
+                    } else {
+                        
+                        SetScheduling();
                     }
                 },
                 error: function (e) {
@@ -2929,7 +2939,7 @@
                                             for (var i = 0; i < valueArr.length; i++) {
                                                 valueTxt += $(item).closest("div.inputContent").find(`input[value="${valueArr[i]}"]`).next().text() + ", ";
                                             }
-                                            
+
                                             valueTxt = valueTxt.slice(0, -2);
                                             $(item).closest("div.inputContent").find("label.label-program").html("").append(valueTxt).show();
                                             $(item).closest("div.inputContent").find("div").first().hide();
@@ -3033,7 +3043,7 @@
                                              for (var i = 0; i < valueArr.length; i++) {
                                                     valueTxt += $(item).closest("div.inputContent").find(`input[value="${valueArr[i]}"]`).next().text() + ", ";
                                             }
-                                            
+
                                                 valueTxt = valueTxt.slice(0, -2);
                                                 $(item).closest("div.inputContent").find("label.label-base").html("").append(valueTxt).show();
                                                 $(item).closest("div.inputContent").find("div").first().hide();
@@ -3942,22 +3952,22 @@
     }
 
     function GetScoreClient(clientformid) {
-        
+
         $.ajax({
             type: "GET",
             url: Apipath + '/api/PatientMain/getclientscorestatus?clientformid=' + clientformid + '&clientid=' + _patientID,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (data) {
-                
+
                 if (data) {
                     var element = $('#ScoreStatus_' + clientformid)
                     var scoreElement = $(element).find('#txtoverallscore');
                     var statusElement = $(element).find('#txtoverallstatus');
-                    
+
                     if (data.OverAllScore != 0 && data.OverAllScore != null && data.OverAllScore != undefined) {
                             $(scoreElement).html(data.Score + '/' + data.OverAllScore);
-                        
+
                         $(element).removeClass('d-none')
 
                         if (data.Crisis != null && data.Crisis != '' && data.Crisis != undefined) {
@@ -3968,7 +3978,7 @@
                             let status = ''
                             let badge=''
                             let score = data.Score
-                            if (score > crisis[0] && score <= crisis[1]) {
+                            if (score >= crisis[0] && score <= crisis[1]) {
                                 status = 'crisis'
                                 badge = '<span class="badge badge-danger" style="height:10px; position:relative; top:4px;">&nbsp; &nbsp;</span>'
                             }
@@ -3996,6 +4006,77 @@
                 toastr.error("Error while getting appotment data.");
             }
         });
+    }
+   
+    SetScheduling();
+    function SetScheduling() {
+        var programDotColor = ''
+      
+        if (SchedulingList.length > 0) {
+            for (var i = 0; i < SchedulingList.length; i++) {
+                var ArrayItem = SchedulingList[i];
+                if (ArrayItem.NotificationColor != null && ArrayItem.DotColor == null) {
+                    var formName = ArrayItem.FormName.replace(/ /g, '')
+                   
+                    if (ArrayItem.FormType == 1) {
+                        if (!ArrayItem.IsChild) {
+                            var $Item = $('#myTab #' + formName + 'Notify')
+                            var $Tab = $('#myTab #a' + formName)
+                        }
+                        else {
+                            var $Item = $('#myChildTab #' + formName + 'Notify')
+                            var $Tab = $('#myChildTab a#' + formName)
+                        }
+                    }
+                    else if (ArrayItem.FormType == 2) {
+                        var $Item = $('#tabPills #' + formName + 'Notify')
+                        var $Tab = $('#tabPills #a' + formName)
+                    }
+
+
+                    if (ArrayItem.NotificationColor == "Red") {
+                        $Item.attr('class', 'notCountR');
+                        $Tab.css('border-left', '5px solid #a53333');
+                        $Item.show();
+                        $Item.html(ArrayItem.NotificationDays);
+
+                        if (ArrayItem.NotificationDays == "0") {
+                            $Item.attr('title', 'Due date isToday.');
+                        }
+                        else {
+                            $Item.attr('title', 'Due ' + ArrayItem.NotificationDays + ' days ago');
+                        }
+                    }
+
+                    else if (ArrayItem.NotificationColor == "Orange") {
+                        $Item.attr('class', 'notCountO');
+                        $Tab.css('border-left', '5px solid #e4854d');
+                        $Item.show();
+                        $Item.html(ArrayItem.NotificationDays);
+                        $Item.attr('title', 'Due after ' + ArrayItem.NotificationDays + ' days.');
+
+                    }
+                    else if (ArrayItem.NotificationColor == "Green") {
+                        $Item.attr('class', 'notCountG');
+                        $Tab.css('border-left', '5px solid #0aa22d');
+                        $Item.show();
+                        $Item.html(ArrayItem.NotificationDays);
+                        $Item.attr('title', 'Due after ' + ArrayItem.NotificationDays + ' days.');
+
+                    }
+
+                    if (ArrayItem.FormType == 2) {
+                        programDotColor = ArrayItem.NotificationColor
+                    }
+
+
+                } else if (ArrayItem.DotColor != null) {
+                    $('a[data-clientformid="' + ArrayItem.FormId+'"]').css('background-color', 'coral');
+
+                }
+
+            }
+        }
     }
 
 </script>
