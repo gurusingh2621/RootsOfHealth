@@ -13,6 +13,54 @@
     #content .inner-content .paitent-detail-left {
         padding: 0;
     }
+    .formGrowRow select#ddStatus {
+        margin: 0 20px 0 0px;
+        padding: 0 10px !important;
+    }
+    .formGrowRow .form-control {
+        padding: 0 10px !important;
+    }
+    .formGrowRow select.form-control {
+        background-position: 97% center;
+    }
+    .formGrowRow .form-control:disabled {
+        cursor: not-allowed;
+        background-color: #eee;
+        border: 1px solid #dddddd;
+    }
+    #FormModal .btn-success.disabled, #FormModal .btn-success:disabled,
+    .btn:disabled {
+        border-color: rgb(161, 161, 161) !important;
+        background-color: rgb(161, 161, 161) !important;
+        color: #ffffff !important;
+    }
+    table#tbl_ScoreSchedule {
+        margin: 20px 0 0;
+    }
+    table#tbl_ScoreSchedule thead th, table#tbl_ScoreSchedule tr td {
+        padding: 8px 10px;
+        font-size: 14px;
+    }
+    .appointement-form label {
+     width:80px;
+    }
+    .appointement-form label.custom-control-label {
+        width: auto;
+    }
+    .appointement-form .modal-footer {
+        padding: 10px 0 10px 0;
+    }
+    .form-schedule .table th {
+        background-color: transparent;
+        color: #495057;
+    }
+    .overite-prorperty.form-schedule .table th:first-child {
+        background-color: transparent !important;
+        border-bottom: 0px solid #565656 !important;
+    }
+    table.dataTable {
+        width: calc(100% - 1px) !important;
+    }
 </style>
 <!-- Form scheduling Tab Start here  -->
 
@@ -71,7 +119,7 @@
 
                 <div class="tab-pane fade" id="ProgramFormScheduling" role="tabpanel" aria-labelledby="ProgramFormScheduling-tab">
 
-                    <div class="appointment mt-5" style="padding:0">
+                    <div class="appointment mt-5" >
                         <div class="container-fluid pl-0 pr-0">
                             <div class="paitent-detail-left">
                                 <div class="detail-heading d-flex">
@@ -82,7 +130,7 @@
                                         <thead class="thead-light">
                                             <tr>
                                                 <th scope="col" style="width:25%">Schedule Form</th>
-                                                <th scope="col" style="width:25%">No Status</th>
+                                                <th scope="col" style="width:25%">For Every</th>
                                                 <th scope="col" style="width:25%">Action</th>
                                             </tr>
                                         </thead>
@@ -235,10 +283,12 @@
                                 @*<input type="text" class="form-control w-40" id="txtFormName">*@
                                 <label for="staticEmail" class="m-0" style="white-space:nowrap" id="programName"></label>
                             </div>
-                            <div class="modal-row custom-control custom-checkbox">
+                            <div class="form-group modal-row custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="NoSchedule" name="checkbox">
-                                <label class="custom-control-label" for="NoSchedule">No Schedule</label>
+                                <label class="custom-control-label" for="NoSchedule">No scheduling for all criteria</label>
                             </div>
+
+
                             <div class="form-group">
                                 <div class="d-flex formGrowRow">
                                     <label for="inputPassword" class="m-0">Score Criteria</label>
@@ -249,13 +299,17 @@
                                         <option value="3">At Risk</option>
                                         <option value="4">Crisis</option>
                                     </select>
+                                    <div class="modal-row custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="NoScheduleForStatus" name="checkbox">
+                                        <label class="custom-control-label" for="NoScheduleForStatus">No Schedule</label>
+                                    </div>
                                 </div>
 
                             </div>
                             <div class="form-group">
                                 <div class="d-flex formGrowRow">
                                     <label for="inputPassword" class="m-0">For every</label>
-                                    <input type="number" class="form-control" onkeyup="isNumber(this)" style="height:25px;width:25px;" id="txtEvery">
+                                    <input type="number" min="1" class="form-control" onkeyup="isNumber(this)" style="height:25px;width:25px;" id="txtEvery">
                                     <select class="form-control" style="height:25px !important;padding: 0;" id="ddType">
                                         <option value="1">Days</option>
                                         <option value="2">Week</option>
@@ -265,10 +319,10 @@
 
                             </div>
                             <button type="button" id="addSchedule" onclick="AddSchedule()" class="btn btn-success" disabled>Add</button>
-                            <div class="modal-footer">
-                                <button type="button" onclick="closeModel()" class="btn btn-secondary">Cancel</button>
-                                <button type="button" id="updateFormScheduling" onclick="UpdateFormScheduling()" class="btn btn-primary" disabled>Update</button>
-                            </div>
+                            @*<div class="modal-footer">
+                                    <button type="button" onclick="closeModel()" class="btn btn-secondary">Cancel</button>
+                <button type="button" id="updateFormScheduling" onclick="UpdateFormScheduling()" class="btn btn-primary" disabled>Update</button>
+        </div>*@
                             <table class="table" id="tbl_ScoreSchedule">
                                 <thead>
                                     <tr>
@@ -308,7 +362,7 @@
                                 @*<input type="text" class="form-control w-40" id="txtFormName">*@
                                 <label for="staticEmail" class="m-0" style="white-space:nowrap" id="lblProgramFormName"></label>
                             </div>
-                            <div class="modal-row custom-control custom-checkbox">
+                            <div class="form-group modal-row custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="NoProgramSchedule" name="checkbox">
                                 <label class="custom-control-label" for="NoProgramSchedule">No Schedule</label>
                             </div>
@@ -316,7 +370,7 @@
                             <div class="form-group">
                                 <div class="d-flex formGrowRow">
                                     <label for="inputPassword" class="m-0">For every</label>
-                                    <input type="text" class="form-control" style="height:25px;width:25px;" id="txtEveryprogram">
+                                    <input type="text" min="1" class="form-control" style="height:25px;width:25px;" id="txtEveryprogram">
                                     <select class="form-control" style="height:25px !important;padding: 0;" id="ddTypeprogram">
                                         <option value="1">Days</option>
                                         <option value="2">Week</option>

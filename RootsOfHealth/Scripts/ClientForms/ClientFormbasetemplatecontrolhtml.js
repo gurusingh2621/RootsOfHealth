@@ -409,9 +409,10 @@ function EditHtml(type, ID) {
                 $(controlId).html("");
                 $(controlId).html("<label class='checkbox-group'><span class='title'>Check Box (Multiple)</span><span class='desc'></span></label>");
                 var option_data = "<div class='inputContent'><div class='checkbox-html'>";
+                
                 $(".option-block").each(function (index) {
                     option_data += `<div class="custom-control custom-checkbox  d-inline-block mr-2">
-                     <input  type="checkbox" class="custom-control-input" id="${ID + index}"  name="${ID}"  value="${$(this).find("input.option-text").val().trim()}">
+                     <input  type="checkbox" class="custom-control-input" id="${ID + index}"  name="${ID}"value="${$(this).find("input.option-text").val().trim()}">
                      <label class="custom-control-label" for="${ID + index}">${$(this).find("input.option-text").val().trim()}</label></div>
                      `;
                 });
