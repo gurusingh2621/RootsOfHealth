@@ -47,10 +47,13 @@
             transition: all ease 0.4s;
         }
 
-        .tabs-scroll > ul#myTab > li > a .notCountR, a .notCountO, a .notCountG, a .notCountR {
-            top: 7px;
-            right: 35px;
-        }
+    .tabs-scroll > ul#myTab > li > a .notCountR,
+    .tabs-scroll > ul#myTab > li > a .notCountO,
+    .tabs-scroll > ul#myTab > li > a .notCountG,
+    .tabs-scroll > ul#myTab > li > a .notCountR {
+        top: 7px;
+        right: 35px;
+    }
 
         #content {
             padding-top: 0px !important;
@@ -125,7 +128,15 @@
         width:100%;
         margin: 0 0 30px auto;
     }
-   
+    .pColorCircle {
+        height: 10px;
+        width: 10px;
+        position: absolute;
+        top: 50%;
+        right: 43px;
+        border-radius: 50px;
+        margin-top: -5px;
+    }
 </style>
 <!-- Content start here -->
 <section id="content" class="responsive-container">
@@ -144,7 +155,7 @@
                      
                         <li class="nav-item">
                             <a id="@("a" + FormName)" class="nav-link" data-toggle="tab"
-                               href="@("#" + FormName + "only")" data-ClientFormID="@item.ClientFormID" data-PatientID="@item.patientID" onclick="loadClient(this)"  data-TemplateID="@item.TemplateID" data-FormName=@(FormName)>@item.FormName<span class="notCount" id="@(FormName + "Notify")" style="display:none"></span><span class="check @Html.Raw(item.Saved ? "" : "d-none")"><i class="fas fa-check-circle"></i></span></a>
+                               href="@("#" + FormName + "only")" data-ClientFormID="@item.ClientFormID" data-PatientID="@item.patientID" onclick="loadClient(this)"  data-TemplateID="@item.TemplateID" data-FormName=@(FormName)>@item.FormName<span class="pColorCircle"  style="display:none"></span><span class="notCount" id="@(FormName + "Notify")" style="display:none"></span><span class="check @Html.Raw(item.Saved ? "" : "d-none")"><i class="fas fa-check-circle"></i></span></a>
 
                         </li>
                        
@@ -153,7 +164,7 @@
                 
                 <li class="nav-item" id="programtbs" style="display:none;/*left: 155px;*/">
                     <a class="nav-link" id="Programs-tab" data-toggle="tab" href="#Programs" role="tab"
-                       aria-controls="Programs" aria-selected="false">Programs <span class="check" data-FormName="Profile"  style="display:none"><i class="fas fa-check-circle"></i></span></a>
+                       aria-controls="Programs" aria-selected="false">Programs <span class="notCount" id="ProgramNotify" style="display:none"></span><span class="check" data-FormName="Profile"  style="display:none"><i class="fas fa-check-circle"></i></span></a>
                 </li>
 
                 <li class="nav-item " style="display:block">

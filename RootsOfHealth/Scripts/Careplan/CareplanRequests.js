@@ -124,7 +124,7 @@ function LoadRequestHistory() {
                         var MTime = Timearray[0] + ":" + Timearray[1] + ":" + Timearray[2].split(".")[0] + " " + AmPm;
                     }
                     careplansRequest += `<tr>
-                           <td width="200px"><a onClick="editCarePlan(${item.CarePlanId},PatientId=${item.PatientId})" class="btn btn-link CarePlanViewLink" style="cursor:pointer;">${item.CarePlanName == null ? "" : item.CarePlanName}</a></td>
+                           <td width="200px"><a onClick="editCarePlan(${item.CarePlanId},PatientId=${item.PatientId},false)" class="btn btn-link CarePlanViewLink" style="cursor:pointer;">${item.CarePlanName == null ? "" : item.CarePlanName}</a></td>
                            <td width="200px">${item.ClientName == null ? "" : item.ClientName}</td>`
 
                     if (item.Status == 2 && item.Type == 1) {
@@ -541,8 +541,11 @@ function ViewCareplan(requestId, IsViewCareplan) {
         }
     });
 }
-function ViewRequestChanges(_careplanid, requestId) {
-    reopenRequestId = requestId;
+function ViewRequestChanges(_careplanid, requestId,FromPopUp=true) {
+    if (FromPopUp) {
+        reopenRequestId = requestId;
+    }
+   
     $.ajax({
         type: "Get",
         url: Apipath + '/api/PatientMain/getchangedneedsandgoals?careplanid=' + _careplanid + '&isChecked=true',
@@ -602,10 +605,18 @@ function ViewRequestChanges(_careplanid, requestId) {
 }
 
 $('#addNewCarePlansSidebar .close_right_sidebar').click(function () {
-    $('#tblCarePlanInbox #' + reopenRequestId + '').find('a.openPopUp').click();
+    
+    if (reopenRequestId != '' && reopenRequestId != 0) {
+        $('#tblCarePlanInbox #' + reopenRequestId + '').find('a.openPopUp').click();
+        reopenRequestId = 0;
+    }
 
 })
 
 $('#ViewRequestCareplanChanges').on('hidden.bs.modal', function (e) {
-    $('#tblCarePlanInbox #' + reopenRequestId + '').find('a.openPopUp').click();
+    
+    if (reopenRequestId != '' && reopenRequestId != 0) {
+        $('#tblCarePlanInbox #' + reopenRequestId + '').find('a.openPopUp').click();
+        reopenRequestId = 0;
+    } 
 })

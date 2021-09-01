@@ -2524,11 +2524,11 @@
                             }
                             else if (item.ClientFormID == ClientFormID) {
                                 if (item.Saved == true) {
-                                    myChildTab.append(`<li class="nav-item active show" style="display: flex;" ><a id="${formnames}" style="width: 230px;" data-FormName="${formnames}" data-TemplateID="${item.TemplateID}" onclick="RebindClientFormEvent(this)" class="nav-link Child" href="${'#' + formnames + 'only'}"data-ClientFormID="${item.ClientFormID}"data-PatientID="${item.PatientID}">
+                                    myChildTab.append(`<li class="nav-item" style="display: flex;" ><a id="${formnames}" style="width: 230px;" data-FormName="${formnames}" data-TemplateID="${item.TemplateID}" onclick="loadClient(this)" class="nav-link Child active show" href="${'#' + formnames + 'only'}"data-ClientFormID="${item.ClientFormID}"data-PatientID="${item.PatientID}">
                                 ${item.FormName}<span class="notCount" id="${formnames}Notify" style="display:none"></span><span class="check" ${item.Saved}?"":style='display:none' ><i class="fas fa-check-circle"></i></span></a></li>`
                                     )
                                 } else {
-                                    myChildTab.append(`<li class="nav-item active show" style="display: flex;" ><a id="${formnames}" style="width: 230px;" data-FormName="${formnames}" data-TemplateID="${item.TemplateID}" onclick="RebindClientFormEvent(this)" class="nav-link Child" href="${'#' + formnames + 'only'}"data-ClientFormID="${item.ClientFormID}"data-PatientID="${item.PatientID}">
+                                    myChildTab.append(`<li class="nav-item" style="display: flex;" ><a id="${formnames}" style="width: 230px;" data-FormName="${formnames}" data-TemplateID="${item.TemplateID}" onclick="loadClient(this)" class="nav-link active show Child" href="${'#' + formnames + 'only'}"data-ClientFormID="${item.ClientFormID}"data-PatientID="${item.PatientID}">
                                 ${item.FormName}<span class="notCount" id="${formnames}Notify" style="display:none"></span><span class="check" ${item.Saved}?"":style='display:none' ></i></span></a></li>`
                                     )
                                 }
@@ -2536,12 +2536,12 @@
                             else {
 
                                 if (item.Saved == true) {
-                                    myChildTab.append(`<li class="nav-item" style="display: flex;" ><a id="${formnames}" style="width: 230px;" data-FormName="${formnames}" data-TemplateID="${item.TemplateID}" onclick="RebindClientFormEvent(this)" class="nav-link Child" href="${'#' + formnames + 'only'}"data-ClientFormID="${item.ClientFormID}"data-PatientID="${item.PatientID}">
-                                ${item.FormName}<span class="notCount" id="${formname}Notify" style="display:none"></span><span class="check" ${item.Saved}?"":style='display:none' ><i class="fas fa-check-circle"></i></span></a></li>`
+                                    myChildTab.append(`<li class="nav-item" style="display: flex;" ><a id="${formnames}" style="width: 230px;" data-FormName="${formnames}" data-TemplateID="${item.TemplateID}" onclick="loadClient(this)" class="nav-link Child" href="${'#' + formnames + 'only'}"data-ClientFormID="${item.ClientFormID}"data-PatientID="${item.PatientID}">
+                                ${item.FormName}<span class="notCount" id="${formnames}Notify" style="display:none"></span><span class="check" ${item.Saved}?"":style='display:none' ><i class="fas fa-check-circle"></i></span></a></li>`
                                     )
                                 } else {
-                                    myChildTab.append(`<li class="nav-item" style="display: flex;" ><a id="${formnames}" style="width: 230px;" data-FormName="${formnames}" data-TemplateID="${item.TemplateID}" onclick="RebindClientFormEvent(this)" class="nav-link Child" href="${'#' + formnames + 'only'}"data-ClientFormID="${item.ClientFormID}"data-PatientID="${item.PatientID}">
-                                ${item.FormName}<span class="notCount" id="${formname}Notify" style="display:none"></span><span class="check" ${item.Saved}?"":style='display:none' ></i></span></a></li>`
+                                    myChildTab.append(`<li class="nav-item" style="display: flex;" ><a id="${formnames}" style="width: 230px;" data-FormName="${formnames}" data-TemplateID="${item.TemplateID}" onclick="loadClient(this)" class="nav-link Child" href="${'#' + formnames + 'only'}"data-ClientFormID="${item.ClientFormID}"data-PatientID="${item.PatientID}">
+                                ${item.FormName}<span class="notCount" id="${formnames}Notify" style="display:none"></span><span class="check" ${item.Saved}?"":style='display:none' ></i></span></a></li>`
                                     )
                                 }
                             }
@@ -4011,13 +4011,13 @@
     SetScheduling();
     function SetScheduling() {
         var programDotColor = ''
-      
+        var programDays = 0
         if (SchedulingList.length > 0) {
             for (var i = 0; i < SchedulingList.length; i++) {
                 var ArrayItem = SchedulingList[i];
                 if (ArrayItem.NotificationColor != null && ArrayItem.DotColor == null) {
                     var formName = ArrayItem.FormName.replace(/ /g, '')
-                   
+
                     if (ArrayItem.FormType == 1) {
                         if (!ArrayItem.IsChild) {
                             var $Item = $('#myTab #' + formName + 'Notify')
@@ -4066,17 +4066,60 @@
                     }
 
                     if (ArrayItem.FormType == 2) {
-                        programDotColor = ArrayItem.NotificationColor
+                        if (programDotColor == '' && programDotColor == null) {
+                            programDotColor = ArrayItem.NotificationColor
+                            programDays = ArrayItem.NotificationDays;
+                        } else if (ArrayItem.NotificationColor == "Red") {
+                            programDotColor = ArrayItem.NotificationColor
+                            if (programDays < ArrayItem.NotificationDays) {
+                                programDays = ArrayItem.NotificationDays;
+                            }
+                        } else if (ArrayItem.NotificationColor == "Orange" && (programDotColor == 'green' || programDotColor == 'orange')) {
+                            programDotColor = ArrayItem.NotificationColor
+                            if (programDays < ArrayItem.NotificationDays) {
+                                programDays = ArrayItem.NotificationDays;
+                            }
+                        } else if (ArrayItem.NotificationColor == "Green" && programDotColor == 'green') {
+                            if (programDays < ArrayItem.NotificationDays) {
+                                programDays = ArrayItem.NotificationDays;
+                            }
+                        }
+
                     }
 
 
                 } else if (ArrayItem.DotColor != null) {
-                    $('a[data-clientformid="' + ArrayItem.FormId+'"]').css('background-color', 'coral');
-
+                    if (ArrayItem.DotColor == "Red") {
+                        $('a[data-clientformid="' + ArrayItem.FormId + '"]').css('border-left', '5px solid #a53333');
+                    } else if (ArrayItem.DotColor == "Orange") {
+                        $('a[data-clientformid="' + ArrayItem.FormId + '"]').css('border-left', '5px solid #e4854d');
+                    } else if (ArrayItem.DotColor == "Green") {
+                        $('a[data-clientformid="' + ArrayItem.FormId + '"]').css('border-left', '5px solid #0aa22d');
+                    }
+                    $('a[data-clientformid="' + ArrayItem.FormId + '"]').find('.pColorCircle').css('background-color', ArrayItem.DotColor).show();
                 }
 
+
+            }
+            if (programDotColor != '') {
+                var programNotify = $('#Programs-tab').find('#ProgramNotify')
+                if (programDotColor == "Red") {
+                    $('#Programs-tab').css('border-left', '5px solid #a53333');
+                    programNotify.attr('class', 'notCountR')
+                } else if (programDotColor == "Orange") {
+                    programNotify.attr('class', 'notCountO')
+                    $('#Programs-tab').css('border-left', '5px solid #e4854d');
+                } else if (programDotColor == "Green") {
+                    programNotify.attr('class', 'notCountG')
+                    $('#Programs-tab').css('border-left', '5px solid #0aa22d');
+
+                }
+                programNotify.show().text(programDays)
             }
         }
+       
     }
+
+    
 
 </script>

@@ -337,7 +337,7 @@ function EditHtml(type, ID) {
                 popupString += '<div class="option-block">' +
                     '<div class="option-fields">' +
                     `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${($(item).next().text() == "option 1" || $(item).next().text() == "option 2") && $(controlId).find("input.custom-control-input").first().attr("data-column") === undefined ? "" : $(item).next().text()}"/>` +
-                    ' <input type="text" placeholder="Value" class="form-control option-value" disabled  value="' + $(item).attr("value") + '"/>' +
+                    ' <input type="text" placeholder="Value" class="form-control option-value" disabled  value="' + $(item).attr("data-value") + '"/>' +
                     ` <input type="text" placeholder="Score" onkeypress="return isNumber(event)" class="form-control option-score ${isScored.length > 0 ? '' : 'd-none'}"  value="${$(item).attr("data-score") == undefined ? '0' : $(item).attr("data-score")}"/>` +
                     '</div>' +
                     '<div class="popup-event-btn">' +
@@ -423,7 +423,7 @@ function EditHtml(type, ID) {
                 var option_data = "<div class='inputContent'><div class='checkbox-html'>";
                 $(".option-block").each(function (index) {
                     option_data += `<div class="custom-control custom-checkbox  d-inline-block mr-2">
-                     <input  type="checkbox"  data-score="${$(this).find("input.option-score").val()}" class="custom-control-input" id="${ID + index}"  name="${ID}"  value="${$(this).find("input.option-text").val().trim()}">
+                     <input  type="checkbox"  data-value="${$(this).find('input.option-value').val().trim()}"  data-score="${$(this).find("input.option-score").val()}" class="custom-control-input" id="${ID + index}"  name="${ID}"  value="${$(this).find("input.option-text").val().trim()}">
                      <label class="custom-control-label" for="${ID + index}">${$(this).find("input.option-text").val().trim()}</label></div>
                      `;
                 });
@@ -1020,7 +1020,7 @@ function EditHtml(type, ID) {
                 popupString += '<div class="option-block">' +
                     '<div class="option-fields">' +
                     `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${($(item).next().text() == "option 1" || $(item).next().text() == "option 2") && $(controlId).find("input.custom-control-input").first().attr("data-column") === undefined ? "" : $(item).next().text()}"/>` +
-                    ' <input type="text" placeholder="Value" class="form-control option-value" disabled value="' + $(item).attr("value") + '"/>' +
+                    ' <input type="text" placeholder="Value" class="form-control option-value" disabled value="' + $(item).attr("data-value") + '"/>' +
                     ` <input type="text" placeholder="Score" onkeypress="return isNumber(event)"  class="form-control option-score ${isScored.length > 0 ? '' : 'd-none'}"  value="${$(item).attr("data-score") == undefined ? '0' : $(item).attr("data-score")}"/>` +
                     '</div>' +
                     '<div class="popup-event-btn">' +
@@ -1105,7 +1105,7 @@ function EditHtml(type, ID) {
                 var option_data = "<div class='inputContent'><div class='radio-html'>";
                 $(".option-block").each(function (index) {
                     option_data += `<div class="custom-control custom-radio d-inline-block mr-2">
-                    <input  type="radio" class="custom-control-input" id="${ID + index}"  name="${ID}" data-score="${$(this).find("input.option-score").val()}"  value="${$(this).find("input.option-text").val()}">
+                    <input data-value="${$(this).find('input.option-value').val().trim()}" type="radio" class="custom-control-input" id="${ID + index}"  name="${ID}" data-score="${$(this).find("input.option-score").val()}"  value="${$(this).find("input.option-text").val()}">
                     <label class="custom-control-label" for="${ID + index}">${$(this).find("input.option-text").val()}</label></div>
                       `;
                 });
@@ -1270,7 +1270,7 @@ function EditHtml(type, ID) {
                     popupString += '<div class="option-block">' +
                         '<div class="option-fields">' +
                         `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${($(item).text() == "option 2" || $(item).text() == "option 3") && $(controlId).attr("data-column") === undefined ? "" : $(item).text()}"/>` +
-                        ' <input type="text" placeholder="Value" class="form-control option-value" disabled  value="' + $(item).val() + '"/>' +
+                        ' <input type="text" placeholder="Value" class="form-control option-value" disabled  value="' + $(item).attr("data-value") + '"/>' +
                         ` <input type="text" placeholder="Score" onkeypress="return isNumber(event)" class="form-control option-score ${isScored > 0 ? '' : 'd-none'}"  value="${$(item).attr("data-score") == undefined ? '0' : $(item).attr("data-score")}"/>` +
                         '</div>' +
                         '<div class="popup-event-btn">' +
@@ -1361,7 +1361,7 @@ function EditHtml(type, ID) {
                 $(controlId).html("");
                 $(".option-block").each(function (index) {
             
-                    var option_data = `<option  data-score="${$(this).find("input.option-score").val()}" value="${$(this).find("input.option-text").val()}">${$(this).find("input.option-text").val()}</option>`    ;
+                    var option_data = `<option data-value=${$(this).find("input.option-value").val()} data-score="${$(this).find("input.option-score").val()}" value="${$(this).find("input.option-text").val()}">${$(this).find("input.option-text").val()}</option>`    ;
 
                     $(option_data).appendTo('#' + ID);
                 });

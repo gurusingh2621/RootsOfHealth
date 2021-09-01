@@ -138,7 +138,10 @@
         transition: all ease 0.4s;
     }
 
-    .tabs-scroll > ul#myTab > li > a .notCountR, a .notCountO, a .notCountG, a .notCountR {
+    .tabs-scroll > ul#myTab > li > a .notCountR,
+    .tabs-scroll > ul#myTab > li > a .notCountO,
+    .tabs-scroll > ul#myTab > li > a .notCountG,
+    .tabs-scroll > ul#myTab > li > a .notCountR {
         top: 7px;
         right: 35px;
     }
@@ -207,6 +210,15 @@
     div#menu-toggle.open {
         right: 310px;
     }
+    .pColorCircle {
+        height: 10px;
+        width: 10px;
+        position: absolute;
+        top: 50%;
+        right: 43px;
+        border-radius: 50px;
+        margin-top: -5px;
+    }
 </style>
 <!-- Content start here -->
 <section id="content" class="responsive-container ">
@@ -238,7 +250,7 @@
                             var FormName = @item.FormName.Replace(" ", "");
                             <li class="nav-item">
                                 <a id="@("a" + FormName)" class="nav-link ProfileNotSaved isProfileSaved" data-toggle="tab"
-                                   href="@("#" + FormName + "only")" data-ClientFormID="@item.ClientFormID" onclick="RebindClientFormEvent(this)" data-PatientID="@item.patientID" data-TemplateID="@item.TemplateID" data-FormName=@(FormName)>@item.FormName<span class="notCount" id="@(FormName + "Notify")" style="display:none"></span><span class="check @Html.Raw(item.Saved ? "" : "d-none")"><i class="fas fa-check-circle"></i></span></a>
+                                   href="@("#" + FormName + "only")" data-ClientFormID="@item.ClientFormID" onclick="RebindClientFormEvent(this)" data-PatientID="@item.patientID" data-TemplateID="@item.TemplateID" data-FormName=@(FormName)>@item.FormName<span class="pColorCircle" style="display:none"></span><span class="notCount" id="@(FormName + "Notify")" style="display:none"></span><span class="check @Html.Raw(item.Saved ? "" : "d-none")"><i class="fas fa-check-circle"></i></span></a>
 
                             </li>
                         }
@@ -249,7 +261,7 @@
 
                 <li class="nav-item" id="programtbs" style="display:none;/*left: 155px;*/">
                     <a class="nav-link" id="Programs-tab" data-toggle="tab" href="#Programs" role="tab"
-                       aria-controls="Programs" aria-selected="false">Programs <span class="check" data-FormName="Profile" style="display:none"><i class="fas fa-check-circle"></i></span></a>
+                       aria-controls="Programs" aria-selected="false">Programs <span class="notCount" id="ProgramNotify" style="display:none"></span><span class="check" data-FormName="Profile" style="display:none"><i class="fas fa-check-circle"></i></span></a>
                 </li>
 
 
@@ -5646,6 +5658,8 @@
                     if (_programelement.find(".base-control").length) {
                         saveClientFormBaseFieldInfo(ClientFormID, _templateId, _Saved);
 
+                    } else {
+                        LoadSchedulingAfterSave();
                     }
 
                     disableClientFormSave()
@@ -5707,7 +5721,7 @@
                     $(".loaderOverlay").hide();
                 },
                 complete: function () {
-                    LoadSchedulingAfterSave();
+                    
                 }
             });
 
@@ -5775,7 +5789,7 @@
                 dataType: "json",
                 async: false,
                 success: function (res) {
-
+                    LoadSchedulingAfterSave();
                 },
                 error: function (e) {
                     toastr.error("Something happen Wrong");
@@ -6600,6 +6614,8 @@
                     if (_programelement.find(".base-control").length) {
                         saveProgramBaseFieldInfo(_programID, _templateId, _Saved);
 
+                    } else {
+                        LoadSchedulingAfterSave();
                     }
 
                     disableSave()
@@ -6660,7 +6676,7 @@
                     toastr.error("Something happen Wrong");
                     $(".loaderOverlay").hide();
                 }, complete: function () {
-                    LoadSchedulingAfterSave();
+                   
 
                 }
             });
@@ -6729,7 +6745,7 @@
                 dataType: "json",
                 async: false,
                 success: function (res) {
-
+                    LoadSchedulingAfterSave();
                 },
                 error: function (e) {
                     toastr.error("Something happen Wrong");
@@ -6960,6 +6976,9 @@
         SetScheduling();
         function SetScheduling() {
             var programDotColor = ''
+            var programDays = 0
+            HideNotification()
+            
             if (SchedulingList.length > 0) {
                 for (var i = 0; i < SchedulingList.length; i++) {
                     var ArrayItem = SchedulingList[i];
@@ -7014,9 +7033,25 @@
                         }
                         
                         if (ArrayItem.FormType == 2) {
-                            programDotColor = ArrayItem.NotificationColor
+                            if (programDotColor == '' && programDotColor == null) {
+                                programDotColor = ArrayItem.NotificationColor
+                                programDays = ArrayItem.NotificationDays;
+                            } else if (ArrayItem.NotificationColor == "Red") {
+                                programDotColor = ArrayItem.NotificationColor
+                                if (programDays < ArrayItem.NotificationDays) {
+                                    programDays = ArrayItem.NotificationDays;
+                                }
+                            } else if (ArrayItem.NotificationColor == "Orange" && (programDotColor == 'green' || programDotColor == 'orange')) {
+                                programDotColor = ArrayItem.NotificationColor
+                                if (programDays < ArrayItem.NotificationDays) {
+                                    programDays = ArrayItem.NotificationDays;
+                                }
+                            } else if (ArrayItem.NotificationColor == "Green" && programDotColor == 'green') {
+                                if (programDays < ArrayItem.NotificationDays) {
+                                    programDays = ArrayItem.NotificationDays;
+                                }
+                            }
                         }
-
 
                     } else if (ArrayItem.DotColor != null) {
                         if (ArrayItem.DotColor == "Red") {
@@ -7026,24 +7061,38 @@
                         } else if (ArrayItem.DotColor == "Green") {
                             $('a[data-clientformid="' + ArrayItem.FormId + '"]').css('border-left', '5px solid #0aa22d');
                         }
+                        $('a[data-clientformid="' + ArrayItem.FormId + '"]').find('.pColorCircle').css('background-color', ArrayItem.DotColor).show();
                     }
 
 
                 }
                 if (programDotColor != '') {
+                    var programNotify = $('#Programs-tab').find('#ProgramNotify')
                     if (programDotColor == "Red") {
                         $('#Programs-tab').css('border-left', '5px solid #a53333');
+                        programNotify.attr('class', 'notCountR')
                     } else if (programDotColor == "Orange") {
+                        programNotify.attr('class','notCountO')
                         $('#Programs-tab').css('border-left', '5px solid #e4854d');
                     } else if (programDotColor == "Green") {
+                        programNotify.attr('class','notCountG')
                         $('#Programs-tab').css('border-left', '5px solid #0aa22d');
 
                     }
-                   
+                    programNotify.show().text(programDays)
                 }
             }
         }
-
+        function HideNotification() {
+            $('.notCountR').hide();
+            $('.notCountO').hide();
+            $('.notCountG').hide();
+            $('.pColorCircle').hide();
+            $('#myTab .nav-item a').css('border-left', '')
+            $('#myChildTab .nav-item a').css('border-left', '')
+            $('#Programs-tab').css('border-left', '');
+            $('#ProgramNotify').hide()
+        }
     </script>
 
 }

@@ -487,6 +487,7 @@ function SetStatus(clientformid) {
 
                 } else {
                     totalScore = result.TotalScore
+                    $('#totalScore').text(totalScore)
                     if (result.AtRisk != '') {
 
                         var crisis = result.Crisis.split('-');
