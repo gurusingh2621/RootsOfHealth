@@ -67,10 +67,10 @@ function HtmlControlDragnDrop() {
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group program-control" id="' + newid + '">' +
                         '<label class="checkbox-group "><span class="title">Check Box (Multiple)</span><span class="desc"></span></label>' +
                         '<div class="custom-control custom-checkbox  d-inline-block mr-2">' +
-                        '<input  type="checkbox" class="custom-control-input" name="checkbox" value="1" id="checkbox1">' +
+                        '<input  type="checkbox" data-value="1"  class="custom-control-input" name="checkbox" value="1" id="checkbox1">' +
                         '<label class="custom-control-label" for="checkbox1">option 1</label></div>' +
                         '<div class="custom-control custom-checkbox  d-inline-block mr-2">' +
-                        '<input type="checkbox" class="custom-control-input"  name="checkbox" value="2" id="checkbox2">' +
+                        '<input type="checkbox" data-value="2"  class="custom-control-input"  name="checkbox" value="2" id="checkbox2">' +
                         '<label class="custom-control-label" for="checkbox2">option 2</label></div>' +
                         '</div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
@@ -114,10 +114,10 @@ function HtmlControlDragnDrop() {
                     var str = '<div class="dragresize col-md-12"><div class="frmbtn"><div class="form-group program-control"  id="' + newid + '">' +
                         '<label class="radiobox-group "><span class="title">Radio</span><span class="desc"></span></label>' +
                         '<div class="custom-control custom-radio d-inline-block mr-2">' +
-                        '<input  type="radio" class="custom-control-input" name="radio" value="1" id="radio1">' +
+                        '<input  type="radio" data-value="1"   class="custom-control-input" name="radio" value="1" id="radio1">' +
                         '<label class="custom-control-label" for="radio1">option 1</label></div>' +
                         '<div class="custom-control custom-radio d-inline-block mr-2">' +
-                        '<input type="radio" class="custom-control-input"  name="radio" value="2" id="radio2">' +
+                        '<input type="radio" data-value="2"  class="custom-control-input"  name="radio" value="2" id="radio2">' +
                         '<label class="custom-control-label" for="radio2">option 2</label></div>' +
                         '</div>' +
                         '<div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml(\'' + draggableId + '\',\'' + newid + '\')"><i class="fas fa-edit"></i></button>' +
@@ -129,9 +129,9 @@ function HtmlControlDragnDrop() {
                     var str = '<div  class="dragresize col-md-12"><div class="frmbtn"><div class="form-group">' +
                         '<label class=""><span class="title">Select</span><span class="desc"></span></label>' +
                         '<div class="inputContent"> <select id="' + newid + '" class="form-control program-control">' +
-                        '<option  value="0">option 1</option>' +
-                        '<option  value="1">option 2</option>' +
-                        '<option  value="2">option 3</option>' +
+                        '<option data-value="0" value="0">option 1</option>' +
+                        '<option  data-value="1"   value="1">option 2</option>' +
+                        '<option  data-value="2"  value="2">option 3</option>' +
                         ' </select>' +
                         '<label class="label-program"></label>' +
                         '</div></div>' +
@@ -332,8 +332,9 @@ function EditHtml(type, ID) {
     </div>`;
             popupString += '<div class="modal-row">' +
                 '<label>Options<span class="addoptions" onclick="addScoreableoption(this)"><i class="fas fa-plus"></i></span></label>';
-            popupString += `<div class="optionHeading"><label>Text</label><label>Value</label><label class="ScoreHeading ${isScored.length > 0 ? '' : 'd - none'}">Score</label></div>`;
+            popupString += `<div class="optionHeading"><label>Text</label><label>Value</label><label class="ScoreHeading ${isScored.length == 1 ? '' : 'd-none'}">Score</label></div>`;
             $(controlId).find("input[type=checkbox]").each(function (index, item) {
+                debugger
                 popupString += '<div class="option-block">' +
                     '<div class="option-fields">' +
                     `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${($(item).next().text() == "option 1" || $(item).next().text() == "option 2") && $(controlId).find("input.custom-control-input").first().attr("data-column") === undefined ? "" : $(item).next().text()}"/>` +
