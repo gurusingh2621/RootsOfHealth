@@ -393,6 +393,14 @@
         body .dataTables_scrollHead {
             background: rgba(0,0,0,.075) !important;
         }
+
+      /*  #droppable .dragresize,
+        .dragresize {
+            position: static !important;
+            width: auto !important;
+            height: auto !important;
+            font-size: initial !important;
+        }*/
     </style>
 </head>
 <body>
@@ -591,24 +599,24 @@
                 <img class="img-fluid" src="~/images/logo.png" alt="">
             </a>
             <ul>
-                <li><a href="/DashBoard/Display" id="DashBoard" class="nav-menu"><span class="home-icon"></span> Home </a></li>
-                <li><a href="/Patient/Appointment" id="Appointment" class="nav-menu"><span class="app-icon"></span> Appointment</a></li>
-                <li><a href="/Patient/List" id="Patient" class="nav-menu"><span class="patient-icon"></span> Clients</a></li>
-                <li><a href="/Client/Add" id="Add" class="nav-menu"><span class="add-icon"></span> Add Client</a></li>
-                <li><a href="/Patient/NotesTemplateField" id="Add" class="nav-menu"><span class="notes-icon"></span> Notes Template</a></li>
-                <li><a href="/Patient/Authorization" id="Authorization" class="nav-menu"><span class="authorization-icon"></span>Authorization</a></li>
-                <li><a href="/Account/Index" id="Account" class="nav-menu"><span class="account-icon"></span>Users</a></li>
-                <li><a href="/Account/UserGroupList" id="UserGroup" class="nav-menu"><span class="group-icon"></span> User Group</a></li>
-                <li><a href="/Account/Roles" id="Account" class="nav-menu"><span class="user-role-icon"></span>Roles</a></li>
-                <li><a href="/Account/UserDetails?username=@FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name" id="Account" class="nav-menu"><span class="account-icon"></span> My Account</a></li>
-                <li><a href="/Patient/WebGridShowLookUpOption" id="LookUpOption" class="nav-menu"><span class="lookup-icon"></span>LookUpTable</a></li>
-                <li><a href="/Patient/FormScheduling" id="FormScheduling" class="nav-menu"><span class="form-sched-icon"></span> Form Scheduling</a></li>
-                <li><a href="/Patient/GetPotientialPatient" id="PotientPatient" class="nav-menu"><span class="add-icon"></span> Potential Clients</a></li>
-                <li><a href="/Patient/AppointmentSetting" id="appointmentSettings" class="nav-menu"><span class="sett-icon"></span> Appointment Settings</a></li>
-                <li><a href="/careplan/list" id="careform" class="nav-menu"><span class="careplan-icon"></span> Care Plan Templates</a></li>
-                <li><a href="/program/list" id="programform" class="nav-menu"><span class="program-icon"></span> Programs</a></li>
-                <li><a href="/Client/ClientsFormList" id="ClientsForm" class="nav-menu"><span class="patient-icon"></span> Clients Forms</a></li>
-                <li class="@(Convert.ToBoolean(@Session["IsCarePlanApprover"])?"":"d-none")"><a href="/CarePlan/Requests" id="requests" class="nav-menu"><span class="program-icon"></span> Care Plan Requests</a></li>
+                <li id="HomeNavItem"><a href="/DashBoard/Display" id="DashBoard" class="nav-menu"><span class="home-icon"></span> Home </a></li>
+                <li id="AppointmentNavItem"><a href="/Patient/Appointment" id="Appointment" class="nav-menu"><span class="app-icon"></span> Appointment</a></li>
+                <li id="ClientNavItem"><a href="/Patient/List" id="Patient" class="nav-menu"><span class="patient-icon"></span> Clients</a></li>
+                <li id="AddClientNavItem"><a href="/Client/Add" id="Add" class="nav-menu"><span class="add-icon"></span> Add Client</a></li>
+                <li id="NoteTemplateNavItem"><a href="/Patient/NotesTemplateField" id="Add" class="nav-menu"><span class="notes-icon"></span> Notes Template</a></li>
+                <li id="AuthorizationNavItem"><a href="/Patient/Authorization" id="Authorization" class="nav-menu"><span class="authorization-icon"></span>Authorization</a></li>
+                <li id="UsersNavItem"><a href="/Account/Index" id="Account" class="nav-menu"><span class="account-icon"></span>Users</a></li>
+                <li id="UserGroupNavItem"><a href="/Account/UserGroupList" id="UserGroup" class="nav-menu"><span class="group-icon"></span> User Group</a></li>
+                <li id="RolesNavItem"><a href="/Account/Roles" id="Account" class="nav-menu"><span class="user-role-icon"></span>Roles</a></li>
+                <li id="MyAccountNavItem"><a href="/Account/UserDetails?username=@FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name" id="Account" class="nav-menu"><span class="account-icon"></span> My Account</a></li>
+                <li id="LookUpTableNavItem"><a href="/Patient/WebGridShowLookUpOption" id="LookUpOption" class="nav-menu"><span class="lookup-icon"></span>LookUpTable</a></li>
+                <li id="FormSchedulingNavItem"><a href="/Patient/FormScheduling" id="FormScheduling" class="nav-menu"><span class="form-sched-icon"></span> Form Scheduling</a></li>
+                <li id="PotentialClientNavItem"><a href="/Patient/GetPotientialPatient" id="PotientPatient" class="nav-menu"><span class="add-icon"></span> Potential Clients</a></li>
+                <li id="AppointmentSettingsNavItem"><a href="/Patient/AppointmentSetting" id="appointmentSettings" class="nav-menu"><span class="sett-icon"></span> Appointment Settings</a></li>
+                <li id="CarePlanNavItem"><a href="/careplan/list" id="careform" class="nav-menu"><span class="careplan-icon"></span> Care Plan Templates</a></li>
+                <li id="ProgramsNavItem"><a href="/program/list" id="programform" class="nav-menu"><span class="program-icon"></span> Programs</a></li>
+                <li id="ClientFormsNavItem"><a href="/Client/ClientsFormList" id="ClientsForm" class="nav-menu"><span class="patient-icon"></span> Clients Forms</a></li>
+                <li id="CarePlanRequestNavItem" class="@(Convert.ToBoolean(@Session["IsCarePlanApprover"])?"":"d-none")"><a href="/CarePlan/Requests" id="requests" class="nav-menu"><span class="program-icon"></span> Care Plan Requests</a></li>
                 <li><a href="/Account/Logout" id="logout" class="nav-menu"><span class="logout-icon"></span>Log Out</a></li>
             </ul>
         </aside>
@@ -768,6 +776,98 @@
             }
             return colname
         }
+        HighLightMenu()
+        function HighLightMenu() {
+
+            var Path = window.location.pathname
+            switch (Path) {
+                case "/DashBoard/Display":
+                    $('#HomeNavItem').addClass('active')
+                    break;
+                case "/Patient/Appointment":
+                    $('#AppointmentNavItem').addClass('active')
+
+                    break;
+                case "/Patient/List":
+                    $('#ClientNavItem').addClass('active')
+                    break;
+
+                case "/Client/Add":
+                    $('#AddClientNavItem').addClass('active')
+
+                    break;
+                case "/Patient/NotesTemplateField":
+                    $('#NoteTemplateNavItem').addClass('active')
+                    ScrollFunction('#NoteTemplateNavItem')
+                    break;
+                case "/Patient/Authorization":
+                    $('#AuthorizationNavItem').addClass('active')
+                    ScrollFunction('#AuthorizationNavItem')
+                    break;
+                case "/Account/Index":
+                    $('#UsersNavItem').addClass('active')
+                    ScrollFunction('#UsersNavItem')
+                    break;
+                case "/Account/UserGroupList":
+                    $('#UserGroupNavItem').addClass('active')
+                    ScrollFunction('#UserGroupNavItem')
+                    break;
+                case "/Account/Roles":
+                    $('#RolesNavItem').addClass('active')
+                    ScrollFunction('#RolesNavItem')
+                    break;
+                case "/Account/UserDetails":
+                    $('#MyAccountNavItem').addClass('active')
+                    ScrollFunction('#MyAccountNavItem')
+                    break;
+                case "/Patient/WebGridShowLookUpOption":
+                    $('#LookUpTableNavItem').addClass('active')
+                    ScrollFunction('#LookUpTableNavItem')
+                    
+                    break;
+
+
+                case "/Patient/FormScheduling":
+                    $('#FormSchedulingNavItem').addClass('active')
+                    ScrollFunction('#FormSchedulingNavItem')
+
+                    break;
+                case "/Patient/GetPotientialPatient":
+                    $('#PotentialClientNavItem').addClass('active')
+                    ScrollFunction('#PotentialClientNavItem')
+
+                    break;
+                case "/Patient/AppointmentSetting":
+                    $('#AppointmentSettingsNavItem').addClass('active')
+                    ScrollFunction('#AppointmentSettingsNavItem')
+                    break;
+                case "/careplan/list":
+                    $('#CarePlanNavItem').addClass('active')
+                    ScrollFunction('#CarePlanNavItem')
+                    break;
+               
+                case "/program/list":
+                    $('#ProgramsNavItem').addClass('active')
+                    ScrollFunction('#ProgramsNavItem')
+                    break;
+                case "/CarePlan/Requests":
+                    $('#CarePlanRequestNavItem').addClass('active')
+                    ScrollFunction('#CarePlanRequestNavItem')
+                    break;
+                case "/Client/ClientsFormList":
+                    $('#ClientFormsNavItem').addClass('active')
+                    ScrollFunction('#ClientFormsNavItem')
+                    break;
+            }
+
+        }
+
+        function ScrollFunction(item) {
+            //setTimeout(function () {
+            //    $('.sidebar-menu').scrollTop($(item).offset().top);
+            //}, 1000)
+        }
+       
     </script>
 
 

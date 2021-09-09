@@ -2970,7 +2970,7 @@
                                 value = ''
                             }
                             else {
-                                value = $(item).find(`option[value=${value}]`).text();
+                                value = $(item).find(`option[value="${value}"]`).text();
                             }
                             $(item).next().html("").append(value).show();
                             $(item).hide();

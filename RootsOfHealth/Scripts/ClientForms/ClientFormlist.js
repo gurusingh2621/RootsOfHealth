@@ -129,7 +129,7 @@ function DeleteProgram(ClientFormID, button) {
     $.confirm({
         icon: 'fas fa-exclamation-triangle',
         title: 'Confirm',
-        content: 'Are you sure,you want to delete this program?',
+        content: 'Are you sure,you want to delete this form?',
         type: 'red',
         columnClass: 'col-md-6 col-md-offset-3',
         typeAnimated: true,
