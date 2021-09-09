@@ -284,7 +284,21 @@
     .patientListbox table.table th {
         width: 25% !important;
     }
-  
+    .programListboxWrap {
+        max-height: 280px;
+        overflow: auto;
+    }
+    /* width */
+    .programListboxWrap::-webkit-scrollbar {
+        height: 8px;        
+        width: 8px;
+    }
+    .programListboxWrap::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+    .programListboxWrap::-webkit-scrollbar-thumb {
+        background: #ccc;
+    }
 </style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.css" crossorigin="anonymous" type="text/css">
 
@@ -423,10 +437,12 @@
                                         <i class="fa fa-plus exp-m" aria-hidden="true"></i>
                                     </span>
                                 </div>
-                                <div class="programListbox">
-                                   
-                                    <canvas id="programChart" style="padding:5px;margin: auto;display: block; "></canvas>
-                                </div>
+                                @*<div class="programListboxWrap">*@
+                                    @*<div class="programListbox" style="height:430px; width:860px;">*@
+                                    <div class="programListbox" >
+                                        <canvas id="programChart" style="padding:5px;margin: auto;display: block; "></canvas>
+                                    </div>
+                                @*</div>*@
                             </div>
                         </div>
                     </div>
@@ -453,16 +469,34 @@
 
         function ProgramChart(result) {
            
-                    var aDatasets1 = [result.ClinicCount, result.DreamCount, result.OUCount, result.PeraltaCollegeCount];
+            var Labels = result.map(c => c.ProgramName);
 
+            var BackGroudColor = ["rgb(60, 179, 113)", "rgb(30, 144, 255)", "rgb(238, 130, 238)", "rgb(211, 211, 211)"];
+            var borderColor = ["rgb(54, 162, 235)", "rgb(255, 99, 132)", "rgb(255, 159, 64)", "rgb(255, 205, 86)"]
+
+            var resultBackgroundColor = [];
+            var resultBorderColor = [];
+                  j = 0;
+                for (var i = 0; i < Labels.length; i++) {
+                    if (j == 4) {
+                        j = 0;
+                    }
+                    resultBackgroundColor.push(BackGroudColor[j])
+                    resultBorderColor.push(borderColor[j])
+                    j++;
+                }
+            
+             
+            var aDatasets1 = result.map(c => c.ProgramCount);
+            
                     var dataT = {
-                        labels: ['Clinic', 'Dream', 'OU', 'Peralta College'],
+                        labels: Labels,
                         datasets: [{
                             label: "Client Count",
                             data: aDatasets1,
                             fill: false,
-                            backgroundColor: ["rgb(60, 179, 113)", "rgb(30, 144, 255)", "rgb(238, 130, 238)", "rgb(211, 211, 211)"],
-                            borderColor: ["rgb(54, 162, 235)", "rgb(255, 99, 132)", "rgb(255, 159, 64)", "rgb(255, 205, 86)"],
+                            backgroundColor: resultBackgroundColor,
+                            borderColor: resultBorderColor,
                             borderWidth: 0
                         }]
                     };
