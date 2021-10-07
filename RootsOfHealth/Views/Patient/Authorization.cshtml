@@ -450,7 +450,9 @@
 
             var patientID = 0;
             if ($("#hdnPatientId").val() == 0) {
-                patientID = '@Request.Cookies["patientid"].Values.ToString()';
+                if ('@Request.Cookies.AllKeys.Contains("patientid")'=='True') {
+                    patientID = '@Request.Cookies["patientid"].Values.ToString()';
+                }
             } else {
                 patientID = $("#hdnPatientId").val();
             }
@@ -575,7 +577,9 @@
         function getauthorizationdata2(formname) {
             var patientID = 0;
             if ($("#hdnPatientId").val() == 0) {
-                patientID = @Request.Cookies["patientid"].Values.ToString();
+                if ('@Request.Cookies.AllKeys.Contains("patientid")'=='True') {
+                    patientID = '@Request.Cookies["patientid"].Values.ToString()';
+                }
             } else {
                 patientID = $("#hdnPatientId").val();
             }
