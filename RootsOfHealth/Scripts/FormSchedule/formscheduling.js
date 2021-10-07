@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-    GetSchedulePlanTemplateList(1);
+    GetSchedulePlanTemplateList();
 })
 var _scheduleListTable = ''
 var _programscheduleListTable = ''
@@ -671,3 +671,13 @@ $('#NoProgramSchedule').change(function () {
 $('#FormModal').on('hidden.bs.modal', function (e) {
     GetSchedulePlanTemplateList()
 })
+var windowWidth = $(window).width()
+$(window).resize(function () {
+    var finalWindowWidth = $(window).width()
+    if (windowWidth != finalWindowWidth) {
+        GetSchedulePlanTemplateList();
+        GetProgramSchedulePlanTemplateList();
+        windowWidth = finalWindowWidth;
+    }
+})
+

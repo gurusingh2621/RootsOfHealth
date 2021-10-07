@@ -195,6 +195,7 @@ function proceedCarePlan(ProgramId) {
                 toastr.error("No template found");
             } else {              
                 $(".basic-info-actions").show();
+                $('#a_p_basic_info .render-basicform').removeClass('a_p_basic_no_buttons')
                 $(".render-basicform").html("").append(result.html);
                 tableName = result.tableName;
                 templateid = result.TemplateId;
@@ -366,6 +367,7 @@ function saveBasicInfo(status) {
                             $(".loaderOverlay").hide();
                             toastr.success("Saved successfully");
                             $(".basic-info-actions").hide();
+                            $('#a_p_basic_info .render-basicform').addClass('a_p_basic_no_buttons')
                             if (intervalStatus != "") {
                                 clearInterval(intervalStatus);
                             }
@@ -787,6 +789,7 @@ function editCarePlan(Id) {
                 case carePlanEnum.NotSaved://not saved                    
                     careplanid = result.CarePlanId;                   
                     proceedCarePlan(result.ProgramID);
+                    $('#a_p_basic_info .render-basicform').removeClass('a_p_basic_no_buttons')
                     $("#ddlcareplanstatus").removeClass("show_careplanstatus").val("-1");
                     $("a.need-nav,a.summary-nav").parent().addClass("disabled");
                     intervalStatus = setInterval(saveBasicInfoAsDraft, 300000, carePlanEnum.SavedAsDraft);
@@ -796,6 +799,7 @@ function editCarePlan(Id) {
                     getCarePlanBasicFormHtml(result.TemplateID);
                     getCarePlanBasicFormValue(result.CarePlanId, result.TemplateID);
                     $(".basic-info-actions").hide();
+                    $('#a_p_basic_info .render-basicform').addClass('a_p_basic_no_buttons')
                     $("#ddlcareplanstatus").addClass("show_careplanstatus").val("1");
                     $("a.need-nav,a.summary-nav").parent().removeClass("disabled");
                     $("#carePlansSidebar").removeClass('opened');
@@ -806,6 +810,7 @@ function editCarePlan(Id) {
                     getCarePlanBasicFormHtml(result.TemplateID);
                     getCarePlanBasicFormValue(result.CarePlanId, result.TemplateID);
                     $(".basic-info-actions").hide();
+                    $('#a_p_basic_info .render-basicform').addClass('a_p_basic_no_buttons')
                     $("#ddlcareplanstatus").addClass("show_careplanstatus").val("3");
                     $("a.need-nav,a.summary-nav").parent().removeClass("disabled");
                     $("#carePlansSidebar").removeClass('opened');
@@ -817,6 +822,7 @@ function editCarePlan(Id) {
                     proceedCarePlan(result.ProgramID);
                     getCarePlanBasicFormValue(result.CarePlanId, result.TemplateID);
                     $(".basic-info-actions").show();
+                    $('#a_p_basic_info .render-basicform').removeClass('a_p_basic_no_buttons')
                     $("#ddlcareplanstatus").removeClass("show_careplanstatus").val("-1");
                     $("a.need-nav,a.summary-nav").parent().addClass("disabled");
                     $("#carePlansSidebar").removeClass('opened');
@@ -827,6 +833,7 @@ function editCarePlan(Id) {
                     getCarePlanBasicFormHtml(result.TemplateID);
                     getCarePlanBasicFormValue(result.CarePlanId, result.TemplateID);
                     $(".basic-info-actions").hide();
+                    $('#a_p_basic_info .render-basicform').addClass('a_p_basic_no_buttons')
                     $("#ddlcareplanstatus").addClass("show_careplanstatus").val("4");
                     $("a.need-nav,a.summary-nav").parent().removeClass("disabled");
                     $("#carePlansSidebar").removeClass('opened');

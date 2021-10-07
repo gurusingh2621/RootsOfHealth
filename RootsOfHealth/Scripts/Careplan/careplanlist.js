@@ -404,3 +404,11 @@ function ViewparseHTML(htmlstr) {
     t.innerHTML = htmlstr;
     return t.content.cloneNode(true);
 }
+var windowWidth = $(window).width()
+$(window).resize(function () {
+    var finalWindowWidth = $(window).width()
+    if (windowWidth != finalWindowWidth) {
+        GetCarePlanTemplateList()
+        windowWidth = finalWindowWidth;
+    }
+})

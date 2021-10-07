@@ -17,6 +17,7 @@ function LoadRequest() {
         async: true,
         success: function (result) {
             if (InboxTable != '') {
+                InboxTable.clear();
                 InboxTable.destroy();
             }
            
@@ -619,4 +620,16 @@ $('#ViewRequestCareplanChanges').on('hidden.bs.modal', function (e) {
         $('#tblCarePlanInbox #' + reopenRequestId + '').find('a.openPopUp').click();
         reopenRequestId = 0;
     } 
+})
+
+
+var windowWidth = $(window).width()
+$(window).resize(function () {
+    var finalWindowWidth = $(window).width()
+    if (windowWidth != finalWindowWidth) {
+        debugger
+        LoadRequest();
+        LoadRequestHistory()
+        windowWidth = finalWindowWidth;
+    }
 })

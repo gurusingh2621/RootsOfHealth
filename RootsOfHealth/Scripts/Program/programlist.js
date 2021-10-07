@@ -512,3 +512,12 @@ $('#templateName').on('keyup', function (e) {
     }
 
 })
+
+var windowWidth = $(window).width()
+$(window).resize(function () {
+    var finalWindowWidth = $(window).width()
+    if (windowWidth != finalWindowWidth) {
+        GetProgramTemplateList()
+        windowWidth = finalWindowWidth;
+    }
+})
