@@ -254,7 +254,6 @@
     <Content Include="images\calender-icon.png" />
     <Content Include="images\chevron-arrow-down.svg" />
     <Content Include="images\heading-border.png" />
-    <Content Include="images\loader.gif" />
     <Content Include="images\logo-dark.png" />
     <Content Include="images\logo.png" />
     <Content Include="images\lookuptable.png" />
@@ -325,7 +324,6 @@
     <Content Include="Scripts\jquery.dragoptions.js" />
     <Content Include="Scripts\jquery.dragoptions.min.js" />
     <Content Include="Scripts\jquery.js" />
-    <Content Include="Scripts\jquery.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
