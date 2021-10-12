@@ -233,7 +233,6 @@
     <Content Include="css\CareplanPatient.css" />
     <Content Include="css\careplantemplate.css" />
     <Content Include="css\fullcalendar.min.css" />
-    <Content Include="css\jquery-ui.css" />
     <Content Include="css\previewinpopup.css" />
     <Content Include="css\programlist.css" />
     <Content Include="css\programtemplate.css" />
