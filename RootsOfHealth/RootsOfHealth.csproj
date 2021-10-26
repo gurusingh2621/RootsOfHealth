@@ -177,6 +177,7 @@
     <Compile Include="Models\ClinicBO.cs" />
     <Compile Include="Models\DastBO.cs" />
     <Compile Include="Models\DreamOnlyBO.cs" />
+    <Compile Include="Models\FormLogHistoryBO.cs" />
     <Compile Include="Models\FormSchedulingBO.cs" />
     <Compile Include="Models\Form_ScheduleResultBO.cs" />
     <Compile Include="Models\LocationOfAppointmentBO.cs" />
@@ -324,6 +325,7 @@
     <Content Include="Scripts\jquery.dragoptions.js" />
     <Content Include="Scripts\jquery.dragoptions.min.js" />
     <Content Include="Scripts\jquery.js" />
+    <Content Include="Scripts\jquery.mask.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -416,6 +418,8 @@
     <Content Include="Views\Client\ClientsFormList.cshtml" />
     <Content Include="Views\Client\ModifyClientFormTemplate.cshtml" />
     <Content Include="Views\Client\ClientFormBaseTemplate.cshtml" />
+    <Content Include="Views\Shared\Client\_FormLogHistory.cshtml" />
+    <Content Include="Views\Shared\Client\_LogHistoryPopUp.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
