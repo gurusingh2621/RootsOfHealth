@@ -3,6 +3,19 @@
     ViewBag.Title = "Authorization";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+
+@{ 
+    string cookiepatientID = "0";
+    var isCookieExist = Request.Cookies.AllKeys.Contains("patientid");
+
+    if (Request.Cookies.AllKeys.Contains("patientid"))
+    {
+        cookiepatientID = Request.Cookies["patientid"].Values.ToString();
+    }
+
+
+}
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <style>
 
@@ -114,6 +127,8 @@
         var CreatedDate = "";
         var ModifiedDate = "";
         var TypeOfInformation = "";
+        var isCookieExist = '@isCookieExist';
+        var cookiePatientId = '@cookiepatientID'
 
          var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]'
 
@@ -450,8 +465,9 @@
 
             var patientID = 0;
             if ($("#hdnPatientId").val() == 0) {
-                if ('@Request.Cookies.AllKeys.Contains("patientid")'=='True') {
-                    patientID = '@Request.Cookies["patientid"].Values.ToString()';
+             
+                if (isCookieExist == 'True') {
+                    patientID = cookiePatientId;
                 }
             } else {
                 patientID = $("#hdnPatientId").val();
@@ -577,8 +593,9 @@
         function getauthorizationdata2(formname) {
             var patientID = 0;
             if ($("#hdnPatientId").val() == 0) {
-                if ('@Request.Cookies.AllKeys.Contains("patientid")'=='True') {
-                    patientID = '@Request.Cookies["patientid"].Values.ToString()';
+                
+                 if (isCookieExist == 'True') {
+                    patientID = cookiePatientId;
                 }
             } else {
                 patientID = $("#hdnPatientId").val();

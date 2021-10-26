@@ -219,6 +219,9 @@
         border-radius: 50px;
         margin-top: -5px;
     }
+    .historyFormLogTableWrap.table-responsive {
+        max-height: calc(100vh - 160px);
+    }
 </style>
 <!-- Content start here -->
 <section id="content" class="responsive-container ">
@@ -280,8 +283,7 @@
             </div>
         </div>
         <div class="tab-content" id="myTabContent">
-            <ul class="nav nav-tabs" style="display:none;" id="myChildTab" role="tablist">
-            </ul>
+            <ul class="nav nav-tabs" style="display:none;" id="myChildTab" role="tablist"></ul>
             <!-- Profile tab start here  -->
 
             @{
@@ -310,6 +312,11 @@
                                                 }
                                                 <h2 style="padding-top:10px">@item.FormName</h2>
                                                 <div class="detail-button ml-auto">
+
+                                                    <a href="javascript:{}" onclick="return OpenFormHistory(@item.ClientFormID,@Model.PatientMain.PatientID,true);" data-save="@(item.Saved ? "True" : "False")" class="btn btn-success ml-auto">
+                                                        <i class="far fa-save"></i>
+                                                        History
+                                                    </a>
                                                     <a href="javascript:{}" onclick="DisplayForm(@ViewBag.PatientID,'@item.FormName'+'Tab','@FormName',@item.ClientFormID)"
                                                        class="btn btn-success  btnDisplayProgram">
                                                         <i class="far fa-edit"></i>
@@ -356,7 +363,9 @@
 
         </div>
     </div>
-
+    @{
+        Html.RenderPartial("~/Views/Shared/Client/_LogHistoryPopUp.cshtml");
+    }
 </section>
 <!-- Content end here -->
 

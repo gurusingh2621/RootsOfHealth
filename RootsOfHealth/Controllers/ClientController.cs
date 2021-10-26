@@ -2280,7 +2280,30 @@ namespace RootsOfHealth.Controllers
                 return Json(jsonResult, JsonRequestBehavior.AllowGet);
             }
         }
-       
+
+        [HttpGet]
+        public ActionResult GetFormLogHistory(int formId,int clientid,bool isClientForm)
+        {
+
+            var LogList = new List<FormLogHistoryBO>();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                //HTTP GET
+                var responseTask = client.GetAsync("/api/PatientMain/getClientHistoryLog?clientId=" + clientid + "&&formid="+ formId+ "&&isClientForm=" + isClientForm);
+                var result = responseTask.Result;
+
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<List<FormLogHistoryBO>>();
+                    readTask.Wait();
+                    LogList = readTask.Result;
+                }
+
+            }
+            return PartialView("~/Views/Shared/Client/_FormLogHistory.cshtml", LogList);
+        }
+
     }
 }
     

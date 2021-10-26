@@ -137,6 +137,9 @@
         border-radius: 50px;
         margin-top: -5px;
     }
+    .historyFormLogTableWrap.table-responsive {
+        max-height: calc(100vh - 160px);
+    }
 </style>
 <!-- Content start here -->
 <section id="content" class="responsive-container">
@@ -149,26 +152,26 @@
                 </li>
                 @if (Model != null)
                 {
-                    foreach (var item in Model.Where(p=>p.ParentFormID==null||p.ParentFormID==0))
+                    foreach (var item in Model.Where(p => p.ParentFormID == null || p.ParentFormID == 0))
                     {
                         string FormName = @item.FormName.Replace(" ", "");
-                     
+
                         <li class="nav-item">
                             <a id="@("a" + FormName)" class="nav-link" data-toggle="tab"
-                               href="@("#" + FormName + "only")" data-ClientFormID="@item.ClientFormID" data-PatientID="@item.patientID" onclick="loadClient(this)"  data-TemplateID="@item.TemplateID" data-FormName=@(FormName)>@item.FormName<span class="pColorCircle"  style="display:none"></span><span class="notCount" id="@(FormName + "Notify")" style="display:none"></span><span class="check @Html.Raw(item.Saved ? "" : "d-none")"><i class="fas fa-check-circle"></i></span></a>
+                               href="@("#" + FormName + "only")" data-ClientFormID="@item.ClientFormID" data-PatientID="@item.patientID" onclick="loadClient(this)" data-TemplateID="@item.TemplateID" data-FormName=@(FormName)>@item.FormName<span class="pColorCircle" style="display:none"></span><span class="notCount" id="@(FormName + "Notify")" style="display:none"></span><span class="check @Html.Raw(item.Saved ? "" : "d-none")"><i class="fas fa-check-circle"></i></span></a>
 
                         </li>
-                       
+
                     }
                 }
-                
+
                 <li class="nav-item" id="programtbs" style="display:none;/*left: 155px;*/">
                     <a class="nav-link" id="Programs-tab" data-toggle="tab" href="#Programs" role="tab"
-                       aria-controls="Programs" aria-selected="false">Programs <span class="notCount" id="ProgramNotify" style="display:none"></span><span class="check" data-FormName="Profile"  style="display:none"><i class="fas fa-check-circle"></i></span></a>
+                       aria-controls="Programs" aria-selected="false">Programs<span class="notCount" id="ProgramNotify" style="display:none"></span><span class="check" data-FormName="Profile" style="display:none"><i class="fas fa-check-circle"></i></span></a>
                 </li>
 
                 <li class="nav-item " style="display:block">
-                    <a class="nav-link" id="RecentClient-tab" href="#"  data-toggle="modal" data-target="#recentpatientModal">Recent Clients</a>
+                    <a class="nav-link" id="RecentClient-tab" href="#" data-toggle="modal" data-target="#recentpatientModal">Recent Clients</a>
                 </li>
 
             </ul>
@@ -192,17 +195,17 @@
                 <div class="paitent-detail">
 
                     @*<div class="row">
-                        <div class="col-lg-8 col-md-8 col-sm-12 col-12 pr-0">
+                    <div class="col-lg-8 col-md-8 col-sm-12 col-12 pr-0">
 
-                        </div>
-
-
-                        <div class="col-lg-4 col-md-12 col-sm-12 col-12">
-
-                        </div>
+                    </div>
 
 
-                        </div>*@
+                    <div class="col-lg-4 col-md-12 col-sm-12 col-12">
+
+                    </div>
+
+
+                    </div>*@
                 </div>
 
             </div>
@@ -245,6 +248,13 @@
                 </div>
             </div>
         </div>
+        @{ 
+            Html.RenderPartial("~/Views/Shared/Client/_LogHistoryPopUp.cshtml");
+        }
+      
+
+
+
         <!--Recent Patient End Here-->
     </div>
 
@@ -582,6 +592,9 @@
                 }
             });
         }
+
+
+       
 
         function recentpcloseModel()
         {

@@ -10,7 +10,7 @@
 
     <link href="https://cdn.rawgit.com/atatanasov/gijgo/master/dist/combined/css/gijgo.min.css" rel="stylesheet" type="text/css" />
 
-    <link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.11.0.css" type="text/css" media="all">
+    <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-1.11.0.css" type="text/css" media="all">
 
     <!-- CSS for Calenders -->
 
@@ -885,6 +885,38 @@
             //setTimeout(function () {
             //    $('.sidebar-menu').scrollTop($(item).offset().top);
             //}, 1000)
+        }
+
+
+
+        function OpenFormHistory(formId, ClientId, isClientForm = false) {
+            $.ajax({
+                type: "Get",
+                url: '/Client/GetFormLogHistory?formId=' + formId + '&&clientid=' + ClientId + '&&isClientForm=' + isClientForm,
+                dataType: "html",
+                contentType: "application/json; charset=utf-8",
+                success: function (result) {
+                    var $FormHistory = $('#FormLogHistory')
+                    $FormHistory.modal('show');
+                    $FormHistory.find('.modal-body').html(result)
+                    var $HistoryLogTable = $('#historyFormLogTable')
+                   $HistoryLogTable.DataTable({
+                        "searching": false,
+                        "ordering": false,
+                        "paging": false
+                    });
+
+                },
+                error: function () {
+                    toastr.error("Some error occurred!! or data not found");
+                },
+                complete: function () {
+                    $(".scroll").animate({ scrollTop: 0 }, "slow");
+                    $(".loaderOverlay").hide();
+
+                }
+            });
+
         }
 
     </script>

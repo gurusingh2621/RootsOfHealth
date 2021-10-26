@@ -1,0 +1,32 @@
+﻿@model List<RootsOfHealth.Models.FormLogHistoryBO>
+
+
+<div class="historyFormLogTableWrap table-responsive">
+    <table class="c_table table table-hover table-striped" id="historyFormLogTable">
+        <thead>
+            <tr class="table-active">
+                <th>Date</th>
+                <th>Modified by</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Count>1)
+            {
+                foreach (var item in Model)
+                {
+
+                    var FormatedDate = item.ModifiedDate.Value.ToString("MM/dd/yyyy h:mm tt");
+                    <tr>
+                        <td>Form was modified on @FormatedDate</td>
+                        <td>@item.FirstName @item.LastName <span class=@((item.UserEmail==null ||item.UserEmail=="")?"d-none":"")> (@item.UserEmail)</span></td>
+                        <td></td>
+                    </tr>
+                }
+            }
+
+
+
+        </tbody>
+    </table>
+</div>
