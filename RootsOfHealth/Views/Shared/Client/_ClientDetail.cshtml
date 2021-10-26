@@ -33,11 +33,15 @@
                                     }
                                     <h2 style="padding-top:10px">@item.FormName</h2>
                                     <div class="detail-button ml-auto">
-
+                                        <a href="javascript:{}" onclick="return OpenFormHistory(@item.ClientFormID,@Model.PatientMain.PatientID,true);" data-save="@(item.Saved ? "True" : "False")" class="btn btn-success ml-auto">
+                                            <i class="far fa-save"></i>
+                                            History
+                                        </a>
                                         <a href="javascript:{}" onclick="return saveProgramBasicInfo('@item.TemplateID','@item.TemplateTable',@item.ClientFormID,@item.patientID);" data-save="@(item.Saved ? "True" : "False")" class="btn btn-success ml-auto btnprogramsave">
                                             <i class="far fa-save"></i>
                                             Save
                                         </a>
+
                                         <a href="javascript:{}" onclick="ActivateTab(@ViewBag.PatientID,'','@FormName',@item.ClientFormID)"
                                            class="btn btn-success label-fields btnProgramEdit">
                                             <i class="far fa-edit"></i>

@@ -33,6 +33,12 @@
                                         <div class="detail-heading d-flex">
                                             <h2 style="padding-top:10px">@item.ProgramName</h2>
                                             <div class="detail-button ml-auto">
+
+                                                <a href="javascript:{}" onclick="return OpenFormHistory(@item.ProgramID,@item.patientID,false);" data-save="@(item.Saved ? "True" : "False")" class="btn btn-success ml-auto">
+                                                    <i class="far fa-save"></i>
+                                                    History
+                                                </a>
+
                                                 <a href="javascript:{}" onclick="DisplayForm(@item.patientID,'ProgramTab','@ProgramN')"
                                                    class="btn btn-success label-fields btnDisplayProgram">
                                                     <i class="far fa-edit"></i>
