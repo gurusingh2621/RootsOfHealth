@@ -1,0 +1,40 @@
+
+                                <input id="hdnbasetempid" hidden="hidden" class="basecontrol-id" type="text" value="0">
+                                <div class="dragresize col-md-12">
+                                    <div class="contentbtn">
+                                        <div class="basecontentarea contentarea1 ui-sortable"></div>
+                                        <span class="basecontentspan">Content area, you can drop control here</span>
+                                    </div>
+                                </div>
+                                <div class="dragresize col-md-12">
+                                    <div class="contentbtn">
+                                        <div class="baseheader basecontentarea ui-sortable" style="border: none;"><div class="dragresize col-md-12"><div class="frmbtn"><div class="form-group f-g-left"><label class="required-asterisk label-left"><span class="title">First Name<span data-toggle="tooltip" data-placement="top" title="" class="tooltipicon" data-original-title="Type fisrt name"><i class="far fa-question-circle"></i></span></span><span class="desc"></span></label><div class="inputContent"><input id="text1" type="text" class="form-control base-control" data-column="FirstName"><label class="label-base"></label></div></div><div class="event-btn-right hidden" style="pointer-events: none;"><button class="event-btn file-edit" onclick="EditHtml('text','text1')"><i class="fas fa-edit"></i></button><button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div></div><div class="dragresize col-md-12"><div class="frmbtn"><div class="form-group f-g-left"><label class="required-asterisk label-left"><span class="title">Last Name<span data-toggle="tooltip" data-placement="top" title="" class="tooltipicon" data-original-title="Type last name"><i class="far fa-question-circle"></i></span></span><span class="desc"></span></label><div class="inputContent"><input id="text3" type="text" class="form-control base-control" data-column="LastName"><label class="label-base"></label></div></div><div class="event-btn-right hidden" style="pointer-events: none;"><button class="event-btn file-edit" onclick="EditHtml('text','text3')"><i class="fas fa-edit"></i></button><button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div></div><div class="dragresize col-md-12"><div class="frmbtn"><div class="form-group"><label class="required-asterisk"><span class="title">Gender</span><span class="desc"></span></label><div class="inputContent"><select id="select4" class="form-control base-control" data-column="Gender"><option value="0">Select..</option><option value="1">Male</option><option value="2">Female</option></select><label class="label-base"></label></div><div class="event-btn-right hidden" style="pointer-events: none;"><button class="event-btn file-edit" onclick="EditHtml('select','select4')"><i class="fas fa-edit"></i></button><button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div></div></div></div>
+                                        <span class="basecontentspan" style="display: none;">Content area, you can drop control here</span>
+                                    </div>
+                                </div>
+                                <div class="dragresize col-md-12">
+                                    <div class="contentbtn">
+                                        <div class="basecontentarea contentarea2 ui-sortable"></div>
+                                        <span class="basecontentspan">Content area, you can drop control here</span>
+                                    </div>
+                                </div>
+                                <div class="dragresize col-md-12">
+                                    <div class="contentbtn">
+                                        <div class="basefooter basecontentarea ui-sortable" style="border: none;"><div class="dragresize col-md-12"><div class="frmbtn"><div class="form-group"><label class="required-asterisk"><span class="title">Your profile pic<span data-toggle="tooltip" data-placement="top" title="" class="tooltipicon" data-original-title="Upload your picture 
+Max-size :500 kb"><i class="far fa-question-circle"></i></span></span><span class="desc"></span></label><div class="inputContent"><input id="file5" onchange="previewOnfileChange(this)" type="file" class="form-control base-control" data-column="Yourprofilepic" data-accept=".png,.jpg,.jpeg" data-filesize="500"><label class="label-base"></label><div class="file5_files uploaded_filewrap"></div></div></div><div class="event-btn-right hidden" style="pointer-events: none;"><button class="event-btn file-edit" onclick="EditHtml('file','file5')"><i class="fas fa-edit"></i></button><button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div></div></div>
+                                        <span class="basecontentspan" style="display: none;">Content area, you can drop control here</span>
+                                    </div>
+                                </div>
+                                <div class="dragresize col-md-12">
+                                    <div class="contentbtn">
+                                        <div class="basecontentarea contentarea3 ui-sortable"><div class="dragresize col-md-12"><div class="frmbtn"><div class="form-group program-control f-g-left" id="radio-group2"><label class="radiobox-group required-asterisk label-left"><span class="title">Have you ever meditated before?</span><span class="desc"></span></label><div class="inputContent"><div class="radio-html"><div class="custom-control custom-radio d-inline-block mr-2">
+    <input type="radio" class="custom-control-input" id="radio-group20" name="radio-group2" value="1" data-column="Haveyouevermeditatedbefore">
+    <label class="custom-control-label" for="radio-group20">Yes</label></div>
+    <div class="custom-control custom-radio d-inline-block mr-2">
+    <input type="radio" class="custom-control-input" id="radio-group21" name="radio-group2" value="2">
+    <label class="custom-control-label" for="radio-group21">No</label></div>
+    </div><label class="label-program"></label></div></div><div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml('radio-group','radio-group2')"><i class="fas fa-edit"></i></button><button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div></div><div class="dragresize col-md-12"><div class="frmbtn"><div class="form-group f-g-left"><label class="required-asterisk label-left"><span class="title">Reason to choose this program</span><span class="desc"></span></label><div class="inputContent"> <select id="select5" class="form-control program-control" data-column="Reasontochoosethisprogram"><option value="0">Select..</option><option value="1">Stress</option><option value="2">Depression</option><option value="4">Anxiety</option></select><label class="label-program"></label></div></div><div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml('select','select5')"><i class="fas fa-edit"></i></button><button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div></div></div>
+                                        <span class="basecontentspan" style="display: none;">Content area, you can drop control here</span>
+                                    </div>
+                                </div>
+                            

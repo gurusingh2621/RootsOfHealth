@@ -1,0 +1,560 @@
+
+                                <input id="hdnbasetempid" hidden="hidden" class="basecontrol-id" type="text" value="3">
+                                <div class="dragresize col-md-12">
+                                    <div class="contentbtn">
+                                        <div class="basecontentarea contentarea1 ui-sortable"><div class="dragresize data-frmbtn col-md-4 ui-sortable-handle">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-0">
+                                           <div class="top-form-row d-flex question-container">
+                                           <div class="one-columns">
+                                           <label class="Add">Client Housing</label>                                                                                             
+                                           </div>
+                                           </div>
+                                           <div class="bootom-form-row mb-2">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-1 data-frm-btn">
+                                           <div class="top-form-row d-flex">
+                                            <div class="one-columns">
+                                            <label>The best Place you live</label>
+                                            </div>
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                             <div class="one-columns">                                                                    
+                                              <label id="PlaceLiveNow_1" class="database-field" data-index="PatientHousing">{{ Value }}</label>                                          
+                                              </div>                                     
+                                               </div>
+                                       <div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml('PlaceLiveNow','PlaceLiveNow_1')"><i class="fas fa-edit"></i></button>
+                                       <button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div>
+                                                </div>
+                                      
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                          <div class="dragresize data-frmbtn col-md-4 ui-sortable-handle">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-0">
+                                           <div class="top-form-row d-flex question-container">
+                                           <div class="one-columns">
+                                           <label class="Add">Client Housing</label>                                                                                             
+                                           </div>
+                                           </div>
+                                           <div class="bootom-form-row mb-2">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-1 data-frm-btn">
+                                           <div class="top-form-row d-flex">
+                                            <div class="one-columns">
+                                            <label>You Stay Temporarily</label>
+                                            </div>
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                             <div class="one-columns">                                                                    
+                                              <label id="EmergencyShelter_2" class="database-field" data-index="PatientHousing">{{ Value }}</label>                                          
+                                              </div>                                     
+                                               </div>
+                                       <div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml('EmergencyShelter','EmergencyShelter_2')"><i class="fas fa-edit"></i></button>
+                                       <button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div>
+                                                </div>
+                                      
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                          <div class="dragresize data-frmbtn col-md-4 ui-sortable-handle">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-0">
+                                           <div class="top-form-row d-flex question-container">
+                                           <div class="one-columns">
+                                           <label class="Add">Client Financial Security</label>                                                                                             
+                                           </div>
+                                           </div>
+                                           <div class="bootom-form-row mb-2">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-1 data-frm-btn">
+                                           <div class="top-form-row d-flex">
+                                            <div class="one-columns">
+                                            <label>Difficulties in paying your bills for expenses like housing, utilities, child care, transportation,telephone, medical care, or other basic needs.</label>
+                                            </div>
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                             <div class="one-columns">                                                                    
+                                              <label id="DifficultiesInPayingBills_3" class="database-field" data-index="PatientFinancialSecurity">{{ Value }}</label>                                          
+                                              </div>                                     
+                                               </div>
+                                       <div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml('DifficultiesInPayingBills','DifficultiesInPayingBills_3')"><i class="fas fa-edit"></i></button>
+                                       <button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div>
+                                                </div>
+                                      
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                          <div class="dragresize col-md-4"><div class="frmbtn"><div class="form-group"><label class="required-asterisk"><span class="title">single file template</span><span class="desc"></span></label><div class="inputContent"><input id="file2" onchange="previewOnChange(this)" type="file" class="form-control program-control" data-column="singlefiletemplate" accept=".png,.jpg,.jpeg" data-filesize="100"><label class="label-program"></label><div class="file2_files uploaded_filewrap"></div></div></div><div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml('file','file2')"><i class="fas fa-edit"></i></button><button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div></div><div class="dragresize data-frmbtn col-md-4">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-0">
+                                           <div class="top-form-row d-flex question-container">
+                                           <div class="one-columns">
+                                           <label class="Add">Client Healthcare</label>                                                                                             
+                                           </div>
+                                           </div>
+                                           <div class="bootom-form-row mb-2">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-1 data-frm-btn">
+                                           <div class="top-form-row d-flex">
+                                            <div class="one-columns">
+                                            <label>When did you last see your doctor?</label>
+                                            </div>
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                             <div class="one-columns">                                                                    
+                                              <label id="LastSeeDoctor_2" class="database-field" data-index="PatientHealthcare">{{ Value }}</label>                                          
+                                              </div>                                     
+                                               </div>
+                                       <div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml('LastSeeDoctor','LastSeeDoctor_2')"><i class="fas fa-edit"></i></button>
+                                       <button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div>
+                                                </div>
+                                      
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div><div class="dragresize data-frmbtn col-md-4">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-0">
+                                           <div class="top-form-row d-flex question-container">
+                                           <div class="one-columns">
+                                           <label class="Add">Client Healthcare</label>                                                                                             
+                                           </div>
+                                           </div>
+                                           <div class="bootom-form-row mb-2">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-1 data-frm-btn">
+                                           <div class="top-form-row d-flex">
+                                            <div class="one-columns">
+                                            <label>Have you ever been diagnosed with any of the following medical conditions? (check all that apply)</label>
+                                            </div>
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                             <div class="one-columns">                                                                    
+                                              <label id="Diagnosed_3" class="database-field" data-index="PatientHealthcare">{{ Value }}</label>                                          
+                                              </div>                                     
+                                               </div>
+                                       <div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml('Diagnosed','Diagnosed_3')"><i class="fas fa-edit"></i></button>
+                                       <button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div>
+                                                </div>
+                                      
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                          
+                                                          <div class="dragresize data-frmbtn col-md-4">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-0">
+                                           <div class="top-form-row d-flex question-container">
+                                           <div class="one-columns">
+                                           <label class="Add">Client Employment/Education</label>                                                                                             
+                                           </div>
+                                           </div>
+                                           <div class="bootom-form-row mb-2">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-1 data-frm-btn">
+                                           <div class="top-form-row d-flex">
+                                            <div class="one-columns">
+                                            <label>What is the name and location(Part-Time) of where you work?</label>
+                                            </div>
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                             <div class="one-columns">                                                                    
+                                              <label id="PartTimeNameLocation_1" class="database-field" data-index="PatientEmploymentEducation">{{ Value }}</label>                                          
+                                              </div>                                     
+                                               </div>
+                                       <div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml('PartTimeNameLocation','PartTimeNameLocation_1')"><i class="fas fa-edit"></i></button>
+                                       <button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div>
+                                                </div>
+                                      
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                          <div class="dragresize col-md-4 ui-sortable-handle"><div class="frmbtn"><div class="form-group"><label class=""><span class="title">short clinic template</span><span class="desc"></span></label><div class="inputContent"><input id="text1" type="text" class="form-control program-control col-md-12" data-column="shortclinictemplate"><label class="label-program"></label></div></div><div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml('text','text1')"><i class="fas fa-edit"></i></button><button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div></div><div class="dragresize col-md-12 ui-sortable-handle"><div class="frmbtn"><div class="form-group"><label class=""><span class="title">long clinic template</span><span class="desc"></span></label><div class="inputContent"><div class="ck-editor"><div class="ck-editor-header"><ul><li><i class="fa fa-list-ul" aria-hidden="true"></i></li><li><i class="fa fa-list-ol" aria-hidden="true"></i></li><li><i class="fa fa-align-left" aria-hidden="true"></i></li><li><i class="fa fa-bold" aria-hidden="true"></i></li><li><i class="fa fa-italic" aria-hidden="true"></i></li><li><i class="fa fa-underline" aria-hidden="true"></i></li><li><i class="fa fa-eraser" aria-hidden="true"></i></li></ul></div><textarea id="textarea2" class="form-control program-control" name="my-textarea" data-column="longclinictemplate"></textarea><label class="label-program"></label></div></div></div><div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml('textarea','textarea2')"><i class="fas fa-edit"></i></button><button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div></div><div class="dragresize col-md-4"><div class="frmbtn"><div class="form-group"><label class="required-asterisk"><span class="title">template date</span><span class="desc"></span></label><div class="inputContent"><input id="date1" type="date" class="form-control program-control" data-column="templatedate"><label class="label-program"></label></div></div><div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml('date','date1')"><i class="fas fa-edit"></i></button><button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div></div> <div class="dragresize col-md-12"><div class="frmbtn"><div class="form-group program-control" id="radio-group3"><label class="radiobox-group required-asterisk"><span class="title">template radio</span><span class="desc"></span></label><div class="inputContent"><div class="radio-html"><div class="custom-control custom-radio d-inline-block mr-2">
+    <input type="radio" class="custom-control-input" id="radio-group30" name="radio-group3" value="1" data-column="templateradio">
+    <label class="custom-control-label" for="radio-group30">aaa</label></div>
+    <div class="custom-control custom-radio d-inline-block mr-2">
+    <input type="radio" class="custom-control-input" id="radio-group31" name="radio-group3" value="2">
+    <label class="custom-control-label" for="radio-group31">bbb</label></div>
+    <div class="custom-control custom-radio d-inline-block mr-2">
+    <input type="radio" class="custom-control-input" id="radio-group32" name="radio-group3" value="3">
+    <label class="custom-control-label" for="radio-group32">ccc</label></div>
+    <div class="custom-control custom-radio d-inline-block mr-2">
+    <input type="radio" class="custom-control-input" id="radio-group33" name="radio-group3" value="4">
+    <label class="custom-control-label" for="radio-group33">ddd</label></div>
+    </div></div></div><label class="label-program"></label><div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml('radio-group','radio-group3')"><i class="fas fa-edit"></i></button><button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div></div><div class="dragresize data-frmbtn col-md-4">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-0">
+                                           <div class="top-form-row d-flex question-container">
+                                           <div class="one-columns">
+                                           <label class="Add">Client Healthcare</label>                                                                                             
+                                           </div>
+                                           </div>
+                                           <div class="bootom-form-row mb-2">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-1 data-frm-btn">
+                                           <div class="top-form-row d-flex">
+                                            <div class="one-columns">
+                                            <label>How many cigarettes do you smoke per day?</label>
+                                            </div>
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                             <div class="one-columns">                                                                    
+                                              <label id="SmokePerDay_4" class="database-field" data-index="PatientHealthcare">{{ Value }}</label>                                          
+                                              </div>                                     
+                                               </div>
+                                       <div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml('SmokePerDay','SmokePerDay_4')"><i class="fas fa-edit"></i></button>
+                                       <button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div>
+                                                </div>
+                                      
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                          </div>
+                                        <span class="basecontentspan" style="display: none;">Content area, you can drop control here</span>
+                                    </div>
+                                </div>
+                                <div class="dragresize col-md-12">
+                                    <div class="contentbtn">
+                                        <div class="baseheader basecontentarea ui-sortable" style="border: none;"><div class="dragresize data-frmbtn col-md-4 ui-sortable-handle">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-0">
+                                           <div class="top-form-row d-flex question-container">
+                                           <div class="one-columns">
+                                           <label class="Add">Client profile</label>                                                                                             
+                                           </div>
+                                           </div>
+                                           <div class="bootom-form-row mb-2">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-1 data-frm-btn">
+                                           <div class="top-form-row d-flex">
+                                            <div class="one-columns">
+                                            <label>Overall status</label>
+                                            </div>
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                             <div class="one-columns">                                                                    
+                                              <label id="OverallStatus_3" class="database-field" data-index="PatientScore">{{ Value }}</label>                                          
+                                              </div>                                     
+                                               </div>
+                                       <div class="event-btn-right hidden" style="pointer-events: none;"><button class="event-btn file-edit" onclick="EditHtml('OverallStatus','OverallStatus_3')"><i class="fas fa-edit"></i></button>
+                                       <button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div>
+                                                </div>
+                                      
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div><div class="dragresize data-frmbtn col-md-4 ui-sortable-handle" style="position: relative; left: 0px; top: 0px;">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-0">
+                                           <div class="top-form-row d-flex question-container">
+                                           <div class="one-columns">
+                                           <label class="Add">Client profile</label>                                                                                             
+                                           </div>
+                                           </div>
+                                           <div class="bootom-form-row mb-2">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-1 data-frm-btn">
+                                           <div class="top-form-row d-flex">
+                                            <div class="one-columns">
+                                            <label>Over all score for all tabs</label>
+                                            </div>
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                             <div class="one-columns">                                                                    
+                                              <label id="OverallScore_2" class="database-field" data-index="PatientScore">{{ Value }}</label>                                          
+                                              </div>                                     
+                                               </div>
+                                       <div class="event-btn-right hidden" style="pointer-events: none;"><button class="event-btn file-edit" onclick="EditHtml('OverallScore','OverallScore_2')"><i class="fas fa-edit"></i></button>
+                                       <button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div>
+                                                </div>
+                                      
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div><div class="dragresize data-frmbtn col-md-4 ui-sortable-handle">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-0">
+                                           <div class="top-form-row d-flex question-container">
+                                           <div class="one-columns">
+                                           <label class="Add">Client profile</label>                                                                                             
+                                           </div>
+                                           </div>
+                                           <div class="bootom-form-row mb-2">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-1 data-frm-btn">
+                                           <div class="top-form-row d-flex">
+                                            <div class="one-columns">
+                                            <label>Middle Name</label>
+                                            </div>
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                             <div class="one-columns">                                                                    
+                                              <label id="MiddleName_5" class="database-field" data-index="PatientMain">{{ Value }}</label>                                          
+                                              </div>                                     
+                                               </div>
+                                       <div class="event-btn-right hidden" style="pointer-events: none;"><button class="event-btn file-edit" onclick="EditHtml('MiddleName','MiddleName_5')"><i class="fas fa-edit"></i></button>
+                                       <button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div>
+                                                </div>
+                                      
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                          <div class="dragresize data-frmbtn col-md-4 ui-sortable-handle">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-0">
+                                           <div class="top-form-row d-flex question-container">
+                                           <div class="one-columns">
+                                           <label class="Add">Client profile</label>                                                                                             
+                                           </div>
+                                           </div>
+                                           <div class="bootom-form-row mb-2">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-1 data-frm-btn">
+                                           <div class="top-form-row d-flex">
+                                            <div class="one-columns">
+                                            <label>Preferred Name/Nickname</label>
+                                            </div>
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                             <div class="one-columns">                                                                    
+                                              <label id="NickName_6" class="database-field" data-index="PatientMain">{{ Value }}</label>                                          
+                                              </div>                                     
+                                               </div>
+                                       <div class="event-btn-right hidden" style="pointer-events: none;"><button class="event-btn file-edit" onclick="EditHtml('NickName','NickName_6')"><i class="fas fa-edit"></i></button>
+                                       <button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div>
+                                                </div>
+                                      
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div><div class="dragresize data-frmbtn col-md-4 ui-sortable-handle">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-0">
+                                           <div class="top-form-row d-flex question-container">
+                                           <div class="one-columns">
+                                           <label class="Add">Client profile</label>                                                                                             
+                                           </div>
+                                           </div>
+                                           <div class="bootom-form-row mb-2">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-1 data-frm-btn">
+                                           <div class="top-form-row d-flex">
+                                            <div class="one-columns">
+                                            <label>Gender</label>
+                                            </div>
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                             <div class="one-columns">                                                                    
+                                              <label id="Gender_7" class="database-field" data-index="PatientMain">{{ Value }}</label>                                          
+                                              </div>                                     
+                                               </div>
+                                       <div class="event-btn-right hidden" style="pointer-events: none;"><button class="event-btn file-edit" onclick="EditHtml('Gender','Gender_7')"><i class="fas fa-edit"></i></button>
+                                       <button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div>
+                                                </div>
+                                      
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                          
+                                                          <div class="dragresize data-frmbtn col-md-4 ui-sortable-handle">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-0">
+                                           <div class="top-form-row d-flex question-container">
+                                           <div class="one-columns">
+                                           <label class="Add">Client profile</label>                                                                                             
+                                           </div>
+                                           </div>
+                                           <div class="bootom-form-row mb-2">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-1 data-frm-btn">
+                                           <div class="top-form-row d-flex">
+                                            <div class="one-columns">
+                                            <label>First name</label>
+                                            </div>
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                             <div class="one-columns">                                                                    
+                                              <label id="FirstName_4" class="database-field" data-index="PatientMain">{{ Value }}</label>                                          
+                                              </div>                                     
+                                               </div>
+                                       <div class="event-btn-right hidden" style="pointer-events: none;"><button class="event-btn file-edit" onclick="EditHtml('FirstName','FirstName_4')"><i class="fas fa-edit"></i></button>
+                                       <button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div>
+                                                </div>
+                                      
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                          
+                                                          
+                                                          <div class="dragresize data-frmbtn col-md-4 ui-sortable-handle">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-0">
+                                           <div class="top-form-row d-flex question-container">
+                                           <div class="one-columns">
+                                           <label class="Add">Client profile</label>                                                                                             
+                                           </div>
+                                           </div>
+                                           <div class="bootom-form-row mb-2">
+                                           <div class="row">
+                                           <div class="col-md-12">
+                                           <div class="form-row-first mt-1 data-frm-btn">
+                                           <div class="top-form-row d-flex">
+                                            <div class="one-columns">
+                                            <label>Date of Birth</label>
+                                            </div>
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                             <div class="one-columns">                                                                    
+                                              <label id="DateOfBirth_8" class="database-field" data-index="PatientMain">{{ Value }}</label>                                          
+                                              </div>                                     
+                                               </div>
+                                       <div class="event-btn-right hidden" style="pointer-events: none;"><button class="event-btn file-edit" onclick="EditHtml('DateOfBirth','DateOfBirth_8')"><i class="fas fa-edit"></i></button>
+                                       <button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div>
+                                                </div>
+                                      
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                      </div>
+                                                          <div class="dragresize col-md-12 ui-sortable-handle"><div class="frmbtn"><div class="form-group"><label id="label1" class="editable">Html</label><div class="html-content"><p><b><span style="margin: 0px; padding: 0px; font-family: " open="" sans",="" arial,="" sans-serif;="" font-size:="" 14px;="" text-align:="" justify;"="">Lorem Ipsum</span><span style="font-family: " open="" sans",="" arial,="" sans-serif;="" font-size:="" 14px;="" text-align:="" justify;"="">&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</span></b></p><p><b><span style="font-family: " open="" sans",="" arial,="" sans-serif;="" font-size:="" 14px;="" text-align:="" justify;"="">for more info read this link:-&nbsp;</span></b><a href="https://www.w3schools.com/">https://www.w3schools.com/</a><b><span style="font-family: " open="" sans",="" arial,="" sans-serif;="" font-size:="" 14px;="" text-align:="" justify;"=""><br></span></b><img src="data:image/jpeg;base64,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" data-filename="118.jpg" style="width: 245.128px; height: 184.447px;"></p><p><br></p></div></div><div class="event-btn-right hidden" style="pointer-events: none;"><button class="event-btn file-edit" onclick="EditHtml('label','label1')"><i class="fas fa-edit"></i></button><button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div></div><div class="dragresize col-md-4"><div class="frmbtn"><div class="form-group"><label class="required-asterisk"><span class="title">base file single</span><span class="desc"></span></label><div class="inputContent"><input id="file1" onchange="previewOnChange(this)" type="file" class="form-control base-control" data-column="basefilesingle" accept=".doc,.docx,.pdf" data-filesize="30"><label class="label-base"></label><div class="file1_files uploaded_filewrap"></div></div></div><div class="event-btn-right hidden" style="pointer-events: none;"><button class="event-btn file-edit" onclick="EditHtml('file','file1')"><i class="fas fa-edit"></i></button><button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div></div><div class="dragresize col-md-4 ui-sortable-handle"><div class="frmbtn"><div class="form-group"><label class="required-asterisk"><span class="title">date field base<span data-toggle="tooltip" data-placement="top" title="" class="tooltipicon" data-original-title="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."><i class="far fa-question-circle"></i></span></span><span class="desc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</span></label><div class="inputContent"><input id="date3" type="date" class="form-control base-control" data-column="datefieldbase"><label class="label-base"></label></div></div><div class="event-btn-right hidden" style="pointer-events: none;"><button class="event-btn file-edit" onclick="EditHtml('date','date3')"><i class="fas fa-edit"></i></button><button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div></div> <div class="dragresize col-md-4 ui-sortable-handle"><div class="frmbtn"><div class="form-group base-control" id="checkbox-group2"><label class="checkbox-group required-asterisk"><span class="title">base checkbox<span data-toggle="tooltip" data-placement="top" title="" class="tooltipicon" data-original-title="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."><i class="far fa-question-circle"></i></span></span><span class="desc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</span></label><div class="inputContent"><div class="checkbox-html"><div class="custom-control custom-checkbox  d-inline-block mr-2">
+                     <input type="checkbox" class="custom-control-input" id="checkbox-group20" name="checkbox-group2" value="1" data-column="basecheckbox">
+                     <label class="custom-control-label" for="checkbox-group20">option 1</label></div>
+                     <div class="custom-control custom-checkbox  d-inline-block mr-2">
+                     <input type="checkbox" class="custom-control-input" id="checkbox-group21" name="checkbox-group2" value="2">
+                     <label class="custom-control-label" for="checkbox-group21">option 2</label></div>
+                     <div class="custom-control custom-checkbox  d-inline-block mr-2">
+                     <input type="checkbox" class="custom-control-input" id="checkbox-group22" name="checkbox-group2" value="3">
+                     <label class="custom-control-label" for="checkbox-group22">option 3</label></div>
+                     <div class="custom-control custom-checkbox  d-inline-block mr-2">
+                     <input type="checkbox" class="custom-control-input" id="checkbox-group23" name="checkbox-group2" value="4">
+                     <label class="custom-control-label" for="checkbox-group23">option 4</label></div>
+                     <div class="custom-control custom-checkbox  d-inline-block mr-2">
+                     <input type="checkbox" class="custom-control-input" id="checkbox-group24" name="checkbox-group2" value="5">
+                     <label class="custom-control-label" for="checkbox-group24">option 5</label></div>
+                     </div></div></div><label class="label-base"></label><div class="event-btn-right hidden" style="pointer-events: none;"><button class="event-btn file-edit" onclick="EditHtml('checkbox-group','checkbox-group2')"><i class="fas fa-edit"></i></button><button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div></div></div>
+                                        <span class="basecontentspan" style="display: none;">Content area, you can drop control here</span>
+                                    </div>
+                                </div>
+                                <div class="dragresize col-md-12">
+                                    <div class="contentbtn">
+                                        <div class="basecontentarea contentarea2 ui-sortable"><div class="dragresize col-md-12"><div class="frmbtn"><div class="form-group program-control" id="checkbox-group5"><label class="checkbox-group required-asterisk"><span class="title">checkbox template</span><span class="desc"></span></label><div class="inputContent"><div class="checkbox-html"><div class="custom-control custom-checkbox  d-inline-block mr-2">
+                     <input type="checkbox" class="custom-control-input" id="checkbox-group50" name="checkbox-group5" value="1" data-column="checkboxtemplate">
+                     <label class="custom-control-label" for="checkbox-group50">a111</label></div>
+                     <div class="custom-control custom-checkbox  d-inline-block mr-2">
+                     <input type="checkbox" class="custom-control-input" id="checkbox-group51" name="checkbox-group5" value="2">
+                     <label class="custom-control-label" for="checkbox-group51">b222</label></div>
+                     <div class="custom-control custom-checkbox  d-inline-block mr-2">
+                     <input type="checkbox" class="custom-control-input" id="checkbox-group52" name="checkbox-group5" value="3">
+                     <label class="custom-control-label" for="checkbox-group52">c333</label></div>
+                     <div class="custom-control custom-checkbox  d-inline-block mr-2">
+                     <input type="checkbox" class="custom-control-input" id="checkbox-group53" name="checkbox-group5" value="4">
+                     <label class="custom-control-label" for="checkbox-group53">d444</label></div>
+                     </div></div></div><label class="label-program"></label><div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml('checkbox-group','checkbox-group5')"><i class="fas fa-edit"></i></button><button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div></div><div class="dragresize col-md-12"><div class="frmbtn"><div class="form-group"><label class="required-asterisk"><span class="title">template file multiple</span><span class="desc"></span></label><div class="inputContent"><input id="file6" onchange="previewOnChange(this)" type="file" class="form-control program-control" data-column="templatefilemultiple" accept=".png,.jpg,.jpeg" data-filesize="100"><label class="label-program"></label><div class="file6_files uploaded_filewrap"></div></div></div><div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml('file','file6')"><i class="fas fa-edit"></i></button><button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div></div><div class="dragresize col-md-12"><div class="frmbtn"><div class="form-group"><label class="required-asterisk"><span class="title">select template</span><span class="desc"></span></label><div class="inputContent"> <select id="select4" class="form-control program-control" data-column="selecttemplate"><option value="1">1111</option><option value="2">2222</option><option value="3">3333</option><option value="4">44444</option></select><label class="label-program"></label></div></div><div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml('select','select4')"><i class="fas fa-edit"></i></button><button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div></div></div>
+                                        <span class="basecontentspan" style="display: none;">Content area, you can drop control here</span>
+                                    </div>
+                                </div>
+                                <div class="dragresize col-md-12">
+                                    <div class="contentbtn">
+                                        <div class="basefooter basecontentarea ui-sortable" style="border: none;"><div class="dragresize col-md-4 ui-sortable-handle"><div class="frmbtn"><div class="form-group"><label class="required-asterisk"><span class="title">select base<span data-toggle="tooltip" data-placement="top" title="" class="tooltipicon" data-original-title="Lorem Ipsum is simply dummy text of the printing and ty"><i class="far fa-question-circle"></i></span></span><span class="desc">Lorem Ipsum is simply dummy text of the printing and ty</span></label><div class="inputContent"><select id="select7" class="form-control base-control col-md-12" data-column="selectbase"><option value="1">select 1</option><option value="2">select 2</option><option value="3">select 3</option><option value="4">select 4</option></select><label class="label-base"></label></div><div class="event-btn-right hidden" style="pointer-events: none;"><button class="event-btn file-edit" onclick="EditHtml('select','select7')"><i class="fas fa-edit"></i></button><button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div></div></div><div class="dragresize col-md-4 ui-sortable-handle"><div class="frmbtn"><div class="form-group"><label class="required-asterisk"><span class="title">short text base<span data-toggle="tooltip" data-placement="top" title="" class="tooltipicon" data-original-title="Lorem Ipsum is simply dummy text of the printing and ty"><i class="far fa-question-circle"></i></span></span><span class="desc">Lorem Ipsum is simply dummy text of the printing and ty</span></label><div class="inputContent"><input id="text8" type="text" class="form-control base-control col-md-12" data-column="shorttextbase"><label class="label-base"></label></div></div><div class="event-btn-right hidden" style="pointer-events: none;"><button class="event-btn file-edit" onclick="EditHtml('text','text8')"><i class="fas fa-edit"></i></button><button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div></div><div class="dragresize col-md-4 ui-sortable-handle"><div class="frmbtn"><div class="form-group base-control" id="radio-group6"><label class="radiobox-group required-asterisk"><span class="title">radio base<span tabindex="0" data-toggle="tooltip" data-placement="top" title="" class="tooltipicon" data-original-title="Lorem Ipsum is simply dummy text of the printing and ty"><i class="far fa-question-circle"></i></span></span><span class="desc">Lorem Ipsum is simply dummy text of the printing and ty</span></label><div class="inputContent"><div class="radio-html"><div class="custom-control custom-radio d-inline-block mr-2">
+    <input type="radio" class="custom-control-input" id="radio-group60" name="radio-group6" value="1" data-column="radiobase">
+    <label class="custom-control-label" for="radio-group60">1 file</label></div>
+    <div class="custom-control custom-radio d-inline-block mr-2">
+    <input type="radio" class="custom-control-input" id="radio-group61" name="radio-group6" value="2">
+    <label class="custom-control-label" for="radio-group61">2 file</label></div>
+    <div class="custom-control custom-radio d-inline-block mr-2">
+    <input type="radio" class="custom-control-input" id="radio-group62" name="radio-group6" value="3">
+    <label class="custom-control-label" for="radio-group62">3 file</label></div>
+    <div class="custom-control custom-radio d-inline-block mr-2">
+    <input type="radio" class="custom-control-input" id="radio-group63" name="radio-group6" value="4">
+    <label class="custom-control-label" for="radio-group63">4 file</label></div>
+    </div></div></div><label class="label-base"></label><div class="event-btn-right hidden" style="pointer-events: none;"><button class="event-btn file-edit" onclick="EditHtml('radio-group','radio-group6')"><i class="fas fa-edit"></i></button><button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div></div><div class="dragresize col-md-6 ui-sortable-handle"><div class="frmbtn"><div class="form-group"><label class="required-asterisk"><span class="title">number base<span data-toggle="tooltip" data-placement="top" title="" class="tooltipicon" data-original-title="Lorem Ipsum is simply dummy text of the printing and ty"><i class="far fa-question-circle"></i></span></span><span class="desc">Lorem Ipsum is simply dummy text of the printing and ty</span></label><div class="inputContent"><input id="number5" type="number" class="form-control base-control" data-column="numberbase"><label class="label-base"></label></div></div><div class="event-btn-right hidden" style="pointer-events: none;"><button class="event-btn file-edit" onclick="EditHtml('number','number5')"><i class="fas fa-edit"></i></button><button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div></div><div class="dragresize col-md-6 ui-sortable-handle" style="position: relative; left: 0px; top: 0px;"><div class="frmbtn"><div class="form-group"><label class="required-asterisk"><span class="title">multiple file base<span data-toggle="tooltip" data-placement="top" title="" class="tooltipicon" data-original-title="upto 50 kb"><i class="far fa-question-circle"></i></span></span><span class="desc">Lorem Ipsum is simply dummy text of the printing and ty</span></label><div class="inputContent"><input id="file10" onchange="previewOnChange(this)" type="file" class="form-control base-control" data-column="multiplefilebase" accept=".png,.jpg,.jpeg,.doc,.docx,.pdf" data-filesize="50" multiple="multiple"><label class="label-base"></label><div class="file10_files uploaded_filewrap"></div></div></div><div class="event-btn-right hidden" style="pointer-events: none;"><button class="event-btn file-edit" onclick="EditHtml('file','file10')"><i class="fas fa-edit"></i></button><button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div></div><div class="dragresize col-md-12 ui-sortable-handle"><div class="frmbtn"><div class="form-group"><label class="required-asterisk"><span class="title">long text base<span data-toggle="tooltip" data-placement="top" title="" class="tooltipicon" data-original-title="Lorem Ipsum is simply dummy text of the printing and ty"><i class="far fa-question-circle"></i></span></span><span class="desc">Lorem Ipsum is simply dummy text of the printing and ty</span></label><div class="inputContent"><div class="ck-editor"><div class="ck-editor-header"><ul><li><i class="fa fa-list-ul" aria-hidden="true"></i></li><li><i class="fa fa-list-ol" aria-hidden="true"></i></li><li><i class="fa fa-align-left" aria-hidden="true"></i></li><li><i class="fa fa-bold" aria-hidden="true"></i></li><li><i class="fa fa-italic" aria-hidden="true"></i></li><li><i class="fa fa-underline" aria-hidden="true"></i></li><li><i class="fa fa-eraser" aria-hidden="true"></i></li></ul></div><textarea id="textarea9" class="form-control base-control" name="my-textarea" data-column="longtextbase"></textarea><label class="label-base"></label></div></div></div><div class="event-btn-right hidden" style="pointer-events: none;"><button class="event-btn file-edit" onclick="EditHtml('textarea','textarea9')"><i class="fas fa-edit"></i></button><button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div></div></div></div>
+                                        <span class="basecontentspan" style="display: none;">Content area, you can drop control here</span>
+                                    </div>
+                                </div>
+                                <div class="dragresize col-md-12">
+                                    <div class="contentbtn">
+                                        <div class="basecontentarea contentarea3 ui-sortable"></div>
+                                        <span class="basecontentspan">Content area, you can drop control here</span>
+                                    </div>
+                                </div>
+                            
