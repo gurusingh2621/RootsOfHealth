@@ -1,14 +1,18 @@
-﻿using RootsOfHealth.Commom;
+﻿using ExcelDataReader;
+using RootsOfHealth.Commom;
 using RootsOfHealth.Models;
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
-using System.Net.Http.Headers;
 
 namespace RootsOfHealth.Controllers
 {
@@ -2304,6 +2308,97 @@ namespace RootsOfHealth.Controllers
             return PartialView("~/Views/Shared/Client/_FormLogHistory.cshtml", LogList);
         }
 
+        [HttpPost]
+        public ActionResult UploadPotentialClientFile()
+        {
+            List<string> columnNames = new List<string>();
+            List<string> listA = new List<string>();
+            var databaseColumns = new List<PotientialTableInfoBO>();
+            try
+            {
+                var files = Request.Files;
+                var fileName = Path.GetFileName(files[0].FileName);
+                var fileExtension = Path.GetExtension(files[0].FileName);
+                var directoryPath = "~/App_Data/PotentialClient";
+                var path = Path.Combine(Server.MapPath(directoryPath), fileName);
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(Server.MapPath(directoryPath));
+                }
+                HttpPostedFileBase fileBase = files[0];
+                fileBase.SaveAs(path);
+                using (var stream = System.IO.File.Open(path, FileMode.Open, FileAccess.Read))
+                {
+                    IExcelDataReader excelReader = null;
+                    if (fileExtension != ".csv")
+                    {
+                       
+
+                        excelReader = ExcelReaderFactory.CreateOpenXmlReader(stream);
+                    }
+                    else
+                    {
+                        excelReader = ExcelReaderFactory.CreateCsvReader(stream, new ExcelReaderConfiguration()
+                        {
+                            AutodetectSeparators = new char[] { ',', ';' },
+                            AnalyzeInitialCsvRows = 0
+                        });
+                    }
+
+                    var result = excelReader.AsDataSet(new ExcelDataSetConfiguration()
+                    {
+                        ConfigureDataTable = (_) => new ExcelDataTableConfiguration()
+                        {
+                            UseHeaderRow = true
+                        }
+                    });
+                    TempData["PotentialClientFileDatatable"] = result.Tables[0];
+                    var tables = result.Tables
+                                       .Cast<DataTable>()
+                                       .Select(t => new {
+                                           TableName = t.TableName,
+                                           Columns = t.Columns
+                                           .Cast<DataColumn>()
+                                           .Select(x => x.ColumnName)
+                                           .ToList()
+                                       });
+                    columnNames = tables.First().Columns;
+
+                };
+          
+               
+                    
+
+                 
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(WebApiKey);
+                    //HTTP GET
+                    var responseTask = client.GetAsync("/api/PatientMain/getpotentialclienttableinfo");
+                    var result = responseTask.Result;
+
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var readTask = result.Content.ReadAsAsync<List<PotientialTableInfoBO>>();
+                        readTask.Wait();
+                        databaseColumns = readTask.Result;
+                    }
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json("Upload failed");
+            }
+            
+            return Json(new {
+                filecolumns = columnNames,
+                databaseColumns = databaseColumns
+
+            });
+        }
     }
 }
     

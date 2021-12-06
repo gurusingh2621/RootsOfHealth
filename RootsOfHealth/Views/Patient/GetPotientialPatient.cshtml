@@ -4,33 +4,53 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <style>
-    
+
     .appointment {
         padding: 20px;
         height: calc(100vh - 100px);
     }
-    #content{padding:0;}
+
+    #content {
+        padding: 0;
+    }
+
+    #PotentialClientFileUpload .modal-dialog {
+        max-width: 750px;
+    }
+    .sortableListBox {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .sortableListBox li {
+        padding: 8px 15px;
+        border: 1px solid #ddd;
+        margin: 0 0 10px;
+        text-align: center;
+    }
 </style>
 <section id="content" class="responsive-container">
     <div class="inner-content mt-0">
         <div class="container-fluid pl-0 pr-0">
             <div class="appointment">
-              
-                
+                @*<input type="file"
+                       id="PoteintialClientFileInput" name="avatar"
+                       accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">*@
+             
                 <table id="tblPotientialPatient" class="display table table-hover table-striped table-bordered">
-                    
-                        <thead>
-                            <tr class="table-active">
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>Last Modify</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-@foreach (var p in Model)
-{
+
+                    <thead>
+                        <tr class="table-active">
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Last Modify</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var p in Model)
+                        {
                             <tr>
                                 <td>@p.FirstName @p.LastName</td>
                                 <td>@p.EmailAddress</td>
@@ -41,23 +61,52 @@
                                         <i class="far fa-edit"></i>
                                         Move
                                     </button>
-                                   
+
                                 </td>
                             </tr>
-}
-                        </tbody>
-                    
+                        }
+                    </tbody>
+
                 </table>
             </div>
 
         </div>
     </div>
-</section>
 
+    <div class="modal fade" id="PotentialClientFileUpload" tabindex="-1" role="dialog" aria-labelledby="PotentialClientFiletitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered preview-modal" role="document">
+            <div class="modal-content" style="height:90%">
+                <div class="modal-header preview-header">
+                    <h5 class="modal-title" id="PotentialClientFiletitle">File Upload</h5>
+                    <button type="button" class="close" aria-label="Close" onclick="ClosePotentialClientModal()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body preview-body scroll">
+                    <div class="row">
+                        <div class="col-md-6 getDatabaseField">
+
+                        </div>
+                        <div class="col-md-6 getFileFields">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer preview-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="https://code.jquery.com/ui/1.12.0-rc.2/jquery-ui.min.js"
+        integrity="sha256-55Jz3pBCF8z9jBO1qQ7cIf0L+neuPTD1u7Ytzrp2dqo="
+        crossorigin="anonymous"></script>
+<script src="~/Scripts/PotentialClients/PotentialClients.js"></script>
 @section scripts{
     <script>
         $(document).ready(function () {
-          
+
             var table = $("#tblPotientialPatient").dataTable({
                 scrollY: 'calc(100vh - 264px)',
                 scrollCollapse: true,
@@ -67,6 +116,6 @@
             //    console.log(data);
             //});
         });
-       
-        </script>
-    }
+
+    </script>
+}
