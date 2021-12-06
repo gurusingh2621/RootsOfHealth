@@ -334,7 +334,6 @@ function EditHtml(type, ID) {
                 '<label>Options<span class="addoptions" onclick="addScoreableoption(this)"><i class="fas fa-plus"></i></span></label>';
             popupString += `<div class="optionHeading"><label>Text</label><label>Value</label><label class="ScoreHeading ${isScored.length == 1 ? '' : 'd-none'}">Score</label></div>`;
             $(controlId).find("input[type=checkbox]").each(function (index, item) {
-                debugger
                 popupString += '<div class="option-block">' +
                     '<div class="option-fields">' +
                     `<input type="text" placeholder="Option Text" class="form-control option-text"  value="${($(item).next().text() == "option 1" || $(item).next().text() == "option 2") && $(controlId).find("input.custom-control-input").first().attr("data-column") === undefined ? "" : $(item).next().text()}"/>` +

@@ -627,7 +627,6 @@ var windowWidth = $(window).width()
 $(window).resize(function () {
     var finalWindowWidth = $(window).width()
     if (windowWidth != finalWindowWidth) {
-        debugger
         LoadRequest();
         LoadRequestHistory()
         windowWidth = finalWindowWidth;
