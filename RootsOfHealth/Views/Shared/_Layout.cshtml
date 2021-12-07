@@ -47,7 +47,7 @@
             height: 100%;
             top: 0;
             left: 0;
-            z-index: 9999;
+            z-index: 99999;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1008,6 +1008,20 @@
 
 
                     <script type="text/javascript">
+
+
+                        var $OverlayLoader = $('.loaderOverlay')
+                        var _Loader = {
+                            StartLoader: function () {
+                                $OverlayLoader.css('display','flex')
+                            },
+                            StopLoader: function () {
+                                $OverlayLoader.hide()
+                            }
+                        }
+
+
+
         $('#formSharingModal .nav-tabs li > a').on('click', function (e) {
             e.preventDefault()
             $(this).tab('show')
@@ -1306,7 +1320,7 @@
                                 },
                                 complete: function () {
                                     $(".scroll").animate({ scrollTop: 0 }, "slow");
-                                    $(".loaderOverlay").hide();
+                                    _Loader.StopLoader()
                                 }
                             });
 
@@ -1395,6 +1409,7 @@
                         }
 
                         function GetShareTabClientDropDown() {
+                            _Loader.StartLoader()
                             var formId = $DDformlistforsharing.val();
                             $.ajax({
                                 type: "Get",
@@ -1414,10 +1429,11 @@
 
                                 },
                                 error: function () {
+                                    _Loader.StopLoader()
                                     toastr.error("Some error occurred!! or data not found");
                                 },
                                 complete: function () {
-                                    $(".loaderOverlay").hide();
+                                   
                                     GetFormSharingHistory();
 
                                 }
@@ -1427,6 +1443,7 @@
 
 
                         function GetFormsForSharing() {
+                            _Loader.StartLoader()
                             $.ajax({
                                 type: "Get",
                                 url: Apipath + '/api/PatientMain/getformsforSharing',
@@ -1446,11 +1463,12 @@
 
                                 },
                                 error: function () {
+                                    _Loader.StopLoader()
                                     toastr.error("Some error occurred!! or data not found");
                                 },
                                 complete: function () {
 
-                                    $(".loaderOverlay").hide();
+                                    _Loader.StopLoader()
 
                                 }
                             });
@@ -1483,6 +1501,11 @@
 
                         var formShareHistoryTable;
                         function GetFormSharingHistory() {
+                            if (!$OverlayLoader.is(":visible")) {
+                                _Loader.StartLoader()
+
+                            }
+
                             var formId, statusid, clientid;
                             formId = $DDformlistforsharing.val();
                             statusid = $DDStatusShareHistory.val();
@@ -1527,7 +1550,7 @@
                                         "searching": false,
                                         "paging": false,
                                         "ordering": false,
-                                        "scrollY": "180px",
+                                        "scrollY": "130px",
                                         'columnDefs': [{
                                             'targets': [6],
                                             'orderable': false
@@ -1538,11 +1561,12 @@
 
                                 },
                                 error: function () {
+                                    _Loader.StopLoader()
                                     toastr.error("Some error occurred!! or data not found");
                                 },
                                 complete: function () {
 
-                                    $(".loaderOverlay").hide();
+                                    _Loader.StopLoader()
 
                                 }
                             });
@@ -1633,7 +1657,7 @@
 
 
                         function SendReminder(shareId) {
-
+                            _Loader.StartLoader()
                             $.ajax({
                                 type: "POST",
                                 url: Apipath + '/api/PatientMain/sendRemainderforsharedform?shareid='+shareId,
@@ -1644,7 +1668,11 @@
                                     toastr.success("", "Reminder is sent successfully", { progressBar: true });
                                 },
                                 error: function () {
+                                    _Loader.StopLoader()
                                     toastr.error("Error while updating goal sort index");
+                                },
+                                complete: function () {
+                                    _Loader.StopLoader()
                                 }
                             });
 
@@ -1653,6 +1681,7 @@
 
 
                         function GeUserListForFormSharing() {
+                            _Loader.StartLoader()
                             var formid = $DDformlistforsharing.val();
                             $.ajax({
                                 type: "Get",
@@ -1713,17 +1742,19 @@
                                   
                                 },
                                 error: function () {
+                                    _Loader.StopLoader()
                                     toastr.error("Some error occurred!! or data not found");
                                 },
                                 complete: function () {
 
-                                    $(".loaderOverlay").hide();
+                                    _Loader.StopLoader()
                                 }
                             });
                         }
 
                         function ShareForm() {
-                            
+                            _Loader.StartLoader()
+
                             var model = {
                                 UserIds: formShareUserList,
                                 FormId: $DDformlistforsharing.val(),
@@ -1740,11 +1771,14 @@
                                     $selectDateAndShare.modal('hide')
                                     $FormSharingModal.modal('hide')
                                     toastr.success("", "Form is shared successfully", { progressBar: true });
-                                    
+                                   
                                 },
                                 error: function () {
-
+                                    _Loader.StopLoader()
                                     toastr.error("Error while updating goal sort index");
+                                },
+                                complete: function () {
+                                    _Loader.StopLoader()
                                 }
                             });
                         }
