@@ -1,0 +1,117 @@
+﻿@model List<RootsOfHealth.Models.SharedFormDataBO>
+
+@{ 
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Sharing</title>
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/style.css" rel="stylesheet" media="print,all,screen" />
+    <link href="~/css/formsharing.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min.css" integrity="sha512-6S2HWzVFxruDlZxI3sXOZZ4/eJ8AcxkQH1+JjSe/ONCEqR9L4Ysq5JdT5ipqtzU7WHalNwzwBv+iE51gNHJNqQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Font Awesome CSS start here -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+    <link href="~/css/all.min.css" rel="stylesheet" />
+</head>
+<body>
+    <section id="content">
+        <div class="profile-tabs">
+
+            <div class="tab-pane fade show active" id="SharedForms" role="tabpanel" aria-labelledby="Programs-tab">
+                <div class="inner-content">
+                    <div class="paitent-detail" id="tabPills">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="paitent-detail-left">
+                                    <ul class="nav nav-tabs">
+
+                                        @foreach (var item in Model)
+                                        {
+                                            var formName = @item.FormName.Replace(" ", "");
+                                            <li class="nav-item">
+                                                <a id="@("a"+formName)" class="nav-link" data-toggle="tab"
+                                                   href="@("#" + formName + "only")" onclick="GetSharedFormTemplate('@item.FormId','@formName',this)" data-isSaved="@item.IsSaved" data-viewed="False">@item.FormName<span class="check @Html.Raw((item.IsSaved==null ||item.IsSaved.Value)?"":"d-none")"><i class="fas fa-check-circle"></i></span></a>
+                                            </li>
+
+                                        }
+
+
+                                    </ul>
+
+                                    <!-- Tab panes -->
+
+
+                                    <div class="tab-content" style="margin-top:20px">
+
+                                        @foreach (var item in Model)
+                                        {
+                                            var FormN = item.FormName.Replace(" ", "");
+                                            var isFormUpdated = item.IsUpdated.HasValue? item.IsUpdated.Value.ToString(): "false";
+                                            var isbaseFormUpdated = item.IsBaseTemplateDataSaved.HasValue ? item.IsBaseTemplateDataSaved.Value.ToString() : "false"; ;
+
+                                            <div class="tab-pane fade" id="@(FormN+"only")">
+
+                                                <div>
+                                                    <div class="detail-heading d-flex">
+                                                        <h2 style="padding-top:10px">@item.FormName</h2>
+                                                        <div class="detail-button ml-auto">
+
+                                                            <a href="javascript:{}" style="background-color: #a1a1a1; border: 1px solid #a1a1a1" onclick="return saveClientFormBasicInfo('@item.Templateid','@item.FormTable',@item.FormId,@item.ClientId,'@isFormUpdated','@isbaseFormUpdated',@item.ShareId);" class="btn btn-success ml-auto disabled btnprogramsave">
+                                                                <i class="far fa-save"></i>
+                                                                Save
+                                                            </a>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="SidebarScroll scroll inner-main-content">
+                                                        <style>
+                                                            ul.file_uploaded_list li img {
+                                                                max-width: 90px;
+                                                                margin-right: 10px;
+                                                            }
+                                                        </style>
+                                                        <div id="@(FormN+"render-basicform")" class="render-basicProgramform" style="padding-bottom:100px"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+
+
+                                        <!---programs start-->
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+    @Scripts.Render("~/bundles/jquery")
+    <script src="~/Scripts/jquery-ui.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+    <script>
+
+        var activeFormName = '@ViewBag.ActiveFormName';
+        var PatientId = '@ViewBag.PatientId'
+        var SeperationString = '#$%^*'
+       var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
+    </script>
+    <script src="~/Scripts/SharedForm/SharedForm.js"></script>
+
+</body>
+</html>

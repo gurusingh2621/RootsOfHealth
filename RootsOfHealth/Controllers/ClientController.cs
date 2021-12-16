@@ -2399,6 +2399,32 @@ namespace RootsOfHealth.Controllers
 
             });
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult Sharing(string shareId, string form)
+        {
+
+            var SharedFormData = new List<SharedFormDataBO>();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                //HTTP GET
+                var responseTask = client.GetAsync("/api/PatientMain/getsharedforms?uniqueidentifier=" + shareId);
+                var result = responseTask.Result;
+
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<List<SharedFormDataBO>>();
+                    readTask.Wait();
+                    SharedFormData = readTask.Result;
+                    ViewBag.ActiveFormName = form;
+                    ViewBag.PatientId = SharedFormData.Count > 0 ? SharedFormData[0].ClientId : 0;
+                }
+
+            }
+            return View(SharedFormData);
+        }
     }
 }
     
