@@ -230,6 +230,7 @@
     <Compile Include="Models\ProgramtemplateBO.cs" />
     <Compile Include="Models\ReleaseAndDisclousureBO.cs" />
     <Compile Include="Models\ScheduleDateBO.cs" />
+    <Compile Include="Models\SharedFormDataBO.cs" />
     <Compile Include="Models\TypeOfAppointmentBO.cs" />
     <Compile Include="Models\UserBO.cs" />
     <Compile Include="Models\UserRolesBO.cs" />
@@ -537,6 +538,7 @@
     <Content Include="css\programtemplate.css" />
     <Content Include="css\responsive.css" />
     <Content Include="css\select2.min.css" />
+    <Content Include="css\formsharing.css" />
     <Content Include="css\style.css" />
     <Content Include="css\CarePlanSummary.css" />
     <Content Include="css\UserGroup.css" />
@@ -637,6 +639,7 @@
     <Content Include="Scripts\Program\programbasetemplatecontrolhtml.js" />
     <Content Include="Scripts\Program\programlist.js" />
     <Content Include="Scripts\select2.min.js" />
+    <Content Include="Scripts\SharedForm\SharedForm.js" />
     <Content Include="Scripts\Usergroup\UserGroup.js" />
     <Content Include="Views\Patient\FormScheduling.cshtml" />
     <Content Include="Web.config">
@@ -720,6 +723,7 @@
     <Content Include="Views\Client\ClientFormBaseTemplate.cshtml" />
     <Content Include="Views\Shared\Client\_FormLogHistory.cshtml" />
     <Content Include="Views\Shared\Client\_LogHistoryPopUp.cshtml" />
+    <Content Include="Views\Client\Sharing.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

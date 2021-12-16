@@ -1,0 +1,484 @@
+
+body {
+    padding-top: 0;
+}
+#content .profile-tabs .nav-tabs:hover {
+    overflow-x: auto;
+}
+#content .inner-content {
+    float: none;
+    margin: 0;
+    padding: 0;
+}
+section#content {
+    margin: 0;
+    padding: 0;
+}
+#content .profile-tabs .nav-item {
+    margin-bottom: 0;
+}
+.render-basicProgramform {
+    width: 100%;
+    display: flex !important;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding: 0;
+    box-sizing: border-box;
+    align-content: baseline;
+    /*max-height: 500px;*/
+}
+
+    .render-basicProgramform .basecontentarea {
+        width: 100%;
+        display: flex;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        align-content: baseline;
+        border: none;
+        min-height: unset;
+        padding: 0px;
+    }
+
+    .render-basicProgramform .form-control {
+        height: 50px;
+        font-size: 13px;
+        border: 1px solid #e2e2e2;
+        border-radius: 0px;
+        padding: 0 15px;
+    }
+
+    .render-basicProgramform select {
+        height: 23px !important;
+    }
+
+    .render-basicProgramform .priority {
+        height: auto !important
+    }
+
+    .render-basicProgramform .form-control[type="file"] {
+        border: 0;
+        padding: 0;
+        height: auto;
+    }
+
+    .render-basicProgramform textarea.form-control {
+        height: 50px;
+    }
+
+    .render-basicProgramform .form-control:focus {
+        box-shadow: none;
+        outline: none;
+    }
+
+    .render-basicProgramform .event-btn-right {
+        position: absolute;
+        bottom: auto;
+        right: -1px;
+        z-index: 9;
+        top: -3px;
+    }
+
+    .render-basicProgramform .frmbtn .form-group label:first-child {
+        background: #f0f0f0;
+        display: block;
+        margin: -11px -11px 10px;
+        padding: 4px 10px;
+        font-size: 14px;
+        color: #343434;
+        font-weight: 500;
+        line-height: normal;
+        vertical-align: middle;
+    }
+
+    .render-basicProgramform .frmbtn .form-group {
+        margin: 0;
+    }
+
+    .render-basicProgramform .frmbtn {
+        border: 1px solid #e2e2e2;
+        padding: 10px;
+        position: relative;
+        margin: 0 0 10px 0;
+    }
+
+        .render-basicProgramform .frmbtn select.form-control {
+            padding: 0 15px;
+            background: url(../images/chevron-arrow-down.svg) no-repeat 0 0;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            -ms-appearance: none;
+            background-size: 12px;
+            background-position: 98% 5px;
+        }
+
+    .render-basicProgramform .data-frmbtn {
+        margin: 0 0 0px 0;
+    }
+
+
+
+    .render-basicProgramform .form-row-first {
+        border: 1px solid #e2e2e2;
+        background: #fff;
+        margin-top: 17px;
+    }
+
+        .render-basicProgramform.form-row-first .top-form-row {
+            background: #f0f0f0;
+            padding: 0 10px;
+            border-bottom: 1px solid #e2e2e2;
+            height: auto;
+        }
+
+        .render-basicProgramform .form-row-first .one-columns {
+            width: 100%;
+            padding: 0px 5px;
+        }
+
+    .render-basicProgramform .bootom-form-row {
+        padding: 7px 10px;
+    }
+
+    .render-basicProgramform .form-row-first .top-form-row label {
+        font-size: 14px;
+        color: #343434;
+        font-weight: 500;
+        margin: 0;
+        line-height: normal;
+        vertical-align: middle;
+    }
+
+    .render-basicProgramform .frmbtn .form-group label span.desc {
+        display: block;
+        margin: 3px 0 0;
+        color: #777;
+        font-weight: normal;
+    }
+
+    .render-basicProgramform .frmbtn .form-group label.label-left {
+        max-width: 50%;
+        flex: 0 0 50%;
+        margin-right: 0 !important;
+        padding-left: 0;
+    }
+
+    .render-basicProgramform .frmbtn .form-group.f-g-left {
+        align-items: flex-start;
+    }
+
+        .render-basicProgramform .frmbtn .form-group.f-g-left .inputContent {
+            max-width: 50%;
+            flex: 0 0 50%;
+        }
+
+    .render-basicProgramform label.database-field {
+        display: inline-block;
+        padding: 0 15px;
+    }
+
+
+
+    .render-basicform {
+    width: 100%;
+    display: flex !important;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding:0;
+    box-sizing:border-box;
+    align-content: baseline;
+    max-height: 380px;
+    overflow-y: auto;
+}
+.render-basicform .basecontentarea {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    align-content: baseline;
+    border: none;
+    min-height: unset;
+    padding: 0px;
+}
+.render-basicform .form-control {
+    height: 50px;
+    font-size: 13px;
+    border: 1px solid #e2e2e2;
+    border-radius: 0px;
+    padding: 0 15px;
+}
+.render-basicform select {
+    height: 23px !important;
+}
+.render-basicform .form-control[type="file"] {
+    border: 0;
+    padding: 0;
+    height: auto;
+}
+.render-basicform textarea.form-control {
+    height: 50px;
+}
+.render-basicform .form-control:focus {
+    box-shadow: none;
+    outline: none;
+}
+.render-basicform .event-btn-right {
+    position: absolute;
+    bottom: auto;
+    right: -1px;
+    z-index: 9;
+    top: -3px;
+}
+.render-basicform .frmbtn .form-group label:first-child {
+    background: #f0f0f0;
+    display: block;
+    margin: -11px -11px 10px;
+    padding: 4px 10px;
+    font-size: 14px;
+    color: #343434;
+    font-weight: 500;
+    line-height: normal;
+    vertical-align: middle;
+}
+.render-basicform .frmbtn .form-group {
+    margin: 0;
+}
+.render-basicform .frmbtn {
+    border: 1px solid #e2e2e2;
+    padding: 10px;
+    position: relative;
+    margin: 0 0 10px 0;
+}
+.render-basicform .frmbtn select.form-control {
+    padding: 0 15px;
+    background: url(../images/chevron-arrow-down.svg) no-repeat 0 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    background-size: 12px;
+    background-position: 98% 5px;
+}
+.render-basicform .data-frmbtn {
+    margin: 0 0 0px 0;
+}
+.vertical .custom-control {
+    display: block !important;
+}
+.vertical {
+    align-items: flex-start !important;
+}
+.label-left {
+    background: transparent !important;
+    margin: 0 20px 0px 0 !important;
+}
+.f-g-left {
+    display: flex !important;
+    align-items: center;
+}
+.preview-body .database-field {
+    border: 0px !important;
+    background: none !important;
+}
+.left-control .frmbtn {
+    border: 0;
+    padding: 0;
+}
+.left-control .form-group label {
+    padding-left: 0 !important;
+}
+span.tooltipicon i {
+    margin: 0px;
+}
+.required-asterisk {
+    position: relative;
+}
+label.required-asterisk span.title:after {
+    content: "*";
+    position: absolute;
+    color: #c10000;
+    margin-left: 5px;
+}
+span.tooltipicon {
+    outline: none;
+    margin-left: 5px;
+}
+.ck-editor {
+    width: 100%;
+}
+label.label-left {
+    flex: 0 0 150px;
+    max-width: 150px;
+}
+
+span.basecontentspan {
+    display: none;
+}
+.tooltip-inner a {
+    color: #ffffff;
+}
+.render-basicform .form-row-first {
+    border: 1px solid #e2e2e2;
+    background: #fff;
+    margin-top: 17px;
+}
+.render-basicform.form-row-first .top-form-row {
+    background: #f0f0f0;
+    padding: 0 10px;
+    border-bottom: 1px solid #e2e2e2;
+    height: auto;
+}
+.render-basicform .form-row-first .one-columns {
+    width: 100%;
+    padding: 0px 5px;
+}
+.render-basicform .bootom-form-row {
+    padding: 7px 10px;
+}
+.render-basicform .form-row-first .top-form-row label {
+    font-size: 14px;
+    color: #343434;
+    font-weight: 500;
+    margin: 0;
+    line-height: normal;
+    vertical-align: middle;
+}
+
+
+@media (max-width: 1024px) {
+    .preview-body .form-row-first .top-form-row {
+        height: auto
+    }
+}
+.render-basicform .frmbtn .form-group label span.desc {
+    display: block;
+    margin: 3px 0 0;
+    color: #777;
+    font-weight: normal;
+}
+.render-basicform .frmbtn .form-group label.label-left {
+    max-width: 50%;
+    flex: 0 0 50%;
+    margin-right: 0 !important;
+    padding-left: 0;
+}
+.render-basicform .frmbtn .form-group.f-g-left {
+    align-items: flex-start;
+}
+.render-basicform .frmbtn .form-group.f-g-left .inputContent {
+    max-width: 50%;
+    flex: 0 0 50%;
+}
+.basic-info-actions .btn-cancel {
+    background-color: #999;
+    border-color: #999;
+}
+.basic-info-actions .btn-cancel:hover {
+    background-color: #bbb;
+    border-color: #bbb;
+}
+.basic-info-actions {
+    margin-top: 20px;
+}
+
+.label-base, .label-program {
+    display: none;
+}
+ul.file_uploaded_list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+ul.file_uploaded_list li {
+    margin: 0 0 6px;
+}
+
+ul.file_uploaded_list li input.form-control {
+    height: 32px;
+}
+.uploaded_filewrap {
+    display: block;
+    margin: 0;
+    padding: 10px 0 0;
+}
+ul.file_uploaded_list li {
+    align-items: center;
+    display: flex;
+}
+ul.file_uploaded_list li input,ul.file_uploaded_list li a {display: block;width: 50%;padding: 0 15px;word-break: break-all;line-height: 1;}
+ul.file_uploaded_list li a {
+    font-size: 14px;
+    color: #555;
+    text-decoration: underline;
+}
+ul.file_uploaded_list.onlylinkslist {
+    margin: -10px 0 0;
+}
+ul.file_uploaded_list.onlylinkslist li a {
+    padding: 0;
+    width: 100%;
+}
+.render-basicform label.database-field {
+    display: inline-block;
+    padding: 0 15px;
+}
+ul.file_uploaded_list li img {
+    max-width: 90px;
+    margin-right: 10px;
+}
+ul.file_uploaded_list li .removeUploadFile i {
+    color: #555;
+    font-size: 12px;
+}
+ul.file_uploaded_list li .removeUploadFile {
+    display: block;
+    min-width: 20px;
+    cursor:pointer;
+    text-align: center;
+}
+#content .render-basicform .bootom-form-row.mb-2 {
+    padding-top: 0 !important;
+}
+input.invaild-input {
+    border: 1px solid red !important;
+}
+
+input.care_plan_name_field {
+    display: inline-block !important;
+    border: 1px solid transparent;
+    box-shadow: none !important;
+    outline: none !important;
+    font-size: 18px;
+    color: #212529;
+    font-weight: 500;
+    padding: 2px 5px;
+    width:100%;
+}
+input.care_plan_name_field:hover {
+    border: 1px solid #ced4da;
+}
+.show_careplanstatus {
+    display: inline-block !important;
+}
+select#ddlcareplanstatus {
+    margin: 0 15px;
+    width: auto;
+    height:34px;
+}
+#addNewCarePlansSidebar .form-control:disabled {
+    background-color: #ffffff;
+}
+/*My responsive style
+============================================================================================ */
+@media(min-width:1400px) {
+    div #addNewCarePlansSidebar {
+        max-width: 80%;
+    }
+}
+
+
+li.ui-sortable-placeholder {
+    margin-bottom: 5px !important;
+}
+
+li.ui-sortable-handle {
+    cursor: move;
+}
