@@ -50,12 +50,29 @@ function OpenActiveForm() {
 
 }
 var _ClientFormElement=''
-function GetSharedFormTemplate(formid, formname, navTab) {
-
+function GetSharedFormTemplate(formid, formname,shareid,navTab) {
 
     var isViewed = $(navTab).attr('data-viewed')
+    if (isViewed == 'False') {
+        UpdateLastView(shareid)
+        $(navTab).attr('data-viewed', 'True');
+    }
 
+    var isExpired = $(navTab).attr('data-isexpired')
+    var isSaved = $(navTab).attr('data-issaved')
     formName = formname
+    
+    if (isSaved == 'True') {
+      //  toastr.error('Form is submitted.')
+        ShowSavedFormContent();
+        return
+    } else if (isExpired == 'True') {
+      //  toastr.error('Form is expired.')
+        $('#' + formName+'only').html('<div class="formStatusDiv"><img src="/images/expired.png" alt="expired"><h1>Form is expired.</h1></div>')
+        return
+    }
+
+   
     _ClientFormElement = $('#' + formname + 'render-basicform')
     var $AllRenderedForms = $('.render-basicProgramform')
     $AllRenderedForms.each(function (index, item) {
@@ -209,7 +226,7 @@ function saveClientFormBasicInfo(_templateId, _templatetable, ClientFormID, _Pat
         dataType: "json",
         success: function (res) {
             if (_ClientFormElement.find(".base-control").length) {
-                saveClientFormBaseFieldInfo(ClientFormID, _templateId);
+                saveClientFormBaseFieldInfo(ClientFormID, _templateId, _PatientId);
 
             } 
             disableClientFormSave()
@@ -270,7 +287,13 @@ function saveClientFormBasicInfo(_templateId, _templatetable, ClientFormID, _Pat
             $(".loaderOverlay").hide();
         },
         complete: function () {
+            if (_ClientFormElement.find(".base-control").length==0) {
+                setTimeout(function () {
+                    ShowSavedFormContent()
+                },1000)
+              
 
+            }
         }
     });
 
@@ -302,7 +325,7 @@ function validateFiles(Id) {
     }
 }
 
-function saveClientFormBaseFieldInfo(ClientFormID, _templateId) {
+function saveClientFormBaseFieldInfo(ClientFormID, _templateId, _PatientId) {
 
     var fieldmodel = [];
     fieldmodel.push({ ColumnName: "PatientID", FieldValue: _PatientId });
@@ -364,7 +387,11 @@ function saveClientFormBaseFieldInfo(ClientFormID, _templateId) {
         dataType: "json",
         async: false,
         success: function (res) {
-            LoadSchedulingAfterSave();
+            //LoadSchedulingAfterSave();
+            setTimeout(function () {
+                ShowSavedFormContent()
+            },1000)
+          
         },
         error: function (e) {
             toastr.error("Something happen Wrong");
@@ -454,6 +481,12 @@ function LoadClientFormTemplate(ClientFormID,IsViewed) {
         }
     });
 }
+//parseHTML=>use inside addoption function to add new block
+function parseHTML(htmlstr) {
+    var t = document.createElement('template');
+    t.innerHTML = htmlstr;
+    return t.content.cloneNode(true);
+}
 
 function getClientFormHeaderAndFooter() {
     $.ajax({
@@ -489,6 +522,17 @@ function getClientFormHeaderAndFooter() {
                     break;
             }
             BindChangeClientEvent()
+
+
+            _ClientFormElement.find(".priority").each((index, item) => {
+                $(item).sortable({
+                    change: function (event, ui) {
+                        enableClientFormSave()
+                    }
+                });
+            })
+
+
         },
         error: function (e) {
             toastr.error("Something happen Wrong");
@@ -668,6 +712,8 @@ function previewOnfileChange(obj) {
 }
 
 function uploadClientFormFiles(Id, fileData, ClientFormID) {
+    
+    console.log($("#" + Id).length)
     var files = $("#" + Id).get(0).files;
     var fileNames = [];
     var savedfiles = [];
@@ -786,26 +832,29 @@ function removeClientFormUpload(obj) {
 
 
 
-//function UpdateLastView() {
+function UpdateLastView(shareid) {
 
-//    $.ajax({
-//        type: "POST",
-//        url: Apipath + '/api/PatientMain/upda',
-//        contentType: 'application/json; charset=UTF-8',
-//        data: JSON.stringify(model),
-//        dataType: "json",
-//        success: function () {
+    $.ajax({
+        type: "POST",
+        url: Apipath + '/api/PatientMain/updatesharedformlastview?shareId=' + shareid,
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        success: function () {
+            //toastr.success("last view updated");
+        },
+        error: function (e) {
+            toastr.error("Something happen Wrong");
+            $(".loaderOverlay").hide();
+        },
+        complete: function () {
 
-//        },
-//        error: function (e) {
-//            toastr.error("Something happen Wrong");
-//            $(".loaderOverlay").hide();
-//        },
-//        complete: function () {
-
-//        }
-//    });
-
+        }
+    });
 
 
-//}
+
+}
+
+function ShowSavedFormContent() {
+    $('#' + formName + 'only').html('<div class="formStatusDiv"><img src="/images/submitted.png" alt="expired"><h1>Form is submitted.</h1></div>')
+}

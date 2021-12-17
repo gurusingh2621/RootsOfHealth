@@ -37,7 +37,7 @@
                                             var formName = @item.FormName.Replace(" ", "");
                                             <li class="nav-item">
                                                 <a id="@("a"+formName)" class="nav-link" data-toggle="tab"
-                                                   href="@("#" + formName + "only")" onclick="GetSharedFormTemplate('@item.FormId','@formName',this)" data-isSaved="@item.IsSaved" data-viewed="False">@item.FormName<span class="check @Html.Raw((item.IsSaved==null ||item.IsSaved.Value)?"":"d-none")"><i class="fas fa-check-circle"></i></span></a>
+                                                   href="@("#" + formName + "only")" data-isexpired="@item.IsExpired" data-issaved="@item.IsSaved" onclick="GetSharedFormTemplate('@item.FormId','@formName','@item.sh',this)"  data-viewed="False">@item.FormName<span class="check @Html.Raw((item.IsSaved==null ||item.IsSaved.Value)?"":"d-none")"><i class="fas fa-check-circle"></i></span></a>
                                             </li>
 
                                         }
