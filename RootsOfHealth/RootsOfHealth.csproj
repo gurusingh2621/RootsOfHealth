@@ -554,6 +554,7 @@
     <Content Include="images\calender-btn.png" />
     <Content Include="images\calender-icon.png" />
     <Content Include="images\chevron-arrow-down.svg" />
+    <Content Include="images\expired.png" />
     <Content Include="images\heading-border.png" />
     <Content Include="images\logo-dark.png" />
     <Content Include="images\logo.png" />
@@ -570,6 +571,7 @@
     <Content Include="images\schedule.png" />
     <Content Include="images\setting-icons.png" />
     <Content Include="images\sidebar-menu-icons.png" />
+    <Content Include="images\submitted.png" />
     <Content Include="images\time-icon.png" />
     <Content Include="images\user-img.png" />
     <Content Include="Scripts\bootstrap.js" />

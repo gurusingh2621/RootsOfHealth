@@ -222,6 +222,13 @@
         #formSharingModal .dataTables_scrollHead label.input_checkbox span {
             background: #eee;
         }
+        #formSharingModal .bootstrap-select .bs-ok-default.check-mark {
+            display: none !important;
+        }
+        #formSharingModal .searchbox .searchboxDropDown .scroll {
+            max-height: 230px;
+            overflow: auto;
+        }
     </style>
 
     <style>
@@ -656,9 +663,59 @@
             text-align: center;
             padding: 20px;
         }
-        #ddClientlistforsharing, #FormShareExpirydate, #ddFormNameShareHistory, #ddStatusShareHistory {
+        #ddClientlistforsharing, #FormShareExpirydate, #ddFormNameShareHistory, #ddStatusShareHistory, #selectClientTab, #sharedStatusTab {
             display: block !important
         }
+
+
+        #formSharingModal .searchbox > button {
+            border: none;
+            background: none;
+            cursor: pointer;
+            margin-left: 6px;
+            margin-right: 5px;
+        }
+        #formSharingModal .searchbox > button i {
+            font-size: 16px;
+            color: #7a7f8c;
+        }
+        #formSharingModal .searchbox > input {
+            padding-left: 14px;
+            border: none;
+            border-left: 1px solid #dee2e8;
+            font-size: 14px;
+            color: #a9aaab;
+            max-width: calc(100% - 53px);
+            flex: 0 0 calc(100% - 53px);
+            width: 100%;
+        }
+        #formSharingModal .searchbox {
+            width: 100%;
+            max-width: 100%;
+            position:relative;
+            justify-content: flex-start;
+            border: 1px solid #dee2e8;
+            padding: 5px 0;
+        }
+        #formSharingModal .searchbox .searchboxDropDown {
+            width: 100%;
+            z-index: 99;
+            top: 37px;
+            left: 0;
+            max-height: 300px;
+            height: auto;
+        }
+        .formsharesearchbtn{
+            cursor:default;
+            pointer-events:none
+        }
+        #ddClientlistforsharing:focus {
+            color: #a9aaab!important;
+        }
+        #ddClientlistforsharing {
+            color: #495057!important
+        }
+       
     </style>
 </head>
 <body>
@@ -926,9 +983,32 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label>Client name</label>
-                                                <select class="form-control" style="display:block!important" id="ddClientlistforsharing" onchange="GetUserListandHistory()"></select>
+                                                <div class="searchbox">
+                                                    <button class="formsharesearchbtn" type="submit"><i class="fas fa-search"></i></button>
+                                                    <input type="text" placeholder="Search..." data-val="0" id="ddClientlistforsharing" autocomplete="off">
+                                                    <div class="searchboxDropDown">
+                                                        <div class="scroll">
+                                                            <ul id="shareFormpatientList">
+                                                                <li>
+                                                                    <div class="imagebox">
+                                                                        <img src="~/images/recent-paitent-img.png" alt="">
+                                                                    </div>
+                                                                    <div class="searchDeatails">
+                                                                        <span>Name: John</span>
+                                                                        <span>Email: John@gmail.com</span>
+                                                                        <span>SSN: 45896325</span>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+
+                                                    @*<select class="form-control" style="display:block!important" id="ddClientlistforsharing" data-live-search="true" title="Select" onchange="GetUserListandHistory()"></select>*@
+                                                </div>
                                             </div>
-                                        </div>
                                       
                                     </div>
 
@@ -1040,7 +1120,13 @@
 
             if (e.target.id != 'patientList') {
                 $("#searchPatient").val('');
-                $(".searchboxDropDown").css('display', 'none');
+                $NavbarSupportedContent.find(".searchboxDropDown").css('display', 'none');
+            }
+            
+            
+            if (e.target.id != 'ddClientlistforsharing') {
+                $DDclientlistforsharing.val(shareFormClientValue);
+                $FormSharingModal.find(".searchboxDropDown").css('display', 'none');
             }
 
         });
@@ -1064,7 +1150,7 @@
         }
         var SearchRequest=null
         function SearchPatient() {
-
+           
             var keyword = $("#searchPatient").val();
             if (SearchRequest != null) {
                 SearchRequest.abort()
@@ -1098,14 +1184,14 @@
 
 
                         }
-                        $(".searchboxDropDown").css('display', 'block');
+                        $NavbarSupportedContent.find(".searchboxDropDown").css('display', 'block');
                         $("#patientList").html(tbl);
 
 
 
 
                     } else {
-                        $(".searchboxDropDown").css('display', 'none');
+                        $NavbarSupportedContent.find(".searchboxDropDown").css('display', 'none');
                     }
 
 
@@ -1158,6 +1244,8 @@
                         var $FormShareExpirydate = $('#FormShareExpirydate')
                         var $selectDateAndShare = $('#selectDateAndShare')
                         var $NoFormSelectedMessage = $('.NoFormSelectedMessage')
+                        var $ShareFormpatientList = $('#shareFormpatientList')
+                        var $NavbarSupportedContent = $('#navbarSupportedContent')
                         setTimeout(function () {
                             $FormShareExpirydate.datepicker(
                                 {
@@ -1359,7 +1447,12 @@
                             HideShareFormtabsContent('#sharedStatusTab')
                             
                             $NoFormSelectedMessage.removeClass('d-none');
-                            GetClientsForSharing();
+                            $ShareFormpatientList.html('')
+                            $DDclientlistforsharing.val('')
+                            shareFormClientId = 0;
+                            shareFormClientValue=''
+                            $FormSharingModal.modal('show')
+                           // GetClientsForSharing();
                         }
 
 
@@ -1413,7 +1506,7 @@
 
                         function GetShareTabClientDropDown() {
                             _Loader.StartLoader()
-                            var clientId = $DDclientlistforsharing.val();
+                            var clientId = shareFormClientId;
                             $.ajax({
                                 type: "Get",
                                 url: Apipath + '/api/PatientMain/getformsListForHistoryTab?clientid=' + clientId,
@@ -1443,41 +1536,106 @@
                             });
 
                         }
+                        var shareFormClientId = 0;
+                        var shareFormClientValue=''
+
+                        $DDclientlistforsharing.click(function (e) {
+                          
+                            var value = $(this).val()
+                            if (value.trim() == '') {
+                                GetClientsForSharing()
+                            } 
+                            isVisible = $FormSharingModal.find(".searchboxDropDown").is(':visible')
+                            if (isVisible) {
+                                $DDclientlistforsharing.val(shareFormClientValue);
+                                $FormSharingModal.find(".searchboxDropDown").css('display', 'none');
+                            }
+                            else {
+                                $FormSharingModal.find(".searchboxDropDown").css('display', 'block');
+                            }
+
+                        })
+
+                        $DDclientlistforsharing.keyup(function () {
+                            
+                            GetClientsForSharing();
+                            $FormSharingModal.find(".searchboxDropDown").css('display', 'block');
+                        })
 
 
-                        function GetClientsForSharing() {
-                            _Loader.StartLoader()
-                            $.ajax({
+                        function SelectFormShareClient(clientid,ClientName,ClientMail) {
+                            shareFormClientId = clientid
+                            shareFormClientValue = ClientName
+                            $DDclientlistforsharing.val(ClientName);
+                            GetClientsForSharing(ClientMail)
+                            GetUserListandHistory()
+                        }
+
+
+                        var ShareFormSearchRequest=null
+                        function GetClientsForSharing(email = '') {
+                            if (ShareFormSearchRequest != null) {
+                                ShareFormSearchRequest.abort()
+                            }
+                           var  keyword=''
+                            if (email != '') {
+                                keyword = email
+                            } else {
+                                 keyword = $DDclientlistforsharing.val();
+                            }
+                           
+                            if (keyword != null) {
+                                keyword = keyword.trim()
+                            }
+                            ShareFormSearchRequest=  $.ajax({
                                 type: "Get",
-                                url: Apipath + '/api/PatientMain/getclientsforSharing',
+                                url: Apipath + '/api/PatientMain/getclientsforSharing?keyword=' + keyword +'&clinicid='+'@Session["ClinicID"]',
                                 dataType: "Json",
                                 contentType: "application/json; charset=utf-8",
                                 success: function (result) {
-                                    var html;
-                                    html += `<option value="0">Select</option>`
-                                    if (result) {
-
+                                    if (result.length) {
+                                        
+                                        $ShareFormpatientList.html('');
+                                        var tbl = '';
                                         for (var i = 0; i < result.length; i++) {
-                                            html += `<option value="${result[i].UserId}">${result[i].DisplayName} (${result[i].UserEmail})</option>`
+                                            if (result[i].UserEmail == null) { result[i].UserEmail = ''; }
+                                            if (result[i].SocialSecurityNumber == null) { result[i].SocialSecurityNumber = ''; }
+
+
+                                            tbl += `<li style="cursor: pointer;" onclick="SelectFormShareClient(${result[i].UserId} , '${result[i].DisplayName}','${result[i].UserEmail}')">`
+                                            if (result[i].Image == '' || result[i].Image == null) {
+                                                tbl += '<div class="imagebox"><img src="/images/avatar.png" alt=""> </div>'
+                                            } else {
+                                                tbl += '<div class="imagebox"><img src="/Files/' + result[i].Image + '" alt=""> </div>'
+                                            }
+                                            tbl += '<div class="searchDeatails">'
+                                            tbl += '<span>Name:' + result[i].DisplayName + '</span >'
+                                            tbl += '<span>Email Address:' + result[i].UserEmail + '</span >'
+
+                                            tbl += '<span>Phone No.: ' + result[i].HomePhone + '</span >'
+                                            tbl += '<span>City: ' + result[i].City + '</span > </div> </li>'
+
+
                                         }
+                                        $ShareFormpatientList.html(tbl);
                                     }
-                                    $DDclientlistforsharing.html(html);
-                                    $FormSharingModal.modal('show')
+                                  
+
+                                   
 
                                 },
                                 error: function () {
-                                    _Loader.StopLoader()
-                                    toastr.error("Some error occurred!! or data not found");
+                                 //   _Loader.StopLoader()
                                 },
                                 complete: function () {
 
-                                    _Loader.StopLoader()
+                                   // _Loader.StopLoader()
 
                                 }
                             });
                         }
 
-                        
+
 
                         function GetUserListandHistory() {
                             
@@ -1512,7 +1670,7 @@
                             var formId, statusid, clientid;
                             formId =  $DDFormNameShareHistory.val();
                             statusid = $DDStatusShareHistory.val();
-                            clientid = $DDclientlistforsharing.val();
+                            clientid = shareFormClientId;
                            
 
                             $.ajax({
@@ -1538,7 +1696,7 @@
                                                        <td style="width:15%">${FormatDate(result[i].ExpiryDate,false)}</td>
                                                        <td style="width:15%">`
 
-                                        if (result[i].IsExpired == 0) {
+                                        if (result[i].IsExpired == 0 && result[i].Status!='Completed') {
                                             html += `  <button class="btn btn-success text-white" onclick="SendReminder(${result[i].ShareId})" style="cursor:pointer;">Remind</button>`
                                         }          
                                         html += ` </td>
@@ -1685,7 +1843,7 @@
 
                         function GetFormListForFormSharing() {
                             _Loader.StartLoader()
-                            var clientid = $DDclientlistforsharing.val();
+                            var clientid = shareFormClientId
                             $.ajax({
                                 type: "Get",
                                 url: Apipath + '/api/PatientMain/getformlistforformsharing?clientid=' + clientid,
@@ -1744,7 +1902,7 @@
                             
                             var model = {
                                 FormsIds: formShareFormList,
-                                ClientId: $DDclientlistforsharing.val(),
+                                ClientId: shareFormClientId,
                                 ExpiryDate: $FormShareExpirydate.val()
                             }
 
