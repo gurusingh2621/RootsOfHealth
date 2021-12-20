@@ -21,6 +21,14 @@
     <link href="~/css/all.min.css" rel="stylesheet" />
 </head>
 <body>
+    <div class="loaderOverlay">
+        <div class="loader" id="loader-6">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
     <section id="content">
         <div class="profile-tabs">
 
@@ -37,7 +45,7 @@
                                             var formName = @item.FormName.Replace(" ", "");
                                             <li class="nav-item">
                                                 <a id="@("a"+formName)" class="nav-link" data-toggle="tab"
-                                                   href="@("#" + formName + "only")" data-isexpired="@item.IsExpired" data-issaved="@item.IsSaved" onclick="GetSharedFormTemplate('@item.FormId','@formName','@item.ShareId',this)"  data-viewed="False">@item.FormName<span class="check @Html.Raw((item.IsSaved==null ||item.IsSaved.Value)?"":"d-none")"><i class="fas fa-check-circle"></i></span></a>
+                                                   href="@("#" + formName + "only")" data-isexpired="@item.IsExpired" data-issaved="@item.IsSaved" onclick="GetSharedFormTemplate('@item.FormId','@formName','@item.ShareId',this)" data-viewed="False">@item.FormName<span class="check @Html.Raw((item.IsSaved==null ||item.IsSaved.Value)?"":"d-none")"><i class="fas fa-check-circle"></i></span></a>
                                             </li>
 
                                         }
@@ -53,7 +61,7 @@
                                         @foreach (var item in Model)
                                         {
                                             var FormN = item.FormName.Replace(" ", "");
-                                            var isFormUpdated = item.IsUpdated.HasValue? item.IsUpdated.Value.ToString(): "false";
+                                            var isFormUpdated = item.IsUpdated.HasValue ? item.IsUpdated.Value.ToString() : "false";
                                             var isbaseFormUpdated = item.IsBaseTemplateDataSaved.HasValue ? item.IsBaseTemplateDataSaved.Value.ToString() : "false"; ;
 
                                             <div class="tab-pane fade" id="@(FormN+"only")">
