@@ -1,11 +1,13 @@
 ﻿$(document).ready(function () {
-
-    if (PatientId == 0) {
-       alert('there is no form to show')
+   
+    if (PatientId==0) {
+        $('body').html('<div class="formStatusDiv noFormToShow"><img src="/images/sad-smiley.png" alt="expired"><h1>There is no activated form to show</h1></div>')
+    } else {
+        OpenActiveForm();  
     }
 
 
-    OpenActiveForm();  
+    
 
 
     jQuery.fn.extend(
@@ -50,16 +52,18 @@ function OpenActiveForm() {
 
 }
 var _ClientFormElement=''
-function GetSharedFormTemplate(formid, formname,shareid,navTab) {
+function GetSharedFormTemplate(formid, formname, shareid, navTab) {
+
+    var isExpired = $(navTab).attr('data-isexpired')
+    var isSaved = $(navTab).attr('data-issaved')
 
     var isViewed = $(navTab).attr('data-viewed')
-    if (isViewed == 'False') {
+    if (isViewed == 'False' && isExpired == 'False' && isSaved=='False') {
         UpdateLastView(shareid)
         $(navTab).attr('data-viewed', 'True');
     }
 
-    var isExpired = $(navTab).attr('data-isexpired')
-    var isSaved = $(navTab).attr('data-issaved')
+   
     formName = formname
     
     if (isSaved == 'True') {
@@ -208,7 +212,7 @@ function saveClientFormBasicInfo(_templateId, _templatetable, ClientFormID, _Pat
             fieldmodel.push({ ColumnName: $(item).attr("data-column"), FieldValue: $(item).val() });
         }
     });
-
+    
     var model = {
         ClientFormID: ClientFormID,
         TableName: _templatetable,
@@ -226,11 +230,11 @@ function saveClientFormBasicInfo(_templateId, _templatetable, ClientFormID, _Pat
         dataType: "json",
         success: function (res) {
             if (_ClientFormElement.find(".base-control").length) {
-                saveClientFormBaseFieldInfo(ClientFormID, _templateId, _PatientId);
+                saveClientFormBaseFieldInfo(ClientFormID, _templateId, _PatientId, sharedid);
 
             } 
             disableClientFormSave()
-            $(".loaderOverlay").hide();
+         
             toastr.success("Saved successfully");
             $(".basic-info-actions").hide();
           
@@ -290,8 +294,9 @@ function saveClientFormBasicInfo(_templateId, _templatetable, ClientFormID, _Pat
             if (_ClientFormElement.find(".base-control").length==0) {
                 setTimeout(function () {
                     ShowSavedFormContent()
-                },1000)
-              
+                    $(".loaderOverlay").hide();
+                },500)
+               
 
             }
         }
@@ -325,7 +330,7 @@ function validateFiles(Id) {
     }
 }
 
-function saveClientFormBaseFieldInfo(ClientFormID, _templateId, _PatientId) {
+function saveClientFormBaseFieldInfo(ClientFormID, _templateId, _PatientId, sharedid) {
 
     var fieldmodel = [];
     fieldmodel.push({ ColumnName: "PatientID", FieldValue: _PatientId });
@@ -376,7 +381,8 @@ function saveClientFormBaseFieldInfo(ClientFormID, _templateId, _PatientId) {
         PatientId: _PatientId,
         TableName: "tbl_BaseClientFormTemplate",
         ClientFormCols: fieldmodel,
-        IsUpdated: IsBasedataExist ? true : false
+        IsUpdated: IsBasedataExist ? true : false,
+        SharedId: sharedid
     }
     $(".loaderOverlay").show();
     $.ajax({
@@ -390,6 +396,7 @@ function saveClientFormBaseFieldInfo(ClientFormID, _templateId, _PatientId) {
             //LoadSchedulingAfterSave();
             setTimeout(function () {
                 ShowSavedFormContent()
+                $(".loaderOverlay").hide();
             },1000)
           
         },
@@ -730,6 +737,7 @@ function uploadClientFormFiles(Id, fileData, ClientFormID) {
     if (fileNames.length == 0) {
         return;
     }
+    
     fileData.append("ClientFormID", ClientFormID);
     fileData.append("ControlId", Id);
     fileData.append("Files", savedfiles.join(","));

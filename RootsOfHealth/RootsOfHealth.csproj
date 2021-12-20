@@ -568,6 +568,7 @@
     <Content Include="images\recent-paitent-img-2.png" />
     <Content Include="images\recent-paitent-img.png" />
     <Content Include="images\role.png" />
+    <Content Include="images\sad-smiley.png" />
     <Content Include="images\schedule.png" />
     <Content Include="images\setting-icons.png" />
     <Content Include="images\sidebar-menu-icons.png" />

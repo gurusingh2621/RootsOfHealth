@@ -1058,6 +1058,7 @@
                                                                 <option value="0">NotStarted</option>
                                                                 <option value="1">Viewed</option>
                                                                 <option value="2">Completed</option>
+                                                                <option value="3">Expired</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -1110,7 +1111,8 @@
             $(this).tab('show')
         })
         var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
-        var SeperationString = '#$%^*'
+                        var SeperationString = '#$%^*'
+                        var _shareFormClinicId='@Session["ClinicID"]'
         function RedirectPatient(ID) {
 
             window.location = '/Client/Info?patientid=' + ID;
@@ -1157,7 +1159,7 @@
             }
             SearchRequest=  $.ajax({
                 type: "GET",
-                url: Apipath + '/api/PatientMain/SearchPatient?keyword=' + keyword +'&clinicid='+'@Session["ClinicID"]',
+                url: Apipath + '/api/PatientMain/SearchPatient?keyword=' + keyword + '&clinicid=' + _shareFormClinicId,
                 contentType: 'application/json; charset=UTF-8',
                 dataType: "json",
                 success: function (result) {
@@ -1452,7 +1454,9 @@
                             shareFormClientId = 0;
                             shareFormClientValue=''
                             $FormSharingModal.modal('show')
-                           // GetClientsForSharing();
+                             allClientList = [];
+                             filteredClients = []
+                             GetAllClient()
                         }
 
 
@@ -1571,30 +1575,72 @@
                             GetUserListandHistory()
                         }
 
+                        var ShareFormSearchRequest = null;
+                        var allClientList = [];
+                        var filteredClients=[]
 
-                        var ShareFormSearchRequest=null
-                        function GetClientsForSharing(email = '') {
-                            if (ShareFormSearchRequest != null) {
-                                ShareFormSearchRequest.abort()
-                            }
-                           var  keyword=''
-                            if (email != '') {
-                                keyword = email
-                            } else {
-                                 keyword = $DDclientlistforsharing.val();
-                            }
-                           
-                            if (keyword != null) {
-                                keyword = keyword.trim()
-                            }
-                            ShareFormSearchRequest=  $.ajax({
+
+                        function GetAllClient() {
+
+
+                            $.ajax({
                                 type: "Get",
-                                url: Apipath + '/api/PatientMain/getclientsforSharing?keyword=' + keyword +'&clinicid='+'@Session["ClinicID"]',
+                                url: Apipath + '/api/PatientMain/getclientsforSharing?clinicid='+_shareFormClinicId,
                                 dataType: "Json",
                                 contentType: "application/json; charset=utf-8",
                                 success: function (result) {
                                     if (result.length) {
                                         
+                                        allClientList = result;
+
+                                        }
+                                   
+
+                                },
+                                error: function () {
+                                    _Loader.StopLoader()
+                                },
+                                complete: function () {
+
+                                    _Loader.StopLoader()
+
+                                }
+                            });
+
+
+
+                        }
+                      
+                        function GetClientsForSharing(email = '') {
+                            if (ShareFormSearchRequest != null) {
+                                ShareFormSearchRequest.abort()
+                            }
+                            var keyword = ''
+                            if (email != '') {
+                                keyword = email
+                            } else {
+                                keyword = $DDclientlistforsharing.val();
+                            }
+
+                            if (keyword != null) {
+                                keyword = keyword.trim()
+                            }
+                            keyword = keyword.toLowerCase()
+
+                            filteredClients = allClientList.filter(c => {
+
+                                if (c.DisplayName.toLowerCase().indexOf(keyword) > -1 || c.UserEmail.toLowerCase().indexOf(keyword) > -1) {
+                                    return true;
+                                } else {
+                                    return false;
+                                }
+                                
+                        })
+                          
+                                    if (filteredClients.length) {
+
+                                        var result = filteredClients;
+                                       
                                         $ShareFormpatientList.html('');
                                         var tbl = '';
                                         for (var i = 0; i < result.length; i++) {
@@ -1619,20 +1665,7 @@
                                         }
                                         $ShareFormpatientList.html(tbl);
                                     }
-                                  
-
-                                   
-
-                                },
-                                error: function () {
-                                 //   _Loader.StopLoader()
-                                },
-                                complete: function () {
-
-                                   // _Loader.StopLoader()
-
-                                }
-                            });
+                                
                         }
 
 
@@ -1773,7 +1806,7 @@
                             if (HideTabsOnFormSelect()) {
                                 return;
                             }
-                            if ($DDclientlistforsharing.val() == '') {
+                            if (shareFormClientId == '0' || shareFormClientId == '') {
                                 HideShareFormtabsContent('#selectClientTab')
                                 HideShareFormtabsContent('#sharedStatusTab')
                                
@@ -1794,7 +1827,7 @@
                         }
                         function HideTabsOnFormSelect() {
                            
-                            if ($DDclientlistforsharing.val() == '0') {
+                            if (shareFormClientId == '0') {
                                 HideShareFormtabsContent('#selectClientTab')
                                 HideShareFormtabsContent('#sharedStatusTab')
                                 $NoFormSelectedMessage.removeClass('d-none')
