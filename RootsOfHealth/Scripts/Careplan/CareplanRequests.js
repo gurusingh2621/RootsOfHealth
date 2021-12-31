@@ -90,7 +90,7 @@ function LoadRequest() {
                 $(".loaderOverlay").hide();
         },
         error: function (e) {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     });
@@ -167,7 +167,7 @@ function LoadRequestHistory() {
           
         },
         error: function (e) {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     });
@@ -224,7 +224,7 @@ function changeRequestStatus(status, requestid,type) {
             },
         error: function (e) {
             isAzaxRequestSent = false
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     });
@@ -260,7 +260,7 @@ function OpenPopUp(item) {
             }
         },
         error: function (e) {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
         }
     });
 }
@@ -301,7 +301,7 @@ function BindModel(item) {
                 $('#' + item.RequestId).removeClass('unread_mess')
             },
             error: function (e) {
-                toastr.error("Unidentified error");
+                toastr.error("Unexpected error!");
             }
         });
 
@@ -538,7 +538,7 @@ function ViewCareplan(requestId, IsViewCareplan) {
             $('.requestRevokeButton').removeClass('disabled')
         },
         error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unexpected error!");
         }
     });
 }
@@ -599,7 +599,7 @@ function ViewRequestChanges(_careplanid, requestId,FromPopUp=true) {
                   }
         },
         error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     });

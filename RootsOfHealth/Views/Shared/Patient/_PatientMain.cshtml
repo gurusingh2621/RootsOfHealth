@@ -2500,7 +2500,7 @@
 
             },
             error: function (e) {
-                toastr.error("Something happen Wrong");
+                toastr.error("Unexpected error!");
                 $(".loaderOverlay").hide();
             }
         });
@@ -2569,7 +2569,7 @@
 
                 },
                 error: function (e) {
-                    toastr.error("Unidentified error");
+                    toastr.error("Unexpected error!");
                     $(".loaderOverlay").hide();
                 }
             });
@@ -2702,7 +2702,7 @@
                
                 $('#btnsendAproval').prop('disabled', false);
                 $('#btnsendRevoke').prop('disabled', false)
-                toastr.error("Unidentified error");
+                toastr.error("Unexpected error!");
                 $(".loaderOverlay").hide();
             }
         });
@@ -2770,7 +2770,7 @@
 
             },
             error: function (e) {
-                toastr.error("Unidentified error");
+                toastr.error("Unexpected error!");
             }
         });
     }
@@ -2793,7 +2793,7 @@
 
             },
             error: function (e) {
-                toastr.error("Unidentified error");
+                toastr.error("Unexpected error!");
             }
         });
     }

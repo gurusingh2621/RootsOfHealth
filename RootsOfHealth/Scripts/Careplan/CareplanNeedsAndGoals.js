@@ -315,7 +315,7 @@ function SaveNeedFunction(e) {
 
         },
         error: function (e) {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     })
@@ -470,7 +470,7 @@ function SaveGoalfunction(e) {
 
 
         }, error: function (e) {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     })
@@ -564,7 +564,7 @@ function getCarePlanRequest() {
   
         }
         , error: function (e) {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     });
@@ -627,7 +627,7 @@ function GetNeedAndGoalList() {
                 NeedFocus();
             
         }, error: function (e) {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     });
@@ -689,7 +689,7 @@ function DeleteNeed(obj) {
                                             toastr.success("", "Changes saved successfully", { progressBar: true });
                                             changeCareplanStatus()
                                         }, error: function (e) {
-                                            toastr.error("Unidentified error");
+                                            toastr.error("Unexpected error!");
                                             $(".loaderOverlay").hide();
                                         }
                                     })
@@ -704,7 +704,7 @@ function DeleteNeed(obj) {
                     
            // }
     //    }, error: function (e) {
-    //        toastr.error("Unidentified error");
+    //        toastr.error("Unexpected error!");
     //        $(".loaderOverlay").hide();
     //    }
     //});
@@ -795,7 +795,7 @@ function DeleteGoal(obj) {
                             toastr.success("", "Changes saved successfully", { progressBar: true });
                             changeCareplanStatus()
                         }, error: function (e) {
-                            toastr.error("Unidentified error");
+                            toastr.error("Unexpected error!");
                             $(".loaderOverlay").hide();
                         }
 
@@ -811,7 +811,7 @@ function DeleteGoal(obj) {
     //                break;
     //        }
     //    }, error: function (e) {
-    //        toastr.error("Unidentified error");
+    //        toastr.error("Unexpected error!");
     //        $(".loaderOverlay").hide();
     //    }
     //});
@@ -1095,7 +1095,7 @@ function EditGoal(o) {
                     }
     //        }
     //    }, error: function (e) {
-    //        toastr.error("Unidentified error");
+    //        toastr.error("Unexpected error!");
     //        $(".loaderOverlay").hide();
     //    }
     //});   
@@ -1125,7 +1125,7 @@ function EditGoalfunction(o, goalRef) {
             $(goalRef).next().hide();
             changeCareplanStatus()
         }, error: function (e) {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     });
@@ -1264,7 +1264,7 @@ function EditNeed(o) {
                    
     //        }
     //    }, error: function (e) {
-    //        toastr.error("Unidentified error");
+    //        toastr.error("Unexpected error!");
     //        $(".loaderOverlay").hide();
     //    }
     //});
@@ -1298,7 +1298,7 @@ function EditNeedfunction(o, needRef) {
             changeCareplanStatus()
         },
         error: function (e) {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     });
@@ -1371,7 +1371,7 @@ function saveEditNeedFunction(obj) {
             changeCareplanStatus()
         },
         error: function (e) {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     })
@@ -1492,7 +1492,7 @@ function GetInterventions(obj) {
                 intervention.append(interventionStr);
             }
         }, error: function (e) {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     });
@@ -1547,7 +1547,7 @@ function GetOutcomes(obj) {
                 outcome.append(outcomeStr);
             }
         }, error: function (e) {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     });
@@ -1669,7 +1669,7 @@ function UpdateNeedStatus() {
             $(".needNote").val('');
             $("#CarePlanChangeStatusModal").modal('hide');
         }, error: function () {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     });
@@ -1688,7 +1688,7 @@ function isUserCarePlanApprover() {
            
         },
         error: function () {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     });
@@ -1833,7 +1833,7 @@ function UpdateGoalStatus() {
                 }
             }
         }, error: function () {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     });
@@ -1862,7 +1862,7 @@ function SaveOutCome(e) {
             $(".txtOutcome").val("").css("height", "21px");;
             toastr.success("Changes saved successfully");
         }, error: function () {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     });
@@ -1893,7 +1893,7 @@ function SaveIntervention(e) {
 
             toastr.success("Changes saved successfully");
         }, error: function () {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     });
@@ -1968,7 +1968,7 @@ function saveEditGoalfunction(obj, goalObj) {
             $(goalObj).remove();
             changeCareplanStatus()
         }, error: function (e) {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     });
@@ -2134,7 +2134,7 @@ function SaveNewNeedFunction(obj) {
 
         },
         error: function (e) {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     })
@@ -2288,7 +2288,7 @@ function saveNewGoalfunction(obj) {
 
 
         }, error: function (e) {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     })
@@ -2501,7 +2501,7 @@ function GetDefaultNeeds() {
                 NeedFocus();
             }
         }, error: function () {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     });
@@ -2552,7 +2552,7 @@ function AddDefaultneeds() {
                 closeDefaultGoals();
             }
         }, error: function () {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     });
@@ -2591,7 +2591,7 @@ function GetDefaultgoals(needid,DefaultNeedId) {
             }
 
         }, error: function () {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     });
@@ -2628,7 +2628,7 @@ function AddDefaultgoals() {
                 closeDefaultGoals();
             }
         }, error: function () {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     });
@@ -2748,7 +2748,7 @@ function GetCareplanHistory() {
             $(".loaderOverlay").hide();
         },
         error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unexpected error!");
         }
     });
 

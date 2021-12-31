@@ -70,7 +70,7 @@ function GetCarePlanTemplateList() {
             $(".loaderOverlay").hide();
         },
         error: function (e) {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error! error");
         }
     });
 }
@@ -344,7 +344,7 @@ function ViewCarePlanContent(ID,name) {
             $(".loaderOverlay").hide();
         },
         error: function (e) {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     });   
@@ -378,7 +378,7 @@ function ViewHeaderAndFooter() {
                     break;
             }
         }, error: function (e) {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     });

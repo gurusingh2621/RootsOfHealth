@@ -932,7 +932,7 @@
                 <li id="ProgramsNavItem"><a href="/program/list" id="programform" class="nav-menu"><span class="program-icon"></span> Programs</a></li>
                 <li id="ClientFormsNavItem"><a href="/Client/ClientsFormList" id="ClientsForm" class="nav-menu"><span class="patient-icon"></span> Clients Forms</a></li>
                 <li id="CarePlanRequestNavItem" class="@(Convert.ToBoolean(@Session["IsCarePlanApprover"])?"":"d-none")"><a href="/CarePlan/Requests" id="requests" class="nav-menu"><span class="program-icon"></span> Care Plan Requests</a></li>
-                <li id="FormsSharinigNavItem">
+                <li id="FormsSharinigNavItem" class="@(Convert.ToString(Session["Roles"]).Contains("Navigator")?"":"d-none")">
                     <a id="formSharing" class="nav-menu" onclick="  ResetFormSharingPopup();"><span class="patient-icon"></span> Clients Request Intakes</a>
                 </li>
                 <li><a href="/Account/Logout" id="logout" class="nav-menu"><span class="logout-icon"></span>Log Out</a></li>

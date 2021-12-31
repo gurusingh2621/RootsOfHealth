@@ -248,9 +248,9 @@
                 "Image": $("input[type=hidden][name=userImg]").val(),
 
             };
+            
 
-
-
+            var currentRole = $('#RoleName').val()
 
             $.ajax({
                 type: "POST",
@@ -260,8 +260,9 @@
                 dataType: "json",
                 success: function (result) {
                     if (result != '') {
+                        
                         toastr.success("User updated successfully");
-                        if (userId == '@Model.UserID' && PrevUserrole!=$('#RoleName').val()) {
+                        if (userId == '@Model.UserID' && PrevUserrole != currentRole) {
                             location.href = "/Account/Index";
                         }
                     }

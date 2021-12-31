@@ -287,7 +287,7 @@ function saveClientFormBasicInfo(_templateId, _templatetable, ClientFormID, _Pat
 
         },
         error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         },
         complete: function () {
@@ -401,7 +401,7 @@ function saveClientFormBaseFieldInfo(ClientFormID, _templateId, _PatientId, shar
           
         },
         error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     });
@@ -483,7 +483,7 @@ function LoadClientFormTemplate(ClientFormID,IsViewed) {
             $(".loaderOverlay").hide();
             disableClientFormSave();
         }, error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     });
@@ -522,7 +522,7 @@ function getClientFormHeaderAndFooter() {
                             _ClientFormElement.find(".basefooter").html("").append(baseFooter);
                         },
                         error: function (e) {
-                            toastr.error("Something happen Wrong");
+                            toastr.error("Unexpected error!");
                             $(".loaderOverlay").hide();
                         }
                     });
@@ -542,7 +542,7 @@ function getClientFormHeaderAndFooter() {
 
         },
         error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     });
@@ -756,7 +756,7 @@ function uploadClientFormFiles(Id, fileData, ClientFormID) {
         success: function (result, status, xhr) {
             fileData = new FormData();
         }, error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
             return false
         }
@@ -851,7 +851,7 @@ function UpdateLastView(shareid) {
             //toastr.success("last view updated");
         },
         error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         },
         complete: function () {

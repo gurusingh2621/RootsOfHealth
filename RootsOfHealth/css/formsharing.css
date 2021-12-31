@@ -600,3 +600,11 @@ div#SharedForms {
 .formStatusDiv.noFormToShow h1 {
     text-transform: initial;
 }
+
+.render-basicProgramform {
+    padding-bottom: 0 !important;
+}
+
+#SharedForms .scroll {
+    overflow-y: auto;
+}

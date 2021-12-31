@@ -27,15 +27,16 @@ namespace RootsOfHealth.Controllers
                 client.BaseAddress = new Uri(WebApiKey);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var responseTask = client.GetAsync("api/PatientMain/isusercareplanapproval?userid=" + @Session["userid"].ToString());
+                var responseTask = client.GetAsync("api/PatientMain/getuserroles?userid=" + @Session["userid"].ToString());
                 responseTask.Wait();
                 var result = responseTask.Result;
                 if (result.IsSuccessStatusCode)
                 {
-                    var data = result.Content.ReadAsAsync<bool>();
+                    var data = result.Content.ReadAsAsync<string>();
                     data.Wait();
                     var res = data.Result;
-                    @Session["IsCarePlanApprover"] = res;
+                    @Session["IsCarePlanApprover"] = (res.Contains("Careplan Approval") || res.Contains("Navigator"));
+                    Session["Roles"] = res;
                 }
             };
             UserBO Users = new UserBO();
@@ -102,6 +103,7 @@ namespace RootsOfHealth.Controllers
                                 Session["userid"] = user.UserID;
                                 Session["ClinicID"] = user.ClinicID;
                                 Session["UserName"] = user.UserName;
+                                Session["Roles"] = user.Roles;
                                 Session["IsCarePlanApprover"] = user.isCarePlanApprover.HasValue ? user.isCarePlanApprover.Value : false;
                                 string usernameChars = string.IsNullOrWhiteSpace(user.FirstName) ?"" : user.FirstName[0].ToString();
                                 usernameChars+= string.IsNullOrWhiteSpace(user.LastName) ? "" : user.LastName[0].ToString();

@@ -242,7 +242,7 @@ function GetNeedAndGoalList() {
             NeedFocus();
         },
         error: function () {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         },
         complete: function (response) {
@@ -292,7 +292,7 @@ function GetNeedAndGoalList() {
                             }
                         },
                         error: function () {
-                            toastr.error("Unidentified error");
+                            toastr.error("Unexpected error!");
                             $(".loaderOverlay").hide();
                         }
                     });
@@ -568,7 +568,7 @@ function EditGoal(o) {
                                     $(goalRef).html("").append($(goalRef).next().val()).show();
                                     $(goalRef).next().remove();
                                 }, error: function (e) {
-                                    toastr.error("Unidentified error");
+                                    toastr.error("Unexpected error!");
                                     $(".loaderOverlay").hide();
                                 }
                             });
@@ -667,7 +667,7 @@ function EditNeed(o) {
                                     $(needRef).next().remove();
                                 },
                                 error: function (e) {
-                                    toastr.error("Unidentified error");
+                                    toastr.error("Unexpected error!");
                                     $(".loaderOverlay").hide();
                                 }
                             });
@@ -802,7 +802,7 @@ function saveNewNeed(obj) {
 
         },
         error: function (e) {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     })
@@ -897,7 +897,7 @@ function saveNewGoal(obj) {
             }
 
         }, error: function (e) {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     })
@@ -938,7 +938,7 @@ function GetBaseNeeds(){
             }
         },
         error: function () {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     });

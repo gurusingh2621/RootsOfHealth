@@ -60,7 +60,7 @@ function GetGroupList() {
             $(".loaderOverlay").hide();
         },
         error: function (e) {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
         }
     });
 }
@@ -85,7 +85,7 @@ function ManageMembership(groupid,roleid,groupname) {
             $('#SaveGroupButton').prop('disabled', true);
         },
         error: function (e) {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
         }
     });
 
@@ -106,7 +106,7 @@ $('#CreateGroup').click(function () {
             LoadRoles();
         },
         error: function (e) {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
         }
     });
 });

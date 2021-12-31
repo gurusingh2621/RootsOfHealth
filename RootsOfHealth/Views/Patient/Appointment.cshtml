@@ -567,7 +567,7 @@
                     $('#fltrddlTypeOfAppointment').html($('#ddlTypeOfAppointment').html());2
                 },
                 error: function (e) {
-                    toastr.error("Unidentified error");
+                    toastr.error("Unexpected error!");
                 }
             });
         }
@@ -590,7 +590,7 @@
                     LocationArray.push(result);
                 },
                 error: function (e) {
-                    toastr.error("Unidentified error");
+                    toastr.error("Unexpected error!");
                 }
             });
         }
