@@ -97,7 +97,7 @@ function GetSchedulePlanTemplateList() {
             $(".loaderOverlay").hide();
         },
         error: function (e) {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
         }
     });
 }
@@ -150,7 +150,7 @@ function GetProgramSchedulePlanTemplateList() {
             $(".loaderOverlay").hide();
         },
         error: function (e) {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
         }
     });
 }

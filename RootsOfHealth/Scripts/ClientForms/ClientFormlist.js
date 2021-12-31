@@ -76,7 +76,7 @@ function GetProgramTemplateList() {
             $(".loaderOverlay").hide();
         },
         error: function (e) {
-            toastr.error("Something Happen Wrong");
+            toastr.error("Unexpected error!");
         }
     });
 }
@@ -430,7 +430,7 @@ function ViewProgramContent(ID,name) {
             $(".loaderOverlay").hide();
         },
         error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     });   
@@ -464,7 +464,7 @@ function ViewHeaderAndFooter() {
                     break;
             }
         }, error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     });
@@ -524,7 +524,7 @@ function SetStatus(clientformid) {
             }
 
         }, error: function (e) {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     });
@@ -709,7 +709,7 @@ function saveStatusForForm(clientFormId = 0) {
             $('#ClientScore').modal('hide');
             
         }, error: function () {
-            toastr.error("Something happen Wrong");
+            toastr.error("Unexpected error!");
         }
     });
 }

@@ -27,7 +27,7 @@ function GetDataBaseForms() {
             }
 
         }, error: function () {
-            toastr.error("Unidentified error");
+            toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }
     });
