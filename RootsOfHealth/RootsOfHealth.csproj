@@ -575,6 +575,7 @@
     <Content Include="images\submitted.png" />
     <Content Include="images\time-icon.png" />
     <Content Include="images\user-img.png" />
+    <Content Include="Scripts\AccountSetting\AccountSetting.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
