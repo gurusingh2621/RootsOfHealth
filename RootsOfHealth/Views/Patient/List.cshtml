@@ -50,7 +50,7 @@
 
     <script>
         $(document).ready(function () {
-
+            _Loader.StartLoader()
             $.ajax({
 
                 type: "Get",
@@ -67,10 +67,11 @@
                    
                 },
                 error: function () {
+                    _Loader.StopLoader()
                     toastr.error("Some error occurred!! or data not found");
                 },
                 complete: function () {
-
+                    _Loader.StopLoader()
 
                 }
             });
