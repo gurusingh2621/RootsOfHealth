@@ -1796,6 +1796,7 @@
                            /* if (!isUserListLoaded) {*/
                                 setTimeout(function () {
                                     GetFormListForFormSharing();
+                                    disableShareBtn()
                                     isUserListLoaded=true
                                 }, 200)
 
@@ -1803,6 +1804,11 @@
                             //    ShowShareFormtabsContent('#selectClientTab')
                             //}
 
+                        }
+
+                        function disableShareBtn() {
+                            formShareFormList = [];
+                            $ShareFormbtn.addClass('disabled')
                         }
                         function LoadHistoryShareFormOnTabClick() {
                             $NoFormSelectedMessage.addClass('d-none')
@@ -1820,6 +1826,7 @@
                            /* if (!isSharedHistoryStatusLoaded) {*/
                                 setTimeout(function () {
                                     GetShareTabClientDropDown();
+                                    disableShareBtn()
                                     isSharedHistoryStatusLoaded=true
                                 }, 200)
 
@@ -1957,6 +1964,7 @@
                                     } else {
                                         LoadHistoryShareFormOnTabClick()
                                     }
+                                    disableShareBtn()
                                    
                                 },
                                 error: function () {
