@@ -3025,10 +3025,6 @@
 
     function Validation()
     {
-
-
-
-
         var check = true;
         if (check == true)
         {
@@ -3624,7 +3620,32 @@
             }
         });
         return o;
-    };
+        };
+
+
+        function validateDOB() {
+            var dob = $('#txtDOB').val();
+           
+            var pattern = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
+            if (!pattern.test(dob)) {
+                toastr.error("Date of birth is invalid.")
+                $('#txtDOB').addClass('invalid-field');
+                return false;
+            }
+            else {
+                var date = new Date(dob);
+                var year = date.getFullYear();
+                var currentYear = new Date().getFullYear()+1
+
+                if (year > 1900 && year <= currentYear) {
+                    return true;
+                }
+
+                toastr.error("Birth year should be in between 1900 and " + currentYear+'.');
+                $('#txtDOB').addClass('invalid-field');
+                return false
+            }
+        }
 
     function ProfileSave()
     {
@@ -3632,8 +3653,8 @@
         Radio();
         ChildrenAges();
 
-        if (Validation()) {
-
+        if (Validation() && validateDOB()) {
+            
             AddDate();
             $("input[type=hidden][name=CreatedDate]").val(CreatedDate);
             $("input[type=hidden][name=ModifiedDate]").val(ModifiedDate);
