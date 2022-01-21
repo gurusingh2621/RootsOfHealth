@@ -13,6 +13,8 @@ using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
+using NPOI.HSSF.UserModel;
+ 
 
 namespace RootsOfHealth.Controllers
 {
@@ -2425,6 +2427,106 @@ namespace RootsOfHealth.Controllers
             }
             return View(SharedFormData);
         }
-    }
-}
+
+
+
+        [HttpPost]
+        public ActionResult ExportSharedForms(FormCollection form)
+        {
+
+           
+            var clinicId = Session["ClinicID"];
+            var SharedFormData = new List<SharedFormForExportBO>();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                //HTTP GET
+                var responseTask = client.GetAsync("/api/PatientMain/getsharedformsforexport?clinicId=" + clinicId);
+                var result = responseTask.Result;
+
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<List<SharedFormForExportBO>>();
+                    readTask.Wait();
+                    SharedFormData = readTask.Result;
+                   
+                }
+
+            }
+
+            using (MemoryStream output = new MemoryStream())
+                {
+                    var workbook = new HSSFWorkbook();
+                    var sheet = workbook.CreateSheet("Form Sharing Export");
+                    var rownumber = 1;
+
+                    var headerRow = sheet.CreateRow(rownumber);
+                    headerRow.CreateCell(0).SetCellValue("Patient Id");
+                    headerRow.CreateCell(1).SetCellValue("First Name");
+                    headerRow.CreateCell(2).SetCellValue("Last Name");
+                    headerRow.CreateCell(3).SetCellValue("Date of Birth");
+                    headerRow.CreateCell(4).SetCellValue("Address");
+                    headerRow.CreateCell(5).SetCellValue("City");
+                    headerRow.CreateCell(6).SetCellValue("State");
+                    headerRow.CreateCell(7).SetCellValue("Postal Code");
+                    headerRow.CreateCell(8).SetCellValue("Mobile Number");
+                    headerRow.CreateCell(9).SetCellValue("Home Number");
+                    headerRow.CreateCell(10).SetCellValue("Email");
+                    headerRow.CreateCell(11).SetCellValue("Langauge");
+                    headerRow.CreateCell(12).SetCellValue("UniqueLink");
+
+
+                    foreach (var item in SharedFormData)
+                    {
+                        rownumber = rownumber + 1;
+                        var row1 = sheet.CreateRow(rownumber);
+                        row1.CreateCell(0).SetCellValue(Common.ConvertValuesToExport(item.PatientId));
+                        row1.CreateCell(1).SetCellValue(Common.ConvertValuesToExport(item.FirstName));
+                        row1.CreateCell(2).SetCellValue(Common.ConvertValuesToExport(item.LastName));
+                        row1.CreateCell(3).SetCellValue(Common.ConvertValuesToExport(item.DOB));
+                        row1.CreateCell(4).SetCellValue(Common.ConvertValuesToExport(item.Address));
+                        row1.CreateCell(5).SetCellValue(Common.ConvertValuesToExport(item.City));
+                        row1.CreateCell(6).SetCellValue(Common.ConvertValuesToExport(item.State));
+                        row1.CreateCell(7).SetCellValue(Common.ConvertValuesToExport(item.PostalCode));
+                        row1.CreateCell(8).SetCellValue(Common.ConvertValuesToExport(item.MobilePhone));
+                        row1.CreateCell(9).SetCellValue(Common.ConvertValuesToExport(item.HomePhone));
+                        row1.CreateCell(10).SetCellValue(Common.ConvertValuesToExport(item.Email));
+                        row1.CreateCell(11).SetCellValue(Common.ConvertValuesToExport(item.Language));
+                        row1.CreateCell(12).SetCellValue(Common.ConvertValuesToExport(item.UniqueLink));
+                    }
+
+                sheet.SetColumnWidth(0, 6000);
+                sheet.SetColumnWidth(1, 6000);
+                sheet.SetColumnWidth(2, 6000);
+                sheet.SetColumnWidth(3, 6000);
+                sheet.SetColumnWidth(4, 6000);
+                sheet.SetColumnWidth(5, 6000);
+                sheet.SetColumnWidth(6, 6000);
+                sheet.SetColumnWidth(7, 6000);
+                sheet.SetColumnWidth(8, 6000);
+                sheet.SetColumnWidth(9, 6000);
+                sheet.SetColumnWidth(10, 6000);
+                sheet.SetColumnWidth(11, 6000);
+                sheet.SetColumnWidth(12, 25000);
+
+                workbook.Write(output);
+
+                   
+
+                    return File(output.ToArray(),   //The binary data of the XLS file
+                        "application/vnd.ms-excel", //MIME type of Excel files
+                        "FormSharing.xls");     //Suggested file name in the "Save as" dialog which will be displayed to the end user
+
+
+
+
+                }
+            }
+           
+        }
+
+       
+
+  }
+
     
