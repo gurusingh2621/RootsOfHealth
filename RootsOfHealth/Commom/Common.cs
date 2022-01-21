@@ -24,6 +24,7 @@ namespace RootsOfHealth.Commom
         List<string> SocialRecreationalOptions = new List<string>();
         
 
+
         public void BindSafetyOptions(ref PatientDetailBO patientdetailobj)
         {
             SafetyOptions.Add("Stay out of any gun-related activity");
@@ -880,6 +881,19 @@ namespace RootsOfHealth.Commom
             {
                 BindSocialRecreationalOptions(ref patientdetailobj);
 
+            }
+
+        }
+
+        public static string ConvertValuesToExport(Object Value)
+        {
+            if(Value == null)
+            {
+                return "";
+            }
+            else
+            {
+                return Value.ToString();
             }
 
         }
