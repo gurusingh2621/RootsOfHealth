@@ -115,7 +115,7 @@ namespace RootsOfHealth.Controllers
                         patientdetailobj = readTask.Result.PatientDetail;
                         patientdetailobj.PatientSubstanceUse.Dast = patientdetailobj.Dast;
                         patientdetailobj.PatientSubstanceUse.Audit = patientdetailobj.Audit;
-
+                        patientdetailobj.PatientMain.CareplanCount = patientdetailobj.CarePlanCount.CarePlanCount;
                         patientdetailobj.PatientMentalHealth.PHQ9 = patientdetailobj.PHQ9;
                         patientdetailobj.PatientProgram.ClinicOnly = patientdetailobj.ClinicOnly;
                         patientdetailobj.PatientProgram.DreamOnly = patientdetailobj.DreamOnly;
@@ -1042,7 +1042,7 @@ namespace RootsOfHealth.Controllers
                     patientdetailobj.PatientScore = readTask.Result.PatientScore;
                     patientdetailobj.PatientSubstanceUse.Audit = patientdetailobj.Audit;
                     patientdetailobj.PatientSubstanceUse.Dast = patientdetailobj.Dast;
-
+                    patientdetailobj.PatientMain.CareplanCount = patientdetailobj.CarePlanCount.CarePlanCount;
                     patientdetailobj.PatientMentalHealth.PHQ9 = patientdetailobj.PHQ9;
                     patientdetailobj.PatientProgram.ClinicOnly = patientdetailobj.ClinicOnly;
                     patientdetailobj.PatientProgram.DreamOnly = patientdetailobj.DreamOnly;

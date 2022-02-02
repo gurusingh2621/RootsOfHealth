@@ -203,6 +203,7 @@
     <Compile Include="Models\AuthorizationBO.cs" />
     <Compile Include="Models\CareConnectBO.cs" />
     <Compile Include="Models\CarePlanBasicInfoBO.cs" />
+    <Compile Include="Models\CareplanCountBO.cs" />
     <Compile Include="Models\CareplanFileBO.cs" />
     <Compile Include="Models\CarePlantemplateBO.cs" />
     <Compile Include="Models\CarePlanTemplateFieldBO.cs" />

@@ -32,7 +32,7 @@ namespace RootsOfHealth.Models
         public List<ProgramsForPatientBO> Programs { get; set; }
         public List<ClientFormForPatientBO> ClientForm { get; set; }
         public List<Form_ScheduleResultBO> FormScheduling { get; set; }
-
+        public CareplanCountBO CarePlanCount { get; set; }
 
 
         public PatientDetailBO()

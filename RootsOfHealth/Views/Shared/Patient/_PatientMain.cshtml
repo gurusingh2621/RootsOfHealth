@@ -144,27 +144,32 @@
         max-width: 150px;
         padding-right: 15px;
     }
+
     .cp_request_status {
         display: block;
         align-items: center;
         margin-top: 20px;
         font-size: 14px;
     }
+
         .cp_request_status div#careplanStatus {
             display: flex;
             width: 100%;
             margin: 0 0 15px;
         }
-        .cp_request_status div#careplanStatus label {
-            display: block;
-            margin-right: 5%;
-            font-weight: 500;
-            text-transform: uppercase;
+
+            .cp_request_status div#careplanStatus label {
+                display: block;
+                margin-right: 5%;
+                font-weight: 500;
+                text-transform: uppercase;
+            }
+
+        .cp_request_status div#careplanStatus {
+            margin-right: 10px;
+            font-size: 14px;
         }
-    .cp_request_status div#careplanStatus {
-        margin-right: 10px;
-        font-size: 14px;
-    }
+
     #RequestUserModel .btn.dropdown-toggle .filter-option {
         height: 40px;
         display: flex;
@@ -176,81 +181,101 @@
         background-position: 97% 14px;
         border-radius: 5px;
     }
+
     textarea#RequestMessage {
         display: block !important;
         min-height: 140px;
     }
+
     ul.needGoalsChecklist {
         list-style: none;
         padding: 0;
         margin: 0 0 15px;
     }
-    ul.needGoalsChecklist label.checkbox_input span {
-        position: relative;
-        padding-left: 26px;
-        height:auto;
-        width:auto;
-    }
+
+        ul.needGoalsChecklist label.checkbox_input span {
+            position: relative;
+            padding-left: 26px;
+            height: auto;
+            width: auto;
+        }
+
         ul.needGoalsChecklist li .form-group.hasGoal {
             padding-right: 30px;
         }
-    ul.needGoalsChecklist label.checkbox_input {
-        margin: 0;
-    }
-    ul.needGoalsChecklist ul {
-        list-style: none;
-        padding: 0 0 0px 26px;
-    }
-    ul.needGoalsChecklist li .form-group {
-        margin: 0;
-        position:relative;
-    }
+
+        ul.needGoalsChecklist label.checkbox_input {
+            margin: 0;
+        }
+
+        ul.needGoalsChecklist ul {
+            list-style: none;
+            padding: 0 0 0px 26px;
+        }
+
+        ul.needGoalsChecklist li .form-group {
+            margin: 0;
+            position: relative;
+        }
+
         ul.needGoalsChecklist > li > .form-group {
             padding: 15px 0;
             border-bottom: 1px solid #eee;
         }
+
         ul.needGoalsChecklist > li:first-child > .form-group {
             border-top: 1px solid #eee;
         }
+
     label.checkbox_input input + span::after {
         height: 20px;
         width: 20px;
     }
+
     ul.needGoalsChecklist > li ul li .form-group {
         padding: 10px 0;
         border-bottom: 1px solid #eee;
     }
+
     ul.needGoalsChecklist label.checkbox_input {
-       cursor:pointer;
+        cursor: pointer;
     }
+
     ul.needGoalsChecklist > li ul {
         padding-top: 0;
         border-bottom: 1px solid #eee;
     }
+
     #ViewCareplanChanges h4.modal-title {
         font-size: 20px;
         text-transform: uppercase;
     }
+
     .selectAll label.checkbox_input {
         display: block;
         width: 100%;
     }
-    .selectAll label.checkbox_input input + span {
-        width: auto;
-        height: auto;
-        padding-left: 30px;
-    }
+
+        .selectAll label.checkbox_input input + span {
+            width: auto;
+            height: auto;
+            padding-left: 30px;
+        }
+
     ul.needGoalsChecklist > li ul li:last-child .form-group {
         border-bottom: 0;
     }
+
     #ViewCareplanChanges .modal-dialog {
         width: 100%;
         max-width: 900px;
-    }  
+    }
+
     #ViewCareplanChanges .modal-body {
         max-height: calc(100vh - 125px);
-        overflow:auto;
+        overflow: auto;
     }
+
     ul.needGoalsChecklist li .form-group i.down_arrow {
         position: absolute;
         right: 5px;
@@ -258,13 +283,14 @@
         color: #a1a1a1;
         transition: all ease 0.4s;
         -webkit-transition: all ease 0.4s;
-        cursor:pointer;
+        cursor: pointer;
     }
+
     ul.needGoalsChecklist li .form-group.active i.down_arrow {
         transform: rotate( -180deg );
     }
 </style>
-<div  class="tab-pane fade test"  id="Profile" role="tabpanel" aria-labelledby="Profile-tab">
+<div class="tab-pane fade test" id="Profile" role="tabpanel" aria-labelledby="Profile-tab">
     <!-- Inner content start here  -->
     <div class="inner-content">
         <div class="paitent-detail">
@@ -279,16 +305,17 @@
                                 <a href="javascript:void(0)" id="btnAMDProfile" class="btn btn-success mb-2">
                                     AMD Profile
                                 </a>
-                                <a href='javaScript:void(0)' onclick=""
+                                <a href='javaScript:void(0)' onclick="getCarePlanList()"
                                    class="btn btn-success label-fields" data-toggle="carePlansSidebar">
-                                    Care Plans<span class="careplanCount"></span>
+                                    Care Plans<span class="careplanCount">@(Model.CareplanCount==0?"":"("+ @Model.CareplanCount.ToString()+ ")")</span>
                                 </a>
-                                <a href='javaScript:void(0)' onclick=""
+
+                                <a href='javaScript:void(0)' onclick="LoadAppointmentsAndLocations()"
                                    id="btnPatientAppointments" class="btn btn-success label-fields">
                                     Appointments
                                 </a>
 
-                                <a href='javaScript:void(0)' onclick=""
+                                <a href='javaScript:void(0)' onclick="LoadAllNotes()"
                                    id="btnPatientNotes" class="btn btn-success label-fields">
                                     Notes
                                 </a>
@@ -298,31 +325,31 @@
                                     <i class="far fa-edit"></i>
                                     Edit
                                 </a>
-                                
-                                
+
+
 
                                 <a style="display:none" class="btn btn-success " href="javascript:{}" id="btnaddprogram" data-toggle="modal" data-target="#myModal"><span class="add-icon"></span> Add/Remove Client Programs</a>
                                 <a href="javascript:{}" onclick="DisplayForm(@Model.PatientID,'Profile-tab')" class="btn btn-success btnDisplayProgram ">
                                     <i class="far fa-edit"></i>
                                     Display
                                 </a>
-                                <a tabindex="57" href="javascript:{}"    style = "border: 1px solid rgb(161, 161, 161); background-color: rgb(161, 161, 161);" onclick="return ProfileSave();" id="ProfileSave" class="btn btn-success btnprogramsave disabled">
+                                <a tabindex="57" href="javascript:{}" style="border: 1px solid rgb(161, 161, 161); background-color: rgb(161, 161, 161);" onclick="return ProfileSave();" id="ProfileSave" class="btn btn-success btnprogramsave disabled">
                                     <i class="far fa-save"></i>
                                     Save
                                 </a>
 
                                 @*<a href="/Patient/Add" id="btnProfileEdit" class="btn btn-success">
-            <i class="far fa-edit"></i>
-            Edit
-        </a>*@
+                                        <i class="far fa-edit"></i>
+                                        Edit
+                                    </a>*@
                                 @*<a href="#!" id="btnProfileCancel" class="btn btn-info" style="display: none;">
-            <i class="far fa-edit"></i>
-            Cancel
-        </a>
-        <a href="#!" id="btnProfileSave" class="btn btn-success" style="display: none;">
-            <i class="far fa-save"></i>
-            Save
-        </a>*@
+                                        <i class="far fa-edit"></i>
+                                        Cancel
+                                    </a>
+                                    <a href="#!" id="btnProfileSave" class="btn btn-success" style="display: none;">
+                                        <i class="far fa-save"></i>
+                                        Save
+                                    </a>*@
                             </div>
 
 
@@ -2005,7 +2032,7 @@
                     </button>
                 </div>
                 <div class="modal-body preview-body scroll">
-                    
+
                 </div>
             </div>
         </div>
@@ -2386,7 +2413,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title defaultNeedTitle">Default Needs</h5>
-                    <button type="button" class="close"  aria-label="Close">
+                    <button type="button" class="close" aria-label="Close">
                         <span aria-hidden="true" class="closeDefaultNeed">&times;</span>
                     </button>
                 </div>
@@ -2430,7 +2457,7 @@
     var RequestId=0
     var careplanUploadedPath = "@System.Web.Configuration.WebConfigurationManager.AppSettings["CarePlanUploadPath"]";
 </script>
-<script src="~/Scripts/jquery-ui.js"></script>
+@*<script src="~/Scripts/jquery-ui.js"></script>*@
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.js"></script>
 <script src="~/Content/script/jquery.timeselector.js"></script>
 <script src="~/Scripts/Careplan/CareplanPatient.js"></script>
@@ -2450,7 +2477,7 @@
             async: false,
             success: function (result) {
                 if(result.length>0){
-                    
+
                 var html=""
                 var needs = result.filter(c => !c.IsGoal);
                 var goals = result.filter(c => c.IsGoal);
@@ -2459,12 +2486,12 @@
                     var NeedGoals = goals.filter(c => c.NeedId == needs[i].NeedId);
                     html += `<li><div class="form-group active ${NeedGoals.length>0?'hasGoal':''}"><label class="checkbox_input" for="${needs[i].NeedId + 'need'}"><input class="Need" type="checkbox" id="${needs[i].NeedId + 'need'}" name="needs" value="${needs[i].NeedId}" checked>
                               <span>${needs[i].Description}</span></label>`
-                    
+
                     if (NeedGoals.length > 0) {
                         html += `<i class="down_arrow fa fa-chevron-down "></i>`
                     }
                     html += `</div>`
-                    
+
                     if (NeedGoals.length > 0) {
                         html+=`<ul>`
                         for (let j = 0; j < NeedGoals.length; j++) {
@@ -2476,10 +2503,10 @@
                     html += `</li>`
                 }
                 html += `</ul>`
-                
+
                 html +=`<button class="btn-success"  onclick="ChooseUsersPopUp('1')">Continue</button>`
                 $('#ViewCareplanChanges .modal-body').html(html)
-               
+
                   }else{
               $('#ViewCareplanChanges .modal-body').html("<div>No change in needs and goals</div>")
                   }
@@ -2487,7 +2514,7 @@
                 $('ul.needGoalsChecklist > li > .form-group').off('click');
 
                 $('ul.needGoalsChecklist > li > .form-group .down_arrow').on('click', function () {
-                    
+
                     $(this).parents('.form-group').toggleClass('active');
                     $(this).parents('li').find('ul').slideToggle();
 
@@ -2504,14 +2531,14 @@
                 $(".loaderOverlay").hide();
             }
         });
-       
-        
+
+
 
     }
 
 
     function SelectAllNeedGoals(){
-    
+
    if($('#selectAllNeedsGoals').prop("checked")){
      $("input:checkbox[name=needs]").prop('checked',true);
      $("input:checkbox[name=goals]").prop('checked',true);
@@ -2550,13 +2577,13 @@
                     $.each(result, function (index, item) {
                         if (!item.IsGroup) {
                             options += `<option data-tokens=" ${item.Name + '(' + item.Email + ')'}"
-                           value="${item.id}:${item.IsGroup}"> 
+                           value="${item.id}:${item.IsGroup}">
                            ${item.Name + '(' + item.Email + ')'}
                            </option>`
                         }
                         else {
                             options += `<option data-tokens="${item.Name}"
-                            value="${item.id}:${item.IsGroup}"> 
+                            value="${item.id}:${item.IsGroup}">
                            ${item.Name} (Group)
                            </option>`
                         }
@@ -2565,7 +2592,7 @@
                     $('#UserAndGroups').selectpicker();
                     $("#UserAndGroups").val('default');
                     $("#UserAndGroups").selectpicker("refresh");
-                   
+
 
                 },
                 error: function (e) {
@@ -2582,7 +2609,7 @@
         $('#RequestUserModel').modal('show');
 
     }
-   
+
     function ApprovalOrRevertRequestRequest(type) {
         if (isAzaxRequestSent) {
             $('#btnsendAproval').prop('disabled', false);
@@ -2597,7 +2624,7 @@
         },1000)
         var SelectedUsers = [];
         var SelectedGroups = [];
-       
+
         if (type == 1) {
             var UsersNGroups = $('#UserAndGroups').val();
             for (let i = 0; i < UsersNGroups.length; i++) {
@@ -2611,14 +2638,14 @@
             }
             if (SelectedUsers.length <= 0 && SelectedGroups.length <= 0) {
                 toastr.error("Please select atleast  an user or a group");
-               
+
                 $('#btnsendAproval').prop('disabled', false);
                 $('#btnsendRevoke').prop('disabled',false)
                 return
             }
             if ($('#RequestMessage').val().trim() == '') {
                 toastr.error("Please write a message");
-               
+
                 $('#btnsendAproval').prop('disabled', false);
                 $('#btnsendRevoke').prop('disabled', false)
                 return
@@ -2627,7 +2654,7 @@
         if (type == 3) {
             if ($('#RequestMessage').val().trim() == '') {
                 toastr.error("Please write a message");
-               
+
                 $('#btnsendAproval').prop('disabled', false);
                 $('#btnsendRevoke').prop('disabled', false)
                 return
@@ -2657,8 +2684,8 @@
             dataType: "json",
             async: false,
             success: function (result) {
-                
-                
+
+
                 if (result == 1) {
                     toastr.success("Approval Request has sent successfully");
                     //$('#careplanStatus').css('display', 'block');
@@ -2699,7 +2726,7 @@
                 //$('#btnsendRevoke').prop('disabled',false)
             },
             error: function (e) {
-               
+
                 $('#btnsendAproval').prop('disabled', false);
                 $('#btnsendRevoke').prop('disabled', false)
                 toastr.error("Unexpected error!");
@@ -2709,7 +2736,7 @@
 
     }
 
-   
+
     $(".scroll").scroll(function () {
         var sticky = $('.sidebar-right'),
             scroll = $(".scroll").scrollTop();
@@ -2752,13 +2779,19 @@
       //  $('#AppointmentModal').modal('hide');
     }
 
-    function GetTypeOfAppointments() {
 
+    function GetTypeOfAppointments(closeloader = true) {
         $.ajax({
             type: "GET",
             url: Apipath + '/api/PatientMain/getTypeOfAppointments',
             dataType: "json",
             contentType: "application/json; charset=utf-8",
+            beforeSend: function () {
+                if (closeloader) {
+                    _Loader.StartLoader();
+                }
+
+            },
             success: function (result) {
                 $('#ddlTypeOfAppointment').html('');
                 var txt = '<option value="0">Select</option>';
@@ -2769,19 +2802,42 @@
                 $('#ddlTypeOfAppointment').html(txt);
 
             },
+            complete: function () {
+                if (closeloader) {
+                       _Loader.StopLoader();
+                }
+            },
             error: function (e) {
+                  _Loader.StopLoader();
                 toastr.error("Unexpected error!");
             }
         });
     }
 
-    function GetLocationOfAppointments() {
+    var isAppointmentAndLocationLoaded = false
+    function LoadAppointmentsAndLocations() {
+        if (!isAppointmentAndLocationLoaded) {
+            getListAllAppointments(false);
+            GetTypeOfAppointments(false);
+            GetLocationOfAppointments(false);
+        }
+        isAppointmentAndLocationLoaded = true
+
+
+    }
+
+    function GetLocationOfAppointments(startLoader = true) {
 
         $.ajax({
             type: "GET",
             url: Apipath + '/api/PatientMain/getLocationOfAppointments',
             dataType: "json",
             contentType: "application/json; charset=utf-8",
+            beforeSend: function () {
+                if (startLoader) {
+                     _Loader.StartLoader();
+                }
+            },
             success: function (result) {
                 $('#ddlLocationOfAppointment').html('');
                 var txt = '<option value="0">Select</option>';
@@ -2792,7 +2848,11 @@
 
 
             },
+            complete: function () {
+                 _Loader.StopLoader();
+            },
             error: function (e) {
+                 _Loader.StopLoader();
                 toastr.error("Unexpected error!");
             }
         });
@@ -2859,8 +2919,8 @@
 
     $(document).ready(function () {
 
-        GetTypeOfAppointments();
-        GetLocationOfAppointments();
+        //GetTypeOfAppointments();
+        //GetLocationOfAppointments();
 
     });
     function addChildrenDiv() {

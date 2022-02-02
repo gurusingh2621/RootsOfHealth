@@ -78,6 +78,7 @@ namespace RootsOfHealth.Models
         public Nullable<int> ClinicID { get; set; }
         public ProgramBO Program { get; set; }
 
+        public int CareplanCount { get; set; }
         public PatientMainBO()
         {
             
