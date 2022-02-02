@@ -171,7 +171,7 @@
                 </li>
 
                 <li class="nav-item " style="display:block">
-                    <a class="nav-link" id="RecentClient-tab" onclick="RecentClients()" href="#" data-toggle="modal" data-target="#recentpatientModal">Recent Clients</a>
+                    <a class="nav-link" id="RecentClient-tab" onclick="RecentClients()" href="#" data-toggle="modal" >Recent Clients</a>
                 </li>
 
             </ul>
@@ -499,12 +499,15 @@
             type: "Get",
             url: '/Client/GetRecentClientForm?clinicid='+'@Session["ClinicID"]',
                 dataType: "html",
-                contentType: "application/json; charset=utf-8",
+                  contentType: "application/json; charset=utf-8",
+                  beforeSend: function () {
+                      _Loader.StartLoader();
+                  },
                 success: function (result) {
 
-                      $('.recent-paitents').html(result);
-                  }, beforeSend: function () {
-                    _Loader.StartLoader();
+                    $('.recent-paitents').html(result);
+                    
+                    $('#recentpatientModal').modal('show')
                   },
                   error: function () {
                       _Loader.StopLoader();
