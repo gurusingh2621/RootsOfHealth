@@ -37,7 +37,7 @@ $(document).ready(function () {
     $(".carePlan_sideBar").click(function () {
         $(this).parents('.right_sidebar').removeClass('opened');
     }); 
-    getCarePlanList();     
+   // getCarePlanList();     
     $("#ddlcareplanstatus").on('focus', function () {
         prevSelectedCarePlan = this.value;
     });    
@@ -106,6 +106,10 @@ function getCareProgramOptions() {
         }
     });  
 }
+
+
+
+
 function getCarePlanList() { 
     clearFileData();
     $.ajax({
@@ -113,6 +117,9 @@ function getCarePlanList() {
         url: Apipath + '/api/PatientMain/getcareplanlist?patientid=' + PatientId,
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
+        beforeSend: function () {
+            _Loader.StartLoader();
+        },
         success: function (result) {
             if (intervalStatus != "") {
                 clearInterval(intervalStatus);
@@ -173,7 +180,11 @@ function getCarePlanList() {
                 $(".careplanlist tbody").html("").append('<tr><td colspan="6" class="text-center">No careplan found.</td></tr>');
             }
         },
+        complete: function () {
+            _Loader.StopLoader();
+        },
         error: function (e) {
+            _Loader.StopLoader();
             toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
         }

@@ -121,6 +121,7 @@
 
 
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
+
 @*<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>*@
 @*<script src="~/Scripts/jquery-ui.min.js"></script>*@
 <script>
@@ -238,7 +239,7 @@
             }
 
             //--get list of appointment by Patient ID
-            function getListAllAppointments() {
+            function getListAllAppointments(stopLoader=true) {
 
 
                 var data = {
@@ -253,6 +254,9 @@
             data: data,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
+            beforeSend: function () {
+                _Loader.StartLoader()
+            },
             success: function (data) {
                 $("#hdnCurrentDate").val(data.CurrentDate);
                     if (data.Data.length) {
@@ -281,8 +285,14 @@
                     }
 
 
-                },
+            },
+            complete: function () {
+                if (stopLoader) {
+                    _Loader.StopLoader();
+                }
+            },
             error: function (e) {
+                _Loader.StopLoader();
                     toastr.error("Error while getting appotment data.");
                 }
             });
@@ -397,6 +407,15 @@
         });
     }
 
+    var isNotesLoaded = false;
+    function LoadAllNotes() {
+        if (!isNotesLoaded) {
+            getListAllNotesLoadMore();
+        }
+        isNotesLoaded = true;
+    }
+
+
     function getListAllNotesLoadMore() {
 
         var data = {
@@ -409,6 +428,9 @@
             data: data,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
+            beforeSend: function () {
+                _Loader.StartLoader();
+            },
             success: function (result) {
                 $('#notesList').html('');
             if (result.length) {
@@ -441,8 +463,11 @@
             }
 
 
-        },
+            }, complete: function () {
+                _Loader.StopLoader();
+            },
             error: function (e) {
+                _Loader.StopLoader();
             toastr.error("Error while getting appotment data.");
         }
     });
@@ -674,7 +699,12 @@
                 //        '</div>'
                 //    )
                 //}
-                $(".tmpdiv").find('.datepick').datepicker();
+
+
+
+                $(".tmpdiv").find('.datepick').datepicker({
+                    uiLibrary: 'bootstrap'
+                });
 
             },
             error: function () {
@@ -1430,8 +1460,8 @@
         //$('#pat_out_div').addClass('col-lg-8 col-md-12 col-sm-12 col-12 pr-0');
         $('.recent-paitents').css('display', 'block');
         $('#appointement_div').css('display', 'block');
-        getListAllAppointments();
-        getListAllNotesLoadMore();
+        //getListAllAppointments();
+       // getListAllNotesLoadMore();
         //-----------Score Bind Start------------------------------//
         //-----------------Housingscore start----------------------//
         @*$('#txthousingscore').html(@Model.PatientScore.housingscore+"/26");

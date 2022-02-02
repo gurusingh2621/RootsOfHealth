@@ -171,7 +171,7 @@
                 </li>
 
                 <li class="nav-item " style="display:block">
-                    <a class="nav-link" id="RecentClient-tab" href="#" data-toggle="modal" data-target="#recentpatientModal">Recent Clients</a>
+                    <a class="nav-link" id="RecentClient-tab" onclick="RecentClients()" href="#" data-toggle="modal" >Recent Clients</a>
                 </li>
 
             </ul>
@@ -316,7 +316,8 @@
 
         $(document).ready(function () {
 
-            $(".loaderOverlay").css("display","flex");
+            // $(".loaderOverlay").css("display","flex");
+            _Loader.StartLoader()
             var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]'
 
             $(".nav-menu").removeClass("active");
@@ -487,28 +488,37 @@
             $('.selectboxmultiple').selectpicker();
 
 
-        $.ajax({
+            bindTopPatient('@ViewBag.PatientID');
+
+        });
+
+
+        function RecentClients() {
+              $.ajax({
 
             type: "Get",
             url: '/Client/GetRecentClientForm?clinicid='+'@Session["ClinicID"]',
                 dataType: "html",
-                contentType: "application/json; charset=utf-8",
+                  contentType: "application/json; charset=utf-8",
+                  beforeSend: function () {
+                      _Loader.StartLoader();
+                  },
                 success: function (result) {
 
                     $('.recent-paitents').html(result);
-                },
-                error: function () {
+                    
+                    $('#recentpatientModal').modal('show')
+                  },
+                  error: function () {
+                      _Loader.StopLoader();
                     toastr.error("Some error occurred!! or data not found");
                 },
                 complete: function () {
-
-                    bindTopPatient('@ViewBag.PatientID');
+                    _Loader.StopLoader();
+                   // bindTopPatient('@ViewBag.PatientID');
                 }
             });
-
-
-
-        });
+        }
 
         var toppatient = "";
 
@@ -542,12 +552,16 @@
 
                 },
                 error: function () {
+                    _Loader.StopLoader()
                     toastr.error("Some error occurred!! or data not found");
                 },
                 complete: function () {
-
+                    setTimeout(function () {
+                        _Loader.StopLoader()
+                    },500)
+                  
                     var a = 0;
-                    GetPatientPrograms(toppatient);
+                   // GetPatientPrograms(toppatient);
 
 
                 }
@@ -581,12 +595,13 @@
 
                 },
                 error: function () {
+                    _Loader.StopLoader()
                     toastr.error("Some error occurred!! or data not found");
                 },
                 complete: function () {
 
                     $(".scroll").animate({ scrollTop: 0 }, "slow");
-                    $(".loaderOverlay").hide();
+                    _Loader.StopLoader()
                     recentpcloseModel();
 
                 }
@@ -594,7 +609,7 @@
         }
 
 
-       
+
 
         function recentpcloseModel()
         {
