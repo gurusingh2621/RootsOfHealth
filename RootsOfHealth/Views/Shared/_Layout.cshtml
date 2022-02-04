@@ -718,6 +718,9 @@
         #SharedFormExport{
             cursor:pointer;
         }
+        #sharedStatusTab .table tr th {
+            padding: 10px 10px;
+        }
        
     </style>
 </head>
@@ -1735,18 +1738,18 @@
 
                     for (var i = 0; i < result.length; i++) {
                         html += ` <tr>
-                                                          <td style="width:15%">${result[i].FormName != null ? result[i].FormName : ''}</td>
+                                                          <td style="width:13%">${result[i].FormName != null ? result[i].FormName : ''}</td>
                                                            <td style="width:10%">${result[i].Status}</td>
                                                            <td style="width:15%">${FormatDate(result[i].SentOn)}</td>
                                                            <td style="width:15%">${FormatDate(result[i].LastViewedOn)}</td>
-                                                           <td style="width:15%">${FormatDate(result[i].LastRemindedOn)}</td>
+                                                           <td style="width:13%">${FormatDate(result[i].LastRemindedOn)}</td>
                                                            <td style="width:15%">${FormatDate(result[i].ExpiryDate, false)}</td>
-                                                           <td style="width:15%">`
-
+                                                           <td style="width:19%"><div class="d-flex">`
+                        html += `  <button class="btn btn-success text-white" onclick="CopyUrlLink('${result[i].Url}')" style="cursor:pointer;">Copy URL Link</button>`
                         if (result[i].IsExpired == 0 && result[i].Status != 'Completed') {
                             html += `  <button class="btn btn-success text-white" onclick="SendReminder(${result[i].ShareId})" style="cursor:pointer;">Remind</button>`
                         }
-                        html += ` </td>
+                        html += ` </div></td>
                                                          </tr>`
                     }
                     if (result.length == 0) {
@@ -1779,6 +1782,11 @@
                 }
             });
 
+        }
+
+        function CopyUrlLink(Url) {
+            navigator.clipboard.writeText(Url);
+            toastr.success("Shared form's URL link is copied.")
         }
 
 
@@ -2004,7 +2012,7 @@
                     if (result>0) {
                         $('#ExportSharedForms_Export').submit();
                         setTimeout(function () {
-                            toastr.success("Exported successfully.");
+                            //toastr.success("Exported successfully.");
                             _Loader.StopLoader()
                         }, 300);
                     } else {
