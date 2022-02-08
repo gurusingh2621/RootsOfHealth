@@ -73,7 +73,7 @@
                 </tr>
                 <tr>
                     <th scope="row">Home Phone</th>
-                    <td>@(Model.Item1.HomePhone == null ? "" : "(" + Model.Item1.HomePhone.Substring(0, 3) + ")" + Model.Item1.HomePhone.Substring(3, 3) + "-" + Model.Item1.HomePhone.Substring(4, 4))</td>
+                    <td>@((Model.Item1.HomePhone == null || Model.Item1.HomePhone.Trim()=="") ? "" : "(" + Model.Item1.HomePhone.Substring(0, 3) + ")" + Model.Item1.HomePhone.Substring(3, 3) + "-" + Model.Item1.HomePhone.Substring(4, 4))</td>
 
                 </tr>
                 <tr class=@((Model.Item1.CellPhone==null?"":Model.Item1.CellPhone.Trim())!=(Model.Item2.CellPhone==null?"":Model.Item2.CellPhone.Trim()) ?"Highlight":"")>
