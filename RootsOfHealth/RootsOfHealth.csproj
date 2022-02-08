@@ -563,6 +563,7 @@
     <Content Include="css\CarePlanSummary.css" />
     <Content Include="css\UserGroup.css" />
     <Content Include="favicon.ico" />
+    <Content Include="Files\avatar.png" />
     <Content Include="Files\thermometer-1539191_1920.jpg" />
     <Content Include="fonts\fa-brands-400.svg" />
     <Content Include="fonts\fa-regular-400.svg" />
