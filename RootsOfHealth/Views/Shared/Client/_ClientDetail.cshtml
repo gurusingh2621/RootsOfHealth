@@ -4,6 +4,9 @@
 
 @{
     Html.RenderPartial("~/Views/Shared/Patient/_PatientMain.cshtml", Model.PatientMain);
+
+    var _PatientData = Model.PatientMain;
+    _PatientData.DateOfBirth = (_PatientData.DateOfBirth != "" || _PatientData.DateOfBirth==null) ? DateTime.Parse(_PatientData.DateOfBirth).ToString("MM/dd/yyyy"):"";
 }
 
 
@@ -3304,6 +3307,8 @@
 }
 
     $('#btnAMDProfile').click(function () {
+
+       
        var PatientObject=  @Html.Raw(Json.Encode(Model.PatientMain));
           $('#AMDProfile .modal-body').html("")
 
