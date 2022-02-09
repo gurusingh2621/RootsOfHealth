@@ -5,6 +5,16 @@
 <link href="~/css/CareplanPatient.css" rel="stylesheet" />
 <link href="~/css/CareplanNeedsAndGoals.css" rel="stylesheet" />
 <link href="~/css/CarePlanSummary.css" rel="stylesheet" />
+
+@{        if (Model != null)
+    {
+        Model.DateOfBirth = Model.DateOfBirth == "" || Model.DateOfBirth == null ? "" : DateTime.Parse(Model.DateOfBirth).ToString("MM/dd/yyyy");
+    }
+
+
+  }
+
+
 <style>
     select#ddlProgramType {
         display: block !important;
