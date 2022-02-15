@@ -576,6 +576,7 @@
     <Content Include="images\calender-btn.png" />
     <Content Include="images\calender-icon.png" />
     <Content Include="images\chevron-arrow-down.svg" />
+    <Content Include="images\excel.png" />
     <Content Include="images\expired.png" />
     <Content Include="images\heading-border.png" />
     <Content Include="images\logo-dark.png" />

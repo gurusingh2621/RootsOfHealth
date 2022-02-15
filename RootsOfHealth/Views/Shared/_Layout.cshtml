@@ -721,7 +721,44 @@
         #sharedStatusTab .table tr th {
             padding: 10px 10px;
         }
-       
+
+        div#downloadingFormShare .modal-content .close {
+            position: absolute;
+            right: 15px;
+            top: 5px;
+            text-shadow: none;
+            z-index:9;
+        }
+        div#downloadingFormShare .modal-body {
+            text-align: center;
+        }
+        .downoadingModalContent img {
+            display: block;
+            max-width: 40px;
+            margin: 0 auto 0px;
+            object-fit: contain;
+        }
+        .d_m_icon {
+            height: 80px;
+            width: 80px;
+            /* border: 1px solid #ddd; */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50px;
+            margin: 0 auto 15px;
+            box-shadow: 0 0 30px rgb(0 0 0 / 16%);
+        }
+        .downoadingModalContent {
+            padding: 15px 0;
+        }
+        .downloadCompleteText i {
+            margin: 0 5px 0 0;
+            color: green;
+            font-size: 23px;
+            position: relative;
+            top: 2px;
+        }
     </style>
 </head>
 <body>
@@ -733,9 +770,9 @@
             <span></span>
         </div>
     </div>
-    @using (Html.BeginForm("ExportSharedForms", "Client", FormMethod.Post, new { @id = "ExportSharedForms_Export" }))
+    @using (Html.BeginForm("DownloadExportFile", "Client", FormMethod.Post, new { @id = "ExportSharedForms_Export" }))
     {
-        <input type="hidden" name="clinicId" id="exportClinicId"  value="Session["ClinicID"]" />
+        <input type="hidden" name="clinicId" id="exportClinicId" value="Session[" ClinicID"]" />
     }
 
     @*<div class="scroll">*@
@@ -898,7 +935,7 @@
 
                                 <div class="dropdown-menu dropdown-user" aria-labelledby="userDropdown">
                                     <ul>
-                                        @if (Convert.ToString(Session["Roles"]).Contains("Navigator")|| Convert.ToString(Session["Roles"]).Contains("Supervisor"))
+                                        @if (Convert.ToString(Session["Roles"]).Contains("Navigator") || Convert.ToString(Session["Roles"]).Contains("Supervisor"))
                                         {
                                             <li><a href="/Account/Settings"><i class="fas fa-users-cog"></i> Account Setting</a></li>
 
@@ -982,6 +1019,25 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="downloadingFormShare" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:420px; width:100%;">
+            <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+                    <span aria-hidden="true">×</span>
+                </button>
+                <div class="modal-body">
+                    <div class="downoadingModalContent">
+                        <div class="d_m_icon"><img src="~/images/excel.png" alt="excel" /></div>
+                        <div class="downloadingtext">Thanks! Your file is being downloaded..</div>
+                        <div class="downloadCompleteText" style="display:none"><i class="fa fa-check-circle"></i> Thanks! download completed</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
     <div class="modal fade" id="formSharingModal" role="dialog">
         <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:56%">
@@ -1265,6 +1321,8 @@
         var $NoFormSelectedMessage = $('.NoFormSelectedMessage')
         var $ShareFormpatientList = $('#shareFormpatientList')
         var $NavbarSupportedContent = $('#navbarSupportedContent')
+        var $DownloadingFormShare = $('#downloadingFormShare')
+       
         setTimeout(function () {
             $FormShareExpirydate.datepicker(
                 {
@@ -1738,19 +1796,19 @@
 
                     for (var i = 0; i < result.length; i++) {
                         html += ` <tr>
-                                                          <td style="width:13%">${result[i].FormName != null ? result[i].FormName : ''}</td>
-                                                           <td style="width:10%">${result[i].Status}</td>
-                                                           <td style="width:15%">${FormatDate(result[i].SentOn)}</td>
-                                                           <td style="width:15%">${FormatDate(result[i].LastViewedOn)}</td>
-                                                           <td style="width:13%">${FormatDate(result[i].LastRemindedOn)}</td>
-                                                           <td style="width:15%">${FormatDate(result[i].ExpiryDate, false)}</td>
-                                                           <td style="width:19%"><div class="d-flex">`
+                                                                  <td style="width:13%">${result[i].FormName != null ? result[i].FormName : ''}</td>
+                                                                   <td style="width:10%">${result[i].Status}</td>
+                                                                   <td style="width:15%">${FormatDate(result[i].SentOn)}</td>
+                                                                   <td style="width:15%">${FormatDate(result[i].LastViewedOn)}</td>
+                                                                   <td style="width:13%">${FormatDate(result[i].LastRemindedOn)}</td>
+                                                                   <td style="width:15%">${FormatDate(result[i].ExpiryDate, false)}</td>
+                                                                   <td style="width:19%"><div class="d-flex">`
                         html += `  <button class="btn btn-success text-white" onclick="CopyUrlLink('${result[i].Url}')" style="cursor:pointer;">Copy URL Link</button>`
                         if (result[i].IsExpired == 0 && result[i].Status != 'Completed') {
                             html += `  <button class="btn btn-success text-white" onclick="SendReminder(${result[i].ShareId})" style="cursor:pointer;">Remind</button>`
                         }
                         html += ` </div></td>
-                                                         </tr>`
+                                                                 </tr>`
                     }
                     if (result.length == 0) {
                         html = `<tr><td></td><td></td><td></td><td>No history Available</td><td></td><td></td><td></td></tr>`
@@ -1870,7 +1928,7 @@
         function HideShareFormtabsContent(div) {
             $(div).find('.data_content').addClass('d-none')
         }
-        function ShowShareFormtabsContent(div){
+        function ShowShareFormtabsContent(div) {
             $(div).find('.data_content').removeClass('d-none')
         }
 
@@ -1883,7 +1941,7 @@
             _Loader.StartLoader()
             $.ajax({
                 type: "POST",
-                url: Apipath + '/api/PatientMain/sendRemainderforsharedform?shareid='+shareId,
+                url: Apipath + '/api/PatientMain/sendRemainderforsharedform?shareid=' + shareId,
                 contentType: 'application/json; charset=UTF-8',
                 dataType: "json",
                 success: function (result) {
@@ -1921,13 +1979,13 @@
 
                     for (var i = 0; i < result.length; i++) {
                         html += ` <tr>
-                                                           <td style="width:30%;">
-                                                              <label class="input_checkbox"><input type="checkbox" onchange="SelectFormShareUser(this)" name="formShareUserSelectedCheckBox" value="${result[i].FormId}"><span></span></label>
-                                                             </td>
-                                                        <td style="width:70%;">
-                                                                ${result[i].FormName}
-                                                          </td>
-                                                     </tr>`
+                                                                   <td style="width:30%;">
+                                                                      <label class="input_checkbox"><input type="checkbox" onchange="SelectFormShareUser(this)" name="formShareUserSelectedCheckBox" value="${result[i].FormId}"><span></span></label>
+                                                                     </td>
+                                                                <td style="width:70%;">
+                                                                        ${result[i].FormName}
+                                                                  </td>
+                                                             </tr>`
                     }
 
                     if (result.length == 0) {
@@ -1997,30 +2055,33 @@
         }
 
 
-
+       
 
         function ExportSharedForms() {
-
-
-            _Loader.StartLoader()
+           
+            
+            $DownloadingFormShare.find('.downloadingtext').show();
+            $DownloadingFormShare.find('.downloadCompleteText').hide();
+            $DownloadingFormShare.modal('show');
+            
             $.ajax({
-                type: "Get",
-                url: Apipath + '/api/PatientMain/getsharedformsforexportcount?clinicId=' + _shareFormClinicId,
+                type: "Post",
+                url: '/Client/GenerateSharedForms',
                 dataType: "Json",
                 contentType: "application/json; charset=utf-8",
                 success: function (result) {
-                    if (result>0) {
+                    if (!result.hasError) {
+
                         $('#ExportSharedForms_Export').submit();
                         setTimeout(function () {
-                            //toastr.success("Exported successfully.");
-                            _Loader.StopLoader()
+                            $DownloadingFormShare.find('.downloadingtext').hide();
+                            $DownloadingFormShare.find('.downloadCompleteText').show();
+                          
                         }, 300);
                     } else {
                         _Loader.StopLoader()
                         toastr.error("There is no data to be exported.");
                     }
-
-
                 },
                 error: function () {
                     toastr.error("Unexpected error!");

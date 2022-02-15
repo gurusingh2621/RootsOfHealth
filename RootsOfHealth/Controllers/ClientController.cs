@@ -2431,9 +2431,8 @@ namespace RootsOfHealth.Controllers
 
 
         [HttpPost]
-        public ActionResult ExportSharedForms(FormCollection form)
+        public ActionResult GenerateSharedForms()
         {
-
            
             var clinicId = Session["ClinicID"];
             var SharedFormData = new List<SharedFormForExportBO>();
@@ -2449,10 +2448,24 @@ namespace RootsOfHealth.Controllers
                     var readTask = result.Content.ReadAsAsync<List<SharedFormForExportBO>>();
                     readTask.Wait();
                     SharedFormData = readTask.Result;
-                   
+                    if (SharedFormData.Count == 0)
+                    {
+                        return new JsonResult()
+                        {
+                            Data = new
+                            {
+                                hasError = true
+                            }
+
+                        };
+                    }
                 }
 
             }
+
+           
+
+
 
             using (MemoryStream output = new MemoryStream())
                 {
@@ -2511,19 +2524,43 @@ namespace RootsOfHealth.Controllers
 
                 workbook.Write(output);
 
-                   
+                Session["GeneratedFile"] = output.ToArray();
 
-                    return File(output.ToArray(),   //The binary data of the XLS file
-                        "application/vnd.ms-excel", //MIME type of Excel files
-                        "FormSharing.xls");     //Suggested file name in the "Save as" dialog which will be displayed to the end user
+                return  new JsonResult()
+                {
+                    Data = new
+                    {
+                        hasError = false
+                    }
+                  
+                };
+                //return File(output.ToArray(),   //The binary data of the XLS file
+                //    "application/vnd.ms-excel", //MIME type of Excel files
+                //    "FormSharing.xls");     //Suggested file name in the "Save as" dialog which will be displayed to the end user
 
-
-
-
-                }
             }
-           
+            }
+
+        [HttpPost]
+        public ActionResult DownloadExportFile()
+        {
+            if (Session["GeneratedFile"] != null)
+            {
+                byte[] data = Session["GeneratedFile"] as byte[];
+                Session.Remove("GeneratedFile");  // Cleanup session data
+                return File(data, "application/vnd.ms-excel", "FormSharing.xls");
+            }
+            else
+            {
+                // Log the error if you want
+                return new EmptyResult();
+            }
         }
+
+
+
+
+    }
 
        
 
