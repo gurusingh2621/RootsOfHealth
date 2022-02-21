@@ -1191,8 +1191,14 @@
             window.location = '/Client/Info?patientid=' + ID;
         }
 
-        $(document).click(function (e) {
+                        $(document).ready(function () {
+                            HighLightMenu()
+                        })
 
+
+
+        $(document).click(function (e) {
+           
             if (e.target.id != 'patientList') {
                 $("#searchPatient").val('');
                 $NavbarSupportedContent.find(".searchboxDropDown").css('display', 'none');
@@ -1349,46 +1355,49 @@
         $('.selectboxmultiple').selectpicker();
         $('.select2').select2({ placeholder: "Select Client", allowClear: true, searchInputPlaceholder: 'Search ...' });
 
-        function hash(str) {
-            var hash = 0, i, chr;
-            if (str.length === 0) return hash;
-            for (i = 0; i < str.length; i++) {
-                chr = str.charCodeAt(i);
-                hash = ((hash << 5) - hash) + chr;
-                hash |= 0;
-            }
-            if (hash < 0) {
-                return -1 * hash
-            }
-            return hash;
-        }
-        function shortenColName(colname) {
-            if (colname.length > 128) {
-                let firstSub = colname.substring(0, 100);
-                let lastSub = colname.substring(100, colname.length);
-                let generatedHash = hash(lastSub);
-                colname = firstSub + generatedHash;
-            }
-            return colname
-        }
-        HighLightMenu()
-        function HighLightMenu() {
+                        function hash(str) {
+                            var hash = 0, i, chr;
+                            if (str.length === 0) return hash;
+                            for (i = 0; i < str.length; i++) {
+                                chr = str.charCodeAt(i);
+                                hash = ((hash << 5) - hash) + chr;
+                                hash |= 0;
+                            }
+                            if (hash < 0) {
+                                return -1 * hash
+                            }
+                            return hash;
+                        }
+                        function shortenColName(colname) {
+                            if (colname.length > 128) {
+                                let firstSub = colname.substring(0, 100);
+                                let lastSub = colname.substring(100, colname.length);
+                                let generatedHash = hash(lastSub);
+                                colname = firstSub + generatedHash;
+                            }
+                            return colname
+                        }
+                      
+                        function HighLightMenu() {
 
-            var Path = window.location.pathname
-            switch (Path) {
-                case "/DashBoard/Display":
-                    $('#HomeNavItem').addClass('active')
-                    break;
-                case "/Patient/Appointment":
-                    $('#AppointmentNavItem').addClass('active')
+                            var Path = window.location.pathname
+                            switch (Path) {
+                                case "/DashBoard/Display":
+                                    $('#HomeNavItem').addClass('active')
+                                    break;
+                                case "/Patient/Appointment":
+                                    $('#AppointmentNavItem').addClass('active')
+                                    ScrollFunction('#AppointmentNavItem')
 
-                    break;
-                case "/Patient/List":
-                    $('#ClientNavItem').addClass('active')
-                    break;
+                                    break;
+                                case "/Patient/List":
+                                    $('#ClientNavItem').addClass('active')
+                                    ScrollFunction('#ClientNavItem')
+                                    break;
 
-                case "/Client/Add":
-                    $('#AddClientNavItem').addClass('active')
+                                case "/Client/Add":
+                                    $('#AddClientNavItem').addClass('active')
+                                    ScrollFunction('#AddClientNavItem')
 
                     break;
                 case "/Patient/NotesTemplateField":
@@ -1457,11 +1466,14 @@
 
         }
 
-        function ScrollFunction(item) {
-            //setTimeout(function () {
-            //    $('.sidebar-menu').scrollTop($(item).offset().top);
-            //}, 1000)
-        }
+                        function ScrollFunction(item) {
+                            setTimeout(function () {
+                                var scrollViewHeight = $('.sidebar-menu').height() / 2;
+                                var navBarHeight = $('.navbar').height();
+                                $('.sidebar-menu').scrollTop($(item).offset().top - navBarHeight - scrollViewHeight);
+                               
+                            }, 500)
+                        }
 
 
 
