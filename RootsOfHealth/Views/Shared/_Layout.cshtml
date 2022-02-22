@@ -983,7 +983,7 @@
                 <li id="ClientFormsNavItem"><a href="/Client/ClientsFormList" id="ClientsForm" class="nav-menu"><span class="patient-icon"></span> Clients Forms</a></li>
                 <li id="CarePlanRequestNavItem" class="@(Convert.ToBoolean(@Session["IsCarePlanApprover"])?"":"d-none")"><a href="/CarePlan/Requests" id="requests" class="nav-menu"><span class="program-icon"></span> Care Plan Requests</a></li>
                 <li id="FormsSharinigNavItem" class="@(Convert.ToString(Session["Roles"]).Contains("Navigator")||Convert.ToString(Session["Roles"]).Contains("Supervisor")?"":"d-none")">
-                    <a id="formSharing" class="nav-menu" onclick="  ResetFormSharingPopup();"><span class="patient-icon"></span> Clients Request Intakes</a>
+                    <a id="formSharing" class="nav-menu" onclick="ResetFormSharingPopup();"><span class="patient-icon"></span> Clients Request Intakes</a>
                 </li>
 
                 <li id="SharedFormExport" class="@(Convert.ToString(Session["Roles"]).Contains("Supervisor")?"":"d-none")">
@@ -1045,6 +1045,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title">Share Forms</h5>
                     <div class="ml-auto">
+                        <a href="javascript:{}"  class="btn btn-success d-none" id="CopyUrlLink">Copy URL Link</a>
                         <a href="javascript:{}" data-toggle="modal" data-target="#selectDateAndShare" class="btn btn-success  disabled" id="ShareForm" onclick="ResetExpirationDate()">Share Form</a>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
@@ -1327,7 +1328,8 @@
         var $NoFormSelectedMessage = $('.NoFormSelectedMessage')
         var $ShareFormpatientList = $('#shareFormpatientList')
         var $NavbarSupportedContent = $('#navbarSupportedContent')
-        var $DownloadingFormShare = $('#downloadingFormShare')
+        var $DownloadingFormShare = $('#downloadingFormShare');
+        var $CopyUrlLink= $('#CopyUrlLink');
        
         setTimeout(function () {
             $FormShareExpirydate.datepicker(
@@ -1540,6 +1542,8 @@
             $DDclientlistforsharing.val('')
             shareFormClientId = 0;
             shareFormClientValue = ''
+            $CopyUrlLink.attr('onclick', '')
+            $CopyUrlLink.addClass('d-none')
             $FormSharingModal.modal('show')
             allClientList = [];
             filteredClients = []
@@ -1653,10 +1657,45 @@
             $FormSharingModal.find(".searchboxDropDown").css('display', 'block');
         })
 
+        var _UniqueLoader;
+        function GetUniqueUrl(clientId) {
+
+            
+            $.ajax({
+                type: "Get",
+                url: Apipath + '/api/PatientMain/getuniqueurl?clinicid=' + clientId,
+                dataType: "Json",
+                contentType: "application/json; charset=utf-8",
+                beforeSend: function () {
+                    _UniqueLoader = _Loader.StartLoader();
+                },
+                success: function (result) {
+                    if (result.length) {
+                        $CopyUrlLink.attr('onclick', "CopyUrlLink('" + result + "')")
+                        $CopyUrlLink.removeClass('d-none')
+                    } else {
+                        $CopyUrlLink.attr('onclick', '')
+                        $CopyUrlLink.addClass('d-none')
+                    }
+                },
+                error: function () {
+                    _Loader.StopLoader()
+                },
+                complete: function () {
+
+                    _Loader.StopLoader()
+
+                }
+            });
+
+        }
+
+
 
         function SelectFormShareClient(clientid, ClientName, ClientMail) {
             shareFormClientId = clientid
             shareFormClientValue = ClientName
+            GetUniqueUrl(clientid);
             $DDclientlistforsharing.val(ClientName);
             GetClientsForSharing(ClientMail)
             GetUserListandHistory()
@@ -1677,12 +1716,8 @@
                 contentType: "application/json; charset=utf-8",
                 success: function (result) {
                     if (result.length) {
-
                         allClientList = result;
-
                     }
-
-
                 },
                 error: function () {
                     _Loader.StopLoader()
@@ -1810,12 +1845,8 @@
                         html += ` <tr>
                                                                   <td style="width:13%">${result[i].FormName != null ? result[i].FormName : ''}</td>
                                                                    <td style="width:10%">${result[i].Status}</td>
-                                                                   <td style="width:15%">${FormatDate(result[i].SentOn)}</td>
-                                                                   <td style="width:15%">${FormatDate(result[i].LastViewedOn)}</td>
-                                                                   <td style="width:13%">${FormatDate(result[i].LastRemindedOn)}</td>
-                                                                   <td style="width:15%">${FormatDate(result[i].ExpiryDate, false)}</td>
-                                                                   <td style="width:19%"><div class="d-flex">`
-                        html += `  <button class="btn btn-success text-white" onclick="CopyUrlLink('${result[i].Url}')" style="cursor:pointer;">Copy URL Link</button>`
+                                                                   <td style="width:10%"><div class="d-flex">`
+                       // html += `<button class="btn btn-success text-white" onclick="CopyUrlLink('${result[i].Url}')" style="cursor:pointer;">Copy URL Link</button>`
                         if (result[i].IsExpired == 0 && result[i].Status != 'Completed') {
                             html += `  <button class="btn btn-success text-white" onclick="SendReminder(${result[i].ShareId})" style="cursor:pointer;">Remind</button>`
                         }
@@ -2061,6 +2092,7 @@
                     toastr.error("Error while updating goal sort index");
                 },
                 complete: function () {
+                    GetUniqueUrl(shareFormClientId);
                     //  _Loader.StopLoader()
                 }
             });

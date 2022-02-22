@@ -608,3 +608,11 @@ div#SharedForms {
 #SharedForms .scroll {
     overflow-y: auto;
 }
+
+.inner-main-content {
+    max-height: calc(100vh - 155px);
+    overflow-x: hidden;
+    margin-top: -10px;
+    padding-right: 8px;
+    height: auto;
+}
