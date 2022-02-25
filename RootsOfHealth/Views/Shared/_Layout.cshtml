@@ -229,6 +229,11 @@
             max-height: 230px;
             overflow: auto;
         }
+        .copyLinkText {
+            text-align: right;
+            padding: 0 0 10px 0;
+            font-size: 14px;
+        }
     </style>
 
     <style>
@@ -1053,6 +1058,7 @@
                     </div>
                 </div>
                 <div class="modal-body">
+                    <div class="copyLinkText d-none">Form URL Link:- <span></span></div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -1330,6 +1336,7 @@
         var $NavbarSupportedContent = $('#navbarSupportedContent')
         var $DownloadingFormShare = $('#downloadingFormShare');
         var $CopyUrlLink= $('#CopyUrlLink');
+        var $CopyLinkText = $('.copyLinkText');
        
         setTimeout(function () {
             $FormShareExpirydate.datepicker(
@@ -1673,9 +1680,13 @@
                     if (result.length) {
                         $CopyUrlLink.attr('onclick', "CopyUrlLink('" + result + "')")
                         $CopyUrlLink.removeClass('d-none')
+                        $CopyLinkText.removeClass('d-none')
+                        $CopyLinkText.find('span').text(result)
                     } else {
                         $CopyUrlLink.attr('onclick', '')
                         $CopyUrlLink.addClass('d-none')
+                        $CopyLinkText.addClass('d-none')
+                        $CopyLinkText.find('span').text("")
                     }
                 },
                 error: function () {
@@ -1840,19 +1851,23 @@
                         formShareHistoryTable.clear();
                         formShareHistoryTable.destroy();
                     }
-
+                    
                     for (var i = 0; i < result.length; i++) {
                         html += ` <tr>
-                                                                  <td style="width:13%">${result[i].FormName != null ? result[i].FormName : ''}</td>
+                                                                  <td style="width:14%">${result[i].FormName != null ? result[i].FormName : ''}</td>
                                                                    <td style="width:10%">${result[i].Status}</td>
+                                                                   <td style="width:17%">${FormatDate(result[i].SentOn)}</td>
+                                                                   <td style="width:17%">${FormatDate(result[i].LastViewedOn)}</td>
+                                                                   <td style="width:17%">${FormatDate(result[i].LastRemindedOn)}</td>
+                                                                   <td style="width:17%">${FormatDate(result[i].ExpiryDate, false)}</td>
                                                                    <td style="width:10%"><div class="d-flex">`
                        // html += `<button class="btn btn-success text-white" onclick="CopyUrlLink('${result[i].Url}')" style="cursor:pointer;">Copy URL Link</button>`
                         if (result[i].IsExpired == 0 && result[i].Status != 'Completed') {
-                            html += `  <button class="btn btn-success text-white" onclick="SendReminder(${result[i].ShareId})" style="cursor:pointer;">Remind</button>`
+                            html += ` <button class="btn btn-success text-white" onclick="SendReminder(${result[i].ShareId})" style="cursor:pointer;">Remind</button>`
                         }
-                        html += ` </div></td>
-                                                                 </tr>`
+                        html += ` </div></td></tr>`
                     }
+                    
                     if (result.length == 0) {
                         html = `<tr><td></td><td></td><td></td><td>No history Available</td><td></td><td></td><td></td></tr>`
                     }
