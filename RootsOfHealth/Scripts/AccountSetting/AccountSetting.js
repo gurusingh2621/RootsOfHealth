@@ -11,6 +11,9 @@ var $SharedFormScheduler = $('#SharedFormSchedulerbtn')
 var $Frequency = $('#frequency');
 var $SendReminderSwitch = $('#sendReminderSwitch');
 
+var $SharedFormExpiryAfter = $('#fsexpirationDate');
+var $FsTimeUnit = $('#fsTimeUnit')
+
 $('#emailAddress,#displayName,#password,#Port,#ServerName').on('input', function () {
     $SaveEmailCredsBtn.removeClass('disabled').prop('disabled',false)
 })
@@ -20,6 +23,13 @@ $Frequency.on('input', function () {
 })
 
 $SendReminderSwitch.change(function () {
+    $SharedFormScheduler.removeClass('disabled').prop('disabled', false)
+})
+$FsTimeUnit.change(function () {
+    $SharedFormScheduler.removeClass('disabled').prop('disabled', false)
+})
+
+$SharedFormExpiryAfter.on('input', function () {
     $SharedFormScheduler.removeClass('disabled').prop('disabled', false)
 })
 
@@ -190,7 +200,7 @@ function GetSharedFormFrequency() {
 
     $.ajax({
         type: "GET",
-        url: Apipath + '/api/PatientMain/getsharedformfrequency',
+        url: Apipath + '/api/PatientMain/getsharedformdefaultsetting',
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         beforeSend: function () {
@@ -199,7 +209,7 @@ function GetSharedFormFrequency() {
         async: true,
         success: function (result) {
 
-            if (result != null) {
+            if (result.ID != null) {
                 $Frequency.val(result.Frequency)
                 if (result.TurnON) {
                     $SendReminderSwitch.prop('checked',true)
@@ -209,6 +219,8 @@ function GetSharedFormFrequency() {
                 UpdateFrequencybtn(result.ID)
             }
 
+            $SharedFormExpiryAfter.val(result.ExpireAfter);
+            $FsTimeUnit.val(result.TimeUnit)
         },
         complete: function () {
             _Loader.StopLoader()
@@ -239,11 +251,21 @@ function SaveOrUpdateSchedulerFrequency(id = 0) {
 
         return;
     }
+
+
+    var expiryAfter = $SharedFormExpiryAfter.val().trim();
+    var timeUnit = $FsTimeUnit.val();
+    
+    if (expiryAfter == 0 || expiryAfter == '') {
+        toastr.error("Expiration date is required.");
+    }
+
     
 
     $.ajax({
         type: "POST",
-        url: Apipath + '/api/PatientMain/saveorupdatesharedformfrequency?id=' + id + '&frequency=' + frequency + '&isSendReminderTurnedOn='+isSendReminderTurnedOn,
+        url: Apipath + '/api/PatientMain/saveorupdateshareddefaultsetting?id=' + id + '&frequency=' + frequency
+            + '&isSendReminderTurnedOn=' + isSendReminderTurnedOn + '&expiryAfter=' + expiryAfter + '&timeUnit=' + timeUnit,
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         beforeSend: function () {

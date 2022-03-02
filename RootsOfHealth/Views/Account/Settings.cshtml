@@ -86,6 +86,7 @@
         border: 1px solid rgb(161, 161, 161);
         background-color: rgb(161, 161, 161);
     }
+    
 
 </style>
 
@@ -103,7 +104,7 @@
                         <a class="nav-link" data-toggle="tab" href="#emailCredSettingTab" onclick="GetEmailCreds()" role="tab" aria-controls="emailCredSettingTab" aria-selected="false">Email Credentials</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#formIntakeSettingTab" role="tab" aria-controls="formIntakeSettingTab" onclick="GetSharedFormFrequency()" aria-selected="false">Form Intake</a>
+                        <a class="nav-link" data-toggle="tab" href="#formIntakeSettingTab" role="tab" aria-controls="formIntakeSettingTab" onclick="GetSharedFormFrequency()" aria-selected="false">Form Sharing</a>
                     </li>
                 </ul>
             </div>
@@ -180,19 +181,19 @@
                 <div class="tab-pane fade" id="formIntakeSettingTab" role="tabpanel">
                     <div class="appointment mt-2">
                         <div class="detail-heading d-flex">
-                            <h2>Form Intake</h2>
+                            <h2>Form Sharing</h2>
                             <button type="button" id="SharedFormSchedulerbtn" onclick="SaveOrUpdateSchedulerFrequency(0)" class="btn btn-success ml-auto">Save</button>
                         </div>
                         <form autocomplete="off">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label>Form intake reminder frequency in days</label>
-                                        <input type="number" placeholder=""  min="0" name="frequency" id="frequency" class="form-control" style="max-width:100px;" />
+                                        <label>Shared Form reminder frequency in days</label>
+                                        <input type="number" placeholder="" min="0" name="frequency" id="frequency" class="form-control" style="max-width:100px;" />
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                    <div class="appointemnt-row justify-content-start" style="width:100%; max-width:200px;">
+                                    <div class="appointemnt-row justify-content-start" style="width:100%; max-width:200px; margin-bottom:20px;">
                                         Send Reminder
                                         <label class="switch ml-auto">
                                             <input type="checkbox" id="sendReminderSwitch">
@@ -200,7 +201,21 @@
                                         </label>
                                     </div>
                                 </div>
-                            </div>
+                                <div class="col-md-12">
+                                    
+                                        <div class="form-group">
+                                            <label>Shared Forms Expire After</label>
+                                            <div class="d-flex">
+                                                <input type="number" placeholder="" min="1" name="fsexpirationDate" id="fsexpirationDate" class="form-control" style="max-width:100px;" />
+
+                                                <select class="form-control" id="fsTimeUnit" style="max-width: 100px;margin-left: 5px;">
+                                                    <option value="1">Day</option>
+                                                    <option value="3">Month</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        </div>
+                                </div>
                         </form>
                     </div>
                 </div>
