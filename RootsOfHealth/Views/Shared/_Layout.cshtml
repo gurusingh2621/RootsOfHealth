@@ -942,7 +942,7 @@
                                     <ul>
                                         @if (Convert.ToString(Session["Roles"]).Contains("Navigator") || Convert.ToString(Session["Roles"]).Contains("Supervisor"))
                                         {
-                                            <li><a href="/Account/Settings"><i class="fas fa-users-cog"></i> Account Setting</a></li>
+                                            <li><a href="/Account/Settings"><i class="fas fa-users-cog"></i> System Setting</a></li>
 
                                         }
                                         <li><a href="/Account/UserDetails?username=@FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name"><i class="fas fa-users-cog"></i> Profile</a></li>

@@ -248,6 +248,7 @@
     <Compile Include="Models\ClientFormtemplateBO .cs" />
     <Compile Include="Models\ProgramtemplateBO.cs" />
     <Compile Include="Models\ReleaseAndDisclousureBO.cs" />
+    <Compile Include="Models\RolePermissionsBO.cs" />
     <Compile Include="Models\ScheduleDateBO.cs" />
     <Compile Include="Models\SharedFormDataBO.cs" />
     <Compile Include="Models\SharedFormForExportBO.cs" />
@@ -752,6 +753,7 @@
     <Content Include="Views\Shared\Client\_FormLogHistory.cshtml" />
     <Content Include="Views\Shared\Client\_LogHistoryPopUp.cshtml" />
     <Content Include="Views\Client\Sharing.cshtml" />
+    <Content Include="Views\Shared\Role\_RolePermissionsList.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -158,249 +158,12 @@
                         <!-- Permission Tab Start here  -->
                         <div class="tab-pane fade" id="PermissionAdmin" role="tabpanel" aria-labelledby="PermissionAdmin-tab">
                             <div class="ProfileContent permissionScroll">
-                                <div class="patientRow housing_button">
-                                    <div class="permissionidGroup">
-                                        <!--Patient Module Hidden PermissionID-->
-                                        <input id="housing_permid" hidden="hidden" />
-                                        <input id="financial_permid" hidden="hidden" />
-                                        <input id="employment_permid" hidden="hidden" />
-                                        <input id="communication_permid" hidden="hidden" />
-                                        <input id="social_permid" hidden="hidden" />
-                                        <input id="legal_permid" hidden="hidden" />
-                                        <input id="substance_permid" hidden="hidden" />
-                                        <input id="mental_permid" hidden="hidden" />
-                                        <input id="foodaccess_permid" hidden="hidden" />
-                                        <input id="program_permid" hidden="hidden" />
-                                        <input id="authorization_permid" hidden="hidden" />
-                                        <!--Others Module Hidden PermissionID-->
-                                        <input id="appointment_permid" hidden="hidden" />
-                                        <input id="users_permid" hidden="hidden" />
-                                        <input id="role_permid" hidden="hidden" />
-                                        <input id="lookupfield_permid" hidden="hidden" />
-                                        <input id="formscheduling_permid" hidden="hidden" />
-                                        <input id="potientialpatient_permid" hidden="hidden" />
-                                        <input id="notes_permid" hidden="hidden" />
-                                    </div>
-                                    <h5 >Client Forms <i id="patient_tgl" class="fas fa-chevron-down"></i></h5>
-                                    <div class="patientToggle">
-                                        <div class="row">
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col02">
-                                                <h6>Housing</h6>
-                                                <select id="housing"  multiple>
-                                                   
-                                                   
-                                                    <option value="1">Add</option>
-                                                    <option value="2">Edit</option>
-                                                    <option value="3">Delete</option>
-                                                    <option value="4">View</option>
-                                                    
-                                                </select>
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col02">
-                                                <h6>Financial Security</h6>
-                                                <select id="financial" multiple>
-                                                   
-                                                    <option value="1">Add</option>
-                                                    <option value="2">Edit</option>
-                                                    <option value="3">Delete</option>
-                                                    <option value="4">View</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col02">
-                                                <h6>Employment/Education</h6>
-                                                <select id="employment" multiple>
-                                                   
-                                                    <option value="1">Add</option>
-                                                    <option value="2">Edit</option>
-                                                    <option value="3">Delete</option>
-                                                    <option value="4">View</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col02">
-                                                <h6>Communication & Mobility</h6>
-                                                <select id="communication"  multiple>
-                                                   
-                                                    <option value="1">Add</option>
-                                                    <option value="2">Edit</option>
-                                                    <option value="3">Delete</option>
-                                                    <option value="4">View</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col02">
-                                                <h6>Social Supports and Safety</h6>
-                                                <select id="social"  multiple>
 
-                                                   
-                                                    <option value="1">Add</option>
-                                                    <option value="2">Edit</option>
-                                                    <option value="3">Delete</option>
-                                                    <option value="4">View</option>
-
-                                                </select>
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col02">
-                                                <h6>Legal Status</h6>
-                                                <select id="legal" multiple>
-                                                  
-                                                    <option value="1">Add</option>
-                                                    <option value="2">Edit</option>
-                                                    <option value="3">Delete</option>
-                                                    <option value="4">View</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col02">
-                                                <h6>Substance Use</h6>
-                                                <select id="substance"  multiple>
-                                                   
-                                                    <option value="1">Add</option>
-                                                    <option value="2">Edit</option>
-                                                    <option value="3">Delete</option>
-                                                    <option value="4">View</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col02">
-                                                <h6>Mental Health</h6>
-                                                <select id="mental"  multiple>
-                                                
-                                                    <option value="1">Add</option>
-                                                    <option value="2">Edit</option>
-                                                    <option value="3">Delete</option>
-                                                    <option value="4">View</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col02">
-                                                <h6>Food Access</h6>
-                                                <select id="foodaccess"  multiple>
-
-                                                
-                                                    <option value="1">Add</option>
-                                                    <option value="2">Edit</option>
-                                                    <option value="3">Delete</option>
-                                                    <option value="4">View</option>
-
-                                                </select>
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col02">
-                                                <h6>Programs</h6>
-                                                <select id="program"  multiple>
-                                                 
-                                                    <option value="1">Add</option>
-                                                    <option value="2">Edit</option>
-                                                    <option value="3">Delete</option>
-                                                    <option value="4">View</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col02">
-                                                <h6>Authorization</h6>
-                                                <select id="authorization" multiple>
-
-                                                    <option value="1">Add</option>
-                                                    <option value="2">Edit</option>
-                                                    <option value="3">Delete</option>
-                                                    <option value="4">View</option>
-                                                </select>
-                                            </div>
-                                            
-                                        </div>
-                                    </div>
-
-                                    <h5>Others <i id="other_tgl" class="fas fa-chevron-down"></i></h5>
-                                    <div class="otherToggle">
-                                        <div class="row">
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col02">
-                                                <h6>Appointment</h6>
-                                                <select id="appointment" multiple>
-
-
-                                                    <option value="1">Add</option>
-                                                    <option value="2">Edit</option>
-                                                    <option value="3">Delete</option>
-                                                    <option value="4">View</option>
-
-                                                </select>
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col02">
-                                                <h6>Users</h6>
-                                                <select id="users" multiple>
-
-                                                    <option value="1">Add</option>
-                                                    <option value="2">Edit</option>
-                                                    <option value="3">Delete</option>
-                                                    <option value="4">View</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col02">
-                                                <h6>Roles/Permission</h6>
-                                                <select id="role" multiple>
-
-                                                    <option value="1">Add</option>
-                                                    <option value="2">Edit</option>
-                                                    <option value="3">Delete</option>
-                                                    <option value="4">View</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col02">
-                                                <h6>LookUp Field</h6>
-                                                <select id="lookupfield" multiple>
-
-                                                    <option value="1">Add</option>
-                                                    <option value="2">Edit</option>
-                                                    <option value="3">Delete</option>
-                                                    <option value="4">View</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col02">
-                                                <h6>Form Scheduling</h6>
-                                                <select id="formscheduling" multiple>
-
-
-                                                    <option value="1">Add</option>
-                                                    <option value="2">Edit</option>
-                                                    <option value="3">Delete</option>
-                                                    <option value="4">View</option>
-
-                                                </select>
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col02">
-                                                <h6>Potiential Patient</h6>
-                                                <select id="potientialpatient" multiple>
-
-                                                    <option value="1">Add</option>
-                                                    <option value="2">Edit</option>
-                                                    <option value="3">Delete</option>
-                                                    <option value="4">View</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-lg-3 col-md-3 col-sm-3 col02">
-                                                <h6>Notes</h6>
-                                                <select id="notes" multiple>
-
-                                                    <option value="1">Add</option>
-                                                    <option value="2">Edit</option>
-                                                    <option value="3">Delete</option>
-                                                    <option value="4">View</option>
-                                                </select>
-                                            </div>
-                                            
-                                        </div>
-                                        
-                                    </div>
-                                </div>
-                                
-                                
-                                
-                                
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" onclick="AddRoleModalClose()">Cancel</button>
-                                <button type="button" class="btn btn-primary" onclick="savePermission()" id="savepermission">Save</button>
-                                <button type="button" class="btn btn-primary" hidden="hidden" onclick="updatePermission()" id="updatepermission">Update</button>
+                                <button type="button" class="btn btn-primary" onclick="SaveRolePermission()" id="savepermission">Save</button>
+                                <button type="button" class="btn btn-primary" hidden="hidden" onclick="SaveRolePermission()" id="updatepermission">Update</button>
                             </div>
                         </div>
                         <!-- Permission Tab end here  -->
@@ -424,6 +187,9 @@
                     url:'/Account/UpdateRolesList',
                     contentType: 'application/json; charset=UTF-8',
                     dataType: "html",
+                    beforeSend: function () {
+                        _Loader.StartLoader()
+                    },
                     success: function (result) {
                         $("#roleListID").html('');
                         $("#roleListID").html(result);
@@ -431,522 +197,56 @@
                             scrollY: 'calc(100vh - 320px)',
                             scrollCollapse: true,
                         });
-                    
+
+                    },
+                    error: function () {
+                        _Loader.StopLoader()
+                    },
+                    complete: function () {
+                        _Loader.StopLoader()
                     }
                 });
             }
-          
+
             $(function () {
                 $("#tblRole").dataTable({
                     scrollY: 'calc(100vh - 320px)',
                     scrollCollapse: true,
                 });
-                $("#patient_tgl").click(function () {
 
-
-                    if ($("#patient_tgl").hasClass('fas fa-chevron-down')) {
-                        $("#patient_tgl").removeClass('fas fa-chevron-down').addClass('fas fa-chevron-up');
-
-                    } else {
-                        $("#patient_tgl").removeClass('fas fa-chevron-up').addClass('fas fa-chevron-down');
-
-
-                    }
-                    $(".patientToggle").slideToggle("slow");
-                });
-                $("#other_tgl").click(function () {
-
-
-                    if ($("#other_tgl").hasClass('fas fa-chevron-down')) {
-                        $("#other_tgl").removeClass('fas fa-chevron-down').addClass('fas fa-chevron-up');
-
-                    } else {
-                        $("#other_tgl").removeClass('fas fa-chevron-up').addClass('fas fa-chevron-down');
-
-
-                    }
-                    $(".otherToggle").slideToggle("slow");
-                });
                 $("#rolename").keypress(function () {
                     $(this).removeClass('invalid-field');
                 });
-                $('#housing').multiselect({
-                    includeSelectAllOption: true,
-                    nonSelectedText: 'Nothing selected',
-                    buttonWidth: '100%',
-                    maxHeight: 300
-                });
 
-                $('#financial').multiselect({
-                    includeSelectAllOption: true,
-                    nonSelectedText: 'Nothing selected',
-                    buttonWidth: '100%',
-                    maxHeight: 300
-                });
-                $('#employment').multiselect({
-                    includeSelectAllOption: true,
-                    nonSelectedText: 'Nothing selected',
-                    buttonWidth: '100%',
-                    maxHeight: 300
-                });
-                $('#communication').multiselect({
-                    includeSelectAllOption: true,
-                    nonSelectedText: 'Nothing selected',
-                    buttonWidth: '100%',
-                    maxHeight: 300
-                });
-                $('#social').multiselect({
-                    includeSelectAllOption: true,
-                    nonSelectedText: 'Nothing selected',
-                    buttonWidth: '100%',
-                    maxHeight: 300
-                });
-                $('#legal').multiselect({
-                    includeSelectAllOption: true,
-                    nonSelectedText: 'Nothing selected',
-                    buttonWidth: '100%',
-                    maxHeight: 300
-                });
-                $('#substance').multiselect({
-                    includeSelectAllOption: true,
-                    nonSelectedText: 'Nothing selected',
-                    buttonWidth: '100%',
-                    maxHeight: 300
-                });
-                $('#mental').multiselect({
-                    includeSelectAllOption: true,
-                    nonSelectedText: 'Nothing selected',
-                    buttonWidth: '100%',
-                    maxHeight: 300
-                });
-                $('#foodaccess').multiselect({
-                    includeSelectAllOption: true,
-                    nonSelectedText: 'Nothing selected',
-                    buttonWidth: '100%',
-                    maxHeight: 300
-                });
-                $('#program').multiselect({
-                    includeSelectAllOption: true,
-                    nonSelectedText: 'Nothing selected',
-                    buttonWidth: '100%',
-                    maxHeight: 300
-                });
-
-                $('#appointment').multiselect({
-                    includeSelectAllOption: true,
-                    nonSelectedText: 'Nothing selected',
-                    buttonWidth: '100%',
-                    maxHeight: 300
-                });
-                $('#users').multiselect({
-                    includeSelectAllOption: true,
-                    nonSelectedText: 'Nothing selected',
-                    buttonWidth: '100%',
-                    maxHeight: 300
-                });
-                $('#role').multiselect({
-                    includeSelectAllOption: true,
-                    nonSelectedText: 'Nothing selected',
-                    buttonWidth: '100%',
-                    maxHeight: 300
-                });
-
-                $('#authorization').multiselect({
-                    includeSelectAllOption: true,
-                    nonSelectedText: 'Nothing selected',
-                    buttonWidth: '100%',
-                    maxHeight: 300
-                });
-                $('#lookupfield').multiselect({
-                    includeSelectAllOption: true,
-                    nonSelectedText: 'Nothing selected',
-                    buttonWidth: '100%',
-                    maxHeight: 300
-                });
-
-                $('#formscheduling').multiselect({
-                    includeSelectAllOption: true,
-                    nonSelectedText: 'Nothing selected',
-                    buttonWidth: '100%',
-                    maxHeight: 300
-                });
-
-                $('#potientialpatient').multiselect({
-                    includeSelectAllOption: true,
-                    nonSelectedText: 'Nothing selected',
-                    buttonWidth: '100%',
-                    maxHeight: 300
-                });
-                $('#notes').multiselect({
-                    includeSelectAllOption: true,
-                    nonSelectedText: 'Nothing selected',
-                    buttonWidth: '100%',
-                    maxHeight: 300
-                });
-
-                $("#housing").closest('div').find('label').append('<span></span>');
-                $("#financial").closest('div').find('label').append('<span></span>');
-                $("#employment").closest('div').find('label').append('<span></span>');
-                $("#communication").closest('div').find('label').append('<span></span>');
-                $("#social").closest('div').find('label').append('<span></span>');
-                $("#legal").closest('div').find('label').append('<span></span>');
-                $("#substance").closest('div').find('label').append('<span></span>');
-                $("#mental").closest('div').find('label').append('<span></span>');
-                $("#foodaccess").closest('div').find('label').append('<span></span>');
-                $("#program").closest('div').find('label').append('<span></span>');
-                $("#appointment").closest('div').find('label').append('<span></span>');
-                $("#users").closest('div').find('label').append('<span></span>');
-                $("#role").closest('div').find('label').append('<span></span>');
-                $("#authorization").closest('div').find('label').append('<span></span>');
-                $("#lookupfield").closest('div').find('label').append('<span></span>');
-                $("#formscheduling").closest('div').find('label').append('<span></span>');
-                $("#potientialpatient").closest('div').find('label').append('<span></span>');
-                $("#notes").closest('div').find('label').append('<span></span>');
             });
 
-
-
-
-                 function savePermission() {
-                   var model = {
-                 "RoleName": $("#rolename").val(),
-                 "Description": $("#description").val(),
-                 "CreatedBy": @Session["userid"].ToString(),
-                 "ModifiedBy":@Session["userid"].ToString(),
-                 "CreatedDate": new Date(),
-                 "ModifiedDate": new Date()
-
-             };
-             $.ajax({
-                 type: "POST",
-                 url: Apipath + '/api/PatientMain/adduserrole',
-                 data: JSON.stringify(model),
-                 contentType: 'application/json; charset=UTF-8',
-                 dataType: "json",
-                 success: function (result) {
-
-                     if (result != '') {
-
-                         $("#hdnRoleid").html(result);
-
-
-
-                     }
-                     else {
-                         toastr.error("Error while adding role");
-                     }
-                 },
-                 complete: function () {
-
-                            var roleid = parseInt($("#hdnRoleid").html());
-                             var userid = parseInt(@Session["userid"].ToString());
-                           var permissionModel = [
-                            { RoleID: roleid, ModuleID: 1, ModuleName: 'Housing', CreatedBy: userid,CreatedDate: new Date(), ModifiedBy:userid,ModifiedDate: new Date() },
-                            { RoleID: roleid, ModuleID: 2, ModuleName: 'Financial Security',  CreatedBy:userid,CreatedDate: new Date(), ModifiedBy:userid,ModifiedDate: new Date() },
-                            { RoleID: roleid, ModuleID: 3, ModuleName: 'Employment/Education',  CreatedBy:userid,CreatedDate: new Date(), ModifiedBy:userid,ModifiedDate: new Date() },
-                            { RoleID: roleid, ModuleID: 4, ModuleName: 'Communication & Mobility', CreatedBy:userid,CreatedDate: new Date(), ModifiedBy:userid,ModifiedDate: new Date() },
-                            { RoleID: roleid, ModuleID: 5, ModuleName: 'Social Supports and Safety', CreatedBy:userid,CreatedDate: new Date(), ModifiedBy:userid,ModifiedDate: new Date() },
-                            { RoleID: roleid, ModuleID: 6, ModuleName: 'Legal Status', CreatedBy:userid,CreatedDate: new Date(), ModifiedBy:userid,ModifiedDate: new Date() },
-                            { RoleID: roleid, ModuleID: 7, ModuleName: 'Substance Use', CreatedBy:userid,CreatedDate: new Date(), ModifiedBy:userid,ModifiedDate: new Date() },
-                            { RoleID: roleid, ModuleID: 8, ModuleName: 'Mental Health', CreatedBy:userid,CreatedDate: new Date(), ModifiedBy:userid,ModifiedDate: new Date() },
-                            { RoleID: roleid, ModuleID: 9, ModuleName: 'Food Access', CreatedBy:userid,CreatedDate: new Date(), ModifiedBy:userid,ModifiedDate: new Date() },
-                            { RoleID: roleid, ModuleID: 10, ModuleName: 'Programs', CreatedBy: userid, CreatedDate: new Date(), ModifiedBy: userid, ModifiedDate: new Date() },
-                            { RoleID: roleid, ModuleID: 11, ModuleName: 'Appointment', CreatedBy: userid, CreatedDate: new Date(), ModifiedBy: userid, ModifiedDate: new Date() },
-                            { RoleID: roleid, ModuleID: 12, ModuleName: 'Users', CreatedBy: userid, CreatedDate: new Date(), ModifiedBy: userid, ModifiedDate: new Date() },
-                            { RoleID: roleid, ModuleID: 13, ModuleName: 'Roles/Permission', CreatedBy: userid, CreatedDate: new Date(), ModifiedBy: userid, ModifiedDate: new Date() },
-                    
-                            { RoleID: roleid, ModuleID: 14, ModuleName: 'Authorization', CreatedBy: userid, CreatedDate: new Date(), ModifiedBy: userid, ModifiedDate: new Date() },
-                            { RoleID: roleid, ModuleID: 15, ModuleName: 'Lookup Field', CreatedBy: userid, CreatedDate: new Date(), ModifiedBy: userid, ModifiedDate: new Date() },
-                            { RoleID: roleid, ModuleID: 16, ModuleName: 'Form Scheduling', CreatedBy: userid, CreatedDate: new Date(), ModifiedBy: userid, ModifiedDate: new Date() },
-                            { RoleID: roleid, ModuleID: 17, ModuleName: 'Potiential Patient', CreatedBy: userid, CreatedDate: new Date(), ModifiedBy: userid, ModifiedDate: new Date() },
-                            { RoleID: roleid, ModuleID: 18, ModuleName: 'Notes', CreatedBy: userid, CreatedDate: new Date(), ModifiedBy: userid, ModifiedDate: new Date() }
-
-
-
-            ];
-                            if ($("#housing").val().length == 0 && $("#financial").val().length == 0 && $("#employment").val().length == 0 && $("#communication").val().length == 0
-                                && $("#social").val().length == 0 && $("#legal").val().length == 0 && $("#substance").val().length == 0 && $("#mental").val().length == 0 && $("#foodaccess").val().length == 0 && $("#program").val().length == 0) {
-                                toastr.error("Please select atleast one module");
-                            } else {
-
-
-                                permissionModel[0].CanCreate = (($("#housing").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[0].CanUpdate = (($("#housing").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[0].CanDelete = (($("#housing").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[0].CanList = (($("#housing").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[1].CanCreate = (($("#financial").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[1].CanUpdate = (($("#financial").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[1].CanDelete = (($("#financial").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[1].CanList = (($("#financial").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[2].CanCreate = (($("#employment").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[2].CanUpdate = (($("#employment").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[2].CanDelete = (($("#employment").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[2].CanList = (($("#employment").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[3].CanCreate = (($("#communication").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[3].CanUpdate = (($("#communication").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[3].CanDelete = (($("#communication").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[3].CanList = (($("#communication").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[4].CanCreate = (($("#social").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[4].CanUpdate = (($("#social").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[4].CanDelete = (($("#social").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[4].CanList = (($("#social").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[5].CanCreate = (($("#legal").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[5].CanUpdate = (($("#legal").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[5].CanDelete = (($("#legal").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[5].CanList = (($("#legal").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[6].CanCreate = (($("#substance").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[6].CanUpdate = (($("#substance").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[6].CanDelete = (($("#substance").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[6].CanList = (($("#substance").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[7].CanCreate = (($("#mental").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[7].CanUpdate = (($("#mental").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[7].CanDelete = (($("#mental").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[7].CanList = (($("#mental").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[8].CanCreate = (($("#foodaccess").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[8].CanUpdate = (($("#foodaccess").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[8].CanDelete = (($("#foodaccess").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[8].CanList = (($("#foodaccess").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[9].CanCreate = (($("#program").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[9].CanUpdate = (($("#program").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[9].CanDelete = (($("#program").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[9].CanList = (($("#program").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[10].CanCreate = (($("#appointment").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[10].CanUpdate = (($("#appointment").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[10].CanDelete = (($("#appointment").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[10].CanList = (($("#appointment").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[11].CanCreate = (($("#users").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[11].CanUpdate = (($("#users").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[11].CanDelete = (($("#users").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[11].CanList = (($("#users").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[12].CanCreate = (($("#role").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[12].CanUpdate = (($("#role").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[12].CanDelete = (($("#role").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[12].CanList = (($("#role").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[13].CanCreate = (($("#authorization").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[13].CanUpdate = (($("#authorization").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[13].CanDelete = (($("#authorization").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[13].CanList = (($("#authorization").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[14].CanCreate = (($("#lookupfield").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[14].CanUpdate = (($("#lookupfield").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[14].CanDelete = (($("#lookupfield").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[14].CanList = (($("#lookupfield").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[15].CanCreate = (($("#formscheduling").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[15].CanUpdate = (($("#formscheduling").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[15].CanDelete = (($("#formscheduling").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[15].CanList = (($("#formscheduling").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[16].CanCreate = (($("#potientialpatient").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[16].CanUpdate = (($("#potientialpatient").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[16].CanDelete = (($("#potientialpatient").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[16].CanList = (($("#potientialpatient").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[17].CanCreate = (($("#notes").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[17].CanUpdate = (($("#notes").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[17].CanDelete = (($("#notes").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[17].CanList = (($("#notes").val().indexOf('4') != -1) ? 1 : 0);
-                                $.ajax({
-                                    type: "POST",
-                                    url: Apipath + '/api/PatientMain/addrolepermission',
-                                    data: JSON.stringify(permissionModel),
-                                    contentType: 'application/json; charset=UTF-8',
-                                    dataType: "json",
-                                    success: function (result) {
-                                        if (result != '') {
-                                            toastr.success("Role/Permission addedd successfully");
-                                            ResetModal();
-                                            updateRoleList();
-                                            $("#addRoleModal").modal('hide');
-
-
-                                        }
-                                        else {
-                                            toastr.error("Error while adding Permission");
-                                        }
-                                    },
-                                    error: function () {
-
-                                        toastr.error("Error while adding Permission");
-                                    }
-                                });
-                            }
-                 },
-                 error: function () {
-
-                     toastr.error("Error while adding role");
-                 }
-             });
-
-
-
-            }
-
-            function updatePermission() {
-                var userid = parseInt(@Session["userid"].ToString());
-
-                            var roleid = parseInt($("#hdnRoleid").html());
-                            var permissionModel = [
-                                {PermissionID: parseInt($("#housing_permid").val()), RoleID: roleid, ModuleID: 1, ModuleName: 'Housing', ModifiedBy: userid, ModifiedDate: new Date() },
-                                { PermissionID: parseInt($("#financial_permid").val()), RoleID: roleid, ModuleID: 2, ModuleName: 'Financial Security',   ModifiedBy:userid,ModifiedDate: new Date() },
-                                { PermissionID: parseInt($("#employment_permid").val()), RoleID: roleid, ModuleID: 3, ModuleName: 'Employment/Education',  ModifiedBy:userid,ModifiedDate: new Date() },
-                                { PermissionID: parseInt($("#communication_permid").val()), RoleID: roleid, ModuleID: 4, ModuleName: 'Communication & Mobility',  ModifiedBy:userid,ModifiedDate: new Date() },
-                                { PermissionID: parseInt($("#social_permid").val()), RoleID: roleid, ModuleID: 5, ModuleName: 'Social Supports and Safety', ModifiedBy:userid,ModifiedDate: new Date() },
-                                { PermissionID: parseInt($("#legal_permid").val()), RoleID: roleid, ModuleID: 6, ModuleName: 'Legal Status',  ModifiedBy:userid,ModifiedDate: new Date() },
-                                { PermissionID: parseInt($("#substance_permid").val()), RoleID: roleid, ModuleID: 7, ModuleName: 'Substance Use',  ModifiedBy:userid,ModifiedDate: new Date() },
-                                { PermissionID: parseInt($("#mental_permid").val()), RoleID: roleid, ModuleID: 8, ModuleName: 'Mental Health', ModifiedBy:userid,ModifiedDate: new Date() },
-                                { PermissionID: parseInt($("#foodaccess_permid").val()), RoleID: roleid, ModuleID: 9, ModuleName: 'Food Access',  ModifiedBy:userid,ModifiedDate: new Date() },
-                                { PermissionID: parseInt($("#program_permid").val()), RoleID: roleid, ModuleID: 10, ModuleName: 'Programs', ModifiedBy: userid, ModifiedDate: new Date() },
-                                { PermissionID: parseInt($("#appointment_permid").val()), RoleID: roleid, ModuleID: 11, ModuleName: 'Appointment', ModifiedBy: userid, ModifiedDate: new Date() },
-                                { PermissionID: parseInt($("#users_permid").val()), RoleID: roleid, ModuleID: 12, ModuleName: 'Users', ModifiedBy: userid, ModifiedDate: new Date() },
-                                { PermissionID: parseInt($("#role_permid").val()), RoleID: roleid, ModuleID: 13, ModuleName: 'Roles/Permission', ModifiedBy: userid, ModifiedDate: new Date() },
-
-                                { PermissionID: parseInt($("#authorization_permid").val()), RoleID: roleid, ModuleID: 14, ModuleName: 'Authorization', ModifiedBy: userid, ModifiedDate: new Date() },
-                                { PermissionID: parseInt($("#lookupfield_permid").val()), RoleID: roleid, ModuleID: 15, ModuleName: 'Lookup Field', ModifiedBy: userid, ModifiedDate: new Date() },
-                                { PermissionID: parseInt($("#formscheduling_permid").val()), RoleID: roleid, ModuleID: 16, ModuleName: 'Form Scheduling', ModifiedBy: userid, ModifiedDate: new Date() },
-                                { PermissionID: parseInt($("#potientialpatient_permid").val()), RoleID: roleid, ModuleID: 17, ModuleName: 'Potiential Patient', ModifiedBy: userid, ModifiedDate: new Date() },
-                                { PermissionID: parseInt($("#notes_permid").val()), RoleID: roleid, ModuleID: 18, ModuleName: 'Notes', ModifiedBy: userid, ModifiedDate: new Date() }
-
-
-            ];
-                            if ($("#housing").val().length == 0 && $("#financial").val().length == 0 && $("#employment").val().length == 0 && $("#communication").val().length == 0
-                                && $("#social").val().length == 0 && $("#legal").val().length == 0 && $("#substance").val().length == 0 && $("#mental").val().length == 0 && $("#foodaccess").val().length == 0 && $("#program").val().length == 0) {
-                                toastr.error("Please select atleast one module");
-                            } else {
-
-
-                                permissionModel[0].CanCreate = (($("#housing").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[0].CanUpdate = (($("#housing").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[0].CanDelete = (($("#housing").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[0].CanList = (($("#housing").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[1].CanCreate = (($("#financial").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[1].CanUpdate = (($("#financial").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[1].CanDelete = (($("#financial").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[1].CanList = (($("#financial").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[2].CanCreate = (($("#employment").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[2].CanUpdate = (($("#employment").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[2].CanDelete = (($("#employment").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[2].CanList = (($("#employment").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[3].CanCreate = (($("#communication").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[3].CanUpdate = (($("#communication").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[3].CanDelete = (($("#communication").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[3].CanList = (($("#communication").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[4].CanCreate = (($("#social").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[4].CanUpdate = (($("#social").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[4].CanDelete = (($("#social").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[4].CanList = (($("#social").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[5].CanCreate = (($("#legal").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[5].CanUpdate = (($("#legal").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[5].CanDelete = (($("#legal").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[5].CanList = (($("#legal").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[6].CanCreate = (($("#substance").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[6].CanUpdate = (($("#substance").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[6].CanDelete = (($("#substance").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[6].CanList = (($("#substance").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[7].CanCreate = (($("#mental").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[7].CanUpdate = (($("#mental").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[7].CanDelete = (($("#mental").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[7].CanList = (($("#mental").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[8].CanCreate = (($("#foodaccess").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[8].CanUpdate = (($("#foodaccess").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[8].CanDelete = (($("#foodaccess").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[8].CanList = (($("#foodaccess").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[9].CanCreate = (($("#program").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[9].CanUpdate = (($("#program").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[9].CanDelete = (($("#program").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[9].CanList = (($("#program").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[10].CanCreate = (($("#appointment").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[10].CanUpdate = (($("#appointment").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[10].CanDelete = (($("#appointment").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[10].CanList = (($("#appointment").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[11].CanCreate = (($("#users").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[11].CanUpdate = (($("#users").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[11].CanDelete = (($("#users").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[11].CanList = (($("#users").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[12].CanCreate = (($("#role").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[12].CanUpdate = (($("#role").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[12].CanDelete = (($("#role").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[12].CanList = (($("#role").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[13].CanCreate = (($("#authorization").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[13].CanUpdate = (($("#authorization").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[13].CanDelete = (($("#authorization").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[13].CanList = (($("#authorization").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[14].CanCreate = (($("#lookupfield").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[14].CanUpdate = (($("#lookupfield").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[14].CanDelete = (($("#lookupfield").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[14].CanList = (($("#lookupfield").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[15].CanCreate = (($("#formscheduling").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[15].CanUpdate = (($("#formscheduling").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[15].CanDelete = (($("#formscheduling").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[15].CanList = (($("#formscheduling").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[16].CanCreate = (($("#potientialpatient").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[16].CanUpdate = (($("#potientialpatient").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[16].CanDelete = (($("#potientialpatient").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[16].CanList = (($("#potientialpatient").val().indexOf('4') != -1) ? 1 : 0);
-
-                                permissionModel[17].CanCreate = (($("#notes").val().indexOf('1') != -1) ? 1 : 0);
-                                permissionModel[17].CanUpdate = (($("#notes").val().indexOf('2') != -1) ? 1 : 0);
-                                permissionModel[17].CanDelete = (($("#notes").val().indexOf('3') != -1) ? 1 : 0);
-                                permissionModel[17].CanList = (($("#notes").val().indexOf('4') != -1) ? 1 : 0);
-                                $.ajax({
-                                    type: "POST",
-                                    url: Apipath + '/api/PatientMain/addrolepermission',
-                                    data: JSON.stringify(permissionModel),
-                                    contentType: 'application/json; charset=UTF-8',
-                                    dataType: "json",
-                                    success: function (result) {
-                                        if (result != '') {
-                                            toastr.success("Permission updated successfully");
-                                            ResetModal();
-                                            updateRoleList();
-                                            $("#addRoleModal").modal('hide');
-                                           
-
-                                        }
-                                        else {
-                                            toastr.error("Error while updating Permission");
-                                        }
-                                    },
-                                    error: function () {
-
-                                        toastr.error("Error while updating Permission");
-                                    }
-                                });
-                            }
-
-
-            }
-
-
+            $('#PermissionAdmin-tab').click(function () {
+                var roleId = $("#hdnRoleid").html();
+                $.ajax({
+                    type: "Get",
+                    url: '/Account/GetRolePermissionsByRoleId?roleId=' + roleId,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "html",
+                    beforeSend: function () {
+                        _Loader.StartLoader()
+                    },
+                    success: function (data) {
+                            $('#PermissionAdmin .ProfileContent').html('');
+                            $('#PermissionAdmin .ProfileContent').html(data)
+                            $("#addRoleModal").modal('show');
+
+
+                    },
+                    error: function (e) {
+                        _Loader.StopLoader()
+
+                    },
+                    complete: function () {
+                        _Loader.StopLoader()
+                    }
+                });
+
+            })
 
 
             function Remove(id) {
@@ -987,322 +287,67 @@
                     });
                 }
             }
-                        function ShowEdit(id) {
 
-                            $.ajax({
-                                type: "Get",
-                                url: Apipath+'/api/PatientMain/getrolebyid?roleid='+id,
-                                contentType: 'application/json; charset=UTF-8',
-                                dataType: "json",
-                                success: function (result) {
+            function ShowEdit(id) {
 
-                                    if (result != undefined || result != null) {
-                                        $("#saveroleOnly").attr('hidden', 'hidden');
-                                        $("#updateroleOnly").removeAttr('hidden');
-                                        $("#savepermission").attr('hidden', 'hidden');
-                                        $("#updatepermission").removeAttr('hidden');
-                                        //$("#editSection").html('');
-                                        //$("#editSection").html(result);
-                                        //$("#editRoleModal").modal('show');
-                                       
-                                        $("#hdnRoleid").html(result.RoleID);
-                                        $("#rolename").val(result.RoleName);
-                                        $("#description").val(result.Description);
+                $.ajax({
+                    type: "Get",
+                    url: Apipath + '/api/PatientMain/getrolebyid?roleid=' + id,
+                    contentType: 'application/json; charset=UTF-8',
+                    dataType: "json",
+                    success: function (result) {
 
-                                    }
-                                    else {
-                                        toastr.error("Error while adding user");
-                                    }
-                                },
-                                complete: function () {
-                                    $.ajax({
-                                        type: "Get",
-                                        url: Apipath + '/api/PatientMain/getrolepermissionbyRoleid?roleid=' + parseInt($("#hdnRoleid").html() == '' ? 0 : $("#hdnRoleid").html()),
-                                        contentType: 'application/json; charset=UTF-8',
-                                        dataType: "json",
-                                        success: function (result) {
+                        if (result != undefined || result != null) {
+                            $("#saveroleOnly").attr('hidden', 'hidden');
+                            $("#updateroleOnly").removeAttr('hidden');
+                            $("#savepermission").attr('hidden', 'hidden');
+                            $("#updatepermission").removeAttr('hidden');
+                            //$("#editSection").html('');
+                            //$("#editSection").html(result);
+                            //$("#editRoleModal").modal('show');
 
-                                            if (result.length) {
-                                                for (var i = 0; i < result.length; i++)
-                                                {
+                            $("#hdnRoleid").html(result.RoleID);
+                            $("#rolename").val(result.RoleName);
+                            $("#description").val(result.Description);
 
-                                                    switch (result[i].ModuleName) {
-                                                        case 'Housing':
-                                                            $("#housing_permid").val(result[i].PermissionID);
-                                                            var dataarray = [];
-                                                            dataarray.push(result[i].CanCreate == true ? 1 : 0);
-                                                            dataarray.push(result[i].CanUpdate == true ? 2 : 0);
-                                                            dataarray.push(result[i].CanDelete == true ? 3 : 0);
-                                                            dataarray.push(result[i].CanList == true?4:0);
-                                                            $("#housing").val(dataarray);
-                                                            $("#housing").multiselect("refresh");
-                                                            break;
-                                                        case 'Financial Security':
-                                                            $("#financial_permid").val(result[i].PermissionID);
-                                                            var dataarray = [];
-                                                            dataarray.push(result[i].CanCreate == true ? 1 : 0);
-                                                            dataarray.push(result[i].CanUpdate == true ? 2 : 0);
-                                                            dataarray.push(result[i].CanDelete == true ? 3 : 0);
-                                                            dataarray.push(result[i].CanList == true ? 4 : 0);
-                                                            $("#financial").val(dataarray);
-                                                            $("#financial").multiselect("refresh");
-                                                            break;
-                                                        case 'Employment/Education':
-                                                            $("#employment_permid").val(result[i].PermissionID);
-                                                            var dataarray = [];
-                                                            dataarray.push(result[i].CanCreate == true ? 1 : 0);
-                                                            dataarray.push(result[i].CanUpdate == true ? 2 : 0);
-                                                            dataarray.push(result[i].CanDelete == true ? 3 : 0);
-                                                            dataarray.push(result[i].CanList == true ? 4 : 0);
-                                                            $("#employment").val(dataarray);
-                                                            $("#employment").multiselect("refresh");
-                                                            break;
-                                                        case 'Communication & Mobility':
-                                                            $("#communication_permid").val(result[i].PermissionID);
-                                                            var dataarray = [];
-                                                            dataarray.push(result[i].CanCreate == true ? 1 : 0);
-                                                            dataarray.push(result[i].CanUpdate == true ? 2 : 0);
-                                                            dataarray.push(result[i].CanDelete == true ? 3 : 0);
-                                                            dataarray.push(result[i].CanList == true ? 4 : 0);
-                                                            $("#communication").val(dataarray);
-                                                            $("#communication").multiselect("refresh");
-                                                            break;
-                                                        case 'Social Supports and Safety':
-                                                            $("#social_permid").val(result[i].PermissionID);
-                                                            var dataarray = [];
-                                                            dataarray.push(result[i].CanCreate == true ? 1 : 0);
-                                                            dataarray.push(result[i].CanUpdate == true ? 2 : 0);
-                                                            dataarray.push(result[i].CanDelete == true ? 3 : 0);
-                                                            dataarray.push(result[i].CanList == true ? 4 : 0);
-                                                            $("#social").val(dataarray);
-                                                            $("#social").multiselect("refresh");
-                                                            break;
-                                                        case 'Legal Status':
-                                                            $("#legal_permid").val(result[i].PermissionID);
-                                                            var dataarray = [];
-                                                            dataarray.push(result[i].CanCreate == true ? 1 : 0);
-                                                            dataarray.push(result[i].CanUpdate == true ? 2 : 0);
-                                                            dataarray.push(result[i].CanDelete == true ? 3 : 0);
-                                                            dataarray.push(result[i].CanList == true ? 4 : 0);
-                                                            $("#legal").val(dataarray);
-                                                            $("#legal").multiselect("refresh");
-                                                            break;
-                                                        case 'Substance Use':
-                                                            $("#substance_permid").val(result[i].PermissionID);
-                                                            var dataarray = [];
-                                                            dataarray.push(result[i].CanCreate == true ? 1 : 0);
-                                                            dataarray.push(result[i].CanUpdate == true ? 2 : 0);
-                                                            dataarray.push(result[i].CanDelete == true ? 3 : 0);
-                                                            dataarray.push(result[i].CanList == true ? 4 : 0);
-                                                            $("#substance").val(dataarray);
-                                                            $("#substance").multiselect("refresh");
-                                                            break;
-                                                        case 'Mental Health':
-                                                            $("#mental_permid").val(result[i].PermissionID);
-                                                            var dataarray = [];
-                                                            dataarray.push(result[i].CanCreate == true ? 1 : 0);
-                                                            dataarray.push(result[i].CanUpdate == true ? 2 : 0);
-                                                            dataarray.push(result[i].CanDelete == true ? 3 : 0);
-                                                            dataarray.push(result[i].CanList == true ? 4 : 0);
-                                                            $("#mental").val(dataarray);
-                                                            $("#mental").multiselect("refresh");
-                                                            break;
-                                                        case 'Food Access':
-                                                            $("#foodaccess_permid").val(result[i].PermissionID);
-                                                            var dataarray = [];
-                                                            dataarray.push(result[i].CanCreate == true ? 1 : 0);
-                                                            dataarray.push(result[i].CanUpdate == true ? 2 : 0);
-                                                            dataarray.push(result[i].CanDelete == true ? 3 : 0);
-                                                            dataarray.push(result[i].CanList == true ? 4 : 0);
-                                                            $("#foodaccess").val(dataarray);
-                                                            $("#foodaccess").multiselect("refresh");
-                                                            break;
-                                                        case 'Programs':
-                                                            $("#program_permid").val(result[i].PermissionID);
-                                                            var dataarray = [];
-                                                            dataarray.push(result[i].CanCreate == true ? 1 : 0);
-                                                            dataarray.push(result[i].CanUpdate == true ? 2 : 0);
-                                                            dataarray.push(result[i].CanDelete == true ? 3 : 0);
-                                                            dataarray.push(result[i].CanList == true ? 4 : 0);
-                                                            $("#program").val(dataarray);
-                                                            $("#program").multiselect("refresh");
-                                                            break;
-                                                        case 'Appointment':
-                                                            $("#appointment_permid").val(result[i].PermissionID);
-                                                            var dataarray = [];
-                                                            dataarray.push(result[i].CanCreate == true ? 1 : 0);
-                                                            dataarray.push(result[i].CanUpdate == true ? 2 : 0);
-                                                            dataarray.push(result[i].CanDelete == true ? 3 : 0);
-                                                            dataarray.push(result[i].CanList == true ? 4 : 0);
-                                                            $("#appointment").val(dataarray);
-                                                            $("#appointment").multiselect("refresh");
-                                                            break;
-                                                        case 'Users':
-                                                            $("#users_permid").val(result[i].PermissionID);
-                                                            var dataarray = [];
-                                                            dataarray.push(result[i].CanCreate == true ? 1 : 0);
-                                                            dataarray.push(result[i].CanUpdate == true ? 2 : 0);
-                                                            dataarray.push(result[i].CanDelete == true ? 3 : 0);
-                                                            dataarray.push(result[i].CanList == true ? 4 : 0);
-                                                            $("#users").val(dataarray);
-                                                            $("#users").multiselect("refresh");
-                                                            break;
-                                                        case 'Roles/Permission':
-                                                            $("#role_permid").val(result[i].PermissionID);
-                                                            var dataarray = [];
-                                                            dataarray.push(result[i].CanCreate == true ? 1 : 0);
-                                                            dataarray.push(result[i].CanUpdate == true ? 2 : 0);
-                                                            dataarray.push(result[i].CanDelete == true ? 3 : 0);
-                                                            dataarray.push(result[i].CanList == true ? 4 : 0);
-                                                            $("#role").val(dataarray);
-                                                            $("#role").multiselect("refresh");
-                                                            break;
-
-                                                        case 'Authorization':
-                                                            $("#authorization_permid").val(result[i].PermissionID);
-                                                            var dataarray = [];
-                                                            dataarray.push(result[i].CanCreate == true ? 1 : 0);
-                                                            dataarray.push(result[i].CanUpdate == true ? 2 : 0);
-                                                            dataarray.push(result[i].CanDelete == true ? 3 : 0);
-                                                            dataarray.push(result[i].CanList == true ? 4 : 0);
-                                                            $("#authorization").val(dataarray);
-                                                            $("#authorization").multiselect("refresh");
-                                                            break;
-                                                        case 'Lookup Field':
-                                                            $("#lookupfield_permid").val(result[i].PermissionID);
-                                                            var dataarray = [];
-                                                            dataarray.push(result[i].CanCreate == true ? 1 : 0);
-                                                            dataarray.push(result[i].CanUpdate == true ? 2 : 0);
-                                                            dataarray.push(result[i].CanDelete == true ? 3 : 0);
-                                                            dataarray.push(result[i].CanList == true ? 4 : 0);
-                                                            $("#lookupfield").val(dataarray);
-                                                            $("#lookupfield").multiselect("refresh");
-                                                            break;
-                                                        case 'Form Scheduling':
-                                                            $("#formscheduling_permid").val(result[i].PermissionID);
-                                                            var dataarray = [];
-                                                            dataarray.push(result[i].CanCreate == true ? 1 : 0);
-                                                            dataarray.push(result[i].CanUpdate == true ? 2 : 0);
-                                                            dataarray.push(result[i].CanDelete == true ? 3 : 0);
-                                                            dataarray.push(result[i].CanList == true ? 4 : 0);
-                                                            $("#formscheduling").val(dataarray);
-                                                            $("#formscheduling").multiselect("refresh");
-                                                            break;
-                                                        case 'Potiential Patient':
-                                                            $("#potientialpatient_permid").val(result[i].PermissionID);
-                                                            var dataarray = [];
-                                                            dataarray.push(result[i].CanCreate == true ? 1 : 0);
-                                                            dataarray.push(result[i].CanUpdate == true ? 2 : 0);
-                                                            dataarray.push(result[i].CanDelete == true ? 3 : 0);
-                                                            dataarray.push(result[i].CanList == true ? 4 : 0);
-                                                            $("#potientialpatient").val(dataarray);
-                                                            $("#potientialpatient").multiselect("refresh");
-                                                            break;
-                                                        case 'Notes':
-                                                            $("#notes_permid").val(result[i].PermissionID);
-                                                            var dataarray = [];
-                                                            dataarray.push(result[i].CanCreate == true ? 1 : 0);
-                                                            dataarray.push(result[i].CanUpdate == true ? 2 : 0);
-                                                            dataarray.push(result[i].CanDelete == true ? 3 : 0);
-                                                            dataarray.push(result[i].CanList == true ? 4 : 0);
-                                                            $("#notes").val(dataarray);
-                                                            $("#notes").multiselect("refresh");
-                                                            break;
-                                                    }
-                                                }
-                                                $('#PermissionAdmin-tab').attr("data-toggle", "tab");
-                                                $('#PermissionAdmin-tab').removeClass("disabled-li1");
-                                                $("#ProfileAdmin").addClass("active show");
-                                                $("#ProfileAdmin-tab").addClass("active show");
-                                                $("#PermissionAdmin").removeClass("active show");
-                                                $("#PermissionAdmin-tab").removeClass("active show");
-                                                $("#addRoleModal").modal('show');
-                                            } else {
-                                                $('#PermissionAdmin-tab').attr("data-toggle", "tab");
-                                                $('#PermissionAdmin-tab').removeClass("disabled-li1");
-                                                $("#ProfileAdmin").addClass("active show");
-                                                $("#ProfileAdmin-tab").addClass("active show");
-                                                $("#PermissionAdmin").removeClass("active show");
-                                                $("#PermissionAdmin-tab").removeClass("active show");
-
-                                                $("#housing").multiselect("clearSelection");
-                                                $("#housing").multiselect('refresh');
-
-                                                $("#financial").multiselect("clearSelection");
-                                                $("#financial").multiselect('refresh');
-
-                                                $("#employment").multiselect("clearSelection");
-                                                $("#employment").multiselect('refresh');
-
-                                                $("#communication").multiselect("clearSelection");
-                                                $("#communication").multiselect('refresh');
-
-                                                $("#social").multiselect("clearSelection");
-                                                $("#social").multiselect('refresh');
-
-                                                $("#legal").multiselect("clearSelection");
-                                                $("#legal").multiselect('refresh');
-
-                                                $("#substance").multiselect("clearSelection");
-                                                $("#substance").multiselect('refresh');
-
-                                                $("#mental").multiselect("clearSelection");
-                                                $("#mental").multiselect('refresh');
-
-                                                $("#foodaccess").multiselect("clearSelection");
-                                                $("#foodaccess").multiselect('refresh');
-
-                                                $("#program").multiselect("clearSelection");
-                                                $("#program").multiselect('refresh');
-
-                                                $("#appointment").multiselect("clearSelection");
-                                                $("#appointment").multiselect('refresh');
-
-                                                $("#users").multiselect("clearSelection");
-                                                $("#users").multiselect('refresh');
-
-                                                $("#role").multiselect("clearSelection");
-                                                $("#role").multiselect('refresh');
-
-                                                $("#authorization").multiselect("clearSelection");
-                                                $("#authorization").multiselect('refresh');
-                                                $("#lookupfield").multiselect("clearSelection");
-                                                $("#lookupfield").multiselect('refresh');
-                                                $("#formscheduling").multiselect("clearSelection");
-                                                $("#formscheduling").multiselect('refresh');
-                                                $("#potientialpatient").multiselect("clearSelection");
-                                                $("#potientialpatient").multiselect('refresh');
-                                                $("#notes").multiselect("clearSelection");
-                                                $("#notes").multiselect('refresh');
-
-                                                $("#addRoleModal").modal('show');
-                                            }
-
-                                        }
-                                    });
-                                },
-                                error: function () {
-
-                                    toastr.error("Error while adding user");
-                                }
-                            });
                         }
+                        else {
+                            toastr.error("Error while adding user");
+                        }
+                        $('#PermissionAdmin-tab').attr("data-toggle", "tab");
+                        $('#PermissionAdmin-tab').removeClass("disabled-li1");
+                        $("#ProfileAdmin").addClass("active show");
+                        $("#ProfileAdmin-tab").addClass("active show");
+                        $("#PermissionAdmin").removeClass("active show");
+                        $("#PermissionAdmin-tab").removeClass("active show");
+                        $("#addRoleModal").modal('show');
 
-                        function AddRoleModalClose() {
+                    },
+                    complete: function () {
+
+                    },
+                    error: function () {
+
+                        toastr.error("Error while adding user");
+                    }
+                });
+            }
+
+            function AddRoleModalClose() {
                             $("#rolename").val('');
                             $("#description").val('');
                             $('#rolename').removeClass("invalid-field");
                             $("#addRoleModal").modal('hide');
                         }
 
+            function SaveRole() {
 
-
-                        function SaveRole() {
-
-             if ($("#rolename").val().trim() == '') {
+                if ($("#rolename").val().trim() == '')
+                {
                  toastr.error("Role name is required");
                  return false;
-                            }
+                }
+
              if ($('#rolename').val().trim() != '') {
                  $.ajax({
                      type: "GET",
@@ -1318,14 +363,50 @@
                              return false;
 
 
-                         } else {
-                             $('#rolename').removeClass("invalid-field");
-                             $('#PermissionAdmin-tab').attr("data-toggle", "tab");
-                             $('#PermissionAdmin-tab').removeClass("disabled-li1");
-                             $("#ProfileAdmin").removeClass("active show");
-                             $("#ProfileAdmin-tab").removeClass("active show");
-                             $("#PermissionAdmin").addClass("active show");
-                             $("#PermissionAdmin-tab").addClass("active show");
+                         }
+                         else
+                         {
+
+                                    var model = {
+                                            "RoleName": $("#rolename").val(),
+                                            "Description": $("#description").val(),
+                                            "CreatedBy": @Session["userid"].ToString(),
+                                            "ModifiedBy":@Session["userid"].ToString(),
+                                            "CreatedDate": new Date(),
+                                            "ModifiedDate": new Date()
+
+                                    };
+
+                                     $.ajax({
+                                         type: "POST",
+                                         url: Apipath + '/api/PatientMain/adduserrole',
+                                         data: JSON.stringify(model),
+                                         contentType: 'application/json; charset=UTF-8',
+                                         dataType: "json",
+                                         success: function (result) {
+
+                                             if (result != '') {
+
+                                                 $("#hdnRoleid").html(result);
+                                                 $('#PermissionAdmin-tab').click();
+
+                                                 $('#rolename').removeClass("invalid-field");
+                                                 $('#PermissionAdmin-tab').attr("data-toggle", "tab");
+                                                 $('#PermissionAdmin-tab').removeClass("disabled-li1");
+                                                 $("#ProfileAdmin").removeClass("active show");
+                                                 $("#ProfileAdmin-tab").removeClass("active show");
+                                                 $("#PermissionAdmin").addClass("active show");
+                                                 $("#PermissionAdmin-tab").addClass("active show");
+                                             }
+                                             else {
+                                                 toastr.error("Error while adding role");
+                                             }
+                                         },
+                                         error: function () {
+
+                                             toastr.error("Error while adding role");
+                                         }
+                                     });
 
                          }
 
@@ -1340,14 +421,15 @@
 
              }
 
-        }
-                        function UpdateRole() {
+            }
+
+            function UpdateRole() {
 
 
                         if ($("#rolename").val().trim() == '') {
-                 toastr.error("Role name is required");
-                 return false;
-                            }
+                             toastr.error("Role name is required");
+                             return false;
+                        }
 
                         if ($('#rolename').val().trim() != '') {
                             $.ajax({
@@ -1367,42 +449,43 @@
                                     } else {
 
                                         $('#rolename').removeClass("invalid-field");
-                        var model = {
-                 "RoleID": parseInt($("#hdnRoleid").html()),
-                 "RoleName": $("#rolename").val(),
-                 "Description": $("#description").val(),
-                 "ModifiedBy":@Session["userid"].ToString(),
-                 "ModifiedDate": new Date()
+                                                    var model = {
+                                             "RoleID": parseInt($("#hdnRoleid").html()),
+                                             "RoleName": $("#rolename").val(),
+                                             "Description": $("#description").val(),
+                                             "ModifiedBy":@Session["userid"].ToString(),
+                                             "ModifiedDate": new Date()
 
-             };
-             $.ajax({
-                 type: "POST",
-                 url: Apipath + '/api/PatientMain/adduserrole',
-                 data: JSON.stringify(model),
-                 contentType: 'application/json; charset=UTF-8',
-                 dataType: "json",
-                 success: function (result) {
-                     if (result != '') {
+                                         };
+                                         $.ajax({
+                                             type: "POST",
+                                             url: Apipath + '/api/PatientMain/adduserrole',
+                                             data: JSON.stringify(model),
+                                             contentType: 'application/json; charset=UTF-8',
+                                             dataType: "json",
+                                             success: function (result) {
+                                                 if (result != '') {
 
-                         $("#ProfileAdmin").removeClass("active show");
-                         $("#PermissionAdmin").addClass("active show");
-                         $("#ProfileAdmin-tab").removeClass("active show");
-                         $("#PermissionAdmin-tab").addClass("active show");
-                         toastr.success("Role updated successfully");
+                                                     $("#ProfileAdmin").removeClass("active show");
+                                                     $("#PermissionAdmin").addClass("active show");
+                                                     $("#ProfileAdmin-tab").removeClass("active show");
+                                                     $("#PermissionAdmin-tab").addClass("active show");
+                                                     $('#PermissionAdmin-tab').click();
+                                                     toastr.success("Role updated successfully");
+                                                     updateRoleList();
 
 
 
+                                                 }
+                                                 else {
+                                                     toastr.error("Error while adding user");
+                                                 }
+                                             },
+                                             error: function () {
 
-                     }
-                     else {
-                         toastr.error("Error while adding user");
-                     }
-                 },
-                 error: function () {
-
-                     toastr.error("Error while adding user");
-                 }
-             });
+                                                 toastr.error("Error while adding user");
+                                             }
+                                         });
                                     }
 
 
@@ -1416,7 +499,7 @@
 
                         }
 
-         }
+             }
 
             function ResetModal() {
 
@@ -1487,6 +570,105 @@
                             $("#notes").multiselect("clearSelection");
                             $("#notes").multiselect('refresh');
 
+            }
+            // function to save role permissions
+            function SaveRolePermission() {
+
+                //----------------
+                var i = 0;
+                var permissionArray = [];
+                $.each($('.ProfileContent select'), function () {
+                    _objPermission = new Object();
+                    var hdnElem = $(this).prev();
+                    var permElem = hdnElem.prev();
+                    _objPermission.PermissionId = parseInt(permElem.val());
+
+                    if (hdnElem.hasClass("hdnClientId")) {
+                        _objPermission.ClientFormId = parseInt(hdnElem.val())
+                        _objPermission.ModuleId = 0;
+                    }
+                    else {
+                        _objPermission.ModuleId = hdnElem.val();
+                        _objPermission.ClientFormId = 0;
+                    }
+
+                    var selectedoptions = $('select#option_' + i + ' option:selected')
+                        .toArray().map(item => item.text).toString();
+
+
+
+                    var res;
+                    if (selectedoptions != undefined) {
+                        res = selectedoptions.split(",");
+                    }
+
+                    _objPermission.CanCreate = false;
+                    _objPermission.CanUpdate = false;
+                    _objPermission.CanDelete = false;
+                    _objPermission.CanList = false;
+
+                    $.each(res, function (index, value) {
+
+                        switch ($.trim(value)) {
+                            case 'Add':
+                                _objPermission.CanCreate = true;
+                                break;
+                            case 'Edit':
+                                _objPermission.CanUpdate = true;
+                                break;
+                            case 'Delete':
+                                _objPermission.CanDelete = true;
+                                break;
+                            case 'View':
+                                _objPermission.CanList = true;
+                                break;
                         }
+
+                    });
+                    permissionArray.push(_objPermission);
+                    i++;
+                });
+
+
+
+                var request = {
+                    RoleId: parseInt($("#hdnRoleid").html()),
+                    CreatedBy :parseInt(@Session["userid"].ToString()),
+                    RolePermissionsData: permissionArray
+
+                };
+
+    //----------------
+
+                $.ajax({
+                    type: "POST",
+                    url: Apipath + '/api/PatientMain/SaveUserRolePermissions',
+                    data: JSON.stringify(request),
+                    contentType: 'application/json; charset=UTF-8',
+                    dataType: "json",
+                    beforeSend: function () {
+                        _Loader.StartLoader()
+                    },
+                    success: function (result) {
+                        if (result != '') {
+                            toastr.success("Permission updated successfully");
+
+                            $("#addRoleModal").modal('hide');
+
+
+                        }
+                        else {
+                            toastr.error("Error while updating Permission");
+                        }
+                    },
+                    error: function () {
+                        _Loader.StopLoader()
+                        toastr.error("Error while updating Permission");
+                    },
+                    complete: function () {
+                        _Loader.StopLoader()
+                    }
+                });
+            }
         </script>
     }

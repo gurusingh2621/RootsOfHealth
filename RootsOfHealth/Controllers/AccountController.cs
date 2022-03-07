@@ -308,6 +308,29 @@ namespace RootsOfHealth.Controllers
             return View(UserRoles);
 
         }
+        public ActionResult GetRolePermissionsByRoleId(int? roleId)
+        {
+            List<RolePermissionsBO> permissionModel = new List<RolePermissionsBO>();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                //HTTP GET
+                var responseTask = client.GetAsync("/api/PatientMain/getrolepermissionbyRoleid?roleid="+ roleId);
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<List<RolePermissionsBO>>();
+                    readTask.Wait();
+                    permissionModel = readTask.Result;
+                    
+
+                }
+
+            }
+            return PartialView("~/Views/Shared/Role/_RolePermissionsList.cshtml", permissionModel);
+        }
         [HttpGet]
         public ActionResult UpdateRolesList()
         {
