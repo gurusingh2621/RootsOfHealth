@@ -1,4 +1,14 @@
 ﻿@model IEnumerable<RootsOfHealth.Models.PatientMainBO>
+@using RootsOfHealth.Commom;
+@using RootsOfHealth.Models;
+@{
+    var clientPerm = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["RoleId"]), Convert.ToInt32(PermissionModel.Module.Client));
+    if (clientPerm.Where(x => x.CanList == false && (x.CanCreate != true && x.CanUpdate != true && x.CanDelete != true)).Any())
+    {
+        Response.Redirect(Url.Action("Display", "Dashboard", new { }));
+
+    }
+}
 <style>
     .tableimg {
         width: 45px !important;
@@ -43,61 +53,67 @@
 
 <h2 class="mb-3">All Clients</h2>
 
-    <table id="tblPatient" class="display c_table  table table-hover table-striped table-bordered ">
-        <thead>
-            <tr class="table-active">
-                <th>Image</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Last Modify</th>
-                <th>Action</th>
-            </tr>
-        </thead>
+<table id="tblPatient" class="display c_table  table table-hover table-striped table-bordered ">
+    <thead>
+        <tr class="table-active">
+            <th>Image</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Last Modify</th>
+            <th>Action</th>
+        </tr>
+    </thead>
 
-        <tbody>
-            @foreach (var p in Model)
-            {
+    <tbody>
+        @foreach (var p in Model)
+        {
 
-                <tr onclick="OpenPatient('@p.PatientID')">
-                    <td style="width:100px" height="100px">
-                        <div class="tableimg">
-                            @if (string.IsNullOrWhiteSpace(p.PatientImg))
-                            {
-                                <img class="img-fluid" id="patientpic" src="/images/avatar.png" />
-                            }
-                            else
-                            {
-                                <img class="img-fluid" src="~/Files/@p.PatientImg" alt="">
+            <tr onclick="OpenPatient('@p.PatientID')">
+                <td style="width:100px" height="100px">
+                    <div class="tableimg">
+                        @if (string.IsNullOrWhiteSpace(p.PatientImg))
+                        {
+                            <img class="img-fluid" id="patientpic" src="/images/avatar.png" />
+                        }
+                        else
+                        {
+                            <img class="img-fluid" src="~/Files/@p.PatientImg" alt="">
 
-                            }
-                        </div>
-                    </td>
-                    <td>@p.FirstName @p.LastName</td>
-                    <td>@p.EmailAddress</td>
-                    <td>@p.CellPhone  </td>
-                    <td>@p.ModifiedDate</td>
-                    <td>
-                        @*<a href='' onclick="this.href='/Client/Info?patientid='+@p.PatientID"
-                           id="btnProfileEdit" class="btn btn-success label-fields">
-                            <i class="far fa-edit"></i>
-                            View1
-                        </a>*@
+                        }
+                    </div>
+                </td>
+                <td>@p.FirstName @p.LastName</td>
+                <td>@p.EmailAddress</td>
+                <td>@p.CellPhone  </td>
+                <td>@p.ModifiedDate</td>
+                <td>
+                    @*<a href='' onclick="this.href='/Client/Info?patientid='+@p.PatientID"
+           id="btnProfileEdit" class="btn btn-success label-fields">
+            <i class="far fa-edit"></i>
+            View1
+        </a>*@
+                    @if (clientPerm.Where(x => x.CanList == true).Any())
+                    {
                         <a href='' onclick="this.href='/Client/Info?patientid='+@p.PatientID"
                            id="btnProfileEdit" class="btn btn-success label-fields">
                             <i class="far fa-edit"></i>
                             View
                         </a>
-                        <a href='' onclick="this.href='/Client/Add?PatientID='+@p.PatientID"
-                           id="btnProfileEdit" class="btn btn-success label-fields">
-                            <i class="far fa-edit"></i>
-                            Edit
-                        </a>
+                    }
+                        @if (clientPerm.Where(x => x.CanUpdate == true).Any())
+                        {
+                            <a href='' onclick="this.href='/Client/Add?PatientID='+@p.PatientID"
+                               id="btnProfileEdit" class="btn btn-success label-fields">
+                                <i class="far fa-edit"></i>
+                                Edit
+                            </a>
+                        }
                     </td>
-                </tr>
-            }
-        </tbody>
+            </tr>
+        }
+    </tbody>
 
-    </table>
+</table>
 
 

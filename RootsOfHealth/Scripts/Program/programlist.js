@@ -24,31 +24,36 @@ function GetProgramTemplateList() {
                     
                     programs += `<tr>
                          <td width="15%">${(item.ProgramsName == null && item.IsBaseTemplate == true) ? "Base Template" : item.ProgramsName}</td>
-                         <td width="10%">${(item.IsActive == null) ? "Not Started" : (item.IsActive == 0)?"In Progress":"Completed"}</td >
+                         <td width="10%">${(item.IsActive == null) ? "Not Started" : (item.IsActive == 0) ? "In Progress" : "Completed"}</td >
                          <td width="15%">${item.ModifiedDate != null ? item.ModifiedDate.split("T")[0] : ""}</td>
-                         <td width="10%">${(item.IsActive==1 && item.IsBaseTemplate == false) ? (item.Isactivated == 1 ? "Yes" : "No") : ""}</td>
+                         <td width="10%">${(item.IsActive == 1 && item.IsBaseTemplate == false) ? (item.Isactivated == 1 ? "Yes" : "No") : ""}</td>
                             <td width="30%"><div>`;
-                    programs += `<a href="javascript:void(0)" onclick="ViewProgramContent(${item.TemplateID},\'${(item.ProgramsName == null && item.IsBaseTemplate == true) ? "Base Template" : item.ProgramsName}'\)" class="btn btn-success text-white" style="cursor:pointer;">VIEW</a>`
-                    if (item.IsBaseTemplate) {
+                    if (canViewProgram == 'True')
+                    {
+                        programs += `<a href="javascript:void(0)" onclick="ViewProgramContent(${item.TemplateID},\'${(item.ProgramsName == null && item.IsBaseTemplate == true) ? "Base Template" : item.ProgramsName}'\)" class="btn btn-success text-white" style="cursor:pointer;">VIEW</a>`
+                    }
+                    if (item.IsBaseTemplate && canMoifyProgram == 'True') {
                         ;
                         item.IsActive = item.IsActive == null ? false : true;
                         programs += `<a href="/program/ProgramBaseTemplate?templateid=${item.TemplateID}&Status=${item.IsActive}"  class="btn btn-success text-white" style="cursor:pointer;">MODIFY</a>`
 
-                    } else {                        
-                        programs += `<a href="javascript:void(0)" onclick="ProceedProgram({TemplateID:${item.TemplateID},TemplateTable:\'${item.TemplateTable}\',ProgramName:\'${item.ProgramsName}\',ProgramID:${item.ProgramID},IsBaseTemplate:${item.IsBaseTemplate}})"  class="btn btn-success text-white" style="cursor: pointer; ${item.Isactivated == true ? "display:none;" : ""} ">MODIFY</a>`
+                    } else {
+                        if (canMoifyProgram == 'True') {
+                            programs += `<a href="javascript:void(0)" onclick="ProceedProgram({TemplateID:${item.TemplateID},TemplateTable:\'${item.TemplateTable}\',ProgramName:\'${item.ProgramsName}\',ProgramID:${item.ProgramID},IsBaseTemplate:${item.IsBaseTemplate}})"  class="btn btn-success text-white" style="cursor: pointer; ${item.Isactivated == true ? "display:none;" : ""} ">MODIFY</a>`
+                        }
                     }
-                    
-                    if (item.IsActive == 1 && item.IsBaseTemplate == false) {
+
+                    if (item.IsActive == 1 && item.IsBaseTemplate == false && canMoifyProgram == 'True') {
                         if (item.Isactivated == true) {
                             programs += `<a href="javascript:void(0)"  onclick="SetTemplateStatus(${item.TemplateID},${false})"  class="btn btn-success text-white" style="cursor:pointer;">DEACTIVATE</a>`;
                         } else if (item.Isactivated == 0) {
                             programs += `<a href="javascript:void(0)" onclick="SetTemplateStatus(${item.TemplateID},${true})"  class="btn btn-success text-white" style="cursor:pointer;">ACTIVATE</a>`;
                         }
-                    } else if (item.IsActive == 0 && item.IsBaseTemplate == false){
+                    } else if (item.IsActive == 0 && item.IsBaseTemplate == false && canMoifyProgram == 'True'){
                         programs += `<a href="javascript:void(0)" onclick="alertInprogressStatus()"  class="btn btn-success text-white" style="cursor:pointer;">ACTIVATE</a>`;
                     }
 
-                    if (!item.IsBaseTemplate) {
+                    if (!item.IsBaseTemplate && canDeleteProgram == 'True') {
                         programs += `<a href="javascript:void(0)" onclick="DeleteProgram(${item.ProgramID},this)"  class="btn btn-success text-white" style="cursor:pointer;">Delete</a>`;
                     }
                  

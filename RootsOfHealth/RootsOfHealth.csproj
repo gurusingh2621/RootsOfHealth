@@ -217,6 +217,7 @@
     <Compile Include="Models\LookUpFieldBO.cs" />
     <Compile Include="Models\LookUpFieldOptionBO.cs" />
     <Compile Include="Models\LookUpOptionBO.cs" />
+    <Compile Include="Models\ModulepermissionsBO.cs" />
     <Compile Include="Models\NotesTemplateFieldBO.cs" />
     <Compile Include="Models\OUOnlyBO.cs" />
     <Compile Include="Models\PatientAllDetailByIDBO.cs" />

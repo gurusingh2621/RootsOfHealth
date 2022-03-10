@@ -28,26 +28,31 @@ function GetCarePlanTemplateList() {
                          <td width="15%">${item.ModifiedDate != null ? item.ModifiedDate.split("T")[0] : ""}</td>
                         <td width="10%">${item.IsActive && item.IsBaseTemplate == false ? item.Isactivated == 1 ? "Yes" : "No" : ""}</td>
                             <td width="30%"><div>`;
-                    careplans += `<a href="javascript:void(0)" onclick="ViewCarePlanContent(${item.TemplateID},\'${item.TemplateName}'\)" class="btn btn-success text-white" style="cursor:pointer;">VIEW</a>`
-                    if (item.IsBaseTemplate) {
+                    if (canViewCPTemplate == 'True')
+                    {
+                       careplans += `<a href="javascript:void(0)" onclick="ViewCarePlanContent(${item.TemplateID},\'${item.TemplateName}'\)" class="btn btn-success text-white" style="cursor:pointer;">VIEW</a>`
+                    }
+                    if (item.IsBaseTemplate && canEditCPTemplate == 'True') {
                         item.IsActive = item.IsActive == null ? false : item.IsActive;
                         careplans += `<a href="/careplan/BaseTemplate?templateid=${item.TemplateID}&Status=${item.IsActive}"  class="btn btn-success text-white" style="cursor:pointer;">MODIFY</a>`
 
-                    } else {                        
-                        careplans += `<a href="javascript:void(0)" onclick="Proceed({TemplateID:${item.TemplateID},TemplateName:\'${item.TemplateName}\',ProgramsID:${item.ProgramsID},IsBaseTemplate:${item.IsBaseTemplate},ProgramName:'${item.ProgramsName}',TemplateTable:'${item.TemplateTable}'})"  class="btn btn-success text-white" style="cursor: pointer; ${item.Isactivated == true ? "display:none;" : ""} ">MODIFY</a>`
+                    } else {
+                        if (canEditCPTemplate == 'True') {
+                            careplans += `<a href="javascript:void(0)" onclick="Proceed({TemplateID:${item.TemplateID},TemplateName:\'${item.TemplateName}\',ProgramsID:${item.ProgramsID},IsBaseTemplate:${item.IsBaseTemplate},ProgramName:'${item.ProgramsName}',TemplateTable:'${item.TemplateTable}'})"  class="btn btn-success text-white" style="cursor: pointer; ${item.Isactivated == true ? "display:none;" : ""} ">MODIFY</a>`
+                        }
                     }
-                    if (item.IsActive == 1 && item.IsBaseTemplate == false) {
+                    if (item.IsActive == 1 && item.IsBaseTemplate == false && canEditCPTemplate == 'True') {
                         if (item.Isactivated == true) {
                             careplans += `<a href="javascript:void(0)"  onclick="SetTemplateStatus(${item.TemplateID},${false})"  class="btn btn-success text-white" style="cursor:pointer;">DEACTIVATE</a>`;
                         } else if (item.Isactivated == 0) {
                             careplans += `<a href="javascript:void(0)" onclick="SetTemplateStatus(${item.TemplateID},${true})"  class="btn btn-success text-white" style="cursor:pointer;">ACTIVATE</a>`;
                         }
-                    } else if (item.IsActive == 0 && item.IsBaseTemplate == false){
+                    } else if (item.IsActive == 0 && item.IsBaseTemplate == false && canEditCPTemplate == 'True') {
                         careplans += `<a href="javascript:void(0)" onclick="alertInprogressStatus()"  class="btn btn-success text-white" style="cursor:pointer;">ACTIVATE</a>`;
                     }
 
 
-                    if (!item.IsBaseTemplate) {
+                    if (!item.IsBaseTemplate && canDeleteCPTemplate == 'True') {
                         careplans += `<a href="javascript:void(0)" onclick="DeleteCarePlanTemplate(${item.ProgramsID},this)"  class="btn btn-success text-white" style="cursor:pointer;">Delete</a>`;
                     }
                     careplans += `</div></td></tr>`;

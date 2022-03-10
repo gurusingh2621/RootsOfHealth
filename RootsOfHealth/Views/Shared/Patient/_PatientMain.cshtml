@@ -1,4 +1,6 @@
 ﻿@model RootsOfHealth.Models.PatientMainBO
+@using RootsOfHealth.Commom;
+
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link href="~/Content/css/jquery.timeselector.css" rel="stylesheet" />
@@ -6,13 +8,15 @@
 <link href="~/css/CareplanNeedsAndGoals.css" rel="stylesheet" />
 <link href="~/css/CarePlanSummary.css" rel="stylesheet" />
 
-@{        if (Model != null)
+@{ if (Model != null)
     {
         Model.DateOfBirth = Model.DateOfBirth == "" || Model.DateOfBirth == null ? "" : DateTime.Parse(Model.DateOfBirth).ToString("MM/dd/yyyy");
     }
 
 
-  }
+    var modulePermissions = new Common().GetMainModulesPermission(Convert.ToInt32(Session["RoleId"]));
+
+}
 
 
 <style>
@@ -319,48 +323,50 @@
                                    class="btn btn-success label-fields" data-toggle="carePlansSidebar">
                                     Care Plans<span class="careplanCount">@(Model.CareplanCount==0?"":"("+ @Model.CareplanCount.ToString()+ ")")</span>
                                 </a>
-
-                                <a href='javaScript:void(0)' onclick="LoadAppointmentsAndLocations()"
-                                   id="btnPatientAppointments" class="btn btn-success label-fields">
-                                    Appointments
-                                </a>
-
-                                <a href='javaScript:void(0)' onclick="LoadAllNotes()"
-                                   id="btnPatientNotes" class="btn btn-success label-fields">
-                                    Notes
-                                </a>
-
-                                <a href='javaScript:void(0)' onclick="ActivateTab(@Model.PatientID,'Profile-tab')"
-                                   id="btnProfileEdit" class="btn btn-success label-fields">
-                                    <i class="far fa-edit"></i>
-                                    Edit
-                                </a>
-
-
-
-                                <a style="display:none" class="btn btn-success " href="javascript:{}" id="btnaddprogram" data-toggle="modal" data-target="#myModal"><span class="add-icon"></span> Add/Remove Client Programs</a>
-                                <a href="javascript:{}" onclick="DisplayForm(@Model.PatientID,'Profile-tab')" class="btn btn-success btnDisplayProgram ">
-                                    <i class="far fa-edit"></i>
-                                    Display
-                                </a>
-                                <a tabindex="57" href="javascript:{}" style="border: 1px solid rgb(161, 161, 161); background-color: rgb(161, 161, 161);" onclick="return ProfileSave();" id="ProfileSave" class="btn btn-success btnprogramsave disabled">
-                                    <i class="far fa-save"></i>
-                                    Save
-                                </a>
-
-                                @*<a href="/Patient/Add" id="btnProfileEdit" class="btn btn-success">
-                                        <i class="far fa-edit"></i>
-                                        Edit
-                                    </a>*@
-                                @*<a href="#!" id="btnProfileCancel" class="btn btn-info" style="display: none;">
-                                        <i class="far fa-edit"></i>
-                                        Cancel
+                                @if (modulePermissions.Where(x => x.ModuleName == "Appointment" && (x.CanCreate == true || x.CanList ==true)).Any())
+                                {
+                                    <a href='javaScript:void(0)' onclick="LoadAppointmentsAndLocations()"
+                                       id="btnPatientAppointments" class="btn btn-success label-fields">
+                                        Appointments
                                     </a>
-                                    <a href="#!" id="btnProfileSave" class="btn btn-success" style="display: none;">
+                                }
+                                    <a href='javaScript:void(0)' onclick="LoadAllNotes()"
+                                       id="btnPatientNotes" class="btn btn-success label-fields">
+                                        Notes
+                                    </a>
+                                    @if (modulePermissions.Where(x => x.ModuleName == "Client" && x.CanUpdate == true).Any())
+                                    {
+                                        <a href='javaScript:void(0)' onclick="ActivateTab(@Model.PatientID,'Profile-tab')"
+                                           id="btnProfileEdit" class="btn btn-success label-fields">
+                                            <i class="far fa-edit"></i>
+                                            Edit
+                                        </a>
+                                    }
+
+
+                                    <a style="display:none" class="btn btn-success " href="javascript:{}" id="btnaddprogram" data-toggle="modal" data-target="#myModal"><span class="add-icon"></span> Add/Remove Client Programs</a>
+                                    <a href="javascript:{}" onclick="DisplayForm(@Model.PatientID,'Profile-tab')" class="btn btn-success btnDisplayProgram ">
+                                        <i class="far fa-edit"></i>
+                                        Display
+                                    </a>
+                                    <a tabindex="57" href="javascript:{}" style="border: 1px solid rgb(161, 161, 161); background-color: rgb(161, 161, 161);" onclick="return ProfileSave();" id="ProfileSave" class="btn btn-success btnprogramsave disabled">
                                         <i class="far fa-save"></i>
                                         Save
-                                    </a>*@
-                            </div>
+                                    </a>
+
+                                    @*<a href="/Patient/Add" id="btnProfileEdit" class="btn btn-success">
+                <i class="far fa-edit"></i>
+                Edit
+            </a>*@
+                                    @*<a href="#!" id="btnProfileCancel" class="btn btn-info" style="display: none;">
+                <i class="far fa-edit"></i>
+                Cancel
+            </a>
+            <a href="#!" id="btnProfileSave" class="btn btn-success" style="display: none;">
+                <i class="far fa-save"></i>
+                Save
+            </a>*@
+                                </div>
 
 
                         </div>
@@ -1935,7 +1941,9 @@
                                 Appointment
                             </h3>
                             <button id="hideAppointmentContent" class="btn btn-link addnotebtn">Close</button>
+                            @if (modulePermissions.Where(x => x.ModuleName == "Appointment" && x.CanCreate == true).Any()) {
                             <button data-toggle="modal" id="openappointmentpopup" data-target="#AppointmentModal" onclick="addAppointment()" class="btn btn-link addnotebtn"> Add Appointment </button>
+                            }
                             <div class="scroll scroll-height" id="appointementlst">
 
 

@@ -1,7 +1,18 @@
-﻿
+﻿@using RootsOfHealth.Commom;
+@using RootsOfHealth.Models;
 @{
     ViewBag.Title = "List";
     Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var userGroupPerm = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["RoleId"]), Convert.ToInt32(PermissionModel.Module.UserGroup));
+    if (userGroupPerm.Where(x => x.CanList == false && (x.CanCreate != true && x.CanUpdate != true && x.CanDelete != true)).Any())
+    {
+        Response.Redirect(Url.Action("Display", "Dashboard", new { }));
+
+    }
+
 }
 <link href="~/css/UserGroup.css" rel="stylesheet" />
 
@@ -15,7 +26,10 @@
                 <div class="detail-heading d-flex templatelist">
                     <h2>Groups</h2>
                 </div>
+                @if (userGroupPerm.Where(x=> x.CanCreate == true).Any()) 
+                {
                 <a href="javascript:void(0)" class="btn btn-success mb-2" data-toggle="modal" data-target="#CreateGroupModal" id="CreateGroup">Create Group</a>
+                }
                 <table id="tblGroupTemplateList" class="table table-striped border">
                     <thead>
                         <tr class="table-active">
@@ -58,14 +72,17 @@
 
             </div>
         </div>
-        </div>
-
     </div>
 
-    @section scripts{
+</div>
 
-        <script>
+@section scripts{
+
+    <script>
         var userId = "@Session["userid"]";
-        </script>
-        <script src="~/Scripts/Usergroup/UserGroup.js"></script>
-    }
+        var canEditUserGroup = '@userGroupPerm.Where(x => x.CanUpdate == true).Any()';
+        var canViewUserGroup =  '@userGroupPerm.Where(x => x.CanList == true || x.CanUpdate == true).Any()';
+         var canDeleteUserGroup = '@userGroupPerm.Where(x => x.CanDelete == true).Any()';
+    </script>
+    <script src="~/Scripts/Usergroup/UserGroup.js"></script>
+}

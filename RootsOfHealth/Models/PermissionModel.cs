@@ -30,24 +30,24 @@ namespace RootsOfHealth.Models
         }
         public enum Module
         {
-            Housing = 1,
-            FinancialSecurity,
-            EmploymentEducation,
-            CommunicationMobility,
-            SocialSupportsandSafety,
-            LegalStatus,
-            SubstanceUse,
-            MentalHealth,
-            FoodAccess,
-            Programs,
-            Appointment,
+            Appointment=1,
             Users,
             RolesPermission,
-            Authorization,
-            LookupField,
             FormScheduling,
             PotientialPatient,
-            Notes
+            Notes,
+            Client,
+            Authorization,
+            UserGroup,
+            AppointmentSetting,
+            Careplan,
+            FormsharingExport,
+            SystemSetting,
+            PotentialClient,
+            Programs,
+            ClientForms,
+            ClientrequestIntake
+
         }
         public static bool HasPermission(int ModuleId,int PermissionType) {
 

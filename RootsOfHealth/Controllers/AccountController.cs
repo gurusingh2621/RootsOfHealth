@@ -104,6 +104,7 @@ namespace RootsOfHealth.Controllers
                                 Session["ClinicID"] = user.ClinicID;
                                 Session["UserName"] = user.UserName;
                                 Session["Roles"] = user.Roles;
+                                Session["RoleId"] = user.RoleID;
                                 Session["IsCarePlanApprover"] = user.isCarePlanApprover.HasValue ? user.isCarePlanApprover.Value : false;
                                 string usernameChars = string.IsNullOrWhiteSpace(user.FirstName) ?"" : user.FirstName[0].ToString();
                                 usernameChars+= string.IsNullOrWhiteSpace(user.LastName) ? "" : user.LastName[0].ToString();

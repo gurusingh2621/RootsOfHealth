@@ -1,9 +1,15 @@
-﻿
-
-
-
+﻿@using RootsOfHealth.Commom;
+@using RootsOfHealth.Models;
 @{
     Layout = "";
+}
+@{
+    var appointmentSettPerm = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["RoleId"]), Convert.ToInt32(PermissionModel.Module.AppointmentSetting));
+    if (appointmentSettPerm.Where(x => x.CanList == false && (x.CanCreate != true && x.CanUpdate != true && x.CanDelete != true)).Any())
+    {
+        Response.Redirect(Url.Action("Display", "Dashboard", new { }));
+
+    }
 }
 
 <div class="inner-content">
@@ -11,9 +17,12 @@
         <div class="container-fluid pl-0 pr-0">
             <h2 class="mb-20">
                 Type Of Appointments
+                @if (appointmentSettPerm.Where(x=>x.CanCreate == true).Any())
+                  {
                 <button type="button" class="btn btn-primary Appointment-btn d-inline-block float-right mb-20" onclick="addAppointmenttype()">
                     Add Type
                 </button>
+                  }
             </h2>
             <table class="display table table-hover table-striped table-bordered" id="tblType">
                 <thead>
@@ -23,7 +32,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                 
                 </tbody>
             </table>
         </div>
@@ -62,7 +70,9 @@
 
 
 <script>
-     var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]'
+    var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]'
+    var canEditAppointment = '@appointmentSettPerm.Where(x=>x.CanUpdate == true).Any()';
+    var canDeleteAppointment = '@appointmentSettPerm.Where(x=>x.CanDelete == true).Any()';
 
      function DeleteAppointmentType(id) {
 
@@ -150,8 +160,14 @@
                 var txt = '';
                 for (var i = 0; i < result.length; i++) {
                     txt += '<tr><td>' + result[i].TypeOfAppointments + '</td>';
-                    txt += '<td><a  onclick="getTypeOfAppointmentById(' + result[i].Id + ')" id="btnProfileEdit" class="btn btn-success btn-succ label-fields"><i class="far fa-edit"></i> Edit</a>'
-                    txt += '<a  onclick="DeleteAppointmentType(' + result[i].Id + ')"id="btnDeleteAppointType" class="btn btn-danger btn-trash label-fields"> <i class="fas fa-trash"></i> Delete  </a> </td> </tr>'
+                    if (canEditAppointment == 'True')
+                    {
+                        txt += '<td><a  onclick="getTypeOfAppointmentById(' + result[i].Id + ')" id="btnProfileEdit" class="btn btn-success btn-succ label-fields"><i class="far fa-edit"></i> Edit</a>'
+                    }
+                    if (canDeleteAppointment == 'True')
+                    {
+                        txt += '<a  onclick="DeleteAppointmentType(' + result[i].Id + ')"id="btnDeleteAppointType" class="btn btn-danger btn-trash label-fields"> <i class="fas fa-trash"></i> Delete  </a> </td> </tr>'
+                    }
                 }
                 console.log = txt;
                 $('#tblType tbody').html(txt);
@@ -181,11 +197,11 @@
     }
 
     $(document).ready(function () {
-        
+
         GetAllTypeOfAppointment();
-        
-           
-    
+
+
+
     });
 
 </script>

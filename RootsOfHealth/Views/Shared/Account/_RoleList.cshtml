@@ -1,5 +1,10 @@
 ﻿@model IEnumerable<RootsOfHealth.Models.UserRolesBO>
-
+@using RootsOfHealth.Commom;
+@using RootsOfHealth.Models;
+@{
+    var rolesPerm = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["RoleId"]), Convert.ToInt32(PermissionModel.Module.RolesPermission));
+    
+}
 <table class="table table-bordered" id="tblRole">
     <thead>
         <tr class="table-active">
@@ -26,11 +31,16 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
+                  @if (rolesPerm.Where(x => x.CanCreate == true ||x.CanList == true).Any())
+                   {
                     <a href="#" onclick="ShowEdit(@item.RoleID)" class="btn btn-success">Edit</a>
-                    @*@Html.ActionLink("Edit", "EditRole", new { roleid = item.RoleID })*@
-                   @if (item.RoleName.ToLower().Replace(" ","")!= "careplanapproval") {
-                    <a href="#" class="btn btn-danger" onclick="Remove(@item.RoleID)">Delete</a>
                    }
+                    
+                    @*@Html.ActionLink("Edit", "EditRole", new { roleid = item.RoleID })*@
+                    @if (item.RoleName.ToLower().Replace(" ", "") != "careplanapproval" && rolesPerm.Where(x => x.CanDelete == true).Any())
+                    {
+                        <a href="#" class="btn btn-danger" onclick="Remove(@item.RoleID)">Delete</a>
+                    }
                 </td>
             </tr>
         }

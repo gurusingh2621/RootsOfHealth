@@ -1,18 +1,28 @@
 ﻿@model RootsOfHealth.Models.UserBO
-
+@using RootsOfHealth.Commom;
+@using RootsOfHealth.Models;
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+@{
+    var usersPerm = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["RoleId"]), Convert.ToInt32(PermissionModel.Module.Users));
+    if (usersPerm.Where(x => x.CanList == false && (x.CanCreate != true && x.CanUpdate != true && x.CanDelete != true)).Any())
+    {
+        Response.Redirect(Url.Action("Display", "Dashboard", new { }));
+
+    }
+}
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <style>
-  .appointment table td img {
+    .appointment table td img {
         width: 30px;
-        height:30px;
-        object-fit:cover;
-        border-radius:100%;
+        height: 30px;
+        object-fit: cover;
+        border-radius: 100%;
     }
-       
+
     .btn-success:hover {
         background: #35c8af;
         border: 1px solid #35c8af;
@@ -28,6 +38,7 @@
         margin-right: 5px;
         line-height: normal;
     }
+
     .appointment table .btn-danger {
         background-color: #dc3545;
         border-color: #dc3545;
@@ -39,90 +50,96 @@
         margin-right: 5px;
         line-height: normal;
     }
-
 </style>
 <section id="content" class="responsive-container pt-0">
     <div class="inner-content mt-0">
         <div class="container-fluid pl-0 pr-0">
             <div class="appointment">
                 <h2 class="mhead">Users</h2>
-                <p class="createbtn">
-                    @Html.ActionLink("Create New", "AddUser", "Account", htmlAttributes: new { @class = "btn btn-success" })
-                </p>
-                <table id="tblUser" class="display table table-hover table-striped table-bordered">
-                    <thead>
-                    <tr class="table-active">
-                        <th>
-                            @Html.DisplayNameFor(model => model.Image)
-                        </th>
-                        <th>
-                            @Html.DisplayName("Name")
-                        </th>
-                        
-                        <th>
-                            @Html.DisplayName("User Name")
-                        </th>
+                @if (usersPerm.Where(x => x.CanCreate == true).Any())
+                {
+                    <p class="createbtn">
+                        @Html.ActionLink("Create New", "AddUser", "Account", htmlAttributes: new { @class = "btn btn-success" })
+                    </p>
+                }
+                    <table id="tblUser" class="display table table-hover table-striped table-bordered">
+                        <thead>
+                            <tr class="table-active">
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Image)
+                                </th>
+                                <th>
+                                    @Html.DisplayName("Name")
+                                </th>
 
-                        <th>
-                            @Html.DisplayName("Role")
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Email)
-                        </th>
-                        <th>
-                            @Html.DisplayName("Phone No")
-                        </th>
+                                <th>
+                                    @Html.DisplayName("User Name")
+                                </th>
 
-                        <th>Action</th>
-                    </tr>
-                        </thead>
-                    <tbody>
-                        @foreach (var item in Model.UserList)
-                        {
-                            <tr>
-                                <td>
-                                    @if (item.Image != "")
-                                {
-                                <img src="~/Files/@item.Image" alt="Sample Image" />
-                                }
-                                else
-                                {
-                                <img class="img-fluid" id="patientpic" src="/Files/profile.png" />
-                                }
+                                <th>
+                                    @Html.DisplayName("Role")
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Email)
+                                </th>
+                                <th>
+                                    @Html.DisplayName("Phone No")
+                                </th>
 
-                                </td>
-                                <td>
-
-                                    @Html.Raw(item.FirstName+" "+item.LastName)
-                                </td>
-
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.UserName)
-                                </td>
-
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.RoleName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Email)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.PhoneNo)
-                                </td>
-
-
-
-                                <td>
-
-                                    @Html.ActionLink("Edit", "EditUserDetails", new { username = item.UserName.ToString() },htmlAttributes:new { @class = "btn btn-success" })
-
-                                    <a href="#" class="btn btn-danger" onclick="Remove(@item.UserID)">Delete</a>
-                                </td>
+                                <th>Action</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.UserList)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (item.Image != "")
+                                        {
+                                            <img src="~/Files/@item.Image" alt="Sample Image" />
+                                        }
+                                        else
+                                        {
+                                            <img class="img-fluid" id="patientpic" src="/Files/profile.png" />
+                                        }
+
+                                    </td>
+                                    <td>
+
+                                        @Html.Raw(item.FirstName + " " + item.LastName)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.UserName)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.RoleName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Email)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PhoneNo)
+                                    </td>
+
+
+
+                                    <td>
+                                        @if (usersPerm.Where(x => x.CanUpdate == true || x.CanList ==true).Any())
+                                        {
+                                            @Html.ActionLink("Edit", "EditUserDetails", new { username = item.UserName.ToString() }, htmlAttributes: new { @class = "btn btn-success" })
+                                        }
+                                        @if (usersPerm.Where(x => x.CanDelete == true).Any())
+                                        {
+                                            <a href="#" class="btn btn-danger" onclick="Remove(@item.UserID)">Delete</a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
 
         </div>
     </div>

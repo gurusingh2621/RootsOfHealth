@@ -37,6 +37,11 @@
     <!-- Custom CSS start here  -->
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
+    @using RootsOfHealth.Commom;
+    @{
+
+        var modulePermissions = new Common().GetMainModulesPermission(Convert.ToInt32(Session["RoleId"]));
+    }
 
 
 
@@ -165,11 +170,13 @@
             div#formSharingModal .modal-dialog {
                 width: 100%;
                 max-width: 1100px !important;
-                min-height:initial;
+                min-height: initial;
             }
+
                 div#formSharingModal .modal-dialog .modal-content {
-                 min-height:552px;
+                    min-height: 552px;
                 }
+
         h6.t_filter_head {
             text-align: right;
             padding: 35px 0 0;
@@ -212,23 +219,29 @@
             z-index: 9999;
             background: rgba(0,0,0,0.5);
         }
+
         .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, .ui-state-active.ui-button:hover {
             border: 1px solid #22baa0;
             background: #22baa0;
         }
+
         #formSharingModal .dataTables_scrollHead table thead {
             background: rgba(0,0,0,.075);
         }
+
         #formSharingModal .dataTables_scrollHead label.input_checkbox span {
             background: #eee;
         }
+
         #formSharingModal .bootstrap-select .bs-ok-default.check-mark {
             display: none !important;
         }
+
         #formSharingModal .searchbox .searchboxDropDown .scroll {
             max-height: 230px;
             overflow: auto;
         }
+
         .copyLinkText {
             text-align: right;
             padding: 0 0 10px 0;
@@ -528,6 +541,7 @@
         .sidebar-menu ul a:hover .group-icon {
             background-position: -1px -2px;
         }
+
         .sidebar-menu ul a span.fas {
             font-size: 22px;
             display: block;
@@ -536,6 +550,7 @@
             margin: auto;
             margin-bottom: 4px;
         }
+
         body .dataTables_scrollHead table.c_table tr th {
             color: #212529;
             text-transform: uppercase;
@@ -670,11 +685,13 @@
         #FormsSharinigNavItem a {
             cursor: pointer;
         }
+
         .NoFormSelectedMessage {
             border: 1px dashed #ddd;
             text-align: center;
             padding: 20px;
         }
+
         #ddClientlistforsharing, #FormShareExpirydate, #ddFormNameShareHistory, #ddStatusShareHistory, #selectClientTab, #sharedStatusTab {
             display: block !important
         }
@@ -687,10 +704,12 @@
             margin-left: 6px;
             margin-right: 5px;
         }
-        #formSharingModal .searchbox > button i {
-            font-size: 16px;
-            color: #7a7f8c;
-        }
+
+            #formSharingModal .searchbox > button i {
+                font-size: 16px;
+                color: #7a7f8c;
+            }
+
         #formSharingModal .searchbox > input {
             padding-left: 14px;
             border: none;
@@ -701,35 +720,42 @@
             flex: 0 0 calc(100% - 53px);
             width: 100%;
         }
+
         #formSharingModal .searchbox {
             width: 100%;
             max-width: 100%;
-            position:relative;
+            position: relative;
             justify-content: flex-start;
             border: 1px solid #dee2e8;
             padding: 5px 0;
         }
-        #formSharingModal .searchbox .searchboxDropDown {
-            width: 100%;
-            z-index: 99;
-            top: 37px;
-            left: 0;
-            max-height: 300px;
-            height: auto;
+
+            #formSharingModal .searchbox .searchboxDropDown {
+                width: 100%;
+                z-index: 99;
+                top: 37px;
+                left: 0;
+                max-height: 300px;
+                height: auto;
+            }
+
+        .formsharesearchbtn {
+            cursor: default;
+            pointer-events: none
         }
-        .formsharesearchbtn{
-            cursor:default;
-            pointer-events:none
-        }
+
         #ddClientlistforsharing:focus {
-            color: #a9aaab!important;
+            color: #a9aaab !important;
         }
+
         #ddClientlistforsharing {
-            color: #495057!important
+            color: #495057 !important
         }
-        #SharedFormExport{
-            cursor:pointer;
+
+        #SharedFormExport {
+            cursor: pointer;
         }
+
         #sharedStatusTab .table tr th {
             padding: 10px 10px;
         }
@@ -739,17 +765,20 @@
             right: 15px;
             top: 5px;
             text-shadow: none;
-            z-index:9;
+            z-index: 9;
         }
+
         div#downloadingFormShare .modal-body {
             text-align: center;
         }
+
         .downoadingModalContent img {
             display: block;
             max-width: 40px;
             margin: 0 auto 0px;
             object-fit: contain;
         }
+
         .d_m_icon {
             height: 80px;
             width: 80px;
@@ -761,9 +790,11 @@
             margin: 0 auto 15px;
             box-shadow: 0 0 30px rgb(0 0 0 / 16%);
         }
+
         .downoadingModalContent {
             padding: 15px 0;
         }
+
         .downloadCompleteText i {
             margin: 0 5px 0 0;
             color: green;
@@ -977,37 +1008,81 @@
             </a>
             <ul>
                 <li id="HomeNavItem"><a href="/DashBoard/Display" id="DashBoard" class="nav-menu"><span class="home-icon"></span> Home </a></li>
-                <li id="AppointmentNavItem"><a href="/Patient/Appointment" id="Appointment" class="nav-menu"><span class="app-icon"></span> Appointment</a></li>
-                <li id="ClientNavItem"><a href="/Patient/List" id="Patient" class="nav-menu"><span class="patient-icon"></span> Clients</a></li>
-                <li id="AddClientNavItem"><a href="/Client/Add" id="Add" class="nav-menu"><span class="add-icon"></span> Add Client</a></li>
-                <li id="NoteTemplateNavItem"><a href="/Patient/NotesTemplateField" id="Add" class="nav-menu"><span class="notes-icon"></span> Notes Template</a></li>
-                <li id="AuthorizationNavItem"><a href="/Patient/Authorization" id="Authorization" class="nav-menu"><span class="authorization-icon"></span>Authorization</a></li>
-                <li id="UsersNavItem"><a href="/Account/Index" id="Account" class="nav-menu"><span class="account-icon"></span>Users</a></li>
-                <li id="UserGroupNavItem"><a href="/Account/UserGroupList" id="UserGroup" class="nav-menu"><span class="group-icon"></span> User Group</a></li>
-                <li id="RolesNavItem"><a href="/Account/Roles" id="Account" class="nav-menu"><span class="user-role-icon"></span>Roles</a></li>
+                @if (modulePermissions.Where(x => x.ModuleName == "Appointment" && (x.CanList == true || x.CanUpdate == true || x.CanCreate == true || x.CanDelete == true)).Any())
+                {
+                    <li id="AppointmentNavItem"><a href="/Patient/Appointment" id="Appointment" class="nav-menu"><span class="app-icon"></span> Appointment</a></li>
+                }
+                @if (modulePermissions.Where(x => x.ModuleName == "Client" && (x.CanList == true || x.CanUpdate == true || x.CanCreate == true || x.CanDelete == true)).Any())
+                {
+                    <li id="ClientNavItem"><a href="/Patient/List" id="Patient" class="nav-menu"><span class="patient-icon"></span> Clients</a></li>
+                }
+                @if (modulePermissions.Where(x => x.ModuleName == "Client" && x.CanCreate == true).Any())
+                {
+                    <li id="AddClientNavItem"><a href="/Client/Add" id="Add" class="nav-menu"><span class="add-icon"></span> Add Client</a></li>
+                }
+                @if (modulePermissions.Where(x => x.ModuleName == "Notes" && (x.CanList == true || x.CanUpdate == true || x.CanCreate == true || x.CanDelete == true)).Any())
+                {
+                    <li id="NoteTemplateNavItem"><a href="/Patient/NotesTemplateField" id="Add" class="nav-menu"><span class="notes-icon"></span> Notes Template</a></li>
+                }
+                @if (modulePermissions.Where(x => x.ModuleName == "Authorization" && x.CanList == true).Any())
+                {
+                    <li id="AuthorizationNavItem"><a href="/Patient/Authorization" id="Authorization" class="nav-menu"><span class="authorization-icon"></span>Authorization</a></li>
+                }
+                @if (modulePermissions.Where(x => x.ModuleName == "Users" && (x.CanList == true || x.CanUpdate == true || x.CanCreate == true || x.CanDelete == true)).Any())
+                {
+                    <li id="UsersNavItem"><a href="/Account/Index" id="Account" class="nav-menu"><span class="account-icon"></span>Users</a></li>
+                }
+                @if (modulePermissions.Where(x => x.ModuleName == "User Group" && (x.CanList == true || x.CanUpdate == true || x.CanCreate == true || x.CanDelete == true)).Any())
+                {
+                    <li id="UserGroupNavItem"><a href="/Account/UserGroupList" id="UserGroup" class="nav-menu"><span class="group-icon"></span> User Group</a></li>
+                }
+                @if (modulePermissions.Where(x => x.ModuleName == "Roles/Permission" && (x.CanList == true || x.CanUpdate == true || x.CanCreate == true || x.CanDelete == true)).Any())
+                {
+                    <li id="RolesNavItem"><a href="/Account/Roles" id="Account" class="nav-menu"><span class="user-role-icon"></span>Roles</a></li>
+                }
+
                 <li id="MyAccountNavItem"><a href="/Account/UserDetails?username=@FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name" id="Account" class="nav-menu"><span class="account-icon"></span> My Account</a></li>
                 <li id="LookUpTableNavItem"><a href="/Patient/WebGridShowLookUpOption" id="LookUpOption" class="nav-menu"><span class="lookup-icon"></span>LookUpTable</a></li>
-                <li id="FormSchedulingNavItem"><a href="/Patient/FormScheduling" id="FormScheduling" class="nav-menu"><span class="form-sched-icon"></span> Form Scheduling</a></li>
-                <li id="PotentialClientNavItem"><a href="/Patient/GetPotientialPatient" id="PotientPatient" class="nav-menu"><span class="add-icon"></span> Potential Clients</a></li>
-                <li id="AppointmentSettingsNavItem"><a href="/Patient/AppointmentSetting" id="appointmentSettings" class="nav-menu"><span class="sett-icon"></span> Appointment Settings</a></li>
-                <li id="CarePlanNavItem"><a href="/careplan/list" id="careform" class="nav-menu"><span class="careplan-icon"></span> Care Plan Templates</a></li>
-                <li id="ProgramsNavItem"><a href="/program/list" id="programform" class="nav-menu"><span class="program-icon"></span> Programs</a></li>
-                <li id="ClientFormsNavItem"><a href="/Client/ClientsFormList" id="ClientsForm" class="nav-menu"><span class="patient-icon"></span> Clients Forms</a></li>
-                <li id="CarePlanRequestNavItem" class="@(Convert.ToBoolean(@Session["IsCarePlanApprover"])?"":"d-none")"><a href="/CarePlan/Requests" id="requests" class="nav-menu"><span class="program-icon"></span> Care Plan Requests</a></li>
-                <li id="FormsSharinigNavItem" class="@(Convert.ToString(Session["Roles"]).Contains("Navigator")||Convert.ToString(Session["Roles"]).Contains("Supervisor")?"":"d-none")">
-                    <a id="formSharing" class="nav-menu" onclick="ResetFormSharingPopup();"><span class="patient-icon"></span>Form Sharing</a>
-                </li>
 
-                <li id="SharedFormExport" class="@(Convert.ToString(Session["Roles"]).Contains("Supervisor")?"":"d-none")">
-                    <a class="nav-menu" onclick="ExportSharedForms();"><span class="patient-icon"></span>Form Sharing Export</a>
-                </li>
-                @if (Convert.ToString(Session["Roles"]).Contains("Navigator") || Convert.ToString(Session["Roles"]).Contains("Supervisor"))
+                @if (modulePermissions.Where(x => x.ModuleName == "Form Scheduling" && (x.CanList == true || x.CanUpdate == true)).Any())
                 {
-                    <li id="AccountSettingNavItem"><a class="nav-menu"  href="/Account/Settings"><span class="fas fa-users-cog"></span> Account Setting</a></li>
-
+                    <li id="FormSchedulingNavItem"><a href="/Patient/FormScheduling" id="FormScheduling" class="nav-menu"><span class="form-sched-icon"></span> Form Scheduling</a></li>
                 }
-                <li><a href="/Account/Logout" id="logout" class="nav-menu"><span class="logout-icon"></span>Log Out</a></li>
-            </ul>
+                @if (modulePermissions.Where(x => x.ModuleName == "Potential Client" && x.CanList == true).Any())
+                {
+                    <li id="PotentialClientNavItem"><a href="/Patient/GetPotientialPatient" id="PotientPatient" class="nav-menu"><span class="add-icon"></span> Potential Clients</a></li>
+                }
+                @if (modulePermissions.Where(x => x.ModuleName == "Appointment Setting" && (x.CanList == true || x.CanUpdate == true || x.CanCreate == true || x.CanDelete == true)).Any())
+                {
+                    <li id="AppointmentSettingsNavItem"><a href="/Patient/AppointmentSetting" id="appointmentSettings" class="nav-menu"><span class="sett-icon"></span> Appointment Settings</a></li>
+                }
+                @if (modulePermissions.Where(x => x.ModuleName == "Careplan" && (x.CanList == true || x.CanUpdate == true || x.CanCreate == true || x.CanDelete == true)).Any())
+                {
+                    <li id="CarePlanNavItem"><a href="/careplan/list" id="careform" class="nav-menu"><span class="careplan-icon"></span> Care Plan Templates</a></li>
+                }
+                @if (modulePermissions.Where(x => x.ModuleName == "Programs" && (x.CanList == true || x.CanUpdate == true || x.CanCreate == true || x.CanDelete == true)).Any())
+                {
+                    <li id="ProgramsNavItem"><a href="/program/list" id="programform" class="nav-menu"><span class="program-icon"></span> Programs</a></li>
+                }
+                @if (modulePermissions.Where(x => x.ModuleName == "Client Forms" && (x.CanList == true || x.CanUpdate == true || x.CanCreate == true || x.CanDelete == true)).Any())
+                {
+                    <li id="ClientFormsNavItem"><a href="/Client/ClientsFormList" id="ClientsForm" class="nav-menu"><span class="patient-icon"></span> Clients Forms</a></li>
+                }
+                    <li id="CarePlanRequestNavItem" class="@(Convert.ToBoolean(@Session["IsCarePlanApprover"])?"":"d-none")"><a href="/CarePlan/Requests" id="requests" class="nav-menu"><span class="program-icon"></span> Care Plan Requests</a></li>
+                    <li id="FormsSharinigNavItem" class="@(Convert.ToString(Session["Roles"]).Contains("Navigator")||Convert.ToString(Session["Roles"]).Contains("Supervisor")?"":"d-none")">
+                        <a id="formSharing" class="nav-menu" onclick="ResetFormSharingPopup();"><span class="patient-icon"></span>Form Sharing</a>
+                    </li>
+
+                    <li id="SharedFormExport" class="@(Convert.ToString(Session["Roles"]).Contains("Supervisor")?"":"d-none")">
+                        <a class="nav-menu" onclick="ExportSharedForms();"><span class="patient-icon"></span>Form Sharing Export</a>
+                    </li>
+                    @if (Convert.ToString(Session["Roles"]).Contains("Navigator") || Convert.ToString(Session["Roles"]).Contains("Supervisor"))
+                    {
+                        <li id="AccountSettingNavItem"><a class="nav-menu" href="/Account/Settings"><span class="fas fa-users-cog"></span> Account Setting</a></li>
+
+                    }
+                    <li><a href="/Account/Logout" id="logout" class="nav-menu"><span class="logout-icon"></span>Log Out</a></li>
+                </ul>
         </aside>
         <!-- Sidebar end here  -->
         @RenderBody()

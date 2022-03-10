@@ -1,14 +1,26 @@
 ﻿@model IEnumerable<RootsOfHealth.Models.UserRolesBO>
+@using RootsOfHealth.Commom;
+@using RootsOfHealth.Models;
 @{
     ViewBag.Title = "Roles";
+}
+@{
+    var rolesPerm = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["RoleId"]), Convert.ToInt32(PermissionModel.Module.RolesPermission));
+    if (rolesPerm.Where(x => x.CanList == false && (x.CanCreate != true && x.CanUpdate != true && x.CanDelete != true)).Any())
+    {
+        Response.Redirect(Url.Action("Display", "Dashboard", new { }));
+
+    }
 }
 <style>
     #PermissionAdmin-tab.nav-link.disabled-li1:after {
         border-left: 33px solid #808080 !important;
     }
+
     .col-lg-3.col-md-3.col-sm-3.col02 {
         padding-top: 6px;
     }
+
     .housing_button button.multiselect {
         background-color: transparent;
         color: #999;
@@ -29,10 +41,12 @@
         height: 42px;
         text-align: left;
     }
+
     .housing_button ul.multiselect-container.dropdown-menu.show {
         padding: 8px 2px;
         width: 100%;
     }
+
         .housing_button ul.multiselect-container.dropdown-menu.show li a {
             /* padding: 0px 8px; */
             font-style: normal;
@@ -49,6 +63,7 @@
             align-items: center;
             padding: .25rem .5rem;
         }
+
     .housing_button ul.multiselect-container li label {
         margin-bottom: 0px;
     }
@@ -59,7 +74,7 @@
         background: #35c8af;
         border: 1px solid #35c8af;
     }
-   
+
 
     .appointment table .btn-success {
         background: #22baa0;
@@ -81,6 +96,9 @@
         padding: 5px 19px;
         margin-right: 5px;
     }
+    #PermissionAdmin .modal-footer {
+        margin: 10px 10px 0 0;
+    }
 </style>
 
 <section id="content" class="responsive-container pt-0">
@@ -91,20 +109,23 @@
                 <div class="detail-heading d-flex">
                     <h2>Roles</h2>
                     <div class="detail-button ml-auto">
+                        @if (rolesPerm.Where(x=>x.CanCreate == true).Any())
+                        { 
                         <button type="button" onclick="ResetModal()" class="btn btn-success" data-toggle="modal" data-target="#addRoleModal">
                             Add Role
                         </button>
+                        }
                     </div>
-                    </div>
-                    <div id="roleListID">
-                        @Html.Partial("~/Views/Shared/Account/_RoleList.cshtml", Model)
-                    </div>
+                </div>
+                <div id="roleListID">
+                    @Html.Partial("~/Views/Shared/Account/_RoleList.cshtml", Model)
                 </div>
             </div>
         </div>
-    </section>
-   
- <div class="modal fade permissionModal" id="addRoleModal" data-refresh="true" tabindex="0" role="dialog" aria-labelledby="addRoleModal" aria-hidden="true">
+    </div>
+</section>
+
+<div class="modal fade permissionModal" id="addRoleModal" data-refresh="true" tabindex="0" role="dialog" aria-labelledby="addRoleModal" aria-hidden="true">
     <div class="modal-dialog mw-100 w-75 modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -118,10 +139,10 @@
                 <div class="permissionsTabContent">
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active"  id="ProfileAdmin-tab" data-toggle="tab" href="#ProfileAdmin" role="tab" aria-controls="ProfileAdmin" aria-selected="true">Role</a>
+                            <a class="nav-link active" id="ProfileAdmin-tab" data-toggle="tab" href="#ProfileAdmin" role="tab" aria-controls="ProfileAdmin" aria-selected="true">Role</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link disabled-li1"  id="PermissionAdmin-tab" data-toggle="" href="#PermissionAdmin" role="tab" aria-controls="PermissionAdmin" aria-selected="false">Permission</a>
+                            <a class="nav-link disabled-li1" id="PermissionAdmin-tab" data-toggle="" href="#PermissionAdmin" role="tab" aria-controls="PermissionAdmin" aria-selected="false">Permission</a>
                         </li>
 
                     </ul>
@@ -145,13 +166,19 @@
                                     </div>
                                 </div>
                             </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" id="rolemodalCancel" onclick="AddRoleModalClose()">Cancel</button>
-                                        <button type="button" class="btn btn-primary" onclick="SaveRole()" id="saveroleOnly">Proceed</button>
-                                        <button type="button" class="btn btn-primary" onclick="UpdateRole()" hidden="hidden" id="updateroleOnly">Update</button>
-                                    </div>
-                               
-                            
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" id="rolemodalCancel" onclick="AddRoleModalClose()">Cancel</button>
+                                @if (rolesPerm.Where(x => x.CanCreate == true).Any())
+                                {
+                                    <button type="button" class="btn btn-primary" onclick="SaveRole()" id="saveroleOnly">Proceed</button>
+                                }
+                                @if (rolesPerm.Where(x => x.CanUpdate == true).Any())
+                                {
+                                    <button type="button" class="btn btn-primary" onclick="UpdateRole()" hidden="hidden" id="updateroleOnly">Update</button>
+                                }
+                                </div>
+
+
 
                         </div>
                         <!-- Profile Tab end here  -->
@@ -162,24 +189,30 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" onclick="AddRoleModalClose()">Cancel</button>
-                                <button type="button" class="btn btn-primary" onclick="SaveRolePermission()" id="savepermission">Save</button>
-                                <button type="button" class="btn btn-primary" hidden="hidden" onclick="SaveRolePermission()" id="updatepermission">Update</button>
-                            </div>
+                                @if (rolesPerm.Where(x => x.CanCreate == true).Any())
+                                {
+                                    <button type="button" class="btn btn-primary" onclick="SaveRolePermission()" id="savepermission">Save</button>
+                                }
+                                @if (rolesPerm.Where(x => x.CanUpdate == true).Any())
+                                {
+                                    <button type="button" class="btn btn-primary" hidden="hidden" onclick="SaveRolePermission()" id="updatepermission">Update</button>
+                                }
+                                </div>
                         </div>
                         <!-- Permission Tab end here  -->
 
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>
 </div>
-    <div id="editSection">
+<div id="editSection">
 
-    </div>
-    @section scripts{
-        <script>
+</div>
+@section scripts{
+    <script>
             var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
             function updateRoleList() {
                 $.ajax({
@@ -219,8 +252,9 @@
                 });
 
             });
-
-            $('#PermissionAdmin-tab').click(function () {
+       
+        $('#PermissionAdmin-tab').click(function () {
+            
                 var roleId = $("#hdnRoleid").html();
                 $.ajax({
                     type: "Get",
@@ -231,6 +265,7 @@
                         _Loader.StartLoader()
                     },
                     success: function (data) {
+
                             $('#PermissionAdmin .ProfileContent').html('');
                             $('#PermissionAdmin .ProfileContent').html(data)
                             $("#addRoleModal").modal('show');
@@ -670,5 +705,5 @@
                     }
                 });
             }
-        </script>
-    }
+    </script>
+}
