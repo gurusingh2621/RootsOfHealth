@@ -7,7 +7,7 @@
     ViewBag.Title = "Appointment";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    var appointPerm = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["RoleId"]), Convert.ToInt32(PermissionModel.Module.Appointment));
+    var appointPerm = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["userid"]), Convert.ToInt32(PermissionModel.Module.Appointment));
 
 
     if (appointPerm.Where(x=> x.CanList == false &&(x.CanCreate != true && x.CanUpdate != true)).Any())

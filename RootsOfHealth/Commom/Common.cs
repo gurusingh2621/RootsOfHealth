@@ -898,14 +898,14 @@ namespace RootsOfHealth.Commom
 
         }
 
-        public List<PermissionModel> GetMainModulesPermission(int roleId)
+        public List<PermissionModel> GetMainModulesPermission(int userId)
         {
             List<PermissionModel> permissionModel = new List<PermissionModel>();
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(WebApiKey);
                 //HTTP GET
-                var responseTask = client.GetAsync("/api/PatientMain/GetMainMenuPermissions?roleid=" + roleId);
+                var responseTask = client.GetAsync("/api/PatientMain/GetMainMenuPermissions?userId=" + userId);
                 responseTask.Wait();
 
                 var result = responseTask.Result;
@@ -922,14 +922,14 @@ namespace RootsOfHealth.Commom
             return permissionModel;
         }
 
-        public List<ModulepermissionsBO> GetPermissionsByModuleId(int roleId,int moduleId)
+        public List<ModulepermissionsBO> GetPermissionsByModuleId(int userId, int moduleId,bool isClientForm = false)
         {
             List<ModulepermissionsBO> permissionModel = new List<ModulepermissionsBO>();
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(WebApiKey);
                 //HTTP GET
-                var responseTask = client.GetAsync("/api/PatientMain/GetPermissionsByModuleId?roleid=" + roleId+"&&moduleId=" + moduleId);
+                var responseTask = client.GetAsync("/api/PatientMain/GetPermissionsByModuleId?userId=" + userId + "&&moduleId=" + moduleId+ "&&isClientForm="+ isClientForm);
                 responseTask.Wait();
 
                 var result = responseTask.Result;

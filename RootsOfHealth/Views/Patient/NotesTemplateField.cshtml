@@ -6,7 +6,7 @@
 
 }
 @{
-    var notesPerm = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["RoleId"]), Convert.ToInt32(PermissionModel.Module.Notes));
+    var notesPerm = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["userid"]), Convert.ToInt32(PermissionModel.Module.NotesTemplate));
     if (notesPerm.Where(x => x.CanList == false && (x.CanCreate != true && x.CanUpdate != true && x.CanDelete != true)).Any())
     {
         Response.Redirect(Url.Action("Display", "Dashboard", new { }));

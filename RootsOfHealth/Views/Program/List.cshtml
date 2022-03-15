@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @{
-    var programsPerm = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["RoleId"]), Convert.ToInt32(PermissionModel.Module.Programs));
+    var programsPerm = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["userid"]), Convert.ToInt32(PermissionModel.Module.Programs));
     if (programsPerm.Where(x => x.CanList == false && (x.CanCreate != true && x.CanUpdate != true && x.CanDelete != true)).Any())
     {
         Response.Redirect(Url.Action("Display", "Dashboard", new { }));

@@ -14,7 +14,7 @@
     }
 
 
-    var modulePermissions = new Common().GetMainModulesPermission(Convert.ToInt32(Session["RoleId"]));
+    var modulePermissions = new Common().GetMainModulesPermission(Convert.ToInt32(Session["userid"]));
 
 }
 
@@ -323,17 +323,20 @@
                                    class="btn btn-success label-fields" data-toggle="carePlansSidebar">
                                     Care Plans<span class="careplanCount">@(Model.CareplanCount==0?"":"("+ @Model.CareplanCount.ToString()+ ")")</span>
                                 </a>
-                                @if (modulePermissions.Where(x => x.ModuleName == "Appointment" && (x.CanCreate == true || x.CanList ==true)).Any())
+                                @if (modulePermissions.Where(x => x.ModuleName == "Appointment" && (x.CanCreate == true || x.CanList == true)).Any())
                                 {
                                     <a href='javaScript:void(0)' onclick="LoadAppointmentsAndLocations()"
                                        id="btnPatientAppointments" class="btn btn-success label-fields">
                                         Appointments
                                     </a>
-                                }
+                                } 
+                                @if (modulePermissions.Where(x => x.ModuleName == "Notes" && (x.CanCreate == true || x.CanList == true || x.CanDelete == true || x.CanUpdate == true)).Any())
+                                {
                                     <a href='javaScript:void(0)' onclick="LoadAllNotes()"
                                        id="btnPatientNotes" class="btn btn-success label-fields">
                                         Notes
                                     </a>
+                                }
                                     @if (modulePermissions.Where(x => x.ModuleName == "Client" && x.CanUpdate == true).Any())
                                     {
                                         <a href='javaScript:void(0)' onclick="ActivateTab(@Model.PatientID,'Profile-tab')"
@@ -1953,13 +1956,16 @@
                         <div class="appointement appointement-notes" style="display:none">
                             <h3>Notes</h3>
                             <button id="hideNoteContent" class="btn btn-link addnotebtn" style="margin-left:20px">  Close </button>
-                            <button data-toggle="modal" id="opennotepopup" data-target="#notesModal" class="btn btn-link addnotebtn"> Add Note </button>
-                            <button data-toggle="modal" id="opennotepopupreadonly" hidden="hidden" data-target="#notesreadonlyModal" class="btn btn-link addnotebtn"> Add Note </button>
-                            <div class="scroll scroll-height" id="notesList">
+                            @if (modulePermissions.Where(x => x.ModuleName == "Notes" && x.CanCreate == true).Any())
+                            {
+                                <button data-toggle="modal" id="opennotepopup" data-target="#notesModal" class="btn btn-link addnotebtn"> Add Note </button>
+                            }
+                                <button data-toggle="modal" id="opennotepopupreadonly" hidden="hidden" data-target="#notesreadonlyModal" class="btn btn-link addnotebtn"> Add Note </button>
+                                <div class="scroll scroll-height" id="notesList">
+
+                                </div>
 
                             </div>
-
-                        </div>
                     </div>
                 </div>
 

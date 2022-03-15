@@ -1,4 +1,5 @@
 ﻿@model RootsOfHealth.Models.PatientDetailBO
+@using RootsOfHealth.Commom
 
 @{
     ViewBag.Title = "Patient";
@@ -239,23 +240,26 @@
                 {
                     foreach (var item in Model.ClientForm.Where(p => p.ParentFormID == null || p.ParentFormID == 0))
                     {
-                        if (ViewBag.PatientID == "0" || ViewBag.PatientID == null)
-                        {
-                            var FormName = @item.FormName.Replace(" ", "");
+                        var formpermission = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["userid"]), item.ClientFormID, true);
+                        if (formpermission.Where(f=> f.CanList == true || f.CanUpdate == true).Any()) {
+                            if (ViewBag.PatientID == "0" || ViewBag.PatientID == null)
+                            {
+                                var FormName = @item.FormName.Replace(" ", "");
                             <li class="nav-item">
                                 <a id="@("a" + FormName)" class="nav-link ProfileNotSaved isProfileSaved" data-toggle
                                    href="@("#" + FormName + "only")" data-ClientFormID="@item.ClientFormID" onclick="ErrorTab()" data-PatientID="@item.patientID" data-TemplateID="@item.TemplateID" data-FormName=@(FormName)>@item.FormName<span class="check @Html.Raw(item.Saved ? "" : "d-none")"><i class="fas fa-check-circle"></i></span></a>
 
                             </li>
-                        }
-                        else
-                        {
-                            var FormName = @item.FormName.Replace(" ", "");
+                            }
+                            else
+                            {
+                                var FormName = @item.FormName.Replace(" ", "");
                             <li class="nav-item">
                                 <a id="@("a" + FormName)" class="nav-link ProfileNotSaved isProfileSaved" data-toggle="tab"
                                    href="@("#" + FormName + "only")" data-ClientFormID="@item.ClientFormID" onclick="RebindClientFormEvent(this)" data-PatientID="@item.patientID" data-TemplateID="@item.TemplateID" data-FormName=@(FormName)>@item.FormName<span class="pColorCircle" style="display:none"></span><span class="notCount" id="@(FormName + "Notify")" style="display:none"></span><span class="check @Html.Raw(item.Saved ? "" : "d-none")"><i class="fas fa-check-circle"></i></span></a>
 
                             </li>
+                            }
                         }
 
                     }
@@ -296,6 +300,7 @@
             {
                 foreach (var item in Model.ClientForm)
                 {
+                    var formpermission = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["userid"]), item.ClientFormID, true);
                     var FormName = item.FormName.Replace(" ", "");
                     <div class="tab-pane fade" id="@(FormName + "only")" role="tabpanel" aria-labelledby="@("a"+FormName)">
                         <div class="inner-content">
@@ -322,10 +327,14 @@
                                                         <i class="far fa-edit"></i>
                                                         Display
                                                     </a>
-                                                    <a href="javascript:{}" onclick="return saveClientFormBasicInfo('@item.TemplateID','@item.TemplateTable',@item.ClientFormID,@item.patientID);" data-save="@(item.Saved ? "True" : "False")" class="btn btn-success ml-auto btnprogramsave">
-                                                        <i class="far fa-save"></i>
-                                                        Save
-                                                    </a>
+                                                    @if (formpermission.Where(f=>f.CanUpdate == true).Any())
+                                                    {
+                                                        <a href="javascript:{}" onclick="return saveClientFormBasicInfo('@item.TemplateID','@item.TemplateTable',@item.ClientFormID,@item.patientID);" data-save="@(item.Saved ? "True" : "False")" class="btn btn-success ml-auto btnprogramsave">
+                                                            <i class="far fa-save"></i>
+                                                            Save
+                                                        </a>
+                                                    }
+
                                                     <a href="javascript:{}" onclick="PrintProgram('@FormName')"
                                                        class="btn btn-success label-fields btnprogramPrint">
                                                         <i class="far fa-save"></i>
@@ -6925,16 +6934,40 @@
 
                         $.each(data, function (i, item) {
                             if (item.ClientFormID != ClientFormId) {
-                                var formname = item.FormName.replace(/ /g, '');
-                                if (item.Saved == true) {
-                                    myChildTab.append(`<li class="nav-item" style="display: flex;" ><a id="${formname}" style="width: 230px;" data-FormName="${formname}" data-TemplateID="${item.TemplateID}" onclick="RebindClientFormEvent(this)" class="nav-link Child" href="${'#' + formname + 'only'}"data-ClientFormID="${item.ClientFormID}"data-PatientID="${item.PatientID}">
-                                ${item.FormName}<span class="notCount" id="${formname + "Notify"}" style="display:none"></span><span class="check" ${item.Saved}?"":style='display:none' ><i class="fas fa-check-circle"></i></span></a></li>`
-                                    )
-                                } else {
-                                    myChildTab.append(`<li class="nav-item" style="display: flex;" ><a id="${formname}" style="width: 230px;" data-FormName="${formname}" data-TemplateID="${item.TemplateID}" onclick="RebindClientFormEvent(this)" class="nav-link Child" href="${'#' + formname + 'only'}"data-ClientFormID="${item.ClientFormID}"data-PatientID="${item.PatientID}">
-                                ${item.FormName}<span class="notCount" id="${formname + "Notify"}" style="display:none"></span><span class="check" ${item.Saved}?"":style='display:none' ></i></span></a></li>`
-                                    )
+
+                                var canViewChildForm = false;
+                                // check permission
+                                $.ajax({
+                                    type: "GET",
+                                    url: Apipath + '/api/PatientMain/GetPermissionsByModuleId?userId=' + parseInt(_userID) + '&&moduleId=' + item.ClientFormID + '&&isClientForm=' + true,
+                                    contentType: 'application/json; charset=UTF-8',
+                                    dataType: "json",
+                                    async: false,
+                                    success: function (result) {
+                                        if (result[0].CanUpdate == true || result[0].CanList == true) {
+                                            canViewChildForm = true
+                                        }
+
+                                    },
+                                    error: function (e) {
+
+                                    }
+                                });
+
+                                // check permission
+                                if (canViewChildForm || canViewChildForm == 'True') {
+                                    var formname = item.FormName.replace(/ /g, '');
+                                    if (item.Saved == true) {
+                                        myChildTab.append(`<li class="nav-item" style="display: flex;" ><a id="${formname}" style="width: 230px;" data-FormName="${formname}" data-TemplateID="${item.TemplateID}" onclick="RebindClientFormEvent(this)" class="nav-link Child" href="${'#' + formname + 'only'}"data-ClientFormID="${item.ClientFormID}"data-PatientID="${item.PatientID}">
+                                    ${item.FormName}<span class="notCount" id="${formname + "Notify"}" style="display:none"></span><span class="check" ${item.Saved}?"":style='display:none' ><i class="fas fa-check-circle"></i></span></a></li>`
+                                        )
+                                    } else {
+                                        myChildTab.append(`<li class="nav-item" style="display: flex;" ><a id="${formname}" style="width: 230px;" data-FormName="${formname}" data-TemplateID="${item.TemplateID}" onclick="RebindClientFormEvent(this)" class="nav-link Child" href="${'#' + formname + 'only'}"data-ClientFormID="${item.ClientFormID}"data-PatientID="${item.PatientID}">
+                                    ${item.FormName}<span class="notCount" id="${formname + "Notify"}" style="display:none"></span><span class="check" ${item.Saved}?"":style='display:none' ></i></span></a></li>`
+                                        )
+                                    }
                                 }
+                             
                             }
                             else {
                                 activeChildForm = item.FormName.replace(/ /g, '');
@@ -6944,7 +6977,7 @@
                     }
 
                     if (myChildTab.find("li").length == 0) {
-                        $('#' + formName + 'only').removeClass('client-form-margin-top');
+                       /* $('#' + formName + 'only').removeClass('client-form-margin-top');*/
                     } else {
                         SetScheduling()
                     }

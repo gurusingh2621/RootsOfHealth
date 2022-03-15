@@ -34,19 +34,20 @@ namespace RootsOfHealth.Models
             Users,
             RolesPermission,
             FormScheduling,
-            PotientialPatient,
-            Notes,
+            CarePlanRequests,
+            NotesTemplate,
             Client,
             Authorization,
             UserGroup,
             AppointmentSetting,
-            Careplan,
+            CareplanTemplate,
             FormsharingExport,
             SystemSetting,
             PotentialClient,
             Programs,
             ClientForms,
-            ClientrequestIntake
+            ClientrequestIntake,
+            Notes
 
         }
         public static bool HasPermission(int ModuleId,int PermissionType) {

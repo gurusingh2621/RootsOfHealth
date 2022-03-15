@@ -134,7 +134,7 @@ namespace RootsOfHealth.Controllers
                 client.BaseAddress = new Uri(WebApiKey);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var responseTask = client.GetAsync("api/PatientMain/getrolepermissionbyRoleid?roleid=" + roleid);
+                var responseTask = client.GetAsync("api/PatientMain/getrolepermissionbyUserid?userId=" + roleid);
                 responseTask.Wait();
 
                 var result = responseTask.Result;

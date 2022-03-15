@@ -4,7 +4,7 @@
     Layout = "";
 }
 @{
-    var appointmentSettPerm = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["RoleId"]), Convert.ToInt32(PermissionModel.Module.AppointmentSetting));
+    var appointmentSettPerm = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["userid"]), Convert.ToInt32(PermissionModel.Module.AppointmentSetting));
     if (appointmentSettPerm.Where(x => x.CanList == false && (x.CanCreate != true && x.CanUpdate != true && x.CanDelete != true)).Any())
     {
         Response.Redirect(Url.Action("Display", "Dashboard", new { }));

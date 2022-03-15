@@ -101,18 +101,5 @@
             $(".otherToggle").slideToggle("slow");
         });
 
-        $.each($('.ProfileContent select'), function (index, value) {
-            $('#option_' + index).multiselect({
-                includeSelectAllOption: true,
-                nonSelectedText: 'Nothing selected',
-                buttonWidth: '100%',
-                maxHeight: 300
-            });
-        })
-
-        $.each($('.ProfileContent select'), function (index, value) {
-            $('#option_' + index).closest('div').find('label').append('<span></span>');
-            $('#option_' + index).multiselect("refresh");
-        })
     });
 </script>

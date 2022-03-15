@@ -5,7 +5,7 @@
     ViewBag.Title = "Roles";
 }
 @{
-    var rolesPerm = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["RoleId"]), Convert.ToInt32(PermissionModel.Module.RolesPermission));
+    var rolesPerm = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["userid"]), Convert.ToInt32(PermissionModel.Module.RolesPermission));
     if (rolesPerm.Where(x => x.CanList == false && (x.CanCreate != true && x.CanUpdate != true && x.CanDelete != true)).Any())
     {
         Response.Redirect(Url.Action("Display", "Dashboard", new { }));
@@ -184,7 +184,7 @@
                         <!-- Profile Tab end here  -->
                         <!-- Permission Tab Start here  -->
                         <div class="tab-pane fade" id="PermissionAdmin" role="tabpanel" aria-labelledby="PermissionAdmin-tab">
-                            <div class="ProfileContent permissionScroll">
+                            <div class="ProfileContent permissionScroll scroll">
 
                             </div>
                             <div class="modal-footer">
@@ -195,7 +195,7 @@
                                 }
                                 @if (rolesPerm.Where(x => x.CanUpdate == true).Any())
                                 {
-                                    <button type="button" class="btn btn-primary" hidden="hidden" onclick="SaveRolePermission()" id="updatepermission">Update</button>
+                                    <button type="button" class="btn btn-primary d-none" hidden="hidden" onclick="SaveRolePermission()" id="updatepermission">Update</button>
                                 }
                                 </div>
                         </div>
@@ -252,9 +252,19 @@
                 });
 
             });
-       
+
+        $(".ProfileContent").on('change', 'select', function (e) {
+
+            $("#updatepermission").removeClass('d-none');
+        });
+        $('.ProfileContent .profileRepeateRow').on('keyup', 'input', function () {
+            $("#updateroleOnly").removeAttr('hidden');
+        })
         $('#PermissionAdmin-tab').click(function () {
-            
+
+            if ($('#PermissionAdmin .ProfileContent').html().trim() != '' && $('#PermissionAdmin-tab').hasClass('active show')) {
+                return false;
+            }
                 var roleId = $("#hdnRoleid").html();
                 $.ajax({
                     type: "Get",
@@ -268,7 +278,8 @@
 
                             $('#PermissionAdmin .ProfileContent').html('');
                             $('#PermissionAdmin .ProfileContent').html(data)
-                            $("#addRoleModal").modal('show');
+                           $("#addRoleModal").modal('show');
+                           $("#updatepermission").addClass('d-none');
 
 
                     },
@@ -277,6 +288,19 @@
 
                     },
                     complete: function () {
+                        $.each($('.ProfileContent select'), function (index, value) {
+                            $('#option_' + index).multiselect({
+                                includeSelectAllOption: true,
+                                nonSelectedText: 'Nothing selected',
+                                buttonWidth: '100%',
+                                maxHeight: 300
+                            });
+                        })
+
+                        $.each($('.ProfileContent select'), function (index, value) {
+                            $('#option_' + index).closest('div').find('label').append('<span></span>');
+                            $('#option_' + index).multiselect("refresh");
+                        })
                         _Loader.StopLoader()
                     }
                 });
@@ -334,8 +358,8 @@
 
                         if (result != undefined || result != null) {
                             $("#saveroleOnly").attr('hidden', 'hidden');
-                            $("#updateroleOnly").removeAttr('hidden');
                             $("#savepermission").attr('hidden', 'hidden');
+                            $("#updateroleOnly").attr('hidden', 'hidden');
                             $("#updatepermission").removeAttr('hidden');
                             //$("#editSection").html('');
                             //$("#editSection").html(result);

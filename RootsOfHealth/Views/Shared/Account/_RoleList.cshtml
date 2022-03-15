@@ -2,7 +2,7 @@
 @using RootsOfHealth.Commom;
 @using RootsOfHealth.Models;
 @{
-    var rolesPerm = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["RoleId"]), Convert.ToInt32(PermissionModel.Module.RolesPermission));
+    var rolesPerm = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["userid"]), Convert.ToInt32(PermissionModel.Module.RolesPermission));
     
 }
 <table class="table table-bordered" id="tblRole">

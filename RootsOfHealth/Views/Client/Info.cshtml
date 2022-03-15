@@ -1,4 +1,5 @@
 ﻿@model List<RootsOfHealth.Models.ClientFormForPatientBO>
+@using RootsOfHealth.Commom
 @{
     ViewBag.Title = "Info";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -154,16 +155,20 @@
                 {
                     foreach (var item in Model.Where(p => p.ParentFormID == null || p.ParentFormID == 0))
                     {
-                        string FormName = @item.FormName.Replace(" ", "");
-
+                        var formpermission = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["userid"]), item.ClientFormID, true);
+                        string FormName = item.FormName.Replace(" ", "");
+                        if (formpermission.Where(f => f.CanList == true || f.CanUpdate == true).Any())
+                        {
                         <li class="nav-item">
                             <a id="@("a" + FormName)" class="nav-link" data-toggle="tab"
                                href="@("#" + FormName + "only")" data-ClientFormID="@item.ClientFormID" data-PatientID="@item.patientID" onclick="loadClient(this)" data-TemplateID="@item.TemplateID" data-FormName=@(FormName)>@item.FormName<span class="pColorCircle" style="display:none"></span><span class="notCount" id="@(FormName + "Notify")" style="display:none"></span><span class="check @Html.Raw(item.Saved ? "" : "d-none")"><i class="fas fa-check-circle"></i></span></a>
 
                         </li>
+                        }
 
                     }
-                }
+                 }
+                
 
                 <li class="nav-item" id="programtbs" style="display:none;/*left: 155px;*/">
                     <a class="nav-link" id="Programs-tab" data-toggle="tab" href="#Programs" role="tab"

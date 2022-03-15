@@ -1,6 +1,15 @@
-﻿
+﻿@using RootsOfHealth.Commom;
+@using RootsOfHealth.Models;
 @{
     ViewBag.Title = "Settings";
+}
+@{
+    var systemSettingPerm = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["userid"]), Convert.ToInt32(PermissionModel.Module.SystemSetting));
+    if (systemSettingPerm.Where(x => x.CanList == false && x.CanUpdate == false).Any())
+    {
+        Response.Redirect(Url.Action("Display", "Dashboard", new { }));
+
+    }
 }
 
 
@@ -81,13 +90,12 @@
             top: 8px;
             cursor: pointer;
         }
+
     #SaveEmailCredsBtn:disabled,
     #SharedFormSchedulerbtn:disabled {
         border: 1px solid rgb(161, 161, 161);
         background-color: rgb(161, 161, 161);
     }
-    
-
 </style>
 
 
@@ -169,7 +177,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Port</label>
-                                        <input type="number"  min="0" placeholder="" id="Port" name="port-name" class="form-control" style="max-width:100px;" />
+                                        <input type="number" min="0" placeholder="" id="Port" name="port-name" class="form-control" style="max-width:100px;" />
                                     </div>
                                 </div>
 
@@ -202,20 +210,20 @@
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                    
-                                        <div class="form-group">
-                                            <label>Shared Forms Expire After</label>
-                                            <div class="d-flex">
-                                                <input type="number" placeholder="" min="1" name="fsexpirationDate" id="fsexpirationDate" class="form-control" style="max-width:100px;" />
 
-                                                <select class="form-control" id="fsTimeUnit" style="max-width: 100px;margin-left: 5px;">
-                                                    <option value="1">Day</option>
-                                                    <option value="3">Month</option>
-                                                </select>
-                                            </div>
+                                    <div class="form-group">
+                                        <label>Shared Forms Expire After</label>
+                                        <div class="d-flex">
+                                            <input type="number" placeholder="" min="1" name="fsexpirationDate" id="fsexpirationDate" class="form-control" style="max-width:100px;" />
+
+                                            <select class="form-control" id="fsTimeUnit" style="max-width: 100px;margin-left: 5px;">
+                                                <option value="1">Day</option>
+                                                <option value="3">Month</option>
+                                            </select>
                                         </div>
-                                        </div>
+                                    </div>
                                 </div>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -231,8 +239,14 @@
     <script>
         var url = window.location.hostname
          var _userID = "@Session["userid"]";
-           var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
+        var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
+        var canEditSystemSetting = '@systemSettingPerm.Where(x => x.CanUpdate == true).Any()';
         $(function () {
+            
+            if (canEditSystemSetting == 'False') {
+                $('#customSwitch').prop('disabled', true);
+            }
+
             $.ajax({
                 type: "Get",
                 url: Apipath + '/api/PatientMain/checkaccountsetting?userid='+@Session["userid"],
@@ -316,4 +330,4 @@
         }*@
     </script>
 }
-    <script src="../Scripts/AccountSetting/AccountSetting.js"></script>
+<script src="../Scripts/AccountSetting/AccountSetting.js"></script>

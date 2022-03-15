@@ -1,7 +1,17 @@
 ﻿@model IEnumerable<RootsOfHealth.Models.FormSchedulingBO>
+@using RootsOfHealth.Commom;
+@using RootsOfHealth.Models;
 @{
     ViewBag.Title = "FormScheduling";
     Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{ 
+    var formSchedulingPerm = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["userid"]), Convert.ToInt32(PermissionModel.Module.FormScheduling));
+    if (formSchedulingPerm.Where(x => x.CanList == false && x.CanUpdate == false).Any())
+    {
+        Response.Redirect(Url.Action("Display", "Dashboard", new { }));
+
+    }
 }
 
 @*<h2>FormScheduling</h2>*@
@@ -394,7 +404,8 @@
 @section scripts{
     <script>
 
-    var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
+        var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
+        var canEditFormSchedule = '@formSchedulingPerm.Where(x=>x.CanUpdate == true).Any()';
 
     //----- get Form Scheduling  detail by  id
     function EditFormScheduling(id) {

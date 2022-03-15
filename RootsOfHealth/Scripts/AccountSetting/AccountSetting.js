@@ -170,6 +170,9 @@ function GetEmailCreds() {
                 $EmailCreds.val(result.Id)
                 UpdateSaveButton(result.Id)
             }
+            if (canEditSystemSetting == 'False') {
+                $SaveEmailCredsBtn.hide();
+            }
 
         },
         complete: function () {
@@ -221,6 +224,10 @@ function GetSharedFormFrequency() {
 
             $SharedFormExpiryAfter.val(result.ExpireAfter);
             $FsTimeUnit.val(result.TimeUnit)
+
+            if (canEditSystemSetting == 'False') {
+                $SharedFormScheduler.hide();
+            }
         },
         complete: function () {
             _Loader.StopLoader()

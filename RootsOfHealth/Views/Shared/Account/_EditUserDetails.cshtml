@@ -6,7 +6,7 @@
     Layout = "";
 }
 @{
-    var userEditPerm = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["RoleId"]), Convert.ToInt32(PermissionModel.Module.Users));
+    var userEditPerm = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["userid"]), Convert.ToInt32(PermissionModel.Module.Users));
   
 }
 <div class="tab-pane active" id="UserProfile" role="tabpanel" aria-labelledby="UserProfile-tab">
