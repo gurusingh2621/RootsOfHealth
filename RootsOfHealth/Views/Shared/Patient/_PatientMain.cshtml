@@ -319,24 +319,26 @@
                                 <a href="javascript:void(0)" id="btnAMDProfile" class="btn btn-success mb-2">
                                     AMD Profile
                                 </a>
-                                <a href='javaScript:void(0)' onclick="getCarePlanList()"
-                                   class="btn btn-success label-fields" data-toggle="carePlansSidebar">
-                                    Care Plans<span class="careplanCount">@(Model.CareplanCount==0?"":"("+ @Model.CareplanCount.ToString()+ ")")</span>
-                                </a>
-                                @if (modulePermissions.Where(x => x.ModuleName == "Appointment" && (x.CanCreate == true || x.CanList == true)).Any())
-                                {
-                                    <a href='javaScript:void(0)' onclick="LoadAppointmentsAndLocations()"
-                                       id="btnPatientAppointments" class="btn btn-success label-fields">
-                                        Appointments
+                                
+                                    <a href='javaScript:void(0)' onclick="getCarePlanList()"
+                                       class="btn btn-success label-fields" data-toggle="carePlansSidebar">
+                                        Care Plans<span class="careplanCount">@(Model.CareplanCount == 0 ? "" : "(" + @Model.CareplanCount.ToString() + ")")</span>
                                     </a>
-                                } 
-                                @if (modulePermissions.Where(x => x.ModuleName == "Notes" && (x.CanCreate == true || x.CanList == true || x.CanDelete == true || x.CanUpdate == true)).Any())
-                                {
-                                    <a href='javaScript:void(0)' onclick="LoadAllNotes()"
-                                       id="btnPatientNotes" class="btn btn-success label-fields">
-                                        Notes
-                                    </a>
-                                }
+                                
+                                    @if (modulePermissions.Where(x => x.ModuleName == "Appointment" && (x.CanCreate == true || x.CanList == true)).Any())
+                                    {
+                                        <a href='javaScript:void(0)' onclick="LoadAppointmentsAndLocations()"
+                                           id="btnPatientAppointments" class="btn btn-success label-fields">
+                                            Appointments
+                                        </a>
+                                    }
+                                    @if (modulePermissions.Where(x => x.ModuleName == "Notes" && (x.CanCreate == true || x.CanList == true || x.CanDelete == true || x.CanUpdate == true)).Any())
+                                    {
+                                        <a href='javaScript:void(0)' onclick="LoadAllNotes()"
+                                           id="btnPatientNotes" class="btn btn-success label-fields">
+                                            Notes
+                                        </a>
+                                    }
                                     @if (modulePermissions.Where(x => x.ModuleName == "Client" && x.CanUpdate == true).Any())
                                     {
                                         <a href='javaScript:void(0)' onclick="ActivateTab(@Model.PatientID,'Profile-tab')"
@@ -1975,8 +1977,10 @@
                         <h3>Care Plans</h3>
                         <div class="ml-auto">
                             @*<a href="#" class="btn btn-success" data-toggle="addNewCarePlansSidebar">Add New</a>*@
-
+                            @if (modulePermissions.Where(x => x.ModuleName == "Client" && x.CanUpdate == true).Any())
+                            {
                             <a href="javascript:void(0);" class="btn btn-success" onclick="getCareProgramOptions()">Add New</a>
+                            }
                             <a class="close_right_sidebar carePlan_sideBar" href="javascript:void(0);"><i class="fa fa-times"></i></a>
                         </div>
                     </div>
@@ -2480,6 +2484,7 @@
     var RequestStatus = 0;
     var RequestId=0
     var careplanUploadedPath = "@System.Web.Configuration.WebConfigurationManager.AppSettings["CarePlanUploadPath"]";
+    var canEditClient = '@modulePermissions.Where(x => x.ModuleName == "Client" && x.CanUpdate == true).Any()'
 </script>
 @*<script src="~/Scripts/jquery-ui.js"></script>*@
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.js"></script>

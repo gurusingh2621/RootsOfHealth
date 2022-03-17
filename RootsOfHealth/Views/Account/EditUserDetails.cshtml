@@ -1,18 +1,24 @@
 ﻿@model RootsOfHealth.Models.UserBO
+@using RootsOfHealth.Commom;
+@using RootsOfHealth.Models;
+@{
+    var usersPerm = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["userid"]), Convert.ToInt32(PermissionModel.Module.Users));
+
+}
 @{
     ViewBag.Title = "EditUserDetails";
 }
 <style>
     #content .inner-content .top-image-row .paitent-img {
         max-width: 60%;
-       
     }
-    
+
 
     .btn-success:hover {
         background: #35c8af;
         border: 1px solid #35c8af;
     }
+
     .appointment .form-control {
         border: 1px solid #e2e2e2;
         background: #fff;
@@ -53,10 +59,12 @@
         padding: 8px 20px;
         margin-right: 5px;
     }
+
     input#usersImg {
         margin-top: 20px;
         margin-bottom: 20px;
     }
+
     .field-icon {
         float: right;
         margin-left: -25px;
@@ -80,10 +88,15 @@
                         <a class="nav-link active" id="UserProfile-tab" data-toggle="tab" href="#UserProfile" role="tab"
                            aria-controls="UserProfile" aria-selected="true">Edit User</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="ChnagePWD-tab" data-toggle="tab" href="#ChnagePWD" role="tab"
-                           aria-controls="ChnagePWD" aria-selected="false">Change Password</a>
-                    </li>
+                    @if (usersPerm.Where(u=> u.CanUpdate == true).Any())
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" id="ChnagePWD-tab" data-toggle="tab" href="#ChnagePWD" role="tab"
+                               aria-controls="ChnagePWD" aria-selected="false">Change Password</a>
+                        </li>
+
+                    }
+
 
 
                 </ul>
@@ -98,7 +111,7 @@
                 }
             </div>
         </div>
-        </div>
+    </div>
 </section>
 @section scripts{
     <script>
@@ -248,7 +261,7 @@
                 "Image": $("input[type=hidden][name=userImg]").val(),
 
             };
-            
+
 
             var currentRole = $('#RoleName').val()
 
@@ -260,7 +273,7 @@
                 dataType: "json",
                 success: function (result) {
                     if (result != '') {
-                        
+
                         toastr.success("User updated successfully");
                         if (userId == '@Model.UserID' && PrevUserrole != currentRole) {
                             location.href = "/Account/Index";

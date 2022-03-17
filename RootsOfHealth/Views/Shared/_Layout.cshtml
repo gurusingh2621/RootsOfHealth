@@ -1042,7 +1042,7 @@
                 }
 
                 <li id="MyAccountNavItem"><a href="/Account/UserDetails?username=@FormsAuthentication.Decrypt(Request.Cookies[FormsAuthentication.FormsCookieName].Value).Name" id="Account" class="nav-menu"><span class="account-icon"></span> My Account</a></li>
-                <li id="LookUpTableNavItem"><a href="/Patient/WebGridShowLookUpOption" id="LookUpOption" class="nav-menu"><span class="lookup-icon"></span>LookUpTable</a></li>
+                @*<li id="LookUpTableNavItem"><a href="/Patient/WebGridShowLookUpOption" id="LookUpOption" class="nav-menu"><span class="lookup-icon"></span>LookUpTable</a></li>*@
 
                 @if (modulePermissions.Where(x => x.ModuleName == "Form Scheduling" && (x.CanList == true || x.CanUpdate == true)).Any())
                 {

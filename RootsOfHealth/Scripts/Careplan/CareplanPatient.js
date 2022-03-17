@@ -162,10 +162,14 @@ function getCarePlanList() {
                     }
                     careplanList += `<td width="15%">${result[i].CreatedDate.split("T")[0]}</td>`;
                     careplanList += `<td width="15%">${result[i].ModifiedDate.split("T")[0]}</td>`;
-                    careplanList += `<td width="20%"><div class="d-flex">
-                   <a href="javascript:void(0)" onclick="editCarePlan(${result[i].CarePlanId})" class="btn btn-success text-white" style="cursor:pointer;">${result[i].status == carePlanEnum.Completed ? 'View' :'Edit'}</a>
-                   <a href="javascript:void(0)"  onclick="deleteCarePlan(this)" class="btn btn-success text-white" style="cursor:pointer;">Delete</a>
-                       </div></td>`;
+                    careplanList += `<td width="20%"><div class="d-flex">`
+                    
+                   
+                    if (canEditClient == 'True') {
+                        careplanList += `<a href="javascript:void(0)" onclick="editCarePlan(${result[i].CarePlanId})" class="btn btn-success text-white" style="cursor:pointer;">${result[i].status == carePlanEnum.Completed ? 'View' : 'Edit'}</a>
+                        <a href="javascript:void(0)"  onclick="deleteCarePlan(this)" class="btn btn-success text-white" style="cursor:pointer;">Delete</a>`
+                    }
+                    careplanList += `</div></td>`;
                 }
                 $(".careplanlist tbody").html("").append(careplanList);
                 $(".careplanlist").DataTable({
@@ -1068,10 +1072,13 @@ function closecarePlan() {
                     }
                     careplanList += `<td width="15%">${result[i].CreatedDate.split("T")[0]}</td>`;
                     careplanList += `<td width="15%">${result[i].ModifiedDate.split("T")[0]}</td>`;
-                    careplanList += `<td width="20%"><div>
-                   <a href="javascript:void(0)" onclick="editCarePlan(${result[i].CarePlanId})" class="btn btn-success text-white" style="cursor:pointer;">${result[i].status == carePlanEnum.Completed ? 'View' : 'Edit'}</a>
-                   <a href="javascript:void(0)"  onclick="deleteCarePlan(this)" class="btn btn-success text-white" style="cursor:pointer;">Delete</a>
-                       </div></td>`;
+                    careplanList += `<td width="20%"><div>`
+                 
+                    if (canEditClient == 'True') {
+                        careplanList += `<a href="javascript:void(0)" onclick="editCarePlan(${result[i].CarePlanId})" class="btn btn-success text-white" style="cursor:pointer;">${result[i].status == carePlanEnum.Completed ? 'View' : 'Edit'}</a>
+                       <a href="javascript:void(0)"  onclick="deleteCarePlan(this)" class="btn btn-success text-white" style="cursor:pointer;">Delete</a>`
+                    }
+                    careplanList +=  `</div></td>`;
                 }
                 $(".careplanlist tbody").html("").append(careplanList);
                 $(".careplanlist").DataTable({
