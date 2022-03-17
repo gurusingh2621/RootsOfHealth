@@ -258,7 +258,11 @@
             $("#updatepermission").removeClass('d-none');
         });
         $('.ProfileContent .profileRepeateRow').on('keyup', 'input', function () {
-            $("#updateroleOnly").removeAttr('hidden');
+            
+            if ($("#hdnRoleid").html() != '') {
+                $("#updateroleOnly").removeAttr('hidden');
+            }
+           
         })
         $('#PermissionAdmin-tab').click(function () {
 
@@ -448,7 +452,7 @@
 
                                                  $("#hdnRoleid").html(result);
                                                  $('#PermissionAdmin-tab').click();
-
+                                                 updateRoleList();
                                                  $('#rolename').removeClass("invalid-field");
                                                  $('#PermissionAdmin-tab').attr("data-toggle", "tab");
                                                  $('#PermissionAdmin-tab').removeClass("disabled-li1");
