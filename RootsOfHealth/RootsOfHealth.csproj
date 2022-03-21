@@ -217,6 +217,7 @@
     <Compile Include="Models\LookUpFieldBO.cs" />
     <Compile Include="Models\LookUpFieldOptionBO.cs" />
     <Compile Include="Models\LookUpOptionBO.cs" />
+    <Compile Include="Models\ModulepermissionsBO.cs" />
     <Compile Include="Models\NotesTemplateFieldBO.cs" />
     <Compile Include="Models\OUOnlyBO.cs" />
     <Compile Include="Models\PatientAllDetailByIDBO.cs" />
@@ -248,6 +249,7 @@
     <Compile Include="Models\ClientFormtemplateBO .cs" />
     <Compile Include="Models\ProgramtemplateBO.cs" />
     <Compile Include="Models\ReleaseAndDisclousureBO.cs" />
+    <Compile Include="Models\RolePermissionsBO.cs" />
     <Compile Include="Models\ScheduleDateBO.cs" />
     <Compile Include="Models\SharedFormDataBO.cs" />
     <Compile Include="Models\SharedFormForExportBO.cs" />
@@ -752,6 +754,7 @@
     <Content Include="Views\Shared\Client\_FormLogHistory.cshtml" />
     <Content Include="Views\Shared\Client\_LogHistoryPopUp.cshtml" />
     <Content Include="Views\Client\Sharing.cshtml" />
+    <Content Include="Views\Shared\Role\_RolePermissionsList.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

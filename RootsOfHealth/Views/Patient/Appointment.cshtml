@@ -1,9 +1,20 @@
 ﻿@*@model RootsOfHealth.Models.PatientDetailBO*@
+@using RootsOfHealth.Commom;
+@using RootsOfHealth.Models;
 @{
     /**/
 
     ViewBag.Title = "Appointment";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var appointPerm = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["userid"]), Convert.ToInt32(PermissionModel.Module.Appointment));
+
+
+    if (appointPerm.Where(x=> x.CanList == false &&(x.CanCreate != true && x.CanUpdate != true)).Any())
+    {
+        Response.Redirect(Url.Action("Display", "Dashboard",new {}));
+
+    }
 }
 
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -108,10 +119,12 @@
                         Add Appointment
                     </button>*@
                 <div class="button-set">
+                    @if (appointPerm.Where(x=> x.CanCreate == true).Any())
+                    {
                     <button type="button" class="btn btn-primary Appointment-btn" onclick="addAppointment()">
                         Add Appointment
                     </button>
-
+                    }
                     <button type="button" class="btn btn-primary Appointment-btn" onclick="addFilter()">
                         Filter
                     </button>
@@ -187,8 +200,11 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" onclick="closeModel()" class="btn btn-secondary">Cancel</button>
-                        <button type="button" onclick="saveAppointment()" class="btn btn-primary">Save</button>
+                        <button type="button" id="SaveAppointment" onclick="saveAppointment()" class="btn btn-primary">Save</button>
+                        @if(appointPerm.Where(x => x.CanDelete == true).Any())
+                        { 
                         <button type="button" id="DeleteAppointment" onclick="deleteAppointment()" class="btn btn-primary">Delete</button>
+                        }
                     </div>
                 </form>
             </div>
@@ -252,7 +268,7 @@
         var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]'
         var autoCompleteArray = [];                   // array to store all patients for autocomplete
         var AllAppointmentArray = [];
-
+        var CanEditAppointment = '@(appointPerm.Where(x => x.CanUpdate == true).Any())'
         var TypeArray = [];
         var LocationArray = [];
 
@@ -289,7 +305,7 @@
 
         // save new appointment
         function saveAppointment(appointmentInfo) {
-           
+
             var data = {};
 
             if (typeof appointmentInfo == "undefined") {
@@ -320,7 +336,7 @@
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (result) {
-                   
+
                     getAllAppointments();
                     $('#exampleModal').modal('hide');
                     emptyModel();
@@ -470,20 +486,20 @@
                         AppointmentTime: info.start.format("hh:mm A"),
                         PatientID: obj.PatientID,
                         Notes: obj.Notes,
-                        AppointmentEndTime: info.end.format("hh:mm A")                        
+                        AppointmentEndTime: info.end.format("hh:mm A")
                     }
                     saveAppointment(data);
                 },
                 // event fire on click of any event
                 eventClick: function (info) {
-                    getAppointmentByid(info.id)
-                    $("#DeleteAppointment").show();
-                    $('#exampleModal').modal('show');
+                        getAppointmentByid(info.id)
+                        $("#DeleteAppointment").show();
+                        $('#exampleModal').modal('show');
                 },
 
                  // event fire on day click
                 dayClick: function (date, allDay, jsEvent, view) {
-                   
+
                     var date = new Date(date);
                     var tzDifference = date.getTimezoneOffset();
                     var offset = new Date(date.getTime() + tzDifference * 60 * 1000);
@@ -501,7 +517,11 @@
                     $("#DeleteAppointment").hide();
                     $('#exampleModal').modal('show');
                 },
-
+                eventAllow: function () {
+                    if (CanEditAppointment == 'False') {
+                        return false;
+                    }
+                },
                 // event fire on drag drop of appointment
                 eventDrop: function (info) {
                    var data =  info.start.toISOString()
@@ -523,14 +543,14 @@
             $('#calendar').fullCalendar('removeEventSource', eventData);
             $('#calendar').fullCalendar('addEventSource', eventData);
 
-           
+
             var data = $('#calendar');
 
 
         }
 
         $("#calendar .fc-month-button").on("click", function () {
-           
+
             alert(1);
         });
 
@@ -620,6 +640,10 @@
                     let obj = autoCompleteArray.find(o => o.id === result.PatientID);
                 //    let abc = TypeArray.find(o => o.Id === result.TypeOfAppointment);
                     $("#autoPatientList").val(obj.value);
+
+                    if (CanEditAppointment == 'False') {
+                        $("#SaveAppointment").hide();
+                    }
                 },
                 error: function (e) {
                     toastr.error("Error while inserting data");

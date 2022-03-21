@@ -897,5 +897,53 @@ namespace RootsOfHealth.Commom
             }
 
         }
+
+        public List<PermissionModel> GetMainModulesPermission(int userId)
+        {
+            List<PermissionModel> permissionModel = new List<PermissionModel>();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                //HTTP GET
+                var responseTask = client.GetAsync("/api/PatientMain/GetMainMenuPermissions?userId=" + userId);
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<List<PermissionModel>>();
+                    readTask.Wait();
+                    permissionModel = readTask.Result;
+
+
+                }
+
+            }
+            return permissionModel;
+        }
+
+        public List<ModulepermissionsBO> GetPermissionsByModuleId(int userId, int moduleId,bool isClientForm = false)
+        {
+            List<ModulepermissionsBO> permissionModel = new List<ModulepermissionsBO>();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                //HTTP GET
+                var responseTask = client.GetAsync("/api/PatientMain/GetPermissionsByModuleId?userId=" + userId + "&&moduleId=" + moduleId+ "&&isClientForm="+ isClientForm);
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<List<ModulepermissionsBO>>();
+                    readTask.Wait();
+                    permissionModel = readTask.Result;
+
+
+                }
+
+            }
+            return permissionModel;
+        }
     }
 }

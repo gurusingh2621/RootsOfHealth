@@ -1,7 +1,16 @@
-﻿
+﻿@using RootsOfHealth.Commom;
+@using RootsOfHealth.Models;
 @{
     ViewBag.Title = "List";
     Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    var programsPerm = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["userid"]), Convert.ToInt32(PermissionModel.Module.Programs));
+    if (programsPerm.Where(x => x.CanList == false && (x.CanCreate != true && x.CanUpdate != true && x.CanDelete != true)).Any())
+    {
+        Response.Redirect(Url.Action("Display", "Dashboard", new { }));
+
+    }
 }
 <link href="~/css/programlist.css" rel="stylesheet" />
 <link href="~/css/previewinpopup.css" rel="stylesheet" />
@@ -17,11 +26,14 @@
                 <div class="detail-heading d-flex templatelist">
                     <h2>Programs</h2>
                 </div>
-                <a href="javascript:void(0)" class="btn btn-success mb-2"  data-toggle="modal" data-target="#CreateProgramModal">Create Program</a>
+                @if (programsPerm.Where(x=>x.CanCreate == true).Any()) 
+                { 
+                <a href="javascript:void(0)" class="btn btn-success mb-2" data-toggle="modal" data-target="#CreateProgramModal">Create Program</a>
+                }
                 <table id="tblProgramTemplateList" class="table c_table  table-striped border">
                     <thead>
                         <tr class="table-active">
-                          
+
                             <th>PROGRAM</th>
                             <th>STATUS</th>
                             <th>MODIFIED DATE</th>
@@ -30,8 +42,8 @@
                         </tr>
                     </thead>
                     <tbody class="programlist">
-                        
-                      <tr></tr>
+
+                        <tr></tr>
 
                     </tbody>
                 </table>
@@ -119,6 +131,10 @@
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.js"></script>
     <script>
         var userId = "@Session["userid"]";
+        var canViewProgram = '@programsPerm.Where(x => x.CanList == true || x.CanUpdate == true).Any()';
+        var canMoifyProgram = '@programsPerm.Where(x => x.CanUpdate == true).Any()';
+        var canDeleteProgram = '@programsPerm.Where(x => x.CanDelete == true).Any()';
+
     </script>
     <script src="~/Scripts/program/programlist.js"></script>
 }

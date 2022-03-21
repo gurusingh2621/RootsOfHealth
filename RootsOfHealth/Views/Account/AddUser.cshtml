@@ -180,7 +180,7 @@
                                 @Html.ValidationMessageFor(model => model.PhoneNo, "", new { @class = "text-danger" })
                             </div>
                         </div>
-                        <div class="col-md-6" id="divclinic" hidden="hidden">
+                        <div class="col-md-6" id="divclinic" @*hidden="hidden"*@>
                             <div class="form-group">
                                 <label class="control-label">Select Clinic</label>
                                 <select id="ddlClinic" class="form-control"></select>
@@ -402,7 +402,7 @@
 
         }
         function SaveOnly() {
-
+            
            
             var file = $("#userImg").get(0).files[0];
            

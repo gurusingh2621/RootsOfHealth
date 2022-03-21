@@ -32,9 +32,15 @@ function GetGroupList() {
                          <td width="15%">${item.ModifiedDate != null ? item.ModifiedDate.split("T")[0] : ""}</td>
                          <td width="10%">${(item.MemberCount == null ? 0 : item.MemberCount)}</td>
                             <td width="30%"><div>`;
+                    
+                    if (canEditUserGroup == 'True' || canViewUserGroup == 'True')
+                    {
                     Groups += `<a href="javascript:void(0)" onclick="ManageMembership(${item.GroupID},${item.RoleID},'${item.GroupName}')" class="btn btn-success text-white" style="cursor:pointer;">Manage Membership</a>`
-                    Groups += `<a href="javascript:void(0)" onclick="DeleteGroup(${item.GroupID},this,${item.RoleID})" class="btn btn-success text-white" style="cursor:pointer;">Delete</a>`
-
+                    }
+                    if (canDeleteUserGroup == 'True')
+                    {
+                        Groups += `<a href="javascript:void(0)" onclick="DeleteGroup(${item.GroupID},this,${item.RoleID})" class="btn btn-success text-white" style="cursor:pointer;">Delete</a>`
+                    }
                     Groups += `</div></td></tr>`;
                 });
                 Grouplist.html("").append(Groups);
@@ -64,8 +70,11 @@ function GetGroupList() {
         }
     });
 }
-function ManageMembership(groupid,roleid,groupname) {
-
+function ManageMembership(groupid, roleid, groupname) {
+    
+    if (canEditUserGroup == 'False') {
+        $('#SaveGroupButton').hide();
+    }
     $.ajax({
         type: "GET",
         url: '/Account/AddGroup',

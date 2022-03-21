@@ -1,62 +1,78 @@
-﻿
+﻿@using RootsOfHealth.Commom;
+@using RootsOfHealth.Models;
 @{
     ViewBag.Title = "List";
     Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    var clientFormsPerm = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["userid"]), Convert.ToInt32(PermissionModel.Module.ClientForms));
+    if (clientFormsPerm.Where(x => x.CanList == false && x.CanUpdate == false).Any())
+    {
+        Response.Redirect(Url.Action("Display", "Dashboard", new { }));
+
+    }
 }
 <link href="~/css/programlist.css" rel="stylesheet" />
 <link href="~/css/previewinpopup.css" rel="stylesheet" />
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
 
 <style>
-.clientFormStatus .form-group {
-    display: flex;
-    align-items: flex-start;
-}
-.clientFormStatus .minMaxValue {
-    position: relative;
-    margin-left: 10px;
-}
-.clientFormStatus .minMaxValue > span {
-    position: absolute;
-    left: 1px;
-    top: 1px;
-    height: 28px;
-    background: #d8d8d8;
-    width: 50px;
-    color: #555;
-    font-size: 14px;
-    text-transform: uppercase;
-    text-align: center;
-    line-height: 30px;
-    border-radius: 4px 0px 0 4px;
-}
-.clientFormStatus .minMaxValue > input {
-    height: 30px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    padding-left: 60px;
-    max-width: 120px;
-}
-.clientFormStatus .form-group label {
-    min-width: 75px;
-}
+    .clientFormStatus .form-group {
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .clientFormStatus .minMaxValue {
+        position: relative;
+        margin-left: 10px;
+    }
+
+        .clientFormStatus .minMaxValue > span {
+            position: absolute;
+            left: 1px;
+            top: 1px;
+            height: 28px;
+            background: #d8d8d8;
+            width: 50px;
+            color: #555;
+            font-size: 14px;
+            text-transform: uppercase;
+            text-align: center;
+            line-height: 30px;
+            border-radius: 4px 0px 0 4px;
+        }
+
+        .clientFormStatus .minMaxValue > input {
+            height: 30px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            padding-left: 60px;
+            max-width: 120px;
+        }
+
+    .clientFormStatus .form-group label {
+        min-width: 75px;
+    }
+
     #ClientScore .modal-dialog {
         max-width: 400px;
     }
-#saveStatusForForm.disabled {
-    border: 1px solid rgb(161, 161, 161);
-    background-color: rgb(161, 161, 161);
-}
-span.errorMessage {
-    text-align: center;
-    display: block;
-    font-size: 13px;
-    background: rgb(230 21 21 / 18%);
-    color: #e61414;
-    padding: 3px 10px;
-    border-radius: 4px;
-    margin: 0 0 5px;
-}
+
+    #saveStatusForForm.disabled {
+        border: 1px solid rgb(161, 161, 161);
+        background-color: rgb(161, 161, 161);
+    }
+
+    span.errorMessage {
+        text-align: center;
+        display: block;
+        font-size: 13px;
+        background: rgb(230 21 21 / 18%);
+        color: #e61414;
+        padding: 3px 10px;
+        border-radius: 4px;
+        margin: 0 0 5px;
+    }
 </style>
 
 
@@ -72,26 +88,32 @@ span.errorMessage {
                 <div class="detail-heading d-flex templatelist">
                     <h2>Client Form</h2>
                 </div>
-                <a href="javascript:void(0)" class="btn btn-success mb-2" data-toggle="modal" data-target="#CreateClientFormModal">Create Form</a>
-                <a href="javascript:void(0)" onclick="SetStatus(0)" class="btn btn-success mb-2" style="cursor:pointer;">Manage Overall status</a>
-                <table id="tblProgramTemplateList" class="table c_table  table-striped border">
-                    <thead>
-                        <tr class="table-active">
+                @if (clientFormsPerm.Where(x=> x.CanCreate == true).Any())
+                {
+                    <a href="javascript:void(0)" class="btn btn-success mb-2" data-toggle="modal" data-target="#CreateClientFormModal">Create Form</a>
+                }
+                @if (clientFormsPerm.Where(x => x.CanUpdate == true).Any())
+                {
+                    <a href="javascript:void(0)" onclick="SetStatus(0)" class="btn btn-success mb-2" style="cursor:pointer;">Manage Overall status</a>
+                }
+                    <table id="tblProgramTemplateList" class="table c_table  table-striped border">
+                        <thead>
+                            <tr class="table-active">
 
-                            <th>Name</th>
-                            <th>STATUS</th>
-                            <th>MODIFIED DATE</th>
-                            <th>ACTIVE</th>
-                            <th>ACTION</th>
-                        </tr>
-                    </thead>
-                    <tbody class="programlist">
+                                <th>Name</th>
+                                <th>STATUS</th>
+                                <th>MODIFIED DATE</th>
+                                <th>ACTIVE</th>
+                                <th>ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody class="programlist">
 
-                        <tr></tr>
+                            <tr></tr>
 
-                    </tbody>
-                </table>
-            </div>
+                        </tbody>
+                    </table>
+                </div>
         </div>
     </div>
 </section>
@@ -146,7 +168,7 @@ span.errorMessage {
 
                 </div>
             </div>
-            
+
             <div class="modal-footer">
                 <a href='javascript:{}' class="btn btn-success label-fields btnProceed" onclick="CreateClientForm()">Save and Proceed</a>
 
@@ -244,6 +266,9 @@ span.errorMessage {
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.js"></script>
     <script>
         var userId = "@Session["userid"]";
+        var canEditClientForm = '@clientFormsPerm.Where(x=> x.CanUpdate == true).Any()';
+        var canViewClientForm = '@clientFormsPerm.Where(x=>x.CanList == true || x.CanUpdate == true).Any()';
+        var canDeleteClientForm = '@clientFormsPerm.Where(x=> x.CanDelete == true).Any()';
     </script>
     <script src="~/Scripts/ClientForms/ClientFormlist.js"></script>
 }

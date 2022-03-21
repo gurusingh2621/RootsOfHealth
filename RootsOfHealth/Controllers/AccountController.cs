@@ -104,6 +104,7 @@ namespace RootsOfHealth.Controllers
                                 Session["ClinicID"] = user.ClinicID;
                                 Session["UserName"] = user.UserName;
                                 Session["Roles"] = user.Roles;
+                                Session["RoleId"] = user.RoleID;
                                 Session["IsCarePlanApprover"] = user.isCarePlanApprover.HasValue ? user.isCarePlanApprover.Value : false;
                                 string usernameChars = string.IsNullOrWhiteSpace(user.FirstName) ?"" : user.FirstName[0].ToString();
                                 usernameChars+= string.IsNullOrWhiteSpace(user.LastName) ? "" : user.LastName[0].ToString();
@@ -133,7 +134,7 @@ namespace RootsOfHealth.Controllers
                 client.BaseAddress = new Uri(WebApiKey);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var responseTask = client.GetAsync("api/PatientMain/getrolepermissionbyRoleid?roleid=" + roleid);
+                var responseTask = client.GetAsync("api/PatientMain/getrolepermissionbyUserid?userId=" + roleid);
                 responseTask.Wait();
 
                 var result = responseTask.Result;
@@ -307,6 +308,29 @@ namespace RootsOfHealth.Controllers
 
             return View(UserRoles);
 
+        }
+        public ActionResult GetRolePermissionsByRoleId(int? roleId)
+        {
+            List<RolePermissionsBO> permissionModel = new List<RolePermissionsBO>();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                //HTTP GET
+                var responseTask = client.GetAsync("/api/PatientMain/getrolepermissionbyRoleid?roleid="+ roleId);
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<List<RolePermissionsBO>>();
+                    readTask.Wait();
+                    permissionModel = readTask.Result;
+                    
+
+                }
+
+            }
+            return PartialView("~/Views/Shared/Role/_RolePermissionsList.cshtml", permissionModel);
         }
         [HttpGet]
         public ActionResult UpdateRolesList()

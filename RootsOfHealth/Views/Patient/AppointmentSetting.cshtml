@@ -1,9 +1,9 @@
 ﻿
-
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <style>
     .showHide {
         display: none;
@@ -36,83 +36,88 @@
     .showHideNotes {
         height: 570px !important;
     }
+
     #tblType, #tblLocation {
         width: 100%;
         float: left;
         max-width: 100% !important;
     }
+
     .appointment {
         padding: 20px;
         height: calc(100vh - 155px) !important
     }
+    #content.appointmentSettingWrap .profile-tabs .nav-tabs {
+      overflow:hidden;
+    }
 </style>
 <section id="content" class="responsive-container appointmentSettingWrap">
-        <div class="profile-tabs">
-            <div class="tabs-scroll">
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="TypeOfAppointment-tab" data-toggle="tab" href="#TypeOfAppointment" role="tab"
-                           aria-controls="TypeOfAppointment" aria-selected="true">Type Of Appointment</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="LocationOfAppointment-tab" data-toggle="tab" href="#LocationOfAppointment" role="tab"
-                           aria-controls="LocationOfAppointment" aria-selected="false">Location Of Appointment</a>
-                    </li>
+    <div class="profile-tabs">
+        <div class="tabs-scroll">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="TypeOfAppointment-tab" data-toggle="tab" href="#TypeOfAppointment" role="tab"
+                       aria-controls="TypeOfAppointment" aria-selected="true">Type Of Appointment</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="LocationOfAppointment-tab" data-toggle="tab" href="#LocationOfAppointment" role="tab"
+                       aria-controls="LocationOfAppointment" aria-selected="false">Location Of Appointment</a>
+                </li>
 
-                </ul>
+            </ul>
+        </div>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="TypeOfAppointment" role="tabpanel" aria-labelledby="TypeOfAppointment-tab">
+                @{
+                    Html.RenderPartial("~/Views/Patient/_GetTypeOfAppointments.cshtml");
+
+                }
             </div>
-            <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="TypeOfAppointment" role="tabpanel" aria-labelledby="TypeOfAppointment-tab">
-                    @{
-                        Html.RenderPartial("~/Views/Patient/_GetTypeOfAppointments.cshtml");
-
-                    }
-                </div>
-                <div class="tab-pane fade" id="LocationOfAppointment" role="tabpanel" aria-labelledby="LocationOfAppointment-tab">
-                    @{
-                        Html.RenderPartial("~/Views/Patient/_GetLocationOfAppointment.cshtml");
-                    }
-                </div>
-
-                </div>
+            <div class="tab-pane fade" id="LocationOfAppointment" role="tabpanel" aria-labelledby="LocationOfAppointment-tab">
+                @{
+                    Html.RenderPartial("~/Views/Patient/_GetLocationOfAppointment.cshtml");
+                }
             </div>
-  
-    </section>
+
+        </div>
+    </div>
+
+</section>
 @section scripts{
-<script>
-    //$(function () {
-    //    GetAllLocationOfAppointment();
-    //    GetAllTypeOfAppointment();
-    //})
-    function deleteTypeOfAppointment(id) {
-               $.ajax({
-                   type: "Post",
-                   url: Apipath + "/api/PatientMain/DeleteTypeOfAppointment",
-                   data: {Id:id},
-                   dataType: "json",
-                   contentType: "application/json; charset=utf-8",
-                   success: function (result) {
-                   }
-               });
+    <script>
+        //$(function () {
+        //    GetAllLocationOfAppointment();
+        //    GetAllTypeOfAppointment();
+        //})
+        function deleteTypeOfAppointment(id) {
+            $.ajax({
+                type: "Post",
+                url: Apipath + "/api/PatientMain/DeleteTypeOfAppointment",
+                data: { Id: id },
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (result) {
+                }
+            });
 
-    }
-    //$("#TypeOfAppointment-tab").click(function () {
-    //    $("#LocationOfAppointment-tab").removeClass("active show");
-    //    $("#LocationOfAppointment").removeClass("active show");
-    //    $("#TypeOfAppointment-tab").addClass("active show");
-    //    $("#TypeOfAppointment").addClass("active show");
-       
+        }
+        //$("#TypeOfAppointment-tab").click(function () {
+        //    $("#LocationOfAppointment-tab").removeClass("active show");
+        //    $("#LocationOfAppointment").removeClass("active show");
+        //    $("#TypeOfAppointment-tab").addClass("active show");
+        //    $("#TypeOfAppointment").addClass("active show");
 
-       
-    //});
-    $("#LocationOfAppointment-tab").click(function () {
-        $("#TypeOfAppointment").removeClass("active show");
-        $("#TypeOfAppointment-tab").removeClass("active show");
-        $("#LocationOfAppointment").addClass("active show");
-        $("#LocationOfAppointment-tab").addClass("active show");
-        $($.fn.dataTable.tables(true)).DataTable()
-            .columns.adjust();
-    });
-    
-</script>
+
+
+        //});
+        $("#LocationOfAppointment-tab").click(function () {
+            $("#TypeOfAppointment").removeClass("active show");
+            $("#TypeOfAppointment-tab").removeClass("active show");
+            $("#LocationOfAppointment").addClass("active show");
+            $("#LocationOfAppointment-tab").addClass("active show");
+            $($.fn.dataTable.tables(true)).DataTable()
+                .columns.adjust();
+        });
+
+    </script>
 }

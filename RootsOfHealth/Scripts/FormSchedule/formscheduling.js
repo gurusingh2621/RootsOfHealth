@@ -73,9 +73,12 @@ function GetSchedulePlanTemplateList() {
                          <td width="15%">${(atrisk == '' || isschedule) ? NoScheduleText : 'after every ' + atrisk}</td>
                          <td width="15%">${(crisis == '' || isschedule) ? NoScheduleText : 'after every ' + crisis}</td>
                          <td width="15%">${(nostatus == '' || isschedule) ? NoScheduleText : 'after every ' + nostatus}</td>
-                         <td width="15%"><div>
-                        <a href="javascript:void(0)"  onclick="SetFormScheduling({formScheduleid:'${item.FormSchedulingid}',formid:'${item.FormId}',formName:'${item.FormName}',crisis:'${item.Crisis}',struggling:'${item.Struggling}',secure:'${item.Secure}',atrisk:'${item.AtRisk}',nostatus:'${item.NoStatus}',noschedule:'${item.NoSchedule}'})"
+                         <td width="15%"><div>`
+                    if (canEditFormSchedule == 'True') {
+                        formschedules += `<a href="javascript:void(0)"  onclick="SetFormScheduling({formScheduleid:'${item.FormSchedulingid}',formid:'${item.FormId}',formName:'${item.FormName}',crisis:'${item.Crisis}',struggling:'${item.Struggling}',secure:'${item.Secure}',atrisk:'${item.AtRisk}',nostatus:'${item.NoStatus}',noschedule:'${item.NoSchedule}'})"
                               class="btn btn-success text-white" style="cursor:pointer;">Edit</a></div></td>`
+                    }
+                       
                           
                     formschedules += `</tr>`;
                 });
@@ -126,9 +129,12 @@ function GetProgramSchedulePlanTemplateList() {
                     formschedules += `<tr>
                          <td width="20%">${item.FormName == null ? "" : item.FormName}</td>
                            <td width="15%">${(nostatus == '' || isschedule) ? '' : 'after every ' + nostatus}</td>
-                         <td width="15%"><div>
-                        <a href="javascript:void(0)"  onclick="SetProgramForm({formScheduleid:'${item.FormSchedulingid}',formid:'${item.FormId}',formName:'${item.FormName}',nostatus:'${item.NoStatus}',noschedule:'${item.NoSchedule}'})"
+                         <td width="15%"><div>`
+                    if (canEditFormSchedule == 'True')
+                    {
+                        formschedules += `<a href="javascript:void(0)"  onclick="SetProgramForm({formScheduleid:'${item.FormSchedulingid}',formid:'${item.FormId}',formName:'${item.FormName}',nostatus:'${item.NoStatus}',noschedule:'${item.NoSchedule}'})"
                               class="btn btn-success text-white" style="cursor:pointer;">Edit</a></div></td>`
+                     }
 
                     formschedules += `</tr>`;
                 });

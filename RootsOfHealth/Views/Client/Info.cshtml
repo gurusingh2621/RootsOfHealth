@@ -1,51 +1,52 @@
 ﻿@model List<RootsOfHealth.Models.ClientFormForPatientBO>
+@using RootsOfHealth.Commom
 @{
     ViewBag.Title = "Info";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <style>
-        .showHide {
-            display: none;
+    .showHide {
+        display: none;
+    }
+
+    .inner-main-content {
+        height: calc(100vh - 240px);
+    }
+
+    .paitent-detail-left {
+        height: calc(100vh - 160px);
+        overflow: hidden;
+    }
+
+    #content .profile-tabs .paitent-detail-left .nav-tabs {
+        border-bottom: 0px;
+    }
+
+        .paitent-detail-left .profile-tabs .nav-tabs:hover, #content .profile-tabs .paitent-detail-left .nav-tabs:hover {
+            overflow-x: hidden !important;
         }
 
-        .inner-main-content {
-            height: calc(100vh - 240px);
-        }
-
-        .paitent-detail-left {
-            height: calc(100vh - 160px);
-            overflow: hidden;
-        }
-
-        #content .profile-tabs .paitent-detail-left .nav-tabs {
-            border-bottom: 0px;
-        }
-
-            .paitent-detail-left .profile-tabs .nav-tabs:hover, #content .profile-tabs .paitent-detail-left .nav-tabs:hover {
-                overflow-x: hidden !important;
-            }
-
-        /* New css
+    /* New css
     -------------------------------------------------*/
 
-        #content .profile-tabs .tabs-scroll {
-            position: fixed;
-            top: 60px;
-            right: 0;
-            width: 310px;
-            z-index: 99;
-            flex-direction: column;
-            display: block;
-            height: calc(100vh - 60px);
-            left: auto;
-            margin: 0;
-            background: #34425a;
-            overflow: auto;
-            transform: translateX(100%);
-            -webkit-transform: translateX(100%);
-            transition: all ease 0.4s;
-        }
+    #content .profile-tabs .tabs-scroll {
+        position: fixed;
+        top: 60px;
+        right: 0;
+        width: 310px;
+        z-index: 99;
+        flex-direction: column;
+        display: block;
+        height: calc(100vh - 60px);
+        left: auto;
+        margin: 0;
+        background: #34425a;
+        overflow: auto;
+        transform: translateX(100%);
+        -webkit-transform: translateX(100%);
+        transition: all ease 0.4s;
+    }
 
     .tabs-scroll > ul#myTab > li > a .notCountR,
     .tabs-scroll > ul#myTab > li > a .notCountO,
@@ -55,68 +56,68 @@
         right: 35px;
     }
 
-        #content {
-            padding-top: 0px !important;
+    #content {
+        padding-top: 0px !important;
+    }
+
+        #content .inner-content {
+            margin-top: 0px !important;
         }
 
-            #content .inner-content {
-                margin-top: 0px !important;
-            }
+        #content.showHidecontent .profile-tabs .tabs-scroll {
+            transform: translateX(0%);
+            -webkit-transform: translateX(0%);
+        }
 
-            #content.showHidecontent .profile-tabs .tabs-scroll {
-                transform: translateX(0%);
-                -webkit-transform: translateX(0%);
-            }
+        #content .profile-tabs .tabs-scroll > .nav-tabs {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            margin: 0;
+            position: static;
+            height: auto;
+            padding: 0;
+            background: transparent;
+            border: 0px;
+        }
 
-            #content .profile-tabs .tabs-scroll > .nav-tabs {
-                display: flex;
-                flex-direction: column;
-                width: 100%;
+        #content .profile-tabs .tabs-scroll > ul#myTab > li {
+            margin: 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+            #content .profile-tabs .tabs-scroll > ul#myTab > li > a {
                 margin: 0;
-                position: static;
-                height: auto;
-                padding: 0;
-                background: transparent;
-                border: 0px;
             }
 
-            #content .profile-tabs .tabs-scroll > ul#myTab > li {
-                margin: 0;
-                border-bottom: 1px solid rgba(255,255,255,0.1);
-            }
-
-                #content .profile-tabs .tabs-scroll > ul#myTab > li > a {
-                    margin: 0;
+                #content .profile-tabs .tabs-scroll > ul#myTab > li > a:after {
+                    content: none;
                 }
 
-                    #content .profile-tabs .tabs-scroll > ul#myTab > li > a:after {
-                        content: none;
-                    }
+    .tabs-scroll > ul#myTab > li > a .check {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        z-index: 9;
+    }
 
-        .tabs-scroll > ul#myTab > li > a .check {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            z-index: 9;
-        }
+    .inner-main-content {
+        height: calc(100vh - 180px);
+    }
 
-        .inner-main-content {
-            height: calc(100vh - 180px);
-        }
+    .paitent-detail-left {
+        height: calc(100vh - 100px);
+    }
 
-        .paitent-detail-left {
-            height: calc(100vh - 100px);
-        }
+    #menu-toggle {
+        right: 0;
+        top: 20px;
+        transition: all ease 0.4s;
+    }
 
-        #menu-toggle {
-            right: 0;
-            top: 20px;
-            transition: all ease 0.4s;
-        }
-
-        div#menu-toggle.open {
-            right: 310px;
-        }
+    div#menu-toggle.open {
+        right: 310px;
+    }
     .btnDisplayProgram, .btnprogramsave {
         display: none !important
     }
@@ -154,16 +155,20 @@
                 {
                     foreach (var item in Model.Where(p => p.ParentFormID == null || p.ParentFormID == 0))
                     {
-                        string FormName = @item.FormName.Replace(" ", "");
-
+                        var formpermission = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["userid"]), item.ClientFormID, true);
+                        string FormName = item.FormName.Replace(" ", "");
+                        if (formpermission.Where(f => f.CanList == true || f.CanUpdate == true).Any())
+                        {
                         <li class="nav-item">
                             <a id="@("a" + FormName)" class="nav-link" data-toggle="tab"
                                href="@("#" + FormName + "only")" data-ClientFormID="@item.ClientFormID" data-PatientID="@item.patientID" onclick="loadClient(this)" data-TemplateID="@item.TemplateID" data-FormName=@(FormName)>@item.FormName<span class="pColorCircle" style="display:none"></span><span class="notCount" id="@(FormName + "Notify")" style="display:none"></span><span class="check @Html.Raw(item.Saved ? "" : "d-none")"><i class="fas fa-check-circle"></i></span></a>
 
                         </li>
+                        }
 
                     }
-                }
+                 }
+                
 
                 <li class="nav-item" id="programtbs" style="display:none;/*left: 155px;*/">
                     <a class="nav-link" id="Programs-tab" data-toggle="tab" href="#Programs" role="tab"
@@ -195,17 +200,17 @@
                 <div class="paitent-detail">
 
                     @*<div class="row">
-                    <div class="col-lg-8 col-md-8 col-sm-12 col-12 pr-0">
+                        <div class="col-lg-8 col-md-8 col-sm-12 col-12 pr-0">
 
-                    </div>
-
-
-                    <div class="col-lg-4 col-md-12 col-sm-12 col-12">
-
-                    </div>
+                        </div>
 
 
-                    </div>*@
+                        <div class="col-lg-4 col-md-12 col-sm-12 col-12">
+
+                        </div>
+
+
+                        </div>*@
                 </div>
 
             </div>
@@ -248,10 +253,10 @@
                 </div>
             </div>
         </div>
-        @{ 
+        @{
             Html.RenderPartial("~/Views/Shared/Client/_LogHistoryPopUp.cshtml");
         }
-      
+
 
 
 
@@ -319,7 +324,7 @@
             // $(".loaderOverlay").css("display","flex");
             _Loader.StartLoader()
             var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]'
-
+           
             $(".nav-menu").removeClass("active");
             $("#DashBoard").addClass("active");
             $("#btnProfileCancel").hide();
@@ -506,7 +511,7 @@
                 success: function (result) {
 
                     $('.recent-paitents').html(result);
-                    
+
                     $('#recentpatientModal').modal('show')
                   },
                   error: function () {
@@ -559,7 +564,7 @@
                     setTimeout(function () {
                         _Loader.StopLoader()
                     },500)
-                  
+
                     var a = 0;
                    // GetPatientPrograms(toppatient);
 
