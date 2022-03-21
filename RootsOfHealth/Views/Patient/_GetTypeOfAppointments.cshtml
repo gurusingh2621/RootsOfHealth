@@ -73,7 +73,10 @@
     var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]'
     var canEditAppointment = '@appointmentSettPerm.Where(x=>x.CanUpdate == true).Any()';
     var canDeleteAppointment = '@appointmentSettPerm.Where(x=>x.CanDelete == true).Any()';
-
+    var hideColumn = false;
+    if (canEditAppointment == 'False' && canDeleteAppointment == 'False') {
+        hideColumn = true;
+    }
      function DeleteAppointmentType(id) {
 
          if (confirm("Are you sure want to delete this type")) {
@@ -148,7 +151,7 @@
             }
         });
     }
-
+    
     function GetAllTypeOfAppointment() {
         $.ajax({
             type: "GET",
@@ -168,6 +171,11 @@
                     {
                         txt += '<a  onclick="DeleteAppointmentType(' + result[i].Id + ')"id="btnDeleteAppointType" class="btn btn-danger btn-trash label-fields"> <i class="fas fa-trash"></i> Delete  </a> </td> </tr>'
                     }
+                }
+
+                if (hideColumn)
+                {
+                    $('td:nth-child(2),th:nth-child(2)').hide();
                 }
                 console.log = txt;
                 $('#tblType tbody').html(txt);

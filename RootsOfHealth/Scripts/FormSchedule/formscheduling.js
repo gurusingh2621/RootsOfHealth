@@ -130,9 +130,9 @@ function GetProgramSchedulePlanTemplateList() {
                          <td width="20%">${item.FormName == null ? "" : item.FormName}</td>
                            <td width="15%">${(nostatus == '' || isschedule) ? '' : 'after every ' + nostatus}</td>
                          <td width="15%"><div>`
-                    if (canEditFormSchedule)
+                    if (canEditFormSchedule == 'True')
                     {
-                      `<a href="javascript:void(0)"  onclick="SetProgramForm({formScheduleid:'${item.FormSchedulingid}',formid:'${item.FormId}',formName:'${item.FormName}',nostatus:'${item.NoStatus}',noschedule:'${item.NoSchedule}'})"
+                        formschedules += `<a href="javascript:void(0)"  onclick="SetProgramForm({formScheduleid:'${item.FormSchedulingid}',formid:'${item.FormId}',formName:'${item.FormName}',nostatus:'${item.NoStatus}',noschedule:'${item.NoSchedule}'})"
                               class="btn btn-success text-white" style="cursor:pointer;">Edit</a></div></td>`
                      }
 

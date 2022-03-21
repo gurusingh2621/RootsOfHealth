@@ -76,7 +76,11 @@
     var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]'
     var canEditAppointment = '@appointmentSettPerm.Where(x=>x.CanUpdate == true).Any()';
     var canDeleteAppointment = '@appointmentSettPerm.Where(x=>x.CanDelete == true).Any()';
-
+    var hideColumn = false;
+    if (canEditAppointment == 'False' && canDeleteAppointment == 'False') {
+        hideColumn = true;
+    }
+    
     function deleteLocationOfAppointment(id) {
         if (confirm("Are you sure want to delete this location?")) {
             $.ajax({
@@ -161,7 +165,7 @@
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             success: function (result) {
-
+                
                 $('#tblLocation tbody').html('');
                 var txt = '';
                 for (var i = 0; i < result.length; i++) {
@@ -175,7 +179,10 @@
                         txt += '<a  onclick="deleteLocationOfAppointment(' + result[i].Id + ')"id="btnProfileEdit" class="btn btn-danger btn-trash label-fields"> <i class="fa fa-trash"></i>  Delete  </a> </td> </tr>'
                     }
                 }
-
+                
+                if (hideColumn) {
+                    $('td:nth-child(2),th:nth-child(2)').hide();
+                }
                 $('#tblLocation tbody').html(txt);
                 $("#tblLocation").dataTable({
                     scrollY: 'calc(100vh - 366px)',
