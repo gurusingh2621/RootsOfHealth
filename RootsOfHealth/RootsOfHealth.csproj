@@ -17,7 +17,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
-    <Use64BitIISExpress />
+    <Use64BitIISExpress>false</Use64BitIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -577,6 +577,7 @@
     <Content Include="images\backlog-select-arrow.svg" />
     <Content Include="images\calender-btn.png" />
     <Content Include="images\calender-icon.png" />
+    <Content Include="images\checkbox.svg" />
     <Content Include="images\chevron-arrow-down.svg" />
     <Content Include="images\excel.png" />
     <Content Include="images\expired.png" />
