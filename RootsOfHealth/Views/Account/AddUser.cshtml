@@ -466,7 +466,11 @@
                 toastr.error("Email already exist.please try diffrent email.");
                 return false;
             };
-
+            var clinicId = $("#ddlClinic").val();
+            if (clinicId == '0') {
+                clinicId = null;
+            }
+                
              var model = {
                 "FirstName": $("#FirstName").val(),
                 "LastName": $("#LastName").val(),
@@ -484,7 +488,7 @@
                 "ModifiedDate": new Date(),
                 "RoleID": $('#RoleID').val(),
                  "Image": $("input[type=hidden][name=usersImg]").val(),
-                 "ClinicID":$("#ddlClinic").val()
+                 "ClinicID": clinicId
             };
              $.ajax({
                  type: "POST",

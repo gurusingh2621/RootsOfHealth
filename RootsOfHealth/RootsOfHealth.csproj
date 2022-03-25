@@ -584,6 +584,7 @@
     <Content Include="images\excel.png" />
     <Content Include="images\expired.png" />
     <Content Include="images\heading-border.png" />
+    <Content Include="images\key.svg" />
     <Content Include="images\logo-dark.png" />
     <Content Include="images\logo.png" />
     <Content Include="images\logo2.png" />
