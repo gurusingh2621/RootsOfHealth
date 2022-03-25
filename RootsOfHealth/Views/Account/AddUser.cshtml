@@ -78,6 +78,11 @@
         height: calc(100vh - 200px);
     }
     /*25-9-19 end*/
+
+    .required:after {
+        content: " *";
+        color: red;
+    }
 </style>
 <section id="content" class="responsive-container pt-0">
     <div class="inner-content p-t-0">
@@ -124,7 +129,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.Label("First Name", htmlAttributes: new { @class = "control-label" })
+                                @Html.Label("First Name", htmlAttributes: new { @class = "control-label required" })
 
                                 @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
                                 @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
@@ -133,7 +138,7 @@
 
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.Label("Last Name", htmlAttributes: new { @class = "control-label" })
+                                @Html.Label("Last Name", htmlAttributes: new { @class = "control-label required" })
 
                                 @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
                                 @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
@@ -141,7 +146,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.Label("User Name", htmlAttributes: new { @class = "control-label" })
+                                @Html.Label("User Name", htmlAttributes: new { @class = "control-label required" })
 
                                 @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
                                 @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
@@ -149,7 +154,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label" })
+                                @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label required" })
 
                                 @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @type = "password" } })
                                 @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
@@ -157,7 +162,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
+                                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label required" })
 
                                 @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
                                 @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
@@ -165,7 +170,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.Label("Role", htmlAttributes: new { @class = "control-label" })
+                                @Html.Label("Role", htmlAttributes: new { @class = "control-label required" })
 
                                 @Html.EditorFor(model => model.RoleID, new { htmlAttributes = new { @class = "form-control" } })
                                 @Html.ValidationMessageFor(model => model.RoleID, "", new { @class = "text-danger" })
@@ -174,13 +179,13 @@
 
                         <div class="col-md-6">
                             <div class="form-group">
-                                @Html.Label("Phone No", htmlAttributes: new { @class = "control-label" })
+                                @Html.Label("Phone No", htmlAttributes: new { @class = "control-label required" })
 
                                 @Html.EditorFor(model => model.PhoneNo, new { htmlAttributes = new { @class = "form-control" } })
                                 @Html.ValidationMessageFor(model => model.PhoneNo, "", new { @class = "text-danger" })
                             </div>
                         </div>
-                        <div class="col-md-6" id="divclinic" @*hidden="hidden"*@>
+                        <div class="col-md-6" id="divclinic" hidden="hidden">
                             <div class="form-group">
                                 <label class="control-label">Select Clinic</label>
                                 <select id="ddlClinic" class="form-control"></select>
@@ -437,18 +442,22 @@
                
             }
             
-            if ($("#PhoneNo").val().trim() == '') {
-                toastr.error("Phone No. is required");
-                return false;
-            }
+            
             if ($('#RoleID').val() == "-1") {
                 toastr.error("please select a role");
                 return false;
             }
-            if ($("#ddlClinic option:selected").val() == '0') {
-                toastr.error("please select a clinic");
+            if ($("#PhoneNo").val().trim() == '') {
+                toastr.error("Phone No. is required");
                 return false;
             }
+            if ($("#RoleID option:selected").text().toLowerCase() == 'navigator' || $("#RoleID option:selected").text().toLowerCase() == 'supervisor') {
+                if ($("#ddlClinic option:selected").val() == '0') {
+                    toastr.error("please select a clinic");
+                    return false;
+                }
+            }
+           
             if (check == false) {
                 toastr.error("username already exist.please try diffrent username.");
                 return false;
@@ -499,10 +508,14 @@
              });
         }
         function CheckRole() {
-            if ($("#RoleID option:selected").text() == 'navigator' || $("#RoleID option:selected").text() == 'supervisor') {
+            
+            var selectedrole = $("#RoleID option:selected").text().toLowerCase();
+            if (selectedrole == 'navigator' || selectedrole == 'supervisor') {
                 $("#divclinic").removeAttr("hidden");
+                $("#divclinic label").addClass('required');
             } else {
                 $("#divclinic").attr("hidden", "hidden");
+                $("#divclinic label").removeClass('required');
             }
         }
         function GetAllClinic() {

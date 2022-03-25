@@ -566,6 +566,7 @@
     <Content Include="css\UserGroup.css" />
     <Content Include="favicon.ico" />
     <Content Include="Files\Images\avatar.png" />
+    <Content Include="Files\profile.png" />
     <Content Include="Files\thermometer-1539191_1920.jpg" />
     <Content Include="fonts\fa-brands-400.svg" />
     <Content Include="fonts\fa-regular-400.svg" />
@@ -577,6 +578,7 @@
     <Content Include="images\backlog-select-arrow.svg" />
     <Content Include="images\calender-btn.png" />
     <Content Include="images\calender-icon.png" />
+    <Content Include="images\care-plans.png" />
     <Content Include="images\checkbox.svg" />
     <Content Include="images\chevron-arrow-down.svg" />
     <Content Include="images\excel.png" />
@@ -590,6 +592,8 @@
     <Content Include="images\no-image.png" />
     <Content Include="images\notesicon.png" />
     <Content Include="images\paitent-img.png" />
+    <Content Include="images\profile.svg" />
+    <Content Include="images\programs.png" />
     <Content Include="images\recent-paitent-img-1.png" />
     <Content Include="images\recent-paitent-img-2.png" />
     <Content Include="images\recent-paitent-img.png" />
@@ -600,6 +604,7 @@
     <Content Include="images\sidebar-menu-icons.png" />
     <Content Include="images\submitted.png" />
     <Content Include="images\time-icon.png" />
+    <Content Include="images\user-group.png" />
     <Content Include="images\user-img.png" />
     <Content Include="Scripts\AccountSetting\AccountSetting.js" />
     <Content Include="Scripts\bootstrap.js" />
