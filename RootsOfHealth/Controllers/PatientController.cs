@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Configuration;
@@ -908,6 +909,75 @@ namespace RootsOfHealth.Controllers
                 }
             }
             return View(li);
+        }
+        public ActionResult GetPotientialPatientsList()
+        {
+            List<PotientialPatientBO> potientialPatients = new List<PotientialPatientBO>();
+           
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(WebApiKey);
+                    //HTTP GET
+                    var responseTask = client.GetAsync("/api/PatientMain/getpotientalpatient");
+
+
+                    responseTask.Wait();
+
+                    var result = responseTask.Result;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var readTask = result.Content.ReadAsAsync<List<PotientialPatientBO>>();
+                        readTask.Wait();
+
+                        potientialPatients = readTask.Result;
+                      
+                    }
+                     
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new {status= 0, Message = ex.Message });
+            }
+            
+            return Json(new
+            {
+                status = 1,
+                pClientlist = potientialPatients,
+                duplicateClients = potientialPatients.GroupBy(x => new { x.EmailAddress, x.CellPhone, x.SocialSecurityNumber }).Where(g => g.Count() > 1).Select(y => y.Key).ToList()
+
+        },JsonRequestBehavior.AllowGet);
+         }
+
+        [HttpGet]
+        public ActionResult EditPotentialPatient(long patientId)
+        {
+            PotientalPatientBO patient = new PotientalPatientBO();
+
+            using (var client = new System.Net.Http.HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+
+                var responseTask = client.GetAsync("/api/PatientMain/GetPotentialPatientDetails?Id=" + patientId);
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<PotientalPatientBO>();
+                    readTask.Wait();
+                    patient = readTask.Result;
+
+                }
+            }
+
+            return View(patient);
+        }
+        public ActionResult AddPotentialPatient()
+        {
+            return View();
         }
         //[HttpPost]
         //public ActionResult Index(PatientMainBO request)

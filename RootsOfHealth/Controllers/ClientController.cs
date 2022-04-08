@@ -14,7 +14,9 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using NPOI.HSSF.UserModel;
- 
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
+using Newtonsoft.Json;
 
 namespace RootsOfHealth.Controllers
 {
@@ -22,6 +24,25 @@ namespace RootsOfHealth.Controllers
     {
         string WebApiKey = WebConfigurationManager.AppSettings["WebApiForBackend"];
         string ProgramUploadPath = WebConfigurationManager.AppSettings["ProgramUploadPath"];
+        private string[] necessaryColumnsForPotentialClient = new string[]
+              { "FirstName",
+                  "LastName",
+                  "Gender",
+                  "DateOfBirth",
+                  "RaceEthnicity",
+                  "EmergencyContact1Name",
+                  "EmergencyContact1Address",
+                  "EmergencyContact1EmailAddress",
+                  "EmergencyContact1Relationship",
+                  "ChildrenUnder18",
+                  "Adults18to65",
+                  "Adults65Plus",
+                  "EverBeenSmoker",
+                  "LanguagesSpeak",
+                  "QuitSmoking",
+                  "SmokingQuitDate"
+
+              };
         // GET: Client
         public ActionResult Index()
         {
@@ -2334,9 +2355,16 @@ namespace RootsOfHealth.Controllers
                     IExcelDataReader excelReader = null;
                     if (fileExtension != ".csv")
                     {
-                       
-
-                        excelReader = ExcelReaderFactory.CreateOpenXmlReader(stream);
+                        if (fileExtension == ".xlsx")
+                        {
+                            excelReader = ExcelReaderFactory.CreateOpenXmlReader(stream);
+                        }
+                        else
+                        {
+                            excelReader = ExcelReaderFactory.CreateBinaryReader(stream);
+                           
+                        }
+                        
                     }
                     else
                     {
@@ -2557,13 +2585,289 @@ namespace RootsOfHealth.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult SavePotentialClientData(string dbfields)
+        {
+            var result = 0;
+            try
+            {
+                Dictionary<string, string> dbFields = JsonConvert.DeserializeObject<Dictionary<string, string>>(dbfields);
 
 
+                var files = Request.Files;
+                string fileName = Request.Files[0].FileName;
+                var fileExtension = Path.GetExtension(files[0].FileName);
 
-    }
+                if (fileExtension != ".csv")
+                {
+                    try
+                    {
+                        XSSFWorkbook workbook = new XSSFWorkbook(Request.Files[0].InputStream);
 
+                        result = DataImportExcel(workbook, fileName, dbFields);
+                       
+                    }
+                    catch (IOException ex)
+                    {
+                        //not excel file
+                       
+                    }
+                }
+                if (result > 0)
+                {
+                    return Json(new { Status = 1, Message = "Data saved Successfully " });
+                }
+                else
+                {
+                    return Json(new { Status = 0, Message = "Error Occured " });
+                }
+               
+                
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Status = 0, Message = ex.Message });
+            }
+        }
        
+        private bool IsRowEmpty(IRow row)
+        {
+            bool ret = false;
+            if (row == null)
+                ret = true;
+            else if (row.FirstCellNum == -1 && row.LastCellNum == -1)
+                ret = true;
 
-  }
+            return ret;
+        }
+        public int DataImportExcel(XSSFWorkbook workbook, string fileName, Dictionary<string, string> dbFields)
+        {
+
+            var sheet = workbook.GetSheetAt(0);
+            if (sheet == null)
+            {
+                //no 'Potential Client Data' sheet
+                return 0;
+            }
+
+            // formatter to get string data from any type of fields
+            HSSFDataFormatter formatter = new HSSFDataFormatter();
+            var headerRow = sheet.GetRow(0);
+            if (IsRowEmpty(headerRow))
+            {
+                //inconsistent structure of the file
+                return 0;
+            }
+            Dictionary<string, int> columnNames = new Dictionary<string, int>();
+            for (int i = headerRow.FirstCellNum; i < headerRow.LastCellNum; i++)
+            {
+                string value = formatter.FormatCellValue(headerRow.GetCell(i)).Trim();
+                if (!columnNames.ContainsKey(value))
+                    columnNames.Add(value, i);
+            }
+
+            
+
+            var databaseColumns = new List<PotientialTableInfoBO>();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                //HTTP GET
+                var responseTask = client.GetAsync("/api/PatientMain/getpotentialclienttableinfo");
+                var result = responseTask.Result;
+
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<List<PotientialTableInfoBO>>();
+                    readTask.Wait();
+                    databaseColumns = readTask.Result;
+                }
+
+            }
+            List<PotientialPatientBO> allowedPatientList = new List<PotientialPatientBO>();
+            //check for necessary columns
+            if (!IsAllNecessaryColumnsExist(dbFields, necessaryColumnsForPotentialClient))
+            {
+                //inconsistent structure of the file
+                return 0;
+            }
+            #region Check every row in import file
+            //loop for all rows
+            for (int i = sheet.FirstRowNum + 1; i <= sheet.LastRowNum; i++)
+            {
+                var currentRow = sheet.GetRow(i);
+                if (IsRowEmpty(currentRow))
+                {
+                    // skip empty rows
+                    continue;
+                }
+                PotientialPatientBO currentPatient = new PotientialPatientBO();
+
+                foreach (var field in dbFields)
+                {
+                    var dbCurrentfield = databaseColumns.Where(x => x.ColName.ToLower() == field.Key.ToLower()).FirstOrDefault();
+                    
+                    var cellNo = columnNames.Where(x => x.Key.ToLower() == field.Value.ToLower()).Select(x=> x.Value).FirstOrDefault();
+                        string value;
+                        var currentCell = currentRow.GetCell(cellNo);
+                    
+                    value = formatter.FormatCellValue(currentCell).Trim();
+                    if (currentCell != null && currentCell.CellType == CellType.Numeric)
+                    {
+                        if (HSSFDateUtil.IsCellDateFormatted(currentCell))
+                        {
+                            value = currentCell.DateCellValue.ToShortDateString();
+                        }
+                    }
+                 
+                    try
+                        {
+                          if (currentCell != null)
+                          {
+                            if (dbCurrentfield.ColType == "bit")
+                            {
+                                bool boolvalue;
+                                if (Boolean.TryParse(value, out boolvalue))
+                                {
+                                    currentPatient.GetType().GetProperty(field.Key).SetValue(currentPatient, boolvalue, null);
+                                }
+                                else
+                                {
+                                    // skip
+                                    continue;
+                                }
+
+                            }
+                            else if (dbCurrentfield.ColType == "int")
+                            {
+                                int intval;
+                                if (Int32.TryParse(value, out intval))
+                                {
+                                    currentPatient.GetType().GetProperty(field.Key).SetValue(currentPatient, intval, null);
+                                }
+                                else
+                                {
+                                    // skip 
+                                    continue;
+                                }
+                            }
+                            else if(dbCurrentfield.ColType == "nvarchar")
+                            {
+                               
+                               
+                                if (currentCell.CellType != CellType.Boolean)
+                                {
+                                    currentPatient.GetType().GetProperty(field.Key).SetValue(currentPatient, value, null);
+                                }
+                                else
+                                {
+                                    // skip
+                                    continue;
+                                }
+                            }
+                          }
+                       }
+                        catch(Exception ex)
+                        {
+                            
+                        }
+                    
+                }
+
+             
+               
+
+                allowedPatientList.Add(currentPatient);
+            }
+            int savedCount=0;
+            #endregion
+            #region Save allowed potentialPatients to DB
+           
+            foreach (var patient in allowedPatientList)
+            {
+                
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(WebApiKey);
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    var responseTask = client.PostAsJsonAsync("/api/PatientMain/savePotentialclient", patient);
+                    responseTask.Wait();
+
+                    var result = responseTask.Result;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var data = result.Content.ReadAsStringAsync().Result;
+                        if (data == "1")
+                        {
+                            savedCount++;
+                        }
+                    }
+                }
+            }
+            #endregion
+            
+            return savedCount;
+        }
+
+        //check for necessary columns
+        private bool IsAllNecessaryColumnsExist(Dictionary<string, string> columns, string[] necessaryColumns)
+        {
+            bool result = true;
+
+            foreach (var item in necessaryColumns)
+            {
+                if (!columns.ContainsValue(item))
+                    result = false;
+            }
+
+            return result;
+        }
+
+        [HttpPost]
+        public ActionResult GenerateSampleExcelFile()
+        {
+            var databaseColumns = new List<PotientialTableInfoBO>();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                //HTTP GET
+                var responseTask = client.GetAsync("/api/PatientMain/getpotentialclienttableinfo");
+                var result = responseTask.Result;
+
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<List<PotientialTableInfoBO>>();
+                    readTask.Wait();
+                    databaseColumns = readTask.Result;
+                }
+
+            }
+
+
+            using (MemoryStream output = new MemoryStream())
+            {
+                var workbook = new HSSFWorkbook();
+                var sheet = workbook.CreateSheet("Sample File Export");
+                var rownumber = 0;
+
+                var headerRow = sheet.CreateRow(rownumber);
+                for (var i=0;i< databaseColumns.Count;i++)
+                {
+                    headerRow.CreateCell(i).SetCellValue(databaseColumns[i].ColName);
+                    sheet.SetColumnWidth(i, 6000);
+                }
+               
+
+                workbook.Write(output);
+
+                return File(output.ToArray(),   //The binary data of the XLS file
+                     "application/vnd.ms-excel", //MIME type of Excel files
+                    "Sample.xls");     //Suggested file name in the "Save as" dialog which will be displayed to the end user
+
+            }
+        }
+    }
+}
 
     
