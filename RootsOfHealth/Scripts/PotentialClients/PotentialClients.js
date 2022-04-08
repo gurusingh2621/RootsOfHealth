@@ -42,7 +42,7 @@ $btnsavepotentialclients.click(function () {
         formdata.append('file', files[0]);
         var dbfields = {};
         
-        $(".getFileFields select").each(function () {
+        $("#dbandFileFields select").each(function () {
             var hh = $(this);
             var name = hh.attr('id');
             dbfields[name] = hh.val();
@@ -105,11 +105,7 @@ $PotentialClientFileUpload.change(function (e) {
                 dataType: "json",
                 success: function (res) {
                     if (res) {
-                        AppendColumnsLists(res, true)
-                        if (res.filecolumns.length > 0) {
-                            AppendColumnsLists(res, false)
-                        }
-                      
+                        AppendColumnsLists(res)
                     }
                     $PotientialClientModal.modal('show');
                 },
@@ -127,48 +123,6 @@ $PotentialClientFileUpload.change(function (e) {
 
 
 })
-
-function AppendColumnsLists(result,isdatabaseField) {
-    
-    if (isdatabaseField) {
-        var databaseResult = result.databaseColumns;
-        var html = '<ul id="DatabaseFields" class="sortableListBox">'
-        for (let i = 0; i < databaseResult.length; i++) {
-            if (databaseResult[i].ColType == 'int' || databaseResult[i].ColType == 'bit') {
-                html += `<li>${databaseResult[i].ColName} ( ${databaseResult[i].ColType == "bit" ? "Boolean" : "Integer"})</li>`
-            } else {
-                html += `<li>${databaseResult[i].ColName} (String( ${databaseResult[i].ColLength == -1 ? "max" : databaseResult[i].ColLength}))</li>`
-            }
-        }
-        html += '</ul>'
-        $PotientialClientModal.find('.modal-body .getDatabaseField').html(html);
-    } else {
-        var fileResult = result.filecolumns;
-        var databaseResult = result.databaseColumns;
-        $PotientialClientModal.find('.modal-body .getFileFields').html('');
-        for (let i = 0; i < databaseResult.length; i++) {
-            var ddl = $("<select></select>").attr("id", databaseResult[i].ColName).attr("name", databaseResult[i].ColName).attr("class", "form-control dllFileFields").attr("columntype", databaseResult[i].ColType);
-            ddl.append("<option value='-1'>--Select--</option>");
-            $.each(fileResult, function (index, el) {
-                ddl.append("<option>" + el + "</option>");
-            });
-            ddl.val(fileResult[i])
-            $PotientialClientModal.find('.modal-body .getFileFields').append(ddl);
-        }
-        
-
-        //var html = '<ul id="FileFields" class="sortableListBox">'
-        //for (let i = 0; i < fileResult.length; i++) {
-        //    html += `<li>${fileResult[i]}</li>`
-        //}
-        //html += '</ul>'
-       /* $PotientialClientModal.find('.modal-body .getFileFields').html(html);*/
-    }
-    
-       
-   
-   
-}
 
 function BindPotentialClientsTable() {
     $.ajax({
@@ -254,6 +208,34 @@ function MovePotentialPatient(id) {
     })
 
 }
+function AppendColumnsLists(result) {
 
+    
+        var fileResult = result.filecolumns;
+        var databaseResult = result.databaseColumns;
+    $PotientialClientModal.find('dbandFileFields').html('');
+    for (let i = 0; i < databaseResult.length; i++) {
+
+        var html = `<div class="row">`
+        if (databaseResult[i].ColType == 'int' || databaseResult[i].ColType == 'bit') {
+            html += `<div class="col-md-6"><div class="DatabaseFields">${databaseResult[i].ColName} ( ${databaseResult[i].ColType == "bit" ? "Boolean" : "Integer"})</div></div>`
+          } else {
+            html += `<div class="col-md-6"><div class="DatabaseFields">${databaseResult[i].ColName} (String( ${databaseResult[i].ColLength == -1 ? "max" : databaseResult[i].ColLength}))</div></div>`
+        }
+        html += `<div id="getFileFields_${i}" class="col-md-6 FileFields"></div></div> `
+        $PotientialClientModal.find('#dbandFileFields').append(html);
+
+        // append dropdowns start
+        var ddl = $("<select></select>").attr("id", databaseResult[i].ColName).attr("name", databaseResult[i].ColName).attr("class", "form-control dllFileFields").attr("columntype", databaseResult[i].ColType);
+
+        $.each(fileResult, function (index, el) {
+            ddl.append("<option>" + el + "</option>");
+        });
+        ddl.val(fileResult[i]);
+        $PotientialClientModal.find('#getFileFields_' + i).append(ddl);
+           // append dropdowns end
+    }
+   
+}
 
 

@@ -22,7 +22,8 @@
         padding: 0;
         margin: 0;
     }
-        .sortableListBox li {
+        .sortableListBox li,
+        .DatabaseFields {
             padding: 8px 15px;
             border: 1px solid #ddd;
             margin: 0 0 10px;
@@ -32,18 +33,35 @@
         padding: 8px 15px;
         border: 1px solid #ddd;
         margin: 0 0 10px;
+        border-radius: 0;
+        min-height: 42px;
     }
+    #PotentialClientFileUpload div#dbandFileFields {
+        max-height: calc(100vh - 170px);
+    }
+    @@media only screen and (max-width: 480px) {
+        #PotentialClientFileUpload .modal-header .close {
+            position: absolute;
+            right: 15px;
+            top: 19px;
+        }
+
+        #PotentialClientFileUpload .modal-header .ml-auto {
+            width: 100%;
+        }
+    }
+
 </style>
 <section id="content" class="responsive-container">
     <div class="inner-content mt-0">
         <div class="container-fluid pl-0 pr-0">
             <div class="appointment">
-                <input type="file"
-                       id="PoteintialClientFileInput" name="avatar"
-                       accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
-
-
-                <a class="btn btn-success" href="/Patient/AddPotentialPatient">Add New</a>
+                <div class="d-flex mb-2">
+                    <input type="file"
+                           id="PoteintialClientFileInput" name="avatar"
+                           accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                    <a class="btn btn-success ml-auto" href="/Patient/AddPotentialPatient">Add New</a>
+                </div>
                 <table id="tblPotientialPatient" class="display table table-hover table-striped table-bordered">
 
                     <thead>
@@ -68,34 +86,48 @@
     <div class="modal fade" id="PotentialClientFileUpload" tabindex="-1" role="dialog" aria-labelledby="PotentialClientFiletitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered preview-modal" role="document">
             <div class="modal-content" style="height:90%">
-                <div class="modal-header preview-header">
+                <div class="modal-header preview-header flex-wrap">
                     <h5 class="modal-title" id="PotentialClientFiletitle">File Upload</h5>
-                    <button href='' id="btnsavepotentialclients" class="btn btn-success">
-                        Save
-                    </button>
-                    
-                    @using (Html.BeginForm("GenerateSampleExcelFile", "Client", FormMethod.Post))
-                    {
-                       
+                    <div class="ml-auto d-flex flex-wrap">
+                        <button href='' id="btnsavepotentialclients" class="btn btn-success">
+                            Save
+                        </button>
+
+                        @using (Html.BeginForm("GenerateSampleExcelFile", "Client", FormMethod.Post))
+                        {
+
                             <input type="submit" value=" Download Sample Excel File" class="btn btn-success" />
-                        
-                    }
-                    <button type="button" class="close" aria-label="Close" onclick="ClosePotentialClientModal()">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+
+                        }
+                        <button type="button" class="close" aria-label="Close" onclick="ClosePotentialClientModal()">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
 
                 </div>
                 
-                <div class="modal-body preview-body scroll">
-                   
-                    <div class="row">
+                <div id="dbandFileFields" class="modal-body preview-body scroll">
+
+                    @*<div class="row">
                         <div class="col-md-6 getDatabaseField">
 
                         </div>
+
                         <div class="col-md-6 getFileFields">
 
                         </div>
-                    </div>
+                    </div>*@
+
+
+
+                    @*<div class="row">
+                        <div id="getDatabaseField" class="col-md-6">
+
+                        </div>
+                        <div id="getFileFields" class="col-md-6">
+
+                        </div>
+                    </div>*@
                 </div>
                 <div class="modal-footer preview-footer">
 

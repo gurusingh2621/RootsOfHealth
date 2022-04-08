@@ -2817,7 +2817,7 @@ namespace RootsOfHealth.Controllers
 
             foreach (var item in necessaryColumns)
             {
-                if (!columns.ContainsValue(item))
+                if (!columns.ContainsKey(item))
                     result = false;
             }
 
