@@ -945,9 +945,8 @@ namespace RootsOfHealth.Controllers
             return Json(new
             {
                 status = 1,
-                pClientlist = potientialPatients,
-                duplicateClients = potientialPatients.GroupBy(x => new { x.EmailAddress, x.CellPhone, x.SocialSecurityNumber }).Where(g => g.Count() > 1).Select(y => y.Key).ToList()
-
+                pClientlist = potientialPatients
+                
         },JsonRequestBehavior.AllowGet);
          }
 

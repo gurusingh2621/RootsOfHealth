@@ -125,6 +125,23 @@ $PotentialClientFileUpload.change(function (e) {
 })
 
 function BindPotentialClientsTable() {
+
+    var duplicates;
+    $.ajax({
+        type: "GET",
+        url: Apipath + '/api/PatientMain/GetDuplicatepatients',
+        dataType: "json",
+        async: false,
+        contentType: "application/json; charset=utf-8",
+        success: function (result) {
+            
+            duplicates = result;
+        },
+        error: function (e) {
+            toastr.error("Unexpected error!");
+        }
+    });
+    
     $.ajax({
         url: '/Patient/GetPotientialPatientsList',
         type: 'GET',
@@ -132,8 +149,8 @@ function BindPotentialClientsTable() {
         dataType: "json",
         success: function (data) {
             
+            
             $("#tblPotientialPatient").dataTable().fnDestroy();
-            var duplicates = data.duplicateClients;
             
             var patientList = $('#tblPotientialPatient tbody');
             if (data.status === 1) {
@@ -141,7 +158,7 @@ function BindPotentialClientsTable() {
                   $.each(data.pClientlist, function (index, item) {
                     
                       potentialPatient += `<tr>`
-                      if (duplicates.filter(e => e.EmailAddress === item.EmailAddress && e.SocialSecurityNumber === item.SocialSecurityNumber && e.CellPhone == item.CellPhone).length > 0)
+                      if (duplicates.filter(e => e.EmailAddress === item.EmailAddress || e.SocialSecurityNumber === item.SocialSecurityNumber).length > 0)
                       {
                           potentialPatient += `<td style="background-color:#2c639f;" >${item.FirstName != null ? item.FirstName : ""} ${+ " " + item.LastName != null ? item.LastName : ""}</td>`
                       } else
@@ -152,9 +169,12 @@ function BindPotentialClientsTable() {
                       potentialPatient += ` <td>${item.EmailAddress != null ? item.EmailAddress : ""}</td>
                          <td >${item.CellPhone != null ? item.CellPhone : ""}</td>
                          <td >${item.ModifiedDate != null ? new Date(parseInt(item.ModifiedDate.substr(6))).toISOString().split('T')[0] : ""}</td>
-                         <td><div>
-                        <button href="javascript:void(0)" id="btnpatientmove" onclick="MovePotentialPatient(${item.PatientID})" class="btn btn-success label-fields"> <i class=""></i>
+                         <td><div>`;
+                      if (duplicates.filter(e => e.EmailAddress === item.EmailAddress || e.SocialSecurityNumber === item.SocialSecurityNumber).length == 0) {
+                          potentialPatient += `<button href="javascript:void(0)" id="btnpatientmove" onclick="MovePotentialPatient(${item.PatientID})" class="btn btn-success label-fields"> <i class=""></i>
                                         Move</button>`;
+                      }
+                      
                       potentialPatient += `<a href="/Patient/EditPotentialPatient?patientId=${item.PatientID}" id="btnpatientedit" class="btn btn-success label-fields"> <i class="far fa-edit"></i>
                                         Edit</a>`;
                       potentialPatient += `</div ></td ></tr >`;
