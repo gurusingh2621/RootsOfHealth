@@ -1,7 +1,17 @@
 ﻿@model IEnumerable<RootsOfHealth.Models.PotientialPatientBO>
+@using RootsOfHealth.Commom;
+@using RootsOfHealth.Models;
 @{
     ViewBag.Title = "GetPotientialPatient";
     Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    var potentialClientPerm = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["userid"]), Convert.ToInt32(PermissionModel.Module.PotentialClient));
+    if (potentialClientPerm.Where(x => x.CanList == false && (x.CanCreate != true && x.CanUpdate != true && x.CanDelete != true && x.CanMove != true)).Any())
+    {
+        Response.Redirect(Url.Action("Display", "Dashboard", new { }));
+
+    }
 }
 <style>
 
@@ -17,11 +27,13 @@
     #PotentialClientFileUpload .modal-dialog {
         max-width: 750px;
     }
+
     .sortableListBox {
         list-style: none;
         padding: 0;
         margin: 0;
     }
+
         .sortableListBox li,
         .DatabaseFields {
             padding: 8px 15px;
@@ -29,6 +41,7 @@
             margin: 0 0 10px;
             text-align: center;
         }
+
     .dllFileFields {
         padding: 8px 15px;
         border: 1px solid #ddd;
@@ -36,9 +49,11 @@
         border-radius: 0;
         min-height: 42px;
     }
+
     #PotentialClientFileUpload div#dbandFileFields {
         max-height: calc(100vh - 170px);
     }
+
     @@media only screen and (max-width: 480px) {
         #PotentialClientFileUpload .modal-header .close {
             position: absolute;
@@ -50,18 +65,42 @@
             width: 100%;
         }
     }
-
+    .appointment table .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+        border-radius: 50px;
+        border: 1px solid #dc3545;
+        font-weight: 500;
+        padding: 8px 20px;
+        margin-right: 5px;
+    }
+    .appointment .sorting_1 {
+        color: black !important
+    }
 </style>
 <section id="content" class="responsive-container">
     <div class="inner-content mt-0">
         <div class="container-fluid pl-0 pr-0">
             <div class="appointment">
                 <div class="d-flex mb-2">
-                    <input type="file"
-                           id="PoteintialClientFileInput" name="avatar"
-                           accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
-                    <a class="btn btn-success ml-auto" href="/Patient/AddPotentialPatient">Add New</a>
-                </div>
+                    @if (potentialClientPerm.Where(x => x.CanCreate == true).Any())
+                    {
+                        <input type="file"
+                               id="PoteintialClientFileInput" name="avatar"
+                               accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                    }
+
+                    @using (Html.BeginForm("GenerateSampleExcelFile", "Client", FormMethod.Post))
+                    {
+
+                        <input type="submit" value=" Download Sample Excel File" class="btn btn-success" />
+
+                    }
+                    @if (potentialClientPerm.Where(x => x.CanCreate == true).Any())
+                    {
+                        <a class="btn btn-success ml-auto" href="/Patient/AddPotentialPatient">Add New</a>
+                    }
+                    </div>
                 <table id="tblPotientialPatient" class="display table table-hover table-striped table-bordered">
 
                     <thead>
@@ -74,7 +113,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                       
                     </tbody>
 
                 </table>
@@ -93,41 +131,17 @@
                             Save
                         </button>
 
-                        @using (Html.BeginForm("GenerateSampleExcelFile", "Client", FormMethod.Post))
-                        {
 
-                            <input type="submit" value=" Download Sample Excel File" class="btn btn-success" />
-
-                        }
                         <button type="button" class="close" aria-label="Close" onclick="ClosePotentialClientModal()">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
 
                 </div>
-                
+
                 <div id="dbandFileFields" class="modal-body preview-body scroll">
 
-                    @*<div class="row">
-                        <div class="col-md-6 getDatabaseField">
 
-                        </div>
-
-                        <div class="col-md-6 getFileFields">
-
-                        </div>
-                    </div>*@
-
-
-
-                    @*<div class="row">
-                        <div id="getDatabaseField" class="col-md-6">
-
-                        </div>
-                        <div id="getFileFields" class="col-md-6">
-
-                        </div>
-                    </div>*@
                 </div>
                 <div class="modal-footer preview-footer">
 
@@ -143,7 +157,10 @@
 @section scripts{
     <script>
         var ClinicID = parseInt(@Session["ClinicID"]);
-         var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
+        var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
+        var canEditPClientPerm = '@potentialClientPerm.Where(x => x.CanUpdate == true).Any()';
+        var canDeletePClientPerm = '@potentialClientPerm.Where(x => x.CanDelete == true).Any()';
+        var canMovePClientPerm = '@potentialClientPerm.Where(x => x.CanMove == true).Any()';
         $(document).ready(function () {
 
             BindPotentialClientsTable();
@@ -156,7 +173,7 @@
             //    console.log(data);
             //});
         });
-        
+
 
     </script>
 }

@@ -156,27 +156,35 @@ function BindPotentialClientsTable() {
             if (data.status === 1) {
                 var potentialPatient = "";
                   $.each(data.pClientlist, function (index, item) {
-                    
-                      potentialPatient += `<tr>`
+
                       if (duplicates.filter(e => e.EmailAddress === item.EmailAddress || e.SocialSecurityNumber === item.SocialSecurityNumber).length > 0)
                       {
-                          potentialPatient += `<td style="background-color:#2c639f;" >${item.FirstName != null ? item.FirstName : ""} ${+ " " + item.LastName != null ? item.LastName : ""}</td>`
-                      } else
-                      {
-                         potentialPatient += `<td> ${ item.FirstName != null ? item.FirstName : "" } ${ + " " + item.LastName != null ? item.LastName : "" }</td >`
+                          potentialPatient += `<tr style="background-color:red ;color:white">`;
                       }
-                         
-                      potentialPatient += ` <td>${item.EmailAddress != null ? item.EmailAddress : ""}</td>
+                      else
+                      {
+                          potentialPatient += `<tr>`
+                      }
+                      
+                      
+                      potentialPatient += `<td>${GetFullName(item.FirstName, item.LastName)}</td>
+                                         <td>${item.EmailAddress != null ? item.EmailAddress : ""}</td>
                          <td >${item.CellPhone != null ? item.CellPhone : ""}</td>
                          <td >${item.ModifiedDate != null ? new Date(parseInt(item.ModifiedDate.substr(6))).toISOString().split('T')[0] : ""}</td>
                          <td><div>`;
-                      if (duplicates.filter(e => e.EmailAddress === item.EmailAddress || e.SocialSecurityNumber === item.SocialSecurityNumber).length == 0) {
+                      if (duplicates.filter(e => e.EmailAddress === item.EmailAddress || e.SocialSecurityNumber === item.SocialSecurityNumber).length == 0 && canMovePClientPerm =="True") {
                           potentialPatient += `<button href="javascript:void(0)" id="btnpatientmove" onclick="MovePotentialPatient(${item.PatientID})" class="btn btn-success label-fields"> <i class=""></i>
                                         Move</button>`;
                       }
-                      
-                      potentialPatient += `<a href="/Patient/EditPotentialPatient?patientId=${item.PatientID}" id="btnpatientedit" class="btn btn-success label-fields"> <i class="far fa-edit"></i>
+                      if (canEditPClientPerm =="True") {
+                          potentialPatient += `<a href="/Patient/EditPotentialPatient?patientId=${item.PatientID}" id="btnpatientedit" class="btn btn-success label-fields"> <i class="far fa-edit"></i>
                                         Edit</a>`;
+                      }
+                      if (canDeletePClientPerm == "True") {
+                          potentialPatient += `<button href="javascript:void(0)" id="btnpatientDelete" onclick="DeletePotentialPatient(${item.PatientID})" class="btn btn-danger label-fields"> <i class=""></i>
+                                        Delete</button>`;
+                      }
+                     
                       potentialPatient += `</div ></td ></tr >`;
                   });
                 patientList.html("").append(potentialPatient);
@@ -199,33 +207,52 @@ function BindPotentialClientsTable() {
     });
     
 }
+function GetFullName(firstname , lastname) {
+    var fullname = "";
+    if (firstname != null) {
+        fullname += firstname;
+    }
+    if (lastname != null) {
+        fullname += " "+lastname;
+    }
+    return fullname;
+}
 
 function MovePotentialPatient(id) {
-    $(".loaderOverlay").show();
+   
     
-    
-    $.ajax({
-        type: "POST",
-        url: Apipath + '/api/PatientMain/MovePotentialPatient?patientId=' + id + "&clinicId=" + ClinicID,
-        contentType: 'application/json; charset=UTF-8',
-        dataType: "json",
-        success: function (result) {
-            if (result == 1) {
-                toastr.success("Potiental Client Moved successfully");
-            }
-            else {
+  
+    if (IsPatientDetailValid(id)) {
+        $(".loaderOverlay").show();
+        $.ajax({
+            type: "POST",
+            url: Apipath + '/api/PatientMain/MovePotentialPatient?patientId=' + id + "&clinicId=" + ClinicID,
+            contentType: 'application/json; charset=UTF-8',
+            dataType: "json",
+            success: function (result) {
+                if (result == 2) {
+                    toastr.success("Potiental Client Moved successfully");
+                    BindPotentialClientsTable();
+                }
+                else {
+                    toastr.error("unexpected error Happened");
+                }
+                $(".loaderOverlay").hide();
+
+
+
+            },
+            error: function () {
                 toastr.error("unexpected error Happened");
+                $(".loaderOverlay").hide();
             }
-            $(".loaderOverlay").hide();
-
-
-
-        },
-        error: function () {
-            toastr.error("unexpected error Happened");
-            $(".loaderOverlay").hide();
-        }
-    })
+        })
+    }
+    else
+    {
+        toastr.error("Reuired Fields are Empty");
+    }
+    
 
 }
 function AppendColumnsLists(result) {
@@ -233,9 +260,9 @@ function AppendColumnsLists(result) {
     
         var fileResult = result.filecolumns;
         var databaseResult = result.databaseColumns;
-    $PotientialClientModal.find('dbandFileFields').html('');
+    $PotientialClientModal.find('#dbandFileFields').html('');
     for (let i = 0; i < databaseResult.length; i++) {
-
+        
         var html = `<div class="row">`
         if (databaseResult[i].ColType == 'int' || databaseResult[i].ColType == 'bit') {
             html += `<div class="col-md-6"><div class="DatabaseFields">${databaseResult[i].ColName} ( ${databaseResult[i].ColType == "bit" ? "Boolean" : "Integer"})</div></div>`
@@ -256,6 +283,139 @@ function AppendColumnsLists(result) {
            // append dropdowns end
     }
    
+}
+
+function DeletePotentialPatient(id) {
+    $(".loaderOverlay").show();
+    $.ajax({
+        type: "POST",
+        url: Apipath + '/api/PatientMain/DeletePotentialPatient?patientId=' + id,
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        success: function (result) {
+            if (result == 1) {
+                toastr.success("Potiental Client Deleted successfully");
+                BindPotentialClientsTable();
+            }
+            else {
+                toastr.error("unexpected error Happened");
+            }
+            $(".loaderOverlay").hide();
+
+
+
+        },
+        error: function () {
+            toastr.error("unexpected error Happened");
+            $(".loaderOverlay").hide();
+        }
+    })
+}
+function IsPatientDetailValid(id) {
+    $.ajax({
+        type: "GET",
+        url: Apipath + '/api/PatientMain/GetPotientalPatientDetail?patientId=' + id,
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        async: false,
+        success: function (result) {
+            
+            if (result != null && result != '') {
+                if (result.FirstName == "" || result.FirstName == null) {
+                    return false;
+                }
+                if (result.LastName == "" || result.LastName == null) {
+                    return false;
+                }
+                if (result.Gender == "" || result.Gender == null) {
+                    return false;
+                }
+                if (!ValidateDOB(result.DateOfBirth)) {
+                    return false;
+                }
+                if (result.RaceEthnicity == "" || result.RaceEthnicity == null) {
+                    return false;
+                }
+                if (result.EmergencyContact1Name == "" || result.EmergencyContact1Name == null) {
+                    return false;
+                }
+                if (result.EmergencyContact1Address == "" || result.EmergencyContact1Address == null) {
+                    return false;
+                }
+                if (!ValidateEmail(result.EmergencyContact1EmailAddress)) {
+                    return false;
+                }
+                if (result.EmergencyContact1Relationship == "" || result.EmergencyContact1Relationship == null) {
+                    return false;
+                }
+                if (result.ChildrenUnder18 == "" || result.ChildrenUnder18 == null) {
+                    return false;
+                }
+                if (result.Adults18to65 == "" || result.Adults18to65 == null) {
+                    return false;
+                }
+                if (result.Adults65Plus == "" || result.Adults65Plus == null) {
+                    return false;
+                }
+                if (result.LanguagesSpeak == "" || result.LanguagesSpeak == null) {
+                    return false;
+                }
+                if (result.EverBeenSmoker != "" && result.EverBeenSmoker != null) {
+                    if (result.EverBeenSmoker.toLowerCase() == "yes" && result.QuitSmoking != null && result.QuitSmoking != "") {
+                        if (result.QuitSmoking.toLowerCase() == "yes" && (result.SmokingQuitDate == null || result.SmokingQuitDate == "")) {
+                            return false;
+                        }
+                    }
+                    esle
+                    {
+                        return false;
+                    }
+                }
+                else {
+                    return false;
+                }
+
+                return true
+                
+            }
+
+
+        }
+
+    })
+}
+
+function ValidateDOB(dob) {
+    
+    var pattern = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
+    if (!pattern.test(dob))
+    {
+        return false;
+    }
+    else
+    {
+        var date = new Date(dob);
+        var year = date.getFullYear();
+        var currentYear = new Date().getFullYear() + 1
+
+        if (year > 1900 && year <= currentYear) {
+            return true;
+        }
+        return false
+    }
+}
+
+function ValidateEmail(email) {
+
+    var pattern = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    if (email == "" || email == null) {
+        return false;
+    }
+    else if (!pattern.test(email)) {
+        
+        return false;
+    }
+    return true;
 }
 
 

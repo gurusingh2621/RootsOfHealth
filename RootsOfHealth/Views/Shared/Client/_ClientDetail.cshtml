@@ -8,7 +8,7 @@
     Html.RenderPartial("~/Views/Shared/Patient/_PatientMain.cshtml", Model.PatientMain);
 
     var _PatientData = Model.PatientMain;
-    _PatientData.DateOfBirth = (_PatientData.DateOfBirth != "" || _PatientData.DateOfBirth==null) ? DateTime.Parse(_PatientData.DateOfBirth).ToString("MM/dd/yyyy"):"";
+    _PatientData.DateOfBirth = _PatientData.DateOfBirth == "" || _PatientData.DateOfBirth==null ?"": _PatientData.DateOfBirth;
     var modulePermissions = new Common().GetMainModulesPermission(Convert.ToInt32(Session["userid"]));
 }
 

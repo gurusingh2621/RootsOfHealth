@@ -2602,9 +2602,19 @@ namespace RootsOfHealth.Controllers
                 {
                     try
                     {
-                        XSSFWorkbook workbook = new XSSFWorkbook(Request.Files[0].InputStream);
+                        if (fileExtension == ".xls")
+                        {
+                            HSSFWorkbook workbook = new HSSFWorkbook(Request.Files[0].InputStream);
+                            result = DataImportExcelOld(workbook, fileName, dbFields);
+                        }
+                        else
+                        {
+                            XSSFWorkbook workbook = new XSSFWorkbook(Request.Files[0].InputStream);
+                            result = DataImportExcelNew(workbook, fileName, dbFields);
+                        }
+                        
 
-                        result = DataImportExcel(workbook, fileName, dbFields);
+                        
                        
                     }
                     catch (IOException ex)
@@ -2640,7 +2650,7 @@ namespace RootsOfHealth.Controllers
 
             return ret;
         }
-        public int DataImportExcel(XSSFWorkbook workbook, string fileName, Dictionary<string, string> dbFields)
+        public int DataImportExcelOld(HSSFWorkbook workbook, string fileName, Dictionary<string, string> dbFields)
         {
 
             var sheet = workbook.GetSheetAt(0);
@@ -2809,7 +2819,175 @@ namespace RootsOfHealth.Controllers
             
             return savedCount;
         }
+        public int DataImportExcelNew(XSSFWorkbook workbook, string fileName, Dictionary<string, string> dbFields)
+        {
 
+            var sheet = workbook.GetSheetAt(0);
+            if (sheet == null)
+            {
+                //no 'Potential Client Data' sheet
+                return 0;
+            }
+
+            // formatter to get string data from any type of fields
+            HSSFDataFormatter formatter = new HSSFDataFormatter();
+            var headerRow = sheet.GetRow(0);
+            if (IsRowEmpty(headerRow))
+            {
+                //inconsistent structure of the file
+                return 0;
+            }
+            Dictionary<string, int> columnNames = new Dictionary<string, int>();
+            for (int i = headerRow.FirstCellNum; i < headerRow.LastCellNum; i++)
+            {
+                string value = formatter.FormatCellValue(headerRow.GetCell(i)).Trim();
+                if (!columnNames.ContainsKey(value))
+                    columnNames.Add(value, i);
+            }
+
+
+
+            var databaseColumns = new List<PotientialTableInfoBO>();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                //HTTP GET
+                var responseTask = client.GetAsync("/api/PatientMain/getpotentialclienttableinfo");
+                var result = responseTask.Result;
+
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<List<PotientialTableInfoBO>>();
+                    readTask.Wait();
+                    databaseColumns = readTask.Result;
+                }
+
+            }
+            List<PotientialPatientBO> allowedPatientList = new List<PotientialPatientBO>();
+            //check for necessary columns
+            if (!IsAllNecessaryColumnsExist(dbFields, necessaryColumnsForPotentialClient))
+            {
+                //inconsistent structure of the file
+                return 0;
+            }
+            #region Check every row in import file
+            //loop for all rows
+            for (int i = sheet.FirstRowNum + 1; i <= sheet.LastRowNum; i++)
+            {
+                var currentRow = sheet.GetRow(i);
+                if (IsRowEmpty(currentRow))
+                {
+                    // skip empty rows
+                    continue;
+                }
+                PotientialPatientBO currentPatient = new PotientialPatientBO();
+
+                foreach (var field in dbFields)
+                {
+                    var dbCurrentfield = databaseColumns.Where(x => x.ColName.ToLower() == field.Key.ToLower()).FirstOrDefault();
+
+                    var cellNo = columnNames.Where(x => x.Key.ToLower() == field.Value.ToLower()).Select(x => x.Value).FirstOrDefault();
+                    string value;
+                    var currentCell = currentRow.GetCell(cellNo);
+
+                    value = formatter.FormatCellValue(currentCell).Trim();
+                    if (currentCell != null && currentCell.CellType == CellType.Numeric)
+                    {
+                        if (HSSFDateUtil.IsCellDateFormatted(currentCell))
+                        {
+                            value = currentCell.DateCellValue.ToShortDateString();
+                        }
+                    }
+
+                    try
+                    {
+                        if (currentCell != null)
+                        {
+                            if (dbCurrentfield.ColType == "bit")
+                            {
+                                bool boolvalue;
+                                if (Boolean.TryParse(value, out boolvalue))
+                                {
+                                    currentPatient.GetType().GetProperty(field.Key).SetValue(currentPatient, boolvalue, null);
+                                }
+                                else
+                                {
+                                    // skip
+                                    continue;
+                                }
+
+                            }
+                            else if (dbCurrentfield.ColType == "int")
+                            {
+                                int intval;
+                                if (Int32.TryParse(value, out intval))
+                                {
+                                    currentPatient.GetType().GetProperty(field.Key).SetValue(currentPatient, intval, null);
+                                }
+                                else
+                                {
+                                    // skip 
+                                    continue;
+                                }
+                            }
+                            else if (dbCurrentfield.ColType == "nvarchar")
+                            {
+
+
+                                if (currentCell.CellType != CellType.Boolean)
+                                {
+                                    currentPatient.GetType().GetProperty(field.Key).SetValue(currentPatient, value, null);
+                                }
+                                else
+                                {
+                                    // skip
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+
+                }
+
+
+
+
+                allowedPatientList.Add(currentPatient);
+            }
+            int savedCount = 0;
+            #endregion
+            #region Save allowed potentialPatients to DB
+
+            foreach (var patient in allowedPatientList)
+            {
+
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(WebApiKey);
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    var responseTask = client.PostAsJsonAsync("/api/PatientMain/savePotentialclient", patient);
+                    responseTask.Wait();
+
+                    var result = responseTask.Result;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var data = result.Content.ReadAsStringAsync().Result;
+                        if (data == "1")
+                        {
+                            savedCount++;
+                        }
+                    }
+                }
+            }
+            #endregion
+
+            return savedCount;
+        }
         //check for necessary columns
         private bool IsAllNecessaryColumnsExist(Dictionary<string, string> columns, string[] necessaryColumns)
         {

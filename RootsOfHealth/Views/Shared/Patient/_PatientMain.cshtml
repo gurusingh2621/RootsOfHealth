@@ -8,9 +8,10 @@
 <link href="~/css/CareplanNeedsAndGoals.css" rel="stylesheet" />
 <link href="~/css/CarePlanSummary.css" rel="stylesheet" />
 
-@{ if (Model != null)
+@{
+    if (Model != null)
     {
-        Model.DateOfBirth = Model.DateOfBirth == "" || Model.DateOfBirth == null ? "" : DateTime.Parse(Model.DateOfBirth).ToString("MM/dd/yyyy");
+        Model.DateOfBirth = Model.DateOfBirth == "" || Model.DateOfBirth == null ? "" : Model.DateOfBirth;
     }
 
 

@@ -2109,7 +2109,7 @@
                 else {
                     $('#txtEmergencyContact1Address').removeClass('invalid-field');
                 }
-                if ($('#txtEmergencyContact1EmailAddress').val() == '') {
+                if ($('#txtEmergencyContact1EmailAddress').val() == '' || !ValidateEmail($('#txtEmergencyContact1EmailAddress').val())) {
                     $('#txtEmergencyContact1EmailAddress').addClass('invalid-field');
                     check = false;
                 }
@@ -2495,6 +2495,18 @@
         }
         function Hidessn() {
             $("#txtSocialSecNo").attr("type", "password");
+        }
+
+        function ValidateEmail(email) {
+
+            var pattern = /^([a-zA-Z0-9_\.\-])+\@@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            if (email == "" || email == null) {
+                return false;
+            }
+            else if (!pattern.test(email)) {
+                return false;
+            }
+            return true;
         }
     </script>
 }

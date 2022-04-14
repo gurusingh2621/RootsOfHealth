@@ -942,12 +942,7 @@ namespace RootsOfHealth.Controllers
                 return Json(new {status= 0, Message = ex.Message });
             }
             
-            return Json(new
-            {
-                status = 1,
-                pClientlist = potientialPatients
-                
-        },JsonRequestBehavior.AllowGet);
+            return Json(new {status = 1,pClientlist = potientialPatients },JsonRequestBehavior.AllowGet);
          }
 
         [HttpGet]
