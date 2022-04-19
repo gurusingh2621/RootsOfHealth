@@ -2412,6 +2412,9 @@ namespace RootsOfHealth.Controllers
                         var readTask = result.Content.ReadAsAsync<List<PotientialTableInfoBO>>();
                         readTask.Wait();
                         databaseColumns = readTask.Result;
+                        databaseColumns = databaseColumns.Where(x => x.ColName.ToLower() != "othergender" && x.ColName.ToLower() != "otherrace"
+                     && x.ColName.ToLower() != "othercontact" && x.ColName.ToLower() != "othermaritalstatus" && x.ColName.ToLower() != "otherlanguagespeak"
+                     && x.ColName.ToLower() != "otherpronouns" && x.ColName.ToLower() != "otherthinkyourselfas").ToList();
                     }
 
                 }
@@ -2716,11 +2719,11 @@ namespace RootsOfHealth.Controllers
                 foreach (var field in dbFields)
                 {
                     var dbCurrentfield = databaseColumns.Where(x => x.ColName.ToLower() == field.Key.ToLower()).FirstOrDefault();
-                    
-                    var cellNo = columnNames.Where(x => x.Key.ToLower() == field.Value.ToLower()).Select(x=> x.Value).FirstOrDefault();
-                        string value;
-                        var currentCell = currentRow.GetCell(cellNo);
-                    
+
+                    var cellNo = columnNames.Where(x => x.Key.ToLower() == field.Value.ToLower()).Select(x => x.Value).FirstOrDefault();
+                    string value;
+                    var currentCell = currentRow.GetCell(cellNo);
+
                     value = formatter.FormatCellValue(currentCell).Trim();
                     if (currentCell != null && currentCell.CellType == CellType.Numeric)
                     {
@@ -2729,27 +2732,231 @@ namespace RootsOfHealth.Controllers
                             value = currentCell.DateCellValue.ToShortDateString();
                         }
                     }
-                 
+                    if (dbCurrentfield.ColName.ToLower() == "gender")
+                    {
+                        switch (value.ToLower())
+                        {
+                            case "male":
+                                value = "Male";
+                                break;
+                            case "female":
+                                value = "Female";
+                                break;
+                            default:
+                                currentPatient.OtherGender = value;
+                                value = "Other";
+                                break;
+                        }
+
+
+
+                    }
+                    else if (dbCurrentfield.ColName.ToLower() == "raceethnicity")
+                    {
+                        switch (value.ToLower().Trim())
+                        {
+                            case "black/african/african-american, asian":
+                                value = "Black/African/African-American,Latino/Hispanic,White/Caucasian,Asian,Native Hawaiian/Pacific Islander,Native American/Alaskan";
+                                break;
+                            case "black/african/african-american,asian":
+                                value = "Black/African/African-American,Latino/Hispanic,White/Caucasian,Asian,Native Hawaiian/Pacific Islander,Native American/Alaskan";
+                                break;
+                            default:
+                                currentPatient.OtherRace = value;
+                                value = "Other";
+                                break;
+                        }
+
+
+
+                    }
+                    else if (dbCurrentfield.ColName.ToLower() == "ispermanentaddress" || dbCurrentfield.ColName.ToLower() == "everbeensmoker" 
+                        || dbCurrentfield.ColName.ToLower() == "quitsmoking" || dbCurrentfield.ColName.ToLower() == "evermemberofusarmedforces")
+                    {
+                        switch (value.ToLower())
+                        {
+                            case "yes":
+                            case "1":
+                                value = "1";
+                                break;
+                            case "no":
+                            case "0":
+                                value = "0";
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    else if (dbCurrentfield.ColName.ToLower() == "waytocontact")
+                    {
+                        switch (value.ToLower())
+                        {
+                            case "home":
+                                value = "Home";
+                                break;
+                            case "cell":
+                                value = "Cell";
+                                break;
+                            case "email":
+                                value = "Email";
+                                break;
+                            default:
+                                currentPatient.OtherContact = value;
+                                value = "Other";
+                                break;
+                        }
+                    }
+                    else if (dbCurrentfield.ColName.ToLower() == "maritalstatus")
+                    {
+                        switch (value.ToLower())
+                        {
+                            case "married":
+                                value = "Married";
+                                break;
+                            case "single":
+                                value = "Single";
+                                break;
+                            case "domestic partnership":
+                                value = "Domestic Partnership";
+                                break;
+                            case "divorced":
+                                value = "Divorced";
+                                break;
+                            case "separated":
+                                value = "Separated";
+                                break;
+                            case "widowed":
+                                value = "Widowed";
+                                break;
+                            default:
+                                currentPatient.OtherMaritalStatus = value;
+                                value = "Other";
+                                break;
+                        }
+                    }
+                    else if (dbCurrentfield.ColName.ToLower() == "languagesspeak")
+                    {
+                        switch (value.ToLower())
+                        {
+                            case "english":
+                                value = "English,Spanish,Arabic,Amharic,Tigrinya";
+                                break;
+                            case "spanish":
+                                value = "English,Spanish,Arabic,Amharic,Tigrinya";
+                                break;
+                            case "arabic":
+                                value = "English,Spanish,Arabic,Amharic,Tigrinya";
+                                break;
+                            case "amharic":
+                                value = "English,Spanish,Arabic,Amharic,Tigrinya";
+                                break;
+                            case "tigrinya":
+                                value = "English,Spanish,Arabic,Amharic,Tigrinya";
+                                break;
+                            default:
+                                currentPatient.OtherLanguageSpeak = value;
+                                value = "Other";
+                                break;
+                        }
+                    }
+                    else if(dbCurrentfield.ColName.ToLower() == "preferredpronouns")
+                    {
+                        switch (value.ToLower())
+                        {
+                            case "she/her":
+                            case "she":
+                            case "her":
+                                value = "She/Her";
+                                break;
+                            case "he/him":
+                            case "he":
+                            case "him":
+                                value = "He/Him";
+                                break;
+                            case "they/them":
+                            case "they":
+                            case "them":
+                                value = "They/Them";
+                                break;
+                            default:
+                                currentPatient.OtherPronouns = value;
+                                value = "Other";
+                                break;
+                        }
+                    }
+                    else if (dbCurrentfield.ColName.ToLower() == "thinkyourselfas")
+                    {
+                        switch (value.ToLower())
+                        {
+                            case "straight or heterosexual":
+                            case "straight":
+                            case "heterosexual":
+                                value = "Straight or Heterosexual";
+                                break;
+                            case "lesbian":
+                                value = "Lesbian";
+                                break;
+                            case "gay":
+                                value = "Gay";
+                                break;
+                            case "bisexual":
+                                value = "Bisexual";
+                                break;
+                            case "queer":
+                                value = "Queer";
+                                break;
+                            case "questioning":
+                                value = "Questioning";
+                                break;
+                            default:
+                                currentPatient.OtherThinkYourselfAs = value;
+                                value = "Unspecified/Other";
+                                break;
+                        }
+                    }
+                    else if (dbCurrentfield.ColName.ToLower() == "patientchildrensages")
+                    {
+                        char[] stringSeparators = new char[] { ',',':','-','/' };
+                        string resul = "";
+                        string[] patientages = value.Split(',');
+                        var childrencounter = 0;
+                        foreach( string pat in patientages)
+                        {
+                            var age = pat.Split(stringSeparators);
+                            
+                            resul +=age[0] +":"+age[1]+",";
+                            childrencounter++;
+                        }
+                        value = resul;
+                        currentPatient.PatientChildren = childrencounter;
+                    }
                     try
                         {
                           if (currentCell != null)
                           {
                             if (dbCurrentfield.ColType == "bit")
                             {
-                                bool boolvalue;
-                                if (Boolean.TryParse(value, out boolvalue))
+                                if (value =="1")
                                 {
-                                    currentPatient.GetType().GetProperty(field.Key).SetValue(currentPatient, boolvalue, null);
+                                    currentPatient.GetType().GetProperty(field.Key).SetValue(currentPatient, true, null);
                                 }
                                 else
                                 {
-                                    // skip
-                                    continue;
+                                     currentPatient.GetType().GetProperty(field.Key).SetValue(currentPatient, false, null);
                                 }
-
+                              
+                               
                             }
                             else if (dbCurrentfield.ColType == "int")
                             {
+                                if (dbCurrentfield.ColLength != null && dbCurrentfield.ColLength != -1)
+                                {
+                                    var fieldLength = value.ToString().Length;
+                                    if (fieldLength > dbCurrentfield.ColLength)
+                                    {
+                                        value = value.Substring(0, dbCurrentfield.ColLength ?? 0);
+                                    }
+                                }
                                 int intval;
                                 if (Int32.TryParse(value, out intval))
                                 {
@@ -2763,8 +2970,16 @@ namespace RootsOfHealth.Controllers
                             }
                             else if(dbCurrentfield.ColType == "nvarchar")
                             {
-                               
-                               
+                                if (dbCurrentfield.ColLength != null && dbCurrentfield.ColLength != -1)
+                                {
+                                    var fieldLength = value.ToString().Length;
+                                    if (fieldLength > dbCurrentfield.ColLength)
+                                    {
+                                        value = value.Substring(0, dbCurrentfield.ColLength ?? 0);
+                                    }
+                                }
+
+
                                 if (currentCell.CellType != CellType.Boolean)
                                 {
                                     currentPatient.GetType().GetProperty(field.Key).SetValue(currentPatient, value, null);
@@ -2899,26 +3114,228 @@ namespace RootsOfHealth.Controllers
                         }
                     }
 
+                    if (dbCurrentfield.ColName.ToLower() == "gender")
+                    {
+                        switch (value.ToLower())
+                        {
+                            case "male":
+                                value = "Male";
+                                break;
+                            case "female":
+                                value = "Female";
+                                break;
+                            default:
+                                currentPatient.OtherGender = value;
+                                value = "Other";
+                                break;
+                        }
+
+                    }
+                    else if (dbCurrentfield.ColName.ToLower() == "raceethnicity")
+                    {
+                        switch (value.ToLower().Trim())
+                        {
+                            case "black/african/african-american, asian":
+                                value = "Black/African/African-American,Latino/Hispanic,White/Caucasian,Asian,Native Hawaiian/Pacific Islander,Native American/Alaskan";
+                                break;
+                            case "black/african/african-american,asian":
+                                value = "Black/African/African-American,Latino/Hispanic,White/Caucasian,Asian,Native Hawaiian/Pacific Islander,Native American/Alaskan";
+                                break;
+                            default:
+                                currentPatient.OtherRace = value;
+                                value = "Other";
+                                break;
+                        }
+
+                    }
+                    else if (dbCurrentfield.ColName.ToLower() == "ispermanentaddress" || dbCurrentfield.ColName.ToLower() == "everbeensmoker"
+                        || dbCurrentfield.ColName.ToLower() == "quitsmoking" || dbCurrentfield.ColName.ToLower() == "evermemberofusarmedforces")
+                    {
+                        switch (value.ToLower())
+                        {
+                            case "yes":
+                            case "1":
+                                value = "1";
+                                break;
+                            case "no":
+                            case "0":
+                                value = "0";
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    else if (dbCurrentfield.ColName.ToLower() == "waytocontact")
+                    {
+                        switch (value.ToLower())
+                        {
+                            case "home":
+                                value = "Home";
+                                break;
+                            case "cell":
+                                value = "Cell";
+                                break;
+                            case "email":
+                                value = "Email";
+                                break;
+                            default:
+                                currentPatient.OtherContact = value;
+                                value = "Other";
+                                break;
+                        }
+                    }
+                    else if (dbCurrentfield.ColName.ToLower() == "maritalstatus")
+                    {
+                        switch (value.ToLower())
+                        {
+                            case "married":
+                                value = "Married";
+                                break;
+                            case "single":
+                                value = "Single";
+                                break;
+                            case "domestic partnership":
+                                value = "Domestic Partnership";
+                                break;
+                            case "divorced":
+                                value = "Divorced";
+                                break;
+                            case "separated":
+                                value = "Separated";
+                                break;
+                            case "widowed":
+                                value = "Widowed";
+                                break;
+                            default:
+                                currentPatient.OtherMaritalStatus = value;
+                                value = "Other";
+                                break;
+                        }
+                    }
+                    else if (dbCurrentfield.ColName.ToLower() == "languagesspeak")
+                    {
+                        switch (value.ToLower())
+                        {
+                            case "english":
+                                value = "English,Spanish,Arabic,Amharic,Tigrinya";
+                                break;
+                            case "spanish":
+                                value = "English,Spanish,Arabic,Amharic,Tigrinya";
+                                break;
+                            case "arabic":
+                                value = "English,Spanish,Arabic,Amharic,Tigrinya";
+                                break;
+                            case "amharic":
+                                value = "English,Spanish,Arabic,Amharic,Tigrinya";
+                                break;
+                            case "tigrinya":
+                                value = "English,Spanish,Arabic,Amharic,Tigrinya";
+                                break;
+                            default:
+                                currentPatient.OtherLanguageSpeak = value;
+                                value = "Other";
+                                break;
+                        }
+                    }
+                    else if (dbCurrentfield.ColName.ToLower() == "preferredpronouns")
+                    {
+                        switch (value.ToLower())
+                        {
+                            case "she/her":
+                            case "she":
+                            case "her":
+                                value = "She/Her";
+                                break;
+                            case "he/him":
+                            case "he":
+                            case "him":
+                                value = "He/Him";
+                                break;
+                            case "they/them":
+                            case "they":
+                            case "them":
+                                value = "They/Them";
+                                break;
+                            default:
+                                currentPatient.OtherPronouns = value;
+                                value = "Other";
+                                break;
+                        }
+                    }
+                    else if (dbCurrentfield.ColName.ToLower() == "thinkyourselfas")
+                    {
+                        switch (value.ToLower())
+                        {
+                            case "straight or heterosexual":
+                            case "straight":
+                            case "heterosexual":
+                                value = "Straight or Heterosexual";
+                                break;
+                            case "lesbian":
+                                value = "Lesbian";
+                                break;
+                            case "gay":
+                                value = "Gay";
+                                break;
+                            case "bisexual":
+                                value = "Bisexual";
+                                break;
+                            case "queer":
+                                value = "Queer";
+                                break;
+                            case "questioning":
+                                value = "Questioning";
+                                break;
+                            default:
+                                currentPatient.OtherThinkYourselfAs = value;
+                                value = "Unspecified/Other";
+                                break;
+                        }
+                    }
+                    else if (dbCurrentfield.ColName.ToLower() == "patientchildrensages")
+                    {
+                        char[] stringSeparators = new char[] { ',', ':', '-', '/' };
+                        string resul = "";
+                        string[] patientages = value.Split(',');
+                        var childrencounter = 0;
+                        foreach (string pat in patientages)
+                        {
+                            var age = pat.Split(stringSeparators);
+
+                            resul += age[0] + ":" + age[1] + ",";
+                            childrencounter++;
+                        }
+                        value = resul;
+                        currentPatient.PatientChildren = childrencounter;
+                    }
                     try
                     {
                         if (currentCell != null)
                         {
                             if (dbCurrentfield.ColType == "bit")
                             {
-                                bool boolvalue;
-                                if (Boolean.TryParse(value, out boolvalue))
+                                if (value == "1")
                                 {
-                                    currentPatient.GetType().GetProperty(field.Key).SetValue(currentPatient, boolvalue, null);
+                                    currentPatient.GetType().GetProperty(field.Key).SetValue(currentPatient, true, null);
                                 }
                                 else
                                 {
-                                    // skip
-                                    continue;
+                                    currentPatient.GetType().GetProperty(field.Key).SetValue(currentPatient, false, null);
                                 }
+
 
                             }
                             else if (dbCurrentfield.ColType == "int")
                             {
+                                if (dbCurrentfield.ColLength != null)
+                                {
+                                    var fieldLength = value.ToString().Length;
+                                    if (fieldLength > dbCurrentfield.ColLength)
+                                    {
+                                        value = value.Substring(0, dbCurrentfield.ColLength ?? 0);
+                                    }
+                                }
+                               
                                 int intval;
                                 if (Int32.TryParse(value, out intval))
                                 {
@@ -2932,7 +3349,14 @@ namespace RootsOfHealth.Controllers
                             }
                             else if (dbCurrentfield.ColType == "nvarchar")
                             {
-
+                                if (dbCurrentfield.ColLength != null)
+                                {
+                                    var fieldLength = value.ToString().Length;
+                                    if (fieldLength > dbCurrentfield.ColLength)
+                                    {
+                                        value = value.Substring(0, dbCurrentfield.ColLength ?? 0);
+                                    }
+                                }
 
                                 if (currentCell.CellType != CellType.Boolean)
                                 {
@@ -2952,9 +3376,6 @@ namespace RootsOfHealth.Controllers
                     }
 
                 }
-
-
-
 
                 allowedPatientList.Add(currentPatient);
             }
@@ -3018,10 +3439,156 @@ namespace RootsOfHealth.Controllers
                     var readTask = result.Content.ReadAsAsync<List<PotientialTableInfoBO>>();
                     readTask.Wait();
                     databaseColumns = readTask.Result;
+                    databaseColumns = databaseColumns.Where(x => x.ColName.ToLower() != "othergender" && x.ColName.ToLower() != "otherrace"
+                     && x.ColName.ToLower() != "othercontact" && x.ColName.ToLower() != "othermaritalstatus" && x.ColName.ToLower() != "otherlanguagespeak"
+                     && x.ColName.ToLower() != "otherpronouns" && x.ColName.ToLower() != "otherthinkyourselfas").ToList();
                 }
 
             }
+            foreach (var item in databaseColumns)
+            {
+                switch (item.ColName)
+                {
+                    case "FirstName":
+                        item.ColName = "First Name";
+                        break;
+                    case "LastName":
+                        item.ColName = "Last Name";
+                        break;
+                    case "MiddleName":
+                        item.ColName = "Middle Name";
+                        break;
+                    case "Gender":
+                        item.ColName = "Which gender do you identify as";
+                        break;
+                    case "DateOfBirth":
+                        item.ColName = "Date Of Birth";
+                        break;
+                    case "SocialSecurityNumber":
+                        item.ColName = "Social Security Number";
+                        break;
+                    case "RaceEthnicity":
+                        item.ColName = "Race/Ethnicity";
+                        break;
+                    case "IsPermanentAddress":
+                        item.ColName = "Is Permanent Address";
+                        break;
+                    case "PermanentAddress":
+                        item.ColName = "Permanent Address";
+                        break;
+                    case "EmailAddress":
+                        item.ColName = "Email Address";
+                        break;
+                    case "HomePhone":
+                        item.ColName = "Home Phone";
+                        break;
+                    case "CellPhone":
+                        item.ColName = "Cell Phone";
+                        break;
+                    case "WayToContact":
+                        item.ColName = "Best way to contact you";
+                        break;
+                    case "PatientChildren":
+                        item.ColName = "Patient Children";
+                        break;
+                    case "PatientChildrensAges":
+                        item.ColName = "Patient Childrens Ages";
+                        break;
+                    case "ChildrenUnder18":
+                        item.ColName = "Children Under 18";
+                        break;
+                    case "Adults18to65":
+                        item.ColName = "Adults 18-65";
+                        break;
+                    case "Adults65Plus":
+                        item.ColName = "Adults 65+";
+                        break;
+                    case "PreferredPharmacyName":
+                        item.ColName = "Preferred Pharmacy Name";
+                        break;
+                    case "PreferredPharmacyLocation":
+                        item.ColName = "Preferred Pharmacy Location";
+                        break;
+                    case "EverMemberOfUSArmedForces":
+                        item.ColName = "Are you now or were you ever a member of the U.S. Armed Forces?";
+                        break;
+                    case "MaritalStatus":
+                        item.ColName = "Marital Status";
+                        break;
+                    case "LanguagesSpeak":
+                        item.ColName = "Which languages do you speak comfortably?";
+                        break;
+                    case "EverBeenSmoker":
+                        item.ColName = "Have you ever been a smoker";
+                        break;
+                    case "QuitSmoking":
+                        item.ColName = "Have you Quit?";
+                        break;
+                    case "SmokingQuitDate":
+                        item.ColName = "Quit Date";
+                        break;
+                    case "PreferredPronouns":
+                        item.ColName = "What are your preferred pronouns";
+                        break;
+                    case "ThinkYourselfAs":
+                        item.ColName = "Do you think of yourself as";
+                        break;
+                    case "EmergencyContact1Name":
+                        item.ColName = "Emergency Contact1 Name";
+                        break;
+                    case "EmergencyContact1Address":
+                        item.ColName = "Emergency Contact1 Address";
+                        break;
+                    case "EmergencyContact1EmailAddress":
+                        item.ColName = "Emergency Contact1 Email Address";
+                        break;
+                    case "EmergencyContact1Relationship":
+                        item.ColName = "Emergency Contact1 Relationship";
+                        break;
+                    case "EmergencyContact2Name":
+                        item.ColName = "Emergency Contact2 Name";
+                        break;
+                    case "EmergencyContact2Address":
+                        item.ColName = "Emergency Contact2 Address";
+                        break;
+                    case "EmergencyContact2EmailAddress":
+                        item.ColName = "Emergency Contact2 Email Address";
+                        break;
+                    case "EmergencyContact2Relationship":
+                        item.ColName = "Emergency Contact2 Relationship";
+                        break;
+                    case "LastTimeYouSmoked":
+                        item.ColName = "When was the last time you smoked?";
+                        break;
+                    case "EmergencyContact1City":
+                        item.ColName = "Emergency Contact1 City";
+                        break;
+                    case "EmergencyContact1State":
+                        item.ColName = "Emergency Contact1 State";
+                        break;
+                    case "EmergencyContact1Zip":
+                        item.ColName = "Emergency Contact1 Zip";
+                        break;
+                    case "EmergencyContact2City":
+                        item.ColName = "Emergency Contact2 City";
+                        break;
+                    case "EmergencyContact2State":
+                        item.ColName = "Emergency Contact2 State";
+                        break;
+                    case "EmergencyContact2Zip":
+                        item.ColName = "Emergency Contact2 Zip";
+                        break;
+                    case "LocalMedicalRecordNumber":
+                        item.ColName = "Local Medical Record Number";
+                        break;
+                    case "AmdMedicalRecordNumber":
+                        item.ColName = "Amd Medical Record Number";
+                        break;
+                    default:
+                        break;
 
+                }
+            }
 
             using (MemoryStream output = new MemoryStream())
             {

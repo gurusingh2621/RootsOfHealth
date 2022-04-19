@@ -3,7 +3,39 @@
     ViewBag.Title = "EditPotentialPatient";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<style>
+    .showHide {
+        display: none;
+    }
+   
+    .ssn-icon {
+        position: relative
+    }
 
+    .ssn-icon-eye {
+        position: absolute;
+        top: 50%;
+        right: 5px;
+        transform: translateY(-50%);
+        font-size: 13px;
+    }
+
+        .ssn-icon-eye.showpwd i.close-eye {
+            display: block !important;
+        }
+
+        .ssn-icon-eye.showpwd i.open-eye {
+            display: none !important;
+        }
+
+        .ssn-icon-eye.showpwd {
+            display: block !important;
+        }
+
+        .ssn-icon-eye.showpwd {
+            display: none;
+        }
+</style>
 
 <section id="content" class="responsive-container ">
     <div class="inner-content">
@@ -1385,7 +1417,7 @@
 
 
         var lblLanguages = $('#lblLanguages').html();
-        if (lblLanguages == "") {
+        if (lblLanguages == "" || lblLanguages == "Other") {
             $("#ddLanguages").val(lblOtherArray);
             $('.selectboxmultiple button[data-id="ddLanguages"]').find('.filter-option-inner-inner').html("Other");
             $('#OtherLanguage').show();
@@ -1394,7 +1426,7 @@
             $("#ddLanguages").val(lblLanguagesArray);
             $('.selectboxmultiple button[data-id="ddLanguages"]').find('.filter-option-inner-inner').html(lblLanguages);
         }
-
+        
         var lblUSArmedForces = $('#lblUSArmedForces').html().toLocaleLowerCase();
         $("input[name=USArmedRadio][value='" + lblUSArmedForces + "']").prop('checked', true);
 
@@ -1426,6 +1458,7 @@
         if (lblGender == "Other") {
             $('#divOtherGender').show();
         }
+        
         var lblPerAdd = $('#lblPerAdd').html().toLocaleLowerCase();
         $('#ddPermanentAddress').val('' + lblPerAdd);
         if (lblPerAdd == "false") {
@@ -1780,14 +1813,14 @@
 
         /*$('.selectboxmultiple').selectpicker();*/
 
-
+        
         var txtChildren = $("#txtChildren").val();
 
         if (txtChildren != "") {
 
 
             $('.ChildrenAgeDiv').html('');
-
+            
             var val = $('#txtChildren').val();
 
             var divhtml = '';
@@ -1800,15 +1833,19 @@
                 temp = temp.replace('#daysid', 'child_days_' + i);
                 divhtml = divhtml + temp;
             }
-
+            
             $('.ChildrenAgeDiv').html(divhtml);
             var lblAgeChildren = $('#lblAgeChildren').html();
             var AgeChildrenArray = lblAgeChildren != undefined ? lblAgeChildren.split(',') : '';
             if (AgeChildrenArray != '') {
                 for (var i = 0; i < AgeChildrenArray.length; i++) {
                     var AgeChildren = AgeChildrenArray != '' ? AgeChildrenArray[i].split(':') : '';
-                    $('#child_year_' + (i + 1)).val(AgeChildren[0].toString());
-                    $('#child_days_' + (i + 1)).val(AgeChildren[1].toString());
+                    if (AgeChildren[0] != "")
+                    {
+                        $('#child_year_' + (i)).val(AgeChildren[0].toString());
+                        $('#child_days_' + (i)).val(AgeChildren[1].toString());
+                    }
+            
                 }
             }
         }
@@ -1818,8 +1855,8 @@
             Radio();
             ChildrenAges();
 
-            if (Validation() && validateDOB()) {
-
+            if (Validation() && validateDOB() && ValidateEmail()) {
+              
                 AddDate();
                 $("input[type=hidden][name=CreatedDate]").val(CreatedDate);
                 $("input[type=hidden][name=ModifiedDate]").val(ModifiedDate);
@@ -2109,7 +2146,7 @@
                 else {
                     $('#txtEmergencyContact1Address').removeClass('invalid-field');
                 }
-                if ($('#txtEmergencyContact1EmailAddress').val() == '' || !ValidateEmail($('#txtEmergencyContact1EmailAddress').val())) {
+                if ($('#txtEmergencyContact1EmailAddress').val() == '' ) {
                     $('#txtEmergencyContact1EmailAddress').addClass('invalid-field');
                     check = false;
                 }
@@ -2164,13 +2201,46 @@
             return check;
 
         }
+        function ValidateEmail() {
+            
+            var pattern = /^([a-zA-Z0-9_\.\-])+\@@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+
+            if (!pattern.test($('#txtEmergencyContact1EmailAddress').val())) {
+                $('#txtEmergencyContact1EmailAddress').addClass('invalid-field');
+                toastr.error('Email is not in Correct Format');
+                return false;
+            }
+            else {
+                $('#txtEmergencyContact1EmailAddress').removeClass('invalid-field');
+            }
+
+            if ($('#txtEmergencyContact2EmailAddress').val() != '' && $('#txtEmergencyContact2EmailAddress').val() != null && !pattern.test($('#txtEmergencyContact2EmailAddress').val())) {
+                $('#txtEmergencyContact2EmailAddress').addClass('invalid-field');
+                toastr.error('Email is not in Correct Format');
+               
+                return false;
+            }
+            else {
+                $('#txtEmergencyContact2EmailAddress').removeClass('invalid-field');
+            }
+
+            if ($('#txtEmailAddress').val() != '' && $('#txtEmailAddress').val() != null && !pattern.test($('#txtEmailAddress').val())) {
+                $('#txtEmailAddress').addClass('invalid-field');
+                toastr.error('Email is not in Correct Format');
+                return false;
+            }
+            else {
+                $('#txtEmailAddress').removeClass('invalid-field');
+            }
+            return true;
+        }
 
         function validateDOB() {
             var dob = $('#txtDOB').val();
 
             var pattern = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
             if (!pattern.test(dob)) {
-                toastr.error("Date of birth is invalid.")
+                toastr.error("Date is not in correct format")
                 $('#txtDOB').addClass('invalid-field');
                 return false;
             }
@@ -2188,7 +2258,6 @@
                 return false
             }
         }
-
         function AddDate() {
 
             var d = new Date();
@@ -2452,7 +2521,7 @@
         }
 
         function ChildrenAges() {
-
+            
             var val = $('#txtChildren').val();
             var result = "";
             // PatientChildrensAges = '';
@@ -2497,16 +2566,24 @@
             $("#txtSocialSecNo").attr("type", "password");
         }
 
-        function ValidateEmail(email) {
+        
+        function addChildrenDiv() {
+            $('.ChildrenAgeDiv').html('');
 
-            var pattern = /^([a-zA-Z0-9_\.\-])+\@@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-            if (email == "" || email == null) {
-                return false;
+            var val = $('#txtChildren').val();
+
+            var divhtml = '';
+
+            for (var i = 1; i <= parseInt(val); i++) {
+
+                var temp = $('.ChildrenAgeTemplate').html();
+                temp = temp.replace('#number', i);
+                temp = temp.replace('#yearid', 'child_year_' + i);
+                temp = temp.replace('#daysid', 'child_days_' + i);
+                divhtml = divhtml + temp;
             }
-            else if (!pattern.test(email)) {
-                return false;
-            }
-            return true;
+
+            $('.ChildrenAgeDiv').html(divhtml);
         }
     </script>
 }

@@ -193,6 +193,7 @@ function BindPotentialClientsTable() {
                 $("#tblPotientialPatient").dataTable({
                     scrollY: 'calc(100vh - 264px)',
                     scrollCollapse: true,
+                    "orderClasses": false
                 });
             }
             else
@@ -250,7 +251,7 @@ function MovePotentialPatient(id) {
     }
     else
     {
-        toastr.error("Reuired Fields are Empty");
+        toastr.error("Can not move records as data is not in correct format or required fields are pending");
     }
     
 
@@ -262,12 +263,153 @@ function AppendColumnsLists(result) {
         var databaseResult = result.databaseColumns;
     $PotientialClientModal.find('#dbandFileFields').html('');
     for (let i = 0; i < databaseResult.length; i++) {
-        
+        var columnName = "";
+        switch (databaseResult[i].ColName) {
+            case "FirstName":
+                columnName = "First Name";
+                break;
+            case "LastName":
+                columnName = "Last Name";
+                break;
+            case "MiddleName":
+                columnName = "Middle Name";
+                break;
+            case "Gender":
+                columnName = "Which gender do you identify as";
+                break;
+            case "DateOfBirth":
+                columnName = "Date Of Birth";
+                break;
+            case "SocialSecurityNumber":
+                columnName = "Social Security Number";
+                break;
+            case "RaceEthnicity":
+                columnName = "Race/Ethnicity";
+                break;
+            case "IsPermanentAddress":
+                columnName = "Is Permanent Address";
+                break;
+            case "PermanentAddress":
+                columnName = "Permanent Address";
+                break;
+            case "EmailAddress":
+                columnName = "Email Address";
+                break;
+            case "HomePhone":
+                columnName = "Home Phone";
+                break;
+            case "CellPhone":
+                columnName = "Cell Phone";
+                break;
+            case "WayToContact":
+                columnName = "Best way to contact you";
+                break;
+            case "PatientChildren":
+                columnName = "Patient Children";
+                break;
+            case "PatientChildrensAges":
+                columnName = "Patient Childrens Ages";
+                break;
+            case "ChildrenUnder18":
+                columnName = "Children Under 18";
+                break;
+            case "Adults18to65":
+                columnName = "Adults 18-65";
+                break;
+            case "Adults65Plus":
+                columnName = "Adults 65+";
+                break;
+            case "PreferredPharmacyName":
+                columnName = "Preferred Pharmacy Name";
+                break;
+            case "PreferredPharmacyLocation":
+                columnName = "Preferred Pharmacy Location";
+                break;
+            case "EverMemberOfUSArmedForces":
+                columnName = "Are you now or were you ever a member of the U.S. Armed Forces?";
+                break;
+            case "MaritalStatus":
+                columnName = "Marital Status";
+                break;
+            case "LanguagesSpeak":
+                columnName = "Which languages do you speak comfortably?";
+                break;
+            case "EverBeenSmoker":
+                columnName = "Have you ever been a smoker";
+                break;
+            case "QuitSmoking":
+                columnName = "Have you Quit?";
+                break;
+            case "SmokingQuitDate":
+                columnName = "Quit Date";
+                break;
+            case "PreferredPronouns":
+                columnName = "What are your preferred pronouns";
+                break;
+            case "ThinkYourselfAs":
+                columnName = "Do you think of yourself as";
+                break;
+            case "EmergencyContact1Name":
+                columnName = "Emergency Contact1 Name";
+                break;
+            case "EmergencyContact1Address":
+                columnName = "Emergency Contact1 Address";
+                break;
+            case "EmergencyContact1EmailAddress":
+                columnName = "Emergency Contact1 Email Address";
+                break;
+            case "EmergencyContact1Relationship":
+                columnName = "Emergency Contact1 Relationship";
+                break;
+            case "EmergencyContact2Name":
+                columnName = "Emergency Contact2 Name";
+                break;
+            case "EmergencyContact2Address":
+                columnName = "Emergency Contact2 Address";
+                break;
+            case "EmergencyContact2EmailAddress":
+                columnName = "Emergency Contact2 Email Address";
+                break;
+            case "EmergencyContact2Relationship":
+                columnName = "Emergency Contact2 Relationship";
+                break;
+            case "LastTimeYouSmoked":
+                columnName = "When was the last time you smoked?";
+                break;
+            case "EmergencyContact1City":
+                columnName = "Emergency Contact1 City";
+                break;
+            case "EmergencyContact1State":
+                columnName = "Emergency Contact1 State";
+                break;
+            case "EmergencyContact1Zip":
+                columnName = "Emergency Contact1 Zip";
+                break;
+            case "EmergencyContact2City":
+                columnName = "Emergency Contact2 City";
+                break;
+            case "EmergencyContact2State":
+                columnName = "Emergency Contact2 State";
+                break;
+            case "EmergencyContact2Zip":
+                columnName = "Emergency Contact2 Zip";
+                break;
+            case "LocalMedicalRecordNumber":
+                columnName = "Local Medical Record Number";
+                break;
+            case "AmdMedicalRecordNumber":
+                columnName = "Amd Medical Record Number";
+                break;
+            default:
+                columnName = databaseResult[i].ColName;
+                break;
+
+        }
         var html = `<div class="row">`
         if (databaseResult[i].ColType == 'int' || databaseResult[i].ColType == 'bit') {
-            html += `<div class="col-md-6"><div class="DatabaseFields">${databaseResult[i].ColName} ( ${databaseResult[i].ColType == "bit" ? "Boolean" : "Integer"})</div></div>`
+            html += `<div class="col-md-6"><div class="DatabaseFields">${columnName} ( ${databaseResult[i].ColType == "bit" ? "Boolean" : "Number"})</div></div>`
           } else {
-            html += `<div class="col-md-6"><div class="DatabaseFields">${databaseResult[i].ColName} (String( ${databaseResult[i].ColLength == -1 ? "max" : databaseResult[i].ColLength}))</div></div>`
+            html += `<div class="col-md-6"><div class="DatabaseFields">${columnName} (character( ${databaseResult[i].ColLength == -1 ? "max" : databaseResult[i].ColLength}))</div></div>`
         }
         html += `<div id="getFileFields_${i}" class="col-md-6 FileFields"></div></div> `
         $PotientialClientModal.find('#dbandFileFields').append(html);
@@ -319,8 +461,10 @@ function IsPatientDetailValid(id) {
         dataType: "json",
         async: false,
         success: function (result) {
-            
+           
+
             if (result != null && result != '') {
+                // required fields validation start
                 if (result.FirstName == "" || result.FirstName == null) {
                     return false;
                 }
@@ -374,7 +518,54 @@ function IsPatientDetailValid(id) {
                 else {
                     return false;
                 }
+                // required fields validation  End
 
+                // date fields validation  Start
+                if (result.SmokingQuitDate != "" && result.SmokingQuitDate != null) {
+                    if (!ValidateDates(result.SmokingQuitDate)) {
+                        return false;
+                    }
+                }
+                if (result.SmokingQuitDate != "" && result.SmokingQuitDate != null) {
+                    if (!ValidateDates(result.SmokingQuitDate)) {
+                        return false;
+                    }
+                }
+                // date fields validation  End
+
+                //  Integer fields validation   Start
+                if (isNaN(result.Zip)) {
+                    return false;
+                }
+                if (isNaN(result.PatientChildren)) {
+                    return false;
+                }
+                if (isNaN(result.EmergencyContact1Zip)) {
+                    return false;
+                }
+                if (isNaN(result.EmergencyContact2Zip)) {
+                    return false;
+                }
+                if (isNaN(result.ChildrenUnder18)) {
+                    return false;
+                }
+                if (isNaN(result.Adults18to65)) {
+                    return false;
+                }
+                if (isNaN(result.Adults65Plus)) {
+                    return false;
+                }
+
+                //  Integer fields validation   End
+                
+                //  Format validation for  Phone,HomePhone,SSN start
+                if (!validatePhone(result.HomePhone)) {
+                    return false;
+                }
+                if (!validatePhone(result.CellPhone)) {
+                    return false;
+                }
+                //  Format validation for  Phone,HomePhone,SSN End
                 return true
                 
             }
@@ -383,6 +574,21 @@ function IsPatientDetailValid(id) {
         }
 
     })
+}
+function validatePhone(phone)
+{
+    var res = phone.replace(/[^\d]/g, '');
+    if (isNan(res) && res.length != 10)
+    {
+        return false;
+    }
+    return true
+}
+function ValidateDates(date) {
+    var pattern = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
+    if (!pattern.test(date)) {
+        return false;
+    }
 }
 
 function ValidateDOB(dob) {
