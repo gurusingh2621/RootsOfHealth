@@ -1435,16 +1435,17 @@
         var lblEverSmoker = $('#lblEverSmoker').html().toLocaleLowerCase();
         $('#ddSmoker').val('' + lblEverSmoker);
         if (lblEverSmoker == "true") {
+            $('#divSmokingQuitDate').show();
             $('#divQuit').show();
             $('#divLastTimeYouSmoked').show();
         }
 
-
-        var lblQuitSmoking = $('#lblQuitSmoking').html().toLocaleLowerCase();
-        $('#ddQuit').val('' + lblQuitSmoking);
-        if (lblQuitSmoking == "true") {
-            $('#divSmokingQuitDate').show();
-        }
+        
+        //var lblQuitSmoking = $('#lblQuitSmoking').html().toLocaleLowerCase();
+        //$('#ddQuit').val('' + lblQuitSmoking);
+        //if (lblQuitSmoking == "true") {
+        //    $('#divSmokingQuitDate').show();
+        //}
 
 
 
@@ -1815,12 +1816,11 @@
 
         
         var txtChildren = $("#txtChildren").val();
-
         if (txtChildren != "") {
 
 
             $('.ChildrenAgeDiv').html('');
-            
+
             var val = $('#txtChildren').val();
 
             var divhtml = '';
@@ -1833,19 +1833,15 @@
                 temp = temp.replace('#daysid', 'child_days_' + i);
                 divhtml = divhtml + temp;
             }
-            
+
             $('.ChildrenAgeDiv').html(divhtml);
             var lblAgeChildren = $('#lblAgeChildren').html();
             var AgeChildrenArray = lblAgeChildren != undefined ? lblAgeChildren.split(',') : '';
             if (AgeChildrenArray != '') {
                 for (var i = 0; i < AgeChildrenArray.length; i++) {
                     var AgeChildren = AgeChildrenArray != '' ? AgeChildrenArray[i].split(':') : '';
-                    if (AgeChildren[0] != "")
-                    {
-                        $('#child_year_' + (i)).val(AgeChildren[0].toString());
-                        $('#child_days_' + (i)).val(AgeChildren[1].toString());
-                    }
-            
+                    $('#child_year_' + (i + 1)).val(AgeChildren[0].toString());
+                    $('#child_days_' + (i + 1)).val(AgeChildren[1].toString());
                 }
             }
         }

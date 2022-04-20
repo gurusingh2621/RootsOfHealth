@@ -2755,10 +2755,13 @@ namespace RootsOfHealth.Controllers
                     {
                         switch (value.ToLower().Trim())
                         {
-                            case "black/african/african-american, asian":
-                                value = "Black/African/African-American,Latino/Hispanic,White/Caucasian,Asian,Native Hawaiian/Pacific Islander,Native American/Alaskan";
-                                break;
-                            case "black/african/african-american,asian":
+                            case "black/african/african-american":
+                            case "latino/hispanic":
+                            case "white/caucasian":
+                            case "White/caucasian":
+                            case "asian":
+                            case "native hawaiian/pacific islander":
+                            case "native american/alaskan":
                                 value = "Black/African/African-American,Latino/Hispanic,White/Caucasian,Asian,Native Hawaiian/Pacific Islander,Native American/Alaskan";
                                 break;
                             default:
@@ -3135,10 +3138,13 @@ namespace RootsOfHealth.Controllers
                     {
                         switch (value.ToLower().Trim())
                         {
-                            case "black/african/african-american, asian":
-                                value = "Black/African/African-American,Latino/Hispanic,White/Caucasian,Asian,Native Hawaiian/Pacific Islander,Native American/Alaskan";
-                                break;
-                            case "black/african/african-american,asian":
+                            case "black/african/african-american":
+                            case "latino/hispanic":
+                            case "white/caucasian":
+                            case "White/caucasian":
+                            case "asian":
+                            case "native hawaiian/pacific islander":
+                            case "native american/alaskan":
                                 value = "Black/African/African-American,Latino/Hispanic,White/Caucasian,Asian,Native Hawaiian/Pacific Islander,Native American/Alaskan";
                                 break;
                             default:
