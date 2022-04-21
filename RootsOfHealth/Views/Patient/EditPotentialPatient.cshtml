@@ -1409,15 +1409,19 @@
             $('#OtherRace').show();
         } else {
             var lblRaceArray = lblRace != undefined ? lblRace.split(',') : '';
+           
             $("#ddRace").val(lblRaceArray);
-            var gg = $('.selectboxmultiple button[data-id="ddRace"]');
 
-            $('.selectboxmultiple button[data-id="ddRace"]').find('.filter-option-inner-inner').html(lblRaceArray);
+            $('.selectboxmultiple button[data-id="ddRace"]').find('.filter-option-inner-inner').html(lblRace);
+            if (lblRace.includes("Other")) {
+                $('#OtherRace').show();
+            }
         }
-
+      
+        
 
         var lblLanguages = $('#lblLanguages').html();
-        if (lblLanguages == "" || lblLanguages == "Other") {
+        if (lblLanguages == "") {
             $("#ddLanguages").val(lblOtherArray);
             $('.selectboxmultiple button[data-id="ddLanguages"]').find('.filter-option-inner-inner').html("Other");
             $('#OtherLanguage').show();
@@ -1425,6 +1429,9 @@
             var lblLanguagesArray = lblLanguages != undefined ? lblLanguages.split(',') : '';
             $("#ddLanguages").val(lblLanguagesArray);
             $('.selectboxmultiple button[data-id="ddLanguages"]').find('.filter-option-inner-inner').html(lblLanguages);
+            if (lblLanguagesArray.includes("Other")) {
+                $('#OtherLanguage').show();
+            }
         }
         
         var lblUSArmedForces = $('#lblUSArmedForces').html().toLocaleLowerCase();
@@ -1503,7 +1510,7 @@
 
         $('#ddRace').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
             // do something...
-
+            
             //  var selected = $('#ddRace option:selected').val();
             var divOtherRace = $('#OtherRace');
 
@@ -1812,6 +1819,63 @@
             }
         });
 
+        $("#PatientImg").change(function () {
+
+            var formData = new FormData();
+            var totalFiles = document.getElementById("PatientImg").files.length;
+            for (var i = 0; i < totalFiles; i++) {
+                var file = document.getElementById("PatientImg").files[i];
+                file = this.files[i];
+                const fileType = file['type'];
+                const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+                if (!validImageTypes.includes(fileType)) {
+                    // invalid file type code goes here.
+                    toastr.error("Invalid Image");
+                }
+
+                formData.append("PatientImg", file);
+            }
+            $.ajax({
+                type: "POST",
+                url: '/Patient/Upload',
+                data: formData,
+                dataType: 'html',
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    PatientImg = response;
+
+                    $("input[type=hidden][name=PatientImg]").val(PatientImg);
+                    $("#patientpic").attr('src', "/Files/" + response)
+                },
+                error: function (error) {
+                    toastr.error("errror");
+                },
+            })
+        });
+        $.fn.serializeObject = function () {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function () {
+                if (o[this.name]) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
+        $(".ssn-icon-eye").click(function () {
+            $(this).toggleClass("showpwd");
+        });
+
+
+        $(".ssn-icon-label").click(function () {
+            $(this).toggleClass("showlbl");
+        });
         /*$('.selectboxmultiple').selectpicker();*/
 
         
@@ -1860,13 +1924,15 @@
                 $("input[type=hidden][name=PatientChildrensAges]").val(PatientChildrensAges);
                 $("input[type=hidden][name=EverMemberOfUSArmedForces]").val(EverMemberOfUSArmedForces);
                 var selectedracevalues = $("#ddRace").selectpicker().val();
-                if (selectedracevalues.indexOf("Other") != -1 && selectedracevalues.length < 7) {
-                    RaceEthnicity = [];
+                
+                //if (selectedracevalues.indexOf("Other") != -1 && selectedracevalues.length < 7) {
+                //    RaceEthnicity = [];
 
-                } else if (selectedracevalues.length < 7) {
+                //} else
+                if (selectedracevalues.length < 7) {
                     RaceEthnicity = [];
                     $.each($("#ddRace option:selected"), function () {
-                        if ($(this).val() == "Other" || $(this).val() == "Select All") {
+                        if ($(this).val() == "Select All") {
 
                         }
                         else {
@@ -1875,17 +1941,18 @@
                             }
                         }
                     });
-                    $("#txtOtherRace").val("");
+                   /* $("#txtOtherRace").val("");*/
                 }
                 $("input[type=hidden][name=RaceEthnicity]").val(RaceEthnicity);
                 var selectedvalues = $('#ddLanguages').selectpicker().val();
-                if (selectedvalues.indexOf("Other") != -1 && selectedvalues.length < 7) {
-                    LanguagesSpeak = [];
+                //if (selectedvalues.indexOf("Other") != -1 && selectedvalues.length < 7) {
+                //    LanguagesSpeak = [];
 
-                } else if (selectedvalues.length < 7) {
+                //} else
+                    if (selectedvalues.length < 7) {
                     LanguagesSpeak = [];
                     $.each($("#ddLanguages option:selected"), function () {
-                        if ($(this).val() == "Other" || $(this).val() == "Select All") {
+                        if ($(this).val() == "Select All") {
 
                         }
                         else {
@@ -1894,7 +1961,7 @@
                             }
                         }
                     });
-                    $("#txtOtherLanguage").val("");
+                   /* $("#txtOtherLanguage").val("");*/
                 }
                 $("input[type=hidden][name=LanguagesSpeak]").val(LanguagesSpeak);
 
@@ -1959,56 +2026,7 @@
             }
 
         }
-        $("#PatientImg").change(function () {
-
-            var formData = new FormData();
-            var totalFiles = document.getElementById("PatientImg").files.length;
-            for (var i = 0; i < totalFiles; i++) {
-                var file = document.getElementById("PatientImg").files[i];
-                file = this.files[i];
-                const fileType = file['type'];
-                const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
-                if (!validImageTypes.includes(fileType)) {
-                    // invalid file type code goes here.
-                    toastr.error("Invalid Image");
-                }
-
-                formData.append("PatientImg", file);
-            }
-            $.ajax({
-                type: "POST",
-                url: '/Patient/Upload',
-                data: formData,
-                dataType: 'html',
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                    PatientImg = response;
-
-                    $("input[type=hidden][name=PatientImg]").val(PatientImg);
-                    $("#patientpic").attr('src', "/Files/" + response)
-                },
-                error: function (error) {
-                    toastr.error("errror");
-                },
-            })
-        });
-        $.fn.serializeObject = function () {
-            var o = {};
-            var a = this.serializeArray();
-            $.each(a, function () {
-                if (o[this.name]) {
-                    if (!o[this.name].push) {
-                        o[this.name] = [o[this.name]];
-                    }
-                    o[this.name].push(this.value || '');
-                } else {
-                    o[this.name] = this.value || '';
-                }
-            });
-            return o;
-        };
-
+      
         function Validation() {
             var check = true;
             if (check == true) {
@@ -2547,14 +2565,7 @@
             }
         }
 
-        $(".ssn-icon-eye").click(function () {
-            $(this).toggleClass("showpwd");
-        });
-
-
-        $(".ssn-icon-label").click(function () {
-            $(this).toggleClass("showlbl");
-        });
+      
         function showSSn() {
             $("#txtSocialSecNo").attr("type", "text");
         }

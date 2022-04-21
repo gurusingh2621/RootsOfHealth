@@ -2753,25 +2753,43 @@ namespace RootsOfHealth.Controllers
                     }
                     else if (dbCurrentfield.ColName.ToLower() == "raceethnicity")
                     {
-                        switch (value.ToLower().Trim())
+                        string[] options = value.Split(',');
+                        var raceEthnicity = "";
+                        var otherRace = "";
+                        foreach (var race in options)
                         {
-                            case "black/african/african-american":
-                            case "latino/hispanic":
-                            case "white/caucasian":
-                            case "White/caucasian":
-                            case "asian":
-                            case "native hawaiian/pacific islander":
-                            case "native american/alaskan":
-                                value = "Black/African/African-American,Latino/Hispanic,White/Caucasian,Asian,Native Hawaiian/Pacific Islander,Native American/Alaskan";
-                                break;
-                            default:
-                                currentPatient.OtherRace = value;
-                                value = "Other";
-                                break;
+                            switch (race.ToLower().Trim())
+                            {
+                                case "black/african/african-american":
+                                    raceEthnicity += "Black/African/African-American,";
+                                    break;
+                                case "latino/hispanic":
+                                    raceEthnicity += "Latino/Hispanic,";
+                                    break;
+                                case "white/caucasian":
+                                    raceEthnicity += "White/Caucasian,";
+                                    break;
+                                case "asian":
+                                    raceEthnicity += "Asian,";
+                                    break;
+                                case "native hawaiian/pacific islander":
+                                    raceEthnicity += "Native Hawaiian/Pacific Islander,";
+                                    break;
+                                case "native american/alaskan":
+                                    raceEthnicity += "Native American/Alaskan,";
+                                    break;
+                                default:
+                                    otherRace += race;
+                                    break;
+                            }
                         }
-
-
-
+                        if (otherRace != "")
+                        {
+                            raceEthnicity += "Other";
+                        }
+                        value = raceEthnicity;
+                        currentPatient.OtherRace = otherRace;
+                        
                     }
                     else if (dbCurrentfield.ColName.ToLower() == "ispermanentaddress" || dbCurrentfield.ColName.ToLower() == "everbeensmoker" 
                         || dbCurrentfield.ColName.ToLower() == "quitsmoking" || dbCurrentfield.ColName.ToLower() == "evermemberofusarmedforces")
@@ -2839,28 +2857,40 @@ namespace RootsOfHealth.Controllers
                     }
                     else if (dbCurrentfield.ColName.ToLower() == "languagesspeak")
                     {
-                        switch (value.ToLower())
+                        string[] options = value.Split(',');
+                        var language = "";
+                        var OtherLanguage = "";
+                        foreach (var lang in options)
                         {
-                            case "english":
-                                value = "English,Spanish,Arabic,Amharic,Tigrinya";
-                                break;
-                            case "spanish":
-                                value = "English,Spanish,Arabic,Amharic,Tigrinya";
-                                break;
-                            case "arabic":
-                                value = "English,Spanish,Arabic,Amharic,Tigrinya";
-                                break;
-                            case "amharic":
-                                value = "English,Spanish,Arabic,Amharic,Tigrinya";
-                                break;
-                            case "tigrinya":
-                                value = "English,Spanish,Arabic,Amharic,Tigrinya";
-                                break;
-                            default:
-                                currentPatient.OtherLanguageSpeak = value;
-                                value = "Other";
-                                break;
+                            switch (lang.ToLower())
+                            {
+                                case "english":
+                                    language += "English,";
+                                    break;
+                                case "spanish":
+                                    language += "Spanish,";
+                                    break;
+                                case "arabic":
+                                    language += "Arabic,";
+                                    break;
+                                case "amharic":
+                                    language += "Amharic,";
+                                    break;
+                                case "tigrinya":
+                                    language += "Tigrinya,";
+                                    break;
+                                default:
+                                    OtherLanguage += lang;
+                                    break;
+                            }
                         }
+                        if (OtherLanguage != "")
+                        {
+                            language += "Other";
+                        }
+                        value = language;
+                        currentPatient.OtherLanguageSpeak = OtherLanguage;
+
                     }
                     else if(dbCurrentfield.ColName.ToLower() == "preferredpronouns")
                     {
@@ -3136,23 +3166,43 @@ namespace RootsOfHealth.Controllers
                     }
                     else if (dbCurrentfield.ColName.ToLower() == "raceethnicity")
                     {
-                        switch (value.ToLower().Trim())
-                        {
-                            case "black/african/african-american":
-                            case "latino/hispanic":
-                            case "white/caucasian":
-                            case "White/caucasian":
-                            case "asian":
-                            case "native hawaiian/pacific islander":
-                            case "native american/alaskan":
-                                value = "Black/African/African-American,Latino/Hispanic,White/Caucasian,Asian,Native Hawaiian/Pacific Islander,Native American/Alaskan";
-                                break;
-                            default:
-                                currentPatient.OtherRace = value;
-                                value = "Other";
-                                break;
-                        }
 
+                        string[] options = value.Split(',');
+                        var raceEthnicity = "";
+                        var otherRace = "";
+                        foreach (var race in options)
+                        {
+                            switch (race.ToLower().Trim())
+                            {
+                                case "black/african/african-american":
+                                    raceEthnicity += "Black/African/African-American,";
+                                    break;
+                                case "latino/hispanic":
+                                    raceEthnicity += "Latino/Hispanic,";
+                                    break;
+                                case "white/caucasian":
+                                    raceEthnicity += "White/Caucasian,";
+                                    break;
+                                case "asian":
+                                    raceEthnicity += "Asian,";
+                                    break;
+                                case "native hawaiian/pacific islander":
+                                    raceEthnicity += "Native Hawaiian/Pacific Islander,";
+                                    break;
+                                case "native american/alaskan":
+                                    raceEthnicity += "Native American/Alaskan,";
+                                    break;
+                                default:
+                                    otherRace += race;
+                                    break;
+                            }
+                        }
+                        if (otherRace != "")
+                        {
+                            raceEthnicity += "Other";
+                        }
+                        value = raceEthnicity;
+                        currentPatient.OtherRace = otherRace;
                     }
                     else if (dbCurrentfield.ColName.ToLower() == "ispermanentaddress" || dbCurrentfield.ColName.ToLower() == "everbeensmoker"
                         || dbCurrentfield.ColName.ToLower() == "quitsmoking" || dbCurrentfield.ColName.ToLower() == "evermemberofusarmedforces")
@@ -3220,28 +3270,40 @@ namespace RootsOfHealth.Controllers
                     }
                     else if (dbCurrentfield.ColName.ToLower() == "languagesspeak")
                     {
-                        switch (value.ToLower())
+                        string[] options = value.Split(',');
+                        var language = "";
+                        var OtherLanguage = "";
+                        foreach (var lang in options)
                         {
-                            case "english":
-                                value = "English,Spanish,Arabic,Amharic,Tigrinya";
-                                break;
-                            case "spanish":
-                                value = "English,Spanish,Arabic,Amharic,Tigrinya";
-                                break;
-                            case "arabic":
-                                value = "English,Spanish,Arabic,Amharic,Tigrinya";
-                                break;
-                            case "amharic":
-                                value = "English,Spanish,Arabic,Amharic,Tigrinya";
-                                break;
-                            case "tigrinya":
-                                value = "English,Spanish,Arabic,Amharic,Tigrinya";
-                                break;
-                            default:
-                                currentPatient.OtherLanguageSpeak = value;
-                                value = "Other";
-                                break;
+                            switch (lang.ToLower())
+                            {
+                                case "english":
+                                    language += "English,";
+                                    break;
+                                case "spanish":
+                                    language += "Spanish,";
+                                    break;
+                                case "arabic":
+                                    language += "Arabic,";
+                                    break;
+                                case "amharic":
+                                    language += "Amharic,";
+                                    break;
+                                case "tigrinya":
+                                    language += "Tigrinya,";
+                                    break;
+                                default:
+                                    OtherLanguage += lang;
+                                    break;
+                            }
                         }
+                        if (OtherLanguage != "")
+                        {
+                            language += "Other";
+                        }
+                        value = language;
+                        currentPatient.OtherLanguageSpeak = OtherLanguage;
+
                     }
                     else if (dbCurrentfield.ColName.ToLower() == "preferredpronouns")
                     {
