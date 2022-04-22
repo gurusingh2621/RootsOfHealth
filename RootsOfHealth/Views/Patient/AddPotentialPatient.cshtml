@@ -1762,13 +1762,11 @@
                 $("input[type=hidden][name=PatientChildrensAges]").val(PatientChildrensAges);
                 $("input[type=hidden][name=EverMemberOfUSArmedForces]").val(EverMemberOfUSArmedForces);
                 var selectedracevalues = $("#ddRace").selectpicker().val();
-                if (selectedracevalues.indexOf("Other") != -1 && selectedracevalues.length < 7) {
-                    RaceEthnicity = [];
-
-                } else if (selectedracevalues.length < 7) {
+                
+                    if (selectedracevalues.length < 7) {
                     RaceEthnicity = [];
                     $.each($("#ddRace option:selected"), function () {
-                        if ($(this).val() == "Other" || $(this).val() == "Select All") {
+                        if ($(this).val() == "Select All") {
 
                         }
                         else {
@@ -1777,17 +1775,15 @@
                             }
                         }
                     });
-                    $("#txtOtherRace").val("");
+                   
                 }
                 $("input[type=hidden][name=RaceEthnicity]").val(RaceEthnicity);
                 var selectedvalues = $('#ddLanguages').selectpicker().val();
-                if (selectedvalues.indexOf("Other") != -1 && selectedvalues.length < 7) {
-                    LanguagesSpeak = [];
 
-                } else if (selectedvalues.length < 7) {
+                if (selectedvalues.length < 7) {
                     LanguagesSpeak = [];
                     $.each($("#ddLanguages option:selected"), function () {
-                        if ($(this).val() == "Other" || $(this).val() == "Select All") {
+                        if ($(this).val() == "Select All") {
 
                         }
                         else {
@@ -1796,7 +1792,7 @@
                             }
                         }
                     });
-                    $("#txtOtherLanguage").val("");
+                   
                 }
                 $("input[type=hidden][name=LanguagesSpeak]").val(LanguagesSpeak);
                 //document.getElementById('frmProfile').submit();

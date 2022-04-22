@@ -53,6 +53,28 @@
     #PotentialClientFileUpload div#dbandFileFields {
         max-height: calc(100vh - 170px);
     }
+    #duplicateFields h5 {
+        text-align: center;
+        margin: 10px 0 15px;
+    }
+    .p_content_block .form-group {
+        margin: 0 0 6px;
+    }
+    .p_content_block {
+        margin: 0;
+    }
+    #duplicateFields hr {
+        margin: 20px 0;
+        border-color: #ddd;
+    }
+    div#duplicateFields {
+        max-height: calc(100vh - 140px);
+        overflow: auto;
+    }
+    #duplicateRecordDetails .modal-content {
+        overflow: hidden;
+    }
+
 
     @@media only screen and (max-width: 480px) {
         #PotentialClientFileUpload .modal-header .close {
@@ -100,11 +122,12 @@
                     {
                         <a class="btn btn-success ml-auto" href="/Patient/AddPotentialPatient">Add New</a>
                     }
-                    </div>
+                </div>
                 <table id="tblPotientialPatient" class="display table table-hover table-striped table-bordered">
 
                     <thead>
                         <tr class="table-active">
+                            <th>PatientId</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Phone</th>
@@ -146,6 +169,39 @@
                 <div class="modal-footer preview-footer">
 
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="duplicateRecordDetails" tabindex="-1" role="dialog" aria-labelledby="duplicateRecordDetailsTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered preview-modal" role="document">
+            <div class="modal-content" style="height:90%">
+                <div class="modal-header preview-header flex-wrap">
+                    <h5 class="modal-title" id="duplicateRecordDetailsTitle">Duplicate Fields</h5>
+                    <div class="ml-auto d-flex flex-wrap">
+                        
+                        <button type="button" class="close" aria-label="Close" onclick="CloseDuplicatePopup()">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                </div>
+
+                <div id="duplicateFields" class="modal-body preview-body scroll">
+                    <div id="fromMainTable" class="">
+                        <h5 class="" id="duplicateRecordDetailsTitle">Main Clients</h5>
+                        <div id="mainPatients" class="">
+
+                        </div>
+                    </div>
+                    <div id="fromPotentialTable" class="">
+                        <h5 class="" id="duplicateRecordDetailsTitle">Potential Clients</h5>
+                        <div id="potentialPatients" class="">
+
+                        </div>
+                    </div>
+                </div>
+               
             </div>
         </div>
     </div>

@@ -159,14 +159,14 @@ function BindPotentialClientsTable() {
 
                       if (duplicates.filter(e => e.EmailAddress === item.EmailAddress || e.SocialSecurityNumber === item.SocialSecurityNumber).length > 0)
                       {
-                          potentialPatient += `<tr style="background-color:red ;color:white">`;
+                          potentialPatient += `<tr style="background-color:red ;color:white"><td onclick="GetDuplicateRecordDetails(${item.PatientID})">${item.PatientID}</td>`;
                       }
                       else
                       {
-                          potentialPatient += `<tr>`
+                          potentialPatient += `<tr><td>${item.PatientID}</td>`
                       }
                       
-                      
+
                       potentialPatient += `<td>${GetFullName(item.FirstName, item.LastName)}</td>
                                          <td>${item.EmailAddress != null ? item.EmailAddress : ""}</td>
                          <td >${item.CellPhone != null ? item.CellPhone : ""}</td>
@@ -221,8 +221,6 @@ function GetFullName(firstname , lastname) {
 
 function MovePotentialPatient(id) {
    
-    
-  
     if (IsPatientDetailValid(id)) {
         $(".loaderOverlay").show();
         $.ajax({
@@ -461,7 +459,6 @@ function IsPatientDetailValid(id) {
         dataType: "json",
         async: false,
         success: function (result) {
-           
 
             if (result != null && result != '') {
                 // required fields validation start
@@ -492,28 +489,25 @@ function IsPatientDetailValid(id) {
                 if (result.EmergencyContact1Relationship == "" || result.EmergencyContact1Relationship == null) {
                     return false;
                 }
-                if (result.ChildrenUnder18 == "" || result.ChildrenUnder18 == null) {
+                if (result.ChildrenUnder18.toString() == "" || result.ChildrenUnder18 == null) {
                     return false;
                 }
-                if (result.Adults18to65 == "" || result.Adults18to65 == null) {
+                if (result.Adults18to65.toString() == "" || result.Adults18to65 == null) {
                     return false;
                 }
-                if (result.Adults65Plus == "" || result.Adults65Plus == null) {
+                if (result.Adults65Plus.toString() == "" || result.Adults65Plus == null) {
                     return false;
                 }
                 if (result.LanguagesSpeak == "" || result.LanguagesSpeak == null) {
                     return false;
                 }
-                if (result.EverBeenSmoker != "" && result.EverBeenSmoker != null) {
-                    if (result.EverBeenSmoker.toLowerCase() == "yes" && result.QuitSmoking != null && result.QuitSmoking != "") {
-                        if (result.QuitSmoking.toLowerCase() == "yes" && (result.SmokingQuitDate == null || result.SmokingQuitDate == "")) {
+                if (result.EverBeenSmoker == true || result.EverBeenSmoker == false) {
+                    if (result.EverBeenSmoker == true && (result.QuitSmoking == true || result.QuitSmoking == false)) {
+                        if (result.QuitSmoking == true && (result.SmokingQuitDate == null || result.SmokingQuitDate == "")) {
                             return false;
                         }
                     }
-                    esle
-                    {
-                        return false;
-                    }
+
                 }
                 else {
                     return false;
@@ -526,8 +520,8 @@ function IsPatientDetailValid(id) {
                         return false;
                     }
                 }
-                if (result.SmokingQuitDate != "" && result.SmokingQuitDate != null) {
-                    if (!ValidateDates(result.SmokingQuitDate)) {
+                if (result.DateOfBirth != "" && result.DateOfBirth != null) {
+                    if (!ValidateDates(result.DateOfBirth)) {
                         return false;
                     }
                 }
@@ -557,7 +551,7 @@ function IsPatientDetailValid(id) {
                 }
 
                 //  Integer fields validation   End
-                
+
                 //  Format validation for  Phone,HomePhone,SSN start
                 if (!validatePhone(result.HomePhone)) {
                     return false;
@@ -566,19 +560,20 @@ function IsPatientDetailValid(id) {
                     return false;
                 }
                 //  Format validation for  Phone,HomePhone,SSN End
-                return true
-                
+
             }
 
 
         }
 
-    })
+    });
+    return true;
 }
 function validatePhone(phone)
 {
+    
     var res = phone.replace(/[^\d]/g, '');
-    if (isNan(res) && res.length != 10)
+    if (isNaN(res) && res.length != 10)
     {
         return false;
     }
@@ -588,6 +583,9 @@ function ValidateDates(date) {
     var pattern = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
     if (!pattern.test(date)) {
         return false;
+    }
+    else {
+        return true
     }
 }
 
@@ -622,6 +620,118 @@ function ValidateEmail(email) {
         return false;
     }
     return true;
+}
+
+function GetDuplicateRecordDetails(id) {
+
+    $.ajax({
+        type: "GET",
+        url: Apipath + '/api/PatientMain/GetDuplicatePatientDetails?patientId='+id,
+        dataType: "json",
+        async: false,
+        contentType: "application/json; charset=utf-8",
+        success: function (result) {
+            
+            var popup = $('#duplicateRecordDetails #duplicateFields');
+            popup.find('#fromPotentialTable #potentialPatients').html('');
+            popup.find('#fromMainTable #mainPatients').html('');
+           
+
+          
+            if (result)
+            {
+                for (var i = 0; i < result.length;i++)
+                {
+                    
+                    if (result[i].IsFromMainTable == 'False' || result[i].IsFromMainTable == false)
+                    {
+                        var html = `<div class="p_content_block">`
+                        html += `<div class="form-group"><label>Patient ID:</label> <label>${result[i].PatientID}</label></div>
+                                <div class="form-group"><label>Name:</label> <label>${GetFullName(result[i].FirstName, result[i].LastName)}</label></div>`
+                        if (result[i].EmailAddress != null && result[i].EmailAddress != "")
+                        {
+                            html += `<div class="form-group"><label>Email:</label> <label>${result[i].EmailAddress != null ? result[i].EmailAddress : ""}</label></div>`
+                        }
+                        if (result[i].DateOfBirth != null && result[i].DateOfBirth != "")
+                        {
+                            html += `<div class="form-group"><label>Date Of Birth:</label> <label>${result[i].DateOfBirth != null ? result[i].DateOfBirth : ""}</label></div>`
+                        }
+                        if (result[i].SocialSecurityNumber != null && result[i].SocialSecurityNumber != "")
+                        {
+                            html += `<div class="form-group"><label>Social Security Number:</label> <label>${result[i].SocialSecurityNumber != null ? result[i].SocialSecurityNumber : ""}</label></div>`
+                        }
+                        if (result[i].CellPhone != null && result[i].CellPhone != "")
+                        {
+                            html += `<div class="form-group"><label>Cell Phone:</label> <label>${result[i].CellPhone != null ? result[i].CellPhone : ""}</label></div>`
+
+                        }
+                        if (result[i].HomePhone != null && result[i].HomePhone != "")
+                        {
+                            html += ` <div class="form-group"><label>Home Phone:</label> <label>${result[i].HomePhone != null ? result[i].HomePhone : "" }</label></div>`
+                        }
+                               
+                        html += `</div><hr>`
+
+                        popup.find('#fromPotentialTable #potentialPatients').append(html);
+                    }
+                    else
+                    {
+                        var html = `<div class="p_content_block">`
+                        html += `<div class="form-group"><label>Patient ID:</label> <label>${result[i].PatientID}</label></div>
+                                 <div class="form-group"><label>Name:</label> <label>${GetFullName(result[i].FirstName, result[i].LastName)}</label></div>`
+                        if (result[i].EmailAddress != null && result[i].EmailAddress != "") {
+                            html += `<div class="form-group"><label>Email:</label> <label>${result[i].EmailAddress != null ? result[i].EmailAddress : ""}</label></div>`
+                        }
+                        if (result[i].DateOfBirth != null && result[i].DateOfBirth != "") {
+                            html += `<div class="form-group"><label>Date Of Birth:</label> <label>${result[i].DateOfBirth != null ? result[i].DateOfBirth : ""}</label></div>`
+                        }
+                        if (result[i].SocialSecurityNumber != null && result[i].SocialSecurityNumber != "") {
+                            html += `<div class="form-group"><label>Social Security Number:</label> <label>${result[i].SocialSecurityNumber != null ? result[i].SocialSecurityNumber : ""}</label></div>`
+                        }
+                        if (result[i].CellPhone != null && result[i].CellPhone != "") {
+                            html += `<div class="form-group"><label>Cell Phone:</label> <label>${result[i].CellPhone != null ? result[i].CellPhone : ""}</label></div>`
+
+                        }
+                        if (result[i].HomePhone != null && result[i].HomePhone != "") {
+                            html += ` <div class="form-group"><label>Home Phone:</label> <label>${result[i].HomePhone != null ? result[i].HomePhone : ""}</label></div>`
+                        }
+
+                        html += `</div><hr>`
+                        popup.find('#fromMainTable #mainPatients').append(html);
+                    }
+                   
+                }
+                
+                if (popup.find('#fromPotentialTable #potentialPatients').html() == '') {
+                    popup.find('#fromPotentialTable').hide();
+                }
+                else {
+                    popup.find('#fromPotentialTable').show();
+                }
+                if (popup.find('#fromMainTable #mainPatients').html() == '') {
+                    popup.find('#fromMainTable').hide();
+                }
+                else {
+                    popup.find('#fromMainTable').show();
+                }
+                $('#duplicateRecordDetails').modal('show');
+               
+            }
+            else
+            {
+                alert("error occured");
+            }
+        },
+        error: function () {
+            alert("error occured");
+        }
+
+    });
+   
+
+}
+function CloseDuplicatePopup() {
+    $('#duplicateRecordDetails').modal('hide');
 }
 
 
