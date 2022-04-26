@@ -41,28 +41,31 @@
                         <h6>@otheritem.ModuleName</h6>
                         @Html.Hidden("hdnPermissionId" + count, otheritem.PermissionID)
                         @Html.Hidden("hdnModuleId" + count, otheritem.ModuleID, new { @class = "hdnModuleId" })
-                        <select id="option_@count" multiple>
-                            @if (moduleName != "potential client" && moduleName != "form scheduling" &&
-                                moduleName != "system setting" && moduleName != "client request intake" &&
-                                moduleName != "form sharing export" && moduleName != "authorization")
-                            {
-                                <option value="Add" @(otheritem.CanCreate == true ? "selected='selected'" : "")> Add </option>
-                            }
-                            @if (moduleName != "authorization")
-                            {
-                                <option value="Edit" @(otheritem.CanUpdate == true ? "selected='selected'" : "")> Edit </option>
-                            }
-                            @if (moduleName != "potential client" && moduleName != "form scheduling" &&
-                                moduleName != "system setting" && moduleName != "client request intake" &&
-                                moduleName != "form sharing export" && moduleName != "authorization")
-                            {
-                                <option value="Delete" @(otheritem.CanDelete == true ? "selected='selected'" : "")> Delete </option>
-                            }
+                    <select id="option_@count" multiple>
+                        @if (moduleName != "form scheduling" &&
+                            moduleName != "system setting" && moduleName != "client request intake" &&
+                            moduleName != "form sharing export" && moduleName != "authorization")
+                        {
+                            <option value="Add" @(otheritem.CanCreate == true ? "selected='selected'" : "")> Add </option>
+                        }
+                        @if (moduleName != "authorization")
+                        {
+                            <option value="Edit" @(otheritem.CanUpdate == true ? "selected='selected'" : "")> Edit </option>
+                        }
+                        @if (moduleName != "form scheduling" &&
+                            moduleName != "system setting" && moduleName != "client request intake" &&
+                            moduleName != "form sharing export" && moduleName != "authorization")
+                        {
+                            <option value="Delete" @(otheritem.CanDelete == true ? "selected='selected'" : "")> Delete </option>
+                        }
 
-                            <option value="View" @(otheritem.CanList == true ? "selected='selected'" : "")> View </option>
+                        <option value="View" @(otheritem.CanList == true ? "selected='selected'" : "")> View </option>
+                        @if (moduleName == "potential client")
+                        {
+                            <option value="Move" @(otheritem.CanMove == true ? "selected='selected'" : "")> Move </option>
+                        }
 
-
-                        </select>
+                    </select>
                     </div>
 
                     count++;

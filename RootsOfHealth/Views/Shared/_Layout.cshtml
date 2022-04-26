@@ -1077,7 +1077,7 @@
                 {
                     <li id="FormSchedulingNavItem"><a href="/Patient/FormScheduling" id="FormScheduling" class="nav-menu"><span class="form-sched-icon"></span> Form Scheduling</a></li>
                 }
-                @if (modulePermissions.Where(x => x.ModuleName == "Potential Client" && (x.CanList == true || x.CanUpdate == true)).Any())
+                @if (modulePermissions.Where(x => x.ModuleName == "Potential Client" && (x.CanList == true || x.CanUpdate == true || x.CanDelete == true|| x.CanMove == true)).Any())
                 {
                     <li id="PotentialClientNavItem"><a href="/Patient/GetPotientialPatient" id="PotientPatient" class="nav-menu"><span class="add-icon"></span> Potential Clients</a></li>
                 }

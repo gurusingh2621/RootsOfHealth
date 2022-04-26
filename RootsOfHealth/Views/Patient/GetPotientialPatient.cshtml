@@ -1,7 +1,17 @@
 ﻿@model IEnumerable<RootsOfHealth.Models.PotientialPatientBO>
+@using RootsOfHealth.Commom;
+@using RootsOfHealth.Models;
 @{
     ViewBag.Title = "GetPotientialPatient";
     Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    var potentialClientPerm = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["userid"]), Convert.ToInt32(PermissionModel.Module.PotentialClient));
+    if (potentialClientPerm.Where(x => x.CanList == false && (x.CanCreate != true && x.CanUpdate != true && x.CanDelete != true && x.CanMove != true)).Any())
+    {
+        Response.Redirect(Url.Action("Display", "Dashboard", new { }));
+
+    }
 }
 <style>
 
@@ -17,30 +27,107 @@
     #PotentialClientFileUpload .modal-dialog {
         max-width: 750px;
     }
+
     .sortableListBox {
         list-style: none;
         padding: 0;
         margin: 0;
     }
-    .sortableListBox li {
+
+        .sortableListBox li,
+        .DatabaseFields {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            margin: 0 0 10px;
+            text-align: center;
+        }
+
+    .dllFileFields {
         padding: 8px 15px;
         border: 1px solid #ddd;
         margin: 0 0 10px;
+        border-radius: 0;
+        min-height: 42px;
+    }
+
+    #PotentialClientFileUpload div#dbandFileFields {
+        max-height: calc(100vh - 170px);
+    }
+    #duplicateFields h5 {
         text-align: center;
+        margin: 10px 0 15px;
+    }
+    .p_content_block .form-group {
+        margin: 0 0 6px;
+    }
+    .p_content_block {
+        margin: 0;
+    }
+    #duplicateFields hr {
+        margin: 20px 0;
+        border-color: #ddd;
+    }
+    div#duplicateFields {
+        max-height: calc(100vh - 140px);
+        overflow: auto;
+    }
+    #duplicateRecordDetails .modal-content {
+        overflow: hidden;
+    }
+
+
+    @@media only screen and (max-width: 480px) {
+        #PotentialClientFileUpload .modal-header .close {
+            position: absolute;
+            right: 15px;
+            top: 19px;
+        }
+
+        #PotentialClientFileUpload .modal-header .ml-auto {
+            width: 100%;
+        }
+    }
+    .appointment table .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+        border-radius: 50px;
+        border: 1px solid #dc3545;
+        font-weight: 500;
+        padding: 8px 20px;
+        margin-right: 5px;
+    }
+    .appointment .sorting_1 {
+        color: black !important
     }
 </style>
 <section id="content" class="responsive-container">
     <div class="inner-content mt-0">
         <div class="container-fluid pl-0 pr-0">
             <div class="appointment">
-                @*<input type="file"
-                       id="PoteintialClientFileInput" name="avatar"
-                       accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">*@
-             
+                <div class="d-flex mb-2">
+                    @if (potentialClientPerm.Where(x => x.CanCreate == true).Any())
+                    {
+                        <input type="file"
+                               id="PoteintialClientFileInput" name="avatar"
+                               accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                    }
+
+                    @using (Html.BeginForm("GenerateSampleExcelFile", "Client", FormMethod.Post))
+                    {
+
+                        <input type="submit" value=" Download Sample Excel File" class="btn btn-success" />
+
+                    }
+                    @if (potentialClientPerm.Where(x => x.CanCreate == true).Any())
+                    {
+                        <a class="btn btn-success ml-auto" href="/Patient/AddPotentialPatient">Add New</a>
+                    }
+                </div>
                 <table id="tblPotientialPatient" class="display table table-hover table-striped table-bordered">
 
                     <thead>
                         <tr class="table-active">
+                            <th>PatientId</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Phone</th>
@@ -49,22 +136,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var p in Model)
-                        {
-                            <tr>
-                                <td>@p.FirstName @p.LastName</td>
-                                <td>@p.EmailAddress</td>
-                                <td>@p.CellPhone  </td>
-                                <td>@p.ModifiedDate</td>
-                                <td>
-                                    <button href='' id="btnpatientmove" class="btn btn-success label-fields">
-                                        <i class="far fa-edit"></i>
-                                        Move
-                                    </button>
-
-                                </td>
-                            </tr>
-                        }
                     </tbody>
 
                 </table>
@@ -76,25 +147,61 @@
     <div class="modal fade" id="PotentialClientFileUpload" tabindex="-1" role="dialog" aria-labelledby="PotentialClientFiletitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered preview-modal" role="document">
             <div class="modal-content" style="height:90%">
-                <div class="modal-header preview-header">
+                <div class="modal-header preview-header flex-wrap">
                     <h5 class="modal-title" id="PotentialClientFiletitle">File Upload</h5>
-                    <button type="button" class="close" aria-label="Close" onclick="ClosePotentialClientModal()">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body preview-body scroll">
-                    <div class="row">
-                        <div class="col-md-6 getDatabaseField">
+                    <div class="ml-auto d-flex flex-wrap">
+                        <button href='' id="btnsavepotentialclients" class="btn btn-success">
+                            Save
+                        </button>
 
-                        </div>
-                        <div class="col-md-6 getFileFields">
 
-                        </div>
+                        <button type="button" class="close" aria-label="Close" onclick="ClosePotentialClientModal()">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
+
+                </div>
+
+                <div id="dbandFileFields" class="modal-body preview-body scroll">
+
+
                 </div>
                 <div class="modal-footer preview-footer">
 
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="duplicateRecordDetails" tabindex="-1" role="dialog" aria-labelledby="duplicateRecordDetailsTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered preview-modal" role="document">
+            <div class="modal-content" style="height:90%">
+                <div class="modal-header preview-header flex-wrap">
+                    <h5 class="modal-title" id="duplicateRecordDetailsTitle">Duplicate Fields</h5>
+                    <div class="ml-auto d-flex flex-wrap">
+                        
+                        <button type="button" class="close" aria-label="Close" onclick="CloseDuplicatePopup()">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                </div>
+
+                <div id="duplicateFields" class="modal-body preview-body scroll">
+                    <div id="fromMainTable" class="">
+                        <h5 class="" id="duplicateRecordDetailsTitle">Main Clients</h5>
+                        <div id="mainPatients" class="">
+
+                        </div>
+                    </div>
+                    <div id="fromPotentialTable" class="">
+                        <h5 class="" id="duplicateRecordDetailsTitle">Potential Clients</h5>
+                        <div id="potentialPatients" class="">
+
+                        </div>
+                    </div>
+                </div>
+               
             </div>
         </div>
     </div>
@@ -105,17 +212,24 @@
 <script src="~/Scripts/PotentialClients/PotentialClients.js"></script>
 @section scripts{
     <script>
+        var ClinicID = parseInt(@Session["ClinicID"]);
+        var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
+        var canEditPClientPerm = '@potentialClientPerm.Where(x => x.CanUpdate == true).Any()';
+        var canDeletePClientPerm = '@potentialClientPerm.Where(x => x.CanDelete == true).Any()';
+        var canMovePClientPerm = '@potentialClientPerm.Where(x => x.CanMove == true).Any()';
         $(document).ready(function () {
 
-            var table = $("#tblPotientialPatient").dataTable({
-                scrollY: 'calc(100vh - 264px)',
-                scrollCollapse: true,
-            });
+            BindPotentialClientsTable();
+            //var table = $("#tblPotientialPatient").dataTable({
+            //    scrollY: 'calc(100vh - 264px)',
+            //    scrollCollapse: true,
+            //});
             //$('#tblPotientialPatient tbody').on('click', 'button', function () {
             //    var data = table.api().row($(this).parents('tr')).data();
             //    console.log(data);
             //});
         });
+
 
     </script>
 }
