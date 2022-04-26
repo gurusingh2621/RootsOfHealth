@@ -14,6 +14,8 @@ namespace RootsOfHealth.Models
         public Nullable<bool> CanUpdate { get; set; }
         public Nullable<bool> CanDelete { get; set; }
         public Nullable<bool> CanList { get; set; }
-  
+        public Nullable<bool> CanMove { get; set; }
+
+
     }
 }

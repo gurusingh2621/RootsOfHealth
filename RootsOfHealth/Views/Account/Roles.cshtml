@@ -669,9 +669,10 @@
                     _objPermission.CanUpdate = false;
                     _objPermission.CanDelete = false;
                     _objPermission.CanList = false;
-
+                    _objPermission.CanMove = false;
+                    
                     $.each(res, function (index, value) {
-
+                        
                         switch ($.trim(value)) {
                             case 'Add':
                                 _objPermission.CanCreate = true;
@@ -685,6 +686,9 @@
                             case 'View':
                                 _objPermission.CanList = true;
                                 break;
+                            case 'Move':
+                                _objPermission.CanMove = true;
+                                break;
                         }
 
                     });
@@ -692,7 +696,7 @@
                     i++;
                 });
 
-
+                
 
                 var request = {
                     RoleId: parseInt($("#hdnRoleid").html()),

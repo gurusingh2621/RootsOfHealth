@@ -1,0 +1,2446 @@
+﻿
+@{
+    ViewBag.Title = "EditPotentialPatient";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .showHide {
+        display: none;
+    }
+
+    .ssn-icon {
+        position: relative
+    }
+
+    .ssn-icon-eye {
+        position: absolute;
+        top: 50%;
+        right: 5px;
+        transform: translateY(-50%);
+        font-size: 13px;
+    }
+
+        .ssn-icon-eye.showpwd i.close-eye {
+            display: block !important;
+        }
+
+        .ssn-icon-eye.showpwd i.open-eye {
+            display: none !important;
+        }
+
+        .ssn-icon-eye.showpwd {
+            display: block !important;
+        }
+
+        .ssn-icon-eye.showpwd {
+            display: none;
+        }
+</style>
+
+<section id="content" class="responsive-container ">
+    <div class="inner-content">
+        <div id="paitent-detail">
+            <div class="row">
+                <div id="pat_out_div" class="col-lg-12 col-md-12 col-sm-12 col-12">
+
+                    <div class="paitent-detail-left">
+                        <div class="detail-heading d-flex">
+                            <h2>Client Profile</h2>
+
+                            <div class="detail-button ml-auto">
+                                <a class="btn btn-success" href="/Patient/GetPotientialPatient">Potential Patients</a>
+                                <a tabindex="57" href="javascript:{}" style="border: 1px solid rgb(161, 161, 161); background-color: rgb(161, 161, 161);" onclick="return SavePotentialClient();" id="SavePotentialClient" class="btn btn-success disabled">
+                                    <i class="far fa-save"></i>
+                                    Save
+                                </a>
+
+                            </div>
+
+
+                        </div>
+                        <div class="SidebarScroll scroll inner-main-content">
+
+
+
+                            <div class="top-image-row d-flex profileImgRow">
+                                <div class="top-image-left">
+
+                                    <div class="paitent-img">
+
+                                        <img class="img-fluid" id="patientpic" src="/images/avatar.png" width="200" height="200" />
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <form id="frmProfile" method="post" class="detail-patient-form" enctype="multipart/form-data">
+
+                                <input class="Add" type="file" tabindex="1" name="PatientImg" id="PatientImg" />
+
+
+                                <div class="form-row-first">
+                                    <div class="top-form-row d-flex">
+                                        <div class="three-columns">
+                                            <label>First name</label>
+                                        </div>
+                                        <div class="three-columns">
+                                            <label>Middle Name</label>
+                                        </div>
+                                        <div class="three-columns">
+                                            <label>Last Name</label>
+                                        </div>
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="three-columns border-bottom-none">
+                                            <label class="label-fields"></label>
+                                            <input tabindex="2" type="text" id="txtFirstName" name="FirstName" class="form-control" maxlength="50"
+                                                   value="" placeholder="" required>
+                                        </div>
+                                        <div class="three-columns border-bottom-none">
+                                            <label class="label-fields"></label>
+                                            <input tabindex="3" type="text" id="txtMiddleName" name="MiddleName" class="form-control" maxlength="50"
+                                                   value="" placeholder="">
+                                        </div>
+                                        <div class="three-columns border-bottom-none">
+                                            <label class="label-fields"></label>
+                                            <input tabindex="4" type="text" id="txtLastName" name="LastName" class="form-control" maxlength="50"
+                                                   placeholder="" value="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label>Preferred Name/Nickname</label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label class="label-fields"></label>
+                                                    <input tabindex="5" type="text" id="txtNickName" name="NickName" class="form-control" maxlength="50"
+                                                           placeholder="" value="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-12 col-12 pl-0">
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label class="Add">Which gender do you identify as?</label>
+                                                    <label class="label-fields">Gender</label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label class="label-fields" id="lblGender"></label>
+                                                    <select tabindex="6" id="ddGender" name="Gender" class="form-control">
+                                                        <option value="0">Select</option>
+                                                        <option value="Male">Male</option>
+                                                        <option value="Female">Female</option>
+                                                        <option value="Transgender Male/Trans Man/Female-to-Male">
+                                                            Transgender Male/Trans Man/Female-to-Male
+                                                        </option>
+                                                        <option value="Transgender Female/Trans Woman/Male-to-Female">
+                                                            Transgender Female/Trans Woman/Male-to-Female
+                                                        </option>
+                                                        <option value="Genderqueer (neither exclusively male or
+                                                                    female)">
+                                                            Genderqueer (neither exclusively male or
+                                                            female)
+                                                        </option>
+                                                        <option value="Other">Other</option>
+                                                    </select>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                                <div class="form-row-first mt-0 mb-3" style="display:none" id="divOtherGender">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label>Other Gender</label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="label-fields"></label>
+                                                            <input tabindex="7" type="text" id="txtOtherGender" name="OtherGender" class="form-control" maxlength="200"
+                                                                   placeholder="" value="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row-first">
+                                    <div class="top-form-row d-flex">
+                                        <div class="two-columns">
+                                            <label>Date of Birth</label>
+                                        </div>
+                                        <div class="two-columns">
+                                            <label>Social Security Number</label>
+                                        </div>
+
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="two-columns">
+
+                                            <label class="label-fields"></label>
+                                            <input tabindex="8" type="text" id="txtDOB" name="DateOfBirth" class="form-control date" maxlength="50"
+                                                   placeholder="" value="" style="width:100px">
+                                        </div>
+                                        <div class="two-columns">
+                                            <div class="ssn-icon">
+                                                <div class="ssn-label">
+                                                    <div class="ssn-label-inner set-eye-pos">
+                                                        <label class="label-fields lbl-hide"></label>
+                                                        <div class="stardiv">*********</div>
+                                                        <div class="ssn-icon-label">
+                                                            <i class="fa fa-eye open-eye" style="display:none" onclick="Hidessnlabel()"></i>
+                                                            <i class="fa fa-eye-slash close-eye" onclick="showSSnlabel()"></i>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <input tabindex="9" type="password" id="txtSocialSecNo" name="SocialSecurityNumber" class="form-control" maxlength="50"
+                                                       placeholder="000-00-0000" value="">
+                                                <div class="ssn-icon-eye">
+                                                    <i class="fa fa-eye open-eye" style="display:none" onclick="showSSn()"></i>
+                                                    <i class="fa fa-eye-slash close-eye" style="display:none" onclick="Hidessn()"></i>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label class="Add">
+                                                        Race/Ethnicity (Select all that
+                                                        apply)
+                                                    </label>
+                                                    <label class="label-fields">
+                                                        Race/Ethnicity
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label class="label-fields" id="lblRace"></label>
+                                                    <select tabindex="10" id="ddRace" class="selectboxmultiple" multiple>
+                                                        <option value="Select All">Select All</option>
+                                                        <option value="Black/African/African-American">Black/African/African-American</option>
+                                                        <option value="Latino/Hispanic">Latino/Hispanic</option>
+                                                        <option value="White/Caucasian">White/Caucasian</option>
+                                                        <option value="Asian">Asian</option>
+                                                        <option value="Native Hawaiian/Pacific Islander">
+                                                            Native Hawaiian/Pacific Islander
+                                                        </option>
+                                                        <option value="Native American/Alaskan">Native American/Alaskan</option>
+                                                        <option value="Other">Other</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                                <div class="form-row-first mt-0 mb-3" id="OtherRace" style='display:none;'>
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label>Other Race/Ethnicity</label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="label-fields" id="lblOtherRace"></label>
+                                                            <input tabindex="11" type="text" id="txtOtherRace" name="OtherRace" class="form-control" maxlength="500"
+                                                                   placeholder="" value="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8 col-md-8 col-sm-12 col-12 pl-0">
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex">
+                                                <div class="two-columns">
+                                                    <label>Address</label>
+                                                </div>
+                                                <div class="two-columns">
+                                                    <label class="Add">
+                                                        Is this address where you live the majority
+                                                        of the time?
+                                                    </label>
+                                                    <label class="label-fields">
+                                                        IsPermanentAddress
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="two-columns">
+                                                    <label class="label-fields"></label>
+                                                    <input tabindex="12" type="text" id="txtAddress" name="Address" class="form-control" maxlength="200"
+                                                           placeholder="" value="s">
+                                                </div>
+                                                <div class="two-columns">
+                                                    <label class="label-fields" id="lblPerAdd"></label>
+                                                    <select tabindex="13" id="ddPermanentAddress" name="IsPermanentAddress" class="form-control">
+                                                        <option value="0">Select</option>
+                                                        <option value="true">Yes</option>
+                                                        <option value="false">No</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                                <div class="form-row-first mt-1">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="three-columns">
+                                                            <label>City</label>
+                                                        </div>
+                                                        <div class="three-columns">
+                                                            <label>State</label>
+                                                        </div>
+                                                        <div class="three-columns">
+                                                            <label>Zip</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex mb-1">
+                                                        <div class="three-columns border-bottom-none">
+                                                            <label class="label-fields"></label>
+                                                            <input tabindex="14" type="text" id="txtCity" name="City" class="form-control" maxlength="50"
+                                                                   placeholder="" value="">
+                                                        </div>
+                                                        <div class="three-columns border-bottom-none">
+                                                            <label class="label-fields"></label>
+                                                            <input tabindex="15" type="text" id="txtState" name="State" class="form-control" maxlength="50"
+                                                                   placeholder="" value="">
+                                                        </div>
+                                                        <div class="three-columns border-bottom-none">
+                                                            <label class="label-fields"></label>
+                                                            <input tabindex="16" type="text" id="txtZip" name="Zip" class="form-control" maxlength="20"
+                                                                   placeholder="" value="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="custom-row">
+
+                                                <div class="form-row-first m-0" id="divPermanentAddress" style='display:none'>
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="Add">what is that address?</label>
+                                                            <label class="label-fields">Permanent Address</label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="label-fields"></label>
+                                                            <input tabindex="17" type="text" id="txtPermanentAddress" name="PermanentAddress" class="form-control" maxlength="200"
+                                                                   placeholder="" value="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-row-first">
+                                    <div class="top-form-row d-flex">
+                                        <div class="three-columns">
+                                            <label>Email Address</label>
+                                        </div>
+                                        <div class="three-columns">
+                                            <label>Home Phone</label>
+                                        </div>
+                                        <div class="three-columns">
+                                            <label>Cell Phone</label>
+                                        </div>
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="three-columns border-bottom-none">
+                                            <label class="label-fields"></label>
+                                            <input tabindex="18" type="text" id="txtEmailAddress" name="EmailAddress" class="form-control" maxlength="50"
+                                                   placeholder="" value="">
+                                        </div>
+                                        <div class="three-columns border-bottom-none">
+                                            <label class="label-fields"></label>
+                                            <input tabindex="19" type="text" id="txtHomePhone" name="HomePhone" class="form-control" maxlength="20"
+                                                   placeholder="(000) 000-0000" value="">
+                                        </div>
+                                        <div class="three-columns border-bottom-none">
+                                            <label class="label-fields"></label>
+                                            <input tabindex="20" type="text" id="txtCellPhone" name="CellPhone" class="form-control" maxlength="20"
+                                                   placeholder="(000) 000-0000" value="">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-row-first">
+                                    <div class="top-form-row d-flex">
+                                        <div class="one-columns">
+                                            <label>Best way to contact you</label>
+                                        </div>
+
+                                    </div>
+                                    <div class="bootom-form-row d-flex">
+                                        <div class="three-columns">
+                                            <label class="label-fields" id="lblContact"></label>
+                                            <select tabindex="21" id="ddWayToContact" name="WayToContact" class="form-control">
+                                                <option value="Home">Home</option>
+                                                <option value="Cell">Cell</option>
+                                                <option value="Email">Email</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-row-first mt-0 mb-3" style='display:none;' id="OtherContact">
+                                            <div class="top-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label>Other Contact</label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label class="label-fields"></label>
+                                                    <input tabindex="22" type="text" id="txtOtherContact" name="OtherContact" class="form-control" maxlength="50"
+                                                           placeholder="" value="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label class="Add">
+                                                        How many children do you have and
+                                                        what are their ages?
+                                                    </label>
+                                                    <label class="label-fields">
+                                                        Number Of Children
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="three-columns">
+                                                    <label class="label-fields" id="lblNumChildren"></label>
+                                                    <label class="label-fields" id="lblAgeChildren" hidden="hidden"></label>
+                                                    <input tabindex="23" type="number" onchange="addChildrenDiv()" id="txtChildren" name="PatientChildren" class="form-control" maxlength="50"
+                                                           placeholder="" value="">
+
+                                                </div>
+
+                                            </div>
+
+                                            <div class="ChildrenAgeDiv">
+
+                                            </div>
+
+
+
+                                            <div class="ChildrenAgeTemplate" style="display:none">
+                                                <div class="form-row-first">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label>
+                                                                Children Age #number
+                                                            </label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row mb-2">
+                                                        <div class="row">
+                                                            <div class="col-lg-6 col-md-6 col-sm-6 col-6 pr-0">
+                                                                <div class="form-row-first">
+                                                                    <div class="top-form-row d-flex">
+                                                                        <div class="one-columns">
+                                                                            <label> Years</label>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="bootom-form-row d-flex ">
+                                                                        <div class="one-columns">
+                                                                            <input tabindex="23" type="text" id="#yearid"
+                                                                                   class="form-control"
+                                                                                   placeholder="">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                                                                <div class="form-row-first">
+                                                                    <div class="top-form-row d-flex">
+                                                                        <div class="one-columns">
+                                                                            <label>Days</label>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="bootom-form-row d-flex">
+                                                                        <div class="one-columns">
+                                                                            <input tabindex="23" type="text" id="#daysid"
+                                                                                   class="form-control"
+                                                                                   placeholder="">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+
+
+
+                                            <div class="ChildrenAgeTemp" style="display:none">
+                                                <div class="form-row-first">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label>
+                                                                Children Age #number
+                                                            </label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row mb-2">
+                                                        <div class="row">
+                                                            <div class="col-lg-6 col-md-6 col-sm-6 col-6 pr-0">
+                                                                <div class="form-row-first">
+                                                                    <div class="top-form-row d-flex">
+                                                                        <div class="one-columns">
+                                                                            <label> Years</label>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="bootom-form-row d-flex ">
+                                                                        <div class="one-columns">
+                                                                            <label class="label-fields" id="#yearid"></label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                                                                <div class="form-row-first">
+                                                                    <div class="top-form-row d-flex">
+                                                                        <div class="one-columns">
+                                                                            <label>Days</label>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="bootom-form-row d-flex">
+                                                                        <div class="one-columns">
+                                                                            <label class="label-fields" id="#daysid"></label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label>
+                                                        Emergency Contact #1
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row mb-3 pb-0">
+                                                <div class="row">
+                                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0">
+                                                        <div class="form-row-first mt-1">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label> Name</label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex ">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields"></label>
+                                                                    <input tabindex="24" type="text" id="txtEmergencyContact1Name" name="EmergencyContact1Name" maxlength="50"
+                                                                           class="form-control"
+                                                                           placeholder="" value="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0">
+                                                        <div class="form-row-first mt-1">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label> Email Address</label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields"></label>
+                                                                    <input tabindex="25" type="text" id="txtEmergencyContact1EmailAddress" name="EmergencyContact1EmailAddress" maxlength="200"
+                                                                           class="form-control"
+                                                                           placeholder="" value="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                                                        <div class="form-row-first mt-1">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>Relationship</label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields"></label>
+                                                                    <input tabindex="26" type="text" id="txtEmergencyContact1Relationship" name="EmergencyContact1Relationship" maxlength="50"
+                                                                           class="form-control"
+                                                                           placeholder="" value="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-8 col-md-8 col-sm-12 col-12 pr-0">
+                                                        <div class="form-row-first">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>Address</label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields"></label>
+                                                                    <input tabindex="27" type="text" id="txtEmergencyContact1Address" name="EmergencyContact1Address" maxlength="200"
+                                                                           class="form-control"
+                                                                           placeholder="" value="">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-12">
+
+
+                                                                <div class="form-row-first mb-2 mt-1">
+                                                                    <div class="top-form-row d-flex ">
+                                                                        <div class="three-columns">
+                                                                            <label>City</label>
+                                                                        </div>
+                                                                        <div class="three-columns">
+                                                                            <label>State</label>
+                                                                        </div>
+                                                                        <div class="three-columns">
+                                                                            <label>Zip</label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="bootom-form-row d-flex ">
+                                                                        <div class="three-columns border-bottom-none">
+                                                                            <label class="label-fields"></label>
+                                                                            <input tabindex="28" type="text" id="txtEmergencyContact1City" name="EmergencyContact1City" class="form-control" maxlength="50"
+                                                                                   placeholder="" value="">
+                                                                        </div>
+                                                                        <div class="three-columns border-bottom-none">
+                                                                            <label class="label-fields"></label>
+                                                                            <input tabindex="29" type="text" id="txtEmergencyContact1State" name="EmergencyContact1State" class="form-control" maxlength="50"
+                                                                                   placeholder="" value="">
+                                                                        </div>
+                                                                        <div class="three-columns border-bottom-none">
+                                                                            <label class="label-fields"></label>
+                                                                            <input tabindex="30" type="text" id="txtEmergencyContact1Zip" name="EmergencyContact1Zip" class="form-control" maxlength="20"
+                                                                                   placeholder="" value="">
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label>
+                                                        Emergency Contact #2
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row mb-2 mt-1">
+                                                <div class="row">
+                                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0">
+                                                        <div class="form-row-first mt-1">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label> Name</label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex ">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields"></label>
+                                                                    <input tabindex="31" type="text" id="txtEmergencyContact2Name" name="EmergencyContact2Name" maxlength="50"
+                                                                           class="form-control"
+                                                                           placeholder="" value="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0">
+                                                        <div class="form-row-first mt-1">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label> Email Address</label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields"></label>
+                                                                    <input tabindex="32" type="text" id="txtEmergencyContact2EmailAddress" name="EmergencyContact2EmailAddress" maxlength="50"
+                                                                           class="form-control"
+                                                                           placeholder="" value="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                                                        <div class="form-row-first mt-1">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>Relationship</label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields"></label>
+                                                                    <input tabindex="33" type="text" id="txtEmergencyContact2Relationship" name="EmergencyContact2Relationship" maxlength="50"
+                                                                           class="form-control"
+                                                                           placeholder="" value="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-8 col-md-8 col-sm-12 col-12 pr-0">
+                                                        <div class="form-row-first">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>Address</label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields"></label>
+                                                                    <input tabindex="34" type="text" id="txtEmergencyContact2Address" name="EmergencyContact2Address" maxlength="200"
+                                                                           class="form-control"
+                                                                           placeholder="" value="">
+                                                                </div>
+                                                            </div>
+
+
+                                                            <div class="col-12">
+
+
+                                                                <div class="form-row-first mb-3 mt-1">
+                                                                    <div class="top-form-row d-flex">
+                                                                        <div class="three-columns">
+                                                                            <label>City</label>
+                                                                        </div>
+                                                                        <div class="three-columns">
+                                                                            <label>State</label>
+                                                                        </div>
+                                                                        <div class="three-columns">
+                                                                            <label>Zip</label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="bootom-form-row d-flex">
+                                                                        <div class="three-columns border-bottom-none">
+                                                                            <label class="label-fields"></label>
+                                                                            <input tabindex="35" type="text" id="txtEmergencyContact2City" name="EmergencyContact2City" class="form-control" maxlength="50"
+                                                                                   placeholder="" value="">
+                                                                        </div>
+                                                                        <div class="three-columns border-bottom-none">
+                                                                            <label class="label-fields"></label>
+                                                                            <input tabindex="36" type="text" id="txtEmergencyContact2State" name="EmergencyContact2State" class="form-control" maxlength="50"
+                                                                                   placeholder="" value="">
+                                                                        </div>
+                                                                        <div class="three-columns border-bottom-none">
+                                                                            <label class="label-fields"></label>
+                                                                            <input tabindex="37" type="text" id="txtEmergencyContact2Zip" name="EmergencyContact2Zip" class="form-control" maxlength="20"
+                                                                                   placeholder="" value="">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-row-first mt-3">
+                                            <div class="top-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label class="Add">
+                                                        How many people in your household in each of
+                                                        the following categories
+                                                    </label>
+                                                    <label class="label-fields">
+                                                        People in household having
+                                                        following categories
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row mb-2">
+                                                <div class="row">
+                                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0">
+                                                        <div class="form-row-first mt-1">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>Children under 18</label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex ">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields"></label>
+                                                                    <input tabindex="38" type="number" id="txtChildrenUnder18" name="ChildrenUnder18" maxlength="10"
+                                                                           class="form-control"
+                                                                           placeholder="" value="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0">
+                                                        <div class="form-row-first mt-1">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>Adults 18-65</label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields"></label>
+                                                                    <input tabindex="39" type="number" id="txtAdults18to65" name="Adults18to65" maxlength="10"
+                                                                           class="form-control"
+                                                                           placeholder="" value="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                                                        <div class="form-row-first mt-1">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>Adults 65+</label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields"></label>
+                                                                    <input tabindex="40" type="number" id="Adults65Plus" name="Adults65Plus" maxlength="50"
+                                                                           class="form-control"
+                                                                           placeholder="" value="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex">
+                                                <div class="one-columns">
+                                                    <label>Preferred Pharmacy</label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row pb-3 grey-bg">
+                                                <div class="row">
+                                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0">
+                                                        <div class="form-row-first mt-1">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>Name</label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields"></label>
+                                                                    <input tabindex="41" type="text" id="txtPharmacyName" name="PreferredPharmacyName" maxlength="200"
+                                                                           class="form-control"
+                                                                           placeholder="" value="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0">
+                                                        <div class="form-row-first mt-1">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>Location</label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields"></label>
+                                                                    <input tabindex="42" type="text" id="txtPharmacyLocation" name="PreferredPharmacyLocation" maxlength="200"
+                                                                           class="form-control"
+                                                                           placeholder="" value="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row-first">
+                                            <div class="top-form-row d-flex">
+                                                <div class="three-columns">
+                                                    <label class="Add">
+                                                        Are you now or were you ever
+                                                        a member of the U.S. Armed
+                                                        Forces?
+                                                    </label>
+                                                    <label class="label-fields">
+                                                        U.S. Armed Forces
+                                                    </label>
+                                                </div>
+                                                <div class="three-columns">
+                                                    <label>Marital status</label>
+                                                </div>
+                                                <div class="three-columns">
+                                                    <label class="Add">
+                                                        Which languages do you speak
+                                                        comfortably?
+                                                    </label>
+                                                    <label class="label-fields">
+                                                        Languages
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="three-columns border-bottom-none">
+                                                    <div class="custom-control custom-radio d-inline-block mr-2">
+                                                        <label class="label-fields"></label>
+                                                        <label id="lblUSArmedForces" hidden="hidden"></label>
+                                                        <input tabindex="43" type="radio" class="custom-control-input"
+                                                               id="MemberRadioYes" onclick="Radio()" name="USArmedRadio"
+                                                               value="true">
+                                                        <label class="custom-control-label"
+                                                               for="MemberRadioYes" value="true">Yes</label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio  d-inline-block">
+                                                        <input tabindex="44" type="radio" class="custom-control-input"
+                                                               id="MemberRadioNo" onclick="Radio()" name="USArmedRadio"
+                                                               value="false">
+                                                        <label class="custom-control-label"
+                                                               for="MemberRadioNo" value="false">No</label>
+                                                    </div>
+
+                                                </div>
+                                                <div class="three-columns border-bottom-none">
+                                                    <label class="label-fields" id="lblMarital"></label>
+                                                    <select tabindex="45" id="ddMaritalStatus" name="MaritalStatus" class="form-control">
+                                                        <option value="0">Select</option>
+                                                        <option value="Married">Married</option>
+                                                        <option value="Single">Single</option>
+                                                        <option value="Domestic partnership">
+                                                            Domestic partnership
+                                                        </option>
+                                                        <option value="Divorced">Divorced</option>
+                                                        <option value="Separated">Separated</option>
+                                                        <option value="Widowed">Widowed</option>
+                                                        <option value="Other">Other</option>
+                                                    </select>
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                                            <div class="form-row-first" id="OtherMaritalStatus" style='display:none'>
+                                                                <div class="top-form-row d-flex">
+                                                                    <div class="one-columns">
+                                                                        <label>
+                                                                            Other Marital
+                                                                            status
+                                                                        </label>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="bootom-form-row d-flex">
+                                                                    <div class="one-columns">
+                                                                        <label class="label-fields"></label>
+                                                                        <input tabindex="46" type="text" id="txtOtherMarital" name="OtherMaritalStatus" maxlength="50"
+                                                                               class="form-control"
+                                                                               placeholder="" value="">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="three-columns border-bottom-none">
+                                                    <label class="label-fields" id="lblLanguages"></label>
+                                                    <select tabindex="47" id="ddLanguages" class="selectboxmultiple" multiple>
+                                                        <option value="Select All">Select All</option>
+                                                        <option value="English">English</option>
+                                                        <option value="Spanish">Spanish</option>
+                                                        <option value="Arabic">
+                                                            Arabic
+                                                        </option>
+                                                        <option value="Amharic">Amharic</option>
+                                                        <option value="Tigrinya">Tigrinya</option>
+                                                        <option value="Other">Other</option>
+
+                                                    </select>
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                                            <div class="form-row-first" id="OtherLanguage" style='display:none'>
+                                                                <div class="top-form-row d-flex">
+                                                                    <div class="one-columns">
+                                                                        <label>Other language</label>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="bootom-form-row d-flex">
+                                                                    <div class="one-columns">
+                                                                        <label class="label-fields" id="lblOtherLang"></label>
+                                                                        <input tabindex="48" type="text" id="txtOtherLanguage" name="OtherLanguageSpeak" maxlength="20"
+                                                                               class="form-control"
+                                                                               placeholder="" value="">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+
+                                        </div>
+
+                                        <div class="form-row-first">
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-12 p-0">
+
+                                                <div class="bootom-form-row mb-1">
+                                                    <div class="row">
+                                                        <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0">
+                                                            <div class="form-row-first mt-1">
+                                                                <div class="top-form-row d-flex">
+                                                                    <div class="one-columns">
+                                                                        <label class="Add">Have you ever been a smoker</label>
+                                                                        <label class="label-fields">Smoker</label>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="bootom-form-row d-flex">
+                                                                    <div class="one-columns">
+                                                                        <label class="label-fields" id="lblSmoker"></label>
+                                                                        <label hidden="hidden" id="lblEverSmoker"></label>
+                                                                        <select tabindex="49" id="ddSmoker" name="EverBeenSmoker" class="form-control">
+                                                                            <option value="0">Select</option>
+                                                                            <option value="true">Yes</option>
+                                                                            <option value="false">No</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0" id="divQuit" style="display:none">
+                                                            <div class="form-row-first mt-1">
+                                                                <div class="top-form-row d-flex">
+
+                                                                    <div class="one-columns">
+                                                                        <label class="Add">Have you Quit?</label>
+                                                                        <label class="label-fields">Quit</label>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="bootom-form-row d-flex">
+                                                                    <div class="one-columns">
+                                                                        <label class="label-fields" id="lblQuit"></label>
+                                                                        <label hidden="hidden" id="lblQuitSmoking"></label>
+                                                                        <select tabindex="50" id="ddQuit" name="QuitSmoking" class="form-control">
+                                                                            <option value="0">Select</option>
+                                                                            <option value="true">Yes</option>
+                                                                            <option value="false">No</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4 col-md-4 col-sm-12 col-12" id="divLastTimeYouSmoked" style="display:none">
+                                                            <div class="form-row-first mt-1">
+                                                                <div class="top-form-row d-flex">
+                                                                    <div class="one-columns">
+                                                                        <label class="Add">
+                                                                            When was the last time you smoked?
+                                                                        </label>
+                                                                        <label class="label-fields">
+                                                                            Last Time You Smoked
+                                                                        </label>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="bootom-form-row d-flex">
+
+                                                                    <div class="one-columns">
+                                                                        <label class="label-fields" id="lblLastTime"></label>
+                                                                        <select tabindex="51" name="LastTimeYouSmoked" class="form-control" id="ddLastTimeYouSmoked">
+                                                                            <option value="0">Select</option>
+                                                                            <option value="Within the past few days">Within the past few days</option>
+                                                                            <option value="1-2 months ago">1-2 months ago</option>
+                                                                            <option value="3-6 months ago">3-6 months ago</option>
+                                                                            <option value="6 months or more">6 months or more</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="col-lg-4 col-md-4 col-sm-12 col-12" id="divSmokingQuitDate" style="display:none">
+                                                            <div class="form-row-first">
+                                                                <div class="top-form-row d-flex">
+                                                                    <div class="one-columns">
+                                                                        <label>Quit Date</label>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="bootom-form-row d-flex">
+                                                                    <div class="one-columns">
+                                                                        <label class="label-fields"></label>
+                                                                        <input tabindex="52" type="text" autocomplete="off" id="txtQuitDate" name="SmokingQuitDate" class="form-control date" maxlength="50"
+                                                                               placeholder="" value="" style="width:100px">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+
+
+
+                                        <div class="row">
+                                            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                                                <div class="form-row-first">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="Add">
+                                                                What are your preferred
+                                                                pronouns
+                                                            </label>
+                                                            <label class="label-fields">
+                                                                Preferred
+                                                                Pronouns
+                                                            </label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="label-fields" id="lblPronoun"></label>
+                                                            <select tabindex="53" id="ddPreferredPronouns" name="PreferredPronouns" class="form-control">
+                                                                <option value="0">Select</option>
+                                                                <option value="She/Her">She/Her</option>
+                                                                <option value="He/Him">He/Him</option>
+                                                                <option value="They/Them">They/Them</option>
+                                                                <option value="Other">Other</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12" id="divOtherPronouns" style="display:none">
+                                                        <div class="form-row-first mt-0 mb-3">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>
+                                                                        Other Pronouns
+                                                                    </label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields"></label>
+                                                                    <input tabindex="54" type="text" id="txtOtherPronouns" name="OtherPronouns" maxlength="50"
+                                                                           class="form-control"
+                                                                           placeholder="" value="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 col-sm-12 col-12 pl-0">
+                                                <div class="form-row-first">
+                                                    <div class="top-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="Add">Do you think of yourself as</label>
+                                                            <label class="label-fields">Think Yourself As</label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="bootom-form-row d-flex">
+                                                        <div class="one-columns">
+                                                            <label class="label-fields" id="lblThink"></label>
+                                                            <select tabindex="55" id="ddThinkYourselfAs" name="ThinkYourselfAs" class="form-control">
+                                                                <option value="0">Select</option>
+                                                                <option value="Straight or Heterosexual">
+                                                                    Straight or Heterosexual
+                                                                </option>
+                                                                <option value="Lesbian">Lesbian</option>
+                                                                <option value="Gay">Gay</option>
+                                                                <option value="Bisexual">Bisexual</option>
+                                                                <option value="Queer">Queer</option>
+                                                                <option value="Questioning">Questioning</option>
+                                                                <option value="Unspecified/Other">Unspecified/Other</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12" id="divOtherThinkYourselfAs" style="display:none">
+                                                        <div class="form-row-first mt-0 mb-3">
+                                                            <div class="top-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label>
+                                                                        Other you think yourself
+                                                                        as
+                                                                    </label>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="bootom-form-row d-flex">
+                                                                <div class="one-columns">
+                                                                    <label class="label-fields"></label>
+                                                                    <input tabindex="56" type="text" id="txtOtherThinkYourself" name="OtherThinkYourselfAs" maxlength="50"
+                                                                           class="form-control"
+                                                                           placeholder="" value="">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="detail-button mt-3 w-100 text-center">
+
+                                    <input type="hidden" name="CreatedDate" />
+                                    <input type="hidden" name="ModifiedDate" />
+                                    <input id="hdfPatientImg" type="hidden" name="PatientImg" value="" />
+                                    <input id="hdfPatientChildrensAges" type="hidden" name="PatientChildrensAges" />
+                                    <input id="hdfEverMemberOfUSArmedForces" type="hidden" name="EverMemberOfUSArmedForces" />
+                                    <input id="hdfMultipleSelectedRace" type="hidden" name="RaceEthnicity" />
+                                    <input id="hdfMultipleSelectedLanguages" type="hidden" name="LanguagesSpeak" />
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts {
+    <script src="https://code.jquery.com/ui/1.12.0-rc.2/jquery-ui.min.js"
+            integrity="sha256-55Jz3pBCF8z9jBO1qQ7cIf0L+neuPTD1u7Ytzrp2dqo="
+            crossorigin="anonymous"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script>
+        var RaceEthnicity = [];
+        var LanguagesSpeak = [];
+        var EverMemberOfUSArmedForces = "";
+        var PatientChildrensAges = "";
+        var PatientImg = "";
+        var CreatedDate = "";
+        var ModifiedDate = "";
+        var isprofilesave = false;
+        var _PatientId = 0;
+
+
+        var options = {
+            onComplete: function (cep) {
+                console.log('CEP Completed!:', cep);
+            },
+            onKeyPress: function (cep, event, currentField, options) {
+                console.log('A key was pressed!:', cep, ' event: ', event,
+                    'currentField: ', currentField, ' options: ', options);
+            },
+            onChange: function (cep) {
+                console.log('cep changed! ', cep);
+            },
+            onInvalid: function (val, e, f, invalid, options) {
+                var error = invalid[0];
+                console.log("Digit: ", error.v, " is invalid for the position: ", error.p, ". We expect something like: ", error.e);
+                toastr.error("Digit: " + error.v + " is invalid");
+            }
+        };
+        $('.date').datepicker(
+            {
+                uiLibrary: 'bootstrap',
+                changeYear: true,
+                changeMonth: true,
+            }
+
+        );
+
+        $(".open-eye").css("display", "block");
+        $(".ssn-label").css("display", "none");
+
+        AddDate();
+
+        $('.date').mask('00/00/0000');
+        $('#txtHomePhone').mask('(000) 000-0000');
+        $('#txtCellPhone').mask('(000) 000-0000');
+        $('#txtSocialSecNo').mask('AAA-AA-AAAA', options);
+        $("input[type=hidden][name=PatientID]").val(_PatientId);
+
+        $('#paitent-detail').find('input').on('input change', function () {
+
+            $('#paitent-detail').find('#SavePotentialClient').removeClass('disabled').css({ 'border': '1px solid rgb(34, 186, 160)', 'background-color': 'rgb(34, 186, 160)' })
+        })
+        $('#paitent-detail').find('select').on('change', function () {
+            $('#paitent-detail').find('#SavePotentialClient').removeClass('disabled').css({ 'border': '1px solid rgb(34, 186, 160)', 'background-color': 'rgb(34, 186, 160)' })
+        })
+
+        $('#ddRace').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+            // do something...
+
+            //  var selected = $('#ddRace option:selected').val();
+            var divOtherRace = $('#OtherRace');
+
+            var selectedvalues = $('#ddRace').selectpicker().val();
+
+            if ($.inArray("Other", selectedvalues) != -1) {
+                divOtherRace.show();
+            }
+            else {
+                divOtherRace.hide();
+
+            }
+
+
+            // check if option at index 0 is clicked
+            if (clickedIndex == 0 || clickedIndex == null) {
+                var all = $(this).children('option[value="Select All"]');
+                optionvalue = all.html();
+
+                // check if All option is clicked
+                if (optionvalue == "Select All") {
+
+                    // check if all option is selected or not
+                    if (isSelected || isSelected == null) {
+
+                        // make all option selected if all option is selected
+                        $(this).selectpicker('selectAll');
+
+                    } else {
+
+                        // make all option un-selected if all option is un-selected
+                        $(this).selectpicker('deselectAll');
+                    }
+                }
+            }
+            else {
+
+                // get selected values and convert it into array
+                var selectedarray = $(this).val().toString() != '' ? $(this).val().toString().split(',') : '';
+
+                // check if all values are selected
+                if (selectedarray.length >= 7 && $.inArray("Select All", selectedarray) == -1) {
+
+                    // select all option if all values are selected
+                    $(this).children('option[value="Select All"]').prop("selected", true);
+
+                }
+                else {
+
+                    // un-select all option if all values are selected
+                    $(this).children('option[value="Select All"]').prop("selected", false);
+
+                }
+
+            }
+
+            // refresh select list
+            $(this).selectpicker('refresh');
+
+
+            $.each($("#ddRace option:selected"), function () {
+
+                if ($(this).val() == "Other" || $(this).val() == "Select All") {
+
+                }
+                else {
+                    if (jQuery.inArray($(this).val(), RaceEthnicity) == -1) {
+                        RaceEthnicity.push($(this).val());
+                    }
+                }
+
+            });
+
+        });
+
+
+        $.each($("#ddRace option:selected"), function () {
+
+            if ($(this).val() == "Other" || $(this).val() == "Select All") {
+
+            }
+            else {
+                if (jQuery.inArray($(this).val(), RaceEthnicity) == -1) {
+                    RaceEthnicity.push($(this).val());
+                }
+            }
+
+        });
+
+
+
+
+        $('#ddLanguages').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+            // do something...
+
+            var divOtherLanguage = $('#OtherLanguage');
+
+            var selectedvalues = $('#ddLanguages').selectpicker().val();
+
+            if ($.inArray("Other", selectedvalues) != -1) {
+                divOtherLanguage.show();
+            }
+            else {
+                divOtherLanguage.hide();
+
+            }
+
+
+            // check if option at index 0 is clicked
+            if (clickedIndex == 0 || clickedIndex == null) {
+                var all = $(this).children('option[value="Select All"]');
+                optionvalue = all.html();
+
+                // check if All option is clicked
+                if (optionvalue == "Select All") {
+
+                    // check if all option is selected or not
+                    if (isSelected || isSelected == null) {
+
+                        // make all option selected if all option is selected
+                        $(this).selectpicker('selectAll');
+
+                    } else {
+
+                        // make all option un-selected if all option is un-selected
+                        $(this).selectpicker('deselectAll');
+                    }
+                }
+            }
+            else {
+
+                // get selected values and convert it into array
+                var selectedarray = $(this).val().toString() ? $(this).val().toString().split(',') : '';
+
+                // check if all values are selected
+                if (selectedarray.length >= 6 && $.inArray("Select All", selectedarray) == -1) {
+
+                    // select all option if all values are selected
+                    $(this).children('option[value="Select All"]').prop("selected", true);
+
+                }
+                else {
+
+                    // un-select all option if all values are selected
+                    $(this).children('option[value="Select All"]').prop("selected", false);
+
+                }
+
+            }
+
+            // refresh select list
+            $(this).selectpicker('refresh');
+
+
+            $.each($("#ddLanguages option:selected"), function () {
+                if ($(this).val() == "Other" || $(this).val() == "Select All") {
+
+                }
+                else {
+                    if (jQuery.inArray($(this).val(), LanguagesSpeak) == -1) {
+                        LanguagesSpeak.push($(this).val());
+                    }
+                }
+            });
+
+        });
+
+        $('#txtCellPhone').blur(function (e) {
+            phone = $("#txtCellPhone").val();
+            phone = phone.replace(/[^0-9]/g, '');
+            if (phone.length != 10) {
+                //alert('Phone number must be 10 digits.');
+                $('#txtCellPhone').val('');
+                $('#txtCellPhone').focus();
+            }
+        });
+
+        $("#PatientImg").change(function () {
+
+            var formData = new FormData();
+            var totalFiles = document.getElementById("PatientImg").files.length;
+            for (var i = 0; i < totalFiles; i++) {
+                var file = document.getElementById("PatientImg").files[i];
+                file = this.files[i];
+                const fileType = file['type'];
+                const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+                if (!validImageTypes.includes(fileType)) {
+                    // invalid file type code goes here.
+                    toastr.error("Invalid Image");
+                }
+
+                formData.append("PatientImg", file);
+            }
+            $.ajax({
+                type: "POST",
+                url: '/Patient/Upload',
+                data: formData,
+                dataType: 'html',
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    PatientImg = response;
+
+                    $("input[type=hidden][name=PatientImg]").val(PatientImg);
+                    $("#patientpic").attr('src', "/Files/" + response)
+                },
+                error: function (error) {
+                    toastr.error("errror");
+                },
+            })
+        });
+
+
+
+        $.each($("#ddLanguages option:selected"), function () {
+            //second
+            if ($(this).val() == "Other" || $(this).val() == "Select All") {
+
+            }
+            else {
+                if (jQuery.inArray($(this).val(), LanguagesSpeak) == -1) {
+                    LanguagesSpeak.push($(this).val());
+                }
+
+            }
+
+        });
+        $('#ddGender').on('change', function () {
+            var selected = $('#ddGender option:selected').val();
+            var divOtherGender = $('#divOtherGender');
+            var txtOtherGender = $('#txtOtherGender');
+
+            if (selected == 'Other') {
+                divOtherGender.show();
+            }
+            else {
+                divOtherGender.hide();
+                txtOtherGender.val('');
+            }
+        });
+
+        $('#ddMaritalStatus').on('change', function () {
+            var selected = $('#ddMaritalStatus option:selected').val();
+            var divOtherMaritalStatus = $('#OtherMaritalStatus');
+
+            if (selected == 'Other') {
+                divOtherMaritalStatus.show();
+            }
+            else {
+                divOtherMaritalStatus.hide();
+            }
+        });
+
+        $('#ddSmoker').on('change', function () {
+            var selected = $('#ddSmoker option:selected').val();
+            var divQuit = $('#divQuit');
+            var divLastTimeYouSmoked = $('#divLastTimeYouSmoked');
+            var divSmokingQuitDate = $('#divSmokingQuitDate');
+            var ddQuit = $('#ddQuit');
+            var ddLastTimeYouSmoked = $('#ddLastTimeYouSmoked');
+
+            if (selected == "true") {
+                divQuit.show();
+                divLastTimeYouSmoked.show();
+            }
+            else {
+                divQuit.hide();
+                divLastTimeYouSmoked.hide();
+                divSmokingQuitDate.hide();
+                ddQuit.val(0);
+                ddLastTimeYouSmoked.val(0);
+            }
+        });
+
+        $('#ddQuit').on('change', function () {
+            var selected = $('#ddQuit option:selected').val();
+            var divSmokingQuitDate = $('#divSmokingQuitDate');
+
+            if (selected == "true") {
+                divSmokingQuitDate.show();
+            }
+            else {
+                divSmokingQuitDate.hide();
+            }
+        });
+
+        $('#ddPreferredPronouns').on('change', function () {
+            var selected = $('#ddPreferredPronouns option:selected').val();
+            var divOtherPronouns = $('#divOtherPronouns');
+            var txtOtherPronouns = $('#txtOtherPronouns');
+
+
+            if (selected == 'Other') {
+                divOtherPronouns.show();
+            }
+            else {
+                divOtherPronouns.hide();
+                txtOtherPronouns.val('');
+            }
+        });
+
+        $('#ddThinkYourselfAs').on('change', function () {
+            var selected = $('#ddThinkYourselfAs option:selected').val();
+            var divOtherThinkYourselfAs = $('#divOtherThinkYourselfAs');
+            var txtOtherThinkYourself = $('#txtOtherThinkYourself');
+
+            if (selected == 'Unspecified/Other') {
+                divOtherThinkYourselfAs.show();
+            }
+            else {
+                divOtherThinkYourselfAs.hide();
+                txtOtherThinkYourself.val('');
+            }
+        });
+
+        $('#ddPermanentAddress').on('change', function () {
+            var selected = $('#ddPermanentAddress option:selected').val();
+            var divPermanentAddress = $('#divPermanentAddress');
+            var txtPermanentAddress = $('#txtPermanentAddress');
+
+            if (selected == "false") {
+                divPermanentAddress.show();
+            }
+            else {
+                divPermanentAddress.hide();
+                txtPermanentAddress.val('');
+            }
+        });
+
+        $('#ddWayToContact').on('change', function () {
+            var selected = $('#ddWayToContact option:selected').val();
+            var divOtherContact = $('#OtherContact');
+            var txtOtherContact = $('#txtOtherContact');
+
+            if (selected == 'Other') {
+                divOtherContact.show();
+            }
+            else {
+                divOtherContact.hide();
+                txtOtherContact.val('');
+            }
+        });
+
+        $('.selectboxmultiple').selectpicker();
+
+
+
+
+        function SavePotentialClient() {
+            $(".loaderOverlay").css("display", "flex");
+            Radio();
+            ChildrenAges();
+
+            if (Validation() && validateDOB() && ValidateEmail()) {
+
+                AddDate();
+                $("input[type=hidden][name=CreatedDate]").val(CreatedDate);
+                $("input[type=hidden][name=ModifiedDate]").val(ModifiedDate);
+
+                $("input[type=hidden][name=PatientChildrensAges]").val(PatientChildrensAges);
+                $("input[type=hidden][name=EverMemberOfUSArmedForces]").val(EverMemberOfUSArmedForces);
+                var selectedracevalues = $("#ddRace").selectpicker().val();
+                
+                    if (selectedracevalues.length < 7) {
+                    RaceEthnicity = [];
+                    $.each($("#ddRace option:selected"), function () {
+                        if ($(this).val() == "Select All") {
+
+                        }
+                        else {
+                            if (jQuery.inArray($(this).val(), RaceEthnicity) == -1) {
+                                RaceEthnicity.push($(this).val());
+                            }
+                        }
+                    });
+                   
+                }
+                $("input[type=hidden][name=RaceEthnicity]").val(RaceEthnicity);
+                var selectedvalues = $('#ddLanguages').selectpicker().val();
+
+                if (selectedvalues.length < 7) {
+                    LanguagesSpeak = [];
+                    $.each($("#ddLanguages option:selected"), function () {
+                        if ($(this).val() == "Select All") {
+
+                        }
+                        else {
+                            if (jQuery.inArray($(this).val(), LanguagesSpeak) == -1) {
+                                LanguagesSpeak.push($(this).val());
+                            }
+                        }
+                    });
+                   
+                }
+                $("input[type=hidden][name=LanguagesSpeak]").val(LanguagesSpeak);
+                //document.getElementById('frmProfile').submit();
+                var formData = $("#frmProfile").serializeObject();
+
+                // console.log(formData);
+
+                $.ajax({
+                    type: "POST",
+                    url: Apipath + '/api/PatientMain/SavePotentialClientManually',
+                    data: JSON.stringify(formData),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (result) {
+
+                        var isexist = result;
+                        if (isexist == -1) {
+                            toastr.error("Combination of CellPhone,SSN and Email are Exist");
+
+                            $(".loaderOverlay").hide();
+                        }
+                        else {
+
+                            $("input[type=hidden][name=PatientID]").val(result);
+                            _PatientId = result;
+
+                            var patname = $('#txtFirstName').val() + ' ' + $('#txtMiddleName').val() + ' ' + $('#txtLastName').val();
+                            var dob = $('#txtDOB').val();
+                            var ssn = $('#txtSocialSecNo').val();
+
+                            $("#PFirstName").html(patname);
+                            $("#PDOB").html(dob);
+                            $("#mentalPDOB").html(ShortDate);
+                            $('#txtSSN').val(ssn);
+
+                            toastr.success("Record saved successfully");
+
+                            $(".loaderOverlay").hide();
+                        }
+
+
+
+                    },
+                    error: function () {
+
+                        toastr.error("Error while inserting data");
+
+                        $(".loaderOverlay").hide();
+                    }
+                });
+
+
+            }
+            else {
+                $(".loaderOverlay").hide();
+                return false;
+            }
+
+        }
+
+        $.fn.serializeObject = function () {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function () {
+                if (o[this.name]) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
+
+        function Validation() {
+            var check = true;
+            if (check == true) {
+
+                if ($('#txtFirstName').val() == '') {
+                    $('#txtFirstName').addClass('invalid-field');
+                    check = false;
+                }
+                else {
+                    $('#txtFirstName').removeClass('invalid-field');
+                }
+
+                if ($('#txtLastName').val() == '') {
+                    $('#txtLastName').addClass('invalid-field');
+                    check = false;
+                }
+                else {
+                    $('#txtLastName').removeClass('invalid-field');
+                }
+
+                if ($('#ddSmoker option:selected').val() == 0) {
+
+                    $('#ddSmoker').addClass('invalid-field');
+                    check = false;
+                }
+                else
+                {
+                    $('#ddSmoker').removeClass('invalid-field');
+                }
+
+                if ($('#ddSmoker option:selected').val() == "true") {
+
+                    $('#ddQuit').addClass('invalid-field');
+                    check = false;
+                    if ($('#ddQuit option:selected').val() == 0) {
+                        $('#ddQuit').addClass('invalid-field');
+                        check = false;
+                    }
+                    else {
+                        $('#ddQuit').removeClass('invalid-field');
+                        check = true;
+                    }
+                }
+
+                else {
+                    $('#ddQuit').removeClass('invalid-field');
+                }
+                if ($('#ddQuit option:selected').val() == "true") {
+
+                    $('#txtQuitDate').addClass('invalid-field');
+                    check = false;
+                    if ($('#txtQuitDate').val() == '') {
+                        $('#txtQuitDate').addClass('invalid-field');
+                        check = false;
+                    }
+                    else {
+                        $('#txtQuitDate').removeClass('invalid-field');
+                        check = true;
+                    }
+
+                }
+                else {
+                    $('#txtQuitDate').removeClass('invalid-field');
+                }
+
+
+
+
+               
+
+                if ($('#txtDOB').val() == '') {
+                    $('#txtDOB').addClass('invalid-field');
+                    check = false;
+                }
+                else {
+                    $('#txtDOB').removeClass('invalid-field');
+                }
+                if ($('#ddGender option:selected').val() == 0) {
+                    $('#ddGender').addClass('invalid-field');
+                    check = false;
+                }
+                else {
+                    $('#ddGender').removeClass('invalid-field');
+                }
+                if ($('#txtEmergencyContact1').val() == '') {
+                    $('#txtEmergencyContact1').addClass('invalid-field');
+                    check = false;
+                }
+                else {
+                    $('#txtEmergencyContact1').removeClass('invalid-field');
+                }
+                if ($('#txtChildrenUnder18').val() == '') {
+                    $('#txtChildrenUnder18').addClass('invalid-field');
+                    check = false;
+                }
+                else {
+                    $('#txtChildrenUnder18').removeClass('invalid-field');
+                }
+                if ($('#txtAdults18to65').val() == '') {
+                    $('#txtAdults18to65').addClass('invalid-field');
+                    check = false;
+                }
+                else {
+                    $('#txtAdults18to65').removeClass('invalid-field');
+                }
+                if ($('#Adults65Plus').val() == '') {
+                    $('#Adults65Plus').addClass('invalid-field');
+                    check = false;
+                }
+                else {
+                    $('#Adults65Plus').removeClass('invalid-field');
+                }
+
+
+
+
+                if ($('#txtEmergencyContact1Name').val() == '') {
+                    $('#txtEmergencyContact1Name').addClass('invalid-field');
+                    check = false;
+                }
+                else {
+                    $('#txtEmergencyContact1Name').removeClass('invalid-field');
+                }
+                if ($('#txtEmergencyContact1Address').val() == '') {
+                    $('#txtEmergencyContact1Address').addClass('invalid-field');
+                    check = false;
+                }
+                else {
+                    $('#txtEmergencyContact1Address').removeClass('invalid-field');
+                }
+                if ($('#txtEmergencyContact1EmailAddress').val() == '') {
+                    $('#txtEmergencyContact1EmailAddress').addClass('invalid-field');
+                    check = false;
+                }
+                else {
+                    $('#txtEmergencyContact1EmailAddress').removeClass('invalid-field');
+                }
+                if ($('#txtEmergencyContact1Relationship').val() == '') {
+                    $('#txtEmergencyContact1Relationship').addClass('invalid-field');
+                    check = false;
+                }
+                else {
+                    $('#txtEmergencyContact1Relationship').removeClass('invalid-field');
+                }
+
+                var RaceValue = $('#ddRace').selectpicker().val();
+                if (RaceValue.length == 0) {
+                    $('#paitent-detail').find('.selectboxmultiple button[data-id="ddRace"]').addClass('invalid-field');
+                    check = false;
+
+                }
+                else {
+                    $('#paitent-detail').find('.selectboxmultiple button[data-id="ddRace"]').removeClass('invalid-field');
+                }
+                if ($.inArray("Other", RaceValue) != -1 && RaceValue.length < 7 && $('#txtOtherRace').val().trim() == "") {
+                    $('#txtOtherRace').addClass('invalid-field');
+                    check = false;
+                } else {
+                    $('#txtOtherRace').removeClass('invalid-field');
+                }
+                var LanguagesValue = $('#ddLanguages').selectpicker().val();
+
+                if (LanguagesValue.length == 0) {
+                    $('#paitent-detail').find('.selectboxmultiple button[data-id="ddLanguages"]').addClass('invalid-field');
+                    check = false;
+
+                }
+                else {
+                    $('#paitent-detail').find('.selectboxmultiple button[data-id="ddLanguages"]').removeClass('invalid-field');
+                }
+                if ($.inArray("Other", LanguagesValue) != -1 && LanguagesValue.length < 7 && $('#txtOtherLanguage').val().trim() == "") {
+                    $('#txtOtherLanguage').addClass('invalid-field');
+                    check = false;
+                } else {
+                    $('#txtOtherLanguage').removeClass('invalid-field');
+                }
+            }
+            if (check == false) {
+                //alert("Please Fill all Required Fields");
+                toastr.error('Please enter all required fields')
+            }
+            
+
+            return check;
+
+        }
+
+        function validateDOB() {
+            var dob = $('#txtDOB').val();
+
+            var pattern = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
+            if (!pattern.test(dob)) {
+                toastr.error("Date is not in correct format")
+                $('#txtDOB').addClass('invalid-field');
+                return false;
+            }
+            else {
+                var date = new Date(dob);
+                var year = date.getFullYear();
+                var currentYear = new Date().getFullYear() + 1
+
+                if (year > 1900 && year <= currentYear) {
+                    return true;
+                }
+
+                toastr.error("Birth year should be in between 1900 and " + currentYear + '.');
+                $('#txtDOB').addClass('invalid-field');
+                return false
+            }
+        }
+
+        function AddDate() {
+
+            var d = new Date();
+            var month = d.getMonth() + 1;
+            var day = d.getDate();
+            var time = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+            CreatedDate = d.getFullYear() + '/' +
+                (month < 10 ? '0' : '') + month + '/' +
+                (day < 10 ? '0' : '') + day + "  " + time;
+
+            ShortDate = d.getFullYear() + '/' +
+                (month < 10 ? '0' : '') + month + '/' +
+                (day < 10 ? '0' : '') + day;
+
+            ModifiedDate = d.getFullYear() + '/' +
+                (month < 10 ? '0' : '') + month + '/' +
+                (day < 10 ? '0' : '') + day + "  " + time;
+        }
+
+        function Radio() {
+
+
+            EverMemberOfUSArmedForces = $("input[name='USArmedRadio']:checked").val();
+            IncomeCoverHouseholdExpenses = $("input[name='HouseholdExpensesRadio']:checked").val();
+            CalworksBenefits = $("input[name='Calworks']:checked").val();
+            SocialSecurityDisabilityInsurance = $("input[name='SSIRadio']:checked").val();
+            GeneralAssistance = $("input[name='GARadio']:checked").val();
+            WomenInfantChildrenBenefits = $("input[name='WICRadio']:checked").val();
+            UnemploymentBenefits = $("input[name='Unemployment']:checked").val();
+            StateDisabilityInsuranceBenefits = $("input[name='SDIRadio']:checked").val();
+            RentalAssistanceBenefits = $("input[name='RentalAssistance']:checked").val();
+            PersonalPhone = $("input[name='Phone']:checked").val();
+
+            HealthInsurance = $("input[name='InsuranceRadio']:checked").val();
+            if (HealthInsurance == "true") {
+                $('#divInsuranceYes').show();
+            }
+            else {
+                $('#divInsuranceYes').hide();
+                $('#txtPlanName').val('');
+                $('#txtPolicyNumber').val('');
+                $('#txtSSN').val('');
+
+            }
+
+            PrimaryCareDoctor = $("input[name='RegularDoctorRadio']:checked").val();
+            if (PrimaryCareDoctor == "true") {
+                $('#divRegularDoctorYes').show();
+            }
+            else {
+                $('#divRegularDoctorYes').hide();
+                //$('#ddLastSeeDoctor').val(0);
+                $('#txtNameOfDoctor').val('');
+                $('#txtDoctorLocation').val('');
+
+            }
+
+            RegularDentist = $("input[name='RegularDentistRadio']:checked").val();
+            if (RegularDentist == "true") {
+                $('#divRegularDentistYes').show();
+            }
+            else {
+                $('#divRegularDentistYes').hide();
+                //$('#ddLastSeeDentist').val(0);
+                $('#txtNameOfDentist').val('');
+                $('#txtDentistLocation').val('');
+
+            }
+
+            OtherDoctorsTherapists = $("input[name='OtherDoctorsRadio']:checked").val();
+            if (OtherDoctorsTherapists == "true") {
+                $('#divOtherDoctorsYes').show();
+            }
+            else {
+                $('#divOtherDoctorsYes').hide();
+                $('#txtTherapistsName').val('');
+                $('#txtTherapistsLocation').val('');
+            }
+
+            CaseManager = $("input[name='SocialWorkerRadio']:checked").val();
+            if (CaseManager == "true") {
+                $('#divSocialWorker').show();
+            }
+            else {
+                $('#divSocialWorker').hide();
+                $('#txtCaseManagerName').val('');
+                $('#txtCaseManagerLocation').val('');
+            }
+            //-----------------------OUonly Start------------------------//
+            Neighborhoods = $("input[name='frmOU_radio1']:checked").val();
+            if (Neighborhoods == "True") {
+                $('#divNeighborhoods').show();
+
+            }
+            else {
+                $('#divNeighborhoods').hide();
+            }
+
+            PendingDate = $("input[name='frmOU_radio4']:checked").val();
+            if (PendingDate == "True") {
+                $('#divPendingDate').show();
+
+            }
+            else {
+                $('#divPendingDate').hide();
+            }
+
+            ConvictedOffense = $("input[name='frmOU_radio5']:checked").val();
+            if (ConvictedOffense == "True") {
+                $('#divMisdemeanor').show();
+                $('#divFelony').show();
+
+            }
+            else {
+                $('#divMisdemeanor').hide();
+                $('#divFelony').hide();
+            }
+
+            Misdemeanor = $("input[name='frmOU_radio6']:checked").val();
+            if (Misdemeanor == "True") {
+                $('#divMisdemeanorDates').show();
+
+            }
+            else {
+                $('#divMisdemeanorDates').hide();
+            }
+
+            Felony = $("input[name='frmOU_radio7']:checked").val();
+            if (Felony == "True") {
+                $('#divFelonyDates').show();
+
+            }
+            else {
+                $('#divFelonyDates').hide();
+            }
+
+            RestrainingOrders = $("input[name='frmOU_radio8']:checked").val();
+            if (RestrainingOrders == "True") {
+                $('#divRestrictions').show();
+
+            }
+            else {
+                $('#divRestrictions').hide();
+            }
+
+            AngerManagement = $("input[name='frmOU_radio9']:checked").val();
+            if (AngerManagement == "True") {
+                $('#divAngerPY').show();
+
+            }
+            else {
+                $('#divAngerPY').hide();
+            }
+
+
+            ViolentOffense = $("input[name='frmOU_radio16']:checked").val();
+            if (ViolentOffense == "True") {
+                $('#divProbation').show();
+
+            }
+            else {
+                $('#divProbation').hide();
+            }
+
+            EligibleForEmployment = $("input[name='frmOU_radio20']:checked").val();
+            if (EligibleForEmployment == "True") {
+                $('#divSSN').show();
+
+            }
+            else {
+                $('#divSSN').hide();
+            }
+
+            //-----------------------OUonly end------------------------//
+
+
+
+            //-------------------HealthCare start--------------//
+
+
+
+
+
+            SmokeCigarettes = $("input[name='SmokeRadio']:checked").val();
+            if (SmokeCigarettes == "true") {
+                $('#divSmoke').show();
+            }
+            else {
+                $('#divSmoke').hide();
+                $('#ddSmokePerDay').val(0);
+                $('#ddFrequentlySmoke').val(0);
+
+            }
+
+            TobaccoProducts = $("input[name='TobaccoProductsRadio']:checked").val();
+
+            //-------------------HealthCare end--------------//
+
+
+
+            IsSomeoneYouCanDependOn = $("input[name='DependOnRadio']:checked").val();
+            InvolvedInCommunityGroup = $("input[name='CommunityGroup']:checked").val();
+            IsSomeoneYouCanCall = $("input[name='CallRadio']:checked").val();
+            IsAnyoneThreatenYou = $("input[name='ThreatenYouRadio']:checked").val();
+
+            EverBeenArrested = $("input[name='ArrestedRadio']:checked").val();
+            OnGoingCriminalCase = $("input[name='CriminalCaseRadio']:checked").val();
+            InterestedInCriminalRecordClearing = $("input[name='RecordClearingRadio']:checked").val();
+            OweRestitution = $("input[name='RestitutionRadio']:checked").val();
+            EverBeenInPrison = $("input[name='PrisonRadio']:checked").val();
+
+            if (EverBeenInPrison == "Yes") {
+                $('#divPrison').show();
+            }
+            else {
+                $('#divPrison').hide();
+                //$('#ddLastReleased').val(0);
+                $('#txtCDC').val('');
+                $('#txtHowMuchOwe').val('');
+                $('#ClearingRadioYes').prop("checked", false);
+                $('#ClearingRadioNo').prop("checked", false);
+                $('#RestitutionRadioYes').prop("checked", false);
+                $('#RestitutionRadioNo').prop("checked", false);
+            }
+
+            if (OweRestitution == "true") {
+                $('#divOwe').show();
+            }
+            else {
+                $('#divOwe').hide();
+                $('#txtHowMuchOwe').val('');
+
+            }
+
+            CurrentlyOnParole = $("input[name='CurrentlyOnParoleRadio']:checked").val();
+            if (CurrentlyOnParole == "Yes") {
+                $('#divParoleProbation').show();
+            }
+            else {
+                $('#divParoleProbation').hide();
+                $('#txtProbParoleEnd').val('');
+                //$('#ddParoleProbation').val(0);
+
+            }
+
+            DifficultiesInGettingAJob = $("input[name='GettingAJobRadio']:checked").val();
+
+            GovernmentIssuedID = $("input[name='GovernmentIDRadio']:checked").val();
+            if (GovernmentIssuedID == "true") {
+                $('#divGovernmentImg').show();
+            }
+            else {
+                $('#divGovernmentImg').hide();
+
+            }
+
+
+            ConcernsAboutFamilyImmigrationStatus = $("input[name='ImmigrationStatusRadio']:checked").val();
+            ConcernsWithLandlord = $("input[name='LandlordRadio']:checked").val();
+
+        }
+
+        function ChildrenAges() {
+            
+            var val = $('#txtChildren').val();
+            var result = "";
+            // PatientChildrensAges = '';
+            for (var i = 1; i <= parseInt(val); i++) {
+
+                var yearid = $('#child_year_' + i).val();
+                var daysid = $('#child_days_' + i).val();
+                if (yearid == "" && daysid == "") {
+                    yearid = "0";
+                    daysid = "0";
+
+                }
+                else if (yearid == "" && daysid != "") {
+                    yearid = "0";
+                    daysid = daysid;
+                }
+                else if (yearid != "" && daysid == "") {
+                    yearid = yearid;
+                    daysid = "0";
+                }
+                result = result + yearid + ":" + daysid + ",";
+            }
+            PatientChildrensAges = result;
+            var lastChar = PatientChildrensAges.slice(-1);
+            if (lastChar == ',') {
+                PatientChildrensAges = PatientChildrensAges.slice(0, -1);
+            }
+        }
+
+        $(".ssn-icon-eye").click(function () {
+            $(this).toggleClass("showpwd");
+        });
+
+
+        $(".ssn-icon-label").click(function () {
+            $(this).toggleClass("showlbl");
+        });
+        function showSSn() {
+            $("#txtSocialSecNo").attr("type", "text");
+        }
+        function Hidessn() {
+            $("#txtSocialSecNo").attr("type", "password");
+        }
+        function ValidateEmail() {
+           
+              var pattern = /^([a-zA-Z0-9_\.\-])+\@@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+           
+            if (!pattern.test($('#txtEmergencyContact1EmailAddress').val())) {
+                $('#txtEmergencyContact1EmailAddress').addClass('invalid-field');
+                toastr.error('Email is not in Correct Format');
+                return false;
+            }
+            else
+            {
+                $('#txtEmergencyContact1EmailAddress').removeClass('invalid-field');
+            }
+
+            if ($('#txtEmergencyContact2EmailAddress').val() != '' && $('#txtEmergencyContact2EmailAddress').val() != null && !pattern.test($('#txtEmergencyContact2EmailAddress').val())) {
+                $('#txtEmergencyContact2EmailAddress').addClass('invalid-field');
+                toastr.error('Email is not in Correct Format');
+                return false;
+            }
+            else
+            {
+                $('#txtEmergencyContact2EmailAddress').removeClass('invalid-field');
+            }
+
+            if ($('#txtEmailAddress').val() != '' && $('#txtEmailAddress').val() != null && !pattern.test($('#txtEmailAddress').val()))
+            {
+                $('#txtEmailAddress').addClass('invalid-field');
+                toastr.error('Email is not in Correct Format');
+                return false;
+            }
+            else
+            {
+                $('#txtEmailAddress').removeClass('invalid-field');
+            }
+            return true;
+        }
+
+        function addChildrenDiv() {
+            $('.ChildrenAgeDiv').html('');
+
+            var val = $('#txtChildren').val();
+
+            var divhtml = '';
+
+            for (var i = 1; i <= parseInt(val); i++) {
+
+                var temp = $('.ChildrenAgeTemplate').html();
+                temp = temp.replace('#number', i);
+                temp = temp.replace('#yearid', 'child_year_' + i);
+                temp = temp.replace('#daysid', 'child_days_' + i);
+                divhtml = divhtml + temp;
+            }
+
+            $('.ChildrenAgeDiv').html(divhtml);
+        }
+    </script>
+}
