@@ -37,7 +37,10 @@
                     <div class="paitent-detail" id="tabPills">
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                <div class="paitent-detail-left">
+                                <div class="paitent-detail-left" style="display:none">
+                                    @{
+                                        Html.RenderPartial("~/Views/Shared/Client/_ClientInfo.cshtml");
+                                    }
                                     <ul class="nav nav-tabs">
 
                                         @foreach (var item in Model)

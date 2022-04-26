@@ -802,6 +802,35 @@
             position: relative;
             top: 2px;
         }
+
+        ul.clientInfo {
+            font-size: 14px;
+            list-style: none;
+            padding: 10px 30px 10px;
+            margin: -20px -30px 10px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-end;
+            background: #f6f6f6;
+            flex-wrap: wrap;
+        }
+
+        .right_sidebar ul.clientInfo {
+            margin: -30px -30px 0;
+        }
+
+        ul.clientInfo li > span.ci_value {
+            font-weight: 500;
+            color: #22baa0;
+        }
+
+        ul.clientInfo li > span:not(.ci_value) {
+            text-transform: uppercase;
+        }
+
+        ul.clientInfo li {
+            padding: 0 15px;
+        }
     </style>
 </head>
 <body>
@@ -2248,6 +2277,21 @@
                 }
             });
 
+        }
+
+        function ShowPatientInfo(patientName, patientEmail, patientSSN) {
+            
+            $('.ci_PatientName').each(function (index) {
+                $(this).text(patientName)
+            });
+            $('.ci_PatientEmail').each(function (index) {
+                $(this).text(patientEmail)
+            });
+            $('.ci_PatientSSN').each(function (index) {
+                $(this).text(patientSSN)
+            });
+
+            $('.clientInfo').show()
         }
 
 
