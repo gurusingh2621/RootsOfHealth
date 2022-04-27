@@ -35,7 +35,7 @@ namespace RootsOfHealth.Controllers
                     var data = result.Content.ReadAsAsync<string>();
                     data.Wait();
                     var res = data.Result;
-                    @Session["IsCarePlanApprover"] = (res.Contains("Careplan Approval") || res.Contains("Navigator"));
+                    @Session["IsCarePlanApprover"] = res.Contains("Careplan Approval");
                     Session["Roles"] = res;
                 }
             };
