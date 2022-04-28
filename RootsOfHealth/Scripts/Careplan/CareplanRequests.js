@@ -562,8 +562,13 @@ function ViewRequestChanges(_careplanid, requestId,FromPopUp=true) {
                 var goals = result.filter(c => c.IsGoal);
                 html += `<ul class="needGoalsChecklist">`
                 for (let i = 0; i < needs.length; i++) {
+                    var needStatus = ''
+
+                    if (needs[i].IsChanged == 1)
+                        needStatus = " (edited)";
+
                     var NeedGoals = goals.filter(c => c.NeedId == needs[i].NeedId);
-                    html += `<li><div class="form-group active ${NeedGoals.length > 0 ? 'hasGoal' : ''}""><label><span>${needs[i].Description}</span></label>`
+                    html += `<li><div class="form-group active ${NeedGoals.length > 0 ? 'hasGoal' : ''}""><label><span>${needs[i].Description}</span><span class="grey-text">${needStatus}</span></label>`
                    
                     if (NeedGoals.length > 0) {
                         html += `<i class="down_arrow fa fa-chevron-down "></i>`
@@ -573,7 +578,11 @@ function ViewRequestChanges(_careplanid, requestId,FromPopUp=true) {
                     if (NeedGoals.length > 0) {
                         html += `<ul>`
                         for (let j = 0; j < NeedGoals.length; j++) {
-                            html += `<li><div class="form-group"><label><span> ${NeedGoals[j].Description}</span></label></div></li>`
+                            var goalStatus = ''
+
+                            if (NeedGoals[j].IsChanged == 1)
+                                goalStatus = " (edited)";
+                            html += `<li><div class="form-group"><label><span> ${NeedGoals[j].Description}</span><span class="grey-text">${goalStatus}</span></label></div></li>`
                         }
                         html += `</ul>`
                     }

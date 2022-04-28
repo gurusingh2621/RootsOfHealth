@@ -831,6 +831,17 @@
         ul.clientInfo li {
             padding: 0 15px;
         }
+
+        div#ViewCareplanChanges ul li .form-group span.grey-text,
+        div#ViewRequestCareplanChanges ul li .form-group span.grey-text {
+            color: #a3a0a0;
+            padding-left: 0px;
+        }
+
+        div#ViewCareplanChanges ul li .form-group span,
+        div#ViewRequestCareplanChanges ul li .form-group span {
+            display: inline;
+        }
     </style>
 </head>
 <body>
@@ -1318,7 +1329,9 @@
         })
         var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
                         var SeperationString = '#$%^*'
-                        var _shareFormClinicId='@Session["ClinicID"]'
+        var _shareFormClinicId = '@Session["ClinicID"]'
+        var _LoggedInUserId = '@Session["userid"]';
+       
         function RedirectPatient(ID) {
 
             window.location = '/Client/Info?patientid=' + ID;
@@ -2282,13 +2295,22 @@
         function ShowPatientInfo(patientName, patientEmail, patientSSN) {
             
             $('.ci_PatientName').each(function (index) {
+                if (patientName.trim() == '')
+                    $(this).closest('li').hide()
+                else
                 $(this).text(patientName)
             });
             $('.ci_PatientEmail').each(function (index) {
+                if (patientEmail.trim() == '')
+                    $(this).closest('li').hide()
+                else
                 $(this).text(patientEmail)
             });
             $('.ci_PatientSSN').each(function (index) {
-                $(this).text(patientSSN)
+                if (patientSSN.trim() == '')
+                    $(this).closest('li').hide()
+                    else
+                      $(this).text(patientSSN)
             });
 
             $('.clientInfo').show()

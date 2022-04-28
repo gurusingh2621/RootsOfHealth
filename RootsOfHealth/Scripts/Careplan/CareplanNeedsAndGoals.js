@@ -560,6 +560,22 @@ function getCarePlanRequest() {
                         $('#careplanStatus .requiredApproval').css('display', 'block');
                     }
                 }
+                
+                if (result.SentBy != _LoggedInUserId) {
+                    $('#btnRevertRequest').prop('disabled', true)
+                        .css({
+                        'border': '1px solid rgb(161, 161, 161)',
+                        'background-color': 'rgb(161, 161, 161)'
+                    });
+
+
+                    $('#btnRevokeRequest').prop('disabled',true).css({
+                        'border': '1px solid rgb(161, 161, 161)',
+                        'background-color': 'rgb(161, 161, 161)'
+                    });
+                    
+                
+                }
             }
   
         }
