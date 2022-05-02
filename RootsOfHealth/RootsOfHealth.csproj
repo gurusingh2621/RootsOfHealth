@@ -17,7 +17,8 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
-    <Use64BitIISExpress>false</Use64BitIISExpress>
+    <Use64BitIISExpress>
+    </Use64BitIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -766,6 +767,7 @@
     <Content Include="Views\Shared\Client\_LogHistoryPopUp.cshtml" />
     <Content Include="Views\Client\Sharing.cshtml" />
     <Content Include="Views\Shared\Role\_RolePermissionsList.cshtml" />
+    <Content Include="Views\Shared\Client\_ClientInfo.cshtml" />
     <Content Include="Views\Patient\EditPotentialPatient.cshtml" />
     <Content Include="Views\Patient\AddPotentialPatient.cshtml" />
   </ItemGroup>

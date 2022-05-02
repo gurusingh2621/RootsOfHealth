@@ -10,6 +10,24 @@
     var _PatientData = Model.PatientMain;
     _PatientData.DateOfBirth = _PatientData.DateOfBirth == "" || _PatientData.DateOfBirth==null ?"": _PatientData.DateOfBirth;
     var modulePermissions = new Common().GetMainModulesPermission(Convert.ToInt32(Session["userid"]));
+    var PatientEmail = "";
+
+    if (!String.IsNullOrEmpty(Model.PatientMain.EmailAddress))
+    {
+        PatientEmail = Model.PatientMain.EmailAddress;
+    }
+    else
+    {
+        if (!String.IsNullOrEmpty(Model.PatientMain.EmergencyContact1EmailAddress))
+        {
+            PatientEmail = Model.PatientMain.EmergencyContact1EmailAddress;
+        }
+
+    }
+
+
+
+
 }
 
 
@@ -31,12 +49,16 @@
                     <div class="row">
                         <div id="pat_out_div" class="col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="paitent-detail-left">
+                                @{
+                                    Html.RenderPartial("~/Views/Shared/Client/_ClientInfo.cshtml");
+                                }
+
                                 <div class="detail-heading d-flex">
                                     @foreach (var items in Model.ClientForm.Where(p => p.ClientFormID == item.ParentFormID))
                                     {
-                                        string FormNames = @items.FormName.Replace(" ", ""); 
+                                        string FormNames = @items.FormName.Replace(" ", "");
                                         <a id="@("a" + FormNames)" class="nav-link" data-toggle="tab"
-                                           href="@("#" + FormNames + "only")" data-ClientFormID="@items.ClientFormID" data-PatientID="@items.patientID" onclick="loadClient(this)" data-TemplateID="@items.TemplateID" data-FormName=@(FormNames)>@items.FormName >> <span class="check @Html.Raw(items.Saved ? "" : "d-none")"></span></a>
+                                           href="@("#" + FormNames + "only")" data-ClientFormID="@items.ClientFormID" data-PatientID="@items.patientID" onclick="loadClient(this)" data-TemplateID="@items.TemplateID" data-FormName=@(FormNames)>@items.FormName>><span class="check @Html.Raw(items.Saved ? "" : "d-none")"></span></a>
                                     }
                                     <h2 style="padding-top:10px">@item.FormName</h2>
                                     <div class="detail-button ml-auto">
@@ -48,12 +70,13 @@
                                             <i class="far fa-save"></i>
                                             Save
                                         </a>
-                                        @if (formpermission.Where(f=> f.CanUpdate == true).Any()) {
-                                        <a href="javascript:{}" onclick="ActivateTab(@ViewBag.PatientID,'','@FormName',@item.ClientFormID)"
-                                           class="btn btn-success label-fields btnProgramEdit">
-                                            <i class="far fa-edit"></i>
-                                            Edit
-                                        </a>
+                                        @if (formpermission.Where(f => f.CanUpdate == true).Any())
+                                        {
+                                            <a href="javascript:{}" onclick="ActivateTab(@ViewBag.PatientID,'','@FormName',@item.ClientFormID)"
+                                               class="btn btn-success label-fields btnProgramEdit">
+                                                <i class="far fa-edit"></i>
+                                                Edit
+                                            </a>
                                         }
                                         <a href="javascript:{}" onclick="PrintProgram('@FormName')"
                                            class="btn btn-success label-fields btnprogramPrint">
@@ -135,7 +158,10 @@
 <script>
    var  programUploadedPath="@System.Web.Configuration.WebConfigurationManager.AppSettings["ProgramUploadPath"]";
     var _userID = "@Session["userid"]";
-        var _patientID = '@ViewBag.PatientId';
+    var _patientID = '@ViewBag.PatientId';
+    var _PatientName = '@Model.PatientMain.FirstName' + ' ' + '@Model.PatientMain.LastName';
+        var _PatientEmail = '@PatientEmail'
+      var _PatientSSN='@Model.PatientMain.SocialSecurityNumber';
     var programName = '';
     var formName = '';
     var programElement = '';
@@ -743,7 +769,9 @@
 
 
 
-      $(document).ready(function () {
+    $(document).ready(function () {
+
+        ShowPatientInfo(_PatientName, _PatientEmail, _PatientSSN)
           //notification changes start here--------------------
 
           if (ViewBagClientFormId != "0" && currenttab != '' && currenttab != 'Profile-tab' && currenttab != 'ProgramTab') {
@@ -818,6 +846,9 @@
                     error: function () {
                         $(".loaderOverlay").hide()
                         toastr.error("Some error occurred!! or data not found");
+                    },
+                    complete: function () {
+                        ShowPatientInfo(_PatientName, _PatientEmail, _PatientSSN)
                     }
                 });
             }

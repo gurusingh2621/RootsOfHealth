@@ -7,17 +7,21 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="paitent-detail-left">
+                        @{
+                            Html.RenderPartial("~/Views/Shared/Client/_ClientInfo.cshtml");
+                        }
                         <ul class="nav nav-tabs">
 
                             @foreach (var item in Model)
-                            { var programName = @item.ProgramName.Replace(" ", "");
-                                <li class="nav-item" >
-                                 <a id="@("a"+programName)" class="nav-link" data-toggle="tab"
-                                    href="@("#" + programName + "only")" data-ProgramID="@item.ProgramID" data-PatientID="@item.patientID" data-TemplateID="@item.TemplateID" data-programName=@(programName)>@item.ProgramName<span class="notCount" id="@(programName+"Notify")" style="display:none"></span><span class="check @Html.Raw(item.Saved?"":"d-none")"><i class="fas fa-check-circle"></i></span></a>
-                              </li>
+                            {
+                                var programName = @item.ProgramName.Replace(" ", "");
+                                <li class="nav-item">
+                                    <a id="@("a"+programName)" class="nav-link" data-toggle="tab"
+                                       href="@("#" + programName + "only")" data-ProgramID="@item.ProgramID" data-PatientID="@item.patientID" data-TemplateID="@item.TemplateID" data-programName=@(programName)>@item.ProgramName<span class="notCount" id="@(programName+"Notify")" style="display:none"></span><span class="check @Html.Raw(item.Saved?"":"d-none")"><i class="fas fa-check-circle"></i></span></a>
+                                </li>
 
                             }
-                           
+
 
                         </ul>
 
@@ -27,7 +31,8 @@
                         <div class="tab-content" style="margin-top:20px">
 
                             @foreach (var item in Model)
-                            { var ProgramN = item.ProgramName.Replace(" ","");
+                            {
+                                var ProgramN = item.ProgramName.Replace(" ", "");
                                 <div class="tab-pane fade" id="@(ProgramN+"only")">
                                     <div>
                                         <div class="detail-heading d-flex">
@@ -61,17 +66,17 @@
                                             </div>
                                         </div>
 
-                                    <div class="SidebarScroll scroll inner-main-content">
-                                        <style>
-                                            ul.file_uploaded_list li img {
-                                                max-width: 90px;
-                                                margin-right: 10px;
-                                            }
-                                        </style>
-                                        <div id="@(ProgramN+"render-basicform")" class="render-basicProgramform" style="padding-bottom:100px"></div>
-                                    </div>
+                                        <div class="SidebarScroll scroll inner-main-content">
+                                            <style>
+                                                ul.file_uploaded_list li img {
+                                                    max-width: 90px;
+                                                    margin-right: 10px;
+                                                }
+                                            </style>
+                                            <div id="@(ProgramN+"render-basicform")" class="render-basicProgramform" style="padding-bottom:100px"></div>
                                         </div>
                                     </div>
+                                </div>
                             }
 
 

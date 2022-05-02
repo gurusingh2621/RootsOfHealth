@@ -118,6 +118,7 @@ function getCarePlanList() {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         beforeSend: function () {
+            $(".careplanlist tbody").html("")
             _Loader.StartLoader();
         },
         success: function (result) {
@@ -799,7 +800,8 @@ function editCarePlan(Id) {
             $(".care_plan_name_field").val(result.CarePlanName);
             isupdateProgramFields = false;
             $("#ddlcareplanstatus,.care_plan_name_field").removeAttr("disabled");
-            
+
+
             switch (result.Status) {
                 case carePlanEnum.NotSaved://not saved                    
                     careplanid = result.CarePlanId;                   
@@ -859,6 +861,9 @@ function editCarePlan(Id) {
                 default:                 
                     break;
             }
+
+            ShowPatientInfo(result.PatientName, result.EmailAddress, result.SocialSecurityNumber)
+           
             $(".loaderOverlay").hide();
         }, error: function (e) {
             toastr.error("Unexpected error!");

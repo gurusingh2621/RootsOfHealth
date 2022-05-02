@@ -4,6 +4,22 @@
 @{
     ViewBag.Title = "Patient";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+    var PatientEmail = "";
+
+    if (!String.IsNullOrEmpty(Model.PatientMain.EmailAddress))
+    {
+        PatientEmail = Model.PatientMain.EmailAddress;
+    }
+    else
+    {
+        if (!String.IsNullOrEmpty(Model.PatientMain.EmergencyContact1EmailAddress))
+        {
+            PatientEmail = Model.PatientMain.EmergencyContact1EmailAddress;
+        }
+
+    }
 }
 
 
@@ -223,6 +239,30 @@
     .historyFormLogTableWrap.table-responsive {
         max-height: calc(100vh - 160px);
     }
+    ul.clientInfo {
+        font-size: 14px;
+        list-style: none;
+        padding: 8px 20px 8px;
+        margin: -20px -20px 10px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-end;
+        background: #f9f9f9;
+        flex-wrap: wrap;
+    }
+
+        ul.clientInfo li > span.ci_value {
+            font-weight: 500;
+            color: #22baa0;
+        }
+
+        ul.clientInfo li > span:not(.ci_value) {
+            text-transform: uppercase;
+        }
+
+        ul.clientInfo li {
+            padding: 0 15px;
+        }
 </style>
 <!-- Content start here -->
 <section id="content" class="responsive-container ">
@@ -308,6 +348,10 @@
                                 <div class="row">
                                     <div id="pat_out_div" class="col-lg-12 col-md-12 col-sm-12 col-12">
                                         <div class="paitent-detail-left">
+                                            @{
+                                                 Html.RenderPartial("~/Views/Shared/Client/_ClientInfo.cshtml");
+                                            }
+
                                             <div class="detail-heading d-flex">
                                                 @foreach (var items in Model.ClientForm.Where(p => p.ClientFormID == item.ParentFormID))
                                                 {
@@ -327,7 +371,7 @@
                                                         <i class="far fa-edit"></i>
                                                         Display
                                                     </a>
-                                                    @if (formpermission.Where(f=>f.CanUpdate == true).Any())
+                                                    @if (formpermission.Where(f => f.CanUpdate == true).Any())
                                                     {
                                                         <a href="javascript:{}" onclick="return saveClientFormBasicInfo('@item.TemplateID','@item.TemplateTable',@item.ClientFormID,@item.patientID);" data-save="@(item.Saved ? "True" : "False")" class="btn btn-success ml-auto btnprogramsave">
                                                             <i class="far fa-save"></i>
@@ -385,6 +429,10 @@
             crossorigin="anonymous"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
     <script>
+
+      var _PatientName = '@Model.PatientMain.FirstName' + ' ' + '@Model.PatientMain.LastName';
+      var _PatientEmail = '@PatientEmail'
+      var _PatientSSN='@Model.PatientMain.SocialSecurityNumber';
 
         var _programName = "";
         var formName = "";
@@ -1100,6 +1148,8 @@
 
         }
         $(document).ready(function () {
+
+            ShowPatientInfo(_PatientName, _PatientEmail, _PatientSSN)
             var currenttab = '@ViewBag.CurrentTab';
             var currentSubtab = '@ViewBag.CurrentSubtab'
 
@@ -1152,7 +1202,10 @@
                   error: function () {
                       $(".loaderOverlay").hide()
                     toastr.error("Some error occurred!! or data not found");
-                }
+                  },
+                  complete: function () {
+                      ShowPatientInfo(_PatientName, _PatientEmail, _PatientSSN)
+                  }
             });
         })
             if (currenttab != '') {
