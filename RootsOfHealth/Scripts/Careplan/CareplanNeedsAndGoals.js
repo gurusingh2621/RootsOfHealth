@@ -1620,7 +1620,10 @@ function UpdateNeedStatus() {
         dataType: "json",
         success: function (res) {
             if (res == "-2") {
-                if (RequestType == 1 && RequestStatus == '2') {
+                if (RequestType =="") {
+                    toastr.error("Care plan approval required to change status of goal or need");
+                }
+                else if (RequestType == 1 && RequestStatus == '2') {
                     toastr.error("Care plan approval required to change status of goal or need");
                 }
                 else if (RequestType == 1 && RequestStatus == '1') {
@@ -1680,10 +1683,10 @@ function UpdateNeedStatus() {
                         break;
                 }
                 toastr.success("Changes saved successfully");
+                $(".ddlStatus").val("0");
+                $(".needNote").val('');
+                $("#CarePlanChangeStatusModal").modal('hide');
             }
-            $(".ddlStatus").val("0");
-            $(".needNote").val('');
-            $("#CarePlanChangeStatusModal").modal('hide');
         }, error: function () {
             toastr.error("Unexpected error!");
             $(".loaderOverlay").hide();
@@ -1747,8 +1750,12 @@ function UpdateGoalStatus() {
         data: JSON.stringify(model),
         dataType: "json",
         success: function (res) {   
+            
             if (res.GoalId == "-2") {
-                if (RequestType == 1 && RequestStatus == '2') {
+                if (RequestType == "") {
+                    toastr.error("Care plan approval required to change status of goal or need");
+                }
+                else if (RequestType == 1 && RequestStatus == '2') {
                     toastr.error("Care plan approval required to change status of goal or need");
                 }
                 else if (RequestType == 1 && RequestStatus == '1') {
