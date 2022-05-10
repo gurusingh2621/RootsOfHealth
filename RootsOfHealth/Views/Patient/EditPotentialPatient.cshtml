@@ -1446,7 +1446,7 @@
         var lblUSArmedForces = $('#lblUSArmedForces').html().toLocaleLowerCase();
         $("input[name=USArmedRadio][value='" + lblUSArmedForces + "']").prop('checked', true);
 
-
+        
 
         var lblEverSmoker = $('#lblEverSmoker').html().toLocaleLowerCase();
         $('#ddSmoker').val('' + lblEverSmoker);
@@ -1457,11 +1457,11 @@
         }
 
         
-        //var lblQuitSmoking = $('#lblQuitSmoking').html().toLocaleLowerCase();
-        //$('#ddQuit').val('' + lblQuitSmoking);
-        //if (lblQuitSmoking == "true") {
-        //    $('#divSmokingQuitDate').show();
-        //}
+        var lblQuitSmoking = $('#lblQuitSmoking').html().toLocaleLowerCase();
+        $('#ddQuit').val('' + lblQuitSmoking);
+        if (lblQuitSmoking == "true" && lblEverSmoker == "true") {
+            $('#divSmokingQuitDate').show();
+        }
 
 
 

@@ -17,14 +17,9 @@ $btnsavepotentialclients.click(function () {
         var isddlvalid = true;
         var selectedfileFields = [];
         $('.dllFileFields').each(function (k, v) {
+            
             var ddlvalue = $(v).val();
-            if (ddlvalue == "-1") {
-                isddlvalid = false;
-                alert('please select any field');
-                $(v).focus();
-                return false;
-            }
-            else if (ddlvalue && $.trim(selectedfileFields.indexOf(ddlvalue)) != -1) {
+            if (ddlvalue != null && ddlvalue != "" && $.trim(selectedfileFields.indexOf(ddlvalue)) != -1) {
                 isddlvalid = false;
                 alert('same field is selected multiple times');
                 $(v).focus();
@@ -34,6 +29,25 @@ $btnsavepotentialclients.click(function () {
             }
 
         });
+        if ($('#FirstName').val() == '' || $('#FirstName').val() == null) {
+            isddlvalid = false;
+            alert('Please select any field for First Name');
+            $('#FirstName').focus();
+            return false;
+        }
+        if ($('#LastName').val() == '' || $('#LastName').val() == null) {
+            isddlvalid = false;
+            alert('Please select any field for Last Name ');
+            $('#LastName').focus();
+            return false;
+        }
+        if ($('#EmailAddress').val() == '' || $('#EmailAddress').val() == null) {
+            isddlvalid = false;
+            alert('Please select any field for Email Address');
+            $('#EmailAddress').focus();
+            return false;
+        }
+       
         if (!isddlvalid) {
             return false;
         }
@@ -87,13 +101,8 @@ $btnsavepotentialclients.click(function () {
             var _rangeto = $(ele).find('.rangeTo').val();
             
             var range = parseInt(_rangeto.replace(/\D/g, '')) - parseInt(_rangefrom.replace(/\D/g, ''));
-            if (range == "") {
-                isInputFieldsvalid = false;
-                alert('please select the range');
-                $(ele).find('.rangeFrom').focus();
-                return false;
-            }
-            else if (range != rangeDifference) {
+          
+            if (!isNaN(parseFloat(range)) && range != rangeDifference) {
                 isInputFieldsvalid = false;
                 alert('Please select same range for all fields');
                 $(ele).find('.rangeFrom').focus();
@@ -101,6 +110,42 @@ $btnsavepotentialclients.click(function () {
             } 
 
         });
+        if ($('#FirstName').val() == '' || $('#FirstName').val() == null) {
+            isInputFieldsvalid = false;
+            alert('Please select any field for First Name');
+            $('#FirstName').focus();
+            return false;
+        }
+        if ($('#FirstNameTo').val() == '' || $('#FirstName').val() == null) {
+            isInputFieldsvalid = false;
+            alert('Please select any field for First Name');
+            $('#FirstNameTo').focus();
+            return false;
+        }
+        if ($('#LastName').val() == '' || $('#LastName').val() == null) {
+            isInputFieldsvalid = false;
+            alert('Please select any field for Last Name ');
+            $('#LastName').focus();
+            return false;
+        }
+        if ($('#LastNameTo').val() == '' || $('#LastName').val() == null) {
+            isInputFieldsvalid = false;
+            alert('Please select any field for Last Name ');
+            $('#LastNameTo').focus();
+            return false;
+        }
+        if ($('#EmailAddress').val() == '' || $('#EmailAddress').val() == null) {
+            isInputFieldsvalid = false;
+            alert('Please select any field for Email Address');
+            $('#EmailAddress').focus();
+            return false;
+        }
+        if ($('#EmailAddressTo').val() == '' || $('#EmailAddress').val() == null) {
+            isInputFieldsvalid = false;
+            alert('Please select any field for Email Address');
+            $('#EmailAddressTo').focus();
+            return false;
+        }
         if (!isInputFieldsvalid) {
             return false;
         }
@@ -492,7 +537,7 @@ function AppendColumnsLists(result) {
 
         // append dropdowns start
         var ddl = $("<select></select>").attr("id", databaseResult[i].ColName).attr("name", databaseResult[i].ColName).attr("class", "form-control dllFileFields").attr("columntype", databaseResult[i].ColType);
-
+        ddl.append("<option>--select--</option>");
         $.each(fileResult, function (index, el) {
             ddl.append("<option>" + el + "</option>");
         });

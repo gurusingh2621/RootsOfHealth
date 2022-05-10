@@ -98,7 +98,7 @@ var IsBasedataExist = false;
 
 function saveClientFormBasicInfo(_templateId, _templatetable, ClientFormID, _PatientId, isUpdated, isbaseTemplateSaved,sharedid) {
     IsBasedataExist = isbaseTemplateSaved=='True'?true:false
-
+    
 
     var fieldmodel = [];
     var isvalid = true;

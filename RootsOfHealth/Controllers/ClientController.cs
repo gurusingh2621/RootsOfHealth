@@ -2701,10 +2701,11 @@ namespace RootsOfHealth.Controllers
 
                         var dbCurrentfield = databaseColumns.Where(x => x.ColName.ToLower() == dfield.Key.ToLower()).FirstOrDefault();
                         string range = dfield.Value.Replace(",", ":");
+                        string[] rangeDiff = range.Split(':');
                         var i = 0;
-                        if (range == "" || range ==":")
+                        if (range == "" || range ==":" || rangeDiff[0] == "" || rangeDiff[1] == "")
                         {
-                            return Json(new { Status = 0, Message = "Range is not valid" });
+                            continue;
                         }
                         var cPatient = allowedPatientList[i];
                         if (allowedPatientList[i] == null)
@@ -2996,6 +2997,11 @@ namespace RootsOfHealth.Controllers
                                     }
                                     allowedPatientList[i].GetType().GetProperty(dfield.Key).SetValue(allowedPatientList[i], value, null);
                                 }
+                                else
+                                {
+                                    allowedPatientList[i].GetType().GetProperty(dfield.Key).SetValue(allowedPatientList[i], value, null);
+                                }
+                                
 
                             }
 
@@ -3104,11 +3110,11 @@ namespace RootsOfHealth.Controllers
             }
             List<PotientialPatientBO> allowedPatientList = new List<PotientialPatientBO>();
             //check for necessary columns
-            if (!IsAllNecessaryColumnsExist(dbFields, necessaryColumnsForPotentialClient))
-            {
-                //inconsistent structure of the file
-                return 0;
-            }
+            //if (!IsAllNecessaryColumnsExist(dbFields, necessaryColumnsForPotentialClient))
+            //{
+            //    //inconsistent structure of the file
+            //    return 0;
+            //}
             #region Check every row in import file
             //loop for all rows
             for (int i = sheet.FirstRowNum + 1; i <= sheet.LastRowNum; i++)
@@ -3123,6 +3129,10 @@ namespace RootsOfHealth.Controllers
 
                 foreach (var field in dbFields)
                 {
+                    if (field.Value == null)
+                    {
+                        continue;
+                    }
                     var dbCurrentfield = databaseColumns.Where(x => x.ColName.ToLower() == field.Key.ToLower()).FirstOrDefault();
 
                     var cellNo = columnNames.Where(x => x.Key.ToLower() == field.Value.ToLower()).Select(x => x.Value).FirstOrDefault();
@@ -3518,11 +3528,11 @@ namespace RootsOfHealth.Controllers
             }
             List<PotientialPatientBO> allowedPatientList = new List<PotientialPatientBO>();
             //check for necessary columns
-            if (!IsAllNecessaryColumnsExist(dbFields, necessaryColumnsForPotentialClient))
-            {
-                //inconsistent structure of the file
-                return 0;
-            }
+            //if (!IsAllNecessaryColumnsExist(dbFields, necessaryColumnsForPotentialClient))
+            //{
+            //    //inconsistent structure of the file
+            //    return 0;
+            //}
             #region Check every row in import file
             //loop for all rows
             for (int i = sheet.FirstRowNum + 1; i <= sheet.LastRowNum; i++)
@@ -3537,6 +3547,10 @@ namespace RootsOfHealth.Controllers
 
                 foreach (var field in dbFields)
                 {
+                    if (field.Value == null)
+                    {
+                        continue;
+                    }
                     var dbCurrentfield = databaseColumns.Where(x => x.ColName.ToLower() == field.Key.ToLower()).FirstOrDefault();
 
                     var cellNo = columnNames.Where(x => x.Key.ToLower() == field.Value.ToLower()).Select(x => x.Value).FirstOrDefault();
@@ -3882,7 +3896,6 @@ namespace RootsOfHealth.Controllers
 
             return savedCount;
         }
-        //check for necessary columns
         private bool IsAllNecessaryColumnsExist(Dictionary<string, string> columns, string[] necessaryColumns)
         {
             bool result = true;
