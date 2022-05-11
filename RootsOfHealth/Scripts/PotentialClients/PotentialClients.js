@@ -773,7 +773,7 @@ function GetDuplicateRecordDetails(id) {
                     if (result[i].IsFromMainTable == 'False' || result[i].IsFromMainTable == false)
                     {
                         var html = `<div class="p_content_block">`
-                        html += `<div class="form-group"><label>Patient ID:</label> <label>${result[i].PatientID}</label></div>
+                        html += `<div class="form-group"><label>Patient ID:</label> <label><a href="/Patient/EditPotentialPatient?patientId=${result[i].PatientID}" target="_blank">${result[i].PatientID}</a></label></div>
                                 <div class="form-group"><label>Name:</label> <label>${GetFullName(result[i].FirstName, result[i].LastName)}</label></div>`
                         if (result[i].EmailAddress != null && result[i].EmailAddress != "")
                         {
@@ -785,7 +785,15 @@ function GetDuplicateRecordDetails(id) {
                         }
                         if (result[i].SocialSecurityNumber != null && result[i].SocialSecurityNumber != "")
                         {
-                            html += `<div class="form-group"><label>Social Security Number:</label> <label>${result[i].SocialSecurityNumber != null ? result[i].SocialSecurityNumber : ""}</label></div>`
+                            html += `<div class="form-group"><label>Social Security Number:</label>
+                                              
+                                                  <input type="password" class="txtSocialSecNo" name="SocialSecurityNumber"
+                                                       placeholder="*********" value="${result[i].SocialSecurityNumber != null ? result[i].SocialSecurityNumber : ""}">
+                                                <span class="showHideSSN" onclick=showHideSSN($(this))>
+                                                    <i class="fa fa-eye"></i>
+                                                    <i class="fa fa-eye-slash"></i>
+                                                </span>
+                                            </div>`
                         }
                         if (result[i].CellPhone != null && result[i].CellPhone != "")
                         {
@@ -804,7 +812,7 @@ function GetDuplicateRecordDetails(id) {
                     else
                     {
                         var html = `<div class="p_content_block">`
-                        html += `<div class="form-group"><label>Patient ID:</label> <label>${result[i].PatientID}</label></div>
+                        html += `<div class="form-group"><label>Patient ID:</label> <label><a href="/Client/Info?patientid=${result[i].PatientID}" target="_blank">${result[i].PatientID}</a></label></div>
                                  <div class="form-group"><label>Name:</label> <label>${GetFullName(result[i].FirstName, result[i].LastName)}</label></div>`
                         if (result[i].EmailAddress != null && result[i].EmailAddress != "") {
                             html += `<div class="form-group"><label>Email:</label> <label>${result[i].EmailAddress != null ? result[i].EmailAddress : ""}</label></div>`
@@ -813,7 +821,14 @@ function GetDuplicateRecordDetails(id) {
                             html += `<div class="form-group"><label>Date Of Birth:</label> <label>${result[i].DateOfBirth != null ? result[i].DateOfBirth : ""}</label></div>`
                         }
                         if (result[i].SocialSecurityNumber != null && result[i].SocialSecurityNumber != "") {
-                            html += `<div class="form-group"><label>Social Security Number:</label> <label>${result[i].SocialSecurityNumber != null ? result[i].SocialSecurityNumber : ""}</label></div>`
+                            html += `<div class="form-group"><label>Social Security Number:</label>
+                                              <input type="password" class="txtSocialSecNo" name="SocialSecurityNumber"
+                                                       placeholder="*********" value="${result[i].SocialSecurityNumber != null ? result[i].SocialSecurityNumber : ""}">
+                                             <span class="showHideSSN" onclick=showHideSSN($(this))>
+                                                <i class="fa fa-eye"></i>
+                                                <i class="fa fa-eye-slash"></i>                                            
+                                            </span>
+                                         </div>`
                         }
                         if (result[i].CellPhone != null && result[i].CellPhone != "") {
                             html += `<div class="form-group"><label>Cell Phone:</label> <label>${result[i].CellPhone != null ? result[i].CellPhone : ""}</label></div>`
@@ -842,7 +857,7 @@ function GetDuplicateRecordDetails(id) {
                     popup.find('#fromMainTable').show();
                 }
                 $('#duplicateRecordDetails').modal('show');
-               
+             
             }
             else
             {
@@ -1032,3 +1047,14 @@ function AppendColumnsListsForUO(result) {
     })
 }
 
+function showHideSSN(element) {
+    
+    if (element.hasClass("active")) {
+        element.removeClass("active");
+        element.parent().find('input').attr("type", "password");
+    }
+    else {
+        element.addClass("active");
+        element.parent().find('input').attr("type", "text");
+    }
+}
