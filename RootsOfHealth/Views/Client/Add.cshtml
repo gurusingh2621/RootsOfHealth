@@ -1149,7 +1149,7 @@
         }
         $(document).ready(function () {
 
-            ShowPatientInfo(_PatientName, _PatientEmail, _PatientSSN)
+            ShowPatientInfo(_PatientName, _PatientEmail)
             var currenttab = '@ViewBag.CurrentTab';
             var currentSubtab = '@ViewBag.CurrentSubtab'
 
@@ -1204,7 +1204,7 @@
                     toastr.error("Some error occurred!! or data not found");
                   },
                   complete: function () {
-                      ShowPatientInfo(_PatientName, _PatientEmail, _PatientSSN)
+                      ShowPatientInfo(_PatientName, _PatientEmail)
                   }
             });
         })

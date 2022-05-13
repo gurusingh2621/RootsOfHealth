@@ -39,7 +39,7 @@ function LoadRequest() {
                         }
                        
                         careplansRequest += `<tr id="${item.RequestId}" class="${item.IsRead ? 'unread_mess' :'' }">
-                           <td width="150px"><a onClick="editCarePlan(${item.CarePlanId},${item.PatientId})" class="btn btn-link CarePlanViewLink" style="cursor:pointer;">${item.CarePlanName == null ? "" : item.CarePlanName}</a></td>
+                           <td width="150px"><a onClick="editCarePlan(${item.CarePlanId},${item.PatientId});SetPatientId(${item.PatientId})" class="btn btn-link CarePlanViewLink" style="cursor:pointer;">${item.CarePlanName == null ? "" : item.CarePlanName}</a></td>
                            <td width="150px">${item.ClientName == null ? "" : item.ClientName}</td>
                            <td width="150px" class="noWrapColumn">${item.Type == 3 ? "Revoke request" :"Approval request" }</td>
                            <td width="150px">${item.UserName == null ? "" : item.UserName}</td>`
@@ -125,7 +125,7 @@ function LoadRequestHistory() {
                         var MTime = Timearray[0] + ":" + Timearray[1] + ":" + Timearray[2].split(".")[0] + " " + AmPm;
                     }
                     careplansRequest += `<tr>
-                           <td width="200px"><a onClick="editCarePlan(${item.CarePlanId},PatientId=${item.PatientId},false)" class="btn btn-link CarePlanViewLink" style="cursor:pointer;">${item.CarePlanName == null ? "" : item.CarePlanName}</a></td>
+                           <td width="200px"><a onClick="editCarePlan(${item.CarePlanId},${item.PatientId},false);SetPatientId(${item.PatientId})" class="btn btn-link CarePlanViewLink" style="cursor:pointer;">${item.CarePlanName == null ? "" : item.CarePlanName}</a></td>
                            <td width="200px">${item.ClientName == null ? "" : item.ClientName}</td>`
 
                     if (item.Status == 2 && item.Type == 1) {
@@ -236,6 +236,7 @@ $('#RequestModel').on('hidden.bs.modal', function () {
 
 
 function OpenPopUp(item) {
+
     $.ajax({
         type: "get",
         url: Apipath + '/api/PatientMain/getCarePlanRequestByRequestId?requestid=' + item.RequestId ,
@@ -337,21 +338,21 @@ function BindModel(item) {
     
 
     if (item.Status == "1" && item.AcceptedById == userId && item.Type == 3) {
-        actionbutton += `<a  style="display:inline-block" class="btn btn-success text-white ViewCareplan" onClick="ViewCareplan(${item.RequestId}, ${item.IsCarePlanViewed});editCarePlan(${item.CarePlanId},${item.PatientId})" style="cursor:pointer;">View Careplan</a>`
+        actionbutton += `<a  style="display:inline-block" class="btn btn-success text-white ViewCareplan" onClick="ViewCareplan(${item.RequestId}, ${item.IsCarePlanViewed});editCarePlan(${item.CarePlanId},${item.PatientId});SetPatientId(${item.PatientId})" style="cursor:pointer;">View Careplan</a>`
         actionbutton += `<a onClick="changeRequestStatus('2',${item.RequestId},1)" style="display:inline-block" class="btn btn-success text-white requestApproveButton ${item.IsCarePlanViewed ? '' :'disabled'}" style="cursor:pointer;">Approve Request</a>`
         actionbutton += `<a onClick="changeRequestStatus('2',${item.RequestId},3)" style="display:inline-block" class="btn btn-success text-white requestRevokeButton ${item.IsCarePlanViewed ? '' : 'disabled'}" style="cursor:pointer;">Accept Revoke Request</a>`
         actionbutton += `<a onClick="ViewRequestChanges(${item.CarePlanId},${item.RequestId})" style="display:inline-block" class="btn btn-success text-white requestViewChanges " style="cursor:pointer;">View Change</a>`
 
     }
     else if (item.Status == "1" && item.AcceptedById == userId && item.Type == 1) {
-        actionbutton += `<a  style="display:inline-block" class="btn btn-success text-white ViewCareplan"onClick="ViewCareplan(${item.RequestId}, ${item.IsCarePlanViewed});editCarePlan(${item.CarePlanId},${item.PatientId})" style="cursor:pointer;">View Careplan</a>`
+        actionbutton += `<a  style="display:inline-block" class="btn btn-success text-white ViewCareplan"onClick="ViewCareplan(${item.RequestId}, ${item.IsCarePlanViewed});editCarePlan(${item.CarePlanId},${item.PatientId});SetPatientId(${item.PatientId})" style="cursor:pointer;">View Careplan</a>`
         actionbutton += `<a onClick="changeRequestStatus('2',${item.RequestId},1)" style="display:inline-block" class="btn btn-success text-white requestApproveButton ${item.IsCarePlanViewed ? '' : 'disabled'}" style="cursor:pointer;">Approve Request</a>`
         actionbutton += `<a onClick="ViewRequestChanges(${item.CarePlanId},${item.RequestId})" style="display:inline-block" class="btn btn-success text-white requestViewChanges " style="cursor:pointer;">View Change</a>`
 
     }
     else if (item.Status == null || item.Status == "0") {
         actionbutton += `<a onClick="changeRequestStatus('1',${item.RequestId},${item.Type})" style="display:inline-block"  class="btn btn-success text-white requestAcceptButton" style="cursor:pointer;">Accept Request</a>`
-        actionbutton += `<a  style="display:none" class="btn btn-success text-white ViewCareplan" onClick="ViewCareplan(${item.RequestId}, ${item.IsCarePlanViewed});editCarePlan(${item.CarePlanId},${item.PatientId})" style="cursor:pointer;">View Careplan</a>`
+        actionbutton += `<a  style="display:none" class="btn btn-success text-white ViewCareplan" onClick="ViewCareplan(${item.RequestId}, ${item.IsCarePlanViewed});editCarePlan(${item.CarePlanId},${item.PatientId});SetPatientId(${item.PatientId})" style="cursor:pointer;">View Careplan</a>`
         actionbutton += `<a onClick="changeRequestStatus('2',${item.RequestId},1)" style="display:none" class="btn btn-success text-white requestApproveButton ${item.IsCarePlanViewed ? '' : 'disabled'}" style="cursor:pointer;">Approve Request</a>`
         actionbutton += `<a onClick="ViewRequestChanges(${item.CarePlanId},${item.RequestId})" style="display:none" class="btn btn-success text-white requestViewChanges " style="cursor:pointer;">View Change</a>`
     }
@@ -641,3 +642,8 @@ $(window).resize(function () {
         windowWidth = finalWindowWidth;
     }
 })
+
+
+function SetPatientId(patientId) {
+    PatientId = patientId
+}
