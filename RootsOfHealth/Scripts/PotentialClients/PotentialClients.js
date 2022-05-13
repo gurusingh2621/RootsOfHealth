@@ -11,71 +11,185 @@ var $tblPotientialPatient = $('#tblPotientialPatient');
 
 $btnsavepotentialclients.click(function () {
 
-    var isddlvalid = true;
-    var selectedfileFields = [];
-    $('.dllFileFields').each(function (k, v) {
-        var ddlvalue = $(v).val();
-        if (ddlvalue == "-1") {
-            isddlvalid = false;
-            alert('please select any field');
-            $(v).focus();
-            return false;
-        }
-        else if (ddlvalue && $.trim(selectedfileFields.indexOf(ddlvalue)) != -1) {
-            isddlvalid = false;
-            alert('same field is selected multiple times');
-            $(v).focus();
-            return false;
-        } else {
-            selectedfileFields.push(ddlvalue);
-        }
+    var ddlExcelTypeValue = $('#ddlExcelType').val();
+    if (ddlExcelTypeValue == "organised") {
 
-    });
-    if (!isddlvalid) {
-        return false;
+        var isddlvalid = true;
+        var selectedfileFields = [];
+        $('.dllFileFields').each(function (k, v) {
+            
+            var ddlvalue = $(v).val();
+            if (ddlvalue != null && ddlvalue != "" && $.trim(selectedfileFields.indexOf(ddlvalue)) != -1) {
+                isddlvalid = false;
+                alert('same field is selected multiple times');
+                $(v).focus();
+                return false;
+            } else {
+                selectedfileFields.push(ddlvalue);
+            }
+
+        });
+        if ($('#FirstName').val() == '' || $('#FirstName').val() == null) {
+            isddlvalid = false;
+            alert('Please select any field for First Name');
+            $('#FirstName').focus();
+            return false;
+        }
+        if ($('#LastName').val() == '' || $('#LastName').val() == null) {
+            isddlvalid = false;
+            alert('Please select any field for Last Name ');
+            $('#LastName').focus();
+            return false;
+        }
+        if ($('#EmailAddress').val() == '' || $('#EmailAddress').val() == null) {
+            isddlvalid = false;
+            alert('Please select any field for Email Address');
+            $('#EmailAddress').focus();
+            return false;
+        }
+       
+        if (!isddlvalid) {
+            return false;
+        }
+        else {
+
+            var files = $PotentialClientFileUpload.get(0).files;
+
+            var formdata = new FormData();
+            formdata.append('file', files[0]);
+            var dbfields = {};
+
+            $("#dbandFileFields select").each(function () {
+                var hh = $(this);
+                var name = hh.attr('id');
+                dbfields[name] = hh.val();
+            });
+
+            formdata.append("dbfields", JSON.stringify( dbfields ));
+
+            $.ajax({
+                url: '/Client/SavePotentialClientData',
+                type: 'POST',
+                data: formdata,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+
+                    if (data.Status === 1) {
+                        ClosePotentialClientModal()
+                        alert(data.Message);
+                        BindPotentialClientsTable();
+
+
+                    } else {
+                        alert("Failed to Save Data");
+                    }
+                }
+            });
+
+        }
     }
     else {
+        var isInputFieldsvalid = true;
+        var rangeElem = $("#getFileFields_0");
+        var rangeFrom = rangeElem.find('.rangeFrom').val().replace(/\D/g, '');
+        var rangeTo = rangeElem.find('.rangeTo').val().replace(/\D/g, '');
+        var rangeDifference = parseInt(rangeTo) - parseInt(rangeFrom);
+        $('#dbandFileFields .FileFields').each(function (k, v) {
+            var ele = $(v);
+            var _rangefrom = $(ele).find('.rangeFrom').val();
+            var _rangeto = $(ele).find('.rangeTo').val();
+            
+            var range = parseInt(_rangeto.replace(/\D/g, '')) - parseInt(_rangefrom.replace(/\D/g, ''));
+          
+            if (!isNaN(parseFloat(range)) && range != rangeDifference) {
+                isInputFieldsvalid = false;
+                alert('Please select same range for all fields');
+                $(ele).find('.rangeFrom').focus();
+                return false;
+            } 
 
-        var files = $PotentialClientFileUpload.get(0).files;
-
-        var formdata = new FormData();
-        formdata.append('file', files[0]);
-        var dbfields = {};
-        
-        $("#dbandFileFields select").each(function () {
-            var hh = $(this);
-            var name = hh.attr('id');
-            dbfields[name] = hh.val();
         });
-        
-        formdata.append("dbfields", JSON.stringify( dbfields ));
-        
-        $.ajax({
-            url: '/Client/SavePotentialClientData',
-            type: 'POST',
-            data: formdata,
-            processData: false,
-            contentType: false,
-            success: function (data) {
-               
-                if (data.Status === 1) {
-                    ClosePotentialClientModal()
-                    alert(data.Message);
-                    BindPotentialClientsTable();
-                   
-                    
-                } else {
-                    alert("Failed to Save Data");
+        if ($('#FirstName').val() == '' || $('#FirstName').val() == null) {
+            isInputFieldsvalid = false;
+            alert('Please select any field for First Name');
+            $('#FirstName').focus();
+            return false;
+        }
+        if ($('#FirstNameTo').val() == '' || $('#FirstName').val() == null) {
+            isInputFieldsvalid = false;
+            alert('Please select any field for First Name');
+            $('#FirstNameTo').focus();
+            return false;
+        }
+        if ($('#LastName').val() == '' || $('#LastName').val() == null) {
+            isInputFieldsvalid = false;
+            alert('Please select any field for Last Name ');
+            $('#LastName').focus();
+            return false;
+        }
+        if ($('#LastNameTo').val() == '' || $('#LastName').val() == null) {
+            isInputFieldsvalid = false;
+            alert('Please select any field for Last Name ');
+            $('#LastNameTo').focus();
+            return false;
+        }
+        if ($('#EmailAddress').val() == '' || $('#EmailAddress').val() == null) {
+            isInputFieldsvalid = false;
+            alert('Please select any field for Email Address');
+            $('#EmailAddress').focus();
+            return false;
+        }
+        if ($('#EmailAddressTo').val() == '' || $('#EmailAddress').val() == null) {
+            isInputFieldsvalid = false;
+            alert('Please select any field for Email Address');
+            $('#EmailAddressTo').focus();
+            return false;
+        }
+        if (!isInputFieldsvalid) {
+            return false;
+        }
+        else {
+            var files = $PotentialClientFileUpload.get(0).files;
+
+            var formdata = new FormData();
+            formdata.append('file', files[0]);
+            var dbfields = {};
+
+            $("#dbandFileFields .FileFields").each(function () {
+                var name = $(this).find('.rangeFrom').attr('id');
+                var from = $(this).find('.rangeFrom').val();
+                var to = $(this).find('.rangeTo').val();
+                dbfields[name] = from + ',' + to;
+            });
+
+            formdata.append("dbfields", JSON.stringify(dbfields));
+            formdata.append("fileRange", JSON.stringify(rangeDifference +1));
+            
+            $.ajax({
+                url: '/Client/SavePCFromUnorganisedExcel',
+                type: 'POST',
+                data: formdata,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+
+                    if (data.Status === 1) {
+                        ClosePotentialClientModal()
+                        alert(data.Message);
+                        BindPotentialClientsTable();
+
+
+                    } else {
+                        alert("Failed to Save Data");
+                    }
                 }
-            }
-        });
+            });
+
+        }
 
     }
-
 });
-    
-
-
 
 function ClosePotentialClientModal() {
     $PotientialClientModal.modal('hide');
@@ -84,7 +198,6 @@ function ClosePotentialClientModal() {
         'form').get(0).reset();
     $PotentialClientFileUpload.unwrap();
 }
-
 
 $PotentialClientFileUpload.change(function (e) {
     
@@ -104,8 +217,19 @@ $PotentialClientFileUpload.change(function (e) {
                 data: data,
                 dataType: "json",
                 success: function (res) {
+                    var ddlExcelTypeValue = $('#ddlExcelType').val();
                     if (res) {
-                        AppendColumnsLists(res)
+                       
+                        if (ddlExcelTypeValue == "organised")
+                        {
+
+                            AppendColumnsLists(res)
+                        }
+                        else
+                        {
+                            AppendColumnsListsForUO(res)
+                        }
+
                     }
                     $PotientialClientModal.modal('show');
                 },
@@ -134,70 +258,67 @@ function BindPotentialClientsTable() {
         async: false,
         contentType: "application/json; charset=utf-8",
         success: function (result) {
-            
+
             duplicates = result;
         },
         error: function (e) {
             toastr.error("Unexpected error!");
         }
     });
-    
+
     $.ajax({
         url: '/Patient/GetPotientialPatientsList',
         type: 'GET',
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (data) {
-            
-            
+
+
             $("#tblPotientialPatient").dataTable().fnDestroy();
-            
+
             var patientList = $('#tblPotientialPatient tbody');
             if (data.status === 1) {
                 var potentialPatient = "";
-                  $.each(data.pClientlist, function (index, item) {
+                $.each(data.pClientlist, function (index, item) {
 
-                      if (duplicates.filter(e => e.EmailAddress === item.EmailAddress || e.SocialSecurityNumber === item.SocialSecurityNumber).length > 0)
-                      {
-                          potentialPatient += `<tr style="background-color:red ;color:white"><td onclick="GetDuplicateRecordDetails(${item.PatientID})">${item.PatientID}</td>`;
-                      }
-                      else
-                      {
-                          potentialPatient += `<tr><td>${item.PatientID}</td>`
-                      }
-                      
+                    if (duplicates.filter(e => e.EmailAddress === item.EmailAddress || e.SocialSecurityNumber === item.SocialSecurityNumber).length > 0) {
+                        potentialPatient += `<tr style="background-color:red ;color:white"><td style="cursor: pointer;" onclick="GetDuplicateRecordDetails(${item.PatientID})">${item.PatientID}</td>`;
+                    }
+                    else {
+                        potentialPatient += `<tr><td>${item.PatientID}</td>`
+                    }
 
-                      potentialPatient += `<td>${GetFullName(item.FirstName, item.LastName)}</td>
+
+                    potentialPatient += `<td>${GetFullName(item.FirstName, item.LastName)}</td>
                                          <td>${item.EmailAddress != null ? item.EmailAddress : ""}</td>
                          <td >${item.CellPhone != null ? item.CellPhone : ""}</td>
                          <td >${item.ModifiedDate != null ? new Date(parseInt(item.ModifiedDate.substr(6))).toISOString().split('T')[0] : ""}</td>
                          <td><div>`;
-                      if (duplicates.filter(e => e.EmailAddress === item.EmailAddress || e.SocialSecurityNumber === item.SocialSecurityNumber).length == 0 && canMovePClientPerm =="True") {
-                          potentialPatient += `<button href="javascript:void(0)" id="btnpatientmove" onclick="MovePotentialPatient(${item.PatientID})" class="btn btn-success label-fields"> <i class=""></i>
+                    if (duplicates.filter(e => e.EmailAddress === item.EmailAddress || e.SocialSecurityNumber === item.SocialSecurityNumber).length == 0 && canMovePClientPerm == "True") {
+                        potentialPatient += `<button href="javascript:void(0)" id="btnpatientmove" onclick="MovePotentialPatient(${item.PatientID})" class="btn btn-success label-fields"> <i class=""></i>
                                         Move</button>`;
-                      }
-                      if (canEditPClientPerm =="True") {
-                          potentialPatient += `<a href="/Patient/EditPotentialPatient?patientId=${item.PatientID}" id="btnpatientedit" class="btn btn-success label-fields"> <i class="far fa-edit"></i>
+                    }
+                    if (canEditPClientPerm == "True") {
+                        potentialPatient += `<a href="/Patient/EditPotentialPatient?patientId=${item.PatientID}" id="btnpatientedit" class="btn btn-success label-fields"> <i class="far fa-edit"></i>
                                         Edit</a>`;
-                      }
-                      if (canDeletePClientPerm == "True") {
-                          potentialPatient += `<button href="javascript:void(0)" id="btnpatientDelete" onclick="DeletePotentialPatient(${item.PatientID})" class="btn btn-danger label-fields"> <i class=""></i>
+                    }
+                    if (canDeletePClientPerm == "True") {
+                        potentialPatient += `<button href="javascript:void(0)" id="btnpatientDelete" onclick="DeletePotentialPatient(${item.PatientID})" class="btn btn-danger label-fields"> <i class=""></i>
                                         Delete</button>`;
-                      }
-                     
-                      potentialPatient += `</div ></td ></tr >`;
-                  });
+                    }
+
+                    potentialPatient += `</div></td></tr>`;
+                });
                 patientList.html("").append(potentialPatient);
 
-               
+
                 $("#tblPotientialPatient").dataTable({
                     scrollY: 'calc(100vh - 264px)',
                     scrollCollapse: true,
                     "orderClasses": false
                 });
             }
-            else
-            {
+            else {
                 alert("error occured");
             }
         },
@@ -206,8 +327,9 @@ function BindPotentialClientsTable() {
         }
 
     });
-    
+
 }
+
 function GetFullName(firstname , lastname) {
     var fullname = "";
     if (firstname != null) {
@@ -254,6 +376,7 @@ function MovePotentialPatient(id) {
     
 
 }
+
 function AppendColumnsLists(result) {
 
     
@@ -414,7 +537,7 @@ function AppendColumnsLists(result) {
 
         // append dropdowns start
         var ddl = $("<select></select>").attr("id", databaseResult[i].ColName).attr("name", databaseResult[i].ColName).attr("class", "form-control dllFileFields").attr("columntype", databaseResult[i].ColType);
-
+        ddl.append("<option>--select--</option>");
         $.each(fileResult, function (index, el) {
             ddl.append("<option>" + el + "</option>");
         });
@@ -451,6 +574,7 @@ function DeletePotentialPatient(id) {
         }
     })
 }
+
 function IsPatientDetailValid(id) {
     $.ajax({
         type: "GET",
@@ -569,6 +693,7 @@ function IsPatientDetailValid(id) {
     });
     return true;
 }
+
 function validatePhone(phone)
 {
     
@@ -579,6 +704,7 @@ function validatePhone(phone)
     }
     return true
 }
+
 function ValidateDates(date) {
     var pattern = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
     if (!pattern.test(date)) {
@@ -588,6 +714,7 @@ function ValidateDates(date) {
         return true
     }
 }
+
 
 function ValidateDOB(dob) {
     
@@ -626,7 +753,7 @@ function GetDuplicateRecordDetails(id) {
 
     $.ajax({
         type: "GET",
-        url: Apipath + '/api/PatientMain/GetDuplicatePatientDetails?patientId='+id,
+        url: '/Client/GetDuplicatePatientsDetails?patientId='+id,
         dataType: "json",
         async: false,
         contentType: "application/json; charset=utf-8",
@@ -636,7 +763,7 @@ function GetDuplicateRecordDetails(id) {
             popup.find('#fromPotentialTable #potentialPatients').html('');
             popup.find('#fromMainTable #mainPatients').html('');
            
-
+            
           
             if (result)
             {
@@ -646,7 +773,7 @@ function GetDuplicateRecordDetails(id) {
                     if (result[i].IsFromMainTable == 'False' || result[i].IsFromMainTable == false)
                     {
                         var html = `<div class="p_content_block">`
-                        html += `<div class="form-group"><label>Patient ID:</label> <label>${result[i].PatientID}</label></div>
+                        html += `<div class="form-group"><label>Patient ID:</label> <label><a href="/Patient/EditPotentialPatient?patientId=${result[i].PatientID}" target="_blank">${result[i].PatientID}</a></label></div>
                                 <div class="form-group"><label>Name:</label> <label>${GetFullName(result[i].FirstName, result[i].LastName)}</label></div>`
                         if (result[i].EmailAddress != null && result[i].EmailAddress != "")
                         {
@@ -658,7 +785,15 @@ function GetDuplicateRecordDetails(id) {
                         }
                         if (result[i].SocialSecurityNumber != null && result[i].SocialSecurityNumber != "")
                         {
-                            html += `<div class="form-group"><label>Social Security Number:</label> <label>${result[i].SocialSecurityNumber != null ? result[i].SocialSecurityNumber : ""}</label></div>`
+                            html += `<div class="form-group"><label>Social Security Number:</label>
+                                              
+                                                  <input type="password" class="txtSocialSecNo" name="SocialSecurityNumber"
+                                                       placeholder="*********" value="${result[i].SocialSecurityNumber != null ? result[i].SocialSecurityNumber : ""}">
+                                                <span class="showHideSSN" onclick=showHideSSN($(this))>
+                                                    <i class="fa fa-eye"></i>
+                                                    <i class="fa fa-eye-slash"></i>
+                                                </span>
+                                            </div>`
                         }
                         if (result[i].CellPhone != null && result[i].CellPhone != "")
                         {
@@ -677,7 +812,7 @@ function GetDuplicateRecordDetails(id) {
                     else
                     {
                         var html = `<div class="p_content_block">`
-                        html += `<div class="form-group"><label>Patient ID:</label> <label>${result[i].PatientID}</label></div>
+                        html += `<div class="form-group"><label>Patient ID:</label> <label><a href="/Client/Info?patientid=${result[i].PatientID}" target="_blank">${result[i].PatientID}</a></label></div>
                                  <div class="form-group"><label>Name:</label> <label>${GetFullName(result[i].FirstName, result[i].LastName)}</label></div>`
                         if (result[i].EmailAddress != null && result[i].EmailAddress != "") {
                             html += `<div class="form-group"><label>Email:</label> <label>${result[i].EmailAddress != null ? result[i].EmailAddress : ""}</label></div>`
@@ -686,7 +821,14 @@ function GetDuplicateRecordDetails(id) {
                             html += `<div class="form-group"><label>Date Of Birth:</label> <label>${result[i].DateOfBirth != null ? result[i].DateOfBirth : ""}</label></div>`
                         }
                         if (result[i].SocialSecurityNumber != null && result[i].SocialSecurityNumber != "") {
-                            html += `<div class="form-group"><label>Social Security Number:</label> <label>${result[i].SocialSecurityNumber != null ? result[i].SocialSecurityNumber : ""}</label></div>`
+                            html += `<div class="form-group"><label>Social Security Number:</label>
+                                              <input type="password" class="txtSocialSecNo" name="SocialSecurityNumber"
+                                                       placeholder="*********" value="${result[i].SocialSecurityNumber != null ? result[i].SocialSecurityNumber : ""}">
+                                             <span class="showHideSSN" onclick=showHideSSN($(this))>
+                                                <i class="fa fa-eye"></i>
+                                                <i class="fa fa-eye-slash"></i>                                            
+                                            </span>
+                                         </div>`
                         }
                         if (result[i].CellPhone != null && result[i].CellPhone != "") {
                             html += `<div class="form-group"><label>Cell Phone:</label> <label>${result[i].CellPhone != null ? result[i].CellPhone : ""}</label></div>`
@@ -715,7 +857,7 @@ function GetDuplicateRecordDetails(id) {
                     popup.find('#fromMainTable').show();
                 }
                 $('#duplicateRecordDetails').modal('show');
-               
+             
             }
             else
             {
@@ -730,8 +872,189 @@ function GetDuplicateRecordDetails(id) {
    
 
 }
+
 function CloseDuplicatePopup() {
     $('#duplicateRecordDetails').modal('hide');
 }
+function AppendColumnsListsForUO(result) {
+    var fileResult = result.filecolumns;
+    var databaseResult = result.databaseColumns;
+    $PotientialClientModal.find('#dbandFileFields').html('');
+    for (let i = 0; i < databaseResult.length; i++) {
+        var columnName = "";
+        switch (databaseResult[i].ColName) {
+            case "FirstName":
+                columnName = "First Name";
+                break;
+            case "LastName":
+                columnName = "Last Name";
+                break;
+            case "MiddleName":
+                columnName = "Middle Name";
+                break;
+            case "Gender":
+                columnName = "Which gender do you identify as";
+                break;
+            case "DateOfBirth":
+                columnName = "Date Of Birth";
+                break;
+            case "SocialSecurityNumber":
+                columnName = "Social Security Number";
+                break;
+            case "RaceEthnicity":
+                columnName = "Race/Ethnicity";
+                break;
+            case "IsPermanentAddress":
+                columnName = "Is Permanent Address";
+                break;
+            case "PermanentAddress":
+                columnName = "Permanent Address";
+                break;
+            case "EmailAddress":
+                columnName = "Email Address";
+                break;
+            case "HomePhone":
+                columnName = "Home Phone";
+                break;
+            case "CellPhone":
+                columnName = "Cell Phone";
+                break;
+            case "WayToContact":
+                columnName = "Best way to contact you";
+                break;
+            case "PatientChildren":
+                columnName = "Patient Children";
+                break;
+            case "PatientChildrensAges":
+                columnName = "Patient Childrens Ages";
+                break;
+            case "ChildrenUnder18":
+                columnName = "Children Under 18";
+                break;
+            case "Adults18to65":
+                columnName = "Adults 18-65";
+                break;
+            case "Adults65Plus":
+                columnName = "Adults 65+";
+                break;
+            case "PreferredPharmacyName":
+                columnName = "Preferred Pharmacy Name";
+                break;
+            case "PreferredPharmacyLocation":
+                columnName = "Preferred Pharmacy Location";
+                break;
+            case "EverMemberOfUSArmedForces":
+                columnName = "Are you now or were you ever a member of the U.S. Armed Forces?";
+                break;
+            case "MaritalStatus":
+                columnName = "Marital Status";
+                break;
+            case "LanguagesSpeak":
+                columnName = "Which languages do you speak comfortably?";
+                break;
+            case "EverBeenSmoker":
+                columnName = "Have you ever been a smoker";
+                break;
+            case "QuitSmoking":
+                columnName = "Have you Quit?";
+                break;
+            case "SmokingQuitDate":
+                columnName = "Quit Date";
+                break;
+            case "PreferredPronouns":
+                columnName = "What are your preferred pronouns";
+                break;
+            case "ThinkYourselfAs":
+                columnName = "Do you think of yourself as";
+                break;
+            case "EmergencyContact1Name":
+                columnName = "Emergency Contact1 Name";
+                break;
+            case "EmergencyContact1Address":
+                columnName = "Emergency Contact1 Address";
+                break;
+            case "EmergencyContact1EmailAddress":
+                columnName = "Emergency Contact1 Email Address";
+                break;
+            case "EmergencyContact1Relationship":
+                columnName = "Emergency Contact1 Relationship";
+                break;
+            case "EmergencyContact2Name":
+                columnName = "Emergency Contact2 Name";
+                break;
+            case "EmergencyContact2Address":
+                columnName = "Emergency Contact2 Address";
+                break;
+            case "EmergencyContact2EmailAddress":
+                columnName = "Emergency Contact2 Email Address";
+                break;
+            case "EmergencyContact2Relationship":
+                columnName = "Emergency Contact2 Relationship";
+                break;
+            case "LastTimeYouSmoked":
+                columnName = "When was the last time you smoked?";
+                break;
+            case "EmergencyContact1City":
+                columnName = "Emergency Contact1 City";
+                break;
+            case "EmergencyContact1State":
+                columnName = "Emergency Contact1 State";
+                break;
+            case "EmergencyContact1Zip":
+                columnName = "Emergency Contact1 Zip";
+                break;
+            case "EmergencyContact2City":
+                columnName = "Emergency Contact2 City";
+                break;
+            case "EmergencyContact2State":
+                columnName = "Emergency Contact2 State";
+                break;
+            case "EmergencyContact2Zip":
+                columnName = "Emergency Contact2 Zip";
+                break;
+            case "LocalMedicalRecordNumber":
+                columnName = "Local Medical Record Number";
+                break;
+            case "AmdMedicalRecordNumber":
+                columnName = "Amd Medical Record Number";
+                break;
+            default:
+                columnName = databaseResult[i].ColName;
+                break;
+
+        }
+        var html = `<div class="row">`
+        if (databaseResult[i].ColType == 'int' || databaseResult[i].ColType == 'bit') {
+            html += `<div class="col-md-6"><div class="DatabaseFields">${columnName} ( ${databaseResult[i].ColType == "bit" ? "Boolean" : "Number"})</div></div>`
+        } else {
+            html += `<div class="col-md-6"><div class="DatabaseFields">${columnName} (character( ${databaseResult[i].ColLength == -1 ? "max" : databaseResult[i].ColLength}))</div></div>`
+        }
+        // append text boxes start
+        html += `<div id="getFileFields_${i}" class="col-md-6 FileFields"><input class="form-control rangeFrom" type="text" id="${databaseResult[i].ColName}" name="${databaseResult[i].ColName}"> <input class="form-control rangeTo" type="text" id="${databaseResult[i].ColName}To" name="${databaseResult[i].ColName}To"> </div></div>`
 
 
+
+        $PotientialClientModal.find('#dbandFileFields').append(html);
+        /* $PotientialClientModal.find('#getFileFields_' + i).append(ddl);*/
+        // append text boxes end
+
+    }
+
+   
+    $PotientialClientModal.find('#dbandFileFields .FileFields input').blur(function () {
+        var val = $(this).val().toUpperCase();
+        $(this).val(val);
+    })
+}
+
+function showHideSSN(element) {
+    
+    if (element.hasClass("active")) {
+        element.removeClass("active");
+        element.parent().find('input').attr("type", "password");
+    }
+    else {
+        element.addClass("active");
+        element.parent().find('input').attr("type", "text");
+    }
+}

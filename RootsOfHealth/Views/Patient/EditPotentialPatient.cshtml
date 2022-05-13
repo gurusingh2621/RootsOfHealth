@@ -35,6 +35,15 @@
         .ssn-icon-eye.showpwd {
             display: none;
         }
+    #content .inner-content {
+        margin-top: 0px !important;
+    }
+    .inner-main-content {
+        height: calc(100vh - 180px);
+    }
+    section#content {
+        padding: 0px !important;
+    }
 </style>
 
 <section id="content" class="responsive-container ">
@@ -1437,7 +1446,7 @@
         var lblUSArmedForces = $('#lblUSArmedForces').html().toLocaleLowerCase();
         $("input[name=USArmedRadio][value='" + lblUSArmedForces + "']").prop('checked', true);
 
-
+        
 
         var lblEverSmoker = $('#lblEverSmoker').html().toLocaleLowerCase();
         $('#ddSmoker').val('' + lblEverSmoker);
@@ -1448,11 +1457,11 @@
         }
 
         
-        //var lblQuitSmoking = $('#lblQuitSmoking').html().toLocaleLowerCase();
-        //$('#ddQuit').val('' + lblQuitSmoking);
-        //if (lblQuitSmoking == "true") {
-        //    $('#divSmokingQuitDate').show();
-        //}
+        var lblQuitSmoking = $('#lblQuitSmoking').html().toLocaleLowerCase();
+        $('#ddQuit').val('' + lblQuitSmoking);
+        if (lblQuitSmoking == "true" && lblEverSmoker == "true") {
+            $('#divSmokingQuitDate').show();
+        }
 
 
 

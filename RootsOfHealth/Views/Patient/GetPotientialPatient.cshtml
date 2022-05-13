@@ -53,24 +53,30 @@
     #PotentialClientFileUpload div#dbandFileFields {
         max-height: calc(100vh - 170px);
     }
+
     #duplicateFields h5 {
         text-align: center;
         margin: 10px 0 15px;
     }
+
     .p_content_block .form-group {
         margin: 0 0 6px;
     }
+
     .p_content_block {
         margin: 0;
     }
+
     #duplicateFields hr {
         margin: 20px 0;
         border-color: #ddd;
     }
+
     div#duplicateFields {
         max-height: calc(100vh - 140px);
         overflow: auto;
     }
+
     #duplicateRecordDetails .modal-content {
         overflow: hidden;
     }
@@ -87,6 +93,7 @@
             width: 100%;
         }
     }
+
     .appointment table .btn-danger {
         background-color: #dc3545;
         border-color: #dc3545;
@@ -96,8 +103,33 @@
         padding: 8px 20px;
         margin-right: 5px;
     }
+
     .appointment .sorting_1 {
         color: black !important
+    }
+
+    #ddlExcelType {
+        width: auto;
+        margin: 0 10px;
+    }
+
+    .FileFields input {
+        width: 100px;
+        display: inline;
+    }
+    input.txtSocialSecNo {
+        border: 0;
+        padding: 0 8px;
+    }
+    .showHideSSN .fa-eye-slash, 
+    .showHideSSN.active .fa-eye {
+        display: none;
+    }
+    .showHideSSN.active .fa-eye-slash {
+        display: inline-block;
+    }
+    span.showHideSSN {
+        color: #555;
     }
 </style>
 <section id="content" class="responsive-container">
@@ -111,7 +143,10 @@
                                id="PoteintialClientFileInput" name="avatar"
                                accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
                     }
-
+                    <select id="ddlExcelType" class="form-control">
+                        <option value="organised">Organised</option>
+                        <option value="unorganised">Un-Organised</option>
+                    </select>
                     @using (Html.BeginForm("GenerateSampleExcelFile", "Client", FormMethod.Post))
                     {
 
@@ -177,9 +212,9 @@
         <div class="modal-dialog modal-dialog-centered preview-modal" role="document">
             <div class="modal-content" style="height:90%">
                 <div class="modal-header preview-header flex-wrap">
-                    <h5 class="modal-title" id="duplicateRecordDetailsTitle">Duplicate Fields</h5>
+                    <h5 class="modal-title" id="duplicateRecordDetailsTitle">Duplicate Records</h5>
                     <div class="ml-auto d-flex flex-wrap">
-                        
+
                         <button type="button" class="close" aria-label="Close" onclick="CloseDuplicatePopup()">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -201,7 +236,7 @@
                         </div>
                     </div>
                 </div>
-               
+
             </div>
         </div>
     </div>
@@ -228,6 +263,7 @@
             //    var data = table.api().row($(this).parents('tr')).data();
             //    console.log(data);
             //});
+           
         });
 
 
