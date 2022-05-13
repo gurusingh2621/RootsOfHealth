@@ -771,7 +771,7 @@
 
     $(document).ready(function () {
 
-        ShowPatientInfo(_PatientName, _PatientEmail, _PatientSSN)
+        ShowPatientInfo(_PatientName, _PatientEmail)
           //notification changes start here--------------------
 
           if (ViewBagClientFormId != "0" && currenttab != '' && currenttab != 'Profile-tab' && currenttab != 'ProgramTab') {
@@ -848,7 +848,7 @@
                         toastr.error("Some error occurred!! or data not found");
                     },
                     complete: function () {
-                        ShowPatientInfo(_PatientName, _PatientEmail, _PatientSSN)
+                        ShowPatientInfo(_PatientName, _PatientEmail)
                     }
                 });
             }
