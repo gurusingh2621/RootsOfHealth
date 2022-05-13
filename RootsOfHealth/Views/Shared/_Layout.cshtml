@@ -2292,7 +2292,7 @@
 
         }
 
-        function ShowPatientInfo(patientName, patientEmail, patientSSN) {
+        function ShowPatientInfo(patientName, patientEmail) {
             
             $('.ci_PatientName').each(function (index) {
                 if (patientName.trim() == '')
@@ -2305,12 +2305,6 @@
                     $(this).closest('li').hide()
                 else
                 $(this).text(patientEmail)
-            });
-            $('.ci_PatientSSN').each(function (index) {
-                if (patientSSN.trim() == '')
-                    $(this).closest('li').hide()
-                    else
-                      $(this).text(patientSSN)
             });
 
             $('.clientInfo').show()

@@ -862,7 +862,7 @@ function editCarePlan(Id) {
                     break;
             }
 
-            ShowPatientInfo(result.PatientName, result.EmailAddress, result.SocialSecurityNumber)
+            ShowPatientInfo(result.PatientName, result.EmailAddress)
            
             $(".loaderOverlay").hide();
         }, error: function (e) {
