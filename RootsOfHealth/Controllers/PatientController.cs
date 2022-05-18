@@ -8,11 +8,13 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using RootsOfHealth.Commom;
+using RootsOfHealth.CustomFilters;
 using RootsOfHealth.Models;
 
 namespace RootsOfHealth.Controllers
 {
     [Authorize]
+    [CustomErrorFilter]
     public class PatientController : Controller
     {
         string WebApiKey = WebConfigurationManager.AppSettings["WebApiForBackend"];
@@ -939,6 +941,7 @@ namespace RootsOfHealth.Controllers
             }
             catch (Exception ex)
             {
+                new Common().LogExceptionToDb(ex);
                 return Json(new {status= 0, Message = ex.Message });
             }
             
@@ -1255,8 +1258,9 @@ namespace RootsOfHealth.Controllers
                     {
                         authobj.WholePersonCare.DateOfBirth = Convert.ToDateTime(patientdetailobj.PatientMain.DateOfBirth);
                     }
-                    catch
+                    catch(Exception ex)
                     {
+                        new Common().LogExceptionToDb(ex);
                     }
 
                 }
@@ -1277,8 +1281,9 @@ namespace RootsOfHealth.Controllers
                     {
                         authobj.CareConnect.DateOfBirth = Convert.ToDateTime(patientdetailobj.PatientMain.DateOfBirth);
                     }
-                    catch
+                    catch(Exception ex)
                     {
+                        new Common().LogExceptionToDb(ex);
                     }
 
                 }
@@ -1300,8 +1305,9 @@ namespace RootsOfHealth.Controllers
                     {
                         authobj.ReleaseAndDisclousure.DateOfBirth = Convert.ToDateTime(patientdetailobj.PatientMain.DateOfBirth);
                     }
-                    catch
+                    catch(Exception ex)
                     {
+                        new Common().LogExceptionToDb(ex);
                     }
 
                 }

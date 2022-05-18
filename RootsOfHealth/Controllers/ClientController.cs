@@ -19,9 +19,11 @@ using NPOI.XSSF.UserModel;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using IronXL;
+using RootsOfHealth.CustomFilters;
 
 namespace RootsOfHealth.Controllers
 {
+    [CustomErrorFilter]
     public class ClientController : Controller
     {
         string WebApiKey = WebConfigurationManager.AppSettings["WebApiForBackend"];
@@ -48,7 +50,7 @@ namespace RootsOfHealth.Controllers
         // GET: Client
         public ActionResult Index()
         {
-            return View();
+            return View("f");
         }
 
         public ActionResult ClientsFormList()
@@ -2424,6 +2426,7 @@ namespace RootsOfHealth.Controllers
             }
             catch (Exception ex)
             {
+                new Common().LogExceptionToDb(ex);
                 Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return Json("Upload failed");
             }
@@ -2624,8 +2627,9 @@ namespace RootsOfHealth.Controllers
                     }
                     catch (IOException ex)
                     {
+                        new Common().LogExceptionToDb(ex);
                         //not excel file
-                       
+
                     }
                 }
                 if (result > 0)
@@ -2641,6 +2645,7 @@ namespace RootsOfHealth.Controllers
             }
             catch (Exception ex)
             {
+                new Common().LogExceptionToDb(ex);
                 return Json(new { Status = 0, Message = ex.Message });
             }
         }
@@ -3051,6 +3056,7 @@ namespace RootsOfHealth.Controllers
             }
             catch (Exception ex)
             {
+                new Common().LogExceptionToDb(ex);
                 return Json(new { Status = 0, Message = ex.Message });
             }
         }
@@ -3442,8 +3448,8 @@ namespace RootsOfHealth.Controllers
                        }
                         catch(Exception ex)
                         {
-                            
-                        }
+                        new Common().LogExceptionToDb(ex);
+                    }
                     
                 }
 
@@ -3859,7 +3865,7 @@ namespace RootsOfHealth.Controllers
                     }
                     catch (Exception ex)
                     {
-
+                        new Common().LogExceptionToDb(ex);
                     }
 
                 }

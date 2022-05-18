@@ -17,8 +17,7 @@
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
-    <Use64BitIISExpress>
-    </Use64BitIISExpress>
+    <Use64BitIISExpress>false</Use64BitIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -198,6 +197,7 @@
     <Compile Include="Controllers\DashBoardController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Controllers\ProgramController.cs" />
+    <Compile Include="CustomFilters\CustomErrorFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -215,6 +215,7 @@
     <Compile Include="Models\DastBO.cs" />
     <Compile Include="Models\DreamOnlyBO.cs" />
     <Compile Include="Models\DuplicatePatientsInfo.cs" />
+    <Compile Include="Models\ErrorLogDetails.cs" />
     <Compile Include="Models\FormLogHistoryBO.cs" />
     <Compile Include="Models\FormSchedulingBO.cs" />
     <Compile Include="Models\Form_ScheduleResultBO.cs" />
@@ -770,6 +771,7 @@
     <Content Include="Views\Shared\Client\_ClientInfo.cshtml" />
     <Content Include="Views\Patient\EditPotentialPatient.cshtml" />
     <Content Include="Views\Patient\AddPotentialPatient.cshtml" />
+    <Content Include="Views\DashBoard\GetErrorLogDetails.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

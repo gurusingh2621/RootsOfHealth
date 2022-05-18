@@ -945,5 +945,28 @@ namespace RootsOfHealth.Commom
             }
             return permissionModel;
         }
+
+        public void LogExceptionToDb(Exception objException)
+        {
+            using (var client = new HttpClient())
+            {
+                try
+                {
+                    client.BaseAddress = new Uri(WebApiKey);
+                    //HTTP GET
+                    var responseTask = client.PostAsJsonAsync("/api/PatientMain/SaveException", objException);
+                    responseTask.Wait();
+
+                    var result = responseTask.Result;
+
+                }
+                catch (Exception ex)
+                {
+
+                }
+
+
+            }
+        }
     }
 }
