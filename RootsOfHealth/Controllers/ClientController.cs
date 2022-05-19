@@ -50,7 +50,7 @@ namespace RootsOfHealth.Controllers
         // GET: Client
         public ActionResult Index()
         {
-            return View("f");
+            return View();
         }
 
         public ActionResult ClientsFormList()
