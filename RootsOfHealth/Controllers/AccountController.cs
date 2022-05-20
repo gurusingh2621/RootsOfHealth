@@ -1,4 +1,5 @@
-﻿using RootsOfHealth.Models;
+﻿using RootsOfHealth.CustomFilters;
+using RootsOfHealth.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,6 +16,7 @@ using System.Web.Security;
 namespace RootsOfHealth.Controllers
 {
     [Authorize]
+    [CustomErrorFilter]
     public class AccountController : Controller
     {
         string WebApiKey = WebConfigurationManager.AppSettings["WebApiForBackend"];

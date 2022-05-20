@@ -1,0 +1,208 @@
+﻿@model List<RootsOfHealth.Models.ErrorLogDetails>
+@{
+    ViewBag.Title = "GetExceptionDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    #errorLogDetails_wrapper table.c_table tr td {
+        white-space: normal;
+        word-break: break-word;
+    }
+    .selectDateRange {
+        margin: 0px 0 15px;
+        display: flex;
+        align-items: flex-end;
+        flex-wrap: wrap;
+    }
+    .selectDateRangeField {
+        flex: 270px;
+        max-width:270px;
+        margin-right:10px;
+    }
+    div#divcustomdates .form-group label {
+        margin: 0;
+    }
+    div#divcustomdates {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        max-width: 300px;
+        padding: 10px 0 0;
+    }
+        div#divcustomdates .form-group {
+            flex: 0 0 49%;
+            margin: 0;
+            max-width: 49%;
+        }
+    div#divcustomdates .form-group .form-control {
+        width: 100% !important;
+    }
+</style>
+<section id="content" class="responsive-container pt-0">
+
+    <div class="inner-content mt-0">
+
+        <div class="appointment">
+
+            <h2>GetExceptionDetails</h2>
+            <div class="selectDateRange">
+                <div class="selectDateRangeField">
+                    <select id="ddlDateFilter" class="form-control">
+                        <option value="today">Today</option>
+                        <option value="last7days">Last 7 Days</option>
+                        <option value="last30days">Last 30 Days</option>
+                        <option value="customdate">Custom dates</option>
+                    </select>
+                </div>
+                <div id="divcustomdates" class="d-none">
+                    <div class="form-group">
+                        <label class="label-fields">Start Date</label>
+                        <input tabindex="8" type="text" id="txtstartDate" name="StartDate" class="form-control date" maxlength="50"
+                               placeholder="" value="" style="width:100px">
+                    </div>
+                    <div class="form-group">
+                        <label class="label-fields">End Date</label>
+                        <input tabindex="8" type="text" id="txtEndDate" name="EndDate" class="form-control date" maxlength="50"
+                               placeholder="" value="" style="width:100px">
+                    </div>
+                </div>
+            </div>
+           
+           
+            <div class="historyFormLogTableWrap table-responsive">
+                <table class="c_table table table-hover table-striped" id="errorLogDetails">
+                    <thead>
+                        <tr class="table-active">
+                            <th  style="width:5%;">Error Message</th>
+                            <th style="width:5%;">Stack Trace</th>
+                            <th style="width:5%;">Inner Exception</th>
+                            <th style="width:5%;">Exception Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+
+
+</section>
+
+<script>
+   
+    $(document).ready(function () {
+        $('.date').datepicker({
+                uiLibrary: 'bootstrap',
+                changeYear: true,
+                changeMonth: true
+        });
+
+            bindErrorDetailsTable();
+        });
+  
+    function bindErrorDetailsTable(date = null, fromDate = null, toDate=null) {
+        
+
+        $("#errorLogDetails").dataTable({
+            "scrollY": 'calc(100vh - 390px)',
+            "paging": true,
+            "ordering": true,
+            "filter": true,
+            "destroy": true,
+            "orderMulti": false,
+            "serverSide": true,
+            "Processing": true,
+            "ajax":
+            {
+                "url": "/Dashboard/GetExceptionDetails?date=" + date + "&fromDate=" + fromDate + "&toDate=" + toDate,
+                "type": "POST",
+                "dataType": "JSON"
+            },
+            "columns": [
+               
+                { "data": "ErrorMessage" },
+                { "data": "StackTrace" },
+                { "data": "InnerException" },
+                {
+                    "data": "CreatedDate",
+                    "render": function (value) {
+                        if (value === null) return "";
+
+                        var pattern = /Date\(([^)]+)\)/;
+                        var results = pattern.exec(value);
+                        var dt = new Date(parseFloat(results[1]));
+
+                        return (dt.getMonth() + 1) + "/" + dt.getDate() + "/" + dt.getFullYear();
+                    }
+                
+                }
+                
+            ]
+        });
+
+    }
+
+    $("#ddlDateFilter").change(function () {
+        
+        var today = new Date();
+        var date = $("#ddlDateFilter").val();
+        if (date == "today") {
+            $("#divcustomdates").addClass('d-none');
+            bindErrorDetailsTable(today.toISOString().slice(0, 10));
+        }
+        else if (date == "last7days") {
+            $("#divcustomdates").addClass('d-none');
+            var from = calculateDate(7)
+            bindErrorDetailsTable(null, from, today.toISOString().slice(0, 10));
+        }
+        else if (date == "last30days") {
+            $("#divcustomdates").addClass('d-none');
+            var from = calculateDate(30)
+            bindErrorDetailsTable(null, from, today.toISOString().slice(0, 10));
+        }
+        else
+        {
+            $("#divcustomdates").removeClass('d-none');
+        }
+       
+    })
+    $(".date").change(function () {
+
+        var startdate = $("#txtstartDate").val();
+        var endDate = $("#txtEndDate").val();
+
+        if (startdate == "" || endDate == "") {
+            return false;
+        }
+        else
+        {
+            var sDate = formatDate(startdate);
+            var EDate = formatDate(endDate);
+            
+            bindErrorDetailsTable(null, sDate, EDate);
+        }
+        
+    });
+    function calculateDate(daystoSubtract) {
+        var date = new Date();
+        var last = new Date(date.getTime() - (daystoSubtract * 24 * 60 * 60 * 1000));
+        var day = last.getDate();
+        var month = last.getMonth() + 1;
+        var year = last.getFullYear();
+        return last.toISOString().slice(0, 10);
+    }
+
+    function formatDate(date) {
+        var dt = new Date(date);
+        
+        var day = dt.getDate();
+        var month = dt.getMonth()+1;
+        var year = dt.getFullYear();
+
+        return year + "-" + month + "-" + day;
+    }
+</script>
+

@@ -1,7 +1,9 @@
 ﻿using RootsOfHealth.Commom;
+using RootsOfHealth.CustomFilters;
 using RootsOfHealth.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Web;
@@ -11,6 +13,7 @@ using System.Web.Mvc;
 namespace RootsOfHealth.Controllers
 {
     [Authorize]
+    [CustomErrorFilter]
     public class DashBoardController : Controller
     {
         string WebApiKey = WebConfigurationManager.AppSettings["WebApiForBackend"];
@@ -1037,6 +1040,53 @@ namespace RootsOfHealth.Controllers
 
         }
 
-        
+
+        [HttpGet]
+        public ActionResult GetErrorLogDetails()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult GetExceptionDetails(string date, string fromDate, string toDate)
+        {
+         
+            string draw = Request.Form.GetValues("draw")[0];
+            string sortBy = Request.Form.GetValues("order[0][column]")[0];
+            string sortDir = Request.Form.GetValues("order[0][dir]")[0];
+            int skipRecords = Convert.ToInt32(Request.Form.GetValues("start")[0]);
+            
+            int pageSize = Convert.ToInt32(Request.Form.GetValues("length")[0]);
+            var searchTerm = Request.Form.GetValues("search[value]").FirstOrDefault();
+
+            List<ErrorLogDetails> exceptionsDetails = new List<ErrorLogDetails>();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                //HTTP GET
+                var responseTask = client.GetAsync("/api/PatientMain/GetExceptionDetails?pageNumber="+ skipRecords + "&pageSize="+ pageSize + "&date="+ date + "&fromDate="+ fromDate + "&toDate="+ toDate+ "&sortby=" + sortBy+ "&sortDir=" + sortDir + "&search=" + searchTerm);
+                var result = responseTask.Result;
+
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<List<ErrorLogDetails>>();
+                    readTask.Wait();
+                    exceptionsDetails = readTask.Result;
+                }
+
+            }
+            var TotalCount = 0;
+            if (exceptionsDetails.Count > 0)
+            {
+                TotalCount = exceptionsDetails[0].TotalCount ?? 0;
+            }
+            return Json(new
+            {
+                draw = Convert.ToInt32(draw),
+                recordsTotal = TotalCount,
+                recordsFiltered = TotalCount,
+                data = exceptionsDetails
+            }, JsonRequestBehavior.AllowGet);
+           
+        }
     }
 }
