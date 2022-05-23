@@ -1,110 +1,162 @@
-﻿@model List<RootsOfHealth.Models.ErrorLogDetails>
+﻿
 @{
     ViewBag.Title = "GetExceptionDetails";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Layout = null;
+
 }
-<style>
-    #errorLogDetails_wrapper table.c_table tr td {
-        white-space: normal;
-        word-break: break-word;
-    }
-    .selectDateRange {
-        margin: 0px 0 15px;
-        display: flex;
-        align-items: flex-end;
-        flex-wrap: wrap;
-    }
-    .selectDateRangeField {
-        flex: 270px;
-        max-width:270px;
-        margin-right:10px;
-    }
-    div#divcustomdates .form-group label {
-        margin: 0;
-    }
-    div#divcustomdates {
-        display: flex;
-        align-items: flex-end;
-        justify-content: space-between;
-        max-width: 300px;
-        padding: 10px 0 0;
-    }
-        div#divcustomdates .form-group {
-            flex: 0 0 49%;
-            margin: 0;
-            max-width: 49%;
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+
+    <link href="https://cdn.rawgit.com/atatanasov/gijgo/master/dist/combined/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+
+    <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-1.11.0.css" type="text/css" media="all">
+
+    <!-- CSS for Calenders -->
+
+
+    <link href="~/css/fullcalendar.min.css" rel="stylesheet" />
+    <link href="~/css/select2.min.css" rel="stylesheet" />
+    <!-- Font Awesome CSS start here -->
+
+    <link href="~/css/all.min.css" rel="stylesheet" />
+    <!-- Bootstrap CSS start here  -->
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/style.css" rel="stylesheet" media="print,all,screen" />
+    <!-- Responsive CSS start here  -->
+
+    <link href="~/css/responsive.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min.css" integrity="sha512-6S2HWzVFxruDlZxI3sXOZZ4/eJ8AcxkQH1+JjSe/ONCEqR9L4Ysq5JdT5ipqtzU7WHalNwzwBv+iE51gNHJNqQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.15/datatables.min.css" />
+    <link href="https://code.jquery.com/ui/1.12.1/themes/ui-lightness/jquery-ui.css"
+          rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+    <!-- Custom CSS start here  -->
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    <style>
+        #errorLogDetails_wrapper table.c_table tr td {
+            white-space: normal;
+            word-break: break-word;
         }
-    div#divcustomdates .form-group .form-control {
-        width: 100% !important;
-    }
-</style>
-<section id="content" class="responsive-container pt-0">
 
-    <div class="inner-content mt-0">
+        .selectDateRange {
+            margin: 0px 0 15px;
+            display: flex;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
 
-        <div class="appointment">
+        .selectDateRangeField {
+            flex: 270px;
+            max-width: 270px;
+            margin-right: 10px;
+        }
 
-            <h2>GetExceptionDetails</h2>
-            <div class="selectDateRange">
-                <div class="selectDateRangeField">
-                    <select id="ddlDateFilter" class="form-control">
-                        <option value="today">Today</option>
-                        <option value="last7days">Last 7 Days</option>
-                        <option value="last30days">Last 30 Days</option>
-                        <option value="customdate">Custom dates</option>
-                    </select>
-                </div>
-                <div id="divcustomdates" class="d-none">
-                    <div class="form-group">
-                        <label class="label-fields">Start Date</label>
-                        <input tabindex="8" type="text" id="txtstartDate" name="StartDate" class="form-control date" maxlength="50"
-                               placeholder="" value="" style="width:100px">
+        div#divcustomdates .form-group label {
+            margin: 0;
+        }
+
+        div#divcustomdates {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            max-width: 300px;
+            padding: 10px 0 0;
+        }
+
+            div#divcustomdates .form-group {
+                flex: 0 0 49%;
+                margin: 0;
+                max-width: 49%;
+            }
+
+                div#divcustomdates .form-group .form-control {
+                    width: 100% !important;
+                }
+    </style>
+</head>
+<body>
+    <section id="content" class="responsive-container pt-0">
+
+        <div class="inner-content mt-0">
+
+            <div class="appointment">
+
+                <h2>GetExceptionDetails</h2>
+                <div class="selectDateRange">
+                    <div class="selectDateRangeField">
+                        <select id="ddlDateFilter" class="form-control">
+                            <option value="today">Today</option>
+                            <option value="last7days">Last 7 Days</option>
+                            <option value="last30days">Last 30 Days</option>
+                            <option value="customdate">Custom dates</option>
+                        </select>
                     </div>
-                    <div class="form-group">
-                        <label class="label-fields">End Date</label>
-                        <input tabindex="8" type="text" id="txtEndDate" name="EndDate" class="form-control date" maxlength="50"
-                               placeholder="" value="" style="width:100px">
+                    <div id="divcustomdates" class="d-none">
+                        <div class="form-group">
+                            <label class="label-fields">Start Date</label>
+                            <input tabindex="8" type="text" id="txtstartDate" name="StartDate" class="form-control date" maxlength="50"
+                                   placeholder="" value="" style="width:100px">
+                        </div>
+                        <div class="form-group">
+                            <label class="label-fields">End Date</label>
+                            <input tabindex="8" type="text" id="txtEndDate" name="EndDate" class="form-control date" maxlength="50"
+                                   placeholder="" value="" style="width:100px">
+                        </div>
                     </div>
                 </div>
-            </div>
-           
-           
-            <div class="historyFormLogTableWrap table-responsive">
-                <table class="c_table table table-hover table-striped" id="errorLogDetails">
-                    <thead>
-                        <tr class="table-active">
-                            <th  style="width:5%;">Error Message</th>
-                            <th style="width:5%;">Stack Trace</th>
-                            <th style="width:5%;">Inner Exception</th>
-                            <th style="width:5%;">Exception Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+
+
+                <div class="historyFormLogTableWrap table-responsive">
+                    <table class="c_table table table-hover table-striped" id="errorLogDetails">
+                        <thead>
+                            <tr class="table-active">
+                                <th style="width:5%;">Error Message</th>
+                                <th style="width:5%;">Stack Trace</th>
+                                <th style="width:5%;">Inner Exception</th>
+                                <th style="width:5%;">Exception Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+
+                </div>
 
             </div>
-
         </div>
-    </div>
 
 
-</section>
+    </section>
+
+</body>
+</html>
 
 <script>
-   
+
     $(document).ready(function () {
         $('.date').datepicker({
-                uiLibrary: 'bootstrap',
-                changeYear: true,
-                changeMonth: true
+            uiLibrary: 'bootstrap',
+            changeYear: true,
+            changeMonth: true
         });
 
-            bindErrorDetailsTable();
-        });
-  
-    function bindErrorDetailsTable(date = null, fromDate = null, toDate=null) {
-        
+        bindErrorDetailsTable();
+    });
+
+    function bindErrorDetailsTable(date = null, fromDate = null, toDate = null) {
+
 
         $("#errorLogDetails").dataTable({
             "scrollY": 'calc(100vh - 390px)',
@@ -122,31 +174,32 @@
                 "dataType": "JSON"
             },
             "columns": [
-               
+
                 { "data": "ErrorMessage" },
                 { "data": "StackTrace" },
                 { "data": "InnerException" },
                 {
                     "data": "CreatedDate",
                     "render": function (value) {
+
                         if (value === null) return "";
 
                         var pattern = /Date\(([^)]+)\)/;
                         var results = pattern.exec(value);
                         var dt = new Date(parseFloat(results[1]));
-
-                        return (dt.getMonth() + 1) + "/" + dt.getDate() + "/" + dt.getFullYear();
+                        var time = dt.toLocaleTimeString();
+                        return (dt.getMonth() + 1) + "/" + dt.getDate() + "/" + dt.getFullYear() + " " + time;
                     }
-                
+
                 }
-                
+
             ]
         });
 
     }
 
     $("#ddlDateFilter").change(function () {
-        
+
         var today = new Date();
         var date = $("#ddlDateFilter").val();
         if (date == "today") {
@@ -163,11 +216,10 @@
             var from = calculateDate(30)
             bindErrorDetailsTable(null, from, today.toISOString().slice(0, 10));
         }
-        else
-        {
+        else {
             $("#divcustomdates").removeClass('d-none');
         }
-       
+
     })
     $(".date").change(function () {
 
@@ -177,14 +229,13 @@
         if (startdate == "" || endDate == "") {
             return false;
         }
-        else
-        {
+        else {
             var sDate = formatDate(startdate);
             var EDate = formatDate(endDate);
-            
+
             bindErrorDetailsTable(null, sDate, EDate);
         }
-        
+
     });
     function calculateDate(daystoSubtract) {
         var date = new Date();
@@ -197,12 +248,24 @@
 
     function formatDate(date) {
         var dt = new Date(date);
-        
+
         var day = dt.getDate();
-        var month = dt.getMonth()+1;
+        var month = dt.getMonth() + 1;
         var year = dt.getFullYear();
 
         return year + "-" + month + "-" + day;
     }
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
 
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+
+<script src="~/Scripts/bootstrap_multiselect.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.15/datatables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
