@@ -18,8 +18,12 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
-using IronXL;
 using RootsOfHealth.CustomFilters;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
+using S = DocumentFormat.OpenXml.Spreadsheet.Sheets;
+using E = DocumentFormat.OpenXml.OpenXmlElement;
+using A = DocumentFormat.OpenXml.OpenXmlAttribute;
 
 namespace RootsOfHealth.Controllers
 {
@@ -47,6 +51,21 @@ namespace RootsOfHealth.Controllers
                   "SmokingQuitDate"
 
               };
+        private enum Formats
+        {
+            General = 0,
+            Number = 1,
+            Decimal = 2,
+            Currency = 164,
+            Accounting = 44,
+            DateShort = 14,
+            DateLong = 165,
+            Time = 166,
+            Percentage = 10,
+            Fraction = 12,
+            Scientific = 11,
+            Text = 49
+        }
         // GET: Client
         public ActionResult Index()
         {
@@ -2010,7 +2029,7 @@ namespace RootsOfHealth.Controllers
             }
 
 
-            var CombineAMDAndPatient = Tuple.Create<AmdProfileBO, PatientMainBO>(AmdModel[0], Patient);
+            var CombineAMDAndPatient = System.Tuple.Create<AmdProfileBO, PatientMainBO>(AmdModel[0], Patient);
             return PartialView("~/Views/Shared/Patient/_AMDProfile.cshtml", CombineAMDAndPatient);
 
 
@@ -2670,356 +2689,482 @@ namespace RootsOfHealth.Controllers
                 fileBase.SaveAs(path);
                 if (fileExtension != ".csv")
                 {
-                      
-                        WorkBook wb = WorkBook.Load(path);
-                        WorkSheet ws = wb.WorkSheets[0];
-                        if (ws == null)
-                        {
-                            return Json(new { Status = 0, Message = "File contains no data" });
-                        }
-                        List<PotientialPatientBO> allowedPatientList = new List<PotientialPatientBO>();
-                    
-                        var databaseColumns = new List<PotientialTableInfoBO>();
-                        using (var client = new HttpClient())
-                        {
-                            client.BaseAddress = new Uri(WebApiKey);
-                            //HTTP GET
-                            var responseTask = client.GetAsync("/api/PatientMain/getpotentialclienttableinfo");
-                            var responseresult = responseTask.Result;
+                    List<PotientialPatientBO> allowedPatientList = new List<PotientialPatientBO>();
 
-                            if (responseresult.IsSuccessStatusCode)
-                            {
-                                var readTask = responseresult.Content.ReadAsAsync<List<PotientialTableInfoBO>>();
-                                readTask.Wait();
-                                databaseColumns = readTask.Result;
-                            }
+                    var databaseColumns = new List<PotientialTableInfoBO>();
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri(WebApiKey);
+                        //HTTP GET
+                        var responseTask = client.GetAsync("/api/PatientMain/getpotentialclienttableinfo");
+                        var responseresult = responseTask.Result;
 
+                        if (responseresult.IsSuccessStatusCode)
+                        {
+                            var readTask = responseresult.Content.ReadAsAsync<List<PotientialTableInfoBO>>();
+                            readTask.Wait();
+                            databaseColumns = readTask.Result;
                         }
-                    for (var i=0;i< fileRange; i++)
+
+                    }
+                    for (var i = 0; i < fileRange; i++)
                     {
                         PotientialPatientBO patient = new PotientialPatientBO();
                         allowedPatientList.Add(patient);
                     }
-                  
-                    foreach (var dfield in databaseFields)
+                    using (SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Open(path, false))
                     {
-
-                        var dbCurrentfield = databaseColumns.Where(x => x.ColName.ToLower() == dfield.Key.ToLower()).FirstOrDefault();
-                        string range = dfield.Value.Replace(",", ":");
-                        string[] rangeDiff = range.Split(':');
-                        var i = 0;
-                        if (range == "" || range ==":" || rangeDiff[0] == "" || rangeDiff[1] == "")
+                       
+                        S sheets = spreadsheetDocument.WorkbookPart.Workbook.Sheets;
+                        // Retrieve a reference to the workbook part.
+                        WorkbookPart wbPart = spreadsheetDocument.WorkbookPart;
+                        // For each sheet
+                        foreach (E sheet in sheets)
                         {
-                            continue;
-                        }
-                        var cPatient = allowedPatientList[i];
-                        if (allowedPatientList[i] == null)
-                        {
-                            return Json(new { Status = 0, Message = "No data is present" });
-                        }
-                        foreach (var item in ws[range])
-                        {
+                          
+                            string sheetname = null;
+                          
+                               foreach (A attr in sheet.GetAttributes())
+                               {
+                                  if (attr.LocalName=="name")
+                                  {
+                                     sheetname = attr.Value;
+                                  }  
+                               }
+                            
                            
-                            var value= item.ToString();
-                            if (dbCurrentfield.ColName.ToLower() == "gender")
-                            {
-                                switch (value.ToLower())
+                                Sheet theSheet = wbPart.Workbook.Descendants<Sheet>().Where(s => s.Name == sheetname).FirstOrDefault();
+
+                                // if there is no sheet.
+                                if (theSheet == null)
                                 {
-                                    case "male":
-                                        value = "Male";
-                                        break;
-                                    case "female":
-                                        value = "Female";
-                                        break;
-                                    default:
-                                        allowedPatientList[i].OtherGender = value;
-                                        value = "Other";
-                                        break;
+                                    break;
                                 }
 
+                            // Retrieve a reference to the worksheet part.
+                            WorksheetPart wsPart = (WorksheetPart)(wbPart.GetPartById(theSheet.Id));
 
+                  
 
-                            }
-                            else if (dbCurrentfield.ColName.ToLower() == "raceethnicity")
-                            {
-                                string[] options = value.Split(',');
-                                var raceEthnicity = "";
-                                var otherRace = "";
-                                foreach (var race in options)
+                                foreach (var dfield in databaseFields)
                                 {
-                                    switch (race.ToLower().Trim())
-                                    {
-                                        case "black/african/african-american":
-                                            raceEthnicity += "Black/African/African-American,";
-                                            break;
-                                        case "latino/hispanic":
-                                            raceEthnicity += "Latino/Hispanic,";
-                                            break;
-                                        case "white/caucasian":
-                                            raceEthnicity += "White/Caucasian,";
-                                            break;
-                                        case "asian":
-                                            raceEthnicity += "Asian,";
-                                            break;
-                                        case "native hawaiian/pacific islander":
-                                            raceEthnicity += "Native Hawaiian/Pacific Islander,";
-                                            break;
-                                        case "native american/alaskan":
-                                            raceEthnicity += "Native American/Alaskan,";
-                                            break;
-                                        default:
-                                            otherRace += race;
-                                            break;
-                                    }
-                                }
-                                if (otherRace != "")
-                                {
-                                    raceEthnicity += "Other";
-                                }
-                                value = raceEthnicity;
-                                allowedPatientList[i].OtherRace = otherRace;
 
-                            }
-                            else if (dbCurrentfield.ColName.ToLower() == "ispermanentaddress" || dbCurrentfield.ColName.ToLower() == "everbeensmoker"
-                                || dbCurrentfield.ColName.ToLower() == "quitsmoking" || dbCurrentfield.ColName.ToLower() == "evermemberofusarmedforces")
-                            {
-                                switch (value.ToLower())
-                                {
-                                    case "yes":
-                                    case "1":
-                                        value = "1";
-                                        break;
-                                    case "no":
-                                    case "0":
-                                        value = "0";
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
-                            else if (dbCurrentfield.ColName.ToLower() == "waytocontact")
-                            {
-                                switch (value.ToLower())
-                                {
-                                    case "home":
-                                        value = "Home";
-                                        break;
-                                    case "cell":
-                                        value = "Cell";
-                                        break;
-                                    case "email":
-                                        value = "Email";
-                                        break;
-                                    default:
-                                        cPatient.OtherContact = value;
-                                        value = "Other";
-                                        break;
-                                }
-                            }
-                            else if (dbCurrentfield.ColName.ToLower() == "maritalstatus")
-                            {
-                                switch (value.ToLower())
-                                {
-                                    case "married":
-                                        value = "Married";
-                                        break;
-                                    case "single":
-                                        value = "Single";
-                                        break;
-                                    case "domestic partnership":
-                                        value = "Domestic Partnership";
-                                        break;
-                                    case "divorced":
-                                        value = "Divorced";
-                                        break;
-                                    case "separated":
-                                        value = "Separated";
-                                        break;
-                                    case "widowed":
-                                        value = "Widowed";
-                                        break;
-                                    default:
-                                        allowedPatientList[i].OtherMaritalStatus = value;
-                                        value = "Other";
-                                        break;
-                                }
-                            }
-                            else if (dbCurrentfield.ColName.ToLower() == "languagesspeak")
-                            {
-                                string[] options = value.Split(',');
-                                var language = "";
-                                var OtherLanguage = "";
-                                foreach (var lang in options)
-                                {
-                                    switch (lang.ToLower())
-                                    {
-                                        case "english":
-                                            language += "English,";
-                                            break;
-                                        case "spanish":
-                                            language += "Spanish,";
-                                            break;
-                                        case "arabic":
-                                            language += "Arabic,";
-                                            break;
-                                        case "amharic":
-                                            language += "Amharic,";
-                                            break;
-                                        case "tigrinya":
-                                            language += "Tigrinya,";
-                                            break;
-                                        default:
-                                            OtherLanguage += lang;
-                                            break;
-                                    }
-                                }
-                                if (OtherLanguage != "")
-                                {
-                                    language += "Other";
-                                }
-                                value = language;
-                                allowedPatientList[i].OtherLanguageSpeak = OtherLanguage;
-
-                            }
-                            else if (dbCurrentfield.ColName.ToLower() == "preferredpronouns")
-                            {
-                                switch (value.ToLower())
-                                {
-                                    case "she/her":
-                                    case "she":
-                                    case "her":
-                                        value = "She/Her";
-                                        break;
-                                    case "he/him":
-                                    case "he":
-                                    case "him":
-                                        value = "He/Him";
-                                        break;
-                                    case "they/them":
-                                    case "they":
-                                    case "them":
-                                        value = "They/Them";
-                                        break;
-                                    default:
-                                        allowedPatientList[i].OtherPronouns = value;
-                                        value = "Other";
-                                        break;
-                                }
-                            }
-                            else if (dbCurrentfield.ColName.ToLower() == "thinkyourselfas")
-                            {
-                                switch (value.ToLower())
-                                {
-                                    case "straight or heterosexual":
-                                    case "straight":
-                                    case "heterosexual":
-                                        value = "Straight or Heterosexual";
-                                        break;
-                                    case "lesbian":
-                                        value = "Lesbian";
-                                        break;
-                                    case "gay":
-                                        value = "Gay";
-                                        break;
-                                    case "bisexual":
-                                        value = "Bisexual";
-                                        break;
-                                    case "queer":
-                                        value = "Queer";
-                                        break;
-                                    case "questioning":
-                                        value = "Questioning";
-                                        break;
-                                    default:
-                                        allowedPatientList[i].OtherThinkYourselfAs = value;
-                                        value = "Unspecified/Other";
-                                        break;
-                                }
-                            }
-                            else if (dbCurrentfield.ColName.ToLower() == "patientchildrensages")
-                            {
-                                char[] stringSeparators = new char[] { ',', ':', '-', '/' };
-                                string resul = "";
-                                string[] patientages = value.Split(',');
-                                var childrencounter = 0;
-                                foreach (string pat in patientages)
-                                {
-                                    var age = pat.Split(stringSeparators);
-                                    if (age.Length > 1)
-                                    {
-                                        resul += age[0] + ":" + age[1] + ",";
-                                        childrencounter++;
-                                    }
+                                    var dbCurrentfield = databaseColumns.Where(x => x.ColName.ToLower() == dfield.Key.ToLower()).FirstOrDefault();
+                                    string range = dfield.Value.Replace(",", ":");
+                                    string[] rangeDiff = range.Split(':');
                                     
-                                }
-                                value = resul;
-                                allowedPatientList[i].PatientChildren = childrencounter;
-                            }
-
-                            if (dbCurrentfield.ColType == "bit")
-                            {
-
-                                if (value == "1")
-                                {
-                                    allowedPatientList[i].GetType().GetProperty(dfield.Key).SetValue(allowedPatientList[i], true, null);
-                                }
-                                else
-                                {
-                                    allowedPatientList[i].GetType().GetProperty(dfield.Key).SetValue(allowedPatientList[i], false, null);
-                                }
-
-
-                            }
-                            else if (dbCurrentfield.ColType == "int")
-                            {
-                                if (dbCurrentfield.ColLength != null && dbCurrentfield.ColLength != -1)
-                                {
-                                    var fieldLength = value.ToString().Length;
-                                    if (fieldLength > dbCurrentfield.ColLength)
+                                    var i = 0;
+                                    if (range == "" || range == ":" || rangeDiff[0] == "" || rangeDiff[1] == "")
                                     {
-                                        value = value.Substring(0, dbCurrentfield.ColLength ?? 0);
+                                        continue;
+                                    }
+
+
+                                  var rangeElement = Regex.Replace(rangeDiff[0], @"[\d-]", string.Empty);
+                                    var currRangeStart = Convert.ToInt32(Regex.Replace(rangeDiff[0], @"[\D+]", string.Empty));
+                                    var currRangeEnd = Convert.ToInt32(Regex.Replace(rangeDiff[1], @"[\D+]", string.Empty));
+                                    List<string> currFieldRange = new List<string>();
+                                    for (var k = currRangeStart; k <= currRangeEnd; k++)
+                                    {
+                                        currFieldRange.Add(rangeElement+k);
+                                    }
+                                    foreach (var item in currFieldRange)
+                                    {
+                                        string cellvalue = null;
+                                        // Use its Worksheet property to get a reference to the cell 
+                                        // whose address matches the address you supplied.
+                                        Cell theCell = wsPart.Worksheet.Descendants<Cell>().Where(c => c.CellReference == item).FirstOrDefault();
+                                    if(theCell == null)
+                                    {
+                                        continue;
+                                    }
+                                        // If the cell does not exist, return an empty string.
+                                        if (theCell.InnerText.Length > 0)
+                                        {
+                                            cellvalue = theCell.InnerText;
+
+                                            // If the cell represents an integer number, you are done. 
+                                            // For dates, this code returns the serialized value that 
+                                            // represents the date. The code handles strings and 
+                                            // Booleans individually. For shared strings, the code 
+                                            // looks up the corresponding value in the shared string 
+                                            // table. For Booleans, the code converts the value into 
+                                            // the words TRUE or FALSE.
+                                            if (theCell.DataType != null)
+                                            {
+                                                switch (theCell.DataType.Value)
+                                                {
+                                                    case CellValues.SharedString:
+
+                                                        // For shared strings, look up the value in the
+                                                        // shared strings table.
+                                                        var stringTable =
+                                                            wbPart.GetPartsOfType<SharedStringTablePart>()
+                                                            .FirstOrDefault();
+
+                                                        // If the shared string table is missing, something 
+                                                        // is wrong. Return the index that is in
+                                                        // the cell. Otherwise, look up the correct text in 
+                                                        // the table.
+                                                        if (stringTable != null)
+                                                        {
+                                                            cellvalue =
+                                                                stringTable.SharedStringTable
+                                                                .ElementAt(int.Parse(cellvalue)).InnerText;
+                                                        }
+                                                        break;
+
+                                                    case CellValues.Boolean:
+                                                        switch (cellvalue)
+                                                        {
+                                                            case "0":
+                                                                cellvalue = "FALSE";
+                                                                break;
+                                                            default:
+                                                                cellvalue = "TRUE";
+                                                                break;
+                                                        }
+                                                        break;
+                                                }
+                                            }
+                                        else if (theCell.DataType == null) // number & dates.
+                                        {
+                                            if (theCell.StyleIndex != null)
+                                            {
+                                                int styleIndex = (int)theCell.StyleIndex.Value;
+                                                CellFormat cellFormat = spreadsheetDocument.WorkbookPart.WorkbookStylesPart.Stylesheet.CellFormats.ChildElements[int.Parse(theCell.StyleIndex.InnerText)] as CellFormat;
+                                                uint formatId = cellFormat.NumberFormatId.Value;
+
+                                                if (formatId == (uint)Formats.DateShort || formatId == (uint)Formats.DateLong)
+                                                {
+                                                    double oaDate;
+                                                    if (double.TryParse(theCell.InnerText, out oaDate))
+                                                    {
+                                                        cellvalue = DateTime.FromOADate(oaDate).ToShortDateString();
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    cellvalue = theCell.InnerText;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                cellvalue = theCell.InnerText;
+                                            }
+                                            
+                                        }
+                                        }
+
+                                        var value = cellvalue;
+                                    if (value == null)
+                                    {
+                                        continue;
+                                    }
+                                        if (dbCurrentfield.ColName.ToLower() == "gender")
+                                        {
+                                            switch (value.ToLower())
+                                            {
+                                                case "male":
+                                                    value = "Male";
+                                                    break;
+                                                case "female":
+                                                    value = "Female";
+                                                    break;
+                                                default:
+                                                    allowedPatientList[i].OtherGender = value;
+                                                    value = "Other";
+                                                    break;
+                                            }
+
+
+
+                                        }
+                                        else if (dbCurrentfield.ColName.ToLower() == "raceethnicity")
+                                        {
+                                            string[] options = value.Split(',');
+                                            var raceEthnicity = "";
+                                            var otherRace = "";
+                                            foreach (var race in options)
+                                            {
+                                                switch (race.ToLower().Trim())
+                                                {
+                                                    case "black/african/african-american":
+                                                        raceEthnicity += "Black/African/African-American,";
+                                                        break;
+                                                    case "latino/hispanic":
+                                                        raceEthnicity += "Latino/Hispanic,";
+                                                        break;
+                                                    case "white/caucasian":
+                                                        raceEthnicity += "White/Caucasian,";
+                                                        break;
+                                                    case "asian":
+                                                        raceEthnicity += "Asian,";
+                                                        break;
+                                                    case "native hawaiian/pacific islander":
+                                                        raceEthnicity += "Native Hawaiian/Pacific Islander,";
+                                                        break;
+                                                    case "native american/alaskan":
+                                                        raceEthnicity += "Native American/Alaskan,";
+                                                        break;
+                                                    default:
+                                                        otherRace += race;
+                                                        break;
+                                                }
+                                            }
+                                            if (otherRace != "")
+                                            {
+                                                raceEthnicity += "Other";
+                                            }
+                                            value = raceEthnicity;
+                                            allowedPatientList[i].OtherRace = otherRace;
+
+                                        }
+                                        else if (dbCurrentfield.ColName.ToLower() == "ispermanentaddress" || dbCurrentfield.ColName.ToLower() == "everbeensmoker"
+                                            || dbCurrentfield.ColName.ToLower() == "quitsmoking" || dbCurrentfield.ColName.ToLower() == "evermemberofusarmedforces")
+                                        {
+                                            switch (value.ToLower())
+                                            {
+                                                case "yes":
+                                                case "1":
+                                                    value = "1";
+                                                    break;
+                                                case "no":
+                                                case "0":
+                                                    value = "0";
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                        }
+                                        else if (dbCurrentfield.ColName.ToLower() == "waytocontact")
+                                        {
+                                            switch (value.ToLower())
+                                            {
+                                                case "home":
+                                                    value = "Home";
+                                                    break;
+                                                case "cell":
+                                                    value = "Cell";
+                                                    break;
+                                                case "email":
+                                                    value = "Email";
+                                                    break;
+                                                default:
+                                                    allowedPatientList[i].OtherContact = value;
+                                                    value = "Other";
+                                                    break;
+                                            }
+                                        }
+                                        else if (dbCurrentfield.ColName.ToLower() == "maritalstatus")
+                                        {
+                                            switch (value.ToLower())
+                                            {
+                                                case "married":
+                                                    value = "Married";
+                                                    break;
+                                                case "single":
+                                                    value = "Single";
+                                                    break;
+                                                case "domestic partnership":
+                                                    value = "Domestic Partnership";
+                                                    break;
+                                                case "divorced":
+                                                    value = "Divorced";
+                                                    break;
+                                                case "separated":
+                                                    value = "Separated";
+                                                    break;
+                                                case "widowed":
+                                                    value = "Widowed";
+                                                    break;
+                                                default:
+                                                    allowedPatientList[i].OtherMaritalStatus = value;
+                                                    value = "Other";
+                                                    break;
+                                            }
+                                        }
+                                        else if (dbCurrentfield.ColName.ToLower() == "languagesspeak")
+                                        {
+                                            string[] options = value.Split(',');
+                                            var language = "";
+                                            var OtherLanguage = "";
+                                            foreach (var lang in options)
+                                            {
+                                                switch (lang.ToLower())
+                                                {
+                                                    case "english":
+                                                        language += "English,";
+                                                        break;
+                                                    case "spanish":
+                                                        language += "Spanish,";
+                                                        break;
+                                                    case "arabic":
+                                                        language += "Arabic,";
+                                                        break;
+                                                    case "amharic":
+                                                        language += "Amharic,";
+                                                        break;
+                                                    case "tigrinya":
+                                                        language += "Tigrinya,";
+                                                        break;
+                                                    default:
+                                                        OtherLanguage += lang;
+                                                        break;
+                                                }
+                                            }
+                                            if (OtherLanguage != "")
+                                            {
+                                                language += "Other";
+                                            }
+                                            value = language;
+                                            allowedPatientList[i].OtherLanguageSpeak = OtherLanguage;
+
+                                        }
+                                        else if (dbCurrentfield.ColName.ToLower() == "preferredpronouns")
+                                        {
+                                            switch (value.ToLower())
+                                            {
+                                                case "she/her":
+                                                case "she":
+                                                case "her":
+                                                    value = "She/Her";
+                                                    break;
+                                                case "he/him":
+                                                case "he":
+                                                case "him":
+                                                    value = "He/Him";
+                                                    break;
+                                                case "they/them":
+                                                case "they":
+                                                case "them":
+                                                    value = "They/Them";
+                                                    break;
+                                                default:
+                                                    allowedPatientList[i].OtherPronouns = value;
+                                                    value = "Other";
+                                                    break;
+                                            }
+                                        }
+                                        else if (dbCurrentfield.ColName.ToLower() == "thinkyourselfas")
+                                        {
+                                            switch (value.ToLower())
+                                            {
+                                                case "straight or heterosexual":
+                                                case "straight":
+                                                case "heterosexual":
+                                                    value = "Straight or Heterosexual";
+                                                    break;
+                                                case "lesbian":
+                                                    value = "Lesbian";
+                                                    break;
+                                                case "gay":
+                                                    value = "Gay";
+                                                    break;
+                                                case "bisexual":
+                                                    value = "Bisexual";
+                                                    break;
+                                                case "queer":
+                                                    value = "Queer";
+                                                    break;
+                                                case "questioning":
+                                                    value = "Questioning";
+                                                    break;
+                                                default:
+                                                    allowedPatientList[i].OtherThinkYourselfAs = value;
+                                                    value = "Unspecified/Other";
+                                                    break;
+                                            }
+                                        }
+                                        else if (dbCurrentfield.ColName.ToLower() == "patientchildrensages")
+                                        {
+                                            char[] stringSeparators = new char[] { ',', ':', '-', '/' };
+                                            string resul = "";
+                                            string[] patientages = value.Split(',');
+                                            var childrencounter = 0;
+                                            foreach (string pat in patientages)
+                                            {
+                                                var age = pat.Split(stringSeparators);
+                                                if (age.Length > 1)
+                                                {
+                                                    resul += age[0] + ":" + age[1] + ",";
+                                                    childrencounter++;
+                                                }
+
+                                            }
+                                            value = resul;
+                                            allowedPatientList[i].PatientChildren = childrencounter;
+                                        }
+
+                                        if (dbCurrentfield.ColType == "bit")
+                                        {
+
+                                            if (value == "1")
+                                            {
+                                                allowedPatientList[i].GetType().GetProperty(dfield.Key).SetValue(allowedPatientList[i], true, null);
+                                            }
+                                            else
+                                            {
+                                                allowedPatientList[i].GetType().GetProperty(dfield.Key).SetValue(allowedPatientList[i], false, null);
+                                            }
+
+
+                                        }
+                                        else if (dbCurrentfield.ColType == "int")
+                                        {
+                                            if (dbCurrentfield.ColLength != null && dbCurrentfield.ColLength != -1)
+                                            {
+                                                var fieldLength = value.ToString().Length;
+                                                if (fieldLength > dbCurrentfield.ColLength)
+                                                {
+                                                    value = value.Substring(0, dbCurrentfield.ColLength ?? 0);
+                                                }
+                                            }
+                                            int intval;
+                                            if (Int32.TryParse(value, out intval))
+                                            {
+                                                allowedPatientList[i].GetType().GetProperty(dfield.Key).SetValue(allowedPatientList[i], intval, null);
+                                            }
+                                            else
+                                            {
+                                                // skip 
+                                                continue;
+                                            }
+                                        }
+                                        else if (dbCurrentfield.ColType == "nvarchar")
+                                        {
+                                            if (dbCurrentfield.ColLength != null && dbCurrentfield.ColLength != -1)
+                                            {
+                                                var fieldLength = value.ToString().Length;
+                                                if (fieldLength > dbCurrentfield.ColLength)
+                                                {
+                                                    value = value.Substring(0, dbCurrentfield.ColLength ?? 0);
+                                                }
+                                                allowedPatientList[i].GetType().GetProperty(dfield.Key).SetValue(allowedPatientList[i], value, null);
+                                            }
+                                            else
+                                            {
+                                                allowedPatientList[i].GetType().GetProperty(dfield.Key).SetValue(allowedPatientList[i], value, null);
+                                            }
+
+
+                                        }
+
+
+                                        i++;
                                     }
                                 }
-                                int intval;
-                                if (Int32.TryParse(value, out intval))
-                                {
-                                    allowedPatientList[i].GetType().GetProperty(dfield.Key).SetValue(allowedPatientList[i], intval, null);
-                                }
-                                else
-                                {
-                                    // skip 
-                                    continue;
-                                }
-                            }
-                            else if (dbCurrentfield.ColType == "nvarchar")
-                            {
-                                if (dbCurrentfield.ColLength != null && dbCurrentfield.ColLength != -1)
-                                {
-                                    var fieldLength = value.ToString().Length;
-                                    if (fieldLength > dbCurrentfield.ColLength)
-                                    {
-                                        value = value.Substring(0, dbCurrentfield.ColLength ?? 0);
-                                    }
-                                    allowedPatientList[i].GetType().GetProperty(dfield.Key).SetValue(allowedPatientList[i], value, null);
-                                }
-                                else
-                                {
-                                    allowedPatientList[i].GetType().GetProperty(dfield.Key).SetValue(allowedPatientList[i], value, null);
-                                }
-                                
-
-                            }
-
-                           
-                            i++;
+                            
                         }
+                      
+
                     }
 
                     #region Save allowed potentialPatients to DB
 
                     foreach (var patient in allowedPatientList)
                     {
-                        if (patient == null)
+                        if (!patient.GetType().GetProperties().Where(x=> x.Name != "PatientID").Select(pi => pi.GetValue(patient)).Any(value => value != null))
                         {
                             continue;
                         }
@@ -3146,7 +3291,7 @@ namespace RootsOfHealth.Controllers
                     var currentCell = currentRow.GetCell(cellNo);
 
                     value = formatter.FormatCellValue(currentCell).Trim();
-                    if (currentCell != null && currentCell.CellType == CellType.Numeric)
+                    if (currentCell != null && currentCell.CellType == NPOI.SS.UserModel.CellType.Numeric)
                     {
                         if (HSSFDateUtil.IsCellDateFormatted(currentCell))
                         {
@@ -3434,7 +3579,7 @@ namespace RootsOfHealth.Controllers
                                 }
 
 
-                                if (currentCell.CellType != CellType.Boolean)
+                                if (currentCell.CellType != NPOI.SS.UserModel.CellType.Boolean)
                                 {
                                     currentPatient.GetType().GetProperty(field.Key).SetValue(currentPatient, value, null);
                                 }
@@ -3564,7 +3709,7 @@ namespace RootsOfHealth.Controllers
                     var currentCell = currentRow.GetCell(cellNo);
 
                     value = formatter.FormatCellValue(currentCell).Trim();
-                    if (currentCell != null && currentCell.CellType == CellType.Numeric)
+                    if (currentCell != null && currentCell.CellType == NPOI.SS.UserModel.CellType.Numeric)
                     {
                         if (HSSFDateUtil.IsCellDateFormatted(currentCell))
                         {
@@ -3851,7 +3996,7 @@ namespace RootsOfHealth.Controllers
                                     }
                                 }
 
-                                if (currentCell.CellType != CellType.Boolean)
+                                if (currentCell.CellType != NPOI.SS.UserModel.CellType.Boolean)
                                 {
                                     currentPatient.GetType().GetProperty(field.Key).SetValue(currentPatient, value, null);
                                 }
@@ -4084,7 +4229,7 @@ namespace RootsOfHealth.Controllers
 
             using (MemoryStream output = new MemoryStream())
             {
-                var workbook = new HSSFWorkbook();
+                var workbook = new XSSFWorkbook();
                 var sheet = workbook.CreateSheet("Sample File Export");
                 var rownumber = 0;
 
@@ -4100,7 +4245,7 @@ namespace RootsOfHealth.Controllers
 
                 return File(output.ToArray(),   //The binary data of the XLS file
                      "application/vnd.ms-excel", //MIME type of Excel files
-                    "Sample.xls");     //Suggested file name in the "Save as" dialog which will be displayed to the end user
+                    "Sample.xlsx");     //Suggested file name in the "Save as" dialog which will be displayed to the end user
 
             }
         }
