@@ -45,6 +45,10 @@
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
     <style>
+        body{
+            padding-top:0px;
+            padding-bottom:0px;
+        }
         #errorLogDetails_wrapper table.c_table tr td {
             white-space: normal;
             word-break: break-word;
@@ -75,15 +79,24 @@
             padding: 10px 0 0;
         }
 
-            div#divcustomdates .form-group {
-                flex: 0 0 49%;
-                margin: 0;
-                max-width: 49%;
-            }
+        div#divcustomdates .form-group {
+           flex: 0 0 49%;
+           margin: 0;
+           max-width: 49%;
+        }
 
-                div#divcustomdates .form-group .form-control {
-                    width: 100% !important;
-                }
+        div#divcustomdates .form-group .form-control {
+          width: 100% !important;
+        }
+
+        section#content {
+            margin-left: 0px !important;
+            padding: 0px;
+        }
+        .appointment {
+            padding: 10px;
+            height: auto;
+        }
     </style>
 </head>
 <body>
@@ -159,7 +172,7 @@
 
 
         $("#errorLogDetails").dataTable({
-            "scrollY": 'calc(100vh - 390px)',
+            "scrollY": 'calc(100vh - 320px)',
             "paging": true,
             "ordering": true,
             "filter": true,
