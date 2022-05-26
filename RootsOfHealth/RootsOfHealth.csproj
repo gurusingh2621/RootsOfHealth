@@ -261,6 +261,7 @@
     <Compile Include="Models\SharedFormForExportBO.cs" />
     <Compile Include="Models\TypeOfAppointmentBO.cs" />
     <Compile Include="Models\UserBO.cs" />
+    <Compile Include="Models\UserListInfo.cs" />
     <Compile Include="Models\UserRolesBO.cs" />
     <Compile Include="Models\WholePersonCareBo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

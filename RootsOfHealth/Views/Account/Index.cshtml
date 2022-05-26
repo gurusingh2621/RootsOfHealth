@@ -66,77 +66,31 @@
                         <thead>
                             <tr class="table-active">
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Image)
+                                    Image
                                 </th>
                                 <th>
-                                    @Html.DisplayName("Name")
-                                </th>
-
-                                <th>
-                                    @Html.DisplayName("User Name")
+                                    Name
                                 </th>
 
                                 <th>
-                                    @Html.DisplayName("Role")
+                                   User Name
+                                </th>
+
+                                <th>
+                                   Role
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Email)
+                                    Email
                                 </th>
                                 <th>
-                                    @Html.DisplayName("Phone No")
+                                   Phone No
                                 </th>
 
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.UserList)
-                            {
-                                <tr>
-                                    <td>
-                                        @if (item.Image != "")
-                                        {
-                                            <img src="~/Files/@item.Image" alt="Sample Image" />
-                                        }
-                                        else
-                                        {
-                                            <img class="img-fluid" id="patientpic" src="/Files/profile.png" />
-                                        }
-
-                                    </td>
-                                    <td>
-
-                                        @Html.Raw(item.FirstName + " " + item.LastName)
-                                    </td>
-
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.UserName)
-                                    </td>
-
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.RoleName)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Email)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.PhoneNo)
-                                    </td>
-
-
-
-                                    <td>
-                                        @if (usersPerm.Where(x => x.CanUpdate == true || x.CanList ==true).Any())
-                                        {
-                                            @Html.ActionLink("Edit", "EditUserDetails", new { username = item.UserName.ToString() }, htmlAttributes: new { @class = "btn btn-success" })
-                                        }
-                                        @if (usersPerm.Where(x => x.CanDelete == true).Any())
-                                        {
-                                            <a href="#" class="btn btn-danger" onclick="Remove(@item.UserID)">Delete</a>
-                                        }
-                                    </td>
-                                </tr>
-                            }
+                           
                         </tbody>
                     </table>
                 </div>
@@ -147,11 +101,15 @@
 @section scripts{
     <script>
         $(document).ready(function () {
-            $("#tblUser").dataTable({
-                scrollY: 'calc(100vh - 320px)',
-                scrollCollapse: true,
-                        });
+            //$("#tblUser").dataTable({
+            //    scrollY: 'calc(100vh - 320px)',
+            //    scrollCollapse: true,
+            //            });
+           
+            bindUsersTable();
         });
+        var canUpdate = "@usersPerm.Where(x => x.CanUpdate == true || x.CanList == true).Any()";
+        var canDelete = "@usersPerm.Where(x => x.CanDelete == true).Any()";
         var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
         function Remove(id) {
             if (confirm("Are you sure,you want to delete.")) {
@@ -182,6 +140,69 @@
                     }
                 });
             }
+        }
+
+        function bindUsersTable() {
+
+            $("#tblUser").dataTable({
+                "scrollY": 'calc(100vh - 320px)',
+                "paging": true,
+                "ordering": true,
+                "filter": true,
+                "destroy": true,
+                "orderMulti": false,
+                "serverSide": true,
+                "Processing": true,
+                "ajax":
+                {
+                    "url": "/Account/GetUsersData",
+                    "type": "POST",
+                    "dataType": "JSON"
+                },
+                "columns": [
+
+                    {
+                        "data": "Image",
+                        "render": function (value) {
+                            if (value == "") {
+                                return "<img class='img - fluid' id='patientpic' src='/Files/profile.png' />"
+                            }
+                            else {
+                                return '<img src="/Files/'+value+'" alt="Sample Image" />'
+                            }
+                        }
+                    },
+                    {
+                        "data": null,
+                        "render": function (data) {
+                           return data.FirstName + ' ' + data.LastName;
+                        }
+                    },
+                    { "data": "UserName" },
+                    { "data": "RoleName" },
+                    { "data": "Email" },
+                    { "data": "PhoneNo" },
+                    {
+                        "data": null,
+                        "render": function (data) {
+                            
+                            var html = "";
+                            if (canUpdate == "True")
+                             {
+                                html += "<a href='/Account/EditUserDetails?username="+ data.UserName + "' class='btn btn-success label-fields'> <i class=''></i> Edit</a>";
+
+                             }
+                            if (canDelete == "True")
+                            {
+                                html += '<a href="#" class="btn btn-danger" onclick="Remove(' + data.UserID+')">Delete</a>';
+                            }
+                            return html;
+                        }
+                    }
+
+                ]
+            });
+
         }
 
     </script>

@@ -1042,10 +1042,12 @@ namespace RootsOfHealth.Controllers
 
 
         [HttpGet]
+        [AllowAnonymous]
         public ActionResult GetErrorLogDetails()
         {
             return View();
         }
+        [AllowAnonymous]
         [HttpPost]
         public ActionResult GetExceptionDetails(string date, string fromDate, string toDate)
         {
