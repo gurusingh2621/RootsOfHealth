@@ -41,28 +41,50 @@ namespace RootsOfHealth.Controllers
                     Session["Roles"] = res;
                 }
             };
-            UserBO Users = new UserBO();
+            
+            return  View();
+        }
+        [HttpPost]
+        public ActionResult GetUsersData()
+        {
+            string draw = Request.Form.GetValues("draw")[0];
+            string sortBy = Request.Form.GetValues("order[0][column]")[0];
+            string sortDir = Request.Form.GetValues("order[0][dir]")[0];
+            int skipRecords = Convert.ToInt32(Request.Form.GetValues("start")[0]);
+            int pageSize = Convert.ToInt32(Request.Form.GetValues("length")[0]);
+            var searchTerm = Request.Form.GetValues("search[value]").FirstOrDefault();
+
+            List<UserListInfo> Users = new List<UserListInfo>();
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(WebApiKey);
                 //HTTP GET
-                var responseTask = client.GetAsync("/api/PatientMain/userslist");
+                var responseTask = client.GetAsync("/api/PatientMain/userslist?skipRecords=" + skipRecords + "&pageSize=" + pageSize + "&sortby=" + sortBy + "&sortDir=" + sortDir + "&search=" + searchTerm);
                 responseTask.Wait();
 
                 var result = responseTask.Result;
                 if (result.IsSuccessStatusCode)
                 {
-                    var readTask = result.Content.ReadAsAsync<List<UserBO>>();
+                    var readTask = result.Content.ReadAsAsync<List<UserListInfo>>();
                     readTask.Wait();
-                    Users.UserList = readTask.Result;
-                    
-                }
-                
-            }
+                    Users = readTask.Result;
 
-            return  View(Users);
+                }
+
+            }
+            var TotalCount = 0;
+            if (Users.Count > 0)
+            {
+                TotalCount = Users[0].TotalCount ?? 0;
+            }
+            return Json(new
+            {
+                draw = Convert.ToInt32(draw),
+                recordsTotal = TotalCount,
+                recordsFiltered = TotalCount,
+                data = Users
+            }, JsonRequestBehavior.AllowGet);
         }
-        
         [AllowAnonymous]
         public ActionResult Login()
         {
