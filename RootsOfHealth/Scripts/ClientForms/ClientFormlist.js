@@ -7,7 +7,9 @@ var _programDataTable = '';
 function GetProgramTemplateList() {
    
     $("#tblProgramTemplateList").dataTable({
-        "scrollY": 'calc(100vh - 380px)',
+        "scrollY": 'calc(100vh - 410px)',
+        "scrollCollapse": true,
+        "scrollX": true,
         "paging": true,
         "ordering": true,
         "filter": true,
