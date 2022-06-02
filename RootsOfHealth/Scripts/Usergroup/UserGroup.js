@@ -9,66 +9,83 @@ var SelectedUsers = [];
 var _groupName = '';
 var _roleId = 0;
 function GetGroupList() {
-    $(".loaderOverlay").css("display", "flex");
-    $.ajax({
-        type: "GET",
-        url: Apipath + '/api/PatientMain/getgrouplist',
-        dataType: "json",
-        contentType: "application/json; charset=utf-8",
-        success: function (result) {
-            var Grouplist = $(".grouplist");
-            var Groups = "";
-            if (result.length) {
-                $.each(result, function (index, item) {
+
+    $("#tblGroupTemplateList").dataTable({
+        "scrollY": 'calc(100vh - 320px)',
+        "paging": true,
+        "ordering": true,
+        "filter": true,
+        "destroy": true,
+        "orderMulti": false,
+        "serverSide": true,
+        "Processing": true,
+        "ajax":
+        {
+            "url": "/Patient/GetUsergroupList",
+            "type": "POST",
+            "dataType": "JSON"
+        },
+        'columnDefs': [{
+                   'targets': [5],
+                   'orderable': false
+                }],
+        "columns": [
+
+            { "data": "GroupName" },
+            { "data": "RoleName" },
+            {
+                "data": "CreatedDate",
+                "render": function (value) {
+
+                    if (value === null) return "";
+
+                    var pattern = /Date\(([^)]+)\)/;
+                    var results = pattern.exec(value);
+                    var dt = new Date(parseFloat(results[1]));
+                    var time = dt.toLocaleTimeString();
+                    return (dt.getMonth() + 1) + "/" + dt.getDate() + "/" + dt.getFullYear() + " " + time;
+                }
+
+            },
+            {
+                "data": "ModifiedDate",
+                "render": function (value) {
+
+                    if (value === null) return "";
+
+                    var pattern = /Date\(([^)]+)\)/;
+                    var results = pattern.exec(value);
+                    var dt = new Date(parseFloat(results[1]));
+                    var time = dt.toLocaleTimeString();
+                    return (dt.getMonth() + 1) + "/" + dt.getDate() + "/" + dt.getFullYear() + " " + time;
+                }
+            },
+            { "data": "MemberCount" },
+            {
+                "data": null,
+                "render": function (data) {
+                    // push groups to an array for duplicate checking 
                     let group = {
-                        ID: item.GroupID,
-                        Name: item.GroupName
+                        ID: data.GroupID,
+                        Name: data.GroupName
                     }
                     CreatedGroups.push(group)
-                    Groups += `<tr>
-                         <td width="15%">${(item.GroupName != null ? item.GroupName : "")}</td>
-                         <td width="15%">${(item.RoleName != null ? item.RoleName : "")}</td>
-                         <td width="15%">${item.CreatedDate != null ? item.CreatedDate.split("T")[0] : ""}</td>
-                         <td width="15%">${item.ModifiedDate != null ? item.ModifiedDate.split("T")[0] : ""}</td>
-                         <td width="10%">${(item.MemberCount == null ? 0 : item.MemberCount)}</td>
-                            <td width="30%"><div>`;
-                    
-                    if (canEditUserGroup == 'True' || canViewUserGroup == 'True')
-                    {
-                    Groups += `<a href="javascript:void(0)" onclick="ManageMembership(${item.GroupID},${item.RoleID},'${item.GroupName}')" class="btn btn-success text-white" style="cursor:pointer;">Manage Membership</a>`
+                    //
+                    var html = "";
+                    if (canEditUserGroup == 'True' || canViewUserGroup == 'True') {
+                        html += `<a href="javascript:void(0)" onclick="ManageMembership(${data.GroupID},${data.RoleID},'${data.GroupName}')" class="btn btn-success text-white" style="cursor:pointer;">Manage Membership</a>`
+
                     }
-                    if (canDeleteUserGroup == 'True')
-                    {
-                        Groups += `<a href="javascript:void(0)" onclick="DeleteGroup(${item.GroupID},this,${item.RoleID})" class="btn btn-success text-white" style="cursor:pointer;">Delete</a>`
+                    if (canDeleteUserGroup == 'True') {
+                        html += `<a href="javascript:void(0)" onclick="DeleteGroup(${data.GroupID},this,${data.RoleID})" class="btn btn-success text-white" style="cursor:pointer;">Delete</a>`
                     }
-                    Groups += `</div></td></tr>`;
-                });
-                Grouplist.html("").append(Groups);
-            } else {
-                Groups += `<tr><td colspan="6"><p class="text-center">No data found.</p></td>
-                            <td style="display: none;"></td>
-                            <td style="display: none;">/td>
-                            <td style="display: none;"></td>
-                            <td style="display: none;"></td>
-                            <td style="display: none;"></td></tr>`;
-                Grouplist.html("").append(Groups);
+                    return html;
+                }
             }
 
-            _usergrouplistDataTable = $('#tblGroupTemplateList').DataTable({
-                retrieve: true,
-                searching: false,
-                'columnDefs': [{
-                    'targets': [5],
-                    'orderable': false
-                }]
-            });
-
-            $(".loaderOverlay").hide();
-        },
-        error: function (e) {
-            toastr.error("Unexpected error!");
-        }
+        ]
     });
+
 }
 function ManageMembership(groupid, roleid, groupname) {
     

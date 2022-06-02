@@ -89,6 +89,46 @@ namespace RootsOfHealth.Controllers
             return View();
         }
         [HttpPost]
+        public ActionResult GetCarePlanTemplateList()
+        {
+            string draw = Request.Form.GetValues("draw")[0];
+            string sortBy = Request.Form.GetValues("order[0][column]")[0];
+            string sortDir = Request.Form.GetValues("order[0][dir]")[0];
+            int skipRecords = Convert.ToInt32(Request.Form.GetValues("start")[0]);
+
+            int pageSize = Convert.ToInt32(Request.Form.GetValues("length")[0]);
+            var searchTerm = Request.Form.GetValues("search[value]").FirstOrDefault();
+
+            List<CarePlanTemplateListInfoBO> carePlanTemplateList = new List<CarePlanTemplateListInfoBO>();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                //HTTP GET
+                var responseTask = client.GetAsync("/api/PatientMain/gettemplatelist?skipRecords=" + skipRecords + "&pageSize=" + pageSize +  "&sortby=" + sortBy + "&sortDir=" + sortDir + "&search=" + searchTerm);
+                var result = responseTask.Result;
+
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<List<CarePlanTemplateListInfoBO>>();
+                    readTask.Wait();
+                    carePlanTemplateList = readTask.Result;
+                }
+
+            }
+            var TotalCount = 0;
+            if (carePlanTemplateList.Count > 0)
+            {
+                TotalCount = carePlanTemplateList[0].TotalCount ?? 0;
+            }
+            return Json(new
+            {
+                draw = Convert.ToInt32(draw),
+                recordsTotal = TotalCount,
+                recordsFiltered = TotalCount,
+                data = carePlanTemplateList
+            });
+        }
+        [HttpPost]
         public JsonResult GetTemplateData(CarePlantemplateBO Model)
         {
             Model.TemplateName= Model.TemplateName.TrimEnd();

@@ -1087,7 +1087,7 @@ namespace RootsOfHealth.Controllers
                 recordsTotal = TotalCount,
                 recordsFiltered = TotalCount,
                 data = exceptionsDetails
-            }, JsonRequestBehavior.AllowGet);
+            });
            
         }
     }

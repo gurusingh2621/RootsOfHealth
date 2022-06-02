@@ -83,7 +83,7 @@ namespace RootsOfHealth.Controllers
                 recordsTotal = TotalCount,
                 recordsFiltered = TotalCount,
                 data = Users
-            }, JsonRequestBehavior.AllowGet);
+            });
         }
         [AllowAnonymous]
         public ActionResult Login()

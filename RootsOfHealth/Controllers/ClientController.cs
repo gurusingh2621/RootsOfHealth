@@ -76,6 +76,50 @@ namespace RootsOfHealth.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public ActionResult GetClientFormtemplatelist()
+        {
+            string draw = Request.Form.GetValues("draw")[0];
+            string sortBy = Request.Form.GetValues("order[0][column]")[0];
+            string sortDir = Request.Form.GetValues("order[0][dir]")[0];
+            int skipRecords = Convert.ToInt32(Request.Form.GetValues("start")[0]);
+
+            int pageSize = Convert.ToInt32(Request.Form.GetValues("length")[0]);
+            var searchTerm = Request.Form.GetValues("search[value]").FirstOrDefault();
+
+
+            List<ClientFormtemplateListInfoBO> clientformtemplateList = new List<ClientFormtemplateListInfoBO>();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                //HTTP GET
+                var responseTask = client.GetAsync("/api/PatientMain/getClientFormtemplatelist?skipRecords=" + skipRecords + "&pageSize=" + pageSize + "&sortby=" + sortBy + "&sortDir=" + sortDir + "&search=" + searchTerm);
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<List<ClientFormtemplateListInfoBO>>();
+                    readTask.Wait();
+                    clientformtemplateList = readTask.Result;
+                }
+
+            }
+            var TotalCount = 0;
+            if (clientformtemplateList.Count > 0)
+            {
+                TotalCount = clientformtemplateList[0].TotalCount ?? 0;
+            }
+            return Json(new
+            {
+                draw = Convert.ToInt32(draw),
+                recordsTotal = TotalCount,
+                recordsFiltered = TotalCount,
+                data = clientformtemplateList
+            });
+
+        }
         public ActionResult Info(string PatientID, string CurrentTab = null, string Subtab = null, int ClientFormID = 0)
         {
 

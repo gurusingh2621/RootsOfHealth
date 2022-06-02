@@ -1,8 +1,59 @@
 ﻿@model RootsOfHealth.Models.PatientMainBO
+@using RootsOfHealth.Commom;
+@using RootsOfHealth.Models;
 @{
     ViewBag.Title = "List";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@{
+    var clientPerm = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["userid"]), Convert.ToInt32(PermissionModel.Module.Client));
+    if (clientPerm.Where(x => x.CanList == false && (x.CanCreate != true && x.CanUpdate != true && x.CanDelete != true)).Any())
+    {
+        Response.Redirect(Url.Action("Display", "Dashboard", new { }));
+
+    }
+}
+<style>
+    .tableimg {
+        width: 45px !important;
+        overflow: hidden;
+        border-radius: 50%;
+        display: table;
+        margin: 0 auto;
+    }
+
+        .tableimg img {
+            max-width: 100%;
+            height: auto;
+        }
+
+    #tblPatient td {
+        vertical-align: middle;
+        height: auto;
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+
+    table#tblPatient .btn {
+        background: #22baa0;
+        border-radius: 50px;
+        border: 1px solid #22baa0;
+        font-size: 13px;
+        font-weight: 500;
+        padding: 6px 20px;
+        margin-right: 5px;
+    }
+
+    #tblPatient th {
+        font-size: 15px;
+        font-weight: 500;
+        color: #333;
+    }
+
+    .SidebarScroll.scroll {
+        height: 420px;
+    }
+</style>
 
 <h2></h2>
 
@@ -11,25 +62,41 @@
 <section id="content" class="responsive-container pt-0">
 
     <div class="inner-content mt-0">
-       
-            <div class="container-fluid p-0">
 
-                <div class="appointment">
+        <div class="container-fluid p-0">
 
-
-                    <div class="recent-paitents All-paitents no-padding mt-0">
+            <div class="appointment">
 
 
+                <div class="recent-paitents All-paitents no-padding mt-0">
+
+                    <h2 class="mb-3">All Clients</h2>
+
+                    <table id="tblPatient" class="display c_table  table table-hover table-striped table-bordered ">
+                        <thead>
+                            <tr class="table-active">
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Last Modify</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                        </tbody>
+                    </table>
 
 
 
-                        </div>
-
-                    </div>
                 </div>
-            </div>
 
-        
+            </div>
+        </div>
+    </div>
+
+
 
 </section>
 
@@ -49,39 +116,134 @@
 
 
     <script>
+         var canUpdate = "@clientPerm.Where(x => x.CanUpdate == true).Any()";
+            var canList = "@clientPerm.Where(x => x.CanList == true).Any()";
         $(document).ready(function () {
-            _Loader.StartLoader()
-            $.ajax({
 
-                type: "Get",
-                url: '/Patient/GetAllPatients',
-                dataType: "html",
-                contentType: "application/json; charset=utf-8",
-                success: function (result) {
+            
+            //_Loader.StartLoader()
+            //$.ajax({
 
-                    $('.All-paitents').html(result);
-                    $("#tblPatient").dataTable({
-                        scrollY: 'calc(100vh - 306px)',
-                       scrollCollapse: true,
-                    });
-                   
-                },
-                error: function () {
-                    _Loader.StopLoader()
-                    toastr.error("Some error occurred!! or data not found");
-                },
-                complete: function () {
-                    _Loader.StopLoader()
+            //    type: "Get",
+            //    url: '/Patient/GetAllPatients',
+            //    dataType: "html",
+            //    contentType: "application/json; charset=utf-8",
+            //    success: function (result) {
 
-                }
-            });
+            //        $('.All-paitents').html(result);
+            //        $("#tblPatient").dataTable({
+            //            scrollY: 'calc(100vh - 306px)',
+            //           scrollCollapse: true,
+            //        });
+
+            //    },
+            //    error: function () {
+            //        _Loader.StopLoader()
+            //        toastr.error("Some error occurred!! or data not found");
+            //    },
+            //    complete: function () {
+            //        _Loader.StopLoader()
+
+            //    }
+            //});
+            bindPatientMainTable();
            
         });
-        function OpenPatient(id) {
-             $('#tblPatient tbody').on('click', 'tr', function () {
-                window.location='/Client/Info?patientid='+id;
+        //function OpenPatient(id) {
+        //    $('#tblPatient tbody').on('click', 'tr', function () {
+        //        window.location = '/Client/Info?patientid=' + id;
+        //    });
+        //}
+
+        function bindPatientMainTable() {
+
+          var oTable=  $("#tblPatient").dataTable({
+                "scrollY": 'calc(100vh - 306px)',
+                "paging": true,
+                "ordering": true,
+                "filter": true,
+                "destroy": true,
+                "orderMulti": false,
+                "serverSide": true,
+                "Processing": true,
+                "ajax":
+                {
+                    "url": "/Patient/GetAllPatients",
+                    "type": "POST",
+                    "dataType": "JSON"
+              },
+              'columnDefs': [{
+                  'targets': [5],
+                  'orderable': false
+              }],
+                "columns": [
+
+                    {
+                        "data": "Image",
+                        "render": function (value) {
+                            var html = ` <div class="tableimg">`;
+                            if (value == "" || value == null) {
+                                
+                                html += "<img class='img - fluid' id='patientpic' src='/images/avatar.png' /></div>"
+                            }
+                            else {
+                                html += '<img src="/Files/' + value + '" alt="Sample Image" /></div>'
+                            }
+                            return html;
+                        }
+                    },
+                    {
+                        "data": null,
+                        "render": function (data) {
+                            return data.FirstName + ' ' + data.LastName;
+                        }
+                    },
+                    { "data": "Email" },
+                    { "data": "PhoneNo" },
+                    {
+                        "data": "ModifiedDate",
+                        "render": function (value) {
+
+                            if (value === null) return "";
+
+                            var pattern = /Date\(([^)]+)\)/;
+                            var results = pattern.exec(value);
+                            var dt = new Date(parseFloat(results[1]));
+                            var time = dt.toLocaleTimeString();
+                            return (dt.getMonth() + 1) + "/" + dt.getDate() + "/" + dt.getFullYear() + " " + time;
+                        }
+                    },
+                    {
+                        "data": null,
+                        "render": function (data) {
+
+                            var html = "";
+                            if (canList == "True") {
+                                html += `<a href='/Client/Info?patientid=${data.PatientId}'
+                           id='btnProfileEdit' class='btn btn-success label-fields'><i class="far fa-edit"></i>View</a>`;
+
+                            }
+                            if (canUpdate == "True") {
+                                html += `<a href='/Client/Add?PatientID=${data.PatientId}'
+                             id='btnProfileEdit' class='btn btn-success label-fields'><i class="far fa-edit"></i>Edit</a>`
+                            }
+                            return html;
+                        }
+                    }
+
+                ]
+            });
+
+
+            $('#tblPatient tbody').on('click', "tr", function () {
+                
+                var iPos = oTable.fnGetPosition(this);
+                var aData = oTable.fnGetData(iPos);
+                var patientId = aData.PatientId;
+                window.location = '/Client/Info?patientid=' + patientId;
             });
         }
+
     </script>
 
 }

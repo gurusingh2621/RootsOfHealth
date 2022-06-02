@@ -6,81 +6,118 @@
 var _programDataTable = '';
 function GetProgramTemplateList() {
     
-    $(".loaderOverlay").css("display", "flex");
-    $.ajax({
-        type: "GET",
-        url: Apipath + '/api/PatientMain/getprogramtemplatelist',
-        dataType: "json",
-        contentType: "application/json; charset=utf-8",
-        success: function (result) {
-            var programlist = $(".programlist");
-            if (_programDataTable != '') {
-                $('#tblProgramTemplateList').DataTable().clear();
-                $('#tblProgramTemplateList').DataTable().destroy();
-            }
-            var programs = "";
-            if (result.length) {
-                $.each(result, function (index, item) {
-                    
-                    programs += `<tr>
-                         <td width="15%">${(item.ProgramsName == null && item.IsBaseTemplate == true) ? "Base Template" : item.ProgramsName}</td>
-                         <td width="10%">${(item.IsActive == null) ? "Not Started" : (item.IsActive == 0) ? "In Progress" : "Completed"}</td >
-                         <td width="15%">${item.ModifiedDate != null ? item.ModifiedDate.split("T")[0] : ""}</td>
-                         <td width="10%">${(item.IsActive == 1 && item.IsBaseTemplate == false) ? (item.Isactivated == 1 ? "Yes" : "No") : ""}</td>
-                            <td width="30%"><div>`;
-                    if (canViewProgram == 'True')
-                    {
-                        programs += `<a href="javascript:void(0)" onclick="ViewProgramContent(${item.TemplateID},\'${(item.ProgramsName == null && item.IsBaseTemplate == true) ? "Base Template" : item.ProgramsName}'\)" class="btn btn-success text-white" style="cursor:pointer;">VIEW</a>`
+    $("#tblProgramTemplateList").dataTable({
+        "scrollY": 'calc(100vh - 380px)',
+        "paging": true,
+        "ordering": true,
+        "filter": true,
+        "destroy": true,
+        "orderMulti": false,
+        "serverSide": true,
+        "searching": false,
+        "Processing": true,
+        "ajax":
+        {
+            "url": "/Program/GetProgramTemplatelist",
+            "type": "POST",
+            "dataType": "JSON"
+        },
+        'columnDefs': [{
+            'targets': [4],
+            'orderable': false
+        }],
+        "columns": [
+
+            {
+                "data": null,
+                "render": function (data) {
+                    if (data.ProgramsName == null && data.IsBaseTemplate == true) {
+                        return "Base Template";
+                    } else {
+                        return data.ProgramsName;
                     }
-                    if (item.IsBaseTemplate && canMoifyProgram == 'True') {
-                        ;
-                        item.IsActive = item.IsActive == null ? false : true;
-                        programs += `<a href="/program/ProgramBaseTemplate?templateid=${item.TemplateID}&Status=${item.IsActive}"  class="btn btn-success text-white" style="cursor:pointer;">MODIFY</a>`
+                }
+            },
+            {
+                "data": null,
+                "render": function (data) {
+                    if (data.IsActive) {
+                        return "Completed";
+                    } else {
+                        return "In Progress";
+                    }
+                }
+            },
+            {
+                "data": "ModifiedDate",
+                "render": function (value) {
+
+                    if (value === null) return "";
+
+                    var pattern = /Date\(([^)]+)\)/;
+                    var results = pattern.exec(value);
+                    var dt = new Date(parseFloat(results[1]));
+                    var time = dt.toLocaleTimeString();
+                    return (dt.getMonth() + 1) + "/" + dt.getDate() + "/" + dt.getFullYear() + " " + time;
+                }
+            },
+            {
+                "data": null,
+                "render": function (data) {
+                    if (data.IsActive && data.IsBaseTemplate == false) {
+                        if (data.Isactivated == 1) {
+                            return "Yes";
+
+                        }
+                        else {
+                            return "No";
+                        }
+                    }
+                    else {
+                        return ""
+                    }
+                }
+            },
+            {
+                "data": null,
+                "render": function (data) {
+                    var programs = "";
+                    if (canViewProgram == 'True') {
+                        programs += `<a href="javascript:void(0)" onclick="ViewProgramContent(${data.TemplateID},\'${(data.ProgramsName == null && data.IsBaseTemplate == true) ? "Base Template" : data.ProgramsName}'\)" class="btn btn-success text-white" style="cursor:pointer;">VIEW</a>`
+                    }
+                    if (data.IsBaseTemplate && canMoifyProgram == 'True') {
+                        
+                        data.IsActive = data.IsActive == null ? false : true;
+                        programs += `<a href="/program/ProgramBaseTemplate?templateid=${data.TemplateID}&Status=${data.IsActive}"  class="btn btn-success text-white" style="cursor:pointer;">MODIFY</a>`
 
                     } else {
                         if (canMoifyProgram == 'True') {
-                            programs += `<a href="javascript:void(0)" onclick="ProceedProgram({TemplateID:${item.TemplateID},TemplateTable:\'${item.TemplateTable}\',ProgramName:\'${item.ProgramsName}\',ProgramID:${item.ProgramID},IsBaseTemplate:${item.IsBaseTemplate}})"  class="btn btn-success text-white" style="cursor: pointer; ${item.Isactivated == true ? "display:none;" : ""} ">MODIFY</a>`
+                            programs += `<a href="javascript:void(0)" onclick="ProceedProgram({TemplateID:${data.TemplateID},TemplateTable:\'${data.TemplateTable}\',ProgramName:\'${data.ProgramsName}\',ProgramID:${data.ProgramID},IsBaseTemplate:${data.IsBaseTemplate}})"  class="btn btn-success text-white" style="cursor: pointer; ${data.Isactivated == true ? "display:none;" : ""} ">MODIFY</a>`
                         }
                     }
 
-                    if (item.IsActive == 1 && item.IsBaseTemplate == false && canMoifyProgram == 'True') {
-                        if (item.Isactivated == true) {
-                            programs += `<a href="javascript:void(0)"  onclick="SetTemplateStatus(${item.TemplateID},${false})"  class="btn btn-success text-white" style="cursor:pointer;">DEACTIVATE</a>`;
-                        } else if (item.Isactivated == 0) {
-                            programs += `<a href="javascript:void(0)" onclick="SetTemplateStatus(${item.TemplateID},${true})"  class="btn btn-success text-white" style="cursor:pointer;">ACTIVATE</a>`;
+                    if (data.IsActive == 1 && data.IsBaseTemplate == false && canMoifyProgram == 'True') {
+                        if (data.Isactivated == true) {
+                            programs += `<a href="javascript:void(0)"  onclick="SetTemplateStatus(${data.TemplateID},${false})"  class="btn btn-success text-white" style="cursor:pointer;">DEACTIVATE</a>`;
+                        } else if (data.Isactivated == 0) {
+                            programs += `<a href="javascript:void(0)" onclick="SetTemplateStatus(${data.TemplateID},${true})"  class="btn btn-success text-white" style="cursor:pointer;">ACTIVATE</a>`;
                         }
-                    } else if (item.IsActive == 0 && item.IsBaseTemplate == false && canMoifyProgram == 'True'){
+                    } else if (data.IsActive == 0 && data.IsBaseTemplate == false && canMoifyProgram == 'True') {
                         programs += `<a href="javascript:void(0)" onclick="alertInprogressStatus()"  class="btn btn-success text-white" style="cursor:pointer;">ACTIVATE</a>`;
                     }
 
-                    if (!item.IsBaseTemplate && canDeleteProgram == 'True') {
-                        programs += `<a href="javascript:void(0)" onclick="DeleteProgram(${item.ProgramID},this)"  class="btn btn-success text-white" style="cursor:pointer;">Delete</a>`;
+                    if (!data.IsBaseTemplate && canDeleteProgram == 'True') {
+                        programs += `<a href="javascript:void(0)" onclick="DeleteProgram(${data.ProgramID},this)"  class="btn btn-success text-white" style="cursor:pointer;">Delete</a>`;
                     }
-                 
-                    programs += `</div></td></tr>`;
-                });
-                programlist.html("").append(programs);
-            } else {
-                programs += `<tr><td colspan="6"><p class="text-center">No data found.</p></td><td style="display: none;"></td><td style="display: none;"></td> <td style="display: none;"></td><td style="display: none;"></tr>`;
-                programlist.html("").append(programs);
+
+                    return programs;
+                }
             }
-            
-          _programDataTable= $('#tblProgramTemplateList').DataTable({
-                retrieve: true,
-              searching: false,
-              "scrollY": "calc(100vh - 380px)",
-                'columnDefs': [{
-                    'targets': [4],
-                    'orderable': false                  
-                }]
-            });
-           
-            $(".loaderOverlay").hide();
-        },
-        error: function (e) {
-            toastr.error("Unexpected error!");
-        }
+
+        ]
     });
+
+
 }
 $("#radioBaseTemplate,#radioScratch").change(function () {
     if ($(this).prop("checked")) {
