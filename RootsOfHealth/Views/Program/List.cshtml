@@ -15,7 +15,47 @@
 <link href="~/css/programlist.css" rel="stylesheet" />
 <link href="~/css/previewinpopup.css" rel="stylesheet" />
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
+<style>
+    .dataTables_wrapper.no-footer div.dataTables_scrollHead > table,
+    .dataTables_wrapper.no-footer div.dataTables_scrollBody > table {
+        width: 100% !important;
+    }
 
+    .appointment > .d-flex {
+        flex-wrap: wrap;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 2px 10px 2px;
+        display: inline-block;
+        border: 0;
+        font-size: 15px;
+        margin: 2px 1px;
+    }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+            background: #22baa0;
+            border: 0;
+            color: #FFF !important;
+        }
+
+    .appointment {
+        overflow: auto;
+    }
+
+    @@media (max-width:767px) {
+        .appointment > .d-flex .ml-auto {
+            margin-left: 0 !important;
+            margin: 3px 0 0;
+        }
+
+        #ddlExcelType {
+            width: auto;
+            margin: 2px 5px;
+        }
+    }
+</style>
 <section id="content" class="responsive-container pt-0">
 
     <div class="inner-content mt-0">

@@ -11,7 +11,9 @@ var _roleId = 0;
 function GetGroupList() {
 
     $("#tblGroupTemplateList").dataTable({
-        "scrollY": 'calc(100vh - 320px)',
+        "scrollY": 'calc(100vh - 410px)',
+        "scrollCollapse": true,
+        "scrollX": true,
         "paging": true,
         "ordering": true,
         "filter": true,

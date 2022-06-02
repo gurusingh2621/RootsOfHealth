@@ -73,6 +73,45 @@
         border-radius: 4px;
         margin: 0 0 5px;
     }
+    .dataTables_wrapper.no-footer div.dataTables_scrollHead > table,
+    .dataTables_wrapper.no-footer div.dataTables_scrollBody > table {
+        width: 100% !important;
+    }
+
+    .appointment > .d-flex {
+        flex-wrap: wrap;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 2px 10px 2px;
+        display: inline-block;
+        border: 0;
+        font-size: 15px;
+        margin: 2px 1px;
+    }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+            background: #22baa0;
+            border: 0;
+            color: #FFF !important;
+        }
+
+    .appointment {
+        overflow: auto;
+    }
+
+    @@media (max-width:767px) {
+        .appointment > .d-flex .ml-auto {
+            margin-left: 0 !important;
+            margin: 3px 0 0;
+        }
+
+        #ddlExcelType {
+            width: auto;
+            margin: 2px 5px;
+        }
+    }
 </style>
 
 
