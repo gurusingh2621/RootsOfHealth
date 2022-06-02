@@ -6,78 +6,112 @@
 });
 var _careplanListTable=''
 function GetCarePlanTemplateList() {
-    $(".loaderOverlay").css("display", "flex");
-    $.ajax({
-        type: "GET",
-        url: Apipath + '/api/PatientMain/gettemplatelist',
-        dataType: "json",
-        contentType: "application/json; charset=utf-8",
-        success: function (result) {
-            if (_careplanListTable != '') {
-                $('#tblCarePlanTemplateList').DataTable().clear();
-                $('#tblCarePlanTemplateList').DataTable().destroy();
-            }
-            var careplanlist = $(".careplanlist");
-            var careplans = "";
-            if (result.length) {
-                $.each(result, function (index, item) {
-                    careplans += `<tr>
-                         <td width="20%">${item.TemplateName}</td>
-                         <td width="15%">${item.ProgramsName == null ? "" : item.ProgramsName}</td>
-                         <td width="10%">${item.IsActive ? "Completed" : "In Progress"}</td>
-                         <td width="15%">${item.ModifiedDate != null ? item.ModifiedDate.split("T")[0] : ""}</td>
-                        <td width="10%">${item.IsActive && item.IsBaseTemplate == false ? item.Isactivated == 1 ? "Yes" : "No" : ""}</td>
-                            <td width="30%"><div>`;
+
+    $("#tblCarePlanTemplateList").dataTable({
+        "scrollY": 'calc(100vh - 380px)',
+        "paging": true,
+        "ordering": true,
+        "filter": true,
+        "destroy": true,
+        "orderMulti": false,
+        "serverSide": true,
+        "searching":false,
+        "Processing": true,
+        "ajax":
+        {
+            "url": "/CarePlan/GetCarePlanTemplateList",
+            "type": "POST",
+            "dataType": "JSON"
+        },
+        'columnDefs': [{
+            'targets': [5],
+            'orderable': false
+        }],
+        "columns": [
+
+            { "data": "TemplateName" },
+            { "data": "ProgramsName" },
+            {
+                "data": null,
+                "render": function (data) {
+                    if (data.IsActive) {
+                        return "Completed";
+                    } else {
+                        return "In Progress";
+                    }
+                }
+            },
+            {
+                "data": "ModifiedDate",
+                "render": function (value) {
+
+                    if (value === null) return "";
+
+                    var pattern = /Date\(([^)]+)\)/;
+                    var results = pattern.exec(value);
+                    var dt = new Date(parseFloat(results[1]));
+                    var time = dt.toLocaleTimeString();
+                    return (dt.getMonth() + 1) + "/" + dt.getDate() + "/" + dt.getFullYear() + " " + time;
+                }
+            },
+            {
+                "data": null,
+                "render": function (data)
+                {
+                    if (data.IsActive && data.IsBaseTemplate == false ) {
+                        if (data.Isactivated == 1) {
+                            return "Yes";
+
+                        }
+                        else {
+                            return "No";
+                        }
+                    }
+                    else {
+                        return ""
+                    }
+                }
+            },
+            {
+                "data": null,
+                "render": function (data) {
+                    var careplans = "";
                     if (canViewCPTemplate == 'True')
                     {
-                       careplans += `<a href="javascript:void(0)" onclick="ViewCarePlanContent(${item.TemplateID},\'${item.TemplateName}'\)" class="btn btn-success text-white" style="cursor:pointer;">VIEW</a>`
+                        careplans += `<a href="javascript:void(0)" onclick="ViewCarePlanContent(${data.TemplateID},\'${data.TemplateName}'\)" class="btn btn-success text-white" style="cursor:pointer;">VIEW</a>`
                     }
-                    if (item.IsBaseTemplate && canEditCPTemplate == 'True') {
-                        item.IsActive = item.IsActive == null ? false : item.IsActive;
-                        careplans += `<a href="/careplan/BaseTemplate?templateid=${item.TemplateID}&Status=${item.IsActive}"  class="btn btn-success text-white" style="cursor:pointer;">MODIFY</a>`
+                    if (data.IsBaseTemplate && data == 'True') {
+                        data.IsActive = data.IsActive == null ? false : data.IsActive;
+                        careplans += `<a href="/careplan/BaseTemplate?templateid=${data.TemplateID}&Status=${data.IsActive}"  class="btn btn-success text-white" style="cursor:pointer;">MODIFY</a>`
 
                     } else {
                         if (canEditCPTemplate == 'True') {
-                            careplans += `<a href="javascript:void(0)" onclick="Proceed({TemplateID:${item.TemplateID},TemplateName:\'${item.TemplateName}\',ProgramsID:${item.ProgramsID},IsBaseTemplate:${item.IsBaseTemplate},ProgramName:'${item.ProgramsName}',TemplateTable:'${item.TemplateTable}'})"  class="btn btn-success text-white" style="cursor: pointer; ${item.Isactivated == true ? "display:none;" : ""} ">MODIFY</a>`
+                            careplans += `<a href="javascript:void(0)" onclick="Proceed({TemplateID:${data.TemplateID},TemplateName:\'${data.TemplateName}\',ProgramsID:${data.ProgramsID},IsBaseTemplate:${data.IsBaseTemplate},ProgramName:'${data.ProgramsName}',TemplateTable:'${data.TemplateTable}'})"  class="btn btn-success text-white" style="cursor: pointer; ${data.Isactivated == true ? "display:none;" : ""} ">MODIFY</a>`
                         }
                     }
-                    if (item.IsActive == 1 && item.IsBaseTemplate == false && canEditCPTemplate == 'True') {
-                        if (item.Isactivated == true) {
-                            careplans += `<a href="javascript:void(0)"  onclick="SetTemplateStatus(${item.TemplateID},${false})"  class="btn btn-success text-white" style="cursor:pointer;">DEACTIVATE</a>`;
-                        } else if (item.Isactivated == 0) {
-                            careplans += `<a href="javascript:void(0)" onclick="SetTemplateStatus(${item.TemplateID},${true})"  class="btn btn-success text-white" style="cursor:pointer;">ACTIVATE</a>`;
+                    if (data.IsActive == 1 && data.IsBaseTemplate == false && canEditCPTemplate == 'True') {
+                        if (data.Isactivated == true) {
+                            careplans += `<a href="javascript:void(0)"  onclick="SetTemplateStatus(${data.TemplateID},${false})"  class="btn btn-success text-white" style="cursor:pointer;">DEACTIVATE</a>`;
+                        } else if (data.Isactivated == 0) {
+                            careplans += `<a href="javascript:void(0)" onclick="SetTemplateStatus(${data.TemplateID},${true})"  class="btn btn-success text-white" style="cursor:pointer;">ACTIVATE</a>`;
                         }
-                    } else if (item.IsActive == 0 && item.IsBaseTemplate == false && canEditCPTemplate == 'True') {
+                    } else if (data.IsActive == 0 && data.IsBaseTemplate == false && canEditCPTemplate == 'True') {
                         careplans += `<a href="javascript:void(0)" onclick="alertInprogressStatus()"  class="btn btn-success text-white" style="cursor:pointer;">ACTIVATE</a>`;
                     }
 
 
-                    if (!item.IsBaseTemplate && canDeleteCPTemplate == 'True') {
-                        careplans += `<a href="javascript:void(0)" onclick="DeleteCarePlanTemplate(${item.ProgramsID},this)"  class="btn btn-success text-white" style="cursor:pointer;">Delete</a>`;
+                    if (!data.IsBaseTemplate && canDeleteCPTemplate == 'True') {
+                        careplans += `<a href="javascript:void(0)" onclick="DeleteCarePlanTemplate(${data.ProgramsID},this)"  class="btn btn-success text-white" style="cursor:pointer;">Delete</a>`;
                     }
-                    careplans += `</div></td></tr>`;
-                });
-                careplanlist.html("").append(careplans);
-            } else {
-                careplans += `<tr><td colspan="6"><p class="text-center">No data found.</p></td></tr>`;
-                careplanlist.html("").append(careplans);
+
+                    return careplans;
+                }
             }
-            _careplanListTable=    $('#tblCarePlanTemplateList').DataTable({
-                paging: false,
-                retrieve: true,
-                "scrollY": "calc(100vh - 380px)",
-                searching: false,
-                'columnDefs': [{
-                    'targets': [5],
-                    'orderable': false                  
-                }]
-            });
-            $(".loaderOverlay").hide();
-        },
-        error: function (e) {
-            toastr.error("Unexpected error! error");
-        }
+
+        ]
     });
+
+
 }
 $("#radioBaseTemplate,#radioScratch").change(function () {
     if ($(this).prop("checked")) {

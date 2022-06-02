@@ -891,38 +891,29 @@ namespace RootsOfHealth.Controllers
 
         public ActionResult GetPotientialPatient()
         {
-            List<PotientialPatientBO> li = new List<PotientialPatientBO>(); ;
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri(WebApiKey);
-                //HTTP GET
-                var responseTask = client.GetAsync("/api/PatientMain/getpotientalpatient");
-
-
-                responseTask.Wait();
-
-                var result = responseTask.Result;
-                if (result.IsSuccessStatusCode)
-                {
-                    var readTask = result.Content.ReadAsAsync<List<PotientialPatientBO>>();
-                    readTask.Wait();
-
-                    li = readTask.Result;
-                }
-            }
-            return View(li);
+           
+            return View();
         }
+        [HttpPost]
         public ActionResult GetPotientialPatientsList()
         {
-            List<PotientialPatientBO> potientialPatients = new List<PotientialPatientBO>();
+
+            string draw = Request.Form.GetValues("draw")[0];
+            string sortBy = Request.Form.GetValues("order[0][column]")[0];
+            string sortDir = Request.Form.GetValues("order[0][dir]")[0];
+            int skipRecords = Convert.ToInt32(Request.Form.GetValues("start")[0]);
+
+            int pageSize = Convert.ToInt32(Request.Form.GetValues("length")[0]);
+            var searchTerm = Request.Form.GetValues("search[value]").FirstOrDefault();
+
+            List<PotentialPatientsListInfoBO> potientialPatients = new List<PotentialPatientsListInfoBO>();
            
-            try
-            {
+          
                 using (var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri(WebApiKey);
                     //HTTP GET
-                    var responseTask = client.GetAsync("/api/PatientMain/getpotientalpatient");
+                    var responseTask = client.GetAsync("/api/PatientMain/getpotientalpatient?skipRecords=" + skipRecords + "&pageSize=" + pageSize + "&sortby=" + sortBy + "&sortDir=" + sortDir + "&search=" + searchTerm);
 
 
                     responseTask.Wait();
@@ -930,7 +921,7 @@ namespace RootsOfHealth.Controllers
                     var result = responseTask.Result;
                     if (result.IsSuccessStatusCode)
                     {
-                        var readTask = result.Content.ReadAsAsync<List<PotientialPatientBO>>();
+                        var readTask = result.Content.ReadAsAsync<List<PotentialPatientsListInfoBO>>();
                         readTask.Wait();
 
                         potientialPatients = readTask.Result;
@@ -938,15 +929,21 @@ namespace RootsOfHealth.Controllers
                     }
                      
                 }
-            }
-            catch (Exception ex)
+            var TotalCount = 0;
+            if (potientialPatients.Count > 0)
             {
-                new Common().LogExceptionToDb(ex);
-                return Json(new {status= 0, Message = ex.Message });
+                TotalCount = potientialPatients[0].TotalCount ?? 0;
             }
-            
-            return Json(new {status = 1,pClientlist = potientialPatients },JsonRequestBehavior.AllowGet);
-         }
+            return Json(new
+            {
+                draw = Convert.ToInt32(draw),
+                recordsTotal = TotalCount,
+                recordsFiltered = TotalCount,
+                data = potientialPatients
+            });
+
+
+        }
 
         [HttpGet]
         public ActionResult EditPotentialPatient(long patientId)
@@ -1073,23 +1070,31 @@ namespace RootsOfHealth.Controllers
             return View();
         }
 
-        [HttpGet]
+        [HttpPost]
         public ActionResult GetAllPatients()
         {
+            string draw = Request.Form.GetValues("draw")[0];
+            string sortBy = Request.Form.GetValues("order[0][column]")[0];
+            string sortDir = Request.Form.GetValues("order[0][dir]")[0];
+            int skipRecords = Convert.ToInt32(Request.Form.GetValues("start")[0]);
 
-            List<PatientMainBO> patientdetailobj = new List<PatientMainBO>();
+            int pageSize = Convert.ToInt32(Request.Form.GetValues("length")[0]);
+            var searchTerm = Request.Form.GetValues("search[value]").FirstOrDefault();
+
+
+            List<PatientMainInfo> patientdetailobj = new List<PatientMainInfo>();
 
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(WebApiKey);
                 //HTTP GET
-                var responseTask = client.GetAsync("/api/PatientMain/GetAllPatient?clinicid="+Session["ClinicID"]);
+                var responseTask = client.GetAsync("/api/PatientMain/GetAllPatient?clinicid="+Session["ClinicID"]+ "&skipRecords=" + skipRecords + "&pageSize=" + pageSize + "&sortby=" + sortBy + "&sortDir=" + sortDir + "&search=" + searchTerm);
                 responseTask.Wait();
 
                 var result = responseTask.Result;
                 if (result.IsSuccessStatusCode)
                 {
-                    var readTask = result.Content.ReadAsAsync<List<PatientMainBO>>();
+                    var readTask = result.Content.ReadAsAsync<List<PatientMainInfo>>();
                     readTask.Wait();
                     patientdetailobj = readTask.Result;
                 }
@@ -1100,8 +1105,63 @@ namespace RootsOfHealth.Controllers
 
                 }
             }
+            var TotalCount = 0;
+            if (patientdetailobj.Count > 0)
+            {
+                TotalCount = patientdetailobj[0].TotalCount ?? 0;
+            }
+            return Json(new
+            {
+                draw = Convert.ToInt32(draw),
+                recordsTotal = TotalCount,
+                recordsFiltered = TotalCount,
+                data = patientdetailobj
+            });
+            
+        }
 
-            return PartialView("~/Views/Shared/Patient/_AllPatient.cshtml", patientdetailobj);
+        [HttpPost]
+        public ActionResult GetUsergroupList()
+        {
+            string draw = Request.Form.GetValues("draw")[0];
+            string sortBy = Request.Form.GetValues("order[0][column]")[0];
+            string sortDir = Request.Form.GetValues("order[0][dir]")[0];
+            int skipRecords = Convert.ToInt32(Request.Form.GetValues("start")[0]);
+
+            int pageSize = Convert.ToInt32(Request.Form.GetValues("length")[0]);
+            var searchTerm = Request.Form.GetValues("search[value]").FirstOrDefault();
+
+
+            List<UsergroupListInfo> usergroupList = new List<UsergroupListInfo>();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                //HTTP GET
+                var responseTask = client.GetAsync("/api/PatientMain/GetGrouplist?skipRecords=" + skipRecords + "&pageSize=" + pageSize + "&sortby=" + sortBy + "&sortDir=" + sortDir + "&search=" + searchTerm);
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<List<UsergroupListInfo>>();
+                    readTask.Wait();
+                    usergroupList = readTask.Result;
+                }
+                
+            }
+            var TotalCount = 0;
+            if (usergroupList.Count > 0)
+            {
+                TotalCount = usergroupList[0].TotalCount ?? 0;
+            }
+            return Json(new
+            {
+                draw = Convert.ToInt32(draw),
+                recordsTotal = TotalCount,
+                recordsFiltered = TotalCount,
+                data = usergroupList
+            });
 
         }
 

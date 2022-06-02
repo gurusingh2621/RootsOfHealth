@@ -211,6 +211,8 @@
     <Compile Include="Models\CareplanFileBO.cs" />
     <Compile Include="Models\CarePlantemplateBO.cs" />
     <Compile Include="Models\CarePlanTemplateFieldBO.cs" />
+    <Compile Include="Models\CarePlanTemplateListInfoBO.cs" />
+    <Compile Include="Models\ClientFormtemplateListInfoBO.cs" />
     <Compile Include="Models\ClinicBO.cs" />
     <Compile Include="Models\DastBO.cs" />
     <Compile Include="Models\DreamOnlyBO.cs" />
@@ -236,6 +238,7 @@
     <Compile Include="Models\PatientHousingBO.cs" />
     <Compile Include="Models\PatientLegalStatuBO.cs" />
     <Compile Include="Models\PatientMainBO.cs" />
+    <Compile Include="Models\PatientMainInfo.cs" />
     <Compile Include="Models\PatientMentalHealthBO.cs" />
     <Compile Include="Models\PatientProgramBO.cs" />
     <Compile Include="Models\PatientScoreBO.cs" />
@@ -244,6 +247,7 @@
     <Compile Include="Models\PeraltaCollegeBO.cs" />
     <Compile Include="Models\PermissionModel.cs" />
     <Compile Include="Models\PHQ9BO.cs" />
+    <Compile Include="Models\PotentialPatientsListInfoBO.cs" />
     <Compile Include="Models\PotientalPatientBO.cs" />
     <Compile Include="Models\PotientialPatientBO.cs" />
     <Compile Include="Models\PotientialTableInfoBO.cs" />
@@ -254,6 +258,7 @@
     <Compile Include="Models\ProgramsForPatientBO.cs" />
     <Compile Include="Models\ClientFormtemplateBO .cs" />
     <Compile Include="Models\ProgramtemplateBO.cs" />
+    <Compile Include="Models\ProgramtemplateListInfoBO.cs" />
     <Compile Include="Models\ReleaseAndDisclousureBO.cs" />
     <Compile Include="Models\RolePermissionsBO.cs" />
     <Compile Include="Models\ScheduleDateBO.cs" />
@@ -261,6 +266,7 @@
     <Compile Include="Models\SharedFormForExportBO.cs" />
     <Compile Include="Models\TypeOfAppointmentBO.cs" />
     <Compile Include="Models\UserBO.cs" />
+    <Compile Include="Models\UsergroupListInfo.cs" />
     <Compile Include="Models\UserListInfo.cs" />
     <Compile Include="Models\UserRolesBO.cs" />
     <Compile Include="Models\WholePersonCareBo.cs" />

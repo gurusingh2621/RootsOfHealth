@@ -25,6 +25,52 @@ namespace RootsOfHealth.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public ActionResult GetProgramTemplatelist()
+        {
+            string draw = Request.Form.GetValues("draw")[0];
+            string sortBy = Request.Form.GetValues("order[0][column]")[0];
+            string sortDir = Request.Form.GetValues("order[0][dir]")[0];
+            int skipRecords = Convert.ToInt32(Request.Form.GetValues("start")[0]);
+
+            int pageSize = Convert.ToInt32(Request.Form.GetValues("length")[0]);
+            var searchTerm = Request.Form.GetValues("search[value]").FirstOrDefault();
+
+
+            List<ProgramtemplateListInfoBO> programtemplateList = new List<ProgramtemplateListInfoBO>();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                //HTTP GET
+                var responseTask = client.GetAsync("/api/PatientMain/getprogramtemplatelist?skipRecords=" + skipRecords + "&pageSize=" + pageSize + "&sortby=" + sortBy + "&sortDir=" + sortDir + "&search=" + searchTerm);
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<List<ProgramtemplateListInfoBO>>();
+                    readTask.Wait();
+                    programtemplateList = readTask.Result;
+                }
+
+            }
+            var TotalCount = 0;
+            if (programtemplateList.Count > 0)
+            {
+                TotalCount = programtemplateList[0].TotalCount ?? 0;
+            }
+            return Json(new
+            {
+                draw = Convert.ToInt32(draw),
+                recordsTotal = TotalCount,
+                recordsFiltered = TotalCount,
+                data = programtemplateList
+            });
+
+        }
+
+
 
         public ActionResult ClientsFormList()
         {

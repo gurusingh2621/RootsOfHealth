@@ -266,66 +266,104 @@ function BindPotentialClientsTable() {
         }
     });
 
-    $.ajax({
-        url: '/Patient/GetPotientialPatientsList',
-        type: 'GET',
-        contentType: 'application/json; charset=UTF-8',
-        dataType: "json",
-        success: function (data) {
-
-
-            $("#tblPotientialPatient").dataTable().fnDestroy();
-
-            var patientList = $('#tblPotientialPatient tbody');
-            if (data.status === 1) {
-                var potentialPatient = "";
-                $.each(data.pClientlist, function (index, item) {
-
-                    if (duplicates.filter(e => e.EmailAddress === item.EmailAddress || e.SocialSecurityNumber === item.SocialSecurityNumber).length > 0) {
-                        potentialPatient += `<tr style="background-color:red ;color:white"><td style="cursor: pointer;" onclick="GetDuplicateRecordDetails(${item.PatientID})">${item.PatientID}</td>`;
+    $("#tblPotientialPatient").dataTable({
+        "scrollY": 'calc(100vh - 300px)',
+        "paging": true,
+        "ordering": true,
+        "filter": true,
+        "destroy": true,
+        "orderMulti": false,
+        "serverSide": true,
+        "Processing": true,
+        "ajax":
+        {
+            "url": "/Patient/GetPotientialPatientsList",
+            "type": "POST",
+            "dataType": "JSON"
+        },
+        'columnDefs': [{
+            'targets': [5],
+            'orderable': false
+        }],
+        "columns": [
+            {
+                "data": "PatientId"
+            },
+            {
+                "data": null,
+                "render": function (data) {
+                    return GetFullName(data.FirstName, data.LastName);
+                }
+            },
+            {
+                "data": "EmailAddress",
+                "render": function (value) {
+                    if (value != null) {
+                        return value;
                     }
                     else {
-                        potentialPatient += `<tr><td>${item.PatientID}</td>`
+                        return "";
                     }
+                }
 
+            },
+            {
+                "data": "CellPhone",
+                "render": function (value) {
+                    if (value != null) {
+                        return value;
+                    }
+                    else {
+                        return "";
+                    }
+                }
+            },
+            {
+                "data": "ModifiedDate",
+                "render": function (value) {
 
-                    potentialPatient += `<td>${GetFullName(item.FirstName, item.LastName)}</td>
-                                         <td>${item.EmailAddress != null ? item.EmailAddress : ""}</td>
-                         <td >${item.CellPhone != null ? item.CellPhone : ""}</td>
-                         <td >${item.ModifiedDate != null ? new Date(parseInt(item.ModifiedDate.substr(6))).toISOString().split('T')[0] : ""}</td>
-                         <td><div>`;
-                    if (duplicates.filter(e => e.EmailAddress === item.EmailAddress || e.SocialSecurityNumber === item.SocialSecurityNumber).length == 0 && canMovePClientPerm == "True") {
-                        potentialPatient += `<button href="javascript:void(0)" id="btnpatientmove" onclick="MovePotentialPatient(${item.PatientID})" class="btn btn-success label-fields"> <i class=""></i>
+                    if (value === null) return "";
+
+                    var pattern = /Date\(([^)]+)\)/;
+                    var results = pattern.exec(value);
+                    var dt = new Date(parseFloat(results[1]));
+                    var time = dt.toLocaleTimeString();
+                    return (dt.getMonth() + 1) + "/" + dt.getDate() + "/" + dt.getFullYear() + " " + time;
+                }
+            },
+            {
+                "data": null,
+                "render": function (data) {
+                    var potentialPatient = "";
+                    if (duplicates.filter(e => e.EmailAddress === data.EmailAddress || e.SocialSecurityNumber === data.SocialSecurityNumber).length == 0 && canMovePClientPerm == "True") {
+                        potentialPatient += `<button href="javascript:void(0)" id="btnpatientmove" onclick="MovePotentialPatient(${data.PatientId})" class="btn btn-success label-fields"> <i class=""></i>
                                         Move</button>`;
                     }
                     if (canEditPClientPerm == "True") {
-                        potentialPatient += `<a href="/Patient/EditPotentialPatient?patientId=${item.PatientID}" id="btnpatientedit" class="btn btn-success label-fields"> <i class="far fa-edit"></i>
+                        potentialPatient += `<a href="/Patient/EditPotentialPatient?patientId=${data.PatientId}" id="btnpatientedit" class="btn btn-success label-fields"> <i class="far fa-edit"></i>
                                         Edit</a>`;
                     }
                     if (canDeletePClientPerm == "True") {
-                        potentialPatient += `<button href="javascript:void(0)" id="btnpatientDelete" onclick="DeletePotentialPatient(${item.PatientID})" class="btn btn-danger label-fields"> <i class=""></i>
+                        potentialPatient += `<button href="javascript:void(0)" id="btnpatientDelete" onclick="DeletePotentialPatient(${data.PatientId})" class="btn btn-danger label-fields"> <i class=""></i>
                                         Delete</button>`;
                     }
 
-                    potentialPatient += `</div></td></tr>`;
-                });
-                patientList.html("").append(potentialPatient);
-
-
-                $("#tblPotientialPatient").dataTable({
-                    scrollY: 'calc(100vh - 264px)',
-                    scrollCollapse: true,
-                    "orderClasses": false
-                });
+                    return potentialPatient;
+                }
             }
-            else {
-                alert("error occured");
+
+        ],
+        "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            if (duplicates.filter(e => e.EmailAddress === aData.EmailAddress || e.SocialSecurityNumber === aData.SocialSecurityNumber).length > 0) {
+                var firstCell = $(nRow).children('td:first');
+                $('td', nRow).css('background-color', 'Red');
+                $('td', nRow).css('color', 'White');
+                firstCell.css('cursor', 'pointer');
+                firstCell.click(function () {
+                    GetDuplicateRecordDetails(aData.PatientId)
+                })
             }
-        },
-        error: function () {
-            alert("error occured");
         }
-
     });
 
 }
