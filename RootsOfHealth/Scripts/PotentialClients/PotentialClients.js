@@ -267,8 +267,7 @@ function BindPotentialClientsTable() {
     });
 
     $("#tblPotientialPatient").dataTable({
-        "scrollY": 'calc(100vh - 410px)',
-        "scrollCollapse": true,
+        "scrollY": 'calc(100vh - 303px)',
         "scrollX": true,
         "paging": true,
         "ordering": true,
