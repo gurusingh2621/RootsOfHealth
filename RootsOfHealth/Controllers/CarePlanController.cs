@@ -10,7 +10,9 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
 namespace RootsOfHealth.Controllers
-{    [Authorize]
+{
+    [SessionTimeout]
+    [Authorize]
     [CustomErrorFilter]
     public class CarePlanController : Controller
     {

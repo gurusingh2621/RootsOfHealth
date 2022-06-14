@@ -12,6 +12,7 @@ using System.Web.Mvc;
 
 namespace RootsOfHealth.Controllers
 {
+    [SessionTimeout]
     [Authorize]
     [CustomErrorFilter]
     public class DashBoardController : Controller
