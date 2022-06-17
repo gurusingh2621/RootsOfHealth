@@ -187,8 +187,8 @@
                                accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
                     }
                     <select id="ddlExcelType" class="form-control">
-                        <option value="organised">Organised</option>
-                        <option value="unorganised">Un-Organised</option>
+                        <option value="organised">Organized</option>
+                        <option value="unorganised">Unorganized</option>
                     </select>
                     @using (Html.BeginForm("GenerateSampleExcelFile", "Client", FormMethod.Post))
                     {
@@ -205,11 +205,11 @@
 
                     <thead>
                         <tr class="table-active">
-                            <th>PatientId</th>
+                            <th>ClientId</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Phone</th>
-                            <th>Last Modify</th>
+                            <th>Last Modified</th>
                             <th>Action</th>
                         </tr>
                     </thead>

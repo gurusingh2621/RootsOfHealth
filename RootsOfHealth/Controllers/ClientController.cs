@@ -27,6 +27,7 @@ using A = DocumentFormat.OpenXml.OpenXmlAttribute;
 
 namespace RootsOfHealth.Controllers
 {
+    [SessionTimeout]
     [CustomErrorFilter]
     public class ClientController : Controller
     {

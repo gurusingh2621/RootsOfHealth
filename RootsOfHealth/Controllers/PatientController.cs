@@ -13,6 +13,7 @@ using RootsOfHealth.Models;
 
 namespace RootsOfHealth.Controllers
 {
+    [SessionTimeout]
     [Authorize]
     [CustomErrorFilter]
     public class PatientController : Controller

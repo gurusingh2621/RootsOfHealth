@@ -19,4 +19,17 @@ namespace RootsOfHealth.CustomFilters
             filterContext.ExceptionHandled = true;
         }
     }
+    public class SessionTimeoutAttribute : ActionFilterAttribute
+    {
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            HttpContext ctx = HttpContext.Current;
+            if (HttpContext.Current.Session["userid"] == null)
+            {
+                filterContext.Result = new RedirectResult("~/Account/Login");
+                return;
+            }
+            base.OnActionExecuting(filterContext);
+        }
+    }
 }

@@ -2042,14 +2042,14 @@ function setCarePlanStatus(obj) {
                 }
                 else {
                     if (model.Status == 1) {
-                        toastr.error("Status cant be changed to Not Started");
+                        toastr.error("status cannot be changed due to pending approval");
 
                     }
                     else if (model.Status == 3) {
-                        toastr.error("Status cant be changed to In-Progress");
+                        toastr.error("status cannot be changed due to pending approval");
                     }
                     else if (model.Status == 4) {
-                        toastr.error("Status cant be changed to Completed");
+                        toastr.error("status cannot be changed due to pending approval");
                     }
 
                     $("#ddlcareplanstatus").val(prevSelectedCarePlan);

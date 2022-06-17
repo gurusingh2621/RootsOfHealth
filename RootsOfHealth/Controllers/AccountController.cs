@@ -15,13 +15,14 @@ using System.Web.Security;
 
 namespace RootsOfHealth.Controllers
 {
+    
     [Authorize]
     [CustomErrorFilter]
     public class AccountController : Controller
     {
         string WebApiKey = WebConfigurationManager.AppSettings["WebApiForBackend"];
         // GET: Account
-       
+        [SessionTimeout]
         public ActionResult Index()
         {
             using (var client = new HttpClient())
@@ -44,6 +45,8 @@ namespace RootsOfHealth.Controllers
             
             return  View();
         }
+
+        [SessionTimeout]
         [HttpPost]
         public ActionResult GetUsersData()
         {
@@ -151,6 +154,7 @@ namespace RootsOfHealth.Controllers
             return Json("");
         }
 
+
        void GetRolePermission(int roleid)
         {
             using (var client = new HttpClient())
@@ -182,6 +186,8 @@ namespace RootsOfHealth.Controllers
             }
             return RedirectToAction("Login");
         }
+
+        [SessionTimeout]
         public ActionResult EditUserDetails(string username)
         {
             UserBO user = new UserBO();
@@ -206,6 +212,8 @@ namespace RootsOfHealth.Controllers
 
             return View(user);
         }
+
+        [SessionTimeout]
         public  ActionResult UserDetails(string username)
         {
             UserBO user = new UserBO();
@@ -231,12 +239,15 @@ namespace RootsOfHealth.Controllers
                 return View(user);
         }
 
+        [SessionTimeout]
         public ActionResult AddUser()
         {
            
 
             return View();
         }
+
+        [SessionTimeout]
         [HttpPost]
         public JsonResult AddUser(UserBO model)
         {
@@ -289,6 +300,8 @@ namespace RootsOfHealth.Controllers
 
             return Json("");
         }
+
+        [SessionTimeout]
         [HttpPost]
         public JsonResult Upload()
         {
@@ -308,6 +321,7 @@ namespace RootsOfHealth.Controllers
 
         }
 
+        [SessionTimeout]
         [HttpGet]
         public ActionResult Roles()
         {
@@ -333,6 +347,8 @@ namespace RootsOfHealth.Controllers
             return View(UserRoles);
 
         }
+
+        [SessionTimeout]
         public ActionResult GetRolePermissionsByRoleId(int? roleId)
         {
             List<RolePermissionsBO> permissionModel = new List<RolePermissionsBO>();
@@ -356,6 +372,8 @@ namespace RootsOfHealth.Controllers
             }
             return PartialView("~/Views/Shared/Role/_RolePermissionsList.cshtml", permissionModel);
         }
+
+        [SessionTimeout]
         [HttpGet]
         public ActionResult UpdateRolesList()
         {
@@ -379,6 +397,8 @@ namespace RootsOfHealth.Controllers
             }
             return PartialView("~/Views/Shared/Account/_RoleList.cshtml", UserRoles);
         }
+
+        [SessionTimeout]
         [HttpGet]
         public ActionResult EditRole(int roleid)
         {
@@ -404,11 +424,15 @@ namespace RootsOfHealth.Controllers
             //return PartialView("~/Views/Shared/Account/_EditRole.cshtml", UserRoles);
 
         }
+
+        [SessionTimeout]
         [HttpGet]
         public ActionResult Settings()
         {
             return View();
         }
+
+        [SessionTimeout]
         [HttpGet]
         public ActionResult UserGroupList()
         {
@@ -432,6 +456,8 @@ namespace RootsOfHealth.Controllers
 
             return View();
         }
+
+        [SessionTimeout]
         [HttpGet]
         public ActionResult AddGroup()
         {
