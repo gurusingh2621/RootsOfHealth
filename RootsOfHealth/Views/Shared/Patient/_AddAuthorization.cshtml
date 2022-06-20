@@ -1,20 +1,29 @@
 ﻿@model RootsOfHealth.Models.AuthorizationBO
 
 
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link type="text/css" href="~/Content/css/jquery.signature.css" rel="stylesheet">
+
+
 <style>
     h1 {
         display: none;
     }
-    .authorization.scroll, .care-connect.scroll{
+
+    .authorization.scroll, .care-connect.scroll {
         height: calc(100vh - 12%);
+    }
+    .kbw-signature {
+        width: 300px;
+        height: 150px;
     }
 </style>
 
 
 <div class="tab-pane fade show active" id="Release" role="tabpanel" aria-labelledby="Release-tab">
     @*<style type="text/css">
-    @@media print {#frmRelease, h1 {display: none;}}
-    </style>*@
+        @@media print {#frmRelease, h1 {display: none;}}
+        </style>*@
     <!-- Inner content start here  -->
     <div class="inner-content">
         <div class="paitent-detail">
@@ -43,7 +52,7 @@
                                         <div class="row" style="display:flex; margin:0 -15px;">
                                             <div class="col-lg-6 col-md-6 col-sm-12 col-12" style="flex:0 0 50%; max-width:50%;">
                                                 <div class="custom-control custom-checkbox">
-                                                    <input  tabindex="1" type="checkbox"
+                                                    <input tabindex="1" type="checkbox"
                                                            class="custom-control-input"
                                                            id="ProblemList"
                                                            name="frmRelease_check1" value="1">
@@ -145,7 +154,7 @@
                                                         Drug and Alcohol
                                                     </label>
                                                 </div>
-                                               
+
                                                 <div class="custom-control custom-checkbox">
                                                     <input tabindex="1" type="checkbox"
                                                            class="custom-control-input"
@@ -223,22 +232,22 @@
 
 
                                                 @*<ul>
-            <li>Drug and Alcohol</li>
-            <li>HIV</li>
-            <li>Mental Health Records</li>
-            <li>Lab Results</li>
-            <li>
-                X-Ray and imaging reports (please list the dates and types of
-                x-rays or images you would like disclosed): <input type="text" name="" value="" />
-            </li>
-            <li>Most recent discharge summary</li>
-            <li>Entire Record</li>
-            <li>
-                Consultation reports (please supply doctors’ names, dates,
-                and report
-                types): <input type="text" name="" value="" />
-            </li>
-        </ul>*@
+                                                        <li>Drug and Alcohol</li>
+                                                        <li>HIV</li>
+                                                        <li>Mental Health Records</li>
+                                                        <li>Lab Results</li>
+                                                        <li>
+                                                            X-Ray and imaging reports (please list the dates and types of
+                                                            x-rays or images you would like disclosed): <input type="text" name="" value="" />
+                                                        </li>
+                                                        <li>Most recent discharge summary</li>
+                                                        <li>Entire Record</li>
+                                                        <li>
+                                                            Consultation reports (please supply doctors’ names, dates,
+                                                            and report
+                                                            types): <input type="text" name="" value="" />
+                                                        </li>
+                                                    </ul>*@
                                             </div>
                                         </div>
 
@@ -300,21 +309,27 @@
                             <div class="signature">
                                 <div class="row" style="display:flex; margin:0 -15px">
                                     <div class="col-lg-5 col-md-5 col-sm-12 col-12" style="padding:0 15px; flex: 0 0 41.666667%;max-width: 41.666667%;">
-                                        <input style="width:100%;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" name="SignatureOfPatient" value="@Model.ReleaseAndDisclousure.SignatureOfPatient" />
+                                        <div id="patientsigPanel"></div>
+                                        <input type="hidden"name="SignatureOfPatient" id="clientSignature" value="@Model.ReleaseAndDisclousure.SignatureOfPatient" />
+                                        @*<input style="width:100%;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" name="SignatureOfPatient" value="@Model.ReleaseAndDisclousure.SignatureOfPatient" />*@
                                         <strong style="line-height: normal;width: 100%;display: block; white-space:normal;">Signature of Client or legal representative</strong>
                                     </div>
                                     <div class="col-lg-2 col-md-2 col-sm-12 col-12" style="flex: 0 0 16.666667%;max-width: 16.666667%; padding:0 15px">
-                                        <input style="width:100%;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;"  class="w-100" type="text" name="SignatureDate" value="@Model.ReleaseAndDisclousure.SignatureDate" />
+                                        <input style="width:100%;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" name="SignatureDate" value="@Model.ReleaseAndDisclousure.SignatureDate" />
                                         <strong style="line-height: normal;width: 100%;display: block;white-space:normal;">Date</strong>
                                     </div>
                                     <div class="col-lg-5 col-md-5 col-sm-12 col-12" style="padding:0 15px; flex: 0 0 41.666667%;max-width: 41.666667%;">
-                                        <input style="width:100%;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" name="RepresentativeRelation" value="@Model.ReleaseAndDisclousure.RepresentativeRelation" />
+                                        <div id="representativesigPanel"></div>
+                                        <input type="hidden" name="RepresentativeRelation" id="representativeSignature" value="@Model.ReleaseAndDisclousure.RepresentativeRelation" />
+                                        @* <input style="width:100%;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" name="RepresentativeRelation" value="@Model.ReleaseAndDisclousure.RepresentativeRelation" />*@
                                         <strong style="line-height: normal;width: 100%;display: block;white-space:normal;">If signed by legal representative, relationship to Client</strong>
                                     </div>
                                 </div>
                                 <div class="row" style="display:flex; margin:0 -15px">
                                     <div class="col-lg-5 col-md-5 col-sm-12 col-12" style="padding:0 15px; flex: 0 0 41.666667%;max-width: 41.666667%;">
-                                        <input style="width:100%;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" name="SignatureOfWitness" value="@Model.ReleaseAndDisclousure.SignatureOfWitness" />
+                                        <div id="witnesssigPanel"></div>
+                                        <input type="hidden" id="witnessSignature" name="SignatureOfWitness" value="@Model.ReleaseAndDisclousure.SignatureOfWitness" />
+                                        @* <input style="width:100%;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" name="SignatureOfWitness" value="@Model.ReleaseAndDisclousure.SignatureOfWitness" />*@
                                         <strong style="line-height: normal;width: 100%;display: block;white-space:normal;">Signature of witness </strong>
                                     </div>
                                     <div class="col-lg-2 col-md-2 col-sm-12 col-12" style="flex: 0 0 16.666667%;max-width: 16.666667%; padding:0 15px">
@@ -332,7 +347,6 @@
                                 <input id="hdfTypeOfInformation" type="hidden" name="TypeOfInformation" value="@Model.ReleaseAndDisclousure.TypeOfInformation" />
                                 <input type="hidden" id="hdfPatientID" name="PatientID" value="@Model.ReleaseAndDisclousure.PatientID" />
                                 <input type="hidden" id="hdfReleaseAndDisclousureID" name="ReleaseAndDisclousureID" value="@Model.ReleaseAndDisclousure.ReleaseAndDisclousureID" />
-
 
                                 <a href="javascript:{}" onclick="return ReleaseSave();" id="btnRelease" class="btn btn-success">
                                     <i class="far fa-save"></i>
@@ -547,7 +561,7 @@
         <div class="paitent-detail">
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                    <div class="care-connect scroll" >
+                    <div class="care-connect scroll">
                         <form class="detail-patient-form" id="frmCare">
                             <div class="auth-topsection" style="background: #f8f8f8;padding: 0 10px;border: 1px solid #e8e8e8;margin-bottom: 25px;">
 
@@ -576,12 +590,12 @@
                                             <p>
                                                 <span class="name" style="height: 25px;">Address:</span> <input id="addressField" style="height: 25px;text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 64px !important;" class="addressPadding" value="@Model.CareConnect.Address" type="text" name="Address">
                                             </p>
-                                           
+
                                             <input id="addressField2" style="height: 25px;text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="address-text" type="text" name="Address2" value="@Model.CareConnect.Address2">
 
                                             <p>
                                                 <span class="name" style="height: 25px;">Tel:</span> <input style="height: 25px;text-align:left;padding-left: 29px !important;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" id="caretel" class="telPadding"
-                                                                                      type="text" name="Tel" value="@Model.CareConnect.Tel">
+                                                                                                            type="text" name="Tel" value="@Model.CareConnect.Tel">
                                             </p>
                                         </div>
 
@@ -593,7 +607,7 @@
                                 </div>
                             </div>
 
-                            <div class="care-text" style="font-size:13px;" >
+                            <div class="care-text" style="font-size:13px;">
                                 <ol>
 
                                     <li>
@@ -748,275 +762,276 @@
                                     <div class="Delievery">
                                         <div class="row" style="display:flex; margin:0-15px;">
                                             <div class="col-lg-6 col-md-6 col-sm-12 col-12 pt-3" style="flex:0 0 50%; max-width:50%;">
-                                                <li><strong>Delievery Preference:</strong></li>
-                                                <div class="delievery-radio">
-                                                    <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block;">
-                                                        <input tabindex="1" type="checkbox" class="custom-control-input" id="Mail" name="frmConnect_dpcheck11" value="11">
-                                                        <label class="custom-control-label" for="Mail">
-                                                            Mail
-                                                        </label>
-                                                    </div>
-                                                    <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block;">
-                                                        <input tabindex="1" type="checkbox" class="custom-control-input" id="PickUp" name="frmConnect_dpcheck12" value="12">
-                                                        <label class="custom-control-label" for="PickUp">
-                                                            Pick Up
-                                                        </label>
-                                                    </div>
-
-                                                    <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:block;">
-                                                        <input tabindex="1" type="checkbox" class="custom-control-input" id="OtherPref" name="frmConnect_dpcheck13" value="13">
-                                                        <label class="custom-control-label" for="OtherPref">
-                                                            Other
-                                                        </label>
-                                                        <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" type="text" name="OtherDelieveryPreference" value="@Model.CareConnect.OtherDelieveryPreference" />
-                                                    </div>
-
-                                                    @*<div class="custom-control custom-radio d-inline-block mr-2">
-                                                            <input type="radio" class="custom-control-input" id="MailRadio" name="example1" value="customEx">
-                                                            <label class="custom-control-label" for="MailRadio">Mail</label>
-                                                        </div>
-                                                        <div class="custom-control custom-radio d-inline-block mr-2">
-                                                            <input type="radio" class="custom-control-input" id="PickRadio" name="example1" value="customEx">
-                                                            <label class="custom-control-label" for="PickRadio">Pick Up</label>
-                                                        </div>
-                                                        <div class="custom-control custom-radio d-inline-block mr-2">
-                                                            <input type="radio" class="custom-control-input" id="OtherRadio" name="example1" value="customEx">
-                                                            <label class="custom-control-label" for="OtherRadio">Other</label>
-                                                        </div>*@
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6 col-md-6 col-sm-12 col-12 pt-3" style="flex:0 0 50%; max-width:50%;">
-                                                <li><strong>Delievery Format:</strong></li>
-                                                <div class="delievery-radio">
-
-                                                    <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block;">
-                                                        <input tabindex="1" type="checkbox" class="custom-control-input" id="CDCheck" name="frmConnect_dfcheck14" value="14">
-                                                        <label class="custom-control-label" for="CDCheck">
-                                                            CD
-                                                        </label>
-                                                    </div>
-                                                    <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block;">
-                                                        <input tabindex="1" type="checkbox" class="custom-control-input" id="FilmCheck" name="frmConnect_dfcheck15" value="15">
-                                                        <label class="custom-control-label" for="FilmCheck">
-                                                            Film
-                                                        </label>
-                                                    </div>
-
-                                                    <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block;">
-                                                        <input tabindex="1" type="checkbox" class="custom-control-input" id="PaperCheck" name="frmConnect_dfcheck16" value="16">
-                                                        <label class="custom-control-label" for="PaperCheck">
-                                                            Paper
-                                                        </label>
-                                                    </div>
-                                                    <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:block;">
-                                                        <input tabindex="1" type="checkbox" class="custom-control-input" id="OtherDel" name="frmConnect_dfcheck17" value="17">
-                                                        <label class="custom-control-label" for="OtherDel">
-                                                            Other
-                                                        </label>
-                                                        <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" type="text" name="OtherDelieveryFormat" value="@Model.CareConnect.OtherDelieveryFormat" />
-                                                    </div>
-
-                                                    @*<div class="custom-control custom-radio d-inline-block mr-2">
-                                                            <input type="radio" class="custom-control-input" id="CDRadio" name="example1" value="customEx">
-                                                            <label class="custom-control-label" for="CDRadio">CD</label>
-                                                        </div>
-                                                        <div class="custom-control custom-radio d-inline-block mr-2">
-                                                            <input type="radio" class="custom-control-input" id="FilmRadio" name="example1" value="customEx">
-                                                            <label class="custom-control-label" for="FilmRadio">Film</label>
-                                                        </div>
-                                                        <div class="custom-control custom-radio d-inline-block mr-2">
-                                                            <input type="radio" class="custom-control-input" id="PaperRadio" name="example1" value="customEx">
-                                                            <label class="custom-control-label" for="PaperRadio">Paper</label>
-                                                        </div>
-                                                        <div class="custom-control custom-radio d-inline-block mr-2">
-                                                            <input type="radio" class="custom-control-input" id="OtherRadioMdical" name="example1" value="customEx">
-                                                            <label class="custom-control-label" for="OtherRadioMdical">Other</label>
-                                                        </div>*@
-                                                </div>
-                                            </div>
+                                    <li><strong>Delievery Preference:</strong></li>
+                                    <div class="delievery-radio">
+                                        <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block;">
+                                            <input tabindex="1" type="checkbox" class="custom-control-input" id="Mail" name="frmConnect_dpcheck11" value="11">
+                                            <label class="custom-control-label" for="Mail">
+                                                Mail
+                                            </label>
                                         </div>
+                                        <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block;">
+                                            <input tabindex="1" type="checkbox" class="custom-control-input" id="PickUp" name="frmConnect_dpcheck12" value="12">
+                                            <label class="custom-control-label" for="PickUp">
+                                                Pick Up
+                                            </label>
+                                        </div>
+
+                                        <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:block;">
+                                            <input tabindex="1" type="checkbox" class="custom-control-input" id="OtherPref" name="frmConnect_dpcheck13" value="13">
+                                            <label class="custom-control-label" for="OtherPref">
+                                                Other
+                                            </label>
+                                            <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" type="text" name="OtherDelieveryPreference" value="@Model.CareConnect.OtherDelieveryPreference" />
+                                        </div>
+
+                                        @*<div class="custom-control custom-radio d-inline-block mr-2">
+                                                <input type="radio" class="custom-control-input" id="MailRadio" name="example1" value="customEx">
+                                                <label class="custom-control-label" for="MailRadio">Mail</label>
+                                            </div>
+                                            <div class="custom-control custom-radio d-inline-block mr-2">
+                                                <input type="radio" class="custom-control-input" id="PickRadio" name="example1" value="customEx">
+                                                <label class="custom-control-label" for="PickRadio">Pick Up</label>
+                                            </div>
+                                            <div class="custom-control custom-radio d-inline-block mr-2">
+                                                <input type="radio" class="custom-control-input" id="OtherRadio" name="example1" value="customEx">
+                                                <label class="custom-control-label" for="OtherRadio">Other</label>
+                                            </div>*@
+                                    </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-12 pt-3" style="flex:0 0 50%; max-width:50%;">
+                                <li><strong>Delievery Format:</strong></li>
+                                <div class="delievery-radio">
+
+                                    <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block;">
+                                        <input tabindex="1" type="checkbox" class="custom-control-input" id="CDCheck" name="frmConnect_dfcheck14" value="14">
+                                        <label class="custom-control-label" for="CDCheck">
+                                            CD
+                                        </label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block;">
+                                        <input tabindex="1" type="checkbox" class="custom-control-input" id="FilmCheck" name="frmConnect_dfcheck15" value="15">
+                                        <label class="custom-control-label" for="FilmCheck">
+                                            Film
+                                        </label>
                                     </div>
 
-                                    <li><strong>Duration:</strong> This Authorization is valid immediately and will be valid until    <input style="display:block;width:25%;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="GivenDate date" type="text" name="ValidUntilDate" value="@Model.CareConnect.ValidUntilDate" id="careGivenDate" placeholder="12/31/2020" /> (Given date)</li>
-                                    <li>
-                                        <strong>Cancellation:</strong>    I understand that I have a right to cancel this authorization any time. A
-                                        cancellation (1) must be in writing, (2) sent or given to the Health Information Management
-                                        Departement, 751 S ,  Bascom Ave, action already taken by SCVHHS under this authorization was required
-                                        for getting insurance coverage and the insurer has a legal right to contest a claim. Verbal cancellation
-                                        will be accepted for behavioral health medical record pursuant to WIC Section 5328. Call:
-                                    </li>
-                                    <li>
-                                        <strong>Conditions:</strong> I understand that treatement, payement, enrollment, or eligibilty for benefits will not be
-                                        based on my giving or refusing to give this authorization except if my treatement is related to research, or if health
-                                        care services are given to me only for creating protected health information for release to a third party.
-                                        I also understand that i may refuse to sign this authorization.
-                                        A copy of this authorization is as valid as an original. I have the right to recieve a copy of this.
-                                    </li>
-                                    <li>
-                                        <strong>Redisclousure:</strong> Information disclosed pursuant to this authorization could be  redisclosed by the
-                                        recipient. Such redisclosure is in some cases not prohibited by California law and may no longer be
-                                        protected by to that protection. In addition, California law prohibits the person recieving my health information
-                                        from making further disclosure of it unless another authorization for such disclosure is obtained from me or unless
-                                        such disclosure is specifically required or permitted by law.
-                                    </li>
+                                    <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block;">
+                                        <input tabindex="1" type="checkbox" class="custom-control-input" id="PaperCheck" name="frmConnect_dfcheck16" value="16">
+                                        <label class="custom-control-label" for="PaperCheck">
+                                            Paper
+                                        </label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:block;">
+                                        <input tabindex="1" type="checkbox" class="custom-control-input" id="OtherDel" name="frmConnect_dfcheck17" value="17">
+                                        <label class="custom-control-label" for="OtherDel">
+                                            Other
+                                        </label>
+                                        <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" type="text" name="OtherDelieveryFormat" value="@Model.CareConnect.OtherDelieveryFormat" />
+                                    </div>
 
-                                    <li>
-                                        <div class="row" style="display:flex; margin:0 -15px">
-                                            <div class="col-lg-4 col-md-4 col-sm-12 col-12" style="width:30%; padding:0 15px;">
-                                                <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" name="PatientOrRepresentativeName" value="@Model.CareConnect.PatientOrRepresentativeName" placeholder="" />
-                                                <strong>Client/Client’s Representative name</strong>
-                                            </div>
-                                            <div class="col-lg-4 col-md-4 col-sm-12 col-12" style="width:30%; padding:0 15px;">
-                                                <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" name="PatientOrRepresentativeSignature" value="@Model.CareConnect.PatientOrRepresentativeSignature" placeholder="" />
-                                                <strong>Client/Client’s Representative Signature</strong>
-                                            </div>
-                                            <div class="col-lg-2 col-md-2 col-sm-12 col-12" style="width:20%; padding:0 15px;">
-                                                <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" name="RelationShip" value="@Model.CareConnect.RelationShip" placeholder="" />
-                                                <strong>Relationship</strong>
-                                            </div>
-                                            <div class="col-lg-2 col-md-2 col-sm-12 col-12" style="width:20%; padding:0 15px;">
-                                                <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" id="careSignatureDate" name="SignatureDate" value="@Model.CareConnect.SignatureDate" placeholder="" />
-                                                <strong>Date</strong>
-                                            </div>
+                                    @*<div class="custom-control custom-radio d-inline-block mr-2">
+                                            <input type="radio" class="custom-control-input" id="CDRadio" name="example1" value="customEx">
+                                            <label class="custom-control-label" for="CDRadio">CD</label>
                                         </div>
-                                    </li>
-
-                                </ol>
+                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                            <input type="radio" class="custom-control-input" id="FilmRadio" name="example1" value="customEx">
+                                            <label class="custom-control-label" for="FilmRadio">Film</label>
+                                        </div>
+                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                            <input type="radio" class="custom-control-input" id="PaperRadio" name="example1" value="customEx">
+                                            <label class="custom-control-label" for="PaperRadio">Paper</label>
+                                        </div>
+                                        <div class="custom-control custom-radio d-inline-block mr-2">
+                                            <input type="radio" class="custom-control-input" id="OtherRadioMdical" name="example1" value="customEx">
+                                            <label class="custom-control-label" for="OtherRadioMdical">Other</label>
+                                        </div>*@
+                                </div>
                             </div>
-
-                            <div class="detail-button mt-3 w-100 text-center">
-
-                                <input type="hidden" name="InformationToBeReleased" id="hdnInformationToBeReleased" value="@Model.CareConnect.InformationToBeReleased" />
-                                <input type="hidden" name="MedicalRecord" id="hdnMedicalRecord" />
-                                <input type="hidden" name="DelieveryPreference" id="hdnDelieveryPreference" value="@Model.CareConnect.DelieveryPreference" />
-                                <input type="hidden" name="DelieveryFormat" id="hdnDelieveryFormat" value="@Model.CareConnect.DelieveryFormat" />
-                                <input type="hidden" name="CreatedDate" value="@Model.CareConnect.CreatedDate" />
-                                <input type="hidden" name="ModifiedDate" />
-                                <input type="hidden" id="hdfPatientID" name="PatientID" value="@Model.CareConnect.PatientID" />
-                                <input type="hidden" id="hdfCareConnectID" name="CareConnectID" value="@Model.CareConnect.CareConnectID" />
-
-
-                                <a href="javascript:{}" onclick="return CareSave();" id="btnCare" class="btn btn-success">
-                                    <i class="far fa-save"></i>
-                                    print
-                                </a>
-                            </div>
-
-                        </form>
-
                     </div>
                 </div>
 
-            </div>
-        </div>
+                <li><strong>Duration:</strong> This Authorization is valid immediately and will be valid until    <input style="display:block;width:25%;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="GivenDate date" type="text" name="ValidUntilDate" value="@Model.CareConnect.ValidUntilDate" id="careGivenDate" placeholder="12/31/2020" /> (Given date)</li>
+                <li>
+                    <strong>Cancellation:</strong>    I understand that I have a right to cancel this authorization any time. A
+                    cancellation (1) must be in writing, (2) sent or given to the Health Information Management
+                    Departement, 751 S ,  Bascom Ave, action already taken by SCVHHS under this authorization was required
+                    for getting insurance coverage and the insurer has a legal right to contest a claim. Verbal cancellation
+                    will be accepted for behavioral health medical record pursuant to WIC Section 5328. Call:
+                </li>
+                <li>
+                    <strong>Conditions:</strong> I understand that treatement, payement, enrollment, or eligibilty for benefits will not be
+                    based on my giving or refusing to give this authorization except if my treatement is related to research, or if health
+                    care services are given to me only for creating protected health information for release to a third party.
+                    I also understand that i may refuse to sign this authorization.
+                    A copy of this authorization is as valid as an original. I have the right to recieve a copy of this.
+                </li>
+                <li>
+                    <strong>Redisclousure:</strong> Information disclosed pursuant to this authorization could be  redisclosed by the
+                    recipient. Such redisclosure is in some cases not prohibited by California law and may no longer be
+                    protected by to that protection. In addition, California law prohibits the person recieving my health information
+                    from making further disclosure of it unless another authorization for such disclosure is obtained from me or unless
+                    such disclosure is specifically required or permitted by law.
+                </li>
 
+                <li>
+                    <div class="row" style="display:flex; margin:0 -15px">
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-12" style="width:30%; padding:0 15px;">
+                            <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" name="PatientOrRepresentativeName" value="@Model.CareConnect.PatientOrRepresentativeName" placeholder="" />
+                            <strong>Client/Client’s Representative name</strong>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-12" style="width:30%; padding:0 15px;">
+                            <div id="patientsigPanel"></div>
+                            <input type="hidden" name="PatientOrRepresentativeSignature" id="PatientOrRepresentativeSignature" value="@Model.CareConnect.PatientOrRepresentativeSignature" />
+                            @*<input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" name="PatientOrRepresentativeSignature" value="@Model.CareConnect.PatientOrRepresentativeSignature" placeholder="" />*@
+                            <strong>Client/Client’s Representative Signature</strong>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-12 col-12" style="width:20%; padding:0 15px;">
+                            <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" name="RelationShip" value="@Model.CareConnect.RelationShip" placeholder="" />
+                            <strong>Relationship</strong>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-12 col-12" style="width:20%; padding:0 15px;">
+                            <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" id="careSignatureDate" name="SignatureDate" value="@Model.CareConnect.SignatureDate" placeholder="" />
+                            <strong>Date</strong>
+                        </div>
+                    </div>
+                </li>
+
+                </ol>
+            </div>
+
+            <div class="detail-button mt-3 w-100 text-center">
+
+                <input type="hidden" name="InformationToBeReleased" id="hdnInformationToBeReleased" value="@Model.CareConnect.InformationToBeReleased" />
+                <input type="hidden" name="MedicalRecord" id="hdnMedicalRecord" />
+                <input type="hidden" name="DelieveryPreference" id="hdnDelieveryPreference" value="@Model.CareConnect.DelieveryPreference" />
+                <input type="hidden" name="DelieveryFormat" id="hdnDelieveryFormat" value="@Model.CareConnect.DelieveryFormat" />
+                <input type="hidden" name="CreatedDate" value="@Model.CareConnect.CreatedDate" />
+                <input type="hidden" name="ModifiedDate" />
+                <input type="hidden" id="hdfPatientID" name="PatientID" value="@Model.CareConnect.PatientID" />
+                <input type="hidden" id="hdfCareConnectID" name="CareConnectID" value="@Model.CareConnect.CareConnectID" />
+
+
+                <a href="javascript:{}" onclick="return CareSave();" id="btnCare" class="btn btn-success">
+                    <i class="far fa-save"></i>
+                    print
+                </a>
+            </div>
+
+            </form>
+
+        </div>
     </div>
 
-    <!-- Inner content end here  -->
-    <!--Inner content for second page start here-->
-    <div class="inner-content">
-        <div class="paitent-detail">
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                    <div class="care-connect scroll">
-                        <form class="detail-patient-form" id="frmCarePage2">
-                            <div class="auth-topsection" style="background: #f8f8f8;padding: 0 10px;border: 1px solid #e8e8e8;margin-bottom: 25px;">
-
-                                <div class="row" style="display:flex; margin:0 -15px;">
+</div>
 
 
-                                    <div class="col-lg-6 col-md-6 col-sm-12 col-12 pr-0 auth-border pt-3 d-flex align-items-end flex-wrap" style="flex: 0 0 50%;max-width: 50%; padding:0 15px;">
-                                        <div class="logo-auth">
-                                            <img src="/images/logo-dark.png" />
-                                        </div>
-                                        <h6>
-                                            Authorization For Use or Disclosure of Protected Health Information
-                                        </h6>
+
+
+<!-- Inner content end here  -->
+<!--Inner content for second page start here-->
+<div class="inner-content">
+    <div class="paitent-detail">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="care-connect scroll">
+                    <form class="detail-patient-form" id="frmCarePage2">
+                        <div class="auth-topsection" style="background: #f8f8f8;padding: 0 10px;border: 1px solid #e8e8e8;margin-bottom: 25px;">
+
+                            <div class="row" style="display:flex; margin:0 -15px;">
+
+
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-12 pr-0 auth-border pt-3 d-flex align-items-end flex-wrap" style="flex: 0 0 50%;max-width: 50%; padding:0 15px;">
+                                    <div class="logo-auth">
+                                        <img src="/images/logo-dark.png" />
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-12 col-12 pt-3" style="flex: 0 0 50%;max-width: 50%; padding:0 15px;z-index: 0000;">
-                                        <div class="PatientDetails">
-                                            <p>
-                                                <span class="name">Client Name:</span> <input id="pname" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 100px !important;" class="PatientPadding" type="text" value="@Model.CareConnect.PatientName" name="PatientName" >
-                                            </p>
-                                            <p>
-                                                <span class="name">Date of Birth</span> <input id="dob"  style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 90px !important;" class="dobPadding" type="text" value="@Model.CareConnect.DateOfBirth" name="DateOfBirth" >
-                                            </p>
-                                            <p>
-                                                <span class="name">ID or Medical Record #:</span> <input id="recordno" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 160px !important;" class="IDPadding" value="@Model.CareConnect.MedicalRecordNumber" type="text" name="MedicalRecordNumber" >
-                                            </p>
-                                            <p>
-                                                <span class="name">Address:</span> <input id="address" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 64px !important;" class="addressPadding" value="@Model.CareConnect.Address" type="text" name="Address" >
-                                            </p>
+                                    <h6>
+                                        Authorization For Use or Disclosure of Protected Health Information
+                                    </h6>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-12 pt-3" style="flex: 0 0 50%;max-width: 50%; padding:0 15px;z-index: 0000;">
+                                    <div class="PatientDetails">
+                                        <p>
+                                            <span class="name">Client Name:</span> <input id="pname" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 100px !important;" class="PatientPadding" type="text" value="@Model.CareConnect.PatientName" name="PatientName">
+                                        </p>
+                                        <p>
+                                            <span class="name">Date of Birth</span> <input id="dob" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 90px !important;" class="dobPadding" type="text" value="@Model.CareConnect.DateOfBirth" name="DateOfBirth">
+                                        </p>
+                                        <p>
+                                            <span class="name">ID or Medical Record #:</span> <input id="recordno" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 160px !important;" class="IDPadding" value="@Model.CareConnect.MedicalRecordNumber" type="text" name="MedicalRecordNumber">
+                                        </p>
+                                        <p>
+                                            <span class="name">Address:</span> <input id="address" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 64px !important;" class="addressPadding" value="@Model.CareConnect.Address" type="text" name="Address">
+                                        </p>
 
-                                            <input id="address2" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="address-text" type="text" name="Address2" value="@Model.CareConnect.Address2" >
+                                        <input id="address2" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="address-text" type="text" name="Address2" value="@Model.CareConnect.Address2">
 
-                                            <p>
-                                                <span class="name">Tel:</span> <input id="tel" style="text-align:left;padding-left: 29px !important;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;"  class="telPadding"
-                                                                                      type="text" name="Tel" value="@Model.CareConnect.Tel" >
-                                            </p>
-                                        </div>
-
-
+                                        <p>
+                                            <span class="name">Tel:</span> <input id="tel" style="text-align:left;padding-left: 29px !important;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="telPadding"
+                                                                                  type="text" name="Tel" value="@Model.CareConnect.Tel">
+                                        </p>
                                     </div>
-
 
 
                                 </div>
+
+
+
                             </div>
+                        </div>
 
-                            <div class="care-text">
-                                <p><strong>Attachement B: List of entities who may receive information.</strong></p>
-                                <p style="text-decoration:underline;">Description of Whole Person Care Program:</p>
-                                <p>
-                                    Whole Person Care (WPC) is a pilot programe funded by the State of California, the federal
-                                    government and Alameda Countery to improve cordination of physical health, behavioral health, and social services
-                                    for Medi-Cal members who may need supportive services not currently funded by the Medi-Cal program.
-                                </p>
-                                <p style="text-decoration:underline;">Recipients:</p>
-                                <ul>
-                                    <li>All WPC participating treatement providers.</li>
-                                    <li>All health plans operating in Alameda County (e.g., Housing Authority, Social Services Ageny, Office Of Reentry Services, Criminal Justice Departement, Emergency Medial Services, Office of Supportive Housing, etc.)</li>
+                        <div class="care-text">
+                            <p><strong>Attachement B: List of entities who may receive information.</strong></p>
+                            <p style="text-decoration:underline;">Description of Whole Person Care Program:</p>
+                            <p>
+                                Whole Person Care (WPC) is a pilot programe funded by the State of California, the federal
+                                government and Alameda Countery to improve cordination of physical health, behavioral health, and social services
+                                for Medi-Cal members who may need supportive services not currently funded by the Medi-Cal program.
+                            </p>
+                            <p style="text-decoration:underline;">Recipients:</p>
+                            <ul>
+                                <li>All WPC participating treatement providers.</li>
+                                <li>All health plans operating in Alameda County (e.g., Housing Authority, Social Services Ageny, Office Of Reentry Services, Criminal Justice Departement, Emergency Medial Services, Office of Supportive Housing, etc.)</li>
 
-                                    <li>All Alamenda Country public agencies/departments(e.g.,Housing Authority,Social services Agency,Office Of Reentry Services,Criminal Justice Department,Emergency Medical Services,Office of Supportive Housing,etc.).</li>
-                                    <li>All Alameda County hospital and their affilated treatement entities.</li>
-                                    <li>All community-based treatement providers participating in WPC that are considered covered entities.</li>
-                                    <li>
-                                        All non-covered entities contracted by the Alameda County or community-based treatement providers
-                                        participating in WPC to provide social supports (e.g., tenancy supports, transportation, care cordination and care management services, food, clothing, job training, etc.)
-                                    </li>
-                                </ul>
-                                
-                            </div>
+                                <li>All Alamenda Country public agencies/departments(e.g.,Housing Authority,Social services Agency,Office Of Reentry Services,Criminal Justice Department,Emergency Medical Services,Office of Supportive Housing,etc.).</li>
+                                <li>All Alameda County hospital and their affilated treatement entities.</li>
+                                <li>All community-based treatement providers participating in WPC that are considered covered entities.</li>
+                                <li>
+                                    All non-covered entities contracted by the Alameda County or community-based treatement providers
+                                    participating in WPC to provide social supports (e.g., tenancy supports, transportation, care cordination and care management services, food, clothing, job training, etc.)
+                                </li>
+                            </ul>
 
-                            <div class="detail-button mt-3 w-100 text-center">
+                        </div>
 
-                                <input type="hidden" name="InformationToBeReleased" id="hdnInformationToBeReleased" value="@Model.CareConnect.InformationToBeReleased" />
-                                <input type="hidden" name="MedicalRecord" id="hdnMedicalRecord" />
-                                <input type="hidden" name="DelieveryPreference" id="hdnDelieveryPreference" value="@Model.CareConnect.DelieveryPreference" />
-                                <input type="hidden" name="DelieveryFormat" id="hdnDelieveryFormat" value="@Model.CareConnect.DelieveryFormat" />
-                                <input type="hidden" name="CreatedDate" value="@Model.CareConnect.CreatedDate" />
-                                <input type="hidden" name="ModifiedDate" />
-                                <input type="hidden" id="hdfPatientID" name="PatientID" value="@Model.CareConnect.PatientID" />
-                                <input type="hidden" id="hdfCareConnectID" name="CareConnectID" value="@Model.CareConnect.CareConnectID" />
+                        <div class="detail-button mt-3 w-100 text-center">
+
+                            <input type="hidden" name="InformationToBeReleased" id="hdnInformationToBeReleased" value="@Model.CareConnect.InformationToBeReleased" />
+                            <input type="hidden" name="MedicalRecord" id="hdnMedicalRecord" />
+                            <input type="hidden" name="DelieveryPreference" id="hdnDelieveryPreference" value="@Model.CareConnect.DelieveryPreference" />
+                            <input type="hidden" name="DelieveryFormat" id="hdnDelieveryFormat" value="@Model.CareConnect.DelieveryFormat" />
+                            <input type="hidden" name="CreatedDate" value="@Model.CareConnect.CreatedDate" />
+                            <input type="hidden" name="ModifiedDate" />
+                            <input type="hidden" id="hdfPatientID" name="PatientID" value="@Model.CareConnect.PatientID" />
+                            <input type="hidden" id="hdfCareConnectID" name="CareConnectID" value="@Model.CareConnect.CareConnectID" />
 
 
-                                <a href="javascript:{}" id="printOnly"  class="btn btn-success" onclick="CareSave('frmCarePage2')">
-                                    <i class="far fa-save"></i>
-                                    print
-                                </a>
-                            </div>
+                            <a href="javascript:{}" id="printOnly" class="btn btn-success" onclick="CareSave('frmCarePage2')">
+                                <i class="far fa-save"></i>
+                                print
+                            </a>
+                        </div>
 
-                        </form>
+                    </form>
 
-                    </div>
                 </div>
-
             </div>
-        </div>
 
+        </div>
     </div>
-    <!--Inner content for Second page end here-->
+
 </div>
+<!--Inner content for Second page end here-->
 <!-- Care Connect tab end here  -->
 <div class="tab-pane fade show" id="WholePersonCare" role="tabpanel" aria-labelledby="WholePersonCare-tab">
 
@@ -1027,7 +1042,7 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="care-connect scroll">
                         <form class="detail-patient-form" id="frmWPCare">
-                           
+
                             <div class="auth-topsection" style="background: #f8f8f8;padding: 0 10px;border: 1px solid #e8e8e8;margin-bottom: 25px;">
 
                                 <div class="row" style="display:flex; margin:0 -15px;">
@@ -1047,7 +1062,7 @@
                                                 <span class="name">Client Name:</span> <input id="wpcName" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 100px !important;" class="PatientPadding" type="text" value="@Model.WholePersonCare.PatientName" name="PatientName">
                                             </p>
                                             <p>
-                                                <span class="name">Date of Birth</span> <input id="wpcDateOfBirth" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 90px !important;" class="dobPadding" type="text" value="@Model.WholePersonCare.DateOfBirth"  name="DateOfBirth">
+                                                <span class="name">Date of Birth</span> <input id="wpcDateOfBirth" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 90px !important;" class="dobPadding" type="text" value="@Model.WholePersonCare.DateOfBirth" name="DateOfBirth">
                                             </p>
                                             <p>
                                                 <span class="name">ID or Medical Record #:</span> <input id="wpcMedicalID" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 160px !important;" class="IDPadding" value="@Model.WholePersonCare.MedicalRecordNumber" type="text" name="MedicalRecordNumber">
@@ -1059,7 +1074,7 @@
                                             <input id="wpcAddress2" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="address-text" type="text" name="Address2" value="@Model.WholePersonCare.Address2">
 
                                             <p>
-                                                <span class="name">Tel:</span> <input id="wpcTel" style="text-align:left;padding-left: 29px !important;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;"  class="telPadding"
+                                                <span class="name">Tel:</span> <input id="wpcTel" style="text-align:left;padding-left: 29px !important;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="telPadding"
                                                                                       type="text" name="Tel" value="@Model.WholePersonCare.Tel">
                                             </p>
                                         </div>
@@ -1201,254 +1216,372 @@
                                     <div class="Delievery">
                                         <div class="row" style="display:flex; margin:0-15px;">
                                             <div class="col-lg-6 col-md-6 col-sm-12 col-12 pt-3" style="flex:0 0 50%; max-width:50%;">
-                                                <li><strong>Delievery Preference:</strong></li>
-                                                <div class="delievery-radio">
-                                                    <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block;">
-                                                        <input tabindex="1" type="checkbox" class="custom-control-input" id="Mail1" name="frmConnect_dpWPCcheck11" value="11">
-                                                        <label class="custom-control-label" for="Mail1">
-                                                            Mail
-                                                        </label>
-                                                    </div>
-                                                    <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block;">
-                                                        <input tabindex="1" type="checkbox" class="custom-control-input" id="PickUp1" name="frmConnect_dpWPCcheck12" value="12">
-                                                        <label class="custom-control-label" for="PickUp1">
-                                                            Pick Up
-                                                        </label>
-                                                    </div>
-
-                                                    <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:block;">
-                                                        <input tabindex="1" type="checkbox" class="custom-control-input" id="OtherPref1" name="frmConnect_dpWPCcheck13" value="13">
-                                                        <label class="custom-control-label" for="OtherPref1">
-                                                            Other
-                                                        </label>
-                                                        <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" type="text" name="OtherDelieveryPreference" value="@Model.WholePersonCare.OtherDelieveryPreference" />
-                                                    </div>
-
-
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6 col-md-6 col-sm-12 col-12 pt-3" style="flex:0 0 50%; max-width:50%;">
-                                                <li><strong>Delievery Format:</strong></li>
-                                                <div class="delievery-radio">
-
-                                                    <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block;">
-                                                        <input tabindex="1" type="checkbox" class="custom-control-input" id="CDCheck1" name="frmConnect_dfWPCcheck14" value="14">
-                                                        <label class="custom-control-label" for="CDCheck1">
-                                                            CD
-                                                        </label>
-                                                    </div>
-                                                    <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block;">
-                                                        <input tabindex="1" type="checkbox" class="custom-control-input" id="FilmCheck1" name="frmConnect_dfWPCcheck15" value="15">
-                                                        <label class="custom-control-label" for="FilmCheck1">
-                                                            Film
-                                                        </label>
-                                                    </div>
-
-                                                    <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block;">
-                                                        <input tabindex="1" type="checkbox" class="custom-control-input" id="PaperCheck1" name="frmConnect_dfWPCcheck16" value="16">
-                                                        <label class="custom-control-label" for="PaperCheck1">
-                                                            Paper
-                                                        </label>
-                                                    </div>
-                                                    <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:block;">
-                                                        <input tabindex="1" type="checkbox" class="custom-control-input" id="OtherDel1" name="frmConnect_dfWPCcheck17" value="17">
-                                                        <label class="custom-control-label" for="OtherDel1">
-                                                            Other
-                                                        </label>
-                                                        <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" type="text" name="OtherDelieveryFormat" value="@Model.WholePersonCare.OtherDelieveryFormat" />
-                                                    </div>
-
-
-                                                </div>
-                                            </div>
+                                    <li><strong>Delievery Preference:</strong></li>
+                                    <div class="delievery-radio">
+                                        <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block;">
+                                            <input tabindex="1" type="checkbox" class="custom-control-input" id="Mail1" name="frmConnect_dpWPCcheck11" value="11">
+                                            <label class="custom-control-label" for="Mail1">
+                                                Mail
+                                            </label>
                                         </div>
+                                        <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block;">
+                                            <input tabindex="1" type="checkbox" class="custom-control-input" id="PickUp1" name="frmConnect_dpWPCcheck12" value="12">
+                                            <label class="custom-control-label" for="PickUp1">
+                                                Pick Up
+                                            </label>
+                                        </div>
+
+                                        <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:block;">
+                                            <input tabindex="1" type="checkbox" class="custom-control-input" id="OtherPref1" name="frmConnect_dpWPCcheck13" value="13">
+                                            <label class="custom-control-label" for="OtherPref1">
+                                                Other
+                                            </label>
+                                            <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" type="text" name="OtherDelieveryPreference" value="@Model.WholePersonCare.OtherDelieveryPreference" />
+                                        </div>
+
+
                                     </div>
-
-                                    <li><strong>Duration:</strong> This Authorization is valid immediately and will be valid until    <input style="display:block;width:25%;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="GivenDate date" type="text" name="ValidUntilDate" value="@Model.WholePersonCare.ValidUntilDate" id="wpcGivenDate" placeholder="12/31/2020" /> (Given date)</li>
-                                    <li>
-                                        <strong>Cancellation:</strong>    I understand that I have a right to cancel this authorization any time. A
-                                        cancellation (1) must be in writing, (2) sent or given to the Health Information Management
-                                        Departement, 751 S ,  Bascom Ave, action already taken by SCVHHS under this authorization was required
-                                        for getting insurance coverage and the insurer has a legal right to contest a claim. Verbal cancellation
-                                        will be accepted for behavioral health medical record pursuant to WIC Section 5328. Call:
-                                    </li>
-                                    <li>
-                                        <strong>Conditions:</strong> I understand that treatement, payement, enrollment, or eligibilty for benefits will not be
-                                        based on my giving or refusing to give this authorization except if my treatement is related to research, or if health
-                                        care services are given to me only for creating protected health information for release to a third party.
-                                        I also understand that i may refuse to sign this authorization.
-                                        A copy of this authorization is as valid as an original. I have the right to recieve a copy of this.
-                                    </li>
-                                    <li>
-                                        <strong>Redisclousure:</strong> Information disclosed pursuant to this authorization could be  redisclosed by the
-                                        recipient. Such redisclosure is in some cases not prohibited by California law and may no longer be
-                                        protected by to that protection. In addition, California law prohibits the person recieving my health information
-                                        from making further disclosure of it unless another authorization for such disclosure is obtained from me or unless
-                                        such disclosure is specifically required or permitted by law.
-                                    </li>
-
-                                    <li>
-                                        <div class="row" style="display:flex; margin:0 -15px">
-                                            <div class="col-lg-4 col-md-4 col-sm-12 col-12" style="width:30%; padding:0 15px;">
-                                                <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" name="PatientOrRepresentativeName" value="@Model.WholePersonCare.PatientOrRepresentativeName" placeholder="" />
-                                                <strong>Client/Client’s Representative name</strong>
-                                            </div>
-                                            <div class="col-lg-4 col-md-4 col-sm-12 col-12" style="width:30%; padding:0 15px;">
-                                                <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" name="PatientOrRepresentativeSignature" value="@Model.WholePersonCare.PatientOrRepresentativeSignature" placeholder="" />
-                                                <strong>Client/Client’s Representative Signature</strong>
-                                            </div>
-                                            <div class="col-lg-2 col-md-2 col-sm-12 col-12" style="width:20%; padding:0 15px;">
-                                                <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" name="RelationShip" value="@Model.WholePersonCare.RelationShip" placeholder="" />
-                                                <strong>Relationship</strong>
-                                            </div>
-                                            <div class="col-lg-2 col-md-2 col-sm-12 col-12" style="width:20%; padding:0 15px;">
-                                                <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" id="wpcSignatureDate" name="SignatureDate" value="@Model.WholePersonCare.SignatureDate" placeholder="" />
-                                                <strong>Date</strong>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                </ol>
                             </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-12 pt-3" style="flex:0 0 50%; max-width:50%;">
+                                <li><strong>Delievery Format:</strong></li>
+                                <div class="delievery-radio">
 
-                            <div class="detail-button mt-3 w-100 text-center">
-
-                                <input type="hidden" name="InformationToBeReleased" id="hdnInformationToBeReleasedWPC" value="@Model.WholePersonCare.InformationToBeReleased" />
-                                <input type="hidden" name="MedicalRecord" id="hdnMedicalRecord" />
-                                <input type="hidden" name="DelieveryPreference" id="hdnDelieveryPreferenceWPC" value="@Model.WholePersonCare.DelieveryPreference" />
-                                <input type="hidden" name="DelieveryFormat" id="hdnDelieveryFormatWPC" value="@Model.WholePersonCare.DelieveryFormat" />
-                                <input type="hidden" name="CreatedDate" value="@Model.WholePersonCare.CreatedDate" />
-                                <input type="hidden" name="ModifiedDate" />
-                                <input type="hidden" id="hdfPatientID" name="PatientID" value="@Model.WholePersonCare.PatientID" />
-                                <input type="hidden" id="hdfCareConnectIDWPC" name="WholePersonCareID" value="@Model.WholePersonCare.WholePersonCareID" />
-
-
-                                <a href="javascript:{}" id="btnWpcCare" class="btn btn-success" onclick="return WholePersonCareSave();">
-                                    <i class="far fa-save"></i>
-                                    print
-                                </a>
-                            </div>
-
-                        </form>
-
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-    </div>
-    <!-- Inner content end here  -->
-    <!--Inner content for second page start here-->
-    <div class="inner-content">
-        <div class="paitent-detail">
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                    <div class="care-connect scroll">
-                        
-                        <form class="detail-patient-form" id="frmWPCare2">
-                            <div class="auth-topsection" style="background: #f8f8f8;padding: 0 10px;border: 1px solid #e8e8e8;margin-bottom: 25px;">
-
-                                <div class="row" style="display:flex; margin:0 -15px;">
-
-
-                                    <div class="col-lg-6 col-md-6 col-sm-12 col-12 pr-0 auth-border pt-3 d-flex align-items-end flex-wrap" style="flex: 0 0 50%;max-width: 50%; padding:0 15px;">
-                                        <div class="logo-auth">
-                                            <img src="/images/logo-dark.png" />
-                                        </div>
-                                        <h6>
-                                            Authorization For Use or Disclosure of Protected Health Information
-                                        </h6>
+                                    <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block;">
+                                        <input tabindex="1" type="checkbox" class="custom-control-input" id="CDCheck1" name="frmConnect_dfWPCcheck14" value="14">
+                                        <label class="custom-control-label" for="CDCheck1">
+                                            CD
+                                        </label>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-12 col-12 pt-3" style="flex: 0 0 50%;max-width: 50%; padding:0 15px;z-index: 0000;">
-                                        <div class="PatientDetails">
-                                            <p>
-                                                <span class="name">Client Name:</span> <input id="wpcname" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 100px !important;" class="PatientPadding" type="text" value="@Model.WholePersonCare.PatientName" name="PatientName">
-                                            </p>
-                                            <p>
-                                                <span class="name">Date of Birth</span> <input id="wpcdob" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 90px !important;" class="dobPadding" type="text" value="@Model.WholePersonCare.DateOfBirth" name="DateOfBirth">
-                                            </p>
-                                            <p>
-                                                <span class="name">ID or Medical Record #:</span> <input id="wpcmedicalid" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 160px !important;" class="IDPadding" value="@Model.WholePersonCare.MedicalRecordNumber" type="text" name="MedicalRecordNumber">
-                                            </p>
-                                            <p>
-                                                <span class="name">Address:</span> <input id="wpcaddress1" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 64px !important;" class="addressPadding" value="@Model.WholePersonCare.Address" type="text" name="Address">
-                                            </p>
-
-                                            <input id="wpcaddress2" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="address-text" type="text" name="Address2" value="@Model.WholePersonCare.Address2">
-
-                                            <p>
-                                                <span class="name">Tel:</span> <input id="wpctel" style="text-align:left;padding-left: 29px !important;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="telPadding"
-                                                                                      type="text" name="Tel" value="@Model.WholePersonCare.Tel">
-                                            </p>
-                                        </div>
-
-
+                                    <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block;">
+                                        <input tabindex="1" type="checkbox" class="custom-control-input" id="FilmCheck1" name="frmConnect_dfWPCcheck15" value="15">
+                                        <label class="custom-control-label" for="FilmCheck1">
+                                            Film
+                                        </label>
                                     </div>
 
+                                    <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block;">
+                                        <input tabindex="1" type="checkbox" class="custom-control-input" id="PaperCheck1" name="frmConnect_dfWPCcheck16" value="16">
+                                        <label class="custom-control-label" for="PaperCheck1">
+                                            Paper
+                                        </label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:block;">
+                                        <input tabindex="1" type="checkbox" class="custom-control-input" id="OtherDel1" name="frmConnect_dfWPCcheck17" value="17">
+                                        <label class="custom-control-label" for="OtherDel1">
+                                            Other
+                                        </label>
+                                        <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" type="text" name="OtherDelieveryFormat" value="@Model.WholePersonCare.OtherDelieveryFormat" />
+                                    </div>
 
 
                                 </div>
                             </div>
-
-                            <div class="care-text">
-                                <p><strong>Attachement B: List of entities who may receive information.</strong></p>
-                                <p style="text-decoration:underline;">Description of Whole Person Care Program:</p>
-                                <p>
-                                    Whole Person Care (WPC) is a pilot program funded by the State of California, the federal
-                                    government and Alameda Countery to improve cordination of physical health, behavioral health, and social services
-                                    for Medi-Cal members who may need supportive services not currently funded by the Medi-Cal program.
-                                </p>
-                                <p style="text-decoration:underline;">Recipients:</p>
-                                <ul>
-                                    <li>All WPC participating treatement providers.</li>
-                                    <li>All health plans operating in Santa Clara Country (e.g., Santa Clara Family Heath Plan, Anthem Blue Cross,)providing Medi-Cal coverage</li>
-
-                                    <li>All Santa Clara Country public agencies/departments(e.g.,Housing Authority,Social services Agency,Office Of Reentry Services,Criminal Justice Department,Emergency Medical Services,Office of Supportive Housing,etc.).</li>
-                                    <li>All Santa Clara County hospital and their affilated treatement entities.</li>
-                                    <li>All community-based treatement providers participating in WPC that are considered covered entities.</li>
-                                    <li>
-                                        All non-covered entities contracted by the Santa Clara County or community-based treatement providers
-                                        participating in WPC to provide social supports (e.g., tenancy supports, transportation, care cordination and care management services, food, clothing, job training, etc.).
-                                    </li>
-                                </ul>
-
-                            </div>
-
-                            <div class="detail-button mt-3 w-100 text-center">
-
-                                <input type="hidden" name="InformationToBeReleased" id="hdnInformationToBeReleasedWPC" value="@Model.WholePersonCare.InformationToBeReleased" />
-                                <input type="hidden" name="MedicalRecord" id="hdnMedicalRecord" />
-                                <input type="hidden" name="DelieveryPreference" id="hdnDelieveryPreferenceWPC" value="@Model.WholePersonCare.DelieveryPreference" />
-                                <input type="hidden" name="DelieveryFormat" id="hdnDelieveryFormatWPC" value="@Model.WholePersonCare.DelieveryFormat" />
-                                <input type="hidden" name="CreatedDate" value="@Model.WholePersonCare.CreatedDate" />
-                                <input type="hidden" name="ModifiedDate" />
-                                <input type="hidden" id="hdfPatientID" name="PatientID" value="@Model.WholePersonCare.PatientID" />
-                                <input type="hidden" id="hdfCareConnectIDWPC" name="WholePersonCareID" value="@Model.WholePersonCare.WholePersonCareID" />
-
-
-                                <a href="javascript:{}" id="btnWpcCare2" class="btn btn-success" onclick="WholePersonCareSave('frmWPCare2')">
-                                    <i class="far fa-save"></i>
-                                    print
-                                </a>
-                            </div>
-
-                        </form>
-
                     </div>
                 </div>
 
-            </div>
-        </div>
+                <li><strong>Duration:</strong> This Authorization is valid immediately and will be valid until    <input style="display:block;width:25%;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="GivenDate date" type="text" name="ValidUntilDate" value="@Model.WholePersonCare.ValidUntilDate" id="wpcGivenDate" placeholder="12/31/2020" /> (Given date)</li>
+                <li>
+                    <strong>Cancellation:</strong>    I understand that I have a right to cancel this authorization any time. A
+                    cancellation (1) must be in writing, (2) sent or given to the Health Information Management
+                    Departement, 751 S ,  Bascom Ave, action already taken by SCVHHS under this authorization was required
+                    for getting insurance coverage and the insurer has a legal right to contest a claim. Verbal cancellation
+                    will be accepted for behavioral health medical record pursuant to WIC Section 5328. Call:
+                </li>
+                <li>
+                    <strong>Conditions:</strong> I understand that treatement, payement, enrollment, or eligibilty for benefits will not be
+                    based on my giving or refusing to give this authorization except if my treatement is related to research, or if health
+                    care services are given to me only for creating protected health information for release to a third party.
+                    I also understand that i may refuse to sign this authorization.
+                    A copy of this authorization is as valid as an original. I have the right to recieve a copy of this.
+                </li>
+                <li>
+                    <strong>Redisclousure:</strong> Information disclosed pursuant to this authorization could be  redisclosed by the
+                    recipient. Such redisclosure is in some cases not prohibited by California law and may no longer be
+                    protected by to that protection. In addition, California law prohibits the person recieving my health information
+                    from making further disclosure of it unless another authorization for such disclosure is obtained from me or unless
+                    such disclosure is specifically required or permitted by law.
+                </li>
 
+                <li>
+                    <div class="row" style="display:flex; margin:0 -15px">
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-12" style="width:30%; padding:0 15px;">
+                            <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" name="PatientOrRepresentativeName" value="@Model.WholePersonCare.PatientOrRepresentativeName" placeholder="" />
+                            <strong>Client/Client’s Representative name</strong>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-12" style="width:30%; padding:0 15px;">
+                            <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" name="PatientOrRepresentativeSignature" value="@Model.WholePersonCare.PatientOrRepresentativeSignature" placeholder="" />
+                            <strong>Client/Client’s Representative Signature</strong>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-12 col-12" style="width:20%; padding:0 15px;">
+                            <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" name="RelationShip" value="@Model.WholePersonCare.RelationShip" placeholder="" />
+                            <strong>Relationship</strong>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-12 col-12" style="width:20%; padding:0 15px;">
+                            <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" id="wpcSignatureDate" name="SignatureDate" value="@Model.WholePersonCare.SignatureDate" placeholder="" />
+                            <strong>Date</strong>
+                        </div>
+                    </div>
+                </li>
+
+                </ol>
+            </div>
+
+            <div class="detail-button mt-3 w-100 text-center">
+
+                <input type="hidden" name="InformationToBeReleased" id="hdnInformationToBeReleasedWPC" value="@Model.WholePersonCare.InformationToBeReleased" />
+                <input type="hidden" name="MedicalRecord" id="hdnMedicalRecord" />
+                <input type="hidden" name="DelieveryPreference" id="hdnDelieveryPreferenceWPC" value="@Model.WholePersonCare.DelieveryPreference" />
+                <input type="hidden" name="DelieveryFormat" id="hdnDelieveryFormatWPC" value="@Model.WholePersonCare.DelieveryFormat" />
+                <input type="hidden" name="CreatedDate" value="@Model.WholePersonCare.CreatedDate" />
+                <input type="hidden" name="ModifiedDate" />
+                <input type="hidden" id="hdfPatientID" name="PatientID" value="@Model.WholePersonCare.PatientID" />
+                <input type="hidden" id="hdfCareConnectIDWPC" name="WholePersonCareID" value="@Model.WholePersonCare.WholePersonCareID" />
+
+
+                <a href="javascript:{}" id="btnWpcCare" class="btn btn-success" onclick="return WholePersonCareSave();">
+                    <i class="far fa-save"></i>
+                    print
+                </a>
+            </div>
+
+            </form>
+
+        </div>
     </div>
-    <!--Inner content for Second page end here-->
 
 </div>
 
 
+
+<!-- Inner content end here  -->
+<!--Inner content for second page start here-->
+<div class="inner-content">
+    <div class="paitent-detail">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="care-connect scroll">
+
+                    <form class="detail-patient-form" id="frmWPCare2">
+                        <div class="auth-topsection" style="background: #f8f8f8;padding: 0 10px;border: 1px solid #e8e8e8;margin-bottom: 25px;">
+
+                            <div class="row" style="display:flex; margin:0 -15px;">
+
+
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-12 pr-0 auth-border pt-3 d-flex align-items-end flex-wrap" style="flex: 0 0 50%;max-width: 50%; padding:0 15px;">
+                                    <div class="logo-auth">
+                                        <img src="/images/logo-dark.png" />
+                                    </div>
+                                    <h6>
+                                        Authorization For Use or Disclosure of Protected Health Information
+                                    </h6>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-12 pt-3" style="flex: 0 0 50%;max-width: 50%; padding:0 15px;z-index: 0000;">
+                                    <div class="PatientDetails">
+                                        <p>
+                                            <span class="name">Client Name:</span> <input id="wpcname" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 100px !important;" class="PatientPadding" type="text" value="@Model.WholePersonCare.PatientName" name="PatientName">
+                                        </p>
+                                        <p>
+                                            <span class="name">Date of Birth</span> <input id="wpcdob" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 90px !important;" class="dobPadding" type="text" value="@Model.WholePersonCare.DateOfBirth" name="DateOfBirth">
+                                        </p>
+                                        <p>
+                                            <span class="name">ID or Medical Record #:</span> <input id="wpcmedicalid" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 160px !important;" class="IDPadding" value="@Model.WholePersonCare.MedicalRecordNumber" type="text" name="MedicalRecordNumber">
+                                        </p>
+                                        <p>
+                                            <span class="name">Address:</span> <input id="wpcaddress1" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 64px !important;" class="addressPadding" value="@Model.WholePersonCare.Address" type="text" name="Address">
+                                        </p>
+
+                                        <input id="wpcaddress2" style="text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="address-text" type="text" name="Address2" value="@Model.WholePersonCare.Address2">
+
+                                        <p>
+                                            <span class="name">Tel:</span> <input id="wpctel" style="text-align:left;padding-left: 29px !important;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="telPadding"
+                                                                                  type="text" name="Tel" value="@Model.WholePersonCare.Tel">
+                                        </p>
+                                    </div>
+
+
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+                        <div class="care-text">
+                            <p><strong>Attachement B: List of entities who may receive information.</strong></p>
+                            <p style="text-decoration:underline;">Description of Whole Person Care Program:</p>
+                            <p>
+                                Whole Person Care (WPC) is a pilot program funded by the State of California, the federal
+                                government and Alameda Countery to improve cordination of physical health, behavioral health, and social services
+                                for Medi-Cal members who may need supportive services not currently funded by the Medi-Cal program.
+                            </p>
+                            <p style="text-decoration:underline;">Recipients:</p>
+                            <ul>
+                                <li>All WPC participating treatement providers.</li>
+                                <li>All health plans operating in Santa Clara Country (e.g., Santa Clara Family Heath Plan, Anthem Blue Cross,)providing Medi-Cal coverage</li>
+
+                                <li>All Santa Clara Country public agencies/departments(e.g.,Housing Authority,Social services Agency,Office Of Reentry Services,Criminal Justice Department,Emergency Medical Services,Office of Supportive Housing,etc.).</li>
+                                <li>All Santa Clara County hospital and their affilated treatement entities.</li>
+                                <li>All community-based treatement providers participating in WPC that are considered covered entities.</li>
+                                <li>
+                                    All non-covered entities contracted by the Santa Clara County or community-based treatement providers
+                                    participating in WPC to provide social supports (e.g., tenancy supports, transportation, care cordination and care management services, food, clothing, job training, etc.).
+                                </li>
+                            </ul>
+
+                        </div>
+
+                        <div class="detail-button mt-3 w-100 text-center">
+
+                            <input type="hidden" name="InformationToBeReleased" id="hdnInformationToBeReleasedWPC" value="@Model.WholePersonCare.InformationToBeReleased" />
+                            <input type="hidden" name="MedicalRecord" id="hdnMedicalRecord" />
+                            <input type="hidden" name="DelieveryPreference" id="hdnDelieveryPreferenceWPC" value="@Model.WholePersonCare.DelieveryPreference" />
+                            <input type="hidden" name="DelieveryFormat" id="hdnDelieveryFormatWPC" value="@Model.WholePersonCare.DelieveryFormat" />
+                            <input type="hidden" name="CreatedDate" value="@Model.WholePersonCare.CreatedDate" />
+                            <input type="hidden" name="ModifiedDate" />
+                            <input type="hidden" id="hdfPatientID" name="PatientID" value="@Model.WholePersonCare.PatientID" />
+                            <input type="hidden" id="hdfCareConnectIDWPC" name="WholePersonCareID" value="@Model.WholePersonCare.WholePersonCareID" />
+
+
+                            <a href="javascript:{}" id="btnWpcCare2" class="btn btn-success" onclick="WholePersonCareSave('frmWPCare2')">
+                                <i class="far fa-save"></i>
+                                print
+                            </a>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<!--Inner content for Second page end here-->
+
+
 <script>
-   
+
+    $(function () {
+        var patientSigpanel = $('#patientsigPanel');
+        var repsntSigPanel = $('#representativesigPanel');
+        var wittnessSigPanel = $('#witnesssigPanel');
+        
+
+        patientSigpanel.signature({
+
+            // The minimum distance to start a drag.
+            distance: 0,
+
+            // The background colour.
+            background: '#fff',
+
+            // The colour of the signature.
+            color: '#000',
+
+            // The thickness of the lines.
+            thickness: 2,
+            // guideline colour.
+            guidelineColor: '#a0a0a0',
+
+            // guideline offset (pixels) from the bottom
+            guidelineOffset: 50,
+
+            // guideline indent (pixels) from the edges
+            guidelineIndent: 10,
+            // 'JSON', 'SVG', 'PNG', 'JPEG'
+            syncFormat: 'JSON',
+
+            // determine whether to use the style attribute in SVG
+            svgStyles: false,
+            syncField: '#clientSignature',
+            notAvailable: 'Your browser doesn\'t support signing',
+            scale: 1,
+            change: null
+
+
+        });
+        repsntSigPanel.signature({
+
+            // The minimum distance to start a drag.
+            distance: 0,
+
+            // The background colour.
+            background: '#fff',
+
+            // The colour of the signature.
+            color: '#000',
+
+            // The thickness of the lines.
+            thickness: 2,
+            // guideline colour.
+            guidelineColor: '#a0a0a0',
+
+            // guideline offset (pixels) from the bottom
+            guidelineOffset: 50,
+
+            // guideline indent (pixels) from the edges
+            guidelineIndent: 10,
+            // 'JSON', 'SVG', 'PNG', 'JPEG'
+            syncFormat: 'JSON',
+
+            // determine whether to use the style attribute in SVG
+            svgStyles: false,
+            syncField: '#representativeSignature',
+            notAvailable: 'Your browser doesn\'t support signing',
+            scale: 1,
+            change: null
+
+
+        });
+        wittnessSigPanel.signature({
+
+            // The minimum distance to start a drag.
+            distance: 0,
+
+            // The background colour.
+            background: '#fff',
+
+            // The colour of the signature.
+            color: '#000',
+
+            // The thickness of the lines.
+            thickness: 2,
+            // guideline colour.
+            guidelineColor: '#a0a0a0',
+
+            // guideline offset (pixels) from the bottom
+            guidelineOffset: 50,
+
+            // guideline indent (pixels) from the edges
+            guidelineIndent: 10,
+            // 'JSON', 'SVG', 'PNG', 'JPEG'
+            syncFormat: 'JSON',
+
+            // determine whether to use the style attribute in SVG
+            svgStyles: false,
+            syncField: '#witnessSignature',
+            notAvailable: 'Your browser doesn\'t support signing',
+            scale: 1,
+            change: null
+
+
+        });
+      
+     
+     
+
+    });
+    function loadSignatures() {
+        $('#patientsigPanel').signature();
+        $('#representativesigPanel').signature();
+        $('#witnesssigPanel').signature();
+ 
+        //$('#patientsigPanel').signature('enable').signature('draw', $('#clientSignature').val());
+        //$('#representativesigPanel').signature('draw', $('#representativeSignature').val());
+        //$('#witnesssigPanel').signature('draw', $('#witnessSignature').val());
+    }
+    loadSignatures();
     $('#patientName').change(function () {
 
         $("#pname").val($(this).val())
@@ -1544,10 +1677,9 @@
         $('#frmCare').find(':checkbox[name^="frmConnect_itr"]').each(function () {
             //$(this).prop("checked", ($.inArray($(this).val(), arrayInformationToBeReleased) != -1));
 
-            if ($.inArray($(this).val(), arrayInformationToBeReleased) != -1)
-                 {
-            $(this).attr("checked", "checked");
-             }
+            if ($.inArray($(this).val(), arrayInformationToBeReleased) != -1) {
+                $(this).attr("checked", "checked");
+            }
 
         });
 
@@ -1615,7 +1747,7 @@
     }
 
     function bindreleasecheckbox() {
-       
+
         var arrayTypeOfInformation = $('#hdfTypeOfInformation').val().split(",");
 
         $('#frmRelease').find(':checkbox[name="frmRelease_check1"]').each(function () {
@@ -1628,4 +1760,13 @@
 
 
     }
+
 </script>
+<script src="https://code.jquery.com/ui/1.12.0-rc.2/jquery-ui.min.js"
+        integrity="sha256-55Jz3pBCF8z9jBO1qQ7cIf0L+neuPTD1u7Ytzrp2dqo="
+        crossorigin="anonymous"></script>
+
+
+<script type="text/javascript" src="~/Content/script/jquery.signature.js"></script>
+
+

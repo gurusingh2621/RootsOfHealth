@@ -176,7 +176,7 @@ function SetTemplateStatus(Templateid, Status) {
             yes: {
                 btnClass: Status == true ? 'btn-green' : 'btn-danger',
                 action: function () {
-                    $(".loaderOverlay").css("display", "flex");
+                    $(".loaderOverlay").show();
                     $.ajax({
                         type: "GET",
                         url: Apipath + '/api/PatientMain/updatecareplantemplatestatus?Templateid=' + Templateid + '&status=' + Status,
@@ -184,6 +184,7 @@ function SetTemplateStatus(Templateid, Status) {
                         dataType: "json",
                         success: function (result) {
                             GetCarePlanTemplateList();
+                            $(".loaderOverlay").hide();
                         },
                     });
                 }

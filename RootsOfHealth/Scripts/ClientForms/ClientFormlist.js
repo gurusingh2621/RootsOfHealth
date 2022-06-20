@@ -155,6 +155,7 @@ function SetTemplateStatus(Templateid, Status) {
                         dataType: "json",
                         success: function (result) {
                             GetProgramTemplateList();
+                            $(".loaderOverlay").hide();
                         },
                     });
                 }

@@ -172,7 +172,7 @@
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (result) {
-
+        
                         autoCompleteArray = [];
                         for (var i = 0; i < result.length; i++) {
                             var label = "";
@@ -183,7 +183,8 @@
                             else if (result[i].LastName != "") {
                                 label = label + " " + result[i].LastName;
                             }
-                            autoCompleteArray.push({ "label": label, "value": label, "id": result[i].PatientID })
+                            
+                            autoCompleteArray.push({ "label": label, "value": label, "id": result[i].PatientId })
                             $("#autoPatientList").autocomplete({
                                 source: autoCompleteArray,
                                 change: function (event, ui) {
@@ -462,7 +463,7 @@
         }
 
         function getauthorizationdata() {
-
+            
             var patientID = 0;
             if ($("#hdnPatientId").val() == 0) {
              
@@ -489,10 +490,10 @@
                     toastr.error("Some error occurred!! or data not found");
                 },
                 complete: function () {
-
+                    
                     AddDate();
 
-
+                    loadSignatures();
                     $('#careSignatureDate').val(ShortDate);
                     $('#releaseSignature').val(ShortDate);
                     $('#wpcSignatureDate').val(ShortDate);
@@ -652,10 +653,9 @@
                     toastr.error("Some error occurred!! or data not found");
                 },
                 complete: function () {
-
+                    
                     AddDate();
-
-
+                    loadSignatures();
                     $('#careSignatureDate').val(ShortDate);
                     $('#releaseSignature').val(ShortDate);
                     $('#wpcSignatureDate').val(ShortDate);
@@ -722,7 +722,7 @@
                             var frmConnectWPC_check5 = "input:checkbox[name='frmConnect_itrWPCcheck5']";
                             var frmConnectWPC_check6 = "input:checkbox[name='frmConnect_itrWPCcheck6']";
                             var currectchkgroupWPC = $(this).attr("name");
-
+                           
                             if (currectchkgroupWPC == 'frmConnect_itrWPCcheck2') {
 
                                 $(frmConnectWPC_check3).prop("checked", false);
