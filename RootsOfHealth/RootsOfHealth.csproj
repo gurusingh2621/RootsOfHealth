@@ -781,6 +781,8 @@
     <Content Include="Views\Patient\EditPotentialPatient.cshtml" />
     <Content Include="Views\Patient\AddPotentialPatient.cshtml" />
     <Content Include="Views\DashBoard\GetErrorLogDetails.cshtml" />
+    <Content Include="Views\Shared\Client\_ClientFormDetail.cshtml" />
+    <Content Include="Views\Shared\Client\_ClientFormDetailForEditPage.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

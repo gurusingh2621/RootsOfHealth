@@ -1804,7 +1804,82 @@ namespace RootsOfHealth.Controllers
             PatientIdCookie.Value = patientdetailobj.PatientMain.PatientID.ToString();
             Response.Cookies.Add(PatientIdCookie);
             Response.Cookies["patientid"].Expires = DateTime.Now.AddDays(1);
-            return PartialView("~/Views/Shared/Client/_ClientDetail.cshtml", patientdetailobj);
+            return PartialView("~/Views/Shared/Patient/_PatientMain.cshtml", patientdetailobj.PatientMain);
+            //return PartialView("~/Views/Shared/Client/_ClientDetail.cshtml", patientdetailobj);
+        }
+
+        [HttpPost]
+        public ActionResult GetClientFormHtml(string PatientID,string pageName ="")
+        {
+            double sub;
+            Common objCommon = new Common();
+            PatientDetailBO patientdetailobj = new PatientDetailBO();
+            List<FormSchedulingBO> formscheduleobj = new List<FormSchedulingBO>();
+            ScheduleDateBO sheduleobj = new ScheduleDateBO();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                //HTTP GET
+                var responseTask = client.GetAsync("/api/PatientMain/GetDetailOfPatientForClientForm?patientid=" + PatientID);
+
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<PatientAllDetailByIDBO>();
+                    readTask.Wait();
+
+
+                    patientdetailobj = readTask.Result.PatientDetail;
+                    patientdetailobj.PatientScore = readTask.Result.PatientScore;
+                    patientdetailobj.PatientSubstanceUse.Audit = patientdetailobj.Audit;
+                    patientdetailobj.PatientSubstanceUse.Dast = patientdetailobj.Dast;
+                    patientdetailobj.PatientMain.CareplanCount = patientdetailobj.CarePlanCount.CarePlanCount;
+                    patientdetailobj.PatientMentalHealth.PHQ9 = patientdetailobj.PHQ9;
+                    patientdetailobj.PatientProgram.ClinicOnly = patientdetailobj.ClinicOnly;
+                    patientdetailobj.PatientProgram.DreamOnly = patientdetailobj.DreamOnly;
+                    patientdetailobj.PatientProgram.OUOnly = patientdetailobj.OUOnly;
+                    patientdetailobj.PatientProgram.PeraltaCollege = patientdetailobj.PeraltaCollege;
+                    patientdetailobj.FormScheduling = readTask.Result.FormSchedulingResult;
+
+                    ViewBag.PatientId = patientdetailobj.PatientMain.PatientID;
+                    ViewBag.FirstName = patientdetailobj.PatientMain.FirstName + " " + patientdetailobj.PatientMain.MiddleName + " " + patientdetailobj.PatientMain.LastName;
+                    ViewBag.DOB = patientdetailobj.PatientMain.DateOfBirth;
+                    ViewBag.mentalPDOB = patientdetailobj.PatientMentalHealth.CreatedDate == null ? DateTime.Now.ToShortDateString() : patientdetailobj.PatientMentalHealth.CreatedDate.ToString();
+                    ViewBag.SSNNumber = patientdetailobj.PatientMain.SocialSecurityNumber;
+
+
+
+                    formscheduleobj = readTask.Result.FormScheduling;
+                   
+                    patientdetailobj.ScheduleDate = sheduleobj;
+                    objCommon.BindDBOptions(ref patientdetailobj);
+
+                }
+                else //web api sent error response 
+                {
+                    //log response status here..
+
+                }
+            }
+
+            objCommon.BindDropDowns(ref patientdetailobj);
+            HttpCookie PatientIdCookie = new HttpCookie("patientid");
+            PatientIdCookie.Value = patientdetailobj.PatientMain.PatientID.ToString();
+            Response.Cookies.Add(PatientIdCookie);
+            Response.Cookies["patientid"].Expires = DateTime.Now.AddDays(1);
+            if (pageName == "Info")
+            {
+                return PartialView("~/Views/Shared/Client/_ClientFormDetail.cshtml", patientdetailobj);
+            }
+            else
+            {
+                return PartialView("~/Views/Shared/Client/_ClientFormDetailForEditPage.cshtml", patientdetailobj);
+            }
+           
         }
 
         [HttpPost]

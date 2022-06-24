@@ -281,24 +281,25 @@
                     foreach (var item in Model.ClientForm.Where(p => p.ParentFormID == null || p.ParentFormID == 0))
                     {
                         var formpermission = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["userid"]), item.ClientFormID, true);
-                        if (formpermission.Where(f=> f.CanList == true || f.CanUpdate == true).Any()) {
+                        if (formpermission.Where(f => f.CanList == true || f.CanUpdate == true).Any())
+                        {
                             if (ViewBag.PatientID == "0" || ViewBag.PatientID == null)
                             {
                                 var FormName = @item.FormName.Replace(" ", "");
-                            <li class="nav-item">
-                                <a id="@("a" + FormName)" class="nav-link ProfileNotSaved isProfileSaved" data-toggle
-                                   href="@("#" + FormName + "only")" data-ClientFormID="@item.ClientFormID" onclick="ErrorTab()" data-PatientID="@item.patientID" data-TemplateID="@item.TemplateID" data-FormName=@(FormName)>@item.FormName<span class="check @Html.Raw(item.Saved ? "" : "d-none")"><i class="fas fa-check-circle"></i></span></a>
+                                <li class="nav-item">
+                                    <a id="@("a" + FormName)" class="nav-link ProfileNotSaved isProfileSaved" data-toggle
+                                       href="@("#" + FormName + "only")" data-ClientFormID="@item.ClientFormID" onclick="ErrorTab()" data-PatientID="@item.patientID" data-TemplateID="@item.TemplateID" data-FormName=@(FormName)>@item.FormName<span class="check @Html.Raw(item.Saved ? "" : "d-none")"><i class="fas fa-check-circle"></i></span></a>
 
-                            </li>
+                                </li>
                             }
                             else
                             {
                                 var FormName = @item.FormName.Replace(" ", "");
-                            <li class="nav-item">
-                                <a id="@("a" + FormName)" class="nav-link ProfileNotSaved isProfileSaved" data-toggle="tab"
-                                   href="@("#" + FormName + "only")" data-ClientFormID="@item.ClientFormID" onclick="RebindClientFormEvent(this)" data-PatientID="@item.patientID" data-TemplateID="@item.TemplateID" data-FormName=@(FormName)>@item.FormName<span class="pColorCircle" style="display:none"></span><span class="notCount" id="@(FormName + "Notify")" style="display:none"></span><span class="check @Html.Raw(item.Saved ? "" : "d-none")"><i class="fas fa-check-circle"></i></span></a>
+                                <li class="nav-item">
+                                    <a id="@("a" + FormName)" class="nav-link ProfileNotSaved isProfileSaved" data-toggle="tab"
+                                       href="@("#" + FormName + "only")" data-ClientFormID="@item.ClientFormID" onclick="RebindClientFormEvent(this)" data-PatientID="@item.patientID" data-TemplateID="@item.TemplateID" data-FormName=@(FormName)>@item.FormName<span class="pColorCircle" style="display:none"></span><span class="notCount" id="@(FormName + "Notify")" style="display:none"></span><span class="check @Html.Raw(item.Saved ? "" : "d-none")"><i class="fas fa-check-circle"></i></span></a>
 
-                            </li>
+                                </li>
                             }
                         }
 
@@ -334,79 +335,6 @@
                 Html.RenderPartial("~/Views/Shared/Patient/_PatientMain.cshtml", Model.PatientMain);
             }
             <!-- Profile Tab end here -->
-            <!-- Dynamic tab start here  -->
-
-            @if (Model.ClientForm != null)
-            {
-                foreach (var item in Model.ClientForm)
-                {
-                    var formpermission = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["userid"]), item.ClientFormID, true);
-                    var FormName = item.FormName.Replace(" ", "");
-                    <div class="tab-pane fade" id="@(FormName + "only")" role="tabpanel" aria-labelledby="@("a"+FormName)">
-                        <div class="inner-content">
-                            <div class="paitent-detail">
-                                <div class="row">
-                                    <div id="pat_out_div" class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                        <div class="paitent-detail-left">
-                                            @{
-                                                 Html.RenderPartial("~/Views/Shared/Client/_ClientInfo.cshtml");
-                                            }
-
-                                            <div class="detail-heading d-flex">
-                                                @foreach (var items in Model.ClientForm.Where(p => p.ClientFormID == item.ParentFormID))
-                                                {
-                                                    string FormNames = @items.FormName.Replace(" ", "");
-                                                    <a id="@("a" + FormNames)" class="nav-link" data-toggle="tab"
-                                                       href="@("#" + FormNames + "only")" data-ClientFormID="@items.ClientFormID" data-PatientID="@items.patientID" onclick="RebindClientFormEvent(this)" data-TemplateID="@items.TemplateID" data-FormName=@(FormNames)>@items.FormName<span class="check @Html.Raw(items.Saved ? "" : "d-none")"></span></a>
-                                                }
-                                                <h2 style="padding-top:10px">@item.FormName</h2>
-                                                <div class="detail-button ml-auto">
-
-                                                    <a href="javascript:{}" onclick="return OpenFormHistory(@item.ClientFormID,@Model.PatientMain.PatientID,true);" data-save="@(item.Saved ? "True" : "False")" class="btn btn-success ml-auto">
-                                                        <i class="far fa-save"></i>
-                                                        History
-                                                    </a>
-                                                    <a href="javascript:{}" onclick="DisplayForm(@ViewBag.PatientID,'@item.FormName'+'Tab','@FormName',@item.ClientFormID)"
-                                                       class="btn btn-success  btnDisplayProgram">
-                                                        <i class="far fa-edit"></i>
-                                                        Display
-                                                    </a>
-                                                    @if (formpermission.Where(f => f.CanUpdate == true).Any())
-                                                    {
-                                                        <a href="javascript:{}" onclick="return saveClientFormBasicInfo('@item.TemplateID','@item.TemplateTable',@item.ClientFormID,@item.patientID);" data-save="@(item.Saved ? "True" : "False")" class="btn btn-success ml-auto btnprogramsave">
-                                                            <i class="far fa-save"></i>
-                                                            Save
-                                                        </a>
-                                                    }
-
-                                                    <a href="javascript:{}" onclick="PrintProgram('@FormName')"
-                                                       class="btn btn-success label-fields btnprogramPrint">
-                                                        <i class="far fa-save"></i>
-                                                        Print
-                                                    </a>
-                                                </div>
-                                            </div>
-
-                                            <div class="SidebarScroll scroll inner-main-content">
-                                                <style>
-                                                    ul.file_uploaded_list li img {
-                                                        max-width: 90px;
-                                                        margin-right: 10px;
-                                                    }
-                                                </style>
-                                                <div id="@(FormName + "render-basicform")" class="render-basicProgramform" style="padding-bottom:100px"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-
-            }
-
-            <!-- Dynamic Tab end here -->
             <!-- Programs Tab start here  -->
 
             <div class="tab-pane fade" id="Programs" role="tabpanel" aria-labelledby="Programs-tab">
@@ -415,6 +343,11 @@
             <!-- Programs Tab end here  -->
 
         </div>
+        <!-- Dynamic tab start here  -->
+        <div id="clientformdetails">
+
+        </div>
+        <!-- Dynamic Tab end here -->
     </div>
     @{
         Html.RenderPartial("~/Views/Shared/Client/_LogHistoryPopUp.cshtml");
@@ -459,6 +392,10 @@
             $("#myChildTab").css("display", "none");
         })
         $('#menu-toggle').click(function () {
+
+            if ($('#clientformdetails').html().trim() == "") {
+                LoadClientFormsHtml(_PatientId);
+            }
             $(this).toggleClass('open');
             if ($("#menu-toggle").hasClass("open")) {
                 $("#cross").attr("title", "Hide Client Menu")
@@ -1152,7 +1089,7 @@
             ShowPatientInfo(_PatientName, _PatientEmail)
             var currenttab = '@ViewBag.CurrentTab';
             var currentSubtab = '@ViewBag.CurrentSubtab'
-
+            
             if (currenttab != 'Profile-tab' && currenttab != 'ProgramTab') {
                 RebindClientFormEvent();
             }
@@ -5991,7 +5928,7 @@
                 $('#Programs .tab-pane').each(function (index, item) {
                     $(item).removeClass("active show");
                 });
-
+                
 
 
                 $(".render-basicProgramform").each(function (index, item) {
@@ -6032,7 +5969,7 @@
                 },
                 async: true,
                 success: function (result) {
-
+                    
                     if (result.html == "") {
                         toastr.error("No template found");
                     } else {
@@ -7208,6 +7145,35 @@
             $('#myChildTab .nav-item a').css('border-left', '')
             $('#Programs-tab').css('border-left', '');
             $('#ProgramNotify').hide()
+        }
+        function LoadClientFormsHtml(patientID) {
+            $(".loaderOverlay").css('display', 'flex');
+
+            $.ajax({
+
+                type: "Post",
+                url: '/Client/GetClientFormHtml',
+                data: JSON.stringify({ PatientID: patientID, pageName :"Edit" }),
+
+                dataType: "html",
+                contentType: "application/json; charset=utf-8",
+                success: function (result) {
+
+                    $('#clientformdetails').html(result);
+                    $('#myTabContent').append($('#clientformdetails').html());
+                    $(".loaderOverlay").hide();
+                },
+                error: function () {
+                    $(".loaderOverlay").hide();
+                    toastr.error("Some error occurred!! or data not found");
+                },
+                complete: function () {
+                    setTimeout(function () {
+                        _Loader.StopLoader()
+                    }, 500)
+
+                }
+            });
         }
     </script>
 
