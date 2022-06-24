@@ -360,18 +360,6 @@
                                         Save
                                     </a>
 
-                                    @*<a href="/Patient/Add" id="btnProfileEdit" class="btn btn-success">
-                <i class="far fa-edit"></i>
-                Edit
-            </a>*@
-                                    @*<a href="#!" id="btnProfileCancel" class="btn btn-info" style="display: none;">
-                <i class="far fa-edit"></i>
-                Cancel
-            </a>
-            <a href="#!" id="btnProfileSave" class="btn btn-success" style="display: none;">
-                <i class="far fa-save"></i>
-                Save
-            </a>*@
                                 </div>
 
 
@@ -1849,91 +1837,6 @@
                         </div>
                     </div>
 
-                    @*<div class="recent-paitents" style="display:none">
-                            <h2 class="mb-3">Recent Patients</h2>
-                            <div class="recent-paitent-row d-flex">
-                                <div class="recent-paitents-img">
-                                    <img class="img-fluid" src="images/recent-paitent-img.png" alt="">
-                                </div>
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <thead class="thead-light">
-                                            <tr>
-                                                <th scope="col" style="width:160px;">Name</th>
-                                                <th scope="col" style="width:268px;">Email</th>
-                                                <th scope="col" style="width:160px;">Phone</th>
-                                                <th scope="col" style="width:160px;">Last Modify</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-
-                                            <tr>
-                                                <td style="width:160px;">Omnis iste</td>
-                                                <td style="width:268px;">Omnisiste@gmail.com</td>
-                                                <td style="width:160px;">98756 45365</td>
-                                                <td style="width:160px;">23-4-2019</td>
-                                            </tr>
-
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="recent-paitent-row d-flex">
-                                <div class="recent-paitents-img">
-                                    <img class="img-fluid" src="images/recent-paitent-img-1.png" alt="">
-                                </div>
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <thead class="thead-light">
-                                            <tr>
-                                                <th scope="col" style="width:160px;">Name</th>
-                                                <th scope="col" style="width:268px;">Email</th>
-                                                <th scope="col" style="width:160px;">Phone</th>
-                                                <th scope="col" style="width:160px;">Last Modify</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-
-                                            <tr>
-                                                <td style="width:160px;">praesentium</td>
-                                                <td style="width:268px;">praesentium@gmail.com</td>
-                                                <td style="width:160px;">68756 45365</td>
-                                                <td style="width:160px;">20-4-2019</td>
-                                            </tr>
-
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="recent-paitent-row d-flex">
-                                <div class="recent-paitents-img">
-                                    <img class="img-fluid" src="images/recent-paitent-img-2.png" alt="">
-                                </div>
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <thead class="thead-light">
-                                            <tr>
-                                                <th scope="col" style="width:160px;">Name</th>
-                                                <th scope="col" style="width:268px;">Email</th>
-                                                <th scope="col" style="width:160px;">Phone</th>
-                                                <th scope="col" style="width:160px;">Last Modify</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-
-                                            <tr>
-                                                <td style="width:160px;">voluptatum</td>
-                                                <td style="width:268px;">voluptatum@gmail.com</td>
-                                                <td style="width:160px;">78756 45365</td>
-                                                <td style="width:160px;">18-4-2019</td>
-                                            </tr>
-
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>*@
-
                 </div>
 
                 <div class="col-lg-4 col-md-12 col-sm-12 col-12 " id="appointement_div" style="display:none">
@@ -1946,7 +1849,7 @@
                       float: left;">
                                 Appointment
                             </h3>
-                            <button id="hideAppointmentContent" class="btn btn-link addnotebtn">Close</button>
+                            <button id="hideAppointmentContent" class="btn btn-link addnotebtn" onclick="HideSidebarTabs(this)">Close</button>
                             @if (modulePermissions.Where(x => x.ModuleName == "Appointment" && x.CanCreate == true).Any()) {
                             <button data-toggle="modal" id="openappointmentpopup" data-target="#AppointmentModal" onclick="addAppointment()" class="btn btn-link addnotebtn"> Add Appointment </button>
                             }
@@ -1958,7 +1861,7 @@
                         </div>
                         <div class="appointement appointement-notes" style="display:none">
                             <h3>Notes</h3>
-                            <button id="hideNoteContent" class="btn btn-link addnotebtn" style="margin-left:20px">  Close </button>
+                            <button id="hideNoteContent" class="btn btn-link addnotebtn" onclick="HideSidebarTabs(this)" style="margin-left:20px">  Close </button>
                             @if (modulePermissions.Where(x => x.ModuleName == "Notes" && x.CanCreate == true).Any())
                             {
                                 <button data-toggle="modal" id="opennotepopup" data-target="#notesModal" class="btn btn-link addnotebtn"> Add Note </button>
@@ -2511,14 +2414,14 @@
                 var html=""
                 var needs = result.filter(c => !c.IsGoal);
                     var goals = result.filter(c => c.IsGoal);
-                    
+
                 html += `<div class="selectAll"><div class="form-group"><label class="checkbox_input"><input class="Need" id="selectAllNeedsGoals" onchange="SelectAllNeedGoals()" type="checkbox" name="select-all" value="" checked><span>Select All</span></label></div></div><ul class="needGoalsChecklist">`
                     for (let i = 0; i < needs.length; i++) {
                         var needStatus = ''
-                        
+
                          if (needs[i].IsChanged == 1)
                             needStatus = " (edited)";
-                      
+
                     var NeedGoals = goals.filter(c => c.NeedId == needs[i].NeedId);
                     html += `<li><div class="form-group active ${NeedGoals.length>0?'hasGoal':''}"><label class="checkbox_input" for="${needs[i].NeedId + 'need'}"><input class="Need" type="checkbox" id="${needs[i].NeedId + 'need'}" name="needs" value="${needs[i].NeedId}" checked>
                               <span>${needs[i].Description}</span><span class="grey-text">${needStatus}</span></label>`
@@ -2531,9 +2434,9 @@
                     if (NeedGoals.length > 0) {
                         html+=`<ul>`
                         for (let j = 0; j < NeedGoals.length; j++) {
-                            
+
                             var goalStatus = ''
-                           
+
                              if (NeedGoals[j].IsChanged == 1)
                                 goalStatus = " (edited)";
 
@@ -2812,6 +2715,9 @@
     $('._time_picker').timeselector({
         hours12: true
     });
+    $('#datepicker').datepicker({
+        uiLibrary: 'bootstrap'
+    })
     function addAppointment() {
         emptyModel();
      //   $('#AppointmentModal').modal('show');
@@ -2858,6 +2764,10 @@
 
     var isAppointmentAndLocationLoaded = false
     function LoadAppointmentsAndLocations() {
+        $("#appointementContent").show();
+        $(".appointement-notes").hide();
+        $('#pat_out_div').removeClass('col-lg-12 col-md-12 col-sm-12 col-12');
+        $('#pat_out_div').addClass('col-lg-8 col-md-12 col-sm-12 col-12 pr-0');
         if (!isAppointmentAndLocationLoaded) {
             getListAllAppointments(false);
             GetTypeOfAppointments(false);
@@ -2983,4 +2893,35 @@
 
         $('.ChildrenAgeDiv').html(divhtml);
     }
+
+    $('#btnAMDProfile').click(function () {
+        
+       var PatientObject=  @Html.Raw(Json.Encode(Model));
+          $('#AMDProfile .modal-body').html("")
+
+          $.ajax({
+              type: "Post",
+              url: '/Client/GetAMDProfile',
+              data: JSON.stringify(PatientObject),
+              contentType: "application/json; charset=utf-8",
+              dataType: "html",
+              success: function (data) {
+                  if (data == '0') {
+                      toastr.error("No data available");
+                  }
+                  else if (data == '1') {
+                      toastr.error("multiple records available");
+                  }
+                  else {
+                      $('#AMDProfile .modal-body').html(data)
+                      $('#AMDProfile').modal('show');
+                  }
+
+              },
+              error: function (e) {
+                  toastr.error("Error AMDProfile Data.");
+              }
+          });
+
+      })
 </script>

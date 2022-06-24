@@ -1,0 +1,658 @@
+﻿@model RootsOfHealth.Models.PatientDetailBO
+@using RootsOfHealth.Commom;
+
+
+
+
+@{
+
+    var _PatientData = Model.PatientMain;
+    _PatientData.DateOfBirth = _PatientData.DateOfBirth == "" || _PatientData.DateOfBirth == null ? "" : _PatientData.DateOfBirth;
+    var modulePermissions = new Common().GetMainModulesPermission(Convert.ToInt32(Session["userid"]));
+    var PatientEmail = "";
+
+    if (!String.IsNullOrEmpty(Model.PatientMain.EmailAddress))
+    {
+        PatientEmail = Model.PatientMain.EmailAddress;
+    }
+    else
+    {
+        if (!String.IsNullOrEmpty(Model.PatientMain.EmergencyContact1EmailAddress))
+        {
+            PatientEmail = Model.PatientMain.EmergencyContact1EmailAddress;
+        }
+
+    }
+
+
+
+
+}
+
+
+
+
+<ul class="nav nav-tabs" style="display:none;" id="myChildTab" role="tablist">
+</ul>
+
+@if (Model.ClientForm != null)
+{
+
+    foreach (var item in Model.ClientForm)
+    {
+        var formpermission = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["userid"]), item.ClientFormID, true);
+        var FormName = item.FormName.Replace(" ", "");
+        <div class="tab-pane fade" id="@(FormName + "only")" role="tabpanel" aria-labelledby="@("a"+FormName)">
+            <div class="inner-content">
+                <div class="paitent-detail">
+                    <div class="row">
+                        <div id="pat_out_div" class="col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="paitent-detail-left">
+                                @{
+                                    Html.RenderPartial("~/Views/Shared/Client/_ClientInfo.cshtml");
+                                }
+
+                                <div class="detail-heading d-flex">
+                                    @foreach (var items in Model.ClientForm.Where(p => p.ClientFormID == item.ParentFormID))
+                                    {
+                                        string FormNames = @items.FormName.Replace(" ", "");
+                                        <a id="@("a" + FormNames)" class="nav-link" data-toggle="tab"
+                                           href="@("#" + FormNames + "only")" data-ClientFormID="@items.ClientFormID" data-PatientID="@items.patientID" onclick="loadClient(this)" data-TemplateID="@items.TemplateID" data-FormName=@(FormNames)>@items.FormName>><span class="check @Html.Raw(items.Saved ? "" : "d-none")"></span></a>
+                                    }
+                                    <h2 style="padding-top:10px">@item.FormName</h2>
+                                    <div class="detail-button ml-auto">
+                                        <a href="javascript:{}" onclick="return OpenFormHistory(@item.ClientFormID,@Model.PatientMain.PatientID,true);" data-save="@(item.Saved ? "True" : "False")" class="btn btn-success ml-auto">
+                                            <i class="far fa-save"></i>
+                                            History
+                                        </a>
+                                        <a href="javascript:{}" onclick="return saveProgramBasicInfo('@item.TemplateID','@item.TemplateTable',@item.ClientFormID,@item.patientID);" data-save="@(item.Saved ? "True" : "False")" class="btn btn-success ml-auto btnprogramsave">
+                                            <i class="far fa-save"></i>
+                                            Save
+                                        </a>
+                                        @if (formpermission.Where(f => f.CanUpdate == true).Any())
+                                        {
+                                            <a href="javascript:{}" onclick="ActivateTab(@ViewBag.PatientID,'','@FormName',@item.ClientFormID)"
+                                               class="btn btn-success label-fields btnProgramEdit">
+                                                <i class="far fa-edit"></i>
+                                                Edit
+                                            </a>
+                                        }
+                                        <a href="javascript:{}" onclick="PrintProgram('@FormName')"
+                                           class="btn btn-success label-fields btnprogramPrint">
+                                            <i class="far fa-save"></i>
+                                            Print
+                                        </a>
+                                    </div>
+
+                                </div>
+                                <div class="score-result score_Result d-none" id="ScoreStatus_@item.ClientFormID">
+                                    <div class="score-full">
+                                        <div class="form-row-first label-fields mt-0">
+                                            <div class="top-form-row d-flex height-auto">
+                                                <div class="two-columns">
+
+                                                    <label class="label-fields">
+                                                        Score
+                                                    </label>
+                                                </div>
+                                                <div class="two-columns">
+
+                                                    <label class="label-fields">
+                                                        Status
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="two-columns">
+
+                                                    <label id="txtoverallscore" class="label-fields"></label>
+
+                                                </div>
+
+                                                <div class="two-columns">
+
+                                                    <label id="txtoverallstatus" class="label-fields"></label>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="SidebarScroll scroll inner-main-content">
+                                    <style>
+                                        ul.file_uploaded_list li img {
+                                            max-width: 90px;
+                                            margin-right: 10px;
+                                        }
+                                    </style>
+                                    <div id="@(FormName + "render-basicform")" class="render-basicProgramform" style="padding-bottom:100px"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+}
+<!-- Programs Tab start here  -->
+
+@{
+    Html.RenderPartial("~/Views/Shared/Patient/_PatientPrograms.cshtml", Model.Programs);
+}
+
+<!-- Programs Tab end here  -->
+<script>
+     var  programUploadedPath="@System.Web.Configuration.WebConfigurationManager.AppSettings["ProgramUploadPath"]";
+    var _userID = "@Session["userid"]";
+    var _patientID = '@ViewBag.PatientId';
+    var _PatientName = '@Model.PatientMain.FirstName' + ' ' + '@Model.PatientMain.LastName';
+        var _PatientEmail = '@PatientEmail'
+      var _PatientSSN='@Model.PatientMain.SocialSecurityNumber';
+
+    var _ClinicId = "@Model.PatientMain.ClinicID"
+    var _amdMedRecordNo = '@Model.PatientMain.AmdMedicalRecordNumber';
+    var clientMiddleName = '@Model.PatientMain.MiddleName';
+    var clientName = '@Model.PatientMain.FirstName'+" "+'@Model.PatientMain.LastName'
+
+    var SchedulingList = JSON.parse('@Html.Raw(Json.Encode(Model.FormScheduling))');
+    var canEditNote = '@modulePermissions.Where(x=> x.ModuleName == "Notes" && x.CanUpdate == true).Any()';
+    var canViewNote = '@modulePermissions.Where(x=> x.ModuleName == "Notes" && x.CanUpdate == true || x.CanList == true).Any()';
+    var canDeleteNote = '@modulePermissions.Where(x=> x.ModuleName == "Notes" && x.CanDelete == true).Any()';
+
+    if (clientMiddleName.trim().length > 0) {
+        clientName = '@Model.PatientMain.FirstName' + " " + clientMiddleName+" "+'@Model.PatientMain.LastName'
+      }
+    var _dateOfBirth = '@Model.PatientMain.DateOfBirth'
+
+    $(document).ready(function () {
+          ShowPatientInfo(_PatientName, _PatientEmail)
+          //notification changes start here--------------------
+
+          if (ViewBagClientFormId != "0" && currenttab != '' && currenttab != 'Profile-tab' && currenttab != 'ProgramTab') {
+              loadClient()
+          }
+          RebindProgramsEvents()
+
+
+          if (ViewBagClientFormId == "0" && (currenttab == '' || currenttab == 'Profile-tab') && currenttab != 'ProgramTab') {
+
+              $('#Profile').addClass('show active');
+    }
+     $('#Programs-tab').click(function () {
+
+            if ($("#tabPills .nav-item").length > 0) {
+
+                var FirstTab = $("#tabPills .nav-item a").get(0);
+
+                FirstTab.click()
+          }
+        })
+           if (currenttab == 'ProgramTab') {
+
+                if (@Model.Programs.Count> 0) {
+                    LoadPrograms();
+                }
+                else {
+                    $('#Profile-tab').click();
+                }
+            }
+    });
+
+
+
+    // Program code start here ......
+
+    function RebindProgramsEvents() {
+
+
+        $("#tabPills .nav-item a").on('click', function (e) {
+
+            $('#Programs .tab-pane').each(function (index, item) {
+                $(item).removeClass("active show");
+            });
+
+            var item = $(this);
+
+            var _programId = item.attr("data-ProgramID")
+            programName = item.attr("data-programName");
+            programElement = $("#" + programName + "render-basicform");
+            var _IsSaved = $('#' + programName + 'only').find('.btnprogramsave').attr('data-save');
+
+            if (_IsSaved == 'True') {
+                $('#' + programName + 'only').find('.btnprogramPrint').css('display', 'block');
+            }
+            else {
+                $('#' + programName + 'only').find('.btnprogramPrint').css('display', 'none');
+            }
+            $('#' + programName + 'only').addClass('active show');
+            var _templateID = item.attr("data-TemplateID");
+            if (programElement.html().length > 0) {
+                $(".loaderOverlay").hide();
+                return;
+            };
+            if (_IsSaved == 'False') {
+                LoadProgramTemplate(_programId)
+            }
+            else {
+                EditPrograms(_programId, _templateID)
+            }
+
+        })
+    }
+    function LoadProgramTemplate(_programId) {
+
+        var programid = _programId;
+        $.ajax({
+            type: "GET",
+            url: '/program/GetProgramTemplateByProgramId?ProgramId=' + programid,
+            contentType: 'application/json; charset=UTF-8',
+            dataType: "json",
+            beforeSend: function () {
+                $(".loaderOverlay").css('display', 'flex');
+            },
+            async: true,
+            success: function (result) {
+                if (result.html == "") {
+                    toastr.error("No template found");
+                } else {
+
+                    programElement.html("").append(result.html);
+                    tableName = result.tableName;
+                    templateid = result.TemplateId;
+
+                    if (programElement.find(".basecontentarea").length > 0) {
+                        getProgramHeaderAndFooter();
+
+                    }
+
+                    programElement.find(".event-btn-right").remove();
+                    programElement.find(".ck-editor-header").remove();
+                    programElement.find(".question-container").parent().css("border", "none");
+                    programElement.find(".dragresize").find(".question-container").remove();
+                    programElement.find(".dragresize").find(".bootom-form-row").css({ "padding": "7px 0px", "margin": "0" });
+                    programElement.find(".html-content").prev().css("display", "none");
+                    programElement.find(".html-content").parent().parent().parent().addClass("left-control");
+                    programElement.find(".f-g-left").each(function (index, item) {
+                        $(item).parent().parent().addClass("left-control");
+                    });
+
+                    $("textarea.program-control,textarea.base-control").summernote({
+                        toolbar: [
+                            ['para', ['ul', 'ol', 'paragraph']],
+                            ['style', ['bold', 'italic', 'underline', 'clear']],
+                            ['font', ['strikethrough', 'superscript', 'subscript']],
+                        ],
+                        placeholder: "Type here",
+                        callbacks: {
+                            onInit: function (e) {
+                                this.placeholder
+                                    ? e.editingArea.find(".note-placeholder").html(this.placeholder)
+                                    : e.editingArea.remove(".note-placeholder")
+                            }
+                        },
+                        height: 150,
+                    });
+                    toogleProgramToolTip();
+                    makeProgramBasicInfoReadonly()
+                    if (programElement.find(".basecontentarea").length > 0) {
+                        getProgramBaseFieldData()
+                    }
+
+
+                }
+                $(".loaderOverlay").hide();
+            },
+            error: function (e) {
+                toastr.error("Unexpected error!");
+                $(".loaderOverlay").hide();
+            }
+        });
+    }
+
+    function getProgramHeaderAndFooter() {
+
+        $.ajax({
+            type: "GET",
+            url: Apipath + '/api/PatientMain/getprogrambasetemplateid',
+            contentType: 'application/json; charset=UTF-8',
+            dataType: "json",
+            async: false,
+            success: function (result) {
+                switch (result.TemplateID) {
+                    case -1:
+                        break;
+                    default:
+
+                        basetemplateid = result;
+                        $.ajax({
+                            type: "GET",
+                            url: '/program/GetFormHtmlById?Id=' + result.TemplateID,
+                            contentType: 'application/json; charset=UTF-8',
+                            dataType: "json",
+                            async: false,
+                            success: function (result) {
+                                var baseHtml = parseHTML(result.html);
+                                var baseHeader = $(baseHtml).find(".baseheader").html();
+                                var baseFooter = $(baseHtml).find(".basefooter").html();
+                                programElement.find(".baseheader").html("").append(baseHeader);
+                                programElement.find(".basefooter").html("").append(baseFooter);
+                            },
+                            error: function (e) {
+                                toastr.error("Unexpected error!");
+                                $(".loaderOverlay").hide();
+                            }
+                        });
+                        break;
+                }
+            },
+            error: function (e) {
+                toastr.error("Unexpected error!");
+                $(".loaderOverlay").hide();
+            }
+        });
+    }
+
+    function LoadPrograms() {
+
+        $(".loaderOverlay").css('display', 'flex');
+        $('Programs').html('')
+        $.ajax({
+
+            type: "Get",
+            url: '/Patient/GetProgramsForPatient?PatientID=' + _PatientId,
+            dataType: "html",
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+
+                $('#Programs')[0].outerHTML = result;
+                $('#myTabContent .tab-pane').each(function () {
+                    $(this).removeClass('active show')
+                })
+                $('#Programs').addClass('active show')
+                $('#myTab .nav-link').each(function () {
+                    $(this).removeClass('active show')
+                })
+
+                RebindProgramsEvents();
+                $('#Programs-tab').addClass('active show')
+
+                if ($("#tabPills .nav-item").length > 0) {
+                    if (currentSubtab == 'undefined') {
+                        $("#tabPills .nav-item a").get(0).click();
+                    }
+                    else {
+                        if ($("#tabPills .nav-item #a" + currentSubtab).length > 0) {
+                            $("#tabPills .nav-item #a" + currentSubtab).click();
+                        }
+                        else {
+                            $("#tabPills .nav-item a").get(0).click();
+                        }
+                    }
+                }
+
+
+            },
+            error: function () {
+                $(".loaderOverlay").hide()
+                toastr.error("Some error occurred!! or data not found");
+            },
+            complete: function () {
+                ShowPatientInfo(_PatientName, _PatientEmail)
+            }
+        });
+    }
+    function SetScheduling() {
+        var programDotColor = ''
+        var programDays = 0
+        if (SchedulingList.length > 0) {
+            for (var i = 0; i < SchedulingList.length; i++) {
+                var ArrayItem = SchedulingList[i];
+                if (ArrayItem.NotificationColor != null && ArrayItem.DotColor == null) {
+                    var formName = ArrayItem.FormName.replace(/ /g, '')
+
+                    if (ArrayItem.FormType == 1) {
+                        if (!ArrayItem.IsChild) {
+                            var $Item = $('#myTab #' + formName + 'Notify')
+                            var $Tab = $('#myTab #a' + formName)
+                        }
+                        else {
+                            var $Item = $('#myChildTab #' + formName + 'Notify')
+                            var $Tab = $('#myChildTab a#' + formName)
+                        }
+                    }
+                    else if (ArrayItem.FormType == 2) {
+                        var $Item = $('#tabPills #' + formName + 'Notify')
+                        var $Tab = $('#tabPills #a' + formName)
+                    }
+
+
+                    if (ArrayItem.NotificationColor == "Red") {
+                        $Item.attr('class', 'notCountR');
+                        $Tab.css('border-left', '5px solid #a53333');
+                        $Item.show();
+                        $Item.html(ArrayItem.NotificationDays);
+
+                        if (ArrayItem.NotificationDays == "0") {
+                            $Item.attr('title', 'Due date isToday.');
+                        }
+                        else {
+                            $Item.attr('title', 'Due ' + ArrayItem.NotificationDays + ' days ago');
+                        }
+                    }
+
+                    else if (ArrayItem.NotificationColor == "Orange") {
+                        $Item.attr('class', 'notCountO');
+                        $Tab.css('border-left', '5px solid #e4854d');
+                        $Item.show();
+                        $Item.html(ArrayItem.NotificationDays);
+                        $Item.attr('title', 'Due after ' + ArrayItem.NotificationDays + ' days.');
+
+                    }
+                    else if (ArrayItem.NotificationColor == "Green") {
+                        $Item.attr('class', 'notCountG');
+                        $Tab.css('border-left', '5px solid #0aa22d');
+                        $Item.show();
+                        $Item.html(ArrayItem.NotificationDays);
+                        $Item.attr('title', 'Due after ' + ArrayItem.NotificationDays + ' days.');
+
+                    }
+
+                    if (ArrayItem.FormType == 2) {
+                        if (programDotColor == '' && programDotColor == null) {
+                            programDotColor = ArrayItem.NotificationColor
+                            programDays = ArrayItem.NotificationDays;
+                        } else if (ArrayItem.NotificationColor == "Red") {
+                            programDotColor = ArrayItem.NotificationColor
+                            if (programDays < ArrayItem.NotificationDays) {
+                                programDays = ArrayItem.NotificationDays;
+                            }
+                        } else if (ArrayItem.NotificationColor == "Orange" && (programDotColor == 'green' || programDotColor == 'orange')) {
+                            programDotColor = ArrayItem.NotificationColor
+                            if (programDays < ArrayItem.NotificationDays) {
+                                programDays = ArrayItem.NotificationDays;
+                            }
+                        } else if (ArrayItem.NotificationColor == "Green" && programDotColor == 'green') {
+                            if (programDays < ArrayItem.NotificationDays) {
+                                programDays = ArrayItem.NotificationDays;
+                            }
+                        }
+
+                    }
+
+
+                } else if (ArrayItem.DotColor != null) {
+                    if (ArrayItem.DotColor == "Red") {
+                        $('a[data-clientformid="' + ArrayItem.FormId + '"]').css('border-left', '5px solid #a53333');
+                    } else if (ArrayItem.DotColor == "Orange") {
+                        $('a[data-clientformid="' + ArrayItem.FormId + '"]').css('border-left', '5px solid #e4854d');
+                    } else if (ArrayItem.DotColor == "Green") {
+                        $('a[data-clientformid="' + ArrayItem.FormId + '"]').css('border-left', '5px solid #0aa22d');
+                    }
+                    $('a[data-clientformid="' + ArrayItem.FormId + '"]').find('.pColorCircle').css('background-color', ArrayItem.DotColor).show();
+                }
+
+
+            }
+            if (programDotColor != '') {
+                var programNotify = $('#Programs-tab').find('#ProgramNotify')
+                if (programDotColor == "Red") {
+                    $('#Programs-tab').css('border-left', '5px solid #a53333');
+                    programNotify.attr('class', 'notCountR')
+                } else if (programDotColor == "Orange") {
+                    programNotify.attr('class', 'notCountO')
+                    $('#Programs-tab').css('border-left', '5px solid #e4854d');
+                } else if (programDotColor == "Green") {
+                    programNotify.attr('class', 'notCountG')
+                    $('#Programs-tab').css('border-left', '5px solid #0aa22d');
+
+                }
+                programNotify.show().text(programDays)
+            }
+        }
+
+    }
+
+
+    function GetClinicAddress(_patientClinicId, formName) {
+        $.ajax({
+            type: "GET",
+            url: Apipath + '/api/PatientMain/getclinicaddress?ClinicID=' + _patientClinicId,
+            contentType: 'application/json; charset=UTF-8',
+            dataType: "json",
+            async: true,
+            success: function (data) {
+                clinicAddress = data;
+                printFunction(formName);
+            },
+            error: function (e) {
+                toastr.error("Unexpected error!");
+                $(".loaderOverlay").hide();
+            }
+        });
+    }
+
+    function PrintProgram(formName) {
+        var clinicaddress = clinicAddress != "" && undefined ? clinicAddress.trim() : ""
+        if (clinicaddress.length == 0 && _ClinicId > 0) {
+            GetClinicAddress(_ClinicId, formName);
+        }
+        else {
+            printFunction(formName)
+        }
+
+    }
+    function printFunction(formName) {
+
+        let htmlToPrint = $("#" + formName + "render-basicform")[0].outerHTML
+        let Programtitle = $('#a' + formName).text();
+        let HeadHtml = $('head').html();
+        var stringToAppend = '<h4 class="text-center mb-4">' + Programtitle + '</h4>';
+        stringToAppend += '<table  width="40%" style="margin-left:35px;margin-bottom:15px">';
+        stringToAppend += '<tr><th width="50%">Name</th><td>' + clientName + '<td></tr>'
+        stringToAppend += '<tr><th width=50%">Medical Record Number</th><td>' + _amdMedRecordNo + '<td></tr>'
+        stringToAppend += '<tr><th width=50%">Date Of Birth</th><td>' + _dateOfBirth + '<td></tr>'
+        stringToAppend += '<tr><th width="50%">Address</th><td>' + clinicAddress + '<td></tr>'
+        stringToAppend += '</table>'
+        var mywindow = window.open('', '', 'width=1000,height=800');
+        mywindow.document.domain = window.document.domain;
+        mywindow.document.write('<html><head><title></title>');
+        mywindow.document.write(HeadHtml);
+        mywindow.document.write('<style>div .basecontentspan{display:none}</style>')
+        mywindow.document.write('</head><body class="colorPrint">');
+        mywindow.document.write(stringToAppend);
+
+        mywindow.document.write(htmlToPrint);
+        mywindow.document.write('</body></html>');
+        mywindow.document.close();
+
+        setTimeout(function () {
+            mywindow.document.close();
+            mywindow.focus();
+            mywindow.print();
+            mywindow.close();
+        }, 500);
+    }
+    function makeProgramBasicInfoReadonly() {
+        // $("#ddlcareplanstatus").addClass("show_careplanstatus").val("1");
+
+        var value = "";
+        // isupdateProgramFields = false;
+        $("a.need-nav,a.summary-nav").parent().removeClass("disabled");
+        programElement.find(".program-control,.base-control").each(function (index, item) {
+            if ($(item).is("div")) {
+                var selectedValues = $.map($(item).find("input:checked"), function (n, i) {
+                    return n.value;
+                }).join(',');
+                if (selectedValues == "") {
+                    if ($(item).hasClass("base-control")) {
+                        $(item).find("label.label-base").html("").show();
+                        $(item).find("div.inputContent").find("div").first().hide();
+                    } else {
+                        $(item).find("label.label-program").html("").show();
+                        $(item).find("div.inputContent").find("div").first().hide();
+                    }
+                } else {
+                    var valueArr = selectedValues.split(',');
+                    var valueTxt = "";
+                    for (var i = 0; i < valueArr.length; i++) {
+                        valueTxt += $(item).find(`input[value=${valueArr[i]}]`).next().text() + ", ";
+                    }
+                    valueTxt = valueTxt.slice(0, -2);
+                    if ($(item).hasClass("base-control")) {
+                        $(item).find("label.label-base").html("").append(valueTxt).show();
+                        $(item).find("div.inputContent").find("div").first().hide();
+                    } else {
+                        $(item).find("label.label-program").html("").append(valueTxt).show();
+                        $(item).find("div.inputContent").find("div").first().hide();
+                    }
+
+                }
+            }
+            if ($(item).is("input")) {
+                switch ($(item).attr("type")) {
+                    case "file":
+                        if ($(item).hasClass("base-control") && $(item).hasAttr("data-column")) {
+                            getBaseFilesReadonly($(item).attr("id"));
+                        } else if ($(item).hasClass("program-control") && $(item).hasAttr("data-column")) {
+                            getProgramFiles(careplanid, $(item).attr("id"))
+                        }
+                        $(item).hide();
+                        break;
+                    default:
+                        value = $(item).val();
+                        $(item).next().html("").append(value).show();
+                        $(item).hide();
+                        break;
+                }
+            }
+            if ($(item).is("select")) {
+                value = $(item).find('option:selected').val();
+                if (value == 0) {
+                    value = '';
+                }
+                else {
+                    value = $(item).find('option:selected').text();
+                }
+                $(item).next().html("").append(value).show();
+                $(item).hide();
+            }
+            if ($(item).is("textarea")) {
+                value = $(item).summernote('code');
+                if ($(item).hasClass("base-control")) {
+                    $(item).parent().find("label.label-base").html("").append(value).show();
+                } else {
+                    $(item).parent().find("label.label-program").html("").append(value).show();
+                }
+                $(item).next().hide();
+            }
+        });
+
+
+    }
+  
+</script>
