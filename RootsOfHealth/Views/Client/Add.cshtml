@@ -393,7 +393,7 @@
         })
         $('#menu-toggle').click(function () {
 
-            if ($('#clientformdetails').html().trim() == "") {
+            if ($('#clientformdetails').html().trim() == "" && _PatientId != 0) {
                 LoadClientFormsHtml(_PatientId);
             }
             $(this).toggleClass('open');
@@ -1086,14 +1086,15 @@
         }
         $(document).ready(function () {
 
-            ShowPatientInfo(_PatientName, _PatientEmail)
+           
             var currenttab = '@ViewBag.CurrentTab';
             var currentSubtab = '@ViewBag.CurrentSubtab'
             
             if (currenttab != 'Profile-tab' && currenttab != 'ProgramTab') {
                 RebindClientFormEvent();
+                LoadClientFormsHtml(_PatientId);
             }
-
+            ShowPatientInfo(_PatientName, _PatientEmail)
             if ((currenttab == 'Profile-tab' || currenttab == '') && '@ViewBag.ClientFormID' == '0') {
                 $('#Profile').addClass('show active')
                 $('#Profile-tab').addClass('show active')
