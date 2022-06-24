@@ -1092,7 +1092,10 @@
             
             if (currenttab != 'Profile-tab' && currenttab != 'ProgramTab') {
                 RebindClientFormEvent();
-                LoadClientFormsHtml(_PatientId);
+                if (_PatientId != 0) {
+                    LoadClientFormsHtml(_PatientId);
+                }
+               
             }
             ShowPatientInfo(_PatientName, _PatientEmail)
             if ((currenttab == 'Profile-tab' || currenttab == '') && '@ViewBag.ClientFormID' == '0') {
