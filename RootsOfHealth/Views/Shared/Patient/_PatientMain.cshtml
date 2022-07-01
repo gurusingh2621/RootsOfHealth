@@ -320,47 +320,47 @@
                                 <a href="javascript:void(0)" id="btnAMDProfile" class="btn btn-success mb-2">
                                     AMD Profile
                                 </a>
-                                
-                                    <a href='javaScript:void(0)' onclick="getCarePlanList()"
-                                       class="btn btn-success label-fields" data-toggle="carePlansSidebar">
-                                        Care Plans<span class="careplanCount">@(Model.CareplanCount == 0 ? "" : "(" + @Model.CareplanCount.ToString() + ")")</span>
+
+                                <a href='javaScript:void(0)' onclick="getCarePlanList()"
+                                   class="btn btn-success label-fields" data-toggle="carePlansSidebar">
+                                    Care Plans<span class="careplanCount">@(Model.CareplanCount == 0 ? "" : "(" + @Model.CareplanCount.ToString() + ")")</span>
+                                </a>
+
+                                @if (modulePermissions.Where(x => x.ModuleName == "Appointment" && (x.CanCreate == true || x.CanList == true)).Any())
+                                {
+                                    <a href='javaScript:void(0)' onclick="LoadAppointmentsAndLocations()"
+                                       id="btnPatientAppointments" class="btn btn-success label-fields">
+                                        Appointments
                                     </a>
-                                
-                                    @if (modulePermissions.Where(x => x.ModuleName == "Appointment" && (x.CanCreate == true || x.CanList == true)).Any())
-                                    {
-                                        <a href='javaScript:void(0)' onclick="LoadAppointmentsAndLocations()"
-                                           id="btnPatientAppointments" class="btn btn-success label-fields">
-                                            Appointments
-                                        </a>
-                                    }
-                                    @if (modulePermissions.Where(x => x.ModuleName == "Notes" && (x.CanCreate == true || x.CanList == true || x.CanDelete == true || x.CanUpdate == true)).Any())
-                                    {
-                                        <a href='javaScript:void(0)' onclick="LoadAllNotes()"
-                                           id="btnPatientNotes" class="btn btn-success label-fields">
-                                            Notes
-                                        </a>
-                                    }
-                                    @if (modulePermissions.Where(x => x.ModuleName == "Client" && x.CanUpdate == true).Any())
-                                    {
-                                        <a href='javaScript:void(0)' onclick="ActivateTab(@Model.PatientID,'Profile-tab')"
-                                           id="btnProfileEdit" class="btn btn-success label-fields">
-                                            <i class="far fa-edit"></i>
-                                            Edit
-                                        </a>
-                                    }
-
-
-                                    <a style="display:none" class="btn btn-success " href="javascript:{}" id="btnaddprogram" data-toggle="modal" data-target="#myModal"><span class="add-icon"></span> Add/Remove Client Programs</a>
-                                    <a href="javascript:{}" onclick="DisplayForm(@Model.PatientID,'Profile-tab')" class="btn btn-success btnDisplayProgram ">
+                                }
+                                @if (modulePermissions.Where(x => x.ModuleName == "Notes" && (x.CanCreate == true || x.CanList == true || x.CanDelete == true || x.CanUpdate == true)).Any())
+                                {
+                                    <a href='javaScript:void(0)' onclick="LoadAllNotes()"
+                                       id="btnPatientNotes" class="btn btn-success label-fields">
+                                        Notes
+                                    </a>
+                                }
+                                @if (modulePermissions.Where(x => x.ModuleName == "Client" && x.CanUpdate == true).Any())
+                                {
+                                    <a href='javaScript:void(0)' onclick="ActivateTab(@Model.PatientID,'Profile-tab')"
+                                       id="btnProfileEdit" class="btn btn-success label-fields">
                                         <i class="far fa-edit"></i>
-                                        Display
+                                        Edit
                                     </a>
-                                    <a tabindex="57" href="javascript:{}" style="border: 1px solid rgb(161, 161, 161); background-color: rgb(161, 161, 161);" onclick="return ProfileSave();" id="ProfileSave" class="btn btn-success btnprogramsave disabled">
-                                        <i class="far fa-save"></i>
-                                        Save
-                                    </a>
+                                }
 
-                                </div>
+
+                                <a style="display:none" class="btn btn-success " href="javascript:{}" id="btnaddprogram" data-toggle="modal" data-target="#myModal"><span class="add-icon"></span> Add/Remove Client Programs</a>
+                                <a href="javascript:{}" onclick="DisplayForm(@Model.PatientID,'Profile-tab')" class="btn btn-success btnDisplayProgram ">
+                                    <i class="far fa-edit"></i>
+                                    Display
+                                </a>
+                                <a tabindex="57" href="javascript:{}" style="border: 1px solid rgb(161, 161, 161); background-color: rgb(161, 161, 161);" onclick="return ProfileSave();" id="ProfileSave" class="btn btn-success btnprogramsave disabled">
+                                    <i class="far fa-save"></i>
+                                    Save
+                                </a>
+
+                            </div>
 
 
                         </div>
@@ -1849,9 +1849,10 @@
                       float: left;">
                                 Appointment
                             </h3>
-                            <button id="hideAppointmentContent" class="btn btn-link addnotebtn" onclick="HideSidebarTabs(this)">Close</button>
-                            @if (modulePermissions.Where(x => x.ModuleName == "Appointment" && x.CanCreate == true).Any()) {
-                            <button data-toggle="modal" id="openappointmentpopup" data-target="#AppointmentModal" onclick="addAppointment()" class="btn btn-link addnotebtn"> Add Appointment </button>
+                            <button id="hideAppointmentContent" class="btn btn-link addnotebtn">Close</button>
+                            @if (modulePermissions.Where(x => x.ModuleName == "Appointment" && x.CanCreate == true).Any())
+                            {
+                                <button data-toggle="modal" id="openappointmentpopup" data-target="#AppointmentModal" onclick="addAppointment()" class="btn btn-link addnotebtn"> Add Appointment </button>
                             }
                             <div class="scroll scroll-height" id="appointementlst">
 
@@ -1861,17 +1862,17 @@
                         </div>
                         <div class="appointement appointement-notes" style="display:none">
                             <h3>Notes</h3>
-                            <button id="hideNoteContent" class="btn btn-link addnotebtn" onclick="HideSidebarTabs(this)" style="margin-left:20px">  Close </button>
+                            <button id="hideNoteContent" class="btn btn-link addnotebtn" style="margin-left:20px">  Close </button>
                             @if (modulePermissions.Where(x => x.ModuleName == "Notes" && x.CanCreate == true).Any())
                             {
                                 <button data-toggle="modal" id="opennotepopup" data-target="#notesModal" class="btn btn-link addnotebtn"> Add Note </button>
                             }
-                                <button data-toggle="modal" id="opennotepopupreadonly" hidden="hidden" data-target="#notesreadonlyModal" class="btn btn-link addnotebtn"> Add Note </button>
-                                <div class="scroll scroll-height" id="notesList">
-
-                                </div>
+                            <button data-toggle="modal" id="opennotepopupreadonly" hidden="hidden" data-target="#notesreadonlyModal" class="btn btn-link addnotebtn"> Add Note </button>
+                            <div class="scroll scroll-height" id="notesList">
 
                             </div>
+
+                        </div>
                     </div>
                 </div>
 
@@ -1883,7 +1884,7 @@
                             @*<a href="#" class="btn btn-success" data-toggle="addNewCarePlansSidebar">Add New</a>*@
                             @if (modulePermissions.Where(x => x.ModuleName == "Client" && x.CanUpdate == true).Any())
                             {
-                            <a href="javascript:void(0);" class="btn btn-success" onclick="getCareProgramOptions()">Add New</a>
+                                <a href="javascript:void(0);" class="btn btn-success" onclick="getCareProgramOptions()">Add New</a>
                             }
                             <a class="close_right_sidebar carePlan_sideBar" href="javascript:void(0);"><i class="fa fa-times"></i></a>
                         </div>
@@ -2715,9 +2716,6 @@
     $('._time_picker').timeselector({
         hours12: true
     });
-    $('#datepicker').datepicker({
-        uiLibrary: 'bootstrap'
-    })
     function addAppointment() {
         emptyModel();
      //   $('#AppointmentModal').modal('show');
@@ -2764,10 +2762,6 @@
 
     var isAppointmentAndLocationLoaded = false
     function LoadAppointmentsAndLocations() {
-        $("#appointementContent").show();
-        $(".appointement-notes").hide();
-        $('#pat_out_div').removeClass('col-lg-12 col-md-12 col-sm-12 col-12');
-        $('#pat_out_div').addClass('col-lg-8 col-md-12 col-sm-12 col-12 pr-0');
         if (!isAppointmentAndLocationLoaded) {
             getListAllAppointments(false);
             GetTypeOfAppointments(false);
@@ -2893,35 +2887,5 @@
 
         $('.ChildrenAgeDiv').html(divhtml);
     }
-
-    $('#btnAMDProfile').click(function () {
-        
-       var PatientObject=  @Html.Raw(Json.Encode(Model));
-          $('#AMDProfile .modal-body').html("")
-
-          $.ajax({
-              type: "Post",
-              url: '/Client/GetAMDProfile',
-              data: JSON.stringify(PatientObject),
-              contentType: "application/json; charset=utf-8",
-              dataType: "html",
-              success: function (data) {
-                  if (data == '0') {
-                      toastr.error("No data available");
-                  }
-                  else if (data == '1') {
-                      toastr.error("multiple records available");
-                  }
-                  else {
-                      $('#AMDProfile .modal-body').html(data)
-                      $('#AMDProfile').modal('show');
-                  }
-
-              },
-              error: function (e) {
-                  toastr.error("Error AMDProfile Data.");
-              }
-          });
-
-      })
 </script>
+
