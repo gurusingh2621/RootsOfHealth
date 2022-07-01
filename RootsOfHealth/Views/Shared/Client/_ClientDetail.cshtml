@@ -1,6 +1,6 @@
 ﻿@model RootsOfHealth.Models.PatientDetailBO
 @using RootsOfHealth.Commom;
-   
+
 
 
 
@@ -2576,7 +2576,7 @@
             async: true,
             success: function (result) {
 
-                
+
                 var parentTabWChild = ''
                 var parentTabWoChild = ''
                 var data = JSON.parse(result.data)
@@ -2692,7 +2692,7 @@
                 async: true,
                 success: function (result) {
 
-                    
+
 
                     var data = JSON.parse(result.data)
                     var myChildTab = $("#myChildTab");
@@ -2726,13 +2726,13 @@
                                         if (result[0].CanUpdate == true || result[0].CanList == true) {
                                             canViewChildForm = true
                                         }
-                                        
+
                                     },
                                     error: function (e) {
-                                      
+
                                     }
                                 });
-                                
+
                                 // check permission
                                 if (canViewChildForm || canViewChildForm == 'True') {
 
@@ -2749,7 +2749,7 @@
 
                                 }
 
-                                
+
                             }
                         });
                     }
