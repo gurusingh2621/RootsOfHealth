@@ -118,17 +118,21 @@
     div#menu-toggle.open {
         right: 310px;
     }
+
     .btnDisplayProgram, .btnprogramsave {
         display: none !important
     }
+
     .btnProgramEdit {
         display: block !important
     }
+
     .score_Result {
         max-width: 630px;
-        width:100%;
+        width: 100%;
         margin: 0 0 30px auto;
     }
+
     .pColorCircle {
         height: 10px;
         width: 10px;
@@ -138,6 +142,7 @@
         border-radius: 50px;
         margin-top: -5px;
     }
+
     .historyFormLogTableWrap.table-responsive {
         max-height: calc(100vh - 160px);
     }
@@ -159,16 +164,16 @@
                         string FormName = item.FormName.Replace(" ", "");
                         if (formpermission.Where(f => f.CanList == true || f.CanUpdate == true).Any())
                         {
-                        <li class="nav-item">
-                            <a id="@("a" + FormName)" class="nav-link" data-toggle="tab"
-                               href="@("#" + FormName + "only")" data-ClientFormID="@item.ClientFormID" data-PatientID="@item.patientID" onclick="loadClient(this)" data-TemplateID="@item.TemplateID" data-FormName=@(FormName)>@item.FormName<span class="pColorCircle" style="display:none"></span><span class="notCount" id="@(FormName + "Notify")" style="display:none"></span><span class="check @Html.Raw(item.Saved ? "" : "d-none")"><i class="fas fa-check-circle"></i></span></a>
+                            <li class="nav-item">
+                                <a id="@("a" + FormName)" class="nav-link" data-toggle="tab"
+                                   href="@("#" + FormName + "only")" data-ClientFormID="@item.ClientFormID" data-PatientID="@item.patientID" onclick="loadClient(this)" data-TemplateID="@item.TemplateID" data-FormName=@(FormName)>@item.FormName<span class="pColorCircle" style="display:none"></span><span class="notCount" id="@(FormName + "Notify")" style="display:none"></span><span class="check @Html.Raw(item.Saved ? "" : "d-none")"><i class="fas fa-check-circle"></i></span></a>
 
-                        </li>
+                            </li>
                         }
 
                     }
-                 }
-                
+                }
+
 
                 <li class="nav-item" id="programtbs" style="display:none;/*left: 155px;*/">
                     <a class="nav-link" id="Programs-tab" data-toggle="tab" href="#Programs" role="tab"
@@ -176,12 +181,12 @@
                 </li>
 
                 <li class="nav-item " style="display:block">
-                    <a class="nav-link" id="RecentClient-tab" onclick="RecentClients()" href="#" data-toggle="modal" >Recent Clients</a>
+                    <a class="nav-link" id="RecentClient-tab" onclick="RecentClients()" href="#" data-toggle="modal">Recent Clients</a>
                 </li>
 
             </ul>
         </div>
-       
+        @*<div class="scroll-hide">show / hide patient menu </div>*@
         <div id="menu-toggle" class="">
             <div id="hamburger">
                 <span></span>
@@ -199,7 +204,18 @@
 
                 <div class="paitent-detail">
 
-                    
+                    @*<div class="row">
+                        <div class="col-lg-8 col-md-8 col-sm-12 col-12 pr-0">
+
+                        </div>
+
+
+                        <div class="col-lg-4 col-md-12 col-sm-12 col-12">
+
+                        </div>
+
+
+                        </div>*@
                 </div>
 
             </div>
@@ -207,9 +223,6 @@
 
 
 
-
-        </div>
-        <div id="clientformdetails">
 
         </div>
 
@@ -270,29 +283,18 @@
 
     <script>
        var ViewBagClientFormId = '@ViewBag.ClientFormID'
-        var _patientID = '@ViewBag.PatientID'
-        var _PatientId = '@ViewBag.PatientId';
+        var _PatientId = '@ViewBag.PatientID'
          var currenttab = '@ViewBag.CurrentTab';
-        var currentSubtab = '@ViewBag.CurrentSubtab'
-        var programName = '';
-        var formName = '';
-        var programElement = '';
-        var clinicAddress = "";
+         var currentSubtab = '@ViewBag.CurrentSubtab'
         // Hamburger menu js
-        $('#myTab a').each(function () {
-            $(this).click(function () {
-                $('#menu-toggle').click();
-            })
+    $('#myTab a').each(function () {
+        $(this).click(function () {
+            $('#menu-toggle').click();
+        })
 
-        });
+    });
 
         $('#menu-toggle').click(function () {
-
-
-            if ($('#clientformdetails').html().trim() == "") {
-                LoadClientFormsHtml(_patientID);
-            }
-
             $(this).toggleClass('open');
             if ($("#menu-toggle").hasClass("open")) {
                 $("#cross").attr("title", "Hide Client Menu")
@@ -322,27 +324,9 @@
 
         })
 
-        $('#datepicker').datepicker({
-            uiLibrary: 'bootstrap'
-        })
-
-        $.date = function (dateObject) {
-            var d = new Date(dateObject);
-            var day = d.getDate();
-            var month = d.getMonth() + 1;
-            var year = d.getFullYear();
-            if (day < 10) {
-                day = "0" + day;
-            }
-            if (month < 10) {
-                month = "0" + month;
-            }
-            var date = day + "/" + month + "/" + year;
-
-            return date;
-        };
         $(document).ready(function () {
 
+            // $(".loaderOverlay").css("display","flex");
             _Loader.StartLoader()
             var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]'
 
@@ -371,6 +355,10 @@
                 $("#divOtherContact").hide();
 
             })
+
+
+
+
 
             $("#btnProfileSave").click(function () {
                 onSaveAndCancel();
@@ -513,11 +501,7 @@
             bindTopPatient('@ViewBag.PatientID');
 
         });
-        function HideSidebarTabs(obj) {
-            $(obj).parent().hide();
-            $('#pat_out_div').addClass('col-lg-12 col-md-12 col-sm-12 col-12');
-            $('#pat_out_div').removeClass('col-lg-8 col-md-12 col-sm-12 col-12 pr-0');
-        }
+
 
         function RecentClients() {
               $.ajax({
@@ -574,21 +558,8 @@
 
                     var a = result;
                     $('#myTabContent').html(result);
+                    $('#btnaddprogram').css('display', 'block');
 
-                    // changed here
-                    $('#Profile').addClass('show active');
-                    $('.form-control').css('display', 'none');
-                    $('.Add').css('display', 'none');
-                    $('.selectboxmultiple').css('display', 'none');
-                    $('.custom-control-input').css('display', 'none');
-                    $('.custom-control-label').css('display', 'none');
-                    $('.custom-file-label').css('display', 'none');
-                    $('.recent-paitents').css('display', 'block');
-                    $('#appointement_div').css('display', 'block');
-
-                    GetScoreClient(0)
-                    //changed here
-                    _Loader.StopLoader();
                 },
                 error: function () {
                     _Loader.StopLoader()
@@ -646,330 +617,9 @@
                 }
             });
         }
-        function GetScoreClient(clientformid) {
-
-            $.ajax({
-                type: "GET",
-                url: Apipath + '/api/PatientMain/getclientscorestatus?clientformid=' + clientformid + '&clientid=' + _patientID,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (data) {
-
-                    if (data) {
-                        var element = $('#ScoreStatus_' + clientformid)
-                        var scoreElement = $(element).find('#txtoverallscore');
-                        var statusElement = $(element).find('#txtoverallstatus');
-
-                        if (data.OverAllScore != 0 && data.OverAllScore != null && data.OverAllScore != undefined) {
-                            $(scoreElement).html(data.Score + '/' + data.OverAllScore);
-
-                            $(element).removeClass('d-none')
-
-                            if (data.Crisis != null && data.Crisis != '' && data.Crisis != undefined) {
-                                let crisis = data.Crisis.split('-');
-                                let Secure = data.Secure.split('-');
-                                let Struggling = data.Struggling.split('-');
-                                let AtRisk = data.AtRisk.split('-')
-                                let status = ''
-                                let badge = ''
-                                let score = data.Score
-                                if (score >= crisis[0] && score <= crisis[1]) {
-                                    status = 'crisis'
-                                    badge = '<span class="badge badge-danger" style="height:10px; position:relative; top:4px;">&nbsp; &nbsp;</span>'
-                                }
-                                else if (score > AtRisk[0] && score <= AtRisk[1]) {
-                                    status = 'at risk'
-                                    badge = '<span class="badge badge-warning"style="height:10px; position:relative; top:4px; background-color:#FF8C00!important">&nbsp; &nbsp;</span>'
-                                }
-                                else if (score > Struggling[0] && score <= Struggling[1]) {
-                                    status = 'struggling'
-                                    badge = '<span class="badge badge-warning" style="height:10px; position:relative; top:4px;background-color:#ecec04!important">&nbsp; &nbsp;</span>'
-                                }
-                                else if (score >= Secure[0] && score <= Secure[1]) {
-                                    status = 'secure'
-                                    badge = '<span class="badge badge-success" style="height:10px; position:relative; top:4px;">&nbsp; &nbsp;</span>'
-                                }
-                                $(statusElement).html(status);
-                                $(statusElement).parent().append(badge)
-                            }
-                        }
-
-                    }
-
-                },
-                error: function (e) {
-                    toastr.error("Error while getting appointment data.");
-                }
-            });
-        }
-         //--get list of appointment by Patient ID
-        function getListAllAppointments(stopLoader=true) {
-
-
-                var data = {
-            PatientID: '@ViewBag.PatientId',
-            startdate: '@DateTime.Now.ToString("yyyy-MM-dd")',
-            enddate: '@DateTime.Now.AddDays(7).ToString("yyyy-MM-dd")'
-                };
-
-            $.ajax({
-                type: "GET",
-                url: Apipath + '/api/PatientMain/GetListPatientAppointmentByPatientId',
-                data: data,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                beforeSend: function () {
-                    _Loader.StartLoader()
-                },
-                success: function (data) {
-                    $("#hdnCurrentDate").val(data.CurrentDate);
-                    if (data.Data.length) {
-                        var result = data.Data;
-                        var tbl = '';
-                        for (var i = 0; i < result.length; i++) {
-
-                            tbl += '<div class="appointement-row">'
-                            tbl += '<div class="calender-img" >'
-                            tbl += '<img src="/images/calender-icon.png" alt=""></div>'
-                            tbl += '<h6>'
-                            tbl += '<span class="date">Date:' + $.date(result[i].AppointmentDate) + '</span>,'
-                            tbl += '<span class="time">'
-                            tbl += ' Time:' + result[i].AppointmentTime + '</span></h6>'
-                            tbl += '<p class="content hideContent">' + result[i].Notes + '</p > <div class="show-more">'
-                            if (result[i].Notes.length > 100) {
-                                tbl += '<a href="#!" id="' + result[i].PatientAppointmentID + '" onclick="ShowMore(' + result[i].PatientAppointmentID + ')" class="btn btn-link" >read more</a>'
-                            }
-                            tbl += '</div ></div>'
-
-                        }
-
-                        $('#appointementlst').html(tbl);
-
-                    } else {
-                        $("#loadMore").hide();
-                    }
-
-
-                },
-                complete: function () {
-                    if (stopLoader) {
-                        _Loader.StopLoader();
-                    }
-                },
-                error: function (e) {
-                    _Loader.StopLoader();
-                    toastr.error("Error while getting appotment data.");
-                }
-            });
-        }
-        var isNotesLoaded = false;
-        function LoadAllNotes() {
-
-            $("#appointementContent").hide();
-            $(".appointement-notes").show();
-            $('#pat_out_div').removeClass('col-lg-12 col-md-12 col-sm-12 col-12');
-            $('#pat_out_div').addClass('col-lg-8 col-md-12 col-sm-12 col-12 pr-0');
-            if (!isNotesLoaded) {
-                getListAllNotesLoadMore();
-            }
-            isNotesLoaded = true;
-        }
-
-        function getListAllNotesLoadMore() {
-
-             var data = {
-                         PatientID: '@ViewBag.PatientId',
-             };
-
-            $.ajax({
-                type: "GET",
-                url: Apipath + '/api/PatientMain/GetListPatientnotesbyid',
-                data: data,
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                beforeSend: function () {
-                    _Loader.StartLoader();
-                },
-                success: function (result) {
-                    $('#notesList').html('');
-                    if (result.length) {
-
-
-                        var tbl = '';
-                        for (var i = 0; i < result.length; i++) {
-
-                            var splitDateTime = result[i].CreatedDate.split("T");
-
-                            tbl += '<div class="appointement-row">'
-                            tbl += '<div class="notesclose" hidden="hidden" >&#10539;</div>'
-                            tbl += '<div class="calender-img" >'
-                            tbl += '<img src="/images/calender-icon.png" alt=""></div>'
-                            tbl += '<h6>'
-                            tbl += '<span class="date">Date:' + $.date(splitDateTime[0]) + '</span>,'
-                            tbl += '<span class="time">'
-                            tbl += ' Time:' + splitDateTime[1].substring(0, splitDateTime[1].lastIndexOf(':')); + '</span></h6>'
-                            tbl += '<p class="content hideContent">' + result[i].Description + '</p> <div class="show-more">'
-                            if (result[i].Description.length > 100) {
-                                tbl += '<a href="#!" id="' + result[i].NotesID + '" onclick="ShowMore(' + result[i].NotesID + ')" class="btn btn-link" >read more</a>'
-                            }
-                            tbl += `</div ><div class="editicons">`
-                            if (canEditNote == 'True') {
-                                tbl += `<button onclick="EditNote(${result[i].NotesID})"><i class="fas fa-edit"></i></button>`
-                            }
-                            if (canViewNote == 'True') {
-                                tbl += `<button  onclick="ViewNote(${result[i].NotesID})"><i class="fa fa-eye" aria-hidden="true"></i></button>`
-                            }
-                            if (canDeleteNote == 'True') {
-                                tbl += `<button onclick="RemoveNote(${result[i].NotesID})"><i class="far fa-trash-alt"></i></button>`
-                            }
-                            tbl += `</div></div>`
-                        }
-
-                        $('#notesList').html(tbl);
-
-                        $("#notesList").animate({ scrollDown: $('#notesList').prop("scrollHeight") }, 1000);
-
-                    }
-
-
-                }, complete: function () {
-                    _Loader.StopLoader();
-                },
-                error: function (e) {
-                    _Loader.StopLoader();
-                    toastr.error("Error while getting appotment data.");
-                }
-            });
-        }
-
-        function GetFieldsByProgramID() {
-
-            var id = $("#ddlProgramType").val();
-            $.ajax({
-                type: "GET",
-                url: Apipath + '/api/PatientMain/GetNotesTemplateByProgramID?programid=' + id,
-                contentType: 'application/json; charset=UTF-8',
-                dataType: "json",
-                success: function (result) {
-                    $(".tmpdiv").html('');
-                    if (result.length) {
-
-                        for (var i = 0; i < result.length; i++) {
-                            switch (result[i].FieldType) {
-                                case "Text":
-                                    $(".tmpdiv").append('<div class="form-group">' +
-                                        '<label>' + result[i].Field + '</label>' +
-                                        '<input type="text" class="form-control txtField getValue" data-id=' + result[i].NotesTemplateFieldID + ' data-fieldvlueid=' + 0 + '>' +
-                                        '</div>'
-                                    )
-                                    break;
-                                case "Number":
-                                    $(".tmpdiv").append('<div class="form-group">' +
-                                        '<label>' + result[i].Field + '</label>' +
-                                        '<input type="number" class="form-control txtField getValue" data-id=' + result[i].NotesTemplateFieldID + ' data-fieldvlueid=' + 0 + '>' +
-                                        '</div>'
-                                    )
-                                    break;
-                                case "Date":
-                                    $(".tmpdiv").append('<div class="form-group">' +
-                                        '<label>' + result[i].Field + '</label>' +
-                                        '<input type="text" class="form-control datepick getValue" data-id=' + result[i].NotesTemplateFieldID + ' data-fieldvlueid=' + 0 + '>' +
-                                        '</div>'
-                                    )
-                                    break;
-                                case "Large text":
-                                    $(".tmpdiv").append('<div class="form-group">' +
-                                        '<label>' + result[i].Field + '</label>' +
-                                        '<textarea cols="10" rows="2" style="height:38px !important" class="form-control getValue" data-id=' + result[i].NotesTemplateFieldID + ' data-fieldvlueid=' + 0 + '></textarea>' +
-                                        '</div>'
-                                    )
-                                    break;
-                            }
 
 
 
-                        }
-
-
-
-                    }
-                    //else {
-
-                    //    $(".tmpdiv").append('<div class="form-group">' +
-                    //        '<label>Description</label>' +
-                    //        '<textarea cols="10" id="txtNotes1" rows="5" class="form-control"></textarea>' +
-                    //        '</div>'
-                    //    )
-                    //}
-
-
-
-                    $(".tmpdiv").find('.datepick').datepicker({
-                        uiLibrary: 'bootstrap'
-                    });
-
-                },
-                error: function () {
-
-                    toastr.error("Error while Getting field");
-                }
-            });
-        }
-
-        function notesSave() {
-
-            if ($.trim($("#txtNotes1").val()) == "") {
-                toastr.error("Description is required.");
-                return;
-            }
-                var data = {
-                    NotesID: $("#noteshdnID").val(),
-                    Description: $.trim($("#txtNotes1").val()),
-                    PatientID: '@ViewBag.PatientId',
-                    CreatedBy: parseInt(@Session["userid"].ToString()),
-                    ModifiedBy: parseInt(@Session["userid"].ToString())
-                };
-              $.ajax({
-                  type: "POST",
-                  url: Apipath + '/api/PatientMain/savenotes',
-                  data: JSON.stringify(data),
-                  contentType: 'application/json; charset=UTF-8',
-                  dataType: "json",
-                  success: function (result) {
-
-                      $("#txtNotes1").val('');
-
-                  },
-                  complete: function (result) {
-
-                      var models = [];
-                      $('.tmpdiv').find('.getValue')
-                          .each(function () {
-                              var b = { ID: $(this).attr('data-fieldvlueid'), NotesTemplateFieldID: $(this).attr('data-id'), NoteID: result.responseJSON, Value: $(this).val() };
-                              models.push(b);
-                          });
-
-                      if (models.length == 0) {
-                          $(".close").click();
-                          getListAllNotesLoadMore();
-                          return
-                      };
-                      $.ajax({
-                          type: "POST",
-                          url: Apipath + '/api/PatientMain/SaveNotesTemplateFieldValue',
-                          data: JSON.stringify(models),
-                          contentType: 'application/json; charset=UTF-8',
-                          dataType: "json",
-                          success: function (result) {
-                              $(".close").click();
-                              getListAllNotesLoadMore();
-                          }
-                      })
-
-                  }
-
-              });
-          }
 
         function recentpcloseModel()
         {
@@ -978,805 +628,6 @@
 
     }
 
-        function EditNote(id) {
-            $.ajax({
-                type: "GET",
-                url: Apipath + '/api/PatientMain/EditNoteByID?noteid=' + id,
-                contentType: 'application/json; charset=UTF-8',
-                dataType: "json",
-                success: function (result) {
-                    $("#opennotepopup").click();
-                    $("#noteshdnID").val(result.NotesID);
-                    $("#txtNotes1").val(result.Description);
-
-                },
-                complete: function () {
-                    $.ajax({
-                        type: "GET",
-                        url: Apipath + '/api/PatientMain/EditNotesTemplateFieldValueByNoteID?noteid=' + id,
-                        contentType: 'application/json; charset=UTF-8',
-                        dataType: "json",
-                        success: function (result) {
-                            $(".tmpdiv").html('');
-                            if (result.length) {
-
-                                for (var i = 0; i < result.length; i++) {
-                                    switch (result[i].FieldType) {
-                                        case "Text":
-                                            $(".tmpdiv").append('<div class="form-group">' +
-                                                '<label>' + result[i].Field + '</label>' +
-                                                '<input type="text" class="form-control txtField getValue" data-id=' + result[i].NotesTemplateFieldID + ' data-fieldvlueid=' + result[i].ID + ' value=' + result[i].Value + '>' +
-                                                '</div>'
-                                            )
-                                            break;
-                                        case "Number":
-                                            $(".tmpdiv").append('<div class="form-group">' +
-                                                '<label>' + result[i].Field + '</label>' +
-                                                '<input type="number" class="form-control txtField getValue" data-id=' + result[i].NotesTemplateFieldID + ' data-fieldvlueid=' + result[i].ID + ' value=' + result[i].Value + '>' +
-                                                '</div>'
-                                            )
-                                            break;
-                                        case "Date":
-                                            $(".tmpdiv").append('<div class="form-group">' +
-                                                '<label>' + result[i].Field + '</label>' +
-                                                '<input type="text" class="form-control datepick getValue" data-id=' + result[i].NotesTemplateFieldID + '  data-fieldvlueid=' + result[i].ID + ' value=' + result[i].Value + '>' +
-                                                '</div>'
-                                            )
-                                            break;
-                                        case "Large text":
-                                            $(".tmpdiv").append('<div class="form-group">' +
-                                                '<label>' + result[i].Field + '</label>' +
-                                                '<textarea cols="10" rows="2" style="height:38px !important" class="form-control getValue" data-id=' + result[i].NotesTemplateFieldID + '  data-fieldvlueid=' + result[i].ID + '>' + result[i].Value + '</textarea>' +
-                                                '</div>'
-                                            )
-                                            break;
-                                    }
-
-
-
-                                }
-
-                                $(".tmpdiv").find('.datepick').datepicker();
-                                $("#ddlProgramType").closest("div").hide();
-                            }
-                        }
-                    })
-                },
-                error: function () {
-
-                    toastr.error("Error while edit note");
-                }
-            });
-        }
-        function ViewNote(id) {
-            $.ajax({
-                type: "GET",
-                url: Apipath + '/api/PatientMain/EditNoteByID?noteid=' + id,
-                contentType: 'application/json; charset=UTF-8',
-                dataType: "json",
-                success: function (result) {
-                    $("#txtNotesReadonly1").html(result.Description);
-
-                    $("#opennotepopupreadonly").click();
-                },
-                complete: function () {
-                    $.ajax({
-                        type: "GET",
-                        url: Apipath + '/api/PatientMain/EditNotesTemplateFieldValueByNoteID?noteid=' + id,
-                        contentType: 'application/json; charset=UTF-8',
-                        dataType: "json",
-                        success: function (result) {
-                            $(".tmpdivreadonly").html('');
-                            if (result.length) {
-
-                                for (var i = 0; i < result.length; i++) {
-                                    switch (result[i].FieldType) {
-                                        case "Text":
-                                            $(".tmpdivreadonly").append('<div class="form-group">' +
-                                                '<label>' + result[i].Field + '</label>' +
-                                                '<label>' + result[i].Value + '</label>' +
-                                                '</div>'
-                                            )
-                                            break;
-                                        case "Number":
-                                            $(".tmpdivreadonly").append('<div class="form-group">' +
-                                                '<label>' + result[i].Field + '</label>' +
-                                                '<label>' + result[i].Value + '</label>' +
-                                                '</div>'
-                                            )
-                                            break;
-                                        case "Date":
-                                            $(".tmpdivreadonly").append('<div class="form-group">' +
-                                                '<label>' + result[i].Field + '</label>' +
-                                                '<label>' + result[i].Value + '</label>' +
-                                                '</div>'
-                                            )
-                                            break;
-                                        case "Large text":
-                                            $(".tmpdivreadonly").append('<div class="form-group">' +
-                                                '<label>' + result[i].Field + '</label>' +
-                                                '<label>' + result[i].Value + '</label>' +
-                                                '</div>'
-                                            )
-                                            break;
-                                    }
-
-
-
-                                }
-
-
-                            }
-                        }
-                    })
-                },
-                error: function () {
-
-                    toastr.error("Error while edit note");
-                }
-            });
-        }
-        function RemoveNote(id) {
-
-          if (confirm("Are you sure,you want to delete.")) {
-
-                var model = {
-                        noteid: id,
-                        modifyby:@Session["userid"].ToString(),
-                        modifydate:'@DateTime.Now.ToString("yyyy-MM-dd")'
-                    };
-               $.ajax({
-                    type: "POST",
-                    url: Apipath + '/api/PatientMain/removenote',
-                    data: JSON.stringify(model),
-                    contentType: 'application/json; charset=UTF-8',
-                    dataType: "json",
-                    success: function (result) {
-                        toastr.success("delete successfully");
-                        getListAllNotesLoadMore();
-
-                    },
-                    error: function () {
-
-                        toastr.error("Error while deleting data");
-                    }
-               });
-          }
-        }
-
-        function loadClient(item) {
-
-            //$("#myTab .nav-item a").on('click', function (e) {
-
-            $(".tab-pane").each(function (index, item) {
-                $(item).removeClass("active show");
-                $(item).removeClass('client-form-margin-top');
-            })
-
-            //$("#myChildTab").css("display", "none");
-            var item = $(item);
-            var ClientFormId = item.attr("data-ClientFormID")
-            formName = item.attr("data-FormName");
-            programElement = $("#" + formName + "render-basicform");
-            if (ClientFormId == undefined) {
-                if (ViewBagClientFormId != 0) {
-                    ClientFormId = ViewBagClientFormId
-                    getParentForm(ClientFormId);
-                }
-                setTimeout(function () {
-                    LoadChildMenu(ClientFormId);
-                }, 1000)
-            }
-            else {
-                LoadChildMenu(ClientFormId);
-            }
-            var id = item.attr("id");
-            if ($("#" + id).hasClass("Child")) {
-                $(".Child").removeClass('active show');
-                $("#" + id).addClass('active show');
-            }
-
-            if (formName != undefined) {
-                var _IsSaved = $('#' + formName + 'only').find('.btnprogramsave').attr('data-save');
-                $('#' + formName + 'only').find('.Child').removeClass('active show ');
-                $('#' + formName + 'only').find("#a" + formName).addClass('active show ');
-                if (_IsSaved == 'True') {
-                    $('#' + formName + 'only').find('.btnprogramPrint').css('display', 'block');
-                }
-                else {
-                    $('#' + formName + 'only').find('.btnprogramPrint').css('display', 'none');
-                }
-                $('#' + formName + 'only').addClass('active show');
-                var _templateID = item.attr("data-TemplateID");
-                if (programElement.html() != "") {
-                    $(".loaderOverlay").hide();
-                    return;
-                };
-
-                if (_IsSaved == 'False') {
-                    LoadClientFormTemplate(ClientFormId)
-                }
-                else {
-                    EditClientForm(ClientFormId, _templateID)
-                }
-            }
-            //})
-        }
-        function getParentForm(ClientFormID) {
-
-            $.ajax({
-                type: "GET",
-                url: '/Client/getParentForm?ClientFormId=' + ClientFormID + '&PatientId=' + _patientID,
-                contentType: 'application/json; charset=UTF-8',
-                dataType: "json",
-                beforeSend: function () {
-
-                },
-                async: true,
-                success: function (result) {
-
-
-                    var parentTabWChild = ''
-                    var parentTabWoChild = ''
-                    var data = JSON.parse(result.data)
-                    var myChildTab = $("#myChildTab");
-                    if (data.length == 0) {
-
-                    } else {
-                        if (data.length > 1) {
-                            myChildTab.find("li").remove();
-                        }
-                        $.each(data, function (i, item) {
-                            if (item.ClientFormID == ClientFormID) {
-                                var formname = item.FormName.replace(/ /g, '');
-                                formName = formname;
-                            }
-
-                            if (item.ClientFormID == ClientFormID && item.ParentFormID == 0) {
-                                parentTabWChild = item.FormName.replace(/ /g, '');
-                            }
-                            if (item.ParentFormID == 0) {
-                                parentTabWoChild = item.FormName.replace(/ /g, '');
-                            }
-
-                            $('#' + formName + 'only').addClass('active show');
-
-                            if (item.ParentFormID != 0 || item.ParentFormID != null) {
-                                var formnames = item.FormName.replace(/ /g, '');
-                                if (item.ParentFormID == 0 || item.ParentFormID == null) {
-                                    $("#myTab .nav-link").each(function (index, item) {
-                                        $(item).removeClass("active show");
-
-                                    })
-                                    // $("#a" + formnames).addClass('active show')
-                                }
-                                else if (item.ClientFormID == ClientFormID) {
-                                    if (item.Saved == true) {
-                                        myChildTab.append(`<li class="nav-item" style="display: flex;" ><a id="${formnames}" style="width: 230px;" data-FormName="${formnames}" data-TemplateID="${item.TemplateID}" onclick="loadClient(this)" class="nav-link Child active show" href="${'#' + formnames + 'only'}"data-ClientFormID="${item.ClientFormID}"data-PatientID="${item.PatientID}">
-                                ${item.FormName}<span class="notCount" id="${formnames}Notify" style="display:none"></span><span class="check" ${item.Saved}?"":style='display:none' ><i class="fas fa-check-circle"></i></span></a></li>`
-                                        )
-                                    } else {
-                                        myChildTab.append(`<li class="nav-item" style="display: flex;" ><a id="${formnames}" style="width: 230px;" data-FormName="${formnames}" data-TemplateID="${item.TemplateID}" onclick="loadClient(this)" class="nav-link active show Child" href="${'#' + formnames + 'only'}"data-ClientFormID="${item.ClientFormID}"data-PatientID="${item.PatientID}">
-                                ${item.FormName}<span class="notCount" id="${formnames}Notify" style="display:none"></span><span class="check" ${item.Saved}?"":style='display:none' ></i></span></a></li>`
-                                        )
-                                    }
-                                }
-                                else {
-
-                                    if (item.Saved == true) {
-                                        myChildTab.append(`<li class="nav-item" style="display: flex;" ><a id="${formnames}" style="width: 230px;" data-FormName="${formnames}" data-TemplateID="${item.TemplateID}" onclick="loadClient(this)" class="nav-link Child" href="${'#' + formnames + 'only'}"data-ClientFormID="${item.ClientFormID}"data-PatientID="${item.PatientID}">
-                                ${item.FormName}<span class="notCount" id="${formnames}Notify" style="display:none"></span><span class="check" ${item.Saved}?"":style='display:none' ><i class="fas fa-check-circle"></i></span></a></li>`
-                                        )
-                                    } else {
-                                        myChildTab.append(`<li class="nav-item" style="display: flex;" ><a id="${formnames}" style="width: 230px;" data-FormName="${formnames}" data-TemplateID="${item.TemplateID}" onclick="loadClient(this)" class="nav-link Child" href="${'#' + formnames + 'only'}"data-ClientFormID="${item.ClientFormID}"data-PatientID="${item.PatientID}">
-                                ${item.FormName}<span class="notCount" id="${formnames}Notify" style="display:none"></span><span class="check" ${item.Saved}?"":style='display:none' ></i></span></a></li>`
-                                        )
-                                    }
-                                }
-                            }
-
-
-                        });
-                        if (data.length == 1 && data[0].ParentFormID == null) {
-                            $("#myChildTab").css("display", "none");
-                        }
-                        if (data.length > 0) {
-
-                            $("#myChildTab").css("display", "flex");
-
-                            SetScheduling()
-                            $('#' + formName + 'only').addClass('client-form-margin-top');
-                        }
-                        $.each(data, function (i, item) {
-                            if (item.ClientFormID == ClientFormID) {
-
-                                _IsSaved = $('#' + formName + 'only').find('.btnprogramsave').attr('data-save');
-                                programElement = $("#" + formName + "render-basicform")
-
-                                if (_IsSaved == 'False') {
-                                    LoadClientFormTemplate(ClientFormID)
-                                    result = true;
-                                }
-                                else {
-                                    EditClientForm(ClientFormID, item.TemplateID)
-                                    result = true;
-                                }
-                            }
-                        });
-                    }
-
-                    if (parentTabWChild != '') {
-                        $('#a' + parentTabWChild).addClass('active show');
-                    }
-                    else { $('#a' + parentTabWoChild).addClass('active show'); }
-
-
-                },
-                error: function (e) {
-                    toastr.error("Unexpected error!");
-                    $(".loaderOverlay").hide();
-                }
-            });
-        }
-        function LoadChildMenu(ClientFormId) {
-
-            $.ajax({
-                type: "GET",
-                url: '/Client/GetClientFormChildMenu?ClientFormId=' + ClientFormId + '&PatientId=' + _patientID,
-                contentType: 'application/json; charset=UTF-8',
-                dataType: "json",
-                beforeSend: function () {
-
-                },
-                async: true,
-                success: function (result) {
-
-
-
-                    var data = JSON.parse(result.data)
-                    var myChildTab = $("#myChildTab");
-                    if (data.length == 1 && (data[0].ParentFormID == null || data[0].ParentFormID == 0)) {
-                        $("#myChildTab").css("display", "none");
-                    } else {
-
-                        var myChildTab = $("#myChildTab");
-                        if (data.length > 1) {
-                            myChildTab.find("li").remove();
-                        }
-
-                        if (data.length > 0) {
-
-                            $("#myChildTab").css("display", "flex");
-                            $('#' + formName + 'only').addClass('client-form-margin-top');
-                        }
-
-
-                        $.each(data, function (i, item) {
-                            if (item.ClientFormID != ClientFormId) {
-                                var canViewChildForm = false;
-                                // check permission
-                                $.ajax({
-                                    type: "GET",
-                                    url: Apipath + '/api/PatientMain/GetPermissionsByModuleId?userId=' + parseInt(_userID) + '&&moduleId=' + item.ClientFormID + '&&isClientForm=' + true,
-                                    contentType: 'application/json; charset=UTF-8',
-                                    dataType: "json",
-                                    async: false,
-                                    success: function (result) {
-                                        if (result[0].CanUpdate == true || result[0].CanList == true) {
-                                            canViewChildForm = true
-                                        }
-
-                                    },
-                                    error: function (e) {
-
-                                    }
-                                });
-
-                                // check permission
-                                if (canViewChildForm || canViewChildForm == 'True') {
-
-                                    var formname = item.FormName.replace(/ /g, '');
-                                    if (item.Saved == true) {
-                                        myChildTab.append(`<li class="nav-item" style="display: flex;" ><a id="${formname}" style="width: 230px;" data-FormName="${formname}" data-TemplateID="${item.TemplateID}" onclick="loadClient(this)" class="nav-link Child" href="${'#' + formname + 'only'}"data-ClientFormID="${item.ClientFormID}"data-PatientID="${item.PatientID}">
-                                ${item.FormName}<span class="notCount" id="${formname}Notify" style="display:none"></span><span class="check" ${item.Saved}?"":style='display:none' ><i class="fas fa-check-circle"></i></span></a></li>`
-                                        )
-                                    } else {
-                                        myChildTab.append(`<li class="nav-item" style="display: flex;" ><a id="${formname}" style="width: 230px;" data-FormName="${formname}" data-TemplateID="${item.TemplateID}" onclick="loadClient(this)" class="nav-link Child" href="${'#' + formname + 'only'}"data-ClientFormID="${item.ClientFormID}"data-PatientID="${item.PatientID}">
-                                ${item.FormName}<span class="notCount" id="${formname}Notify" style="display:none"></span><span class="check" ${item.Saved}?"":style='display:none' ></i></span></a></li>`
-                                        )
-                                    }
-
-                                }
-
-
-                            }
-                        });
-                    }
-                    if (myChildTab.find("li").length == 0) {
-
-
-                        /*  $('#' + formName + 'only').removeClass('client-form-margin-top');*/
-                    } else {
-
-                        SetScheduling();
-                    }
-                },
-                error: function (e) {
-                    toastr.error("Unexpected error!");
-                    $(".loaderOverlay").hide();
-                }
-            });
-        }
-
-
-        function LoadClientFormTemplate(ClientFormId) {
-
-            var _ClientFormId = ClientFormId;
-            $.ajax({
-                type: "GET",
-                url: '/Client/GetClientFormTemplateByClientFormId?ClientFormId=' + _ClientFormId,
-                contentType: 'application/json; charset=UTF-8',
-                dataType: "json",
-                beforeSend: function () {
-                    $(".loaderOverlay").css('display', 'flex');
-                },
-                async: true,
-                success: function (result) {
-                    if (result.html == "") {
-                        toastr.error("No template found");
-                    } else {
-
-                        programElement.html("").append(result.html);
-                        tableName = result.tableName;
-                        templateid = result.TemplateId;
-
-                        if (programElement.find(".basecontentarea").length > 0) {
-                            getClientFormHeaderAndFooter();
-
-                        }
-                        //getClientFormBasicFormValue(ClientFormId, _templateID)
-                        programElement.find(".event-btn-right").remove();
-                        programElement.find(".ck-editor-header").remove();
-                        programElement.find(".question-container").parent().css("border", "none");
-                        programElement.find(".dragresize").find(".question-container").remove();
-                        programElement.find(".dragresize").find(".bootom-form-row").css({ "padding": "7px 0px", "margin": "0" });
-                        programElement.find(".html-content").prev().css("display", "none");
-                        programElement.find(".html-content").parent().parent().parent().addClass("left-control");
-                        programElement.find(".f-g-left").each(function (index, item) {
-                            $(item).parent().parent().addClass("left-control");
-                        });
-
-                        $("textarea.program-control,textarea.base-control").summernote({
-                            toolbar: [
-                                ['para', ['ul', 'ol', 'paragraph']],
-                                ['style', ['bold', 'italic', 'underline', 'clear']],
-                                ['font', ['strikethrough', 'superscript', 'subscript']],
-                            ],
-                            placeholder: "Type here",
-                            callbacks: {
-                                onInit: function (e) {
-                                    this.placeholder
-                                        ? e.editingArea.find(".note-placeholder").html(this.placeholder)
-                                        : e.editingArea.remove(".note-placeholder")
-                                }
-                            },
-                            height: 150,
-                        });
-                        toogleProgramToolTip();
-                        makeClientFormBasicInfoReadonly()
-                        if (programElement.find(".basecontentarea").length > 0) {
-                            getClientFormBaseFieldData()
-                        }
-
-
-                    }
-                    $(".loaderOverlay").hide();
-                },
-                error: function (e) {
-                    toastr.error("Unexpected error!");
-                    $(".loaderOverlay").hide();
-                }
-            });
-        }
-        function EditClientForm(ClientFormId, TemplateID) {
-            getClientFormBasicFormHtml(ClientFormId, TemplateID)
-
-            GetScoreClient(ClientFormId);
-        }
-
-        function LoadClientFormsHtml(patientID) {
-            $(".loaderOverlay").css('display', 'flex');
-          
-            $.ajax({
-
-                type: "Post",
-                url: '/Client/GetClientFormHtml',
-                data: JSON.stringify({ PatientID: patientID, pageName: "Info" }),
-
-                dataType: "html",
-                contentType: "application/json; charset=utf-8",
-                success: function (result) {
-
-                    $('#clientformdetails').html(result);
-                    $('#myTabContent').append($('#clientformdetails').html());
-                    $(".loaderOverlay").hide();
-                },
-                error: function () {
-                    $(".loaderOverlay").hide();
-                    toastr.error("Some error occurred!! or data not found");
-                },
-                complete: function () {
-                    setTimeout(function () {
-                        _Loader.StopLoader()
-                    }, 500)
-
-                }
-            });
-        }
-        function toogleProgramToolTip() {
-
-            programElement.find('span.tooltipicon').tooltip({
-                trigger: "click",
-                html: true,
-                container: 'body'
-            });
-            programElement.find('span.tooltipicon').on('show.bs.tooltip', function () {
-                programElement.find('span.tooltipicon').not(this).tooltip('hide');
-            });
-            $('body').on('click', function (e) {
-                if ($(e.target).data('toggle') !== 'tooltip' && $(e.target).parents('[data-toggle="tooltip"]').length === 0
-                    && $(e.target).parents('.tooltip.in').length === 0) {
-                    (($('[data-toggle="tooltip"]').tooltip('hide').data('bs.tooltip') || {}).inState || {}).click = false;
-                }
-            });
-        }
-        function makeClientFormBasicInfoReadonly() {
-            // $("#ddlcareplanstatus").addClass("show_careplanstatus").val("1");
-
-            var value = "";
-            // isupdateProgramFields = false;
-            $("a.need-nav,a.summary-nav").parent().removeClass("disabled");
-            programElement.find(".program-control,.base-control").each(function (index, item) {
-                if ($(item).is("div")) {
-                    var selectedValues = $.map($(item).find("input:checked"), function (n, i) {
-                        return n.value;
-                    }).join(',');
-                    if (selectedValues == "") {
-                        if ($(item).hasClass("base-control")) {
-                            $(item).find("label.label-base").html("").show();
-                            $(item).find("div.inputContent").find("div").first().hide();
-                        } else {
-                            $(item).find("label.label-program").html("").show();
-                            $(item).find("div.inputContent").find("div").first().hide();
-                        }
-                    } else {
-                        var valueArr = selectedValues.split(',');
-                        var valueTxt = "";
-                        for (var i = 0; i < valueArr.length; i++) {
-                            valueTxt += $(item).find(`input[value=${valueArr[i]}]`).next().text() + ", ";
-                        }
-                        valueTxt = valueTxt.slice(0, -2);
-                        if ($(item).hasClass("base-control")) {
-                            $(item).find("label.label-base").html("").append(valueTxt).show();
-                            $(item).find("div.inputContent").find("div").first().hide();
-                        } else {
-                            $(item).find("label.label-program").html("").append(valueTxt).show();
-                            $(item).find("div.inputContent").find("div").first().hide();
-                        }
-
-                    }
-                }
-                if ($(item).is("input")) {
-                    switch ($(item).attr("type")) {
-                        case "file":
-                            if ($(item).hasClass("base-control") && $(item).hasAttr("data-column")) {
-                                getBaseFilesReadonly($(item).attr("id"));
-                            } else if ($(item).hasClass("program-control") && $(item).hasAttr("data-column")) {
-                                getProgramFiles(careplanid, $(item).attr("id"))
-                            }
-                            $(item).hide();
-                            break;
-                        default:
-                            value = $(item).val();
-                            $(item).next().html("").append(value).show();
-                            $(item).hide();
-                            break;
-                    }
-                }
-                if ($(item).is("select")) {
-                    value = $(item).find('option:selected').val();
-                    if (value == 0) {
-                        value = '';
-                    }
-                    else {
-                        value = $(item).find('option:selected').text();
-                    }
-                    $(item).next().html("").append(value).show();
-                    $(item).hide();
-                }
-                if ($(item).is("textarea")) {
-                    value = $(item).summernote('code');
-                    if ($(item).hasClass("base-control")) {
-                        $(item).parent().find("label.label-base").html("").append(value).show();
-                    } else {
-                        $(item).parent().find("label.label-program").html("").append(value).show();
-                    }
-                    $(item).next().hide();
-                }
-            });
-        }
-        function getClientFormBasicFormHtml(ClientFormId, id) {
-
-            if (id != 0 && id != undefined) {
-                $.ajax({
-                    type: "GET",
-                    url: '/Client/GetClientFormTemplateById?TemplateId=' + id,
-                    contentType: 'application/json; charset=UTF-8',
-                    dataType: "json",
-                    beforeSend: function () {
-                        $(".loaderOverlay").css('display', 'flex');
-                    },
-                    async: true,
-                    success: function (result) {
-
-                        if (result.html == "") {
-                            toastr.error("No template found");
-                        } else {
-                            programElement.html("").append(result.html);
-                            tableName = result.tableName;
-                            templateid = id;
-                            if (programElement.find(".basecontentarea").length > 0) {
-
-                                getBasehtmlByClientFormId(ClientFormId);
-
-                            }
-                            programElement.find(".event-btn-right").remove();
-                            programElement.find(".ck-editor-header").remove();
-                            programElement.find(".question-container").parent().css("border", "none");
-                            programElement.find(".dragresize").find(".question-container").remove();
-                            programElement.find(".dragresize").find(".bootom-form-row").css({ "padding": "7px 0px", "margin": "0" });
-                            programElement.find(".html-content").prev().css("display", "none");
-                            programElement.find(".html-content").parent().parent().parent().addClass("left-control");
-                            programElement.find(".f-g-left").each(function (index, item) {
-                                $(item).parent().parent().addClass("left-control");
-                            });
-                            toogleProgramToolTip();
-
-                            $("textarea.program-control,textarea.base-control").summernote({
-                                toolbar: [
-                                    ['para', ['ul', 'ol', 'paragraph']],
-                                    ['style', ['bold', 'italic', 'underline', 'clear']],
-                                    ['font', ['strikethrough', 'superscript', 'subscript']],
-                                ],
-                                placeholder: "Type here",
-                                callbacks: {
-                                    onInit: function (e) {
-                                        this.placeholder
-                                            ? e.editingArea.find(".note-placeholder").html(this.placeholder)
-                                            : e.editingArea.remove(".note-placeholder")
-                                    }
-                                },
-                                height: 150,
-                            });
-                        }
-                        getClientFormBasicFormValue(ClientFormId, id)
-                        $(".loaderOverlay").hide();
-                    },
-                    error: function (e) {
-                        toastr.error("Unexpected error!");
-                        $(".loaderOverlay").hide();
-                    }
-                });
-            }
-
-        }
-        function getClientFormBasicFormValue(ClientFormID, templateid) {
-
-
-            $.ajax({
-                type: "GET",
-                url: Apipath + '/api/PatientMain/getfieldvaluebyClientFormid?ClientFormID=' + ClientFormID + "&TemplateId=" + templateid + "&PatientId=" + _patientID,
-                contentType: 'application/json; charset=UTF-8',
-                dataType: "json",
-                async: false,
-                success: function (result) {
-
-                    if (result.length) {
-                        var fields = result[0];
-                        var value = "";
-                        programElement.find(".program-control,input.custom-control-input").each(function (index, item) {
-                            if ($(item).is("input")) {
-                                switch ($(item).attr("type")) {
-                                    case "radio":
-                                    case "checkbox":
-                                        if ($(item).hasAttr("data-column") && $(item).closest("div.inputContent").parent().hasClass("program-control")) {
-                                            value = fields[$(item).attr("data-column")];
-
-                                            if (value == null || value == "") {
-
-                                                $(item).closest("div.inputContent").find("label.label-program").html("").show();
-                                                $(item).closest("div.inputContent").find("div").first().hide();
-
-                                            } else {
-                                                var valueArr = value.split(SeperationString);
-                                                var valueTxt = "";
-
-                                                for (var i = 0; i < valueArr.length; i++) {
-                                                    valueTxt += $(item).closest("div.inputContent").find(`input[value="${valueArr[i]}"]`).next().text() + ", ";
-                                                }
-
-                                                valueTxt = valueTxt.slice(0, -2);
-                                                $(item).closest("div.inputContent").find("label.label-program").html("").append(valueTxt).show();
-                                                $(item).closest("div.inputContent").find("div").first().hide();
-
-                                            }
-                                        }
-                                        break;
-                                    case "file":
-                                        getClientFormModuleFiles(ClientFormID, $(item).attr("id"));
-
-                                        $(item).hide();
-
-                                        break;
-                                    default:
-
-                                        value = fields[$(item).attr("data-column")];
-
-                                        $(item).next().html("").append(value).show();
-                                        $(item).hide();
-
-                                        break;
-                                }
-                            }
-                            if ($(item).is("select")) {
-                                value = fields[$(item).attr("data-column")];
-
-                                if (value == 0) {
-                                    value = ''
-                                }
-                                else {
-                                    value = $(item).find(`option[value="${value}"]`).text();
-                                }
-                                $(item).next().html("").append(value).show();
-                                $(item).hide();
-
-                            }
-                            if ($(item).hasClass("priority")) {
-                                value = fields[$(item).attr("data-column")];
-                                var splitvalues = value.split(SeperationString);
-
-                                var result = '';
-
-                                for (let i = 0; i < splitvalues.length; i++) {
-                                    if ($(item).find('li[value="' + splitvalues[i] + '"]')) {
-                                        result += $(item).find('li[value="' + splitvalues[i] + '"]')[0].outerHTML;
-                                    }
-
-
-                                }
-                                if (result.length > 0) {
-                                    $(item).html(result);
-                                }
-                            }
-                            if ($(item).is("textarea")) {
-                                value = fields[$(item).attr("data-column")];
-
-                                $(item).parent().find("label.label-program").html("").append(value).show();
-                                $(item).next().hide();
-
-                            }
-                        });
-                    }
-                    if (programElement.find(".basecontentarea").length > 0) {
-                        getClientFormBaseFieldData();
-                    }
-                }, error: function (e) {
-                    toastr.error("Unexpected error!");
-                    $(".loaderOverlay").hide();
-                }
-            })
-
-        }
         function ActivateTab(PatientId, Tab,Subtab,ClientFormID) {
         window.location.href = '/Client/Add?PatientID=' + PatientId + '&CurrentTab=' + Tab + '&SubTab=' + Subtab +'&ClientFormID='+ClientFormID;
 

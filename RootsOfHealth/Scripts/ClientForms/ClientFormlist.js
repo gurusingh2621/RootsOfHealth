@@ -6,7 +6,7 @@
 var _programDataTable = '';
 function GetProgramTemplateList() {
    
-    $("#tblProgramTemplateList").dataTable({
+  _programDataTable =  $("#tblProgramTemplateList").dataTable({
         "scrollY": 'calc(100vh - 303px)',
         "scrollX": true,
         "paging": true,

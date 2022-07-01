@@ -335,6 +335,79 @@
                 Html.RenderPartial("~/Views/Shared/Patient/_PatientMain.cshtml", Model.PatientMain);
             }
             <!-- Profile Tab end here -->
+            <!-- Dynamic tab start here  -->
+
+            @if (Model.ClientForm != null)
+            {
+                foreach (var item in Model.ClientForm)
+                {
+                    var formpermission = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["userid"]), item.ClientFormID, true);
+                    var FormName = item.FormName.Replace(" ", "");
+                    <div class="tab-pane fade" id="@(FormName + "only")" role="tabpanel" aria-labelledby="@("a"+FormName)">
+                        <div class="inner-content">
+                            <div class="paitent-detail">
+                                <div class="row">
+                                    <div id="pat_out_div" class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="paitent-detail-left">
+                                            @{
+                                                Html.RenderPartial("~/Views/Shared/Client/_ClientInfo.cshtml");
+                                            }
+
+                                            <div class="detail-heading d-flex">
+                                                @foreach (var items in Model.ClientForm.Where(p => p.ClientFormID == item.ParentFormID))
+                                                {
+                                                    string FormNames = @items.FormName.Replace(" ", "");
+                                                    <a id="@("a" + FormNames)" class="nav-link" data-toggle="tab"
+                                                       href="@("#" + FormNames + "only")" data-ClientFormID="@items.ClientFormID" data-PatientID="@items.patientID" onclick="RebindClientFormEvent(this)" data-TemplateID="@items.TemplateID" data-FormName=@(FormNames)>@items.FormName<span class="check @Html.Raw(items.Saved ? "" : "d-none")"></span></a>
+                                                }
+                                                <h2 style="padding-top:10px">@item.FormName</h2>
+                                                <div class="detail-button ml-auto">
+
+                                                    @*<a href="javascript:{}" onclick="return OpenFormHistory(@item.ClientFormID,@Model.PatientMain.PatientID,true);" data-save="@(item.Saved ? "True" : "False")" class="btn btn-success ml-auto">
+                                                    <i class="far fa-save"></i>
+                                                    History
+                                                </a>*@
+                                                    <a href="javascript:{}" onclick="DisplayForm(@ViewBag.PatientID,'@item.FormName'+'Tab','@FormName',@item.ClientFormID)"
+                                                       class="btn btn-success  btnDisplayProgram">
+                                                        <i class="far fa-edit"></i>
+                                                        Display
+                                                    </a>
+                                                    @if (formpermission.Where(f => f.CanUpdate == true).Any())
+                                                    {
+                                                        <a href="javascript:{}" onclick="return saveClientFormBasicInfo('@item.TemplateID','@item.TemplateTable',@item.ClientFormID,@item.patientID);" data-save="@(item.Saved ? "True" : "False")" class="btn btn-success ml-auto btnprogramsave">
+                                                            <i class="far fa-save"></i>
+                                                            Save
+                                                        </a>
+                                                    }
+
+                                                    @*<a href="javascript:{}" onclick="PrintProgram('@FormName')"
+                                                   class="btn btn-success label-fields btnprogramPrint">
+                                                    <i class="far fa-save"></i>
+                                                    Print
+                                                </a>*@
+                                                </div>
+                                            </div>
+
+                                            <div class="SidebarScroll scroll inner-main-content">
+                                                <style>
+                                                    ul.file_uploaded_list li img {
+                                                        max-width: 90px;
+                                                        margin-right: 10px;
+                                                    }
+                                                </style>
+                                                <div id="@(FormName + "render-basicform")" class="render-basicProgramform" style="padding-bottom:100px"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            }
+
+            <!-- Dynamic Tab end here -->
             <!-- Programs Tab start here  -->
 
             <div class="tab-pane fade" id="Programs" role="tabpanel" aria-labelledby="Programs-tab">
@@ -343,11 +416,6 @@
             <!-- Programs Tab end here  -->
 
         </div>
-        <!-- Dynamic tab start here  -->
-        <div id="clientformdetails">
-
-        </div>
-        <!-- Dynamic Tab end here -->
     </div>
     @{
         Html.RenderPartial("~/Views/Shared/Client/_LogHistoryPopUp.cshtml");
@@ -392,10 +460,6 @@
             $("#myChildTab").css("display", "none");
         })
         $('#menu-toggle').click(function () {
-
-            if ($('#clientformdetails').html().trim() == "" && _PatientId != 0) {
-                LoadClientFormsHtml(_PatientId);
-            }
             $(this).toggleClass('open');
             if ($("#menu-toggle").hasClass("open")) {
                 $("#cross").attr("title", "Hide Client Menu")
@@ -1086,18 +1150,14 @@
         }
         $(document).ready(function () {
 
-           
+            ShowPatientInfo(_PatientName, _PatientEmail)
             var currenttab = '@ViewBag.CurrentTab';
             var currentSubtab = '@ViewBag.CurrentSubtab'
-            
+
             if (currenttab != 'Profile-tab' && currenttab != 'ProgramTab') {
                 RebindClientFormEvent();
-                if (_PatientId != 0) {
-                    LoadClientFormsHtml(_PatientId);
-                }
-               
             }
-            ShowPatientInfo(_PatientName, _PatientEmail)
+
             if ((currenttab == 'Profile-tab' || currenttab == '') && '@ViewBag.ClientFormID' == '0') {
                 $('#Profile').addClass('show active')
                 $('#Profile-tab').addClass('show active')
@@ -2849,7 +2909,7 @@
 
         $('.selectboxmultiple').selectpicker();
 
-            
+
         var txtChildren = $("#txtChildren").val();
         if (txtChildren != "")
         {
@@ -3628,7 +3688,7 @@
 
         function validateDOB() {
             var dob = $('#txtDOB').val();
-           
+
             var pattern = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
             if (!pattern.test(dob)) {
                 toastr.error("Date of birth is invalid.")
@@ -3657,7 +3717,7 @@
         ChildrenAges();
 
         if (Validation() && validateDOB()) {
-            
+
             AddDate();
             $("input[type=hidden][name=CreatedDate]").val(CreatedDate);
             $("input[type=hidden][name=ModifiedDate]").val(ModifiedDate);
@@ -5745,8 +5805,8 @@
                     }
                     clearProgramFileData();
 
-                    $('#' + _programName + 'only').find('.btnprogramsave').attr('data-save', 'True');
-                    $('#a' + _programName).find('.check').removeClass('d-none')
+                    $('#' + formName + 'only').find('.btnprogramsave').attr('data-save', 'True');
+                    $('#a' + formName).find('.check').removeClass('d-none')
 
                 },
                 error: function (e) {
@@ -5754,7 +5814,7 @@
                     $(".loaderOverlay").hide();
                 },
                 complete: function () {
-                    
+
                 }
             });
 
@@ -5932,7 +5992,7 @@
                 $('#Programs .tab-pane').each(function (index, item) {
                     $(item).removeClass("active show");
                 });
-                
+
 
 
                 $(".render-basicProgramform").each(function (index, item) {
@@ -5973,7 +6033,7 @@
                 },
                 async: true,
                 success: function (result) {
-                    
+
                     if (result.html == "") {
                         toastr.error("No template found");
                     } else {
@@ -6709,7 +6769,7 @@
                     toastr.error("Unexpected error!");
                     $(".loaderOverlay").hide();
                 }, complete: function () {
-                   
+
 
                 }
             });
@@ -6961,7 +7021,7 @@
                                         )
                                     }
                                 }
-                             
+
                             }
                             else {
                                 activeChildForm = item.FormName.replace(/ /g, '');
@@ -7035,7 +7095,7 @@
             var programDotColor = ''
             var programDays = 0
             HideNotification()
-            
+
             if (SchedulingList.length > 0) {
                 for (var i = 0; i < SchedulingList.length; i++) {
                     var ArrayItem = SchedulingList[i];
@@ -7088,7 +7148,7 @@
                             $Item.attr('title', 'Due after ' + ArrayItem.NotificationDays + ' days.');
 
                         }
-                        
+
                         if (ArrayItem.FormType == 2) {
                             if (programDotColor == '' && programDotColor == null) {
                                 programDotColor = ArrayItem.NotificationColor
@@ -7149,35 +7209,6 @@
             $('#myChildTab .nav-item a').css('border-left', '')
             $('#Programs-tab').css('border-left', '');
             $('#ProgramNotify').hide()
-        }
-        function LoadClientFormsHtml(patientID) {
-            $(".loaderOverlay").css('display', 'flex');
-
-            $.ajax({
-
-                type: "Post",
-                url: '/Client/GetClientFormHtml',
-                data: JSON.stringify({ PatientID: patientID, pageName :"Edit" }),
-
-                dataType: "html",
-                contentType: "application/json; charset=utf-8",
-                success: function (result) {
-
-                    $('#clientformdetails').html(result);
-                    $('#myTabContent').append($('#clientformdetails').html());
-                    $(".loaderOverlay").hide();
-                },
-                error: function () {
-                    $(".loaderOverlay").hide();
-                    toastr.error("Some error occurred!! or data not found");
-                },
-                complete: function () {
-                    setTimeout(function () {
-                        _Loader.StopLoader()
-                    }, 500)
-
-                }
-            });
         }
     </script>
 
