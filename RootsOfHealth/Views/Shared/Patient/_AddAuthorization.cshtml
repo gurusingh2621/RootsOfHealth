@@ -14,7 +14,7 @@
         height: calc(100vh - 12%);
     }
     .kbw-signature {
-        width: 300px;
+        width: 200px;
         height: 150px;
     }
 </style>
@@ -131,20 +131,7 @@
                                                         Other (please describe):   <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" type="text" name="Other" value="@Model.ReleaseAndDisclousure.Other" />
                                                     </label>
                                                 </div>
-
-                                                @*<ul>
-                                                    <li>Problem list</li>
-                                                    <li>Medication list</li>
-                                                    <li>List of allergies</li>
-                                                    <li>Immunization records</li>
-                                                    <li>Most recent history</li>
-                                                    <li>Most recent discharge summary</li>
-                                                    <li>Entire Record</li>
-                                                    <li>Other (please describe): <input type="text" name="" value="" /></li>
-                                                    </ul>*@
-                                            </div>
-                                            <div class="col-lg-6 col-md-6 col-sm-12 col-12" style="flex:0 0 50%; max-width:50%;">
-                                                <div class="custom-control custom-checkbox">
+                                                 <div class="custom-control custom-checkbox">
                                                     <input tabindex="1" type="checkbox"
                                                            class="custom-control-input"
                                                            id="Drug"
@@ -165,6 +152,20 @@
                                                         HIV
                                                     </label>
                                                 </div>
+
+                                                @*<ul>
+                                                    <li>Problem list</li>
+                                                    <li>Medication list</li>
+                                                    <li>List of allergies</li>
+                                                    <li>Immunization records</li>
+                                                    <li>Most recent history</li>
+                                                    <li>Most recent discharge summary</li>
+                                                    <li>Entire Record</li>
+                                                    <li>Other (please describe): <input type="text" name="" value="" /></li>
+                                                    </ul>*@
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 col-sm-12 col-12" style="flex:0 0 50%; max-width:50%;">
+                                               
                                                 <div class="custom-control custom-checkbox">
                                                     <input tabindex="1" type="checkbox"
                                                            class="custom-control-input"
@@ -640,7 +641,7 @@
                                                             Medical Record
                                                         </label>
 
-                                                        <div class="custom-check">
+                                                        <div class="custom-check d_flex_box" style="display:flex;">
                                                             <div class="custom-control custom-checkbox">
                                                                 <input tabindex="1" type="checkbox" class="custom-control-input" id="diagnosis" name="frmConnect_itrcheck2" value="2">
                                                                 <label class="custom-control-label" for="diagnosis">
@@ -881,7 +882,7 @@
                             <strong>Client/Client’s Representative name</strong>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-12 col-12" style="width:30%; padding:0 15px;">
-                            <div id="patientsigPanel"></div>
+                            <div id="patientOrRepresentativeSigpanel"></div>
                             <input type="hidden" name="PatientOrRepresentativeSignature" id="PatientOrRepresentativeSignature" value="@Model.CareConnect.PatientOrRepresentativeSignature" />
                             @*<input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" name="PatientOrRepresentativeSignature" value="@Model.CareConnect.PatientOrRepresentativeSignature" placeholder="" />*@
                             <strong>Client/Client’s Representative Signature</strong>
@@ -1461,14 +1462,10 @@
 
 
 <script>
+   
+    function loadSignatures() {
 
-    $(function () {
-        var patientSigpanel = $('#patientsigPanel');
-        var repsntSigPanel = $('#representativesigPanel');
-        var wittnessSigPanel = $('#witnesssigPanel');
-        
-
-        patientSigpanel.signature({
+        $('#patientsigPanel').signature({
 
             // The minimum distance to start a drag.
             distance: 0,
@@ -1501,7 +1498,7 @@
 
 
         });
-        repsntSigPanel.signature({
+        $('#representativesigPanel').signature({
 
             // The minimum distance to start a drag.
             distance: 0,
@@ -1534,7 +1531,7 @@
 
 
         });
-        wittnessSigPanel.signature({
+        $('#witnesssigPanel').signature({
 
             // The minimum distance to start a drag.
             distance: 0,
@@ -1567,21 +1564,60 @@
 
 
         });
-      
-     
-     
+        $('#patientOrRepresentativeSigpanel').signature({
 
-    });
-    function loadSignatures() {
-        $('#patientsigPanel').signature();
-        $('#representativesigPanel').signature();
-        $('#witnesssigPanel').signature();
- 
-        //$('#patientsigPanel').signature('enable').signature('draw', $('#clientSignature').val());
-        //$('#representativesigPanel').signature('draw', $('#representativeSignature').val());
-        //$('#witnesssigPanel').signature('draw', $('#witnessSignature').val());
+            // The minimum distance to start a drag.
+            distance: 0,
+
+            // The background colour.
+            background: '#fff',
+
+            // The colour of the signature.
+            color: '#000',
+
+            // The thickness of the lines.
+            thickness: 2,
+            // guideline colour.
+            guidelineColor: '#a0a0a0',
+
+            // guideline offset (pixels) from the bottom
+            guidelineOffset: 50,
+
+            // guideline indent (pixels) from the edges
+            guidelineIndent: 10,
+            // 'JSON', 'SVG', 'PNG', 'JPEG'
+            syncFormat: 'JSON',
+
+            // determine whether to use the style attribute in SVG
+            svgStyles: false,
+            syncField: '#PatientOrRepresentativeSignature',
+            notAvailable: 'Your browser doesn\'t support signing',
+            scale: 1,
+            change: null
+
+
+        });
+
+        var patientSigval = $('#clientSignature').val();
+        var representativeSigval = $('#representativeSignature').val();
+        var witnessSigval = $('#witnessSignature').val();
+        var patientorRepresentativeSigval = $('#PatientOrRepresentativeSignature').val();
+
+        if (patientSigval != "") {
+            $('#patientsigPanel').signature('enable').signature('draw', patientSigval);
+        }
+        if (representativeSigval != "") {
+            $('#representativesigPanel').signature('draw', representativeSigval);
+        }
+        if (witnessSigval != "") {
+            $('#witnesssigPanel').signature('draw', witnessSigval);
+        }
+        if (patientorRepresentativeSigval != "") {
+            $('#patientOrRepresentativeSigpanel').signature('draw', patientorRepresentativeSigval);
+        }
     }
-    loadSignatures();
+    
+   
     $('#patientName').change(function () {
 
         $("#pname").val($(this).val())

@@ -1284,7 +1284,7 @@ namespace RootsOfHealth.Controllers
             }
 
             PatientDetailBO patientdetailobj = new PatientDetailBO();
-
+            PatientAllDetailByIDBO pat = new PatientAllDetailByIDBO();
 
             using (var client = new HttpClient())
             {
@@ -1296,9 +1296,11 @@ namespace RootsOfHealth.Controllers
                 var result = responseTask.Result;
                 if (result.IsSuccessStatusCode)
                 {
-                    var readTask = result.Content.ReadAsAsync<PatientDetailBO>();
+                    var readTask = result.Content.ReadAsAsync<PatientAllDetailByIDBO>();
                     readTask.Wait();
-                    patientdetailobj = readTask.Result;
+                    
+                    pat = readTask.Result;
+                    patientdetailobj = pat.PatientDetail; 
 
                 }
                 else //web api sent error response 

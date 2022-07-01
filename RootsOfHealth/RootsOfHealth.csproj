@@ -571,6 +571,7 @@
     <Content Include="css\careplantemplate.css" />
     <Content Include="css\fullcalendar.min.css" />
     <Content Include="css\previewinpopup.css" />
+    <Content Include="css\Printjs.css" />
     <Content Include="css\programlist.css" />
     <Content Include="css\programtemplate.css" />
     <Content Include="css\responsive.css" />
@@ -685,6 +686,7 @@
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\nugetexample.js" />
+    <Content Include="Scripts\Plugins\Print.js" />
     <Content Include="Scripts\PotentialClients\PotentialClients.js" />
     <Content Include="Scripts\Program\databasecontrol.js" />
     <Content Include="Scripts\Program\htmlcontrol.js" />

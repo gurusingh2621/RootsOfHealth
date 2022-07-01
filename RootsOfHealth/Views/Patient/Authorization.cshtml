@@ -5,7 +5,7 @@
 }
 
 
-@{ 
+@{
     string cookiepatientID = "0";
     var isCookieExist = Request.Cookies.AllKeys.Contains("patientid");
 
@@ -17,6 +17,7 @@
 
 }
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
 <style>
 
 
@@ -24,6 +25,7 @@
         border: 1px solid #22baa0;
         background: #22baa0;
     }
+
     ul#ui-id-1 {
         position: fixed;
         left: 0px;
@@ -35,23 +37,24 @@
         text-align: center;
         height: 200px;
         overflow-y: scroll;
-        overflow-x:hidden;
+        overflow-x: hidden;
     }
 
-        .appointement-form .form-control {
-            width: 100%;
-            border: 1px solid #dddddd;
-            border-radius: 0;
-            color: #4d4d4d;
-            font-size: 13px;
-        }
+    .appointement-form .form-control {
+        width: 100%;
+        border: 1px solid #dddddd;
+        border-radius: 0;
+        color: #4d4d4d;
+        font-size: 13px;
+    }
 
     /*@@media print {
-        #printOnly {
-            display: none;
-        }
-}*/
+            #printOnly {
+                display: none;
+            }
+    }*/
 </style>
+
 <!-- Content start here -->
 <section id="content" class="responsive-container">
     <div class="profile-tabs">
@@ -99,7 +102,7 @@
                     <div class="form-group">
                         <label for="inputPassword">Select Client</label>
 
-                        <input id="autoPatientList" type="text" class="form-control" placeholder="Enter Client name"/>
+                        <input id="autoPatientList" type="text" class="form-control" placeholder="Enter Client name" />
                         <input type="hidden" value="0" id="hdnPatientId" />
                     </div>
 
@@ -123,7 +126,8 @@
     <script src="https://code.jquery.com/ui/1.12.0-rc.2/jquery-ui.min.js"
             integrity="sha256-55Jz3pBCF8z9jBO1qQ7cIf0L+neuPTD1u7Ytzrp2dqo="
             crossorigin="anonymous"></script>
-    <script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/print-js/1.6.0/print.js" integrity="sha512-/fgTphwXa3lqAhN+I8gG8AvuaTErm1YxpUjbdCvwfTMyv8UZnFyId7ft5736xQ6CyQN4Nzr21lBuWWA9RTCXCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+     <script>
         var CreatedDate = "";
         var ModifiedDate = "";
         var TypeOfInformation = "";
@@ -172,7 +176,7 @@
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (result) {
-        
+
                         autoCompleteArray = [];
                         for (var i = 0; i < result.length; i++) {
                             var label = "";
@@ -183,7 +187,7 @@
                             else if (result[i].LastName != "") {
                                 label = label + " " + result[i].LastName;
                             }
-                            
+
                             autoCompleteArray.push({ "label": label, "value": label, "id": result[i].PatientId })
                             $("#autoPatientList").autocomplete({
                                 source: autoCompleteArray,
@@ -239,15 +243,20 @@
 
 
         function myPrint(myfrm) {
-
-
+            var baseURl = window.location.origin;
+            console.log(baseURl);
             $("#btnRelease,#btnCare,#printOnly,#btnWpcCare,#btnWpcCare2").hide();
-            var printdata = document.getElementById(myfrm);
-            newwin = window.open("");
-            newwin.document.write(printdata.outerHTML);
-            newwin.print();
 
-            newwin.close();
+            printJS({
+                printable: myfrm, type: 'html', css: [baseURl + '/css/Printjs.css']
+            });
+
+            //var printdata = document.getElementById(myfrm);
+            //newwin = window.open("");
+            //var htmltoPrint = printdata.outerHTML;
+            //newwin.document.write(htmltoPrint);
+            //newwin.print();
+            //newwin.close();
             $("#btnRelease,#btnCare,#printOnly,#btnWpcCare,#btnWpcCare2").show();
 
         }
@@ -463,10 +472,10 @@
         }
 
         function getauthorizationdata() {
-            
+
             var patientID = 0;
             if ($("#hdnPatientId").val() == 0) {
-             
+
                 if (isCookieExist == 'True') {
                     patientID = cookiePatientId;
                 }
@@ -490,7 +499,7 @@
                     toastr.error("Some error occurred!! or data not found");
                 },
                 complete: function () {
-                    
+
                     AddDate();
 
                     loadSignatures();
@@ -594,7 +603,7 @@
         function getauthorizationdata2(formname) {
             var patientID = 0;
             if ($("#hdnPatientId").val() == 0) {
-                
+
                  if (isCookieExist == 'True') {
                     patientID = cookiePatientId;
                 }
@@ -653,7 +662,7 @@
                     toastr.error("Some error occurred!! or data not found");
                 },
                 complete: function () {
-                    
+
                     AddDate();
                     loadSignatures();
                     $('#careSignatureDate').val(ShortDate);
@@ -722,7 +731,7 @@
                             var frmConnectWPC_check5 = "input:checkbox[name='frmConnect_itrWPCcheck5']";
                             var frmConnectWPC_check6 = "input:checkbox[name='frmConnect_itrWPCcheck6']";
                             var currectchkgroupWPC = $(this).attr("name");
-                           
+
                             if (currectchkgroupWPC == 'frmConnect_itrWPCcheck2') {
 
                                 $(frmConnectWPC_check3).prop("checked", false);
