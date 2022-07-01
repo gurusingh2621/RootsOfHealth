@@ -257,8 +257,9 @@
                 contentType: 'application/json; charset=UTF-8',
                 dataType: "json",
                 success: function (result) {
-
+                    
                     if (result == 1) {
+                        $("#txtPassword").val($("#txtPassword1").val())
                         $("#txtPassword1").val('');
                         $("#txtPassword2").val('');
                         toastr.success("User Password updated successfully!");

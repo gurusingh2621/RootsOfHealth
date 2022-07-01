@@ -1804,8 +1804,7 @@ namespace RootsOfHealth.Controllers
             PatientIdCookie.Value = patientdetailobj.PatientMain.PatientID.ToString();
             Response.Cookies.Add(PatientIdCookie);
             Response.Cookies["patientid"].Expires = DateTime.Now.AddDays(1);
-            return PartialView("~/Views/Shared/Patient/_PatientMain.cshtml", patientdetailobj.PatientMain);
-            //return PartialView("~/Views/Shared/Client/_ClientDetail.cshtml", patientdetailobj);
+            return PartialView("~/Views/Shared/Client/_ClientDetail.cshtml", patientdetailobj);
         }
 
         [HttpPost]
