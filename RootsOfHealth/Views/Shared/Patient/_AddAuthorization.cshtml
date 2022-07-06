@@ -17,6 +17,34 @@
         width: 200px;
         height: 150px;
     }
+    .PatientDetails.authTopsectionDiv div {
+        display: flex;
+        align-items: flex-end;
+        padding: 0 0 5px;
+        white-space: nowrap;
+    }
+.PatientDetails.authTopsectionDiv div input {
+    position: static !important;
+    text-align: left;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+.PatientDetails.authTopsectionDiv div > span {
+    display: block;
+    display:flex;
+    white-space: nowrap;
+}
+.custom_div_list .custom_div_item {
+    padding-left: 20px;
+    position: relative;
+    margin-bottom:10px;
+}
+.custom_div_list .custom_div_item span.listNumber {
+    position: absolute;
+    left: 0;
+    top: 2px;
+    display:block;
+}
 </style>
 
 
@@ -578,26 +606,26 @@
                                         </h6>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-12 col-12 pt-3" style="flex: 0 0 50%;max-width: 50%; padding:0 15px;z-index: 0000;">
-                                        <div class="PatientDetails">
-                                            <p>
-                                                <span class="name" style="height: 25px;">Client Name:</span> <input id="patientName" style="height: 25px;text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 100px !important;" class="PatientPadding" type="text" value="@Model.CareConnect.PatientName" name="PatientName">
-                                            </p>
-                                            <p>
-                                                <span class="name" style="height: 25px;">Date of Birth</span> <input style="height: 25px;text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 90px !important;" class="dobPadding" type="text" value="@Model.CareConnect.DateOfBirth" id="careDateOfBirth" name="DateOfBirth">
-                                            </p>
-                                            <p>
-                                                <span class="name" style="height: 25px;">ID or Medical Record #:</span> <input id="recordID" style="height: 25px;text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 160px !important;" class="IDPadding" value="@Model.CareConnect.MedicalRecordNumber" type="text" name="MedicalRecordNumber">
-                                            </p>
-                                            <p>
-                                                <span class="name" style="height: 25px;">Address:</span> <input id="addressField" style="height: 25px;text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;padding-left: 64px !important;" class="addressPadding" value="@Model.CareConnect.Address" type="text" name="Address">
-                                            </p>
-
-                                            <input id="addressField2" style="height: 25px;text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="address-text" type="text" name="Address2" value="@Model.CareConnect.Address2">
-
-                                            <p>
-                                                <span class="name" style="height: 25px;">Tel:</span> <input style="height: 25px;text-align:left;padding-left: 29px !important;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" id="caretel" class="telPadding"
+                                        <div class="PatientDetails authTopsectionDiv">
+                                            <div>
+                                                <span class="name" style="height: 25px;">Client Name:</span> <input id="patientName" style="height: 25px;text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="PatientPadding" type="text" value="@Model.CareConnect.PatientName" name="PatientName">
+                                            </div>
+                                            <div>
+                                                <span class="name" style="height: 25px;">Date of Birth</span> <input style="height: 25px;text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="dobPadding" type="text" value="@Model.CareConnect.DateOfBirth" id="careDateOfBirth" name="DateOfBirth">
+                                            </div>
+                                            <div>
+                                                <span class="name" style="height: 25px;">ID or Medical Record #:</span> <input id="recordID" style="height: 25px;text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="IDPadding" value="@Model.CareConnect.MedicalRecordNumber" type="text" name="MedicalRecordNumber">
+                                            </div>
+                                            <div>
+                                                <span class="name" style="height: 25px;">Address:</span> <input id="addressField" style="height: 25px;text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="addressPadding" value="@Model.CareConnect.Address" type="text" name="Address">
+                                            </div>
+                                            <div>
+                                             <input id="addressField2" style="height: 25px;text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="address-text" type="text" name="Address2" value="@Model.CareConnect.Address2">
+                                            </div>
+                                            <div>
+                                                <span class="name" style="height: 25px;">Tel:</span> <input style="height: 25px;text-align:left;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" id="caretel" class="telPadding"
                                                                                                             type="text" name="Tel" value="@Model.CareConnect.Tel">
-                                            </p>
+                                            </div>
                                         </div>
 
 
@@ -609,32 +637,36 @@
                             </div>
 
                             <div class="care-text" style="font-size:13px;">
-                                <ol>
+                                <div class="custom_div_list custom_div_listParent">
 
-                                    <li>
+                                    <div class="custom_div_item">
+                                        <span class="listNumber">1.</span>
                                         <strong>Authorization:</strong> I give permission to <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-50" type="text" value="@Model.CareConnect.PermissionTo" name="PermissionTo"> (comprised of <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-50" type="text" value="@Model.CareConnect.ComprisedOf" name="ComprisedOf"> ) to use and
                                         release to:
 
                                         <p class="mt-2">Recipient Name: <input style="border: none;border-bottom: 1px solid #000;font-size: 13px;padding: 0;background: none;height: 25px;" class="w-50" type="text" value="@Model.CareConnect.Recipient" name="Recipient"></p>
 
-                                    </li>
-                                    <li>
+                                    </div>
+                                    <div class="custom_div_item">
+                                        <span class="listNumber">2.</span>
                                         <strong>Purpose: </strong> The health information disclosed may only be used for the following purpose(s):
                                         <input style="width:100%;border: none;border-bottom: 1px solid #000;font-size: 13px;padding: 0;background: none;height: 25px;" class="w-100" type="text" value="@Model.CareConnect.Purpose" name="Purpose" />
                                         <input style="width:100%;border: none;border-bottom: 1px solid #000;font-size: 13px;padding: 0;background: none;height: 25px;" class="w-100" type="text" value="@Model.CareConnect.Purpose2" name="Purpose2" />
                                         <input style="width:100%;border: none;border-bottom: 1px solid #000;font-size: 13px;padding: 0;background: none;height: 25px;" class="w-100" type="text" value="@Model.CareConnect.Purpose3" name="Purpose3" />
-                                    </li>
-                                    <li>
+                                    </div>
+                                    <div class="custom_div_item">
+                                        <span class="listNumber">3.</span>
                                         <strong>Information To be Released</strong>
                                         <div class="InformationReleased">
 
 
-                                            <ul>
-                                                <li style="list-style:decimal;">
+                                            <div class="custom_div_list">
+                                                <div class="custom_div_item">
+                                                    <span class="listNumber">1</span>
                                                     @*<input tabindex="1" type="checkbox"
-                                                        class="custom-control-input"
-                                                        id="chkMedicalRecord"
-                                                        name="frmCare_check1" value="Medical Record" />*@
+                    class="custom-control-input"
+                    id="chkMedicalRecord"
+                    name="frmCare_check1" value="Medical Record" />*@
                                                     <div class="custom-control custom-checkbox">
                                                         <input tabindex="1" type="checkbox" class="custom-control-input" id="MedicalRecords" name="frmConnect_itrcheck1" value="1">
                                                         <label class="custom-control-label" for="MedicalRecords">
@@ -642,68 +674,85 @@
                                                         </label>
 
                                                         <div class="custom-check d_flex_box" style="display:flex;">
-                                                            <div class="custom-control custom-checkbox">
-                                                                <input tabindex="1" type="checkbox" class="custom-control-input" id="diagnosis" name="frmConnect_itrcheck2" value="2">
-                                                                <label class="custom-control-label" for="diagnosis">
-                                                                    All health information (e.g. diagnosis, test results, treatement); Or
-                                                                </label>
-                                                            </div>
-                                                            <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block; margin-right:10px;">
-                                                                <input tabindex="1" type="checkbox" class="custom-control-input" id="Films" name="frmConnect_itrcheck3" value="3">
-                                                                <label class="custom-control-label" for="Films">
-                                                                    Images and/or Films
-                                                                </label>
-                                                            </div>
-                                                            <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block; margin-right:10px;">
-                                                                <input tabindex="1" type="checkbox" class="custom-control-input" id="Reports" name="frmConnect_itrcheck4" value="4">
-                                                                <label class="custom-control-label" for="Reports">
-                                                                    Reports
-                                                                </label>
-                                                            </div>
-                                                            <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block; margin-right:10px;">
-                                                                <input tabindex="1" type="checkbox" class="custom-control-input" id="Billing" name="frmConnect_itrcheck5" value="5">
-                                                                <label class="custom-control-label" for="Billing">
-                                                                    Billing
-                                                                </label>
-                                                            </div>
-                                                            <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block; margin-right:10px;">
-                                                                <input tabindex="1" type="checkbox" class="custom-control-input" id="Dental" name="frmConnect_itrcheck6" value="6">
-                                                                <label class="custom-control-label" for="Dental">
-                                                                    Dental
-                                                                </label>
-                                                            </div>
+                                                            <table class="medicalReocrdTable">
+                                                                <tr>
+                                                                    <td colspan="5">
+                                                                        <div class="custom-control custom-checkbox">
+                                                                            <input tabindex="1" type="checkbox" class="custom-control-input" id="diagnosis" name="frmConnect_itrcheck2" value="2">
+                                                                            <label class="custom-control-label" for="diagnosis">
+                                                                                All health information (e.g. diagnosis, test results, treatement); Or
+                                                                            </label>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block; margin-right:10px;">
+                                                                            <input tabindex="1" type="checkbox" class="custom-control-input" id="Films" name="frmConnect_itrcheck3" value="3">
+                                                                            <label class="custom-control-label" for="Films">
+                                                                                Images and/or Films
+                                                                            </label>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block; margin-right:10px;">
+                                                                            <input tabindex="1" type="checkbox" class="custom-control-input" id="Reports" name="frmConnect_itrcheck4" value="4">
+                                                                            <label class="custom-control-label" for="Reports">
+                                                                                Reports
+                                                                            </label>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block; margin-right:10px;">
+                                                                            <input tabindex="1" type="checkbox" class="custom-control-input" id="Billing" name="frmConnect_itrcheck5" value="5">
+                                                                            <label class="custom-control-label" for="Billing">
+                                                                                Billing
+                                                                            </label>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block; margin-right:10px;">
+                                                                            <input tabindex="1" type="checkbox" class="custom-control-input" id="Dental" name="frmConnect_itrcheck6" value="6">
+                                                                            <label class="custom-control-label" for="Dental">
+                                                                                Dental
+                                                                            </label>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+
                                                         </div>
                                                     </div>
 
 
 
                                                     @*<div class="medical-radio">
-                                                            <div class="custom-control custom-radio d-inline-block mr-2">
-                                                                <input type="radio" class="custom-control-input" id="MedicalRadio" name="example1" value="customEx">
-                                                                <label class="custom-control-label" for="MedicalRadio">All health information (e.g. diagnosis, test results, treatement); Or</label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="medical-radio">
-                                                            <div class="custom-control custom-radio d-inline-block mr-2">
-                                                                <input type="radio" class="custom-control-input" id="ImageRadio" name="example1" value="customEx">
-                                                                <label class="custom-control-label" for="ImageRadio">Images and/or Films</label>
-                                                            </div>
-                                                            <div class="custom-control custom-radio d-inline-block mr-2">
-                                                                <input type="radio" class="custom-control-input" id="ReportsRadio" name="example1" value="customEx">
-                                                                <label class="custom-control-label" for="ReportsRadio">Reports</label>
-                                                            </div>
-                                                            <div class="custom-control custom-radio d-inline-block mr-2">
-                                                                <input type="radio" class="custom-control-input" id="BillingRadio" name="example1" value="customEx">
-                                                                <label class="custom-control-label" for="BillingRadio">Billing</label>
-                                                            </div>
-                                                            <div class="custom-control custom-radio d-inline-block mr-2">
-                                                                <input type="radio" class="custom-control-input" id="DentalRadio" name="example1" value="customEx">
-                                                                <label class="custom-control-label" for="DentalRadio">Dental</label>
-                                                            </div>
-                                                        </div>*@
-                                                </li>
-                                                <li style="list-style:decimal;">
-
+                        <div class="custom-control custom-radio d-inline-block mr-2">
+                            <input type="radio" class="custom-control-input" id="MedicalRadio" name="example1" value="customEx">
+                            <label class="custom-control-label" for="MedicalRadio">All health information (e.g. diagnosis, test results, treatement); Or</label>
+                        </div>
+                    </div>
+                    <div class="medical-radio">
+                        <div class="custom-control custom-radio d-inline-block mr-2">
+                            <input type="radio" class="custom-control-input" id="ImageRadio" name="example1" value="customEx">
+                            <label class="custom-control-label" for="ImageRadio">Images and/or Films</label>
+                        </div>
+                        <div class="custom-control custom-radio d-inline-block mr-2">
+                            <input type="radio" class="custom-control-input" id="ReportsRadio" name="example1" value="customEx">
+                            <label class="custom-control-label" for="ReportsRadio">Reports</label>
+                        </div>
+                        <div class="custom-control custom-radio d-inline-block mr-2">
+                            <input type="radio" class="custom-control-input" id="BillingRadio" name="example1" value="customEx">
+                            <label class="custom-control-label" for="BillingRadio">Billing</label>
+                        </div>
+                        <div class="custom-control custom-radio d-inline-block mr-2">
+                            <input type="radio" class="custom-control-input" id="DentalRadio" name="example1" value="customEx">
+                            <label class="custom-control-label" for="DentalRadio">Dental</label>
+                        </div>
+                    </div>*@
+                                                </div>
+                                                <div class="custom_div_item">
+                                                    <span class="listNumber">2</span>
                                                     <div class="delievery-radio-row" style="display:flex;">
                                                         <div class="custom-control custom-checkbox d-inline-block mr-2" style="max-width:70%;">
                                                             <input tabindex="1" type="checkbox" class="custom-control-input" id="TestResults" name="frmConnect_itrcheck7" value="7">
@@ -713,8 +762,9 @@
                                                         </div>
                                                         <span class="initial" style="display:flex;max-width:30%; margin-left:auto;">Intial: <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-75" type="text" value="@Model.CareConnect.AidsTestResultsInitial" name="AidsTestResultsInitial" /></span>
                                                     </div>
-                                                </li>
-                                                <li style="list-style:decimal;">
+                                                </div>
+                                                <div class="custom_div_item">
+                                                    <span class="listNumber">3</span>
                                                     <div class="delievery-radio-row" style="display:flex;">
                                                         <div class="custom-control custom-checkbox d-inline-block mr-2" style="max-width:70%;">
                                                             <input tabindex="1" type="checkbox" class="custom-control-input" id="Treatement" name="frmConnect_itrcheck8" value="8">
@@ -724,13 +774,14 @@
                                                         </div>
                                                         <span class="initial" style="display:flex; max-width:30%;margin-left:auto;">Intial: <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-75" type="text" value="@Model.CareConnect.AlcoholTreatementInitial" name="AlcoholTreatementInitial" /></span>
                                                     </div>
-                                                </li>
+                                                </div>
 
 
 
 
 
-                                                <li style="list-style:decimal;">
+                                                <div class="custom_div_item">
+                                                    <span class="listNumber">4</span>
                                                     <div class="delievery-radio-row" style="display:flex;">
                                                         <div class="custom-control custom-checkbox d-inline-block mr-2" style="max-width:70%;">
                                                             <input tabindex="1" type="checkbox" class="custom-control-input" id="MentalHealthResults" name="frmConnect_itrcheck9" value="9">
@@ -741,9 +792,9 @@
                                                         <span class="initial" style="display:flex;max-width:30%;margin-left:auto;">Intial: <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-75" type="text" value="@Model.CareConnect.MentalHealthInitial" name="MentalHealthInitial" /></span>
                                                     </div>
 
-                                                </li>
-                                                <li style="list-style:decimal;">
-
+                                                </div>
+                                                <div class="custom_div_item">
+                                                    <span class="listNumber">5</span>
                                                     <div class="delievery-radio-row" style="display:flex;">
                                                         <div class="custom-control custom-checkbox d-inline-block mr-2" style="max-width:70%;">
                                                             <input tabindex="1" type="checkbox" class="custom-control-input" id="NonCovered" name="frmConnect_itrcheck10" value="10">
@@ -753,83 +804,114 @@
                                                         </div>
                                                         <span class="initial" style="display:flex;max-width:30%;margin-left:auto;">Intial: <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-75" type="text" value="@Model.CareConnect.OtherInitial" name="OtherInitial" /></span>
                                                     </div>
-                                                </li>
-                                            </ul>
+                                                </div>
+                                            </div>
 
 
                                         </div>
 
-                                    </li>
+                                    </div>
                                     <div class="Delievery">
                                         <div class="row" style="display:flex; margin:0-15px;">
                                             <div class="col-lg-6 col-md-6 col-sm-12 col-12 pt-3" style="flex:0 0 50%; max-width:50%;">
-                                    <li><strong>Delievery Preference:</strong></li>
+                                    <div class="custom_div_item"><span class="listNumber">4.</span><strong>Delievery Preference:</strong></div>
                                     <div class="delievery-radio">
-                                        <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block;">
-                                            <input tabindex="1" type="checkbox" class="custom-control-input" id="Mail" name="frmConnect_dpcheck11" value="11">
-                                            <label class="custom-control-label" for="Mail">
-                                                Mail
-                                            </label>
-                                        </div>
-                                        <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block;">
-                                            <input tabindex="1" type="checkbox" class="custom-control-input" id="PickUp" name="frmConnect_dpcheck12" value="12">
-                                            <label class="custom-control-label" for="PickUp">
-                                                Pick Up
-                                            </label>
-                                        </div>
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block;">
+                                                        <input tabindex="1" type="checkbox" class="custom-control-input" id="Mail" name="frmConnect_dpcheck11" value="11">
+                                                        <label class="custom-control-label" for="Mail">
+                                                            Mail
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block;">
+                                                        <input tabindex="1" type="checkbox" class="custom-control-input" id="PickUp" name="frmConnect_dpcheck12" value="12">
+                                                        <label class="custom-control-label" for="PickUp">
+                                                            Pick Up
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <div class="flexRadioField custom-control custom-checkbox d-inline-block mr-2" style="display:block;">
+                                                        <input tabindex="1" type="checkbox" class="custom-control-input" id="OtherPref" name="frmConnect_dpcheck13" value="13">
+                                                        <label class="custom-control-label" for="OtherPref">
+                                                            Other
+                                                        </label>
+                                                        <input class="deliveryInput" style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" type="text" name="OtherDelieveryPreference" value="@Model.CareConnect.OtherDelieveryPreference" />
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                       
+                                       
 
-                                        <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:block;">
-                                            <input tabindex="1" type="checkbox" class="custom-control-input" id="OtherPref" name="frmConnect_dpcheck13" value="13">
-                                            <label class="custom-control-label" for="OtherPref">
-                                                Other
-                                            </label>
-                                            <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" type="text" name="OtherDelieveryPreference" value="@Model.CareConnect.OtherDelieveryPreference" />
-                                        </div>
+                                        
 
                                         @*<div class="custom-control custom-radio d-inline-block mr-2">
-                                                <input type="radio" class="custom-control-input" id="MailRadio" name="example1" value="customEx">
-                                                <label class="custom-control-label" for="MailRadio">Mail</label>
-                                            </div>
-                                            <div class="custom-control custom-radio d-inline-block mr-2">
-                                                <input type="radio" class="custom-control-input" id="PickRadio" name="example1" value="customEx">
-                                                <label class="custom-control-label" for="PickRadio">Pick Up</label>
-                                            </div>
-                                            <div class="custom-control custom-radio d-inline-block mr-2">
-                                                <input type="radio" class="custom-control-input" id="OtherRadio" name="example1" value="customEx">
-                                                <label class="custom-control-label" for="OtherRadio">Other</label>
-                                            </div>*@
+            <input type="radio" class="custom-control-input" id="MailRadio" name="example1" value="customEx">
+            <label class="custom-control-label" for="MailRadio">Mail</label>
+        </div>
+        <div class="custom-control custom-radio d-inline-block mr-2">
+            <input type="radio" class="custom-control-input" id="PickRadio" name="example1" value="customEx">
+            <label class="custom-control-label" for="PickRadio">Pick Up</label>
+        </div>
+        <div class="custom-control custom-radio d-inline-block mr-2">
+            <input type="radio" class="custom-control-input" id="OtherRadio" name="example1" value="customEx">
+            <label class="custom-control-label" for="OtherRadio">Other</label>
+        </div>*@
                                     </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-12 col-12 pt-3" style="flex:0 0 50%; max-width:50%;">
-                                <li><strong>Delievery Format:</strong></li>
+                                <div class="custom_div_item"><span class="listNumber">5.</span><strong>Delievery Format:</strong></div>
                                 <div class="delievery-radio">
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block;">
+                                                    <input tabindex="1" type="checkbox" class="custom-control-input" id="CDCheck" name="frmConnect_dfcheck14" value="14">
+                                                    <label class="custom-control-label" for="CDCheck">
+                                                        CD
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block;">
+                                                    <input tabindex="1" type="checkbox" class="custom-control-input" id="FilmCheck" name="frmConnect_dfcheck15" value="15">
+                                                    <label class="custom-control-label" for="FilmCheck">
+                                                        Film
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block;">
+                                                    <input tabindex="1" type="checkbox" class="custom-control-input" id="PaperCheck" name="frmConnect_dfcheck16" value="16">
+                                                    <label class="custom-control-label" for="PaperCheck">
+                                                        Paper
+                                                    </label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                <div class="flexRadioField custom-control custom-checkbox d-inline-block mr-2" style="display:block;">
+                                                    <input tabindex="1" type="checkbox" class="custom-control-input" id="OtherDel" name="frmConnect_dfcheck17" value="17">
+                                                    <label class="custom-control-label" for="OtherDel">
+                                                        Other
+                                                    </label>
+                                                    <input class="deliveryInput"  style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" type="text" name="OtherDelieveryFormat" value="@Model.CareConnect.OtherDelieveryFormat" />
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    
 
-                                    <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block;">
-                                        <input tabindex="1" type="checkbox" class="custom-control-input" id="CDCheck" name="frmConnect_dfcheck14" value="14">
-                                        <label class="custom-control-label" for="CDCheck">
-                                            CD
-                                        </label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block;">
-                                        <input tabindex="1" type="checkbox" class="custom-control-input" id="FilmCheck" name="frmConnect_dfcheck15" value="15">
-                                        <label class="custom-control-label" for="FilmCheck">
-                                            Film
-                                        </label>
-                                    </div>
-
-                                    <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:inline-block;">
-                                        <input tabindex="1" type="checkbox" class="custom-control-input" id="PaperCheck" name="frmConnect_dfcheck16" value="16">
-                                        <label class="custom-control-label" for="PaperCheck">
-                                            Paper
-                                        </label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox d-inline-block mr-2" style="display:block;">
-                                        <input tabindex="1" type="checkbox" class="custom-control-input" id="OtherDel" name="frmConnect_dfcheck17" value="17">
-                                        <label class="custom-control-label" for="OtherDel">
-                                            Other
-                                        </label>
-                                        <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" type="text" name="OtherDelieveryFormat" value="@Model.CareConnect.OtherDelieveryFormat" />
-                                    </div>
+                                    
+                                    
 
                                     @*<div class="custom-control custom-radio d-inline-block mr-2">
                                             <input type="radio" class="custom-control-input" id="CDRadio" name="example1" value="customEx">
@@ -852,30 +934,34 @@
                     </div>
                 </div>
 
-                <li><strong>Duration:</strong> This Authorization is valid immediately and will be valid until    <input style="display:block;width:25%;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="GivenDate date" type="text" name="ValidUntilDate" value="@Model.CareConnect.ValidUntilDate" id="careGivenDate" placeholder="12/31/2020" /> (Given date)</li>
-                <li>
+                <div class="custom_div_item"> <span class="listNumber">6.</span><strong>Duration:</strong> This Authorization is valid immediately and will be valid until    <input style="display:block;width:25%;border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="GivenDate date" type="text" name="ValidUntilDate" value="@Model.CareConnect.ValidUntilDate" id="careGivenDate" placeholder="12/31/2020" /> (Given date)</div>
+                <div class="custom_div_item">
+                    <span class="listNumber">7.</span>
                     <strong>Cancellation:</strong>    I understand that I have a right to cancel this authorization any time. A
                     cancellation (1) must be in writing, (2) sent or given to the Health Information Management
                     Departement, 751 S ,  Bascom Ave, action already taken by SCVHHS under this authorization was required
                     for getting insurance coverage and the insurer has a legal right to contest a claim. Verbal cancellation
                     will be accepted for behavioral health medical record pursuant to WIC Section 5328. Call:
-                </li>
-                <li>
+                </div>
+                <div class="custom_div_item" i>
+                    <span class="listNumber">8.</span>
                     <strong>Conditions:</strong> I understand that treatement, payement, enrollment, or eligibilty for benefits will not be
                     based on my giving or refusing to give this authorization except if my treatement is related to research, or if health
                     care services are given to me only for creating protected health information for release to a third party.
                     I also understand that i may refuse to sign this authorization.
                     A copy of this authorization is as valid as an original. I have the right to recieve a copy of this.
-                </li>
-                <li>
+                </div>
+                <div class="custom_div_item">
+                    <span class="listNumber">9.</span>
                     <strong>Redisclousure:</strong> Information disclosed pursuant to this authorization could be  redisclosed by the
                     recipient. Such redisclosure is in some cases not prohibited by California law and may no longer be
                     protected by to that protection. In addition, California law prohibits the person recieving my health information
                     from making further disclosure of it unless another authorization for such disclosure is obtained from me or unless
                     such disclosure is specifically required or permitted by law.
-                </li>
+                </div>
 
-                <li>
+                <div class="custom_div_item">
+                    <span class="listNumber">10.</span>
                     <div class="row" style="display:flex; margin:0 -15px">
                         <div class="col-lg-4 col-md-4 col-sm-12 col-12" style="width:30%; padding:0 15px;">
                             <input style="border: none;border-bottom: 1px solid #000;font-size: 14px;padding: 0;background: none;height: 25px;" class="w-100" type="text" name="PatientOrRepresentativeName" value="@Model.CareConnect.PatientOrRepresentativeName" placeholder="" />
@@ -896,9 +982,9 @@
                             <strong>Date</strong>
                         </div>
                     </div>
-                </li>
+                </div>
 
-                </ol>
+                </div>
             </div>
 
             <div class="detail-button mt-3 w-100 text-center">
