@@ -71,14 +71,7 @@ body .detail-patient-form label {
 .mr-2, .mx-2 {
     margin-right: 10px !important;
 }
-/*.d_flex_box {
-    display:table!important;
-    background:red;
-    height:500px;
-}
-    .d_flex_box div {
-      float:left!important;
-    }*/
+ 
 
 
 
@@ -125,4 +118,71 @@ body .Delievery {
 
 .pt-3, .py-3 {
     padding-top: 1rem !important;
+}
+
+
+
+.PatientDetails.authTopsectionDiv div {
+    display: flex;
+    align-items: flex-end;
+    padding: 0 0 5px;
+    white-space: nowrap;
+}
+.PatientDetails.authTopsectionDiv div input {
+    position: static !important;
+    text-align: left;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.PatientDetails.authTopsectionDiv div span {
+    display: flex;
+    white-space: nowrap!important;
+}
+
+
+
+.detail-patient-form ol li {
+    padding-bottom: 20px!important;
+}
+.delievery-radio {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    width:100%!important;
+}
+.medicalReocrdTable .custom-control-label {
+    display: flex;
+    white-space: nowrap !important;
+}
+
+
+
+.custom_div_list .custom_div_item {
+    padding-left: 20px;
+    position: relative;
+    padding-bottom: 10px;
+}
+.custom_div_listParent .custom_div_item {
+    padding-bottom: 30px;
+    background:#fff;
+}
+.custom_div_list .custom_div_item span.listNumber {
+    position: absolute;
+    left: 0;
+    top: 2px;
+    display: block;
+}
+.flexRadioField.d-inline-block {
+    display: flex !important;
+    justify-content:flex-start;
+}
+.flexRadioField input.deliveryInput {
+    border:0px;
+    border-bottom: 1px solid #000;
+    font-size: 14px;
+    padding: 0;
+    height: 25px;
+    padding-left:1px;
+    display:block;
+    width:150px;
 }
