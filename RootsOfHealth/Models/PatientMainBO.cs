@@ -75,6 +75,9 @@ namespace RootsOfHealth.Models
         public string EmergencyContact2State { get; set; }
         public string EmergencyContact2Zip { get; set; }
         public string AmdMedicalRecordNumber { get; set; }
+        public string DataCameFrom { get;set; }
+        public string ImportNotes { get; set; }
+        public DateTime ImportDate { get; set; }
         public Nullable<int> ClinicID { get; set; }
         public ProgramBO Program { get; set; }
 

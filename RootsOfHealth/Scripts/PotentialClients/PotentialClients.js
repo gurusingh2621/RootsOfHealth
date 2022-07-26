@@ -6,12 +6,32 @@ var $PotentialClientFileUpload = $('#PoteintialClientFileInput')
 var $btnsavepotentialclients = $('#btnsavepotentialclients');
 var filePath = '';
 var $tblPotientialPatient = $('#tblPotientialPatient');
+var summaryElem = $('#summary');
+var TotalFileColumns = '';
 
 
 
 $btnsavepotentialclients.click(function () {
-
+    
     var ddlExcelTypeValue = $('#ddlExcelType').val();
+    var dataCameFrom = $('#txtdataCameFrom').val();
+    var importNotes = $('#txtImportNotes').val();
+    var importDate = $('#ImportDate').val();
+    if (dataCameFrom == '' || dataCameFrom == null) {
+        alert('Please enter value for Data Came From');
+        $('#txtdataCameFrom').focus();
+        return false;
+    }
+    if (importNotes == '' || importNotes == null) {
+        alert('Please enter value for Import Notes');
+        $('#txtImportNotes').focus();
+        return false;
+    }
+    if (importDate == '' || importDate == null) {
+        alert('Please enter value for Import Date');
+        $('#ImportDate').focus();
+        return false;
+    }
     if (ddlExcelTypeValue == "organised") {
 
         var isddlvalid = true;
@@ -66,6 +86,9 @@ $btnsavepotentialclients.click(function () {
             });
 
             formdata.append("dbfields", JSON.stringify( dbfields ));
+            formdata.append("dataCameFrom", dataCameFrom);
+            formdata.append("importNotes", importNotes);
+            formdata.append("importDate", importDate);
 
             $.ajax({
                 url: '/Client/SavePotentialClientData',
@@ -162,9 +185,12 @@ $btnsavepotentialclients.click(function () {
                 var to = $(this).find('.rangeTo').val();
                 dbfields[name] = from + ',' + to;
             });
-
+        
             formdata.append("dbfields", JSON.stringify(dbfields));
-            formdata.append("fileRange", JSON.stringify(rangeDifference +1));
+            formdata.append("fileRange", JSON.stringify(rangeDifference + 1));
+            formdata.append("dataCameFrom", dataCameFrom);
+            formdata.append("importNotes", importNotes);
+            formdata.append("importDate", importDate);
             
             $.ajax({
                 url: '/Client/SavePCFromUnorganisedExcel',
@@ -200,7 +226,7 @@ function ClosePotentialClientModal() {
 }
 
 $PotentialClientFileUpload.change(function (e) {
-    
+    $(".loaderOverlay").show();
     var files = e.target.files;
     if (files.length > 0) {
         if (window.FormData !== undefined) {
@@ -219,29 +245,49 @@ $PotentialClientFileUpload.change(function (e) {
                 success: function (res) {
                     var ddlExcelTypeValue = $('#ddlExcelType').val();
                     if (res) {
-                       
+                        summaryElem.find('#totalRecords span').html(res.totalRecords);
+                        TotalFileColumns = res.databaseColumns.length
+                        summaryElem.find('#spanTotalCols').html(TotalFileColumns);
                         if (ddlExcelTypeValue == "organised")
                         {
-
+                            if (res.filecolumns.length > res.databaseColumns.length) {
+                                summaryElem.find('#spancolsMatched').html(res.databaseColumns.length);
+                            }
+                            else {
+                                summaryElem.find('#spancolsMatched').html(res.filecolumns.length);
+                            }
+                           
                             AppendColumnsLists(res)
+                           
                         }
                         else
                         {
+                            summaryElem.find('#spancolsMatched').html(0);
                             AppendColumnsListsForUO(res)
                         }
+                        $('.date').datepicker(
+                            {
+                                uiLibrary: 'bootstrap',
+                                changeYear: true,
+                                changeMonth: true,
+                            }
 
+                        );
                     }
                     $PotientialClientModal.modal('show');
+                    $(".loaderOverlay").hide();
                 },
                 error: function (xhr, status, p3, p4) {
                     var err = "Error " + " " + status + " " + p3 + " " + p4;
                     if (xhr.responseText && xhr.responseText[0] == "{")
                         err = JSON.parse(xhr.responseText).Message;
                     console.log(err);
+                    $(".loaderOverlay").hide();
                 }
             });
         } else {
             alert("This browser doesn't support HTML5 file uploads!");
+            $(".loaderOverlay").hide();
         }
     }
 
@@ -422,6 +468,7 @@ function AppendColumnsLists(result) {
         var fileResult = result.filecolumns;
         var databaseResult = result.databaseColumns;
     $PotientialClientModal.find('#dbandFileFields').html('');
+    $PotientialClientModal.find('#dbandFileFields').append('<div class="row"><div class="col-md-6 colTitle">Target (Roots)</div><div class="col-md-6 colTitle">Source(Import File)</div></div>');
     for (let i = 0; i < databaseResult.length; i++) {
         var columnName = "";
         switch (databaseResult[i].ColName) {
@@ -576,7 +623,7 @@ function AppendColumnsLists(result) {
 
         // append dropdowns start
         var ddl = $("<select></select>").attr("id", databaseResult[i].ColName).attr("name", databaseResult[i].ColName).attr("class", "form-control dllFileFields").attr("columntype", databaseResult[i].ColType);
-        ddl.append("<option>--select--</option>");
+        ddl.append("<option>Not Assigned</option>");
         $.each(fileResult, function (index, el) {
             ddl.append("<option>" + el + "</option>");
         });
@@ -584,34 +631,69 @@ function AppendColumnsLists(result) {
         $PotientialClientModal.find('#getFileFields_' + i).append(ddl);
            // append dropdowns end
     }
-   
+    $('.dllFileFields').change(function () {
+        var selectedval = $(this).val();
+        var matchedCol = summaryElem.find('#spancolsMatched').html();
+        if (selectedval != 'Not Assigned') {
+            if (matchedCol < TotalFileColumns) {
+                matchedCol = parseInt(matchedCol) + 1;
+            }
+        }
+        else {
+            matchedCol = parseInt(matchedCol) - 1;
+        }
+
+        summaryElem.find('#spancolsMatched').html(matchedCol);
+    })
+
 }
 
+
 function DeletePotentialPatient(id) {
-    $(".loaderOverlay").show();
-    $.ajax({
-        type: "POST",
-        url: Apipath + '/api/PatientMain/DeletePotentialPatient?patientId=' + id,
-        contentType: 'application/json; charset=UTF-8',
-        dataType: "json",
-        success: function (result) {
-            if (result == 1) {
-                toastr.success("Potiental Client Deleted successfully");
-                BindPotentialClientsTable();
+    $.confirm({
+        icon: 'fas fa-exclamation-triangle',
+        title: 'Confirm',
+        content: 'The record will be permanently deleted!  Are you sure?',
+        type: 'red',
+        columnClass: 'col-md-6 col-md-offset-3',
+        typeAnimated: true,
+        buttons: {
+            yes: {
+                btnClass: 'btn-red',
+                action: function () {
+                    $(".loaderOverlay").show();
+                    $.ajax({
+                        type: "POST",
+                        url: Apipath + '/api/PatientMain/DeletePotentialPatient?patientId=' + id,
+                        contentType: 'application/json; charset=UTF-8',
+                        dataType: "json",
+                        success: function (result) {
+                            if (result == 1) {
+                                toastr.success("Potiental Client Deleted successfully");
+                                BindPotentialClientsTable();
+                            }
+                            else {
+                                toastr.error("unexpected error Happened");
+                            }
+                            $(".loaderOverlay").hide();
+
+
+
+                        },
+                        error: function () {
+                            toastr.error("unexpected error Happened");
+                            $(".loaderOverlay").hide();
+                        }
+                    })
+                }
+            },
+            no: function () {
             }
-            else {
-                toastr.error("unexpected error Happened");
-            }
-            $(".loaderOverlay").hide();
-
-
-
-        },
-        error: function () {
-            toastr.error("unexpected error Happened");
-            $(".loaderOverlay").hide();
         }
-    })
+    });
+
+
+   
 }
 
 function IsPatientDetailValid(id) {
@@ -1083,6 +1165,16 @@ function AppendColumnsListsForUO(result) {
     $PotientialClientModal.find('#dbandFileFields .FileFields input').blur(function () {
         var val = $(this).val().toUpperCase();
         $(this).val(val);
+
+        var matchedCol = summaryElem.find('#spancolsMatched').html();
+        var ele = $(this).parent();
+        var _rangefrom = $(ele).find('.rangeFrom').val();
+        var _rangeto = $(ele).find('.rangeTo').val();
+        if (_rangefrom != '' && _rangeto != '' && matchedCol < TotalFileColumns) {
+            matchedCol = parseInt(matchedCol) + 1;
+        }
+        summaryElem.find('#spancolsMatched').html(matchedCol);
+        
     })
 }
 
