@@ -2478,6 +2478,7 @@ namespace RootsOfHealth.Controllers
         {
             List<string> columnNames = new List<string>();
             List<string> listA = new List<string>();
+            int TotalRecords = 0;
             var databaseColumns = new List<PotientialTableInfoBO>();
             try
             {
@@ -2499,14 +2500,22 @@ namespace RootsOfHealth.Controllers
                     {
                         if (fileExtension == ".xlsx")
                         {
+                            XSSFWorkbook workbook = new XSSFWorkbook(Request.Files[0].InputStream);
+                            var sheet = workbook.GetSheetAt(0);
+                            TotalRecords = sheet.LastRowNum;
                             excelReader = ExcelReaderFactory.CreateOpenXmlReader(stream);
                         }
                         else
                         {
+                            HSSFWorkbook workbook = new HSSFWorkbook(Request.Files[0].InputStream);
+                            var sheet = workbook.GetSheetAt(0);
+                            TotalRecords = sheet.LastRowNum;
                             excelReader = ExcelReaderFactory.CreateBinaryReader(stream);
                            
                         }
+
                         
+
                     }
                     else
                     {
@@ -2556,11 +2565,12 @@ namespace RootsOfHealth.Controllers
                         databaseColumns = readTask.Result;
                         databaseColumns = databaseColumns.Where(x => x.ColName.ToLower() != "othergender" && x.ColName.ToLower() != "otherrace"
                      && x.ColName.ToLower() != "othercontact" && x.ColName.ToLower() != "othermaritalstatus" && x.ColName.ToLower() != "otherlanguagespeak"
-                     && x.ColName.ToLower() != "otherpronouns" && x.ColName.ToLower() != "otherthinkyourselfas").ToList();
+                     && x.ColName.ToLower() != "otherpronouns" && x.ColName.ToLower() != "otherthinkyourselfas"
+                      && x.ColName.ToLower() != "datacamefrom" && x.ColName.ToLower() != "importnotes" && x.ColName.ToLower() != "importdate").ToList();
                     }
 
                 }
-
+              
             }
             catch (Exception ex)
             {
@@ -2571,7 +2581,8 @@ namespace RootsOfHealth.Controllers
             
             return Json(new {
                 filecolumns = columnNames,
-                databaseColumns = databaseColumns
+                databaseColumns = databaseColumns,
+                totalRecords = TotalRecords
 
             });
         }
@@ -2732,14 +2743,18 @@ namespace RootsOfHealth.Controllers
         }
 
         [HttpPost]
-        public ActionResult SavePotentialClientData(string dbfields)
+        public ActionResult SavePotentialClientData(string dbfields,string dataCameFrom,string importNotes,string importDate)
         {
             var result = 0;
             try
             {
                 Dictionary<string, string> dbFields = JsonConvert.DeserializeObject<Dictionary<string, string>>(dbfields);
-
-
+                DateTime ImportDate;
+                bool isSuccess = DateTime.TryParse(importDate, out ImportDate);
+                if (!isSuccess)
+                {
+                    ImportDate = DateTime.Now;
+                }
                 var files = Request.Files;
                 string fileName = Request.Files[0].FileName;
                 var fileExtension = Path.GetExtension(files[0].FileName);
@@ -2751,17 +2766,14 @@ namespace RootsOfHealth.Controllers
                         if (fileExtension == ".xls")
                         {
                             HSSFWorkbook workbook = new HSSFWorkbook(Request.Files[0].InputStream);
-                            result = DataImportExcelOld(workbook, fileName, dbFields);
+                            result = DataImportExcelOld(workbook, fileName, dbFields, dataCameFrom, importNotes, ImportDate);
                         }
                         else
                         {
                             XSSFWorkbook workbook = new XSSFWorkbook(Request.Files[0].InputStream);
-                            result = DataImportExcelNew(workbook, fileName, dbFields);
+                            result = DataImportExcelNew(workbook, fileName, dbFields, dataCameFrom, importNotes, ImportDate);
                         }
                         
-
-                        
-                       
                     }
                     catch (IOException ex)
                     {
@@ -2787,13 +2799,18 @@ namespace RootsOfHealth.Controllers
                 return Json(new { Status = 0, Message = ex.Message });
             }
         }
-        public ActionResult SavePCFromUnorganisedExcel(string dbfields, int fileRange)
+        public ActionResult SavePCFromUnorganisedExcel(string dbfields, int fileRange, string dataCameFrom, string importNotes, string importDate)
         {
             var result = 0;
             try
             {
                 Dictionary<string, string> databaseFields = JsonConvert.DeserializeObject<Dictionary<string, string>>(dbfields);
-
+                DateTime ImportDate;
+                bool isSuccess = DateTime.TryParse(importDate, out ImportDate);
+                if (!isSuccess)
+                {
+                    ImportDate = DateTime.Now;
+                }
 
                 var files = Request.Files;
                 string fileName = Request.Files[0].FileName;
@@ -3268,9 +3285,12 @@ namespace RootsOfHealth.Controllers
 
 
                                         }
+                                    allowedPatientList[i].DataCameFrom = dataCameFrom;
+                                    allowedPatientList[i].ImportNotes = importNotes;
+                                    allowedPatientList[i].ImportDate = ImportDate;
 
 
-                                        i++;
+                                    i++;
                                     }
                                 }
                             
@@ -3334,7 +3354,7 @@ namespace RootsOfHealth.Controllers
 
             return ret;
         }
-        public int DataImportExcelOld(HSSFWorkbook workbook, string fileName, Dictionary<string, string> dbFields)
+        public int DataImportExcelOld(HSSFWorkbook workbook, string fileName, Dictionary<string, string> dbFields, string dataCameFrom, string importNotes, DateTime importDate)
         {
 
             var sheet = workbook.GetSheetAt(0);
@@ -3716,7 +3736,9 @@ namespace RootsOfHealth.Controllers
                     }
                     
                 }
-
+                currentPatient.DataCameFrom = dataCameFrom;
+                currentPatient.ImportNotes = importNotes;
+                currentPatient.ImportDate = importDate;
              
                
 
@@ -3752,7 +3774,7 @@ namespace RootsOfHealth.Controllers
             
             return savedCount;
         }
-        public int DataImportExcelNew(XSSFWorkbook workbook, string fileName, Dictionary<string, string> dbFields)
+        public int DataImportExcelNew(XSSFWorkbook workbook, string fileName, Dictionary<string, string> dbFields, string dataCameFrom, string importNotes, DateTime importDate)
         {
 
             var sheet = workbook.GetSheetAt(0);
@@ -4133,6 +4155,9 @@ namespace RootsOfHealth.Controllers
                     }
 
                 }
+                currentPatient.DataCameFrom = dataCameFrom;
+                currentPatient.ImportNotes = importNotes;
+                currentPatient.ImportDate = importDate;
 
                 allowedPatientList.Add(currentPatient);
             }
@@ -4197,7 +4222,8 @@ namespace RootsOfHealth.Controllers
                     databaseColumns = readTask.Result;
                     databaseColumns = databaseColumns.Where(x => x.ColName.ToLower() != "othergender" && x.ColName.ToLower() != "otherrace"
                      && x.ColName.ToLower() != "othercontact" && x.ColName.ToLower() != "othermaritalstatus" && x.ColName.ToLower() != "otherlanguagespeak"
-                     && x.ColName.ToLower() != "otherpronouns" && x.ColName.ToLower() != "otherthinkyourselfas").ToList();
+                     && x.ColName.ToLower() != "otherpronouns" && x.ColName.ToLower() != "otherthinkyourselfas" 
+                     && x.ColName.ToLower() != "datacamefrom" && x.ColName.ToLower() != "importnotes" && x.ColName.ToLower() != "importdate").ToList();
                 }
 
             }
