@@ -50,9 +50,9 @@
         min-height: 42px;
     }
 
-    #PotentialClientFileUpload div#dbandFileFields {
+   /* #PotentialClientFileUpload div#dbandFileFields {
         max-height: calc(100vh - 170px);
-    }
+    }*/
 
     #duplicateFields h5 {
         text-align: center;
@@ -189,6 +189,32 @@
         color: #343434;
         font-weight: 500;
     }
+    #PotentialClientFileUpload .div_newcolumns {
+        padding: 1rem 1rem 5px;
+        border-bottom: 1px solid #e9ecef;
+    }
+    div#PotentialClientFileUpload {
+        padding-left: 0 !important;
+    }
+    div#PotentialClientFileUpload .popup_scroll {
+        max-height: calc(100vh - 140px);
+        overflow: auto;
+    }
+    div#PotentialClientFileUpload .modal-content {
+        overflow: hidden;
+    }
+    button#btnpatientDelete {
+        border-radius: 50px;
+    }
+    table#tblInvalidClients {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    #inValidClientsDetails .modal-dialog {
+        max-width: 750px;
+    }
+    
 </style>
 <section id="content" class="responsive-container">
     <div class="inner-content mt-0">
@@ -252,43 +278,42 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class=" d-flex flex-wrap">
-                        <div>
+
+                </div>
+                <div class="popup_scroll scroll">
+                    <div class="div_newcolumns">
+                        <div class="form-group">
                             <label class="label-fields">Data Came From</label>
                             <input tabindex="38" type="text" id="txtdataCameFrom" name="dataCameFrom" maxlength="500"
                                    class="form-control"
                                    placeholder="" value="">
                         </div>
-                        <div>
+                        <div class="form-group">
                             <label class="label-fields">Import Notes</label>
-                            <input type="text" id="txtImportNotes" name="ImportNotes"
-                                   class="form-control"
-                                   placeholder="" value="">
+                            <textarea type="text" id="txtImportNotes" name="ImportNotes"
+                                      class="form-control"
+                                      placeholder="" value=""></textarea>
                         </div>
-                        <div>
+                        <div class="form-group">
                             <label class="label-fields">Import Date</label>
                             <input tabindex="40" type="text" id="ImportDate" name="ImportDate" maxlength="50"
                                    class="form-control date"
                                    placeholder="" value="">
                         </div>
                     </div>
+                    <div id="summary">
+                        <div>
+                            <label class="label-fields" id="totalRecords">Total Records : <span></span></label>
+                        </div>
+                        <div>
+                            <label class="label-fields" id="colsMatched">Columns matched : <span id="spancolsMatched"></span>/<span id="spanTotalCols"></span></label>
+                        </div>
 
-                </div>
-                <div id="summary">
-                    <div>
-                        <label class="label-fields" id="totalRecords">Total Records : <span></span></label>
                     </div>
-                    <div>
-                        <label class="label-fields" id="colsMatched">Columns matched : <span id="spancolsMatched"></span>/<span id="spanTotalCols"></span></label>
+                    <div id="dbandFileFields" class="modal-body preview-body scroll">
+
+
                     </div>
-                   
-                </div>
-                <div id="dbandFileFields" class="modal-body preview-body scroll">
-
-
-                </div>
-                <div class="modal-footer preview-footer">
-
                 </div>
             </div>
         </div>
@@ -322,6 +347,38 @@
                         </div>
                     </div>
                 </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="inValidClientsDetails" tabindex="-1" role="dialog" aria-labelledby="inValidClientsDetailsTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered preview-modal" role="document">
+            <div class="modal-content" style="height:90%">
+                <div class="modal-header preview-header flex-wrap">
+                    <h5 class="modal-title" id="inValidClientsDetailsTitle">Fields marked with red background were not saved</h5>
+                    <div class="ml-auto d-flex flex-wrap">
+
+                        <button type="button" class="close" aria-label="Close" onclick="CloseDuplicateRecordsPopup()">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                </div>
+
+                <table id="tblInvalidClients" class="display table table-hover table-striped table-bordered">
+
+                    <thead id="tblInvalidClientsHeader">
+                        <tr class="table-active"></tr>
+                            @*<tr class="table-active">
+                
+
+            </tr>*@
+                    </thead>
+                    <tbody id="tblInvalidClientsBody">
+                    </tbody>
+
+                </table>
 
             </div>
         </div>

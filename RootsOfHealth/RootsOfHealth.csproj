@@ -221,6 +221,7 @@
     <Compile Include="Models\FormLogHistoryBO.cs" />
     <Compile Include="Models\FormSchedulingBO.cs" />
     <Compile Include="Models\Form_ScheduleResultBO.cs" />
+    <Compile Include="Models\InvalidClientsDetail.cs" />
     <Compile Include="Models\LocationOfAppointmentBO.cs" />
     <Compile Include="Models\LookUpFieldBO.cs" />
     <Compile Include="Models\LookUpFieldOptionBO.cs" />
