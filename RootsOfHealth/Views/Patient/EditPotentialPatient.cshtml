@@ -3,11 +3,20 @@
     ViewBag.Title = "EditPotentialPatient";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@{
+    var ImportDateString = "";
+    if (Model != null)
+    {
+      
+        ImportDateString = Model.ImportDate != null ? Model.ImportDate.ToString("MM/dd/yyyy") : "";
+    }
+
+}
 <style>
     .showHide {
         display: none;
     }
-   
+
     .ssn-icon {
         position: relative
     }
@@ -35,12 +44,15 @@
         .ssn-icon-eye.showpwd {
             display: none;
         }
+
     #content .inner-content {
         margin-top: 0px !important;
     }
+
     .inner-main-content {
         height: calc(100vh - 180px);
     }
+
     section#content {
         padding: 0px !important;
     }
@@ -1330,11 +1342,77 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                                <div class="form-row-first mt-3">
 
+                                                    <div class="bootom-form-row mb-2">
+                                                        <div class="row">
+                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0">
+                                                                <div class="form-row-first mt-1">
+                                                                    <div class="top-form-row d-flex">
+                                                                        <div class="one-columns">
+                                                                            <label>Data Came From</label>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="bootom-form-row d-flex ">
+                                                                        <div class="one-columns">
+                                                                            <label class="label-fields">@Model.DataCameFrom</label>
+                                                                            <input tabindex="38" type="text" id="txtdataCameFrom" name="dataCameFrom" maxlength="500"
+                                                                                   class="form-control"
+                                                                                   placeholder="" value="@Model.DataCameFrom">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-12 pr-0">
+                                                                <div class="form-row-first mt-1">
+                                                                    <div class="top-form-row d-flex">
+                                                                        <div class="one-columns">
+                                                                            <label>Import Notes</label>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="bootom-form-row d-flex">
+                                                                        <div class="one-columns">
+                                                                            <label class="label-fields">@Model.ImportNotes</label>
+                                                                            <input type="text" id="txtImportNotes" name="ImportNotes"
+                                                                                   class="form-control"
+                                                                                   placeholder="" value="@Model.ImportNotes">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                                                                <div class="form-row-first mt-1">
+                                                                    <div class="top-form-row d-flex">
+                                                                        <div class="one-columns">
+                                                                            <label>Import Date</label>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="bootom-form-row d-flex">
+                                                                        <div class="one-columns">
+                                                                            <label class="label-fields">@Model.ImportDate</label>
+                                                                            <input tabindex="40" type="text" id="ImportDate" name="ImportDate" maxlength="50"
+                                                                                   class="form-control date"
+                                                                                   placeholder="" value="@ImportDateString">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     </div>
 
                                 </div>
-                              
+
                                 <div class="detail-button mt-3 w-100 text-center">
                                     <input type="hidden" name="CreatedDate" />
                                     <input type="hidden" name="ModifiedDate" />
@@ -1410,7 +1488,7 @@
         $("input[type=hidden][name=PatientID]").val(_PatientId);
 
         //------------Profile Start--------------------------------------//
-        
+
         var lblOtherArray = ["Other"];
         var lblRace = $('#lblRace').html();
         if (lblRace == "") {
@@ -1419,7 +1497,7 @@
             $('#OtherRace').show();
         } else {
             var lblRaceArray = lblRace != undefined ? lblRace.split(',') : '';
-           
+
             $("#ddRace").val(lblRaceArray);
 
             $('.selectboxmultiple button[data-id="ddRace"]').find('.filter-option-inner-inner').html(lblRace);
@@ -1427,8 +1505,8 @@
                 $('#OtherRace').show();
             }
         }
-      
-        
+
+
 
         var lblLanguages = $('#lblLanguages').html();
         if (lblLanguages == "") {
@@ -1443,11 +1521,11 @@
                 $('#OtherLanguage').show();
             }
         }
-        
+
         var lblUSArmedForces = $('#lblUSArmedForces').html().toLocaleLowerCase();
         $("input[name=USArmedRadio][value='" + lblUSArmedForces + "']").prop('checked', true);
 
-        
+
 
         var lblEverSmoker = $('#lblEverSmoker').html().toLocaleLowerCase();
         $('#ddSmoker').val('' + lblEverSmoker);
@@ -1457,7 +1535,7 @@
             $('#divLastTimeYouSmoked').show();
         }
 
-        
+
         var lblQuitSmoking = $('#lblQuitSmoking').html().toLocaleLowerCase();
         $('#ddQuit').val('' + lblQuitSmoking);
         if (lblQuitSmoking == "true" && lblEverSmoker == "true") {
@@ -1476,7 +1554,7 @@
         if (lblGender == "Other") {
             $('#divOtherGender').show();
         }
-        
+
         var lblPerAdd = $('#lblPerAdd').html().toLocaleLowerCase();
         $('#ddPermanentAddress').val('' + lblPerAdd);
         if (lblPerAdd == "false") {
@@ -1520,7 +1598,7 @@
 
         $('#ddRace').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
             // do something...
-            
+
             //  var selected = $('#ddRace option:selected').val();
             var divOtherRace = $('#OtherRace');
 
@@ -1888,7 +1966,7 @@
         });
         /*$('.selectboxmultiple').selectpicker();*/
 
-        
+
         var txtChildren = $("#txtChildren").val();
         if (txtChildren != "") {
 
@@ -1926,7 +2004,7 @@
             ChildrenAges();
 
             if (Validation() && validateDOB() && ValidateEmail()) {
-              
+
                 AddDate();
                 $("input[type=hidden][name=CreatedDate]").val(CreatedDate);
                 $("input[type=hidden][name=ModifiedDate]").val(ModifiedDate);
@@ -1934,7 +2012,7 @@
                 $("input[type=hidden][name=PatientChildrensAges]").val(PatientChildrensAges);
                 $("input[type=hidden][name=EverMemberOfUSArmedForces]").val(EverMemberOfUSArmedForces);
                 var selectedracevalues = $("#ddRace").selectpicker().val();
-                
+
                 //if (selectedracevalues.indexOf("Other") != -1 && selectedracevalues.length < 7) {
                 //    RaceEthnicity = [];
 
@@ -1977,7 +2055,7 @@
 
                 //document.getElementById('frmProfile').submit();
                 var formData = $("#frmProfile").serializeObject();
-                
+
                 // console.log(formData);
 
                 $.ajax({
@@ -2013,7 +2091,7 @@
                             $('#txtSSN').val(ssn);
 
                             toastr.success("Record saved successfully");
-                       
+
                             $(".loaderOverlay").hide();
                         }
 
@@ -2036,7 +2114,7 @@
             }
 
         }
-      
+
         function Validation() {
             var check = true;
             if (check == true) {
@@ -2226,7 +2304,7 @@
 
         }
         function ValidateEmail() {
-            
+
             var pattern = /^([a-zA-Z0-9_\.\-])+\@@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
             if (!pattern.test($('#txtEmergencyContact1EmailAddress').val())) {
@@ -2241,7 +2319,7 @@
             if ($('#txtEmergencyContact2EmailAddress').val() != '' && $('#txtEmergencyContact2EmailAddress').val() != null && !pattern.test($('#txtEmergencyContact2EmailAddress').val())) {
                 $('#txtEmergencyContact2EmailAddress').addClass('invalid-field');
                 toastr.error('Email is not in Correct Format');
-               
+
                 return false;
             }
             else {
@@ -2545,7 +2623,7 @@
         }
 
         function ChildrenAges() {
-            
+
             var val = $('#txtChildren').val();
             var result = "";
             // PatientChildrensAges = '';
@@ -2575,7 +2653,7 @@
             }
         }
 
-      
+
         function showSSn() {
             $("#txtSocialSecNo").attr("type", "text");
         }
@@ -2583,7 +2661,7 @@
             $("#txtSocialSecNo").attr("type", "password");
         }
 
-        
+
         function addChildrenDiv() {
             $('.ChildrenAgeDiv').html('');
 

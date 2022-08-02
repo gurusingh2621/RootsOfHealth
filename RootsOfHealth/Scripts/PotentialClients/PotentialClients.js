@@ -4,6 +4,7 @@
 var $PotientialClientModal = $('#PotentialClientFileUpload')
 var $PotentialClientFileUpload = $('#PoteintialClientFileInput')
 var $btnsavepotentialclients = $('#btnsavepotentialclients');
+var $inValidClientsDetails = $('#inValidClientsDetails');
 var filePath = '';
 var $tblPotientialPatient = $('#tblPotientialPatient');
 var summaryElem = $('#summary');
@@ -94,12 +95,22 @@ $btnsavepotentialclients.click(function () {
                 url: '/Client/SavePotentialClientData',
                 type: 'POST',
                 data: formdata,
+                beforeSend: function () {
+                    $(".loaderOverlay").show();
+                },
                 processData: false,
                 contentType: false,
+                cache: false,
                 success: function (data) {
-
-                    if (data.Status === 1) {
-                        ClosePotentialClientModal()
+                    
+                    $(".loaderOverlay").hide();
+                    if (data.Status === 1 && data.InvalidClientsDetailList.length) {
+                        ClosePotentialClientModal();
+                        BindPotentialClientsTable();
+                        showInvalidFields(data.InvalidClientsDetailList, data.tableColumns);
+                    }
+                    else if (data.Status === 1) {
+                        ClosePotentialClientModal();
                         alert(data.Message);
                         BindPotentialClientsTable();
 
@@ -107,6 +118,12 @@ $btnsavepotentialclients.click(function () {
                     } else {
                         alert("Failed to Save Data");
                     }
+                },
+                error: function (e, textStatus, errorMessage) {
+                    alert(errorMessage);
+                    $(".loaderOverlay").hide();
+                    BindPotentialClientsTable();
+                    ClosePotentialClientModal();
                 }
             });
 
@@ -196,12 +213,20 @@ $btnsavepotentialclients.click(function () {
                 url: '/Client/SavePCFromUnorganisedExcel',
                 type: 'POST',
                 data: formdata,
+                beforeSend: function () {
+                    $(".loaderOverlay").show();
+                },
                 processData: false,
                 contentType: false,
                 success: function (data) {
-
-                    if (data.Status === 1) {
-                        ClosePotentialClientModal()
+                    $(".loaderOverlay").hide();
+                    if (data.Status === 1 && data.InvalidClientsDetailList.length) {
+                        ClosePotentialClientModal();
+                        BindPotentialClientsTable();
+                        showInvalidFieldsForUnOrganised(data.InvalidClientsDetailList, data.tableColumns);
+                    }
+                    else if (data.Status === 1) {
+                        ClosePotentialClientModal();
                         alert(data.Message);
                         BindPotentialClientsTable();
 
@@ -209,6 +234,12 @@ $btnsavepotentialclients.click(function () {
                     } else {
                         alert("Failed to Save Data");
                     }
+                },
+                error: function () {
+                    $(".loaderOverlay").hide();
+                    BindPotentialClientsTable();
+                    ClosePotentialClientModal();
+
                 }
             });
 
@@ -216,7 +247,68 @@ $btnsavepotentialclients.click(function () {
 
     }
 });
+function showInvalidFields(data, tableColumns) {
+    var recordshtml = "";
+    var tableHeader = ""
+    for (var i = 0; i < tableColumns.length;i++) {
+        tableHeader += `<th>${tableColumns[i]}</th>`
+    }
+    $('#tblInvalidClientsHeader .table-active').html('').append(tableHeader);
+    
+    for (var i = 1; i <= tableColumns.length; i++) {
+        var items = data.filter(function (el) {
+            return el.RowNumber == i;
+        });
+        var tblrow = "";
+        tblrow  +='<tr>';
+       
+        $.each(items, function (index, item) {
+            tblrow += `<td width="20%"${!item.IsValid ? "style=background-color:#f58888;" : ""}>${item.ColumnValue == null ? "" : item.ColumnValue}</td>`
+        });
+        tblrow += '</tr>';
+        
+        recordshtml += tblrow;
+    }
+   
+        
+    
+    
+    $('#tblInvalidClientsBody').html("").append(recordshtml);
+    $inValidClientsDetails.modal('show');
+}
 
+function showInvalidFieldsForUnOrganised(data, tableColumns) {
+    var recordshtml = "";
+    var tableHeader = ""
+    for (var i = 0; i < tableColumns.length; i++) {
+        tableHeader += `<th>${tableColumns[i]}</th>`
+    }
+    $('#tblInvalidClientsHeader .table-active').html('').append(tableHeader);
+    
+    for (var i = 0; i < tableColumns.length; i++) {
+        var items = data.filter(function (el) {
+            return el.RowNumber == i;
+        });
+        var tblrow = "";
+        tblrow += '<tr>';
+        
+        $.each(items, function (index, item) {
+            tblrow += `<td width="20%"${!item.IsValid ? "style=background-color:#f58888;" : ""}>${item.ColumnValue == null ? "" : item.ColumnValue}</td>`
+        });
+        tblrow += '</tr>';
+
+        recordshtml += tblrow;
+    }
+
+
+
+
+    $('#tblInvalidClientsBody').html("").append(recordshtml);
+    $inValidClientsDetails.modal('show');
+}
+function CloseDuplicateRecordsPopup() {
+    $inValidClientsDetails.modal('hide');
+}
 function ClosePotentialClientModal() {
     $PotientialClientModal.modal('hide');
    

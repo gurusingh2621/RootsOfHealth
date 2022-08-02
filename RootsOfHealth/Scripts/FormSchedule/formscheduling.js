@@ -90,7 +90,7 @@ function GetSchedulePlanTemplateList() {
             _scheduleListTable = $('#tbl_formScheduling').DataTable({
                 paging: false,
                 retrieve: true,
-                "scrollY": "calc(100vh - 380px)",
+                "scrollY": "calc(100vh - 325px)",
                 searching: false,
                 'columnDefs': [{
                     'targets': [6],
@@ -146,7 +146,7 @@ function GetProgramSchedulePlanTemplateList() {
             _programscheduleListTable = $('#tbl_programformScheduling').DataTable({
                 paging: false,
                 retrieve: true,
-                "scrollY": "calc(100vh - 380px)",
+                "scrollY": "calc(100vh - 350px)",
                 searching: false,
                 'columnDefs': [{
                     'targets': [2],
