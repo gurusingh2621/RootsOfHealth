@@ -24,6 +24,7 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using S = DocumentFormat.OpenXml.Spreadsheet.Sheets;
 using E = DocumentFormat.OpenXml.OpenXmlElement;
 using A = DocumentFormat.OpenXml.OpenXmlAttribute;
+using System.Reflection;
 
 namespace RootsOfHealth.Controllers
 {
@@ -2748,6 +2749,8 @@ namespace RootsOfHealth.Controllers
         public ActionResult SavePotentialClientData(string dbfields, string dataCameFrom, string importNotes, string importDate)
         {
             var result = 0;
+            List<InvalidClientsDetail> InvalidClientsDetailList = new List<InvalidClientsDetail>();
+            List<string> headerRow = new List<string>();
             try
             {
                 Dictionary<string, string> dbFields = JsonConvert.DeserializeObject<Dictionary<string, string>>(dbfields);
@@ -2784,8 +2787,8 @@ namespace RootsOfHealth.Controllers
 
                     }
                 }
-                List<InvalidClientsDetail> InvalidClientsDetailList = (List<InvalidClientsDetail>)TempData["InvalidClientsDetailList"];
-                var headerRow = InvalidClientsDetailList.Where(x => x.RowNumber == 1).Select(y=> y.ColumnName).ToList();
+               InvalidClientsDetailList = (List<InvalidClientsDetail>)TempData["InvalidClientsDetailList"];
+                 headerRow = InvalidClientsDetailList.Where(x => x.RowNumber == 1).Select(y=> y.ColumnName).ToList();
                 if (result > 0)
                 {
                     return Json(new { Status = 1, Message = "Data saved Successfully " , InvalidClientsDetailList = InvalidClientsDetailList,tableColumns = headerRow });
@@ -2800,13 +2803,14 @@ namespace RootsOfHealth.Controllers
             catch (Exception ex)
             {
                 new Common().LogExceptionToDb(ex);
-                return Json(new { Status = 0, Message = ex.Message });
+                return Json(new { Status = 0, Message = ex.Message, InvalidClientsDetailList = InvalidClientsDetailList, tableColumns = headerRow });
             }
         }
         public ActionResult SavePCFromUnorganisedExcel(string dbfields, int fileRange, string dataCameFrom, string importNotes, string importDate)
         {
             var result = 0;
             List<InvalidClientsDetail> InvalidClientsDetailList = new List<InvalidClientsDetail>();
+            List<string> headerRow = new List<string>();
             try
             {
                 Dictionary<string, string> databaseFields = JsonConvert.DeserializeObject<Dictionary<string, string>>(dbfields);
@@ -3405,20 +3409,20 @@ namespace RootsOfHealth.Controllers
                     #endregion
 
                 }
-                var headerRow = InvalidClientsDetailList.Where(x => x.RowNumber == 0).Select(y => y.ColumnName).ToList();
+                 headerRow = InvalidClientsDetailList.Where(x => x.RowNumber == 0).Select(y => y.ColumnName).ToList();
                 if (result > 0)
                 {
                     return Json(new { Status = 1, Message = "Data saved Successfully ", InvalidClientsDetailList = InvalidClientsDetailList, tableColumns = headerRow });
                 }
                 else
                 {
-                    return Json(new { Status = 0, Message = "Error Occured " });
+                    return Json(new { Status = 0, Message = "Error Occured ", InvalidClientsDetailList = InvalidClientsDetailList, tableColumns = headerRow });
                 }
             }
             catch (Exception ex)
             {
                 new Common().LogExceptionToDb(ex);
-                return Json(new { Status = 0, Message = ex.Message });
+                return Json(new { Status = 0, Message = ex.Message, InvalidClientsDetailList = InvalidClientsDetailList, tableColumns = headerRow });
             }
         }
         private bool IsRowEmpty(IRow row)
@@ -3740,9 +3744,12 @@ namespace RootsOfHealth.Controllers
                         foreach(string pat in patientages)
                         {
                             var age = pat.Split(stringSeparators);
-
-                            resul += age[0] + ":" + age[1] + ",";
-                            childrencounter++;
+                            if (age.Length > 1)
+                            {
+                                resul += age[0] + ":" + age[1] + ",";
+                                childrencounter++;
+                            }
+                            
                         }
                         value = resul;
                         currentPatient.PatientChildren = childrencounter;
@@ -3885,9 +3892,11 @@ namespace RootsOfHealth.Controllers
                 currentPatient.ImportNotes = importNotes;
                 currentPatient.ImportDate = importDate;
 
-              
 
-                allowedPatientList.Add(currentPatient);
+                if (CheckObjectHasValue(currentPatient))
+                {
+                    allowedPatientList.Add(currentPatient);
+                }
             }
             int savedCount=0;
             #endregion
@@ -4226,9 +4235,13 @@ namespace RootsOfHealth.Controllers
                         foreach (string pat in patientages)
                         {
                             var age = pat.Split(stringSeparators);
-
-                            resul += age[0] + ":" + age[1] + ",";
-                            childrencounter++;
+                            if (age.Length > 1)
+                            {
+                                resul += age[0] + ":" + age[1] + ",";
+                                childrencounter++;
+                            }
+                            
+                            
                         }
                         value = resul;
                         currentPatient.PatientChildren = childrencounter;
@@ -4370,8 +4383,11 @@ namespace RootsOfHealth.Controllers
                 currentPatient.DataCameFrom = dataCameFrom;
                 currentPatient.ImportNotes = importNotes;
                 currentPatient.ImportDate = importDate;
-
-                allowedPatientList.Add(currentPatient);
+                if (CheckObjectHasValue(currentPatient))
+                {
+                    allowedPatientList.Add(currentPatient);
+                }
+              
             }
             int savedCount = 0;
             #endregion
@@ -4641,6 +4657,21 @@ namespace RootsOfHealth.Controllers
             }
 
             return Json(duplicateresult, JsonRequestBehavior.AllowGet);
+        }
+        bool CheckObjectHasValue(object obj)
+        {
+            foreach (PropertyInfo pi in obj.GetType().GetProperties())
+            {
+                if (pi.PropertyType == typeof(string))
+                {
+                    string value = (string)pi.GetValue(obj);
+                    if (!string.IsNullOrEmpty(value) && pi.Name.ToLower() != "datacamefrom" && pi.Name.ToLower() != "importnotes")
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     }
 }
