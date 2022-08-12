@@ -102,9 +102,9 @@ $btnsavepotentialclients.click(function () {
                 contentType: false,
                 cache: false,
                 success: function (data) {
-                    
+                    clearInputFields();
                     $(".loaderOverlay").hide();
-                    if (data.Status === 1 && data.InvalidClientsDetailList.length) {
+                    if (data.Status === 1 && data.showPopup==true && data.InvalidClientsDetailList.length) {
                         ClosePotentialClientModal();
                         BindPotentialClientsTable();
                         showInvalidFields(data.InvalidClientsDetailList, data.tableColumns);
@@ -219,8 +219,9 @@ $btnsavepotentialclients.click(function () {
                 processData: false,
                 contentType: false,
                 success: function (data) {
+                    clearInputFields();
                     $(".loaderOverlay").hide();
-                    if (data.Status === 1 && data.InvalidClientsDetailList.length) {
+                    if (data.Status === 1 && data.showPopup == true && data.InvalidClientsDetailList.length) {
                         ClosePotentialClientModal();
                         BindPotentialClientsTable();
                         showInvalidFieldsForUnOrganised(data.InvalidClientsDetailList, data.tableColumns);
@@ -247,6 +248,10 @@ $btnsavepotentialclients.click(function () {
 
     }
 });
+
+function clearInputFields() {
+    $('.div_newcolumns .form-control').val('');
+}
 function showInvalidFields(data, tableColumns) {
     var recordshtml = "";
     var tableHeader = ""

@@ -2789,13 +2789,15 @@ namespace RootsOfHealth.Controllers
                 }
                InvalidClientsDetailList = (List<InvalidClientsDetail>)TempData["InvalidClientsDetailList"];
                  headerRow = InvalidClientsDetailList.Where(x => x.RowNumber == 1).Select(y=> y.ColumnName).ToList();
+                var InvalidList = InvalidClientsDetailList.Where(y => y.IsValid == false);
+                var showPopup = InvalidList.Count() > 0;
                 if (result > 0)
                 {
-                    return Json(new { Status = 1, Message = "Data saved Successfully " , InvalidClientsDetailList = InvalidClientsDetailList,tableColumns = headerRow });
+                    return Json(new { Status = 1, showPopup= showPopup, Message = "Data saved Successfully " , InvalidClientsDetailList = InvalidClientsDetailList,tableColumns = headerRow });
                 }
                 else
                 {
-                    return Json(new { Status = 0, Message = "Error Occured " });
+                    return Json(new { Status = 0, showPopup= showPopup, Message = "Error Occured ",InvalidClientsDetailList = InvalidClientsDetailList, tableColumns = headerRow });
                 }
 
 
@@ -3410,13 +3412,15 @@ namespace RootsOfHealth.Controllers
 
                 }
                  headerRow = InvalidClientsDetailList.Where(x => x.RowNumber == 0).Select(y => y.ColumnName).ToList();
+                var InvalidList = InvalidClientsDetailList.Where(y => y.IsValid == false);
+                var showPopup = InvalidList.Count() > 0;
                 if (result > 0)
                 {
-                    return Json(new { Status = 1, Message = "Data saved Successfully ", InvalidClientsDetailList = InvalidClientsDetailList, tableColumns = headerRow });
+                    return Json(new { Status = 1,showPopUp = showPopup, Message = "Data saved Successfully ", InvalidClientsDetailList = InvalidClientsDetailList, tableColumns = headerRow });
                 }
                 else
                 {
-                    return Json(new { Status = 0, Message = "Error Occured ", InvalidClientsDetailList = InvalidClientsDetailList, tableColumns = headerRow });
+                    return Json(new { Status = 0, showPopup= showPopup, Message = "Error Occured ", InvalidClientsDetailList = InvalidClientsDetailList, tableColumns = headerRow });
                 }
             }
             catch (Exception ex)
