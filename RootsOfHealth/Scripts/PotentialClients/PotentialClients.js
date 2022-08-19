@@ -37,37 +37,20 @@ $btnsavepotentialclients.click(function () {
 
         var isddlvalid = true;
         var selectedfileFields = [];
-        $('.dllFileFields').each(function (k, v) {
-            
-            var ddlvalue = $(v).val();
-            if (ddlvalue != null && ddlvalue != "" && $.trim(selectedfileFields.indexOf(ddlvalue)) != -1) {
+        $('.fileandDbFields').each(function () {
+            var dbElm = $(this).find('.dllFileFields');
+            var ddlvalue = dbElm.val();
+            if (ddlvalue != null && ddlvalue != "" && ddlvalue != "Not Assigned" && $.trim(selectedfileFields.indexOf(ddlvalue)) != -1) {
                 isddlvalid = false;
                 alert('same field is selected multiple times');
-                $(v).focus();
+                dbElm.focus();
                 return false;
             } else {
                 selectedfileFields.push(ddlvalue);
             }
 
         });
-        if ($('#FirstName').val() == '' || $('#FirstName').val() == null) {
-            isddlvalid = false;
-            alert('Please select any field for First Name');
-            $('#FirstName').focus();
-            return false;
-        }
-        if ($('#LastName').val() == '' || $('#LastName').val() == null) {
-            isddlvalid = false;
-            alert('Please select any field for Last Name ');
-            $('#LastName').focus();
-            return false;
-        }
-        if ($('#EmailAddress').val() == '' || $('#EmailAddress').val() == null) {
-            isddlvalid = false;
-            alert('Please select any field for Email Address');
-            $('#EmailAddress').focus();
-            return false;
-        }
+        
        
         if (!isddlvalid) {
             return false;
@@ -79,13 +62,20 @@ $btnsavepotentialclients.click(function () {
             var formdata = new FormData();
             formdata.append('file', files[0]);
             var dbfields = {};
+            $('.fileandDbFields').each(function (i) {
+                var ele = $(this);
+                var fileEle = ele.find('.DatabaseFields');
+                var dbEle = ele.find('.dllFileFields');
+                if (dbEle.val() !="Not Assigned") {
 
-            $("#dbandFileFields select").each(function () {
-                var hh = $(this);
-                var name = hh.attr('id');
-                dbfields[name] = hh.val();
-            });
-
+                    var value = dbEle.val().split("(");
+                    var name = GetDatabaseValue(value[0].trim());
+                    var selectedValue = fileEle.html();
+                    dbfields[name] = selectedValue;
+                }
+                
+            })
+          
             formdata.append("dbfields", JSON.stringify( dbfields ));
             formdata.append("dataCameFrom", dataCameFrom);
             formdata.append("importNotes", importNotes);
@@ -105,25 +95,26 @@ $btnsavepotentialclients.click(function () {
                     clearInputFields();
                     $(".loaderOverlay").hide();
                     if (data.Status === 1 && data.showPopup==true && data.InvalidClientsDetailList.length) {
-                        ClosePotentialClientModal();
+                        ClosePotentialClientModal(false);
                         BindPotentialClientsTable();
                         showInvalidFields(data.InvalidClientsDetailList, data.tableColumns);
                     }
                     else if (data.Status === 1) {
-                        ClosePotentialClientModal();
+                        ClosePotentialClientModal(false);
                         alert(data.Message);
                         BindPotentialClientsTable();
 
 
                     } else {
                         alert("Failed to Save Data");
+                        ClosePotentialClientModal(false);
                     }
                 },
                 error: function (e, textStatus, errorMessage) {
                     alert(errorMessage);
                     $(".loaderOverlay").hide();
                     BindPotentialClientsTable();
-                    ClosePotentialClientModal();
+                    ClosePotentialClientModal(false);
                 }
             });
 
@@ -221,13 +212,13 @@ $btnsavepotentialclients.click(function () {
                 success: function (data) {
                     clearInputFields();
                     $(".loaderOverlay").hide();
-                    if (data.Status === 1 && data.showPopup == true && data.InvalidClientsDetailList.length) {
+                    if (data.Status === 1 && data.InvalidClientsDetailList.length) {
                         ClosePotentialClientModal();
                         BindPotentialClientsTable();
                         showInvalidFieldsForUnOrganised(data.InvalidClientsDetailList, data.tableColumns);
                     }
                     else if (data.Status === 1) {
-                        ClosePotentialClientModal();
+                        ClosePotentialClientModal(false);
                         alert(data.Message);
                         BindPotentialClientsTable();
 
@@ -239,7 +230,7 @@ $btnsavepotentialclients.click(function () {
                 error: function () {
                     $(".loaderOverlay").hide();
                     BindPotentialClientsTable();
-                    ClosePotentialClientModal();
+                    ClosePotentialClientModal(false);
 
                 }
             });
@@ -248,10 +239,6 @@ $btnsavepotentialclients.click(function () {
 
     }
 });
-
-function clearInputFields() {
-    $('.div_newcolumns .form-control').val('');
-}
 function showInvalidFields(data, tableColumns) {
     var recordshtml = "";
     var tableHeader = ""
@@ -314,14 +301,176 @@ function showInvalidFieldsForUnOrganised(data, tableColumns) {
 function CloseDuplicateRecordsPopup() {
     $inValidClientsDetails.modal('hide');
 }
-function ClosePotentialClientModal() {
-    $PotientialClientModal.modal('hide');
-   
-    $PotentialClientFileUpload.wrap('<form>').closest(
-        'form').get(0).reset();
-    $PotentialClientFileUpload.unwrap();
+function clearInputFields() {
+    $('.div_newcolumns .form-control').val('');
 }
+function ClosePotentialClientModal(showAlert) {
+    
+    if (showAlert && showAlert != undefined) {
+        if (confirm("Are you sure! you want to close popup")) {
+            $PotientialClientModal.modal('hide');
 
+            $PotentialClientFileUpload.wrap('<form>').closest(
+                'form').get(0).reset();
+            $PotentialClientFileUpload.unwrap();
+        }
+    }
+    else {
+        $PotientialClientModal.modal('hide');
+
+        $PotentialClientFileUpload.wrap('<form>').closest(
+            'form').get(0).reset();
+        $PotentialClientFileUpload.unwrap();
+    }
+    clearInputFields();
+}
+function GetDatabaseValue(colName) {
+    var columnName = "";
+    if (colName != '' && colName != null && colName != "Not Assigned") {
+        switch (colName) {
+            case "First Name":
+                columnName = "FirstName";
+                break;
+            case "Last Name":
+                columnName = "LastName";
+                break;
+            case "Middle Name":
+                columnName = "MiddleName";
+                break;
+            case "Which gender do you identify as":
+                columnName = "Gender";
+                break; 
+            case "Date Of Birth":
+                columnName = "DateOfBirth";
+                break;
+            case "Social Security Number":
+                columnName = "SocialSecurityNumber";
+                break;
+            case "Race/Ethnicity":
+                columnName = "RaceEthnicity";
+                break;
+            case "Is Permanent Address":
+                columnName = "IsPermanentAddress";
+                break;
+            case "Permanent Address":
+                columnName = "PermanentAddress";
+                break;
+            case "Email Address":
+                columnName = "EmailAddress";
+                break;
+            case "Home Phone":
+                columnName = "HomePhone";
+                break;
+            case "Cell Phone":
+                columnName = "CellPhone";
+                break;
+            case "Best way to contact you":
+                columnName =  "WayToContact";
+                break;
+            case "Patient Children":
+                columnName = "PatientChildren";
+                break;
+            case "Patient Childrens Ages":
+                columnName = "PatientChildrensAges";
+                break;
+            case "Children Under 18":
+                columnName = "ChildrenUnder18";
+                break;
+            case "Adults 18-65":
+                columnName = "Adults18to65";
+                break;
+            case "Adults 65+":
+                columnName = "Adults65Plus";
+                break;
+            case "Preferred Pharmacy Name":
+                columnName = "PreferredPharmacyName";
+                break;
+            case "Preferred Pharmacy Location":
+                columnName = "PreferredPharmacyLocation";
+                break;
+            case "Are you now or were you ever a member of the U.S. Armed Forces?":
+                columnName = "EverMemberOfUSArmedForces";
+                break;
+            case "Marital Status":
+                columnName = "MaritalStatus";
+                break;
+            case "Which languages do you speak comfortably?":
+                columnName = "LanguagesSpeak";
+                break;
+            case "Have you ever been a smoker":
+                columnName =  "EverBeenSmoker";
+                break;
+            case "Have you Quit?":
+                columnName =  "QuitSmoking";
+                break;
+            case "Quit Date":
+                columnName =  "SmokingQuitDate";
+                break;
+            case "What are your preferred pronouns":
+                columnName =  "PreferredPronouns";
+                break;
+            case "Do you think of yourself as":
+                columnName =  "ThinkYourselfAs";
+                break;
+            case "Emergency Contact1 Name":
+                columnName = "EmergencyContact1Name";
+                break;
+            case "Emergency Contact1 Address":
+                columnName = "EmergencyContact1Address";
+                break;
+            case "Emergency Contact1 Email Address":
+                columnName = "EmergencyContact1EmailAddress";
+                break;
+            case "Emergency Contact1 Relationship":
+                columnName = "EmergencyContact1Relationship";
+                break;
+            case "Emergency Contact2 Name":
+                columnName = "EmergencyContact2Name";
+                break;
+            case "Emergency Contact2 Address":
+                columnName = "EmergencyContact2Address";
+                break;
+            case "Emergency Contact2 Email Address":
+                columnName = "EmergencyContact2EmailAddress";
+                break;
+            case "Emergency Contact2 Relationship":
+                columnName = "EmergencyContact2Relationship";
+                break;
+            case "When was the last time you smoked?":
+                columnName =  "LastTimeYouSmoked";
+                break;
+            case "Emergency Contact1 City":
+                columnName = "EmergencyContact1City";
+                break;
+            case "Emergency Contact1 State":
+                columnName = "EmergencyContact1State";
+                break;
+            case "Emergency Contact1 Zip":
+                columnName = "EmergencyContact1Zip";
+                break;
+            case "Emergency Contact2 City":
+                columnName = "EmergencyContact2City";
+                break;
+            case "Emergency Contact2 State":
+                columnName = "EmergencyContact2State";
+                break;
+            case "Emergency Contact2 Zip":
+                columnName = "EmergencyContact2Zip";
+                break;
+            case "Local Medical Record Number":
+                columnName = "LocalMedicalRecordNumber";
+                break;
+            case "Amd Medical Record Number":
+                columnName = "AmdMedicalRecordNumber";
+                break;
+            default:
+                columnName = colName;
+                break;
+
+        }
+        return columnName;
+    }
+}
 $PotentialClientFileUpload.change(function (e) {
     $(".loaderOverlay").show();
     var files = e.target.files;
@@ -343,7 +492,7 @@ $PotentialClientFileUpload.change(function (e) {
                     var ddlExcelTypeValue = $('#ddlExcelType').val();
                     if (res) {
                         summaryElem.find('#totalRecords span').html(res.totalRecords);
-                        TotalFileColumns = res.databaseColumns.length
+                        TotalFileColumns = res.filecolumns.length
                         summaryElem.find('#spanTotalCols').html(TotalFileColumns);
                         if (ddlExcelTypeValue == "organised")
                         {
@@ -565,166 +714,175 @@ function AppendColumnsLists(result) {
         var fileResult = result.filecolumns;
         var databaseResult = result.databaseColumns;
     $PotientialClientModal.find('#dbandFileFields').html('');
-    $PotientialClientModal.find('#dbandFileFields').append('<div class="row"><div class="col-md-6 colTitle">Target (Roots)</div><div class="col-md-6 colTitle">Source(Import File)</div></div>');
-    for (let i = 0; i < databaseResult.length; i++) {
-        var columnName = "";
-        switch (databaseResult[i].ColName) {
-            case "FirstName":
-                columnName = "First Name";
-                break;
-            case "LastName":
-                columnName = "Last Name";
-                break;
-            case "MiddleName":
-                columnName = "Middle Name";
-                break;
-            case "Gender":
-                columnName = "Which gender do you identify as";
-                break;
-            case "DateOfBirth":
-                columnName = "Date Of Birth";
-                break;
-            case "SocialSecurityNumber":
-                columnName = "Social Security Number";
-                break;
-            case "RaceEthnicity":
-                columnName = "Race/Ethnicity";
-                break;
-            case "IsPermanentAddress":
-                columnName = "Is Permanent Address";
-                break;
-            case "PermanentAddress":
-                columnName = "Permanent Address";
-                break;
-            case "EmailAddress":
-                columnName = "Email Address";
-                break;
-            case "HomePhone":
-                columnName = "Home Phone";
-                break;
-            case "CellPhone":
-                columnName = "Cell Phone";
-                break;
-            case "WayToContact":
-                columnName = "Best way to contact you";
-                break;
-            case "PatientChildren":
-                columnName = "Patient Children";
-                break;
-            case "PatientChildrensAges":
-                columnName = "Patient Childrens Ages";
-                break;
-            case "ChildrenUnder18":
-                columnName = "Children Under 18";
-                break;
-            case "Adults18to65":
-                columnName = "Adults 18-65";
-                break;
-            case "Adults65Plus":
-                columnName = "Adults 65+";
-                break;
-            case "PreferredPharmacyName":
-                columnName = "Preferred Pharmacy Name";
-                break;
-            case "PreferredPharmacyLocation":
-                columnName = "Preferred Pharmacy Location";
-                break;
-            case "EverMemberOfUSArmedForces":
-                columnName = "Are you now or were you ever a member of the U.S. Armed Forces?";
-                break;
-            case "MaritalStatus":
-                columnName = "Marital Status";
-                break;
-            case "LanguagesSpeak":
-                columnName = "Which languages do you speak comfortably?";
-                break;
-            case "EverBeenSmoker":
-                columnName = "Have you ever been a smoker";
-                break;
-            case "QuitSmoking":
-                columnName = "Have you Quit?";
-                break;
-            case "SmokingQuitDate":
-                columnName = "Quit Date";
-                break;
-            case "PreferredPronouns":
-                columnName = "What are your preferred pronouns";
-                break;
-            case "ThinkYourselfAs":
-                columnName = "Do you think of yourself as";
-                break;
-            case "EmergencyContact1Name":
-                columnName = "Emergency Contact1 Name";
-                break;
-            case "EmergencyContact1Address":
-                columnName = "Emergency Contact1 Address";
-                break;
-            case "EmergencyContact1EmailAddress":
-                columnName = "Emergency Contact1 Email Address";
-                break;
-            case "EmergencyContact1Relationship":
-                columnName = "Emergency Contact1 Relationship";
-                break;
-            case "EmergencyContact2Name":
-                columnName = "Emergency Contact2 Name";
-                break;
-            case "EmergencyContact2Address":
-                columnName = "Emergency Contact2 Address";
-                break;
-            case "EmergencyContact2EmailAddress":
-                columnName = "Emergency Contact2 Email Address";
-                break;
-            case "EmergencyContact2Relationship":
-                columnName = "Emergency Contact2 Relationship";
-                break;
-            case "LastTimeYouSmoked":
-                columnName = "When was the last time you smoked?";
-                break;
-            case "EmergencyContact1City":
-                columnName = "Emergency Contact1 City";
-                break;
-            case "EmergencyContact1State":
-                columnName = "Emergency Contact1 State";
-                break;
-            case "EmergencyContact1Zip":
-                columnName = "Emergency Contact1 Zip";
-                break;
-            case "EmergencyContact2City":
-                columnName = "Emergency Contact2 City";
-                break;
-            case "EmergencyContact2State":
-                columnName = "Emergency Contact2 State";
-                break;
-            case "EmergencyContact2Zip":
-                columnName = "Emergency Contact2 Zip";
-                break;
-            case "LocalMedicalRecordNumber":
-                columnName = "Local Medical Record Number";
-                break;
-            case "AmdMedicalRecordNumber":
-                columnName = "Amd Medical Record Number";
-                break;
-            default:
-                columnName = databaseResult[i].ColName;
-                break;
-
-        }
-        var html = `<div class="row">`
-        if (databaseResult[i].ColType == 'int' || databaseResult[i].ColType == 'bit') {
-            html += `<div class="col-md-6"><div class="DatabaseFields">${columnName} ( ${databaseResult[i].ColType == "bit" ? "Boolean" : "Number"})</div></div>`
-          } else {
-            html += `<div class="col-md-6"><div class="DatabaseFields">${columnName} (character( ${databaseResult[i].ColLength == -1 ? "max" : databaseResult[i].ColLength}))</div></div>`
-        }
+    $PotientialClientModal.find('#dbandFileFields').append('<div class="row"><div class="col-md-6 colTitle">Source(Import File)</div><div class="col-md-6 colTitle">Target (Roots)</div></div>');
+    for (let i = 0; i < fileResult.length; i++) {
+       
+        var html = `<div class="row fileandDbFields">`
+        html += `<div class="col-md-6"><div class="DatabaseFields">${fileResult[i]}</div></div>`;
         html += `<div id="getFileFields_${i}" class="col-md-6 FileFields"></div></div> `
+        
         $PotientialClientModal.find('#dbandFileFields').append(html);
 
         // append dropdowns start
-        var ddl = $("<select></select>").attr("id", databaseResult[i].ColName).attr("name", databaseResult[i].ColName).attr("class", "form-control dllFileFields").attr("columntype", databaseResult[i].ColType);
+        var ddl = $("<select></select>").attr("id", fileResult[i]).attr("name", fileResult[i]).attr("class", "form-control dllFileFields").attr("columntype", databaseResult[i].ColType);
         ddl.append("<option>Not Assigned</option>");
-        $.each(fileResult, function (index, el) {
-            ddl.append("<option>" + el + "</option>");
+        var ddlvalue = "";
+        $.each(databaseResult, function (index, el) {
+            var columnName = "";
+           
+            switch (el.ColName) {
+                case "FirstName":
+                    columnName = "First Name";
+                    break;
+                case "LastName":
+                    columnName = "Last Name";
+                    break;
+                case "MiddleName":
+                    columnName = "Middle Name";
+                    break;
+                case "Gender":
+                    columnName = "Which gender do you identify as";
+                    break;
+                case "DateOfBirth":
+                    columnName = "Date Of Birth";
+                    break;
+                case "SocialSecurityNumber":
+                    columnName = "Social Security Number";
+                    break;
+                case "RaceEthnicity":
+                    columnName = "Race/Ethnicity";
+                    break;
+                case "IsPermanentAddress":
+                    columnName = "Is Permanent Address";
+                    break;
+                case "PermanentAddress":
+                    columnName = "Permanent Address";
+                    break;
+                case "EmailAddress":
+                    columnName = "Email Address";
+                    break;
+                case "HomePhone":
+                    columnName = "Home Phone";
+                    break;
+                case "CellPhone":
+                    columnName = "Cell Phone";
+                    break;
+                case "WayToContact":
+                    columnName = "Best way to contact you";
+                    break;
+                case "PatientChildren":
+                    columnName = "Patient Children";
+                    break;
+                case "PatientChildrensAges":
+                    columnName = "Patient Childrens Ages";
+                    break;
+                case "ChildrenUnder18":
+                    columnName = "Children Under 18";
+                    break;
+                case "Adults18to65":
+                    columnName = "Adults 18-65";
+                    break;
+                case "Adults65Plus":
+                    columnName = "Adults 65+";
+                    break;
+                case "PreferredPharmacyName":
+                    columnName = "Preferred Pharmacy Name";
+                    break;
+                case "PreferredPharmacyLocation":
+                    columnName = "Preferred Pharmacy Location";
+                    break;
+                case "EverMemberOfUSArmedForces":
+                    columnName = "Are you now or were you ever a member of the U.S. Armed Forces?";
+                    break;
+                case "MaritalStatus":
+                    columnName = "Marital Status";
+                    break;
+                case "LanguagesSpeak":
+                    columnName = "Which languages do you speak comfortably?";
+                    break;
+                case "EverBeenSmoker":
+                    columnName = "Have you ever been a smoker";
+                    break;
+                case "QuitSmoking":
+                    columnName = "Have you Quit?";
+                    break;
+                case "SmokingQuitDate":
+                    columnName = "Quit Date";
+                    break;
+                case "PreferredPronouns":
+                    columnName = "What are your preferred pronouns";
+                    break;
+                case "ThinkYourselfAs":
+                    columnName = "Do you think of yourself as";
+                    break;
+                case "EmergencyContact1Name":
+                    columnName = "Emergency Contact1 Name";
+                    break;
+                case "EmergencyContact1Address":
+                    columnName = "Emergency Contact1 Address";
+                    break;
+                case "EmergencyContact1EmailAddress":
+                    columnName = "Emergency Contact1 Email Address";
+                    break;
+                case "EmergencyContact1Relationship":
+                    columnName = "Emergency Contact1 Relationship";
+                    break;
+                case "EmergencyContact2Name":
+                    columnName = "Emergency Contact2 Name";
+                    break;
+                case "EmergencyContact2Address":
+                    columnName = "Emergency Contact2 Address";
+                    break;
+                case "EmergencyContact2EmailAddress":
+                    columnName = "Emergency Contact2 Email Address";
+                    break;
+                case "EmergencyContact2Relationship":
+                    columnName = "Emergency Contact2 Relationship";
+                    break;
+                case "LastTimeYouSmoked":
+                    columnName = "When was the last time you smoked?";
+                    break;
+                case "EmergencyContact1City":
+                    columnName = "Emergency Contact1 City";
+                    break;
+                case "EmergencyContact1State":
+                    columnName = "Emergency Contact1 State";
+                    break;
+                case "EmergencyContact1Zip":
+                    columnName = "Emergency Contact1 Zip";
+                    break;
+                case "EmergencyContact2City":
+                    columnName = "Emergency Contact2 City";
+                    break;
+                case "EmergencyContact2State":
+                    columnName = "Emergency Contact2 State";
+                    break;
+                case "EmergencyContact2Zip":
+                    columnName = "Emergency Contact2 Zip";
+                    break;
+                case "LocalMedicalRecordNumber":
+                    columnName = "Local Medical Record Number";
+                    break;
+                case "AmdMedicalRecordNumber":
+                    columnName = "Amd Medical Record Number";
+                    break;
+                default:
+                    columnName = el.ColName;
+                    break;
+
+            }
+            var ddlOption = "";
+            if (el.ColType == 'int' || el.ColType == 'bit') {
+                ddlOption += `${columnName} ( ${el.ColType == "bit" ? "Boolean" : "Number"})`
+            } else {
+                ddlOption += `${columnName} (character( ${el.ColLength == -1 ? "max" : el.ColLength}))`
+            }
+            if (index == i) {
+                ddlvalue = ddlOption;
+            }
+            ddl.append("<option key='" + el.ColName +"'>" + ddlOption + "</option>");
         });
-        ddl.val(fileResult[i]);
+        ddl.val(ddlvalue);
         $PotientialClientModal.find('#getFileFields_' + i).append(ddl);
            // append dropdowns end
     }

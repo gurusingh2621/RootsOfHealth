@@ -3495,7 +3495,7 @@ namespace RootsOfHealth.Controllers
             for (int i = sheet.FirstRowNum + 1; i <= sheet.LastRowNum; i++)
             {
                 var currentRow = sheet.GetRow(i);
-                if (IsRowEmpty(currentRow))
+                if (IsRowEmpty(currentRow) || currentRow.Cells.All(d => d.CellType == NPOI.SS.UserModel.CellType.Blank))
                 {
                     // skip empty rows
                     continue;
@@ -3988,7 +3988,7 @@ namespace RootsOfHealth.Controllers
             for (int i = sheet.FirstRowNum + 1; i <= sheet.LastRowNum; i++)
             {
                 var currentRow = sheet.GetRow(i);
-                if (IsRowEmpty(currentRow))
+                if (IsRowEmpty(currentRow) || currentRow.Cells.All(d => d.CellType == NPOI.SS.UserModel.CellType.Blank))
                 {
                     // skip empty rows
                     continue;
