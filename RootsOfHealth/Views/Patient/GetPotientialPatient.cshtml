@@ -214,7 +214,10 @@
     #inValidClientsDetails .modal-dialog {
         max-width: 750px;
     }
-    
+    table#tblInvalidClients {
+        overflow: scroll;
+        height: calc(100vh - 303px);
+    }
 </style>
 <section id="content" class="responsive-container">
     <div class="inner-content mt-0">
@@ -263,7 +266,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="PotentialClientFileUpload" tabindex="-1" role="dialog" aria-labelledby="PotentialClientFiletitle" aria-hidden="true">
+    <div class="modal fade" id="PotentialClientFileUpload" tabindex="-1" role="dialog" aria-labelledby="PotentialClientFiletitle" aria-hidden="true" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-dialog-centered preview-modal" role="document">
             <div class="modal-content" style="height:90%">
                 <div class="modal-header preview-header flex-wrap">
@@ -274,7 +277,7 @@
                         </button>
 
 
-                        <button type="button" class="close" aria-label="Close" onclick="ClosePotentialClientModal()">
+                        <button type="button" class="close" aria-label="Close" onclick="ClosePotentialClientModal(true)">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
