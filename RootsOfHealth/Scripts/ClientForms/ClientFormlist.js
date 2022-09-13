@@ -95,24 +95,24 @@ function GetProgramTemplateList() {
 
                     } else {
                         if (canEditClientForm == 'True') {
-                            programs += `<a href="javascript:void(0)" onclick="ProceedProgram({TemplateID:${data.TemplateID},TemplateTable:\'${data.TemplateTable}\',FormName:\'${data.FormName}\',ClientFormID:${data.ClientFormID},IsBaseTemplate:${data.IsBaseTemplate}})"  class="btn btn-success text-white" style="cursor: pointer; ${data.Isactivated == true ? "display:none;" : ""} ">MODIFY</a>`
+                            programs += `<a href="javascript:void(0)" onclick="ProceedProgram({TemplateID:${data.TemplateID},TemplateTable:\'${data.TemplateTable}\',FormName:\'${data.FormName}\',ClientFormID:${data.ClientFormID},IsBaseTemplate:${data.IsBaseTemplate}})"  class="btn btn-success text-white" style="cursor: pointer; ${(data.Isactivated == true && data.FormName.toLowerCase() !="main form") ? "display:none;" : ""} ">MODIFY</a>`
                         }
                     }
 
-                    if (data.IsActive == 1 && data.IsBaseTemplate == false && canEditClientForm == 'True') {
+                    if (data.IsActive == 1 && data.IsBaseTemplate == false && canEditClientForm == 'True' && data.FormName.toLowerCase() != "main form") {
                         if (data.Isactivated == true) {
                             programs += `<a href="javascript:void(0)"  onclick="SetTemplateStatus(${data.TemplateID},${false})"  class="btn btn-success text-white" style="cursor:pointer;">DEACTIVATE</a>`;
                         } else if (data.Isactivated == 0) {
                             programs += `<a href="javascript:void(0)" onclick="SetTemplateStatus(${data.TemplateID},${true})"  class="btn btn-success text-white" style="cursor:pointer;">ACTIVATE</a>`;
                         }
-                    } else if (data.IsActive == 0 && data.IsBaseTemplate == false && canEditClientForm == 'True') {
+                    } else if (data.IsActive == 0 && data.IsBaseTemplate == false && canEditClientForm == 'True' && data.FormName.toLowerCase() != "main form") {
                         programs += `<a href="javascript:void(0)" onclick="alertInprogressStatus()"  class="btn btn-success text-white" style="cursor:pointer;">ACTIVATE</a>`;
                     }
 
-                    if (!data.IsBaseTemplate && canDeleteClientForm == 'True') {
+                    if (!data.IsBaseTemplate && canDeleteClientForm == 'True' && data.FormName.toLowerCase() != "main form") {
                         programs += `<a href="javascript:void(0)" onclick="DeleteProgram(${data.ClientFormID},this)"  class="btn btn-success text-white" style="cursor:pointer;">Delete</a>`;
                     }
-                    if (!data.IsBaseTemplate && data.IsActive == 1 && canEditClientForm == 'True') {
+                    if (!data.IsBaseTemplate && data.IsActive == 1 && canEditClientForm == 'True' && data.FormName.toLowerCase() != "main form") {
                         programs += `<a href="javascript:void(0)" onclick="SetStatus(${data.ClientFormID})"  class="btn btn-success text-white" style="cursor:pointer;">Manage Status</a>`;
                     }
 

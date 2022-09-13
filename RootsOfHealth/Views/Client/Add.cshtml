@@ -263,6 +263,31 @@
         ul.clientInfo li {
             padding: 0 15px;
         }
+    #clientMainFormDetail .frmbtn {
+        border: 1px solid #e2e2e2;
+        padding: 10px;
+        position: relative;
+        margin: 0 0 10px 0;
+    }
+
+        #clientMainFormDetail .frmbtn .form-group label:first-child {
+            background: #f0f0f0;
+            display: block;
+            margin: -11px -11px 10px;
+            padding: 4px 10px;
+            font-size: 14px;
+            color: #343434;
+            font-weight: 500;
+            line-height: normal;
+            vertical-align: middle;
+        }
+
+        #clientMainFormDetail .frmbtn .form-group label span.desc {
+            display: block;
+            margin: 3px 0 0;
+            color: #777;
+            font-weight: normal;
+        }
 </style>
 <!-- Content start here -->
 <section id="content" class="responsive-container ">
@@ -541,7 +566,10 @@
         var ShortDate = "";
         var OneYouAre = "";
         var isprofilesave = false;
-
+        var _mainFormtemplateId = "";
+        var _mainFormtemplatetable = "";
+        var _ClientMainFormID = "";
+        var _isMainFormSaved = false;
         var modeldetail ="";
 
         var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]'
@@ -1148,9 +1176,231 @@
 
 
         }
+        function LoadClientMainForm() {
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/GetClientMainFormIdByFormName',
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                async: false,
+                success: function (result) {
+                    
+                    if (result != null && result != '') {
+                        _ClientMainFormID = result;
+                        LoadClientMainFormTemplate(result);
+                    }
+
+                }
+
+            });
+        }
+        function LoadClientMainFormTemplate(ClientFormId) {
+            
+            $.ajax({
+                type: "GET",
+                url: '/Client/GetClientFormTemplateByClientFormId?ClientFormId=' + ClientFormId,
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                beforeSend: function () {
+                    $(".loaderOverlay").css('display', 'flex');
+                },
+                async: true,
+                success: function (result) {
+                    var formElem = $('#clientMainFormDetail');
+                    
+                    if (result.html == "") {
+                        toastr.error("No template found");
+                    } else {
+                        _mainFormtemplateId = result.TemplateId;
+                        _mainFormtemplatetable = result.tableName;
+                        formElem.html("").append(result.html);
+
+                        //if ($('#clientMainFormDetail').find(".basecontentarea").length > 0) {
+                        //    getClientFormHeaderAndFooter();
+
+                        //}
+                        getClientMainFormBasicFormValue(ClientFormId, _mainFormtemplateId)
+                        formElem.find(".event-btn-right").remove();
+                        formElem.find(".ck-editor-header").remove();
+                        formElem.find(".question-container").parent().css("border", "none");
+                        formElem.find(".dragresize").find(".question-container").remove();
+                        formElem.find(".dragresize").find(".bootom-form-row").css({ "padding": "7px 0px", "margin": "0" });
+                        formElem.find(".html-content").prev().css("display", "none");
+
+
+                        $("textarea.program-control,textarea.base-control").summernote({
+                            toolbar: [
+                                ['para', ['ul', 'ol', 'paragraph']],
+                                ['style', ['bold', 'italic', 'underline', 'clear']],
+                                ['font', ['strikethrough', 'superscript', 'subscript']],
+                            ],
+                            placeholder: "Type here",
+                            callbacks: {
+                                onChange: function () {
+                                    $('#Profile').find('#ProfileSave').removeClass('disabled').css({ 'border': '1px solid rgb(34, 186, 160)', 'background-color': 'rgb(34, 186, 160)' })
+                                },
+                                onInit: function (e) {
+                                    this.placeholder
+                                        ? e.editingArea.find(".note-placeholder").html(this.placeholder)
+                                        : e.editingArea.remove(".note-placeholder")
+                                }
+                            },
+                            height: 150,
+                        });
+                        //toogleProgramToolTip();
+
+                       
+
+                    }
+                    $(".loaderOverlay").hide();
+                },
+                error: function (e) {
+                    toastr.error("Unexpected error!");
+                    $(".loaderOverlay").hide();
+                }
+            });
+        }
+        function getMainFormBaseFieldData(formElem) {
+
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/getClientFormbasefieldbypatientid?Patientid=' + _PatientId,
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                async: false,
+                success: function (result) {
+                    if (result.length) {
+                        var baseFields = result[0];
+                        var value = "";
+                        formElem.find(".form-control.base-control,input.custom-control-input").each(function (index, item) {
+                            if ($(item).is("input")) {
+                                switch ($(item).attr("type")) {
+                                    case "radio":
+                                    case "checkbox":
+
+                                        if ($(item).hasAttr("data-column")) {
+                                            if ($(item).closest("div.inputContent").parent().hasClass("base-control")) {
+                                                value = baseFields[$(item).attr("data-column")];
+                                                if (value == null || value == "" || value == undefined) {
+                                                    $(item).closest("div.inputContent").find("label.label-base").html("").show();
+                                                    $(item).closest("div.inputContent").find("div").first().hide();
+                                                } else {
+                                                    var valueArr = value.split(SeperationString);
+                                                    var valueTxt = "";
+                                                    for (var i = 0; i < valueArr.length; i++) {
+                                                        valueTxt += $(item).closest("div.inputContent").find(`input[value="${valueArr[i]}"]`).next().text() + ", ";
+                                                    }
+
+                                                    valueTxt = valueTxt.slice(0, -2);
+                                                    $(item).closest("div.inputContent").find("label.label-base").html("").append(valueTxt).show();
+                                                    $(item).closest("div.inputContent").find("div").first().hide();
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case "file":
+
+                                        getClientFormBaseFilesReadonly($(item).attr("id"));
+                                        $(item).hide();
+
+                                        break;
+                                    default:
+
+                                        value = baseFields[$(item).attr("data-column")];
+
+                                        $(item).next().html("").append(value).show();
+                                        $(item).hide();
+
+                                        break;
+                                }
+                            }
+                            if ($(item).is("select")) {
+                                value = baseFields[$(item).attr("data-column")];
+
+                                if (value == 0) {
+                                    value = '';
+                                }
+                                else {
+                                    value = $(item).find(`option[value=${value}]`).text();
+                                }
+                                $(item).next().html("").append(value).show();
+                                $(item).hide();
+
+                            }
+                            if ($(item).hasClass("priority")) {
+                                value = baseFields[$(item).attr("data-column")];
+                                var splitvalues = value.split(SeperationString);
+
+                                var result = '';
+
+                                for (let i = 0; i < splitvalues.length; i++) {
+                                    if ($(item).find('li[value="' + splitvalues[i] + '"]')) {
+                                        result += $(item).find('li[value="' + splitvalues[i] + '"]')[0].outerHTML;
+                                    }
+
+                                }
+                                if (result.length > 0) {
+                                    $(item).html(result);
+                                }
+                            }
+                            if ($(item).is("textarea")) {
+                                value = baseFields[$(item).attr("data-column")];
+
+                                $(item).parent().find("label.label-base").html("").append(value).show();
+                                $(item).next().hide();
+
+                            }
+                        });
+                    }
+                },
+                error: function (e) {
+                    toastr.error("Unexpected error!");
+                    $(".loaderOverlay").hide();
+                }
+            });
+        }
+        function getClientFormBaseFilesReadonly(Id) {
+
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/getClientFormbasefilesbypatientid?PatientId=' + _patientID + '&controlid=' + Id,
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                async: false,
+                success: function (result) {
+                    if (result != "" && result != null) {
+
+                        var filesArr = result.Files.split(',');
+                        var namesArr = result.FileNames.split(',');
+                        var selectedFiles = `<ul class="file_uploaded_list onlylinkslist">`;
+                        var ext = "";
+                        for (var i = 0; i < filesArr.length; i++) {
+                            ext = filesArr[i].split('.').pop();
+                            switch (ext) {
+                                case "png":
+                                case "jpg":
+                                case "jpeg":
+                                    selectedFiles += '<li><img style="max-width: 90px;margin-right: 10px;" src="/' + programUploadedPath + filesArr[i] + '" alt="Care Plan Upload"><span><a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></span></li>';
+                                    break;
+                                default:
+                                    selectedFiles += '<li><a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></li>';
+                                    break;
+                            }
+
+                        }
+                        selectedFiles += `</ul>`;
+                        $('#clientMainFormDetail').find('#' + Id).next().next().html("").append(selectedFiles);
+                    }
+                }, error: function (e) {
+                    toastr.error("Unexpected error!");
+                    $(".loaderOverlay").hide();
+                }
+            });
+        }
         $(document).ready(function () {
 
             ShowPatientInfo(_PatientName, _PatientEmail)
+            LoadClientMainForm();
             var currenttab = '@ViewBag.CurrentTab';
             var currentSubtab = '@ViewBag.CurrentSubtab'
 
@@ -3716,7 +3966,7 @@
         Radio();
         ChildrenAges();
 
-        if (Validation() && validateDOB()) {
+        if (Validation() && validateDOB() && ValidateMainForm()) {
 
             AddDate();
             $("input[type=hidden][name=CreatedDate]").val(CreatedDate);
@@ -3827,6 +4077,7 @@
                         $('#FoodAccess-tab').attr("data-toggle", "tab");
                         $('#FoodAccess-tab').removeClass("disabled-li1");
                         isprofilesave = true;
+                        saveClientMainFormBasicInfo();
                         $(".loaderOverlay").hide();
                     }
 
@@ -4847,7 +5098,7 @@
                     var _templateID = item.attr("data-TemplateID");
                     $('.btnprogramPrint').addClass('d-none')
 
-
+                    
 
                     if (_IsSaved == 'False') {
                         LoadClientFormTemplate(ClientFormID)
@@ -4979,7 +5230,6 @@
         function LoadClientFormTemplate(ClientFormID) {
             var _ClientFormID = ClientFormID;
 
-
             $.ajax({
                 type: "GET",
                 url: '/Client/GetClientFormTemplateByClientFormId?ClientFormId=' + _ClientFormID,
@@ -4990,7 +5240,7 @@
                 },
                 async: true,
                 success: function (result) {
-
+                    
                     if (result.html == "") {
                         toastr.error("No template found");
                     } else {
@@ -5104,7 +5354,6 @@
         var IsBasedataExist = false;
 
         function EditClientForm(ClientFormID, TemplateID) {
-
             getClientFormBasicFormHtml(ClientFormID, TemplateID)
 
         }
@@ -5241,7 +5490,7 @@
                 dataType: "json",
                 async: false,
                 success: function (result) {
-
+                    
                     if (result.length) {
                         var fields = result[0];
                         var value = "";
@@ -5620,6 +5869,7 @@
         }
         ///Save
         function saveClientFormBasicInfo(_templateId, _templatetable, ClientFormID) {
+            
             var _Saved = $('#' + formName + 'only').find('.btnprogramsave').attr('data-save');
             var fieldmodel = [];
             var isvalid = true;
@@ -5819,7 +6069,318 @@
             });
 
         }
+        function ValidateMainForm() {
+            var isvalid = true;
+            var _mainFormElement = $('#clientMainFormDetail');
+            _mainFormElement.find(".base-control,.program-control,input.custom-control-input").each(function (index, item) {
+                if ($(item).is("input") && $(item).hasAttr("data-column")) {
+                    switch ($(item).attr("type")) {
+                        case "radio":
+                        case "checkbox":
+                            if ($(item).closest(".inputContent").prev().hasClass("required-asterisk") && $(item).closest("div.inputContent").find("input:checked").length == 0) {
+                                isvalid = false;
+                            }
+                            break;
+                        case "file":
+                            if ($(item).closest(".inputContent").prev().hasClass("required-asterisk")) {
+                                if ($(item).next().next().find("input").length == 0) {
+                                    isvalid = false;
+                                }
+                            }
+                            break;
+                        default:
+                            if ($(item).closest(".inputContent").prev().hasClass("required-asterisk") && $(item).val().trim() == "") {
+                                isvalid = false;
+                            }
+                            break;
 
+                    }
+                }
+
+                if ($(item).is("select") && $(item).hasAttr("data-column") && ($(item).val().trim() == "" || $(item).val() == "0")) {
+                    if ($(item).closest(".inputContent").prev().hasClass("required-asterisk")) {
+                        isvalid = false;
+                    }
+                }
+                if ($(item).is("textarea") && $(item).hasAttr("data-column")) {
+                    if ($(item).closest(".inputContent").prev().hasClass("required-asterisk") && $(item).summernote("isEmpty")) {
+                        isvalid = false;
+                    }
+                }
+
+            });
+            if (!isvalid) {
+                toastr.error("Field marked with asterisk(*) are mandatory");
+                return;
+            }
+            if (_mainFormElement.find("input[type='file']").length) {
+                _mainFormElement.find("input[type='file']").each(function (index, item) {
+                    if ($(item).hasAttr("data-column")) {
+                        if ($(item).hasClass("program-control") || $(item).hasClass("base-control")) {
+                            var res = validateFiles($(item).attr("id"));
+                            if (res == false) {
+                                return false;
+                            }
+                        }
+                    }
+                });
+            }
+            //if (_mainFormElement.find("input.invaild-input").length) {
+            //    return false;
+            //}
+            return isvalid;
+        }
+        function saveClientMainFormBasicInfo() {
+            $.ajax({
+                type: "GET",
+                url: '/Client/GetClientMainFormDetail/?PatientID=' + _PatientId + '&formId=' + _ClientMainFormID,
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                async: false,
+                success: function (result) {
+                    var res = result.data[0];
+                    _isMainFormSaved = res.Saved;
+
+                },
+                error: function () {
+
+                }
+
+            });
+            var _mainFormElement = $('#clientMainFormDetail');
+            
+            var _Saved = _isMainFormSaved;
+            if (_isMainFormSaved == "True" || _isMainFormSaved == "False") {
+                _isMainFormSaved = (_isMainFormSaved == "True") ? true : false
+            }
+    
+            var fieldmodel = [];
+           
+            fieldmodel.push({ ColumnName: "PatientID", FieldValue: _PatientId });
+            fieldmodel.push({ ColumnName: "TemplateID", FieldValue: _mainFormtemplateId });
+            fieldmodel.push({ ColumnName: "ClientFormID", FieldValue: _ClientMainFormID });
+            if (_Saved == 'False') {
+                fieldmodel.push({ ColumnName: "CreatedBy", FieldValue: _userID });
+                fieldmodel.push({ ColumnName: "CreatedDate", FieldValue: getActualFullDate() });
+            }
+            fieldmodel.push({ ColumnName: "ModifiedBy", FieldValue: _userID });
+            fieldmodel.push({ ColumnName: "ModifiedDate", FieldValue: getActualFullDate() });
+            if (_mainFormElement.find(".base-control").length) {
+                fieldmodel.push({ ColumnName: "BaseTemplateID", FieldValue: basetemplateid });
+            }
+
+
+            _mainFormElement.find("[type=text],[type=number],[type=file],[type=date]").each(function (index, item) {
+                if ($(item).hasAttr("data-column") && $(item).val() != "" && $(item).hasClass("program-control")) {
+                    fieldmodel.push({ ColumnName: $(item).attr("data-column"), FieldValue: $(item).val() });
+                }
+            });
+            _mainFormElement.find("select").each(function (index, item) {
+                if ($(item).hasAttr("data-column") && $(item).val() != "" && $(item).hasClass("program-control")) {
+                    fieldmodel.push({ ColumnName: $(item).attr("data-column"), FieldValue: $(item).val() });
+                }
+            });
+            _mainFormElement.find(".priority").each(function (index, item) {
+
+                if ($(item).hasAttr("data-column") && $(item).hasClass("program-control")) {
+                    var id = $(item).attr("id")
+
+                    var strvalue = ''
+                    $.each($('#' + id + ' li'), function () {
+                        strvalue += $(this).attr('value') + SeperationString
+                    });
+
+                    strvalue = strvalue.substr(0, strvalue.length - SeperationString.length)
+                    fieldmodel.push({ ColumnName: $(item).attr("data-column"), FieldValue: strvalue });
+                }
+            });
+            _mainFormElement.find("[type=checkbox], [type=radio]").each(function (index, item) {
+                var selectedValues = ''
+                if ($(item).hasAttr("data-column") && $(item).closest(".form-group").hasClass("program-control")) {
+                    selectedValues = $.map($(item).closest("div.inputContent").find("input:checked"), function (n, i) {
+                        return n.value;
+                    }).join(SeperationString);
+                    fieldmodel.push({ ColumnName: $(item).attr("data-column"), FieldValue: selectedValues });
+                }
+
+            });
+            _mainFormElement.find("textarea").each(function (index, item) {
+                if ($(item).hasAttr("data-column") && $(item).val() != "" && $(item).hasClass("program-control")) {
+                    fieldmodel.push({ ColumnName: $(item).attr("data-column"), FieldValue: $(item).val() });
+                }
+            });
+
+            var model = {
+                ClientFormID: _ClientMainFormID,
+                TableName: _mainFormtemplatetable,
+                ClientFormCols: fieldmodel,
+                PatientID: _PatientId,
+                IsUpdated: _isMainFormSaved
+            }
+            $(".loaderOverlay").show();
+            $.ajax({
+                type: "POST",
+                url: Apipath + '/api/PatientMain/saveClientFormbasicinfo',
+                contentType: 'application/json; charset=UTF-8',
+                data: JSON.stringify(model),
+                dataType: "json",
+                success: function (res) {
+                    if (_mainFormElement.find(".base-control").length) {
+                        saveClientFormBaseFieldInfo(_ClientMainFormID, _mainFormtemplateId, _Saved);
+
+                    } else {
+                        LoadSchedulingAfterSave();
+                    }
+
+                    $(".basic-info-actions").hide();
+                    if (intervalStatus != "") {
+                        clearInterval(intervalStatus);
+                    }
+                    if (_mainFormElement.find("input[type='file']").length) {
+                        _mainFormElement.find("input[type='file']").each(function (index, item) {
+                            if ($(item).hasAttr("data-column")) {
+                                if ($(item).hasClass("program-control") || $(item).hasClass("base-control")) {
+
+                                    switch (index) {
+                                        case 0:
+                                            uploadClientFormFiles($(item).attr("id"), fileDataP1, _ClientMainFormID);
+                                            break;
+                                        case 1:
+                                            uploadClientFormFiles($(item).attr("id"), fileDataP2, _ClientMainFormID);
+                                            break;
+                                        case 2:
+                                            uploadClientFormFiles($(item).attr("id"), fileDataP3, _ClientMainFormID);
+                                            break;
+                                        case 3:
+                                            uploadClientFormFiles($(item).attr("id"), fileDataP4, _ClientMainFormID);
+                                            break;
+                                        case 4:
+                                            uploadClientFormFiles($(item).attr("id"), fileDataP5, _ClientMainFormID);
+                                            break;
+                                        case 5:
+                                            uploadClientFormFiles($(item).attr("id"), fileDataP6, _ClientMainFormID);
+                                            break;
+                                        case 6:
+                                            uploadClientFormFiles($(item).attr("id"), fileDataP7, _ClientMainFormID);
+                                            break;
+                                        case 7:
+                                            uploadClientFormFiles($(item).attr("id"), fileDataP8, _ClientMainFormID);
+                                            break;
+                                        case 8:
+                                            uploadClientFormFiles($(item).attr("id"), fileDataP9, _ClientMainFormID);
+                                            break;
+                                        case 9:
+                                            uploadClientFormFiles($(item).attr("id"), fileDataP10, _ClientMainFormID);
+                                            break;
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    clearProgramFileData();
+
+                    $('#' + formName + 'only').find('.btnprogramsave').attr('data-save', 'True');
+                    $('#a' + formName).find('.check').removeClass('d-none')
+
+                },
+                error: function (e) {
+                    toastr.error("Unexpected error!");
+                    $(".loaderOverlay").hide();
+                },
+                complete: function () {
+
+                }
+            });
+
+        }
+        function getClientMainFormBasicFormValue(ClientFormID, templateid) {
+            var formEle = $('#clientMainFormDetail');
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/getfieldvaluebyClientFormid?ClientFormID=' + ClientFormID + "&TemplateId=" + templateid + "&PatientId=" + _PatientId,
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                async: false,
+                success: function (result) {
+                    if (result.length) {
+                        var fields = result[0];
+                        var value = "";
+                        formEle.find(".program-control,input.custom-control-input").each(function (index, item) {
+                            if ($(item).is("input")) {
+                                switch ($(item).attr("type")) {
+                                    case "radio":
+                                    case "checkbox":
+                                        if ($(item).hasAttr("data-column") && $(item).closest("div.inputContent").parent().hasClass("program-control")) {
+                                            value = fields[$(item).attr("data-column")];
+
+                                            if (value == null || value == "") {
+
+                                            } else {
+
+                                                var valueArr = value.split(SeperationString);
+                                                var valueTxt = "";
+
+                                                for (var i = 0; i < valueArr.length; i++) {
+                                                    $(item).closest("div.inputContent").find(`input[value="${valueArr[i]}"]`).prop("checked", true);
+                                                }
+
+                                            }
+                                        }
+                                        break;
+                                    case "file":
+                                        getClientFormModuleFiles(ClientFormID, $(item).attr("id"));
+
+                                        break;
+                                    default:
+
+                                        value = fields[$(item).attr("data-column")];
+
+                                        item.value = value;
+
+                                        break;
+                                }
+                            }
+                            if ($(item).is("select")) {
+                                value = fields[$(item).attr("data-column")];
+
+                                item.value = value;
+
+                            }
+                            if ($(item).hasClass("priority")) {
+
+                                value = fields[$(item).attr("data-column")];
+                                var splitvalues = (value != "" && value != undefined) ? value.split(SeperationString) : "";
+
+                                var result = '';
+
+                                for (let i = 0; i < splitvalues.length; i++) {
+                                    if ($(item).find('li[value="' + splitvalues[i] + '"]')) {
+                                        result += $(item).find('li[value="' + splitvalues[i] + '"]')[0].outerHTML;
+                                    }
+
+
+                                }
+                                if (result.length > 0) {
+                                    $(item).html(result);
+                                }
+                            }
+                            if ($(item).is("textarea")) {
+                                value = fields[$(item).attr("data-column")];
+
+                                $(item).summernote('code', value);
+
+                            }
+                        });
+                    }
+                    if (formEle.find(".basecontentarea").length > 0) {
+                        getClientFormBaseFieldData();
+                    }
+                }, error: function (e) {
+                    toastr.error("Unexpected error!");
+                    $(".loaderOverlay").hide();
+                }
+            });
+        }
         function saveClientFormBaseFieldInfo(ClientFormID, _templateId, _Saved) {
 
             var fieldmodel = [];
@@ -7060,10 +7621,10 @@
 
 
         $('#Profile').find('input').on('input change', function () {
-
+            
             $('#Profile').find('#ProfileSave').removeClass('disabled').css({ 'border': '1px solid rgb(34, 186, 160)', 'background-color':'rgb(34, 186, 160)'})
         })
-
+        
 
         $('#Profile').find('select').on('change', function () {
             $('#Profile').find('#ProfileSave').removeClass('disabled').css({ 'border': '1px solid rgb(34, 186, 160)', 'background-color': 'rgb(34, 186, 160)' })
