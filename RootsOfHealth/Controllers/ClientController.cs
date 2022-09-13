@@ -2087,7 +2087,8 @@ namespace RootsOfHealth.Controllers
                 {
                     html = gethtml,
                     IsActive = data.IsActive,
-                    Isactivated = data.Isactivated
+                    Isactivated = data.Isactivated,
+                    isMainForm = data.TemplateTable.Contains("MainForm")
                 };
                 return Json(jsonResult, JsonRequestBehavior.AllowGet);
             }
@@ -4676,6 +4677,32 @@ namespace RootsOfHealth.Controllers
                 }
             }
             return false;
+        }
+        public ActionResult GetClientMainFormDetail(string PatientID , int formId)
+        {
+            List<ClientFormForPatientBO> clientForm = new List<ClientFormForPatientBO>();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                //HTTP GET
+                var responseTask = client.GetAsync("/api/PatientMain/GetMainFormDetail?patientId=" + PatientID+ "&formId=" + formId);
+                responseTask.Wait();
+                var result = responseTask.Result;
+
+                if (result.IsSuccessStatusCode)
+                {
+
+                    var readTask = result.Content.ReadAsAsync<List<ClientFormForPatientBO>>();
+                    readTask.Wait();
+                    clientForm = readTask.Result;
+
+                }
+
+            }
+            return Json(new
+            {
+             data = clientForm
+            },JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -3,7 +3,7 @@ var newid = "";
 var connect = '#droppable';
 var parentFormID = "";
 $(function () {
-
+    
     if (sessionStorage.getItem("Id") === null) {
         GetFormHtmlById(templateId);
     }
@@ -2464,9 +2464,9 @@ function GetFormHtmlById(Id) {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
-            if (result.Isactivated && isModify == 'True') {
+            if (result.Isactivated && isModify == 'True' && (result.isMainForm == "false" || result.isMainForm =="False")) {
                 $("#droppable").html("");
-                toastr.error("", "Deactiavte this template to modify.", { progressBar: true });
+                toastr.error("", "Deactivate this template to modify.", { progressBar: true });
                 setTimeout(function () { window.location.href = '/Client/ClientsFormList'; }, 2000);
                 return;
             }
