@@ -1543,30 +1543,35 @@
         }
 
         //------------Profile Start--------------------------------------//
+            
+            if (_PatientId != 0) {
+                var lblOtherArray = ["Other"];
+                var lblRace = $('#lblRace').html();
+                if (lblRace == "") {
+                    $("#ddRace").val(lblOtherArray);
+                    $('.selectboxmultiple button[data-id="ddRace"]').find('.filter-option-inner-inner').html("Other");
+                    $('#OtherRace').show();
+                } else {
+                    var lblRaceArray = lblRace != undefined ? lblRace.split(',') : '';
+                    $("#ddRace").val(lblRaceArray);
+                    $('.selectboxmultiple button[data-id="ddRace"]').find('.filter-option-inner-inner').html(lblRace);
+                }
 
-            var lblOtherArray = ["Other"];
-            var lblRace = $('#lblRace').html();
-            if (lblRace == "") {
-                $("#ddRace").val(lblOtherArray);
-                $('.selectboxmultiple button[data-id="ddRace"]').find('.filter-option-inner-inner').html("Other");
-                $('#OtherRace').show();
-            } else {
-                var lblRaceArray = lblRace != undefined ? lblRace.split(',') : '';
-                $("#ddRace").val(lblRaceArray);
-                $('.selectboxmultiple button[data-id="ddRace"]').find('.filter-option-inner-inner').html(lblRace);
+
+                var lblLanguages = $('#lblLanguages').html();
+                if (lblLanguages == "") {
+                    $("#ddLanguages").val(lblOtherArray);
+                    $('.selectboxmultiple button[data-id="ddLanguages"]').find('.filter-option-inner-inner').html("Other");
+                    $('#OtherLanguage').show();
+                } else {
+                    var lblLanguagesArray = lblLanguages != undefined ? lblLanguages.split(',') : '';
+                    $("#ddLanguages").val(lblLanguagesArray);
+                    $('.selectboxmultiple button[data-id="ddLanguages"]').find('.filter-option-inner-inner').html(lblLanguages);
+                }
             }
-
-
-            var lblLanguages = $('#lblLanguages').html();
-            if (lblLanguages == "") {
-                $("#ddLanguages").val(lblOtherArray);
-                $('.selectboxmultiple button[data-id="ddLanguages"]').find('.filter-option-inner-inner').html("Other");
-                $('#OtherLanguage').show();
-            } else {
-                var lblLanguagesArray = lblLanguages != undefined ? lblLanguages.split(',') : '';
-                $("#ddLanguages").val(lblLanguagesArray);
-                $('.selectboxmultiple button[data-id="ddLanguages"]').find('.filter-option-inner-inner').html(lblLanguages);
-            }
+           
+          
+            
 
         var lblUSArmedForces = $('#lblUSArmedForces').html().toLocaleLowerCase();
         $("input[name=USArmedRadio][value='"+lblUSArmedForces+"']").prop('checked', true);
@@ -5715,8 +5720,12 @@
                             selectedFiles += '<a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a><span onclick="removeClientFormUpload(this)" class="removeUploadFile"><i class="fa fa-times"></i></span></li>';
                         }
                         selectedFiles += "</ul>";
-
-                        _programelement.find("#" + Id).next().next().html("").append(selectedFiles);
+                        if (_programelement == undefined || _programelement == "") {
+                            $('#clientMainFormDetail').find("#" + Id).next().next().html("").append(selectedFiles);
+                        } else {
+                            _programelement.find("#" + Id).next().next().html("").append(selectedFiles);
+                        }
+                       
                     }
                 }, error: function (e) {
                     toastr.error("Unexpected error!");
@@ -5724,10 +5733,12 @@
                 }
             });
         }
-
         function previewOnfileChange(obj) {
             if (obj.files.length) {
                 var fileData;
+                if (_programelement == undefined || _programelement == "") {
+                    _programelement = $('#clientMainFormDetail');
+                }
                 if (_programelement.find("input[type='file']").length) {
                     _programelement.find("input[type='file']").each(function (index, item) {
                         if ($(item).hasClass("program-control") || $(item).hasClass("base-control")) {

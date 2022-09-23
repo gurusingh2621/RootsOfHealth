@@ -152,7 +152,8 @@ function DeleteCarePlanTemplate(_programId, button) {
                             }
                             else if (result.status == 1) {
                                 toastr.success("", "Deleted successfully", { progressBar: true });
-                                _careplanListTable.row(btn.parents('tr')).remove().draw();
+                                /* _careplanListTable.row(btn.parents('tr')).remove().draw();*/
+                                GetCarePlanTemplateList()
                                 getPrograms();
                             }
                         }

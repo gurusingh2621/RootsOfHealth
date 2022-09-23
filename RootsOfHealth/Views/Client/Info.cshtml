@@ -302,7 +302,7 @@
         })
 
     });
-
+         
         $('#menu-toggle').click(function () {
             $(this).toggleClass('open');
             if ($("#menu-toggle").hasClass("open")) {
@@ -522,13 +522,13 @@
                     if (result != null && result != '') {
                         LoadClientMainFormTemplate(result);
                     }
-                  
+
                 }
 
             });
         }
         function LoadClientMainFormTemplate(ClientFormId) {
-            
+
             $.ajax({
                 type: "GET",
                 url: '/Client/GetClientFormTemplateByClientFormId?ClientFormId=' + ClientFormId,
@@ -540,7 +540,7 @@
                 async: true,
                 success: function (result) {
                     var formElem = $('#clientMainFormDetail');
-                    
+
                     if (result.html == "") {
                         toastr.error("No template found");
                     } else {
@@ -549,7 +549,7 @@
                         formElem.html("").append(result.html);
 
                         formElem.html("").append(result.html);
-                        
+
                         //tableName = result.tableName;
                         //templateid = result.TemplateId;
 
@@ -564,7 +564,7 @@
                         formElem.find(".dragresize").find(".question-container").remove();
                         formElem.find(".dragresize").find(".bootom-form-row").css({ "padding": "7px 0px", "margin": "0" });
                         formElem.find(".html-content").prev().css("display", "none");
-                       
+
 
                         $("textarea.program-control,textarea.base-control").summernote({
                             toolbar: [
@@ -586,8 +586,8 @@
 
 
                         makeMainFormBasicInfoReadonly(formElem)
-                        
-                        
+
+
                     }
                     $(".loaderOverlay").hide();
                 },
@@ -598,10 +598,10 @@
             });
         }
         function makeMainFormBasicInfoReadonly(formElem) {
-           
+
 
             var value = "";
-            
+
             formElem.find(".program-control,.base-control").each(function (index, item) {
                 if ($(item).is("div")) {
                     var selectedValues = $.map($(item).find("input:checked"), function (n, i) {
@@ -817,7 +817,7 @@
                 dataType: "json",
                 async: false,
                 success: function (result) {
-                    
+
                     if (result.length) {
                         var fields = result[0];
                         var value = "";
@@ -844,7 +844,7 @@
                                         }
                                         break;
                                     case "file":
-                                        getClientFormModuleFiles(ClientFormID, $(item).attr("id"));
+                                        getClientMainFormModuleFiles(ClientFormID, $(item).attr("id"));
 
                                         break;
                                     default:
@@ -890,6 +890,35 @@
                     }
                     if (formEle.find(".basecontentarea").length > 0) {
                         getClientFormBaseFieldData();
+                    }
+                }, error: function (e) {
+                    toastr.error("Unexpected error!");
+                    $(".loaderOverlay").hide();
+                }
+            });
+        }
+        function getClientMainFormModuleFiles(ClientFormID, Id) {
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/getfilesbyClientFormid?ClientFormID=' + ClientFormID + '&controlid=' + Id + '&patientid=' + _PatientId,
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                async: false,
+                success: function (result) {
+
+                    if (result != "" && result != null) {
+                        var filesArr = result.Files.split(',');
+                        var namesArr = result.FileNames.split(',');
+                        var selectedFiles = "";
+
+                        selectedFiles = `<div class="label">File Names</div><ul class="file_uploaded_list file_uploaded_inputs">`;
+                        for (var i = 0; i < filesArr.length; i++) {
+                            selectedFiles += `<li><input class="form-control" data-file="${filesArr[i]}" placeholder="Enter file name here" type="text" value="${namesArr[i]}"/>`
+                            selectedFiles += '<a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a><span onclick="removeClientFormUpload(this)" class="removeUploadFile"><i class="fa fa-times"></i></span></li>';
+                        }
+                        selectedFiles += "</ul>";
+
+                        $('#clientMainFormDetail').find("#" + Id).next().next().html("").append(selectedFiles);
                     }
                 }, error: function (e) {
                     toastr.error("Unexpected error!");

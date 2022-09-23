@@ -183,6 +183,14 @@
 
         $('#btnaddprogram').addClass('d-none')
 
+    if (@Model.Programs.Count > 0)
+    {
+       $("#programtbs").show();
+    }
+    else
+    {
+      $("#programtbs").hide();
+    }
 
 
     $('#datepicker').datepicker({

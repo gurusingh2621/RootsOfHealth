@@ -1898,7 +1898,8 @@ function saveTemplate(isactive) {
         IsActive: isactive,
         CreatedBy: userId,
         ModifiedBy: userId,
-        TemplateTable: templateTable
+        TemplateTable: templateTable,
+        NeedApproval: $('#checkbox-needApproval').prop("checked")
     };
     $(".loaderOverlay").css("display", "flex");
     $.ajax({
@@ -2032,6 +2033,9 @@ function GetFormHtmlById(Id) {
             }
             if (result.IsActive && isModify == 'True') {
                 $("#checkbox-finalize").prop("checked", true).attr("disabled","disabled");
+            }
+            if (result.NeedApproval) {
+                $("#checkbox-needApproval").prop("checked", true);
             }
             toogleToolTip();
             $(".loaderOverlay").hide();

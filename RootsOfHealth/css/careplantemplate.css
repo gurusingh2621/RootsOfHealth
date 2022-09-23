@@ -999,7 +999,9 @@ span.needDesc {
 span.finializewrap {
     padding: 5px 10px;
 }
-
+span.needApprovalewrap {
+    padding: 5px 0px 0px 15px;
+}
     span.finializewrap .custom-control-label::after, span.finializewrap .custom-control-label::before {
         left: 4px !important;
     }

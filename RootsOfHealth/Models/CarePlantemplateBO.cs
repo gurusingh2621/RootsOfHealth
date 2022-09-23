@@ -25,6 +25,7 @@ namespace RootsOfHealth.Models
         public bool IsBaseTemplate { get; set; }
         [NotMapped]
         public bool IsModify { get; set; }
+        public Nullable<bool> NeedApproval { get; set; }
 
     }
 }
