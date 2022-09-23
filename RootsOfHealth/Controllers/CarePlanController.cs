@@ -196,7 +196,8 @@ namespace RootsOfHealth.Controllers
                 {
                     html = gethtml,
                     IsActive=data.IsActive,
-                    Isactivated = data.Isactivated
+                    Isactivated = data.Isactivated,
+                    NeedApproval = data.NeedApproval
                 };
                 return Json(jsonResult, JsonRequestBehavior.AllowGet);
             }

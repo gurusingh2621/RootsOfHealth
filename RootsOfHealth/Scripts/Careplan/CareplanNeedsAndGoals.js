@@ -13,6 +13,7 @@ var needGoalEnum = {
     InProgress: 1,
     Completed:2
 }
+var isApprovalRequired=true;
 $(".txtNeed").keypress(function (event) {
     var keycode = event.keyCode || event.which;
     if (keycode == '13' && !event.shiftKey) {
@@ -1575,8 +1576,9 @@ function GetOutcomes(obj) {
     }
 }
 function UpdateNeedStatus() {
+    CareplanRequiredApproval();
     
-    if (IsUserCarePlanApprover == 'False') {
+    if (IsUserCarePlanApprover == 'False' && (isApprovalRequired == 'True' || isApprovalRequired == true)) {
         var changedStatus = $(".ddlStatus").val()
         if (needStatus == '0' && (changedStatus == "1" || changedStatus == "2")) {
             if (changedStatus == '1') {
@@ -1714,9 +1716,29 @@ function isUserCarePlanApprover() {
 
 
 }
+function CareplanRequiredApproval() {
+    $.ajax({
+        type: "get",
+        url: Apipath + '/api/PatientMain/isApprovalRequired?careplanId=' + careplanid,
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        async:false,
+        success: function (res) {
+            isApprovalRequired = res;
+
+        },
+        error: function () {
+            toastr.error("Unexpected error!");
+            $(".loaderOverlay").hide();
+        }
+    });
+}
 function UpdateGoalStatus() {
+    
+    CareplanRequiredApproval();
     var changedStatus = $(".ddlStatus").val()
-    if (IsUserCarePlanApprover == 'False') {
+  
+    if (IsUserCarePlanApprover == 'False' && (isApprovalRequired == 'True' || isApprovalRequired == true)) {
         if (goalStatus == '0' && (changedStatus == "1" || changedStatus == "2")) {
             if (changedStatus == '1') {
                 toastr.error("Status can't be changed to In progress")
@@ -1743,6 +1765,7 @@ function UpdateGoalStatus() {
         ModifiedBy: userId,
         CarePlanId: careplanid
     }
+   
     $.ajax({
         type: "POST",
         url: Apipath + '/api/PatientMain/updategoalstatus',

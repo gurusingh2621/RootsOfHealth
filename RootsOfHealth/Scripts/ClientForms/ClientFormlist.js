@@ -194,7 +194,8 @@ function DeleteProgram(ClientFormID, button) {
                             }
                             else if (result.DeleteStatus == 1) {
                                 toastr.success("", "Deleted successfully", { progressBar: true });
-                                _programDataTable.row(btn.parents('tr')).remove().draw();
+                                /*  _programDataTable.row(btn.parents('tr')).remove().draw();*/
+                                GetProgramTemplateList() 
                             }
                         }
                     });
