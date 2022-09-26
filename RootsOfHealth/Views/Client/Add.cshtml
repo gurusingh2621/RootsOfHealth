@@ -66,6 +66,9 @@
     .render-basicProgramform .priority > li {
         cursor: move
     }
+    div#clientMainFormDetail .priority > li {
+        cursor: move;
+    }
 
     .divAnyVaccinations ul.multiselect-container.dropdown-menu.show {
         padding: 8px 2px;
@@ -1248,8 +1251,21 @@
                             height: 150,
                         });
                         //toogleProgramToolTip();
+                        formElem.find(".priority").each((index, item) => {
+                            $(item).sortable({
+                                change: function (event, ui) {
+                                    $('#Profile').find('#ProfileSave').removeClass('disabled').css({ 'border': '1px solid rgb(34, 186, 160)', 'background-color': 'rgb(34, 186, 160)' })
 
-                       
+                                }
+                            });
+                        })
+                        formElem.find('input').on('input change', function () {
+
+                            $('#Profile').find('#ProfileSave').removeClass('disabled').css({ 'border': '1px solid rgb(34, 186, 160)', 'background-color': 'rgb(34, 186, 160)' })
+                        });
+                        formElem.find('select').on('change', function () {
+                            $('#Profile').find('#ProfileSave').removeClass('disabled').css({ 'border': '1px solid rgb(34, 186, 160)', 'background-color': 'rgb(34, 186, 160)' })
+                        })
 
                     }
                     $(".loaderOverlay").hide();
@@ -4030,7 +4046,7 @@
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                  success: function (result) {
-
+                     
                     var isexist = result;
                     if (isexist == 1) {
                         toastr.error("Combination of CellPhone and Email already exists");
@@ -4052,7 +4068,7 @@
                         $('#txtSSN').val(ssn);
 
                         $('#btnaddprogram').css('display', 'block');
-
+                        $('#Profile').find('#ProfileSave').addClass('disabled').css({ 'border': '1px solid rgb(161, 161, 161)', 'background-color': 'rgb(161, 161, 161)' })
                         toastr.success("Record saved successfully");
                         $('.isProfileSaved').attr("data-toggle", "tab")
                         $('.isProfileSaved').removeClass("disabled-li1");
@@ -5734,6 +5750,7 @@
             });
         }
         function previewOnfileChange(obj) {
+            
             if (obj.files.length) {
                 var fileData;
                 if (_programelement == undefined || _programelement == "") {
@@ -5837,7 +5854,10 @@
         }
 
         function uploadClientFormFiles(Id, fileData, ClientFormID) {
-
+            if (PatientId == "0" || PatientId =="") {
+                PatientId = _PatientId
+            }
+            
             var files = $("#" + Id).get(0).files;
             var fileNames = [];
             var savedfiles = [];

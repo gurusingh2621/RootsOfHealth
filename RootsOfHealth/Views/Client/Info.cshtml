@@ -508,7 +508,7 @@
 
 
             bindTopPatient('@ViewBag.PatientID');
-            LoadClientMainForm();
+          
 
         });
         function LoadClientMainForm() {
@@ -905,7 +905,7 @@
                 dataType: "json",
                 async: false,
                 success: function (result) {
-
+                    
                     if (result != "" && result != null) {
                         var filesArr = result.Files.split(',');
                         var namesArr = result.FileNames.split(',');
@@ -990,6 +990,7 @@
                     toastr.error("Some error occurred!! or data not found");
                 },
                 complete: function () {
+                    LoadClientMainForm();
                     setTimeout(function () {
                         _Loader.StopLoader()
                     },500)
