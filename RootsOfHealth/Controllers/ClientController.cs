@@ -1057,7 +1057,7 @@ namespace RootsOfHealth.Controllers
                 objCommon.BindLegalOptions(ref patientdetailobj);
                 objCommon.BindSocialRecreationalOptions(ref patientdetailobj);
                 patientdetailobj.Programs = new List<ProgramsForPatientBO>();
-
+                patientdetailobj.PatientMain.ImportDate = DateTime.Now;
             }
 
             objCommon.BindDropDowns(ref patientdetailobj);
