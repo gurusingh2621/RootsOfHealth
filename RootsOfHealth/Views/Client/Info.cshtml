@@ -4,7 +4,7 @@
     ViewBag.Title = "Info";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
 <style>
     .showHide {
         display: none;
@@ -146,29 +146,32 @@
     .historyFormLogTableWrap.table-responsive {
         max-height: calc(100vh - 160px);
     }
+
     #clientMainFormDetail .frmbtn {
         border: 1px solid #e2e2e2;
         padding: 10px;
         position: relative;
         margin: 0 0 10px 0;
     }
-    #clientMainFormDetail .frmbtn .form-group label:first-child {
-        background: #f0f0f0;
-        display: block;
-        margin: -11px -11px 10px;
-        padding: 4px 10px;
-        font-size: 14px;
-        color: #343434;
-        font-weight: 500;
-        line-height: normal;
-        vertical-align: middle;
-    }
-    #clientMainFormDetail .frmbtn .form-group label span.desc {
-        display: block;
-        margin: 3px 0 0;
-        color: #777;
-        font-weight: normal;
-    }
+
+        #clientMainFormDetail .frmbtn .form-group label:first-child {
+            background: #f0f0f0;
+            display: block;
+            margin: -11px -11px 10px;
+            padding: 4px 10px;
+            font-size: 14px;
+            color: #343434;
+            font-weight: 500;
+            line-height: normal;
+            vertical-align: middle;
+        }
+
+        #clientMainFormDetail .frmbtn .form-group label span.desc {
+            display: block;
+            margin: 3px 0 0;
+            color: #777;
+            font-weight: normal;
+        }
 </style>
 <!-- Content start here -->
 <section id="content" class="responsive-container">
@@ -230,7 +233,7 @@
                 </div>
             </div>
         </div>
-       
+
         <!--Recent Patient Modal start here-->
         <div class="modal fade" id="recentpatientModal" tabindex="-1" role="dialog" aria-labelledby="recentpatientModalLabel"
              aria-hidden="true">
@@ -284,7 +287,7 @@
 
 @section scripts {
 
-
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.js"></script>
 
     <script>
        var ViewBagClientFormId = '@ViewBag.ClientFormID'
@@ -302,7 +305,7 @@
         })
 
     });
-         
+
         $('#menu-toggle').click(function () {
             $(this).toggleClass('open');
             if ($("#menu-toggle").hasClass("open")) {
@@ -506,9 +509,9 @@
             })
             $('.selectboxmultiple').selectpicker();
 
-           
+
             bindTopPatient('@ViewBag.PatientID');
-           
+
 
         });
         function LoadClientMainForm() {
@@ -905,7 +908,7 @@
                 dataType: "json",
                 async: false,
                 success: function (result) {
-                    
+
                     if (result != "" && result != null) {
                         var filesArr = result.Files.split(',');
                         var namesArr = result.FileNames.split(',');
@@ -975,7 +978,7 @@
                 type: "Post",
                 url: '/Client/GetClientFormDetail',
                 data: JSON.stringify({ PatientID: toppatient }),
-               
+
                 dataType: "html",
                 contentType: "application/json; charset=utf-8",
                 success: function (result) {
@@ -983,7 +986,7 @@
                     var a = result;
                     $('#myTabContent').html(result);
                     $('#btnaddprogram').css('display', 'block');
-                  
+
                 },
                 error: function () {
                     _Loader.StopLoader()
