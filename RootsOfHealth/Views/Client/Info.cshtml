@@ -506,9 +506,9 @@
             })
             $('.selectboxmultiple').selectpicker();
 
-
+           
             bindTopPatient('@ViewBag.PatientID');
-          
+           
 
         });
         function LoadClientMainForm() {
@@ -537,7 +537,7 @@
                 beforeSend: function () {
                     $(".loaderOverlay").css('display', 'flex');
                 },
-                async: true,
+                async: false,
                 success: function (result) {
                     var formElem = $('#clientMainFormDetail');
 
@@ -975,7 +975,7 @@
                 type: "Post",
                 url: '/Client/GetClientFormDetail',
                 data: JSON.stringify({ PatientID: toppatient }),
-
+               
                 dataType: "html",
                 contentType: "application/json; charset=utf-8",
                 success: function (result) {
@@ -983,7 +983,7 @@
                     var a = result;
                     $('#myTabContent').html(result);
                     $('#btnaddprogram').css('display', 'block');
-
+                  
                 },
                 error: function () {
                     _Loader.StopLoader()
