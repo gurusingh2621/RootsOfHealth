@@ -1057,7 +1057,6 @@ namespace RootsOfHealth.Controllers
                 objCommon.BindLegalOptions(ref patientdetailobj);
                 objCommon.BindSocialRecreationalOptions(ref patientdetailobj);
                 patientdetailobj.Programs = new List<ProgramsForPatientBO>();
-                patientdetailobj.PatientMain.ImportDate = DateTime.Now;
             }
 
             objCommon.BindDropDowns(ref patientdetailobj);
@@ -1068,7 +1067,11 @@ namespace RootsOfHealth.Controllers
             ViewBag.ClientFormID = ClientFormID;
             Response.Cookies["patientid"].Value = patientId.ToString();
             Response.Cookies["patientid"].Expires = DateTime.Now.AddDays(1);
-            return View(patientdetailobj);
+            if (patientdetailobj.PatientMain.ImportDate == default(DateTime))
+            {
+                patientdetailobj.PatientMain.ImportDate = DateTime.Now;
+            }
+                return View(patientdetailobj);
         }
 
         [HttpGet]
