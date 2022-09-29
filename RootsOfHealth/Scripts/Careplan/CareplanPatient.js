@@ -366,6 +366,7 @@ function saveBasicInfo(status) {
                         TableName: tableName,
                         carePlanCols: fieldmodel,
                     }
+                    console.log(model);
                     $(".loaderOverlay").show();
                     $.ajax({
                         type: "POST",
@@ -432,7 +433,7 @@ function saveBasicInfo(status) {
                             //updateDefaultneeds(careplanid, templateid);
                         },
                         error: function (e) {
-                            toastr.error("Unexpected error!");
+                            toastr.error("Error occurred!");
                             console.log(e);
                             $(".loaderOverlay").hide();
                         }
