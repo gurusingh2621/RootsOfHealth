@@ -260,7 +260,7 @@ function proceedCarePlan(ProgramId) {
 function saveBasicInfo(status) {
     var fieldmodel = [];  
     var isvalid = true;
-    $(".render-basicform").find(".base-control,.program-control,input.custom-control-input").each(function (index, item) {
+    $("#addNewCarePlansSidebar .render-basicform").find(".base-control,.program-control,input.custom-control-input").each(function (index, item) {
         if ($(item).is("input") && $(item).hasAttr("data-column")) {
             switch ($(item).attr("type")) {
                 case "radio":
@@ -301,7 +301,7 @@ function saveBasicInfo(status) {
         toastr.error("Field marked with asterisk(*) are mandatory");
         return;
     }   
-    if ($(".render-basicform").find("input[type='file']").length) {
+    if ($("#addNewCarePlansSidebar .render-basicform").find("input[type='file']").length) {
         $(".render-basicform").find("input[type='file']").each(function (index, item) {
             if ($(item).hasAttr("data-column")) {
                 if ($(item).hasClass("program-control") || $(item).hasClass("base-control")) {
@@ -313,7 +313,7 @@ function saveBasicInfo(status) {
             }
         });
     }
-    if ($(".render-basicform").find("input.invaild-input").length) {
+    if ($("#addNewCarePlansSidebar .render-basicform").find("input.invaild-input").length) {
         return false;
     }
     fieldmodel.push({ ColumnName: "PatientID", FieldValue: PatientId });
@@ -325,20 +325,21 @@ function saveBasicInfo(status) {
     }
     fieldmodel.push({ ColumnName: "ModifiedBy", FieldValue: userId });
     fieldmodel.push({ ColumnName: "ModifiedDate", FieldValue: getActualFullDate() });
-    if ($(".render-basicform").find(".base-control").length) {
+    if ($("#addNewCarePlansSidebar .render-basicform").find(".base-control").length) {
         fieldmodel.push({ ColumnName: "BaseTemplateID", FieldValue: basetemplateid });
     }
-    $(".render-basicform [type=text],[type=number],[type=file],[type=date]").each(function (index, item) {
+    $("#addNewCarePlansSidebar .render-basicform [type=text],#addNewCarePlansSidebar .render-basicform [type=number],#addNewCarePlansSidebar .render-basicform [type=file],#addNewCarePlansSidebar .render-basicform [type=date]").each(function (index, item) {
+        
         if ($(item).hasAttr("data-column") && $(item).val() != "" && $(item).hasClass("program-control")) {
             fieldmodel.push({ ColumnName: $(item).attr("data-column"), FieldValue: $(item).val() });
         }
     });
-    $(".render-basicform select").each(function (index, item) {
+    $("#addNewCarePlansSidebar .render-basicform select").each(function (index, item) {
         if ($(item).hasAttr("data-column") && $(item).val() != "" && $(item).hasClass("program-control")) {
             fieldmodel.push({ ColumnName: $(item).attr("data-column"), FieldValue: $(item).val() });
         }
     });
-    $(".render-basicform [type=checkbox],.render-basicform [type=radio]").each(function (index, item) {
+    $("#addNewCarePlansSidebar .render-basicform [type=checkbox],#addNewCarePlansSidebar .render-basicform [type=radio]").each(function (index, item) {
         if ($(item).hasAttr("data-column") && $(item).closest("div.inputContent").find("input:checked").length && $(item).closest(".form-group").hasClass("program-control")) {
             var selectedValues = $.map($(item).closest("div.inputContent").find("input:checked"), function (n, i) {
                 return n.value;
@@ -346,7 +347,8 @@ function saveBasicInfo(status) {
             fieldmodel.push({ ColumnName: $(item).attr("data-column"), FieldValue: selectedValues });
         }
     });
-    $(".render-basicform textarea").each(function (index, item) {
+    $("#addNewCarePlansSidebar .render-basicform textarea").each(function (index, item) {
+        
         if ($(item).hasAttr("data-column") && $(item).val() != "" && $(item).hasClass("program-control")) {
             fieldmodel.push({ColumnName: $(item).attr("data-column"), FieldValue: $(item).val() });
         }
