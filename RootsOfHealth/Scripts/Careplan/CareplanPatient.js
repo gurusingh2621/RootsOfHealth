@@ -1509,7 +1509,7 @@ function saveBasicInfoAsDraft(status) {
     if ($(".render-basicform").find(".base-control").length) {
         fieldmodel.push({ ColumnName: "BaseTemplateID", FieldValue: basetemplateid });
     }
-    $(".render-basicform [type=text],[type=number],[type=file],[type=date]").each(function (index, item) {
+    $(".render-basicform [type=text],.render-basicform [type=number],.render-basicform [type=file],.render-basicform [type=date]").each(function (index, item) {
         if ($(item).hasAttr("data-column") && $(item).val() != "" && $(item).hasClass("program-control")) {
             fieldmodel.push({ ColumnName: $(item).attr("data-column"), FieldValue: $(item).val() });
         }
