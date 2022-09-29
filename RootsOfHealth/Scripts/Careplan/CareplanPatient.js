@@ -433,6 +433,7 @@ function saveBasicInfo(status) {
                         },
                         error: function (e) {
                             toastr.error("Unexpected error!");
+                            console.log(e);
                             $(".loaderOverlay").hide();
                         }
                     });
