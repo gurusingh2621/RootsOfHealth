@@ -396,34 +396,34 @@ function saveBasicInfo(status) {
                                         if ($(item).hasClass("program-control") || $(item).hasClass("base-control")) {
                                             switch (index) {
                                                 case 0:
-                                                    uploadFiles($(item).attr("id"), fileData1);
+                                                    uploadCarePlanFiles($(item).attr("id"), fileData1);
                                                     break;
                                                 case 1:
-                                                    uploadFiles($(item).attr("id"), fileData2);
+                                                    uploadCarePlanFiles($(item).attr("id"), fileData2);
                                                     break;
                                                 case 2:
-                                                    uploadFiles($(item).attr("id"), fileData3);
+                                                    uploadCarePlanFiles($(item).attr("id"), fileData3);
                                                     break;
                                                 case 3:
-                                                    uploadFiles($(item).attr("id"), fileData4);
+                                                    uploadCarePlanFiles($(item).attr("id"), fileData4);
                                                     break;
                                                 case 4:
-                                                    uploadFiles($(item).attr("id"), fileData5);
+                                                    uploadCarePlanFiles($(item).attr("id"), fileData5);
                                                     break;
                                                 case 5:
-                                                    uploadFiles($(item).attr("id"), fileData6);
+                                                    uploadCarePlanFiles($(item).attr("id"), fileData6);
                                                     break;
                                                 case 6:
-                                                    uploadFiles($(item).attr("id"), fileData7);
+                                                    uploadCarePlanFiles($(item).attr("id"), fileData7);
                                                     break;
                                                 case 7:
-                                                    uploadFiles($(item).attr("id"), fileData8);
+                                                    uploadCarePlanFiles($(item).attr("id"), fileData8);
                                                     break;
                                                 case 8:
-                                                    uploadFiles($(item).attr("id"), fileData9);
+                                                    uploadCarePlanFiles($(item).attr("id"), fileData9);
                                                     break;
                                                 case 9:
-                                                    uploadFiles($(item).attr("id"), fileData10);
+                                                    uploadCarePlanFiles($(item).attr("id"), fileData10);
                                                     break;
                                             }
                                         }
@@ -1330,6 +1330,63 @@ function previewOnChange(obj) {
         //$(obj).next().next().html("");
     }    
 }
+function uploadCarePlanFiles(Id, fileData) {
+    
+    var files = $("#addNewCarePlansSidebar").find("#" + Id).get(0).files;
+    var fileNames = [];
+    var savedfiles = [];
+    $("#addNewCarePlansSidebar").find("#" + Id).next().next().find("input").each(function (index, item) {
+        
+        fileNames.push($(item).val());
+        if ($(item).hasAttr("data-file")) {
+            savedfiles.push($(item).attr("data-file"));
+        }
+    });
+    if (files.length == 0 && savedfiles.length == 0) {
+        // delete careplanplan filecontrol files if removed from front end
+        $.ajax({
+            type: "POST",
+            url: Apipath + '/api/PatientMain/DeleteCareplanFiles?Careplanid=' + careplanid + "&controlid=" + Id,
+            contentType: 'application/json; charset=UTF-8',
+            dataType: "json",
+            async: false,
+            success: function (result) {   
+                fileData = new FormData();
+            }, error: function (e) {
+                toastr.error("Unexpected error!");
+                $(".loaderOverlay").hide();
+                return false
+            }
+        });
+        return;
+    }
+    if (fileNames.length == 0) {
+        return;
+    }
+    fileData.append("CarePlanId", careplanid);
+    fileData.append("ControlId", Id);
+    fileData.append("Files", savedfiles.join(","));
+    fileData.append("FileNames", fileNames.join(","));
+    fileData.append("PatientId", PatientId);
+    fileData.append("IsBaseField", $("#" + Id).hasClass("base-control"));
+
+    $.ajax({
+        type: "POST",
+        url: "/CarePlan/UploadFiles",
+        dataType: "json",
+        contentType: false,
+        processData: false,
+        data: fileData,
+        async: false,
+        success: function (result, status, xhr) {
+            fileData = new FormData();
+        }, error: function (e) {
+            toastr.error("Unexpected error!");
+            $(".loaderOverlay").hide();
+            return false
+        }
+    });
+}
 function uploadFiles(Id, fileData) {
     var files = $("#" + Id).get(0).files;
     var fileNames = [];
@@ -1408,7 +1465,8 @@ function getProgramFiles(careid, Id) {
                     }
                     selectedFiles += `</ul>`;                   
                 }
-                $("#" + Id).next().next().html("").append(selectedFiles);         
+                var fileEle = $("#addNewCarePlansSidebar").find("#" + Id);
+                fileEle.next().next().html("").append(selectedFiles);         
             }
         }, error: function (e) {
             toastr.error("Unexpected error!");
@@ -1563,34 +1621,34 @@ function saveBasicInfoAsDraft(status) {
 
                             switch (index) {
                                 case 0:
-                                    uploadFiles($(item).attr("id"), fileData1);
+                                    uploadCarePlanFiles($(item).attr("id"), fileData1);
                                     break;
                                 case 1:
-                                    uploadFiles($(item).attr("id"), fileData2);
+                                    uploadCarePlanFiles($(item).attr("id"), fileData2);
                                     break;
                                 case 2:
-                                    uploadFiles($(item).attr("id"), fileData3);
+                                    uploadCarePlanFiles($(item).attr("id"), fileData3);
                                     break;
                                 case 3:
-                                    uploadFiles($(item).attr("id"), fileData4);
+                                    uploadCarePlanFiles($(item).attr("id"), fileData4);
                                     break;
                                 case 4:
-                                    uploadFiles($(item).attr("id"), fileData5);
+                                    uploadCarePlanFiles($(item).attr("id"), fileData5);
                                     break;
                                 case 5:
-                                    uploadFiles($(item).attr("id"), fileData6);
+                                    uploadCarePlanFiles($(item).attr("id"), fileData6);
                                     break;
                                 case 6:
-                                    uploadFiles($(item).attr("id"), fileData7);
+                                    uploadCarePlanFiles($(item).attr("id"), fileData7);
                                     break;
                                 case 7:
-                                    uploadFiles($(item).attr("id"), fileData8);
+                                    uploadCarePlanFiles($(item).attr("id"), fileData8);
                                     break;
                                 case 8:
-                                    uploadFiles($(item).attr("id"), fileData9);
+                                    uploadCarePlanFiles($(item).attr("id"), fileData9);
                                     break;
                                 case 9:
-                                    uploadFiles($(item).attr("id"), fileData10);
+                                    uploadCarePlanFiles($(item).attr("id"), fileData10);
                                     break;
                             }
                         }

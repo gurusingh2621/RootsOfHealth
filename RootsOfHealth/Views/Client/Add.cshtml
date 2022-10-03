@@ -5751,6 +5751,12 @@
         }
         function previewOnfileChange(obj) {
             
+            var parentElement = $(obj).parent().parent().parent().parent().parent();
+            var id = parentElement.attr('id')
+            if (id =="clientMainFormDetail") {
+                _programelement = $('#clientMainFormDetail');
+            }
+            
             if (obj.files.length) {
                 var fileData;
                 if (_programelement == undefined || _programelement == "") {
@@ -5853,15 +5859,19 @@
             }
         }
 
-        function uploadClientFormFiles(Id, fileData, ClientFormID) {
+        function uploadClientFormFiles(Id, fileData, ClientFormID,formElement) {
             if (PatientId == "0" || PatientId =="") {
                 PatientId = _PatientId
             }
             
-            var files = $("#" + Id).get(0).files;
+            if (formElement == undefined) {
+                formElement = $('#' + formName + 'only');
+            }
+            
+            var files = formElement.find("#" + Id).get(0).files;
             var fileNames = [];
             var savedfiles = [];
-            $("#" + Id).next().next().find("input").each(function (index, item) {
+            formElement.find("#" + Id).next().next().find("input").each(function (index, item) {
                 fileNames.push($(item).val());
 
                 if ($(item).hasAttr("data-file")) {
@@ -5869,6 +5879,20 @@
                 }
             });
             if (files.length == 0 && savedfiles.length == 0) {
+                $.ajax({
+                    type: "POST",
+                    url: Apipath + '/api/PatientMain/DeleteClientFormFiles?clientformId=' + ClientFormID + "&controlid=" + Id+"&patientId=" + _PatientId,
+                    contentType: 'application/json; charset=UTF-8',
+                    dataType: "json",
+                    async: false,
+                    success: function (result) {
+                        fileData = new FormData();
+                    }, error: function (e) {
+                        toastr.error("Unexpected error!");
+                        $(".loaderOverlay").hide();
+                        return false
+                    }
+                });
                 return;
             }
             if (fileNames.length == 0) {
@@ -6274,34 +6298,34 @@
 
                                     switch (index) {
                                         case 0:
-                                            uploadClientFormFiles($(item).attr("id"), fileDataP1, _ClientMainFormID);
+                                            uploadClientFormFiles($(item).attr("id"), fileDataP1, _ClientMainFormID, _mainFormElement);
                                             break;
                                         case 1:
-                                            uploadClientFormFiles($(item).attr("id"), fileDataP2, _ClientMainFormID);
+                                            uploadClientFormFiles($(item).attr("id"), fileDataP2, _ClientMainFormID, _mainFormElement);
                                             break;
                                         case 2:
-                                            uploadClientFormFiles($(item).attr("id"), fileDataP3, _ClientMainFormID);
+                                            uploadClientFormFiles($(item).attr("id"), fileDataP3, _ClientMainFormID, _mainFormElement);
                                             break;
                                         case 3:
-                                            uploadClientFormFiles($(item).attr("id"), fileDataP4, _ClientMainFormID);
+                                            uploadClientFormFiles($(item).attr("id"), fileDataP4, _ClientMainFormID, _mainFormElement);
                                             break;
                                         case 4:
-                                            uploadClientFormFiles($(item).attr("id"), fileDataP5, _ClientMainFormID);
+                                            uploadClientFormFiles($(item).attr("id"), fileDataP5, _ClientMainFormID, _mainFormElement);
                                             break;
                                         case 5:
-                                            uploadClientFormFiles($(item).attr("id"), fileDataP6, _ClientMainFormID);
+                                            uploadClientFormFiles($(item).attr("id"), fileDataP6, _ClientMainFormID, _mainFormElement);
                                             break;
                                         case 6:
-                                            uploadClientFormFiles($(item).attr("id"), fileDataP7, _ClientMainFormID);
+                                            uploadClientFormFiles($(item).attr("id"), fileDataP7, _ClientMainFormID, _mainFormElement);
                                             break;
                                         case 7:
-                                            uploadClientFormFiles($(item).attr("id"), fileDataP8, _ClientMainFormID);
+                                            uploadClientFormFiles($(item).attr("id"), fileDataP8, _ClientMainFormID, _mainFormElement);
                                             break;
                                         case 8:
-                                            uploadClientFormFiles($(item).attr("id"), fileDataP9, _ClientMainFormID);
+                                            uploadClientFormFiles($(item).attr("id"), fileDataP9, _ClientMainFormID, _mainFormElement);
                                             break;
                                         case 9:
-                                            uploadClientFormFiles($(item).attr("id"), fileDataP10, _ClientMainFormID);
+                                            uploadClientFormFiles($(item).attr("id"), fileDataP10, _ClientMainFormID, _mainFormElement);
                                             break;
                                     }
                                 }
@@ -6484,6 +6508,12 @@
         }
 
         function removeClientFormUpload(obj) {
+            var parentElement = $(obj).parent().parent().parent().parent().parent().parent().parent().parent();
+            var id = parentElement.attr('id')
+            if (id == "clientMainFormDetail") {
+                _programelement = $('#clientMainFormDetail');
+            }
+            
             $.confirm({
                 icon: 'fas fa-exclamation-triangle',
                 title: 'Confirm',
@@ -7127,11 +7157,11 @@
         }
 
         function uploadProgramFiles(Id, fileData, ProgramID) {
-
-            var files = $("#" + Id).get(0).files;
+            
+            var files = $('#' + _programName + 'only').find("#" + Id).get(0).files;
             var fileNames = [];
             var savedfiles = [];
-            $("#" + Id).next().next().find("input").each(function (index, item) {
+            $('#' + _programName + 'only').find("#" + Id).next().next().find("input").each(function (index, item) {
                 fileNames.push($(item).val());
 
                 if ($(item).hasAttr("data-file")) {
@@ -7139,6 +7169,21 @@
                 }
             });
             if (files.length == 0 && savedfiles.length == 0) {
+                // delete program filecontrol files if removed
+                $.ajax({
+                    type: "POST",
+                    url: Apipath + '/api/PatientMain/DeleteProgramFiles?programId=' + ProgramID + "&controlid=" + Id + "&patientId=" + _PatientId,
+                    contentType: 'application/json; charset=UTF-8',
+                    dataType: "json",
+                    async: false,
+                    success: function (result) {
+                        fileData = new FormData();
+                    }, error: function (e) {
+                        toastr.error("Unexpected error!");
+                        $(".loaderOverlay").hide();
+                        return false
+                    }
+                });
                 return;
             }
             if (fileNames.length == 0) {
