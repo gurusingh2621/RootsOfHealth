@@ -15,5 +15,7 @@ namespace RootsOfHealth.Models
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public string CellPhone { get; set; }
         public string SocialSecurityNumber { get; set; }
+        public string CreatedDate { get; set; }
+        public Nullable<bool> IsNewpatient { get; set; }
     }
 }

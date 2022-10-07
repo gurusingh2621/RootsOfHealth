@@ -15,5 +15,6 @@ namespace RootsOfHealth.Models
         public Nullable<int> ClientFormID { get; set; }
         public Nullable<int> PatientId { get; set; }
         public Nullable<bool> IsBaseField { get; set; }
+        public string FilesDescription { get; set; }
     }
 }

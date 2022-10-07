@@ -172,6 +172,11 @@
             color: #777;
             font-weight: normal;
         }
+   span.fileDescription {
+        padding-left: 20px;
+        font-size: 13px;
+        color: #555;
+    }
 </style>
 <!-- Content start here -->
 <section id="content" class="responsive-container">
@@ -602,7 +607,7 @@
         }
         function makeMainFormBasicInfoReadonly(formElem) {
 
-
+            
             var value = "";
 
             formElem.find(".program-control,.base-control").each(function (index, item) {
@@ -639,10 +644,11 @@
                     switch ($(item).attr("type")) {
                         case "file":
                             if ($(item).hasClass("base-control") && $(item).hasAttr("data-column")) {
-                                getBaseFilesReadonly($(item).attr("id"));
-                            } else if ($(item).hasClass("program-control") && $(item).hasAttr("data-column")) {
-                                getProgramFiles(careplanid, $(item).attr("id"))
+                                getMainFormBaseFilesReadonly($(item).attr("id"), formElem);
                             }
+                            //else if ($(item).hasClass("program-control") && $(item).hasAttr("data-column")) {
+                            //    getProgramFiles(careplanid, $(item).attr("id"))
+                            //}
                             $(item).hide();
                             break;
                         default:
@@ -714,7 +720,7 @@
                                         break;
                                     case "file":
 
-                                        getClientFormBaseFilesReadonly($(item).attr("id"));
+                                        getClientMainFormBaseFilesReadonly($(item).attr("id"));
                                         $(item).hide();
 
                                         break;
@@ -773,7 +779,7 @@
                 }
             });
         }
-        function getClientFormBaseFilesReadonly(Id) {
+        function getClientMainFormBaseFilesReadonly(Id) {
 
             $.ajax({
                 type: "GET",
@@ -820,7 +826,7 @@
                 dataType: "json",
                 async: false,
                 success: function (result) {
-
+                    
                     if (result.length) {
                         var fields = result[0];
                         var value = "";
@@ -847,7 +853,7 @@
                                         }
                                         break;
                                     case "file":
-                                        getClientMainFormModuleFiles(ClientFormID, $(item).attr("id"));
+                                        getClientMainFormModuleFilesReadOnly(ClientFormID, $(item).attr("id"));
 
                                         break;
                                     default:
@@ -891,16 +897,19 @@
                             }
                         });
                     }
+                    var labelprogram = formEle.find('.inputContent .label-program');
+                    labelprogram.css('display','block');
+                   
                     if (formEle.find(".basecontentarea").length > 0) {
                         getClientFormBaseFieldData();
                     }
                 }, error: function (e) {
                     toastr.error("Unexpected error!");
-                    $(".loaderOverlay").hide();
+                    $(".loaderOverlay").hide(); 
                 }
             });
         }
-        function getClientMainFormModuleFiles(ClientFormID, Id) {
+        function getClientMainFormModuleFilesReadOnly(ClientFormID, Id) {
             $.ajax({
                 type: "GET",
                 url: Apipath + '/api/PatientMain/getfilesbyClientFormid?ClientFormID=' + ClientFormID + '&controlid=' + Id + '&patientid=' + _PatientId,
@@ -912,12 +921,28 @@
                     if (result != "" && result != null) {
                         var filesArr = result.Files.split(',');
                         var namesArr = result.FileNames.split(',');
-                        var selectedFiles = "";
+                        var descriptionArr = [];
+                        if (result.FilesDescription != null) {
+                            descriptionArr = result.FilesDescription.split(',');
+                        }
 
-                        selectedFiles = `<div class="label">File Names</div><ul class="file_uploaded_list file_uploaded_inputs">`;
+                        var ext = "";
+                        var selectedFiles = `<ul class="file_uploaded_list onlylinkslist">`;
+                     
                         for (var i = 0; i < filesArr.length; i++) {
-                            selectedFiles += `<li><input class="form-control" data-file="${filesArr[i]}" placeholder="Enter file name here" type="text" value="${namesArr[i]}"/>`
-                            selectedFiles += '<a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a><span onclick="removeClientFormUpload(this)" class="removeUploadFile"><i class="fa fa-times"></i></span></li>';
+                            
+                            ext = filesArr[i].split('.').pop();
+                            switch (ext) {
+                                case "png":
+                                case "jpg":
+                                case "jpeg":
+                                    selectedFiles += '<li><span><a href="/' + programUploadedPath + filesArr[i] + '" target="_blank"> <img  src="/' + programUploadedPath + filesArr[i] + '" alt="File Upload"></a></span><span><a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></span><span class="fileDescription">' + descriptionArr[i] +'</span></li>';
+                                    break;
+                                default:
+                                    selectedFiles += '<li><span><a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></span> <span class="fileDescription">' + descriptionArr[i]+'</span></li>';
+                                    break;
+                            }
+
                         }
                         selectedFiles += "</ul>";
 

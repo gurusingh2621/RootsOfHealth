@@ -2168,14 +2168,29 @@ namespace RootsOfHealth.Controllers
                 Directory.CreateDirectory(path);
             }
             HttpFileCollectionBase files = Request.Files;
-            var filenames = Request["FileNames"];
+            var filesDescription = Request["FilesDescription"];
             var savedfiles = Request["Files"];
             var controlid = Request["ControlId"];
             var ClientFormID = Request["ClientFormID"];
             var patientId = Request["PatientId"];
             var IsBaseField = Convert.ToBoolean(Request["IsBaseField"]);
+            var savedFileNames = Request["FileNames"];
+            var fileName = "";
             string guidName = "";
             List<string> FilesGuid = new List<string>();
+            List<string> fileNames = new List<string>();
+            if (savedFileNames.IndexOf(',') > 0)
+            {
+                var savedfileName = savedFileNames.Split(',');
+                for (int i = 0; i < savedfileName.Length; i++)
+                {
+                    fileNames.Add(savedfileName[i]);
+                }
+            }
+            else if (savedFileNames.IndexOf('.') > 0)
+            {
+                fileNames.Add(savedFileNames);
+            }
             if (savedfiles.IndexOf(',') > 0)
             {
                 var savedArr = savedfiles.Split(',');
@@ -2194,6 +2209,8 @@ namespace RootsOfHealth.Controllers
                 guidName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
                 file.SaveAs(path + guidName);
                 FilesGuid.Add(guidName);
+                fileName = file.FileName;
+                fileNames.Add(fileName);
             }
             using (var client = new HttpClient())
             {
@@ -2202,7 +2219,8 @@ namespace RootsOfHealth.Controllers
                     ClientFormID = Convert.ToInt32(ClientFormID),
                     ControlId = controlid,
                     Files = String.Join(",", FilesGuid),
-                    FileNames = filenames,
+                    FileNames = String.Join(",", fileNames),
+                    FilesDescription = filesDescription,
                     PatientId = Convert.ToInt32(patientId)
                 };
                 client.BaseAddress = new Uri(WebApiKey);
@@ -3393,6 +3411,7 @@ namespace RootsOfHealth.Controllers
                         {
                             continue;
                         }
+                        patient.CreatedDate = DateTime.Now;
                         using (var client = new HttpClient())
                         {
                             client.BaseAddress = new Uri(WebApiKey);
@@ -3912,7 +3931,7 @@ namespace RootsOfHealth.Controllers
 
             foreach (var patient in allowedPatientList)
             {
-
+                patient.CreatedDate = DateTime.Now;
                 using (var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri(WebApiKey);
@@ -4403,7 +4422,7 @@ namespace RootsOfHealth.Controllers
 
             foreach (var patient in allowedPatientList)
             {
-
+                patient.CreatedDate = DateTime.Now;
                 using (var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri(WebApiKey);
