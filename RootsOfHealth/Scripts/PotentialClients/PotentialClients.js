@@ -497,10 +497,10 @@ $PotentialClientFileUpload.change(function (e) {
                         if (ddlExcelTypeValue == "organised")
                         {
                             if (res.filecolumns.length > res.databaseColumns.length) {
-                                summaryElem.find('#spancolsMatched').html(res.databaseColumns.length);
+                                summaryElem.find('#spancolsMatched').html(0);
                             }
                             else {
-                                summaryElem.find('#spancolsMatched').html(res.filecolumns.length);
+                                summaryElem.find('#spancolsMatched').html(0);
                             }
                            
                             AppendColumnsLists(res)
@@ -575,7 +575,7 @@ function BindPotentialClientsTable() {
             "dataType": "JSON"
         },
         'columnDefs': [{
-            'targets': [5],
+            'targets': [6],
             'orderable': false
         }],
         "columns": [
@@ -614,7 +614,7 @@ function BindPotentialClientsTable() {
             {
                 "data": "ModifiedDate",
                 "render": function (value) {
-
+                    
                     if (value === null) return "";
 
                     var pattern = /Date\(([^)]+)\)/;
@@ -622,6 +622,16 @@ function BindPotentialClientsTable() {
                     var dt = new Date(parseFloat(results[1]));
                     var time = dt.toLocaleTimeString();
                     return (dt.getMonth() + 1) + "/" + dt.getDate() + "/" + dt.getFullYear() + " " + time;
+                }
+            },
+            {
+                "data": "CreatedDate",
+                "render": function (value) {
+                    
+                    if (value === null) return "";
+
+                    return value;
+                  
                 }
             },
             {
@@ -656,11 +666,14 @@ function BindPotentialClientsTable() {
                     GetDuplicateRecordDetails(aData.PatientId)
                 })
             }
+            if (aData.IsNewpatient == null || aData.IsNewpatient) {
+                $('td', nRow).css('background-color', '#dceb53');
+                $('td', nRow).css('color', 'black');
+            }
         }
     });
-
+  
 }
-
 function GetFullName(firstname , lastname) {
     var fullname = "";
     if (firstname != null) {
@@ -718,7 +731,7 @@ function AppendColumnsLists(result) {
     for (let i = 0; i < fileResult.length; i++) {
        
         var html = `<div class="row fileandDbFields">`
-        html += `<div class="col-md-6"><div class="DatabaseFields">${fileResult[i]}</div></div>`;
+        html += `<div class="col-md-6"><div class="s_field_wrap"><div id="fileColumns_${i}" class="DatabaseFields">${fileResult[i]}</div><span class="spn_check hidden"><i class="fa fa-check"></i></span></div></div>`;
         html += `<div id="getFileFields_${i}" class="col-md-6 FileFields"></div></div> `
         
         $PotientialClientModal.find('#dbandFileFields').append(html);
@@ -726,7 +739,7 @@ function AppendColumnsLists(result) {
         // append dropdowns start
         var ddl = $("<select></select>").attr("id", fileResult[i]).attr("name", fileResult[i]).attr("class", "form-control dllFileFields").attr("columntype", databaseResult[i].ColType);
         ddl.append("<option>Not Assigned</option>");
-        var ddlvalue = "";
+       /* var ddlvalue = "";*/
         $.each(databaseResult, function (index, el) {
             var columnName = "";
            
@@ -877,25 +890,29 @@ function AppendColumnsLists(result) {
             } else {
                 ddlOption += `${columnName} (character( ${el.ColLength == -1 ? "max" : el.ColLength}))`
             }
-            if (index == i) {
-                ddlvalue = ddlOption;
-            }
+            //if (index == i) {
+            //    ddlvalue = ddlOption;
+            //}
             ddl.append("<option key='" + el.ColName +"'>" + ddlOption + "</option>");
         });
-        ddl.val(ddlvalue);
+       /* ddl.val(ddlvalue);*/
         $PotientialClientModal.find('#getFileFields_' + i).append(ddl);
            // append dropdowns end
     }
     $('.dllFileFields').change(function () {
+        var ele = $(this).parent();
+        
         var selectedval = $(this).val();
         var matchedCol = summaryElem.find('#spancolsMatched').html();
         if (selectedval != 'Not Assigned') {
             if (matchedCol < TotalFileColumns) {
                 matchedCol = parseInt(matchedCol) + 1;
+                ele.prev('div').find('.spn_check').removeClass('hidden');
             }
         }
         else {
             matchedCol = parseInt(matchedCol) - 1;
+            ele.prev('div').find('.spn_check').addClass('hidden');
         }
 
         summaryElem.find('#spancolsMatched').html(matchedCol);
@@ -1401,9 +1418,9 @@ function AppendColumnsListsForUO(result) {
         }
         var html = `<div class="row">`
         if (databaseResult[i].ColType == 'int' || databaseResult[i].ColType == 'bit') {
-            html += `<div class="col-md-6"><div class="DatabaseFields">${columnName} ( ${databaseResult[i].ColType == "bit" ? "Boolean" : "Number"})</div></div>`
+            html += `<div class="col-md-6"><div class="DatabaseFields">${columnName} ( ${databaseResult[i].ColType == "bit" ? "Boolean" : "Number"})</div><span class="spn_check hidden"><i class="fa fa-check"></i></span></div>`
         } else {
-            html += `<div class="col-md-6"><div class="DatabaseFields">${columnName} (character( ${databaseResult[i].ColLength == -1 ? "max" : databaseResult[i].ColLength}))</div></div>`
+            html += `<div class="col-md-6"><div class="DatabaseFields">${columnName} (character( ${databaseResult[i].ColLength == -1 ? "max" : databaseResult[i].ColLength}))</div><span class="spn_check hidden"><i class="fa fa-check"></i></span></div>`
         }
         // append text boxes start
         html += `<div id="getFileFields_${i}" class="col-md-6 FileFields"><input class="form-control rangeFrom" type="text" id="${databaseResult[i].ColName}" name="${databaseResult[i].ColName}"> <input class="form-control rangeTo" type="text" id="${databaseResult[i].ColName}To" name="${databaseResult[i].ColName}To"> </div></div>`

@@ -3285,10 +3285,15 @@
         dataType: "json",
         async: false,
         success: function (result) {
-
+            
             if (result != "" && result != null) {
                 var filesArr = result.Files.split(',');
                 var namesArr = result.FileNames.split(',');
+                var descriptionArr = [];
+                if (result.FilesDescription != null) {
+                    descriptionArr = result.FilesDescription.split(',');
+                }
+              
                 var selectedFiles = "";
                 selectedFiles = `<ul class="file_uploaded_list onlylinkslist">`;
                     var ext = "";
@@ -3298,10 +3303,10 @@
                             case "png":
                             case "jpg":
                             case "jpeg":
-                                selectedFiles += '<li><img style="max-width: 90px;margin-right: 10px;" src="/' + programUploadedPath + filesArr[i] + '" alt="Program Upload"><span><a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></span></li>';
+                                selectedFiles += '<li><span><a href="/' + programUploadedPath + filesArr[i] + '" target="_blank"><img style="max-width: 90px;margin-right: 10px;" src="/' + programUploadedPath + filesArr[i] + '" alt="Program Upload"></a></span><span><a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></span><span class="fileDescription">' + descriptionArr[i] +'</span></li>';
                                 break;
                             default:
-                                selectedFiles += '<li><a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></li>';
+                                selectedFiles += '<li><span><a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></span><span class="fileDescription">' + descriptionArr[i] +'</span></li>';
                                 break;
                         }
 

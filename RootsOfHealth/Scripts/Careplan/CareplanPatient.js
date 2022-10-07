@@ -1474,6 +1474,43 @@ function getProgramFiles(careid, Id) {
         }
     });
 }
+function getMainFormBaseFilesReadonly(Id, formel) {
+
+    $.ajax({
+        type: "GET",
+        url: Apipath + '/api/PatientMain/getbasefilesbypatientid?PatientId=' + PatientId + '&controlid=' + Id,
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        async: false,
+        success: function (result) {
+            if (result != "" && result != null) {
+                var filesArr = result.Files.split(',');
+                var namesArr = result.FileNames.split(',');
+                var selectedFiles = `<ul class="file_uploaded_list onlylinkslist">`;
+                var ext = "";
+                for (var i = 0; i < filesArr.length; i++) {
+                    ext = filesArr[i].split('.').pop();
+                    switch (ext) {
+                        case "png":
+                        case "jpg":
+                        case "jpeg":
+                            selectedFiles += '<li><img  src="/' + careplanUploadedPath + filesArr[i] + '" alt="Care Plan Upload"><span><a href="/' + careplanUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></span></li>';
+                            break;
+                        default:
+                            selectedFiles += '<li><a href="/' + careplanUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></li>';
+                            break;
+                    }
+
+                }
+                selectedFiles += `</ul>`;
+                formel.find("#" + Id).next().next().html("").append(selectedFiles);
+            }
+        }, error: function (e) {
+            toastr.error("Unexpected error!");
+            $(".loaderOverlay").hide();
+        }
+    });
+}
 function getBaseFilesReadonly(Id) {
     $.ajax({
         type: "GET",

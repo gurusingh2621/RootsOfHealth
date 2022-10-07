@@ -218,6 +218,22 @@
         overflow: scroll;
         height: calc(100vh - 303px);
     }
+    .hidden {
+        display:none;
+    }
+    .s_field_wrap {
+        position: relative;
+    }
+    .s_field_wrap span.spn_check {
+        position: absolute;
+        right: -22px;
+        top: 8px;
+    }
+    @@media (max-width:767px) {
+        .s_field_wrap span.spn_check {
+            right: 10px;
+        }
+    }
 </style>
 <section id="content" class="responsive-container">
     <div class="inner-content mt-0">
@@ -254,6 +270,7 @@
                             <th>Email</th>
                             <th>Phone</th>
                             <th>Last Modified</th>
+                            <th>Created Date</th>
                             <th>Action</th>
                         </tr>
                     </thead>

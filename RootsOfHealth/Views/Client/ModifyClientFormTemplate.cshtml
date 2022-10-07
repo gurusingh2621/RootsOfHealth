@@ -52,9 +52,9 @@
                 <div class="detail-heading d-flex">
                     <span class="templatename-wrap">
                         <label>Client Form name:</label>
-                        <input type="text" class="form-control templatename-input" value="@ViewBag.TemplateName" />
+                        <input id="txtClientFormName" type="text" class="form-control templatename-input" value="@ViewBag.TemplateName" />
                     </span>
-                    <span class="templatename-wrap">
+                    <span id="span_SelectParent" class="templatename-wrap">
                         <label>Select Parent Form:</label>
                         <select class="form-control templatename-input" id="SelectParent" style=" height: 23px;"></select>
                     </span>
@@ -225,7 +225,11 @@
 
         var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]'
         $(document).ready(function () {
-
+            
+            if (templateName.toLowerCase() == "main form") {
+                $('#span_SelectParent').hide();
+                $('#txtClientFormName').prop('disabled', true);
+            }
             $.ajax({
 
                 type: "Get",

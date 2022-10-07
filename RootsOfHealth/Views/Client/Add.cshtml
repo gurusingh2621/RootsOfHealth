@@ -1316,7 +1316,7 @@
                                         break;
                                     case "file":
 
-                                        getClientFormBaseFilesReadonly($(item).attr("id"));
+                                        getClientMainFormBaseFilesReadonly($(item).attr("id"));
                                         $(item).hide();
 
                                         break;
@@ -1375,7 +1375,7 @@
                 }
             });
         }
-        function getClientFormBaseFilesReadonly(Id) {
+        function getClientMainFormBaseFilesReadonly(Id) {
 
             $.ajax({
                 type: "GET",
@@ -5724,24 +5724,61 @@
                 dataType: "json",
                 async: false,
                 success: function (result) {
-
+                    
                     if (result != "" && result != null) {
                         var filesArr = result.Files.split(',');
                         var namesArr = result.FileNames.split(',');
+                        var descriptionArr = [];
+                        if (result.FilesDescription != null) {
+                            descriptionArr = result.FilesDescription.split(',');
+                        }
                         var selectedFiles = "";
 
                         selectedFiles = `<div class="label">File Names</div><ul class="file_uploaded_list file_uploaded_inputs">`;
                         for (var i = 0; i < filesArr.length; i++) {
-                            selectedFiles += `<li><input class="form-control" data-file="${filesArr[i]}" placeholder="Enter file name here" type="text" value="${namesArr[i]}"/>`
+                            selectedFiles += `<li><input class="form-control" data-file="${filesArr[i]}" placeholder="Enter file name here" type="text" value="${descriptionArr[i]}" fileName= "${namesArr[i]}"/>`
                             selectedFiles += '<a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a><span onclick="removeClientFormUpload(this)" class="removeUploadFile"><i class="fa fa-times"></i></span></li>';
                         }
                         selectedFiles += "</ul>";
-                        if (_programelement == undefined || _programelement == "") {
-                            $('#clientMainFormDetail').find("#" + Id).next().next().html("").append(selectedFiles);
-                        } else {
-                            _programelement.find("#" + Id).next().next().html("").append(selectedFiles);
-                        }
+                   
+                        _programelement.find("#" + Id).next().next().html("").append(selectedFiles);
+                        
                        
+                    }
+                }, error: function (e) {
+                    toastr.error("Unexpected error!");
+                    $(".loaderOverlay").hide();
+                }
+            });
+        }
+        function getClientMainFormModuleFiles(ClientFormID, Id) {
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/getfilesbyClientFormid?ClientFormID=' + ClientFormID + '&controlid=' + Id + '&patientid=' + _PatientId,
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                async: false,
+                success: function (result) {
+                    
+                    if (result != "" && result != null) {
+                        var filesArr = result.Files.split(',');
+                        var namesArr = result.FileNames.split(',');
+                        var descriptionArr = [];
+                        if (result.FilesDescription != null) {
+                            descriptionArr = result.FilesDescription.split(',');
+                        }
+                        var selectedFiles = "";
+
+                        selectedFiles = `<div class="label">File Names</div><ul class="file_uploaded_list file_uploaded_inputs">`;
+                        for (var i = 0; i < filesArr.length; i++) {
+                            selectedFiles += `<li><input class="form-control" data-file="${filesArr[i]}" placeholder="Enter file name here" type="text" value="${descriptionArr[i]}" fileName= "${namesArr[i]}"/>`
+                            selectedFiles += '<a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a><span onclick="removeClientFormUpload(this)" class="removeUploadFile"><i class="fa fa-times"></i></span></li>';
+                        }
+                        selectedFiles += "</ul>";
+                
+                        $('#clientMainFormDetail').find("#" + Id).next().next().html("").append(selectedFiles);
+                        
+
                     }
                 }, error: function (e) {
                     toastr.error("Unexpected error!");
@@ -5871,11 +5908,15 @@
             var files = formElement.find("#" + Id).get(0).files;
             var fileNames = [];
             var savedfiles = [];
+            var filesDecription = [];
             formElement.find("#" + Id).next().next().find("input").each(function (index, item) {
-                fileNames.push($(item).val());
+                filesDecription.push($(item).val());
 
                 if ($(item).hasAttr("data-file")) {
                     savedfiles.push($(item).attr("data-file"));
+                }
+                if ($(item).hasAttr("fileName")) {
+                    fileNames.push($(item).attr("fileName"));
                 }
             });
             if (files.length == 0 && savedfiles.length == 0) {
@@ -5895,12 +5936,13 @@
                 });
                 return;
             }
-            if (fileNames.length == 0) {
+            if (filesDecription.length == 0) {
                 return;
             }
             fileData.append("ClientFormID", ClientFormID);
             fileData.append("ControlId", Id);
             fileData.append("Files", savedfiles.join(","));
+            fileData.append("FilesDescription", filesDecription.join(","));
             fileData.append("FileNames", fileNames.join(","));
             fileData.append("PatientId", PatientId);
             fileData.append("IsBaseField", $("#" + Id).hasClass("base-control"));
@@ -6383,7 +6425,7 @@
                                         }
                                         break;
                                     case "file":
-                                        getClientFormModuleFiles(ClientFormID, $(item).attr("id"));
+                                        getClientMainFormModuleFiles(ClientFormID, $(item).attr("id"));
 
                                         break;
                                     default:
