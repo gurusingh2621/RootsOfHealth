@@ -659,7 +659,7 @@
             $.ajax({
 
                 type: "GET",
-                url: Apipath + '/api/PatientMain/GetAllPatient?clinicid=' +'@Session["ClinicID"]',
+                url: Apipath + '/api/PatientMain/GetAllPatient?clinicid=' + '@Session["ClinicID"]' + '&skipRecords=' + 0 + '&pageSize='+10000,
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (result) {
@@ -674,7 +674,7 @@
                         else if (result[i].LastName != "") {
                             label = label + " " + result[i].LastName;
                         }
-                        autoCompleteArray.push({ "label": label, "value": label, "id": result[i].PatientID })
+                        autoCompleteArray.push({ "label": label, "value": label, "id": result[i].PatientId })
                         $("#autoPatientList").autocomplete({
 
                             source: autoCompleteArray,
