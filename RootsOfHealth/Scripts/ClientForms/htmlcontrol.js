@@ -2254,6 +2254,18 @@ function CheckAndSaveTemplate(isactive) {
 
 
 }
+function SetMainFormTemplateStatus(Templateid) {
+    $.ajax({
+        type: "GET",
+        url: Apipath + '/api/PatientMain/updateClientFormtemplatestatus?Templateid=' + Templateid + '&status=' + true,
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        success: function (result) {
+
+        },
+    });
+
+}
 var scoreModel = []
 function saveTemplate(isactive) {
     var gethtml = $("#droppable").html();
@@ -2280,7 +2292,7 @@ function saveTemplate(isactive) {
         contentType: 'application/json; charset=UTF-8',
         dataType: "json",
         success: function (result) {
-
+           
             var Res = JSON.parse(result.id);
 
             if (Res.TemplateID == 0) {
@@ -2296,6 +2308,10 @@ function saveTemplate(isactive) {
 
                 $("#hdnTemplateId").val(Res.TemplateID);
                 $(".hiddenSavedHtml").html("").append(gethtml);
+                if (templateName.toLowerCase() == "main form") {
+                    SetMainFormTemplateStatus(Res.TemplateID);
+                }
+               
             }
 
         }
