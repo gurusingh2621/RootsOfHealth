@@ -98,7 +98,7 @@ function GetProgramTemplateList() {
                             programs += `<a href="javascript:void(0)" onclick="ProceedProgram({TemplateID:${data.TemplateID},TemplateTable:\'${data.TemplateTable}\',FormName:\'${data.FormName}\',ClientFormID:${data.ClientFormID},IsBaseTemplate:${data.IsBaseTemplate}})"  class="btn btn-success text-white" style="cursor: pointer; ${(data.Isactivated == true && data.FormName.toLowerCase() !="main form") ? "display:none;" : ""} ">MODIFY</a>`
                         }
                     }
-
+                    
                     if (data.IsActive == 1 && data.IsBaseTemplate == false && canEditClientForm == 'True' && data.FormName.toLowerCase() != "main form") {
                         if (data.Isactivated == true) {
                             programs += `<a href="javascript:void(0)"  onclick="SetTemplateStatus(${data.TemplateID},${false})"  class="btn btn-success text-white" style="cursor:pointer;">DEACTIVATE</a>`;

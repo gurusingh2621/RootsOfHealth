@@ -15,8 +15,8 @@ function GetDataBaseForms() {
         success: function (res) {
            
             if (res) {
-                var Html=''
-                ClientForms = res.filter(c => c.Field == "");
+                var Html = ''
+                ClientForms = res.filter(c => c.Field == "" && c.ClientForm.toLowerCase() != "main form");
                 ClientFormFields = res.filter(c => c.Field != "");
                  Html += '<option value="0">Select a Client Form</option><option value="Profile-Form">Profile</option>'
                 for (let i = 0; i < ClientForms.length; i++) {
@@ -116,6 +116,12 @@ function DatabaseFormFields() {
         databasecontrol_li += '<li data-type="OtherPronouns" data-index="PatientMain" class="databasecontrol"><span>Other Preferred Pronouns</span></li>';
         databasecontrol_li += '<li data-type="ThinkYourselfAs" data-index="PatientMain" class="databasecontrol"><span>Think Yourself As</span></li>';
         databasecontrol_li += '<li data-type="OtherThinkYourselfAs" data-index="PatientMain" class="databasecontrol"><span>Other Think Yourself As</span></li>';
+        
+        specificClientFields = ClientFormFields.filter(c => c.ClientForm.toLowerCase() == "main form")
+
+        for (let i = 0; i < specificClientFields.length; i++) {
+            databasecontrol_li += `<li data-controlId= "${specificClientFields[i].ControlId}" data-columnType="${specificClientFields[i].ColumnType}" data-type="${specificClientFields[i].Field}" data-index="${specificClientFields[i].ClientForm}" class="databasecontrol"><span>${specificClientFields[i].FieldName}</span></li>`;
+        }
     }
    
            
