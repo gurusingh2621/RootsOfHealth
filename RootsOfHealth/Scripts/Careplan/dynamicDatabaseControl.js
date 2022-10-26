@@ -226,7 +226,7 @@ function DatabaseFormFields() {
                 $(".contentarea3").next("span.basecontentspan").hide();
             }
             if (ui.item.hasClass("ui-draggable") && ui.item.attr("data-index") !== undefined) {
-                EditHtml(ui.item.attr("data-type"), newid);
+                EditHtml('databaseField', newid);
             }
         }
     });
