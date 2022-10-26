@@ -1585,6 +1585,7 @@ function EditHtml(type, ID) {
             break;     
         default:
             var labelText = $(controlId).parent().parent().prev().find("label").html();
+            console.log(labelText);
             popupString = '<div class="modal-row">' +
                 '<label class="required-asterisk">Label Text</label>' +
                 '<input  type="text"  class="form-control database-labeltext"  value="' + labelText + '"/>' +
@@ -1608,6 +1609,7 @@ function EditHtml(type, ID) {
                     return;
                 }
                 $(controlId).parent().parent().prev().find("label").html("").append($(".database-labeltext").val());
+                console.log($(".database-labeltext").val());
                 $(controlId).closest(".dragresize").removeClass("col-md-4 col-md-6 col-md-12").addClass($("#fieldsize").val());
                 $("#exampleModalCenter").modal("hide");
             });
