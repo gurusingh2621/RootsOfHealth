@@ -192,7 +192,7 @@ function DatabaseFormFields() {
                                               <label id="${newid}" data-controlId="${controlId}"  class="database-field" data-columnType="${columnType}" data-index="${responseIndex}">{{ Value }}</label>                                          
                                               </div>                                     
                                                </div>
-                                       <div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml('${draggableType}','${newid}')"><i class="fas fa-edit"></i></button>
+                                       <div class="event-btn-right"><button class="event-btn file-edit" onclick="EditHtml('databaseField','${newid}')"><i class="fas fa-edit"></i></button>
                                        <button class="event-btn file-remove" onclick="RemoveControl(this)"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></div>
                                                 </div>
                                       
