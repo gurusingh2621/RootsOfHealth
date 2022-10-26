@@ -59,7 +59,7 @@ function DatabaseFormFields() {
         specificClientFields = ClientFormFields.filter(c => c.ClientForm == selectedForm)
         
         for (let i = 0; i < specificClientFields.length; i++) {
-            databasecontrol_li += `<li data-controlId= "${specificClientFields[i].ControlId}" data-columnType="${specificClientFields[i].ColumnType}" data-type="${'databaseFields' +specificClientFields[i].Field}" data-index="${specificClientFields[i].ClientForm}" class="databasecontrol"><span>${specificClientFields[i].FieldName}</span></li>`;
+            databasecontrol_li += `<li data-controlId= "${specificClientFields[i].ControlId}" data-columnType="${specificClientFields[i].ColumnType}" data-type="${specificClientFields[i].Field}" data-index="${specificClientFields[i].ClientForm}" class="databasecontrol"><span>${specificClientFields[i].FieldName}</span></li>`;
         }
     }
     else {
@@ -120,7 +120,7 @@ function DatabaseFormFields() {
         specificClientFields = ClientFormFields.filter(c => c.ClientForm.toLowerCase() == "main form")
 
         for (let i = 0; i < specificClientFields.length; i++) {
-            databasecontrol_li += `<li data-controlId= "${specificClientFields[i].ControlId}" data-columnType="${specificClientFields[i].ColumnType}" data-type="${'databaseFields'+specificClientFields[i].Field}" data-index="${specificClientFields[i].ClientForm}" class="databasecontrol"><span>${specificClientFields[i].FieldName}</span></li>`;
+            databasecontrol_li += `<li data-controlId= "${specificClientFields[i].ControlId}" data-columnType="${specificClientFields[i].ColumnType}" data-type="${specificClientFields[i].Field}" data-index="${specificClientFields[i].ClientForm}" class="databasecontrol"><span>${specificClientFields[i].FieldName}</span></li>`;
         }
     }
    
@@ -166,7 +166,8 @@ function DatabaseFormFields() {
                     break;
                 }
             }
-            var lblValue = $("[data-type=" + draggableType + "] span").html();
+            var lblValue = $("#database-control-box").find(("[data-type=" + draggableType + "] span")).html();
+            
             var sectionName = selectedForm;
             var databaseStr = ``;
             databaseStr = `<div  class="dragresize data-frmbtn col-md-12">
