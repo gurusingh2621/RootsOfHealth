@@ -224,7 +224,7 @@
         <div class="form-group">
             <p>Username</p>
             <div class="userName">
-                <input class="text-box single-line" id="UserName" name="UserName" placeholder="Enter Username" type="text" value="">
+                <input class="text-box single-line" id="UserName" name="UserName"  placeholder="Enter Username" type="text" autocomplete="off" readonly="readonly" onclick="makeReadonlyField(this,false)" onfocusout="makeReadonlyField(this,true)"  value="">
                 <span class="UserIcon"><img src="~/images/profile.svg"></span>
             </div>
         </div>
@@ -232,7 +232,7 @@
         <div class="form-group">
             <p>Password</p>
             <div class="userName">
-                <input class="text-box single-line" id="Password" name="Password" placeholder="Enter Password" type="password" value="">
+                <input class="text-box single-line" id="Password" name="Password" placeholder="Enter Password" type="password" autocomplete="off" readonly="readonly" onclick="makeReadonlyField(this,false)" onfocusout="makeReadonlyField(this,true)" value="">
                 <span class="UserIcon"><img src="~/images/key.svg"></span>
             </div>
         </div>
@@ -279,5 +279,9 @@
                     toastr.error('error');
                 }
             });      
+    }
+
+    function makeReadonlyField(obj, value) {
+        $(obj).prop('readonly', value);
     }
 </script>

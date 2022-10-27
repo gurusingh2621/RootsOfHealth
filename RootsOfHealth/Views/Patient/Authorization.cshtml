@@ -172,27 +172,31 @@
         function autocomplete() {
             $.ajax({
                 type: "GET",
-                url: Apipath + '/api/PatientMain/GetAllPatient?clinicid='+'@Session["ClinicID"]',
+                url: Apipath + '/api/PatientMain/GetAllPatient?clinicid=' + '@Session["ClinicID"]' + '&skipRecords=' + 0 + '&pageSize=' + 10000,
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (result) {
-
+                    
                         autoCompleteArray = [];
                         for (var i = 0; i < result.length; i++) {
                             var label = "";
                             label = result[i].FirstName;
+                            var clientEmail = "";
+                            if (result[i].Email != "" && result[i].Email != null) {
+                                clientEmail = ' (' + result[i].Email + ')';
+                            }
+                          
                             if (result[i].MiddleName != "") {
-                                label = label + " " + result[i].MiddleName;
+                                label = label + " " + result[i].MiddleName + clientEmail;
                             }
                             else if (result[i].LastName != "") {
-                                label = label + " " + result[i].LastName;
+                                label = label + " " + result[i].LastName + clientEmail;
                             }
 
                             autoCompleteArray.push({ "label": label, "value": label, "id": result[i].PatientId })
                             $("#autoPatientList").autocomplete({
                                 source: autoCompleteArray,
                                 change: function (event, ui) {
-
                                     if (ui.item != null)$("#hdnPatientId").val(ui.item.id);
 
                                 }
