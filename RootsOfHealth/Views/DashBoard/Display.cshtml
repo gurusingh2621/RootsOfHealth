@@ -564,16 +564,16 @@
                 success: function (result) {
                     
                   
-                    var aDatasets1 = [result.PatientCount.TotalPatient, result.PatientCount.MalePatient, result.PatientCount.FemalePatient, result.PatientCount.TransMale, result.PatientCount.TransFemale, result.PatientCount.GenderQueer, result.PatientCount.Other];
+                    var aDatasets1 = [result.PatientCount.MalePatient, result.PatientCount.FemalePatient, result.PatientCount.TransMale, result.PatientCount.TransFemale, result.PatientCount.GenderQueer, result.PatientCount.Other];
 
                     var dataT = {
-                        labels: ['Total', 'Male', 'Female', 'Trans male', 'Trans female', 'Gender Queer','Other'],
+                        labels: ['Male', 'Female', 'Trans male', 'Trans female', 'Gender Queer','Other'],
                         datasets: [{
                             label: "Client Count",
                             data: aDatasets1,
                             fill: false,
-                            backgroundColor: ["rgb(60, 179, 113)", "rgb(30, 144, 255)", "rgb(238, 130, 238)", "rgb(211, 211, 211)", "rgb(255, 165, 0)", "rgb(106, 90, 205)", "rgb(255, 99, 71)"],
-                            borderColor: ["rgb(54, 162, 235)", "rgb(255, 99, 132)", "rgb(255, 159, 64)", "rgb(255, 205, 86)"],
+                            backgroundColor: ["rgb(30, 144, 255)", "rgb(238, 130, 238)", "rgb(211, 211, 211)", "rgb(255, 165, 0)", "rgb(106, 90, 205)", "rgb(255, 99, 71)"],
+                            borderColor: ["rgb(255, 99, 132)", "rgb(255, 159, 64)", "rgb(255, 205, 86)"],
                             borderWidth: 0
                         }]
                     };
