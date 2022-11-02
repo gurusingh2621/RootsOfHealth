@@ -578,6 +578,7 @@ function BindPotentialClientsTable() {
             'targets': [6],
             'orderable': false
         }],
+        'order': [[5, 'desc']],
         "columns": [
             {
                 "data": "PatientId"
@@ -670,6 +671,9 @@ function BindPotentialClientsTable() {
                 $('td', nRow).css('background-color', '#dceb53');
                 $('td', nRow).css('color', 'black');
             }
+        },
+        "fnInitComplete": function () {
+            setTimeout(UpdateIsNewPatientColumn(), 5000);
         }
     });
   
@@ -1460,4 +1464,20 @@ function showHideSSN(element) {
         element.addClass("active");
         element.parent().find('input').attr("type", "text");
     }
+}
+
+function UpdateIsNewPatientColumn() {
+    $.ajax({
+        type: "POST",
+        url: Apipath + '/api/PatientMain/UpdateIsNewPatientColumn',
+        contentType: 'application/json; charset=UTF-8',
+        dataType: "json",
+        success: function (result) {
+            $(".loaderOverlay").hide();
+
+        },
+        error: function () {
+            $(".loaderOverlay").hide();
+        }
+    })
 }
