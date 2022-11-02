@@ -118,6 +118,7 @@
         var PrevUserrole = "@Model.RoleID";
         var userId="@Session["userid"]"
         var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
+        var currentPassword = "@Model.Password";
         $("#usersImg").change(function () {
 
             var formData = new FormData();
@@ -169,7 +170,8 @@
 
         }
         $(function () {
-            $("#txtPassword").val('@Model.Password');
+            var $CurrentPassword = $("#ChnagePWD").find('#txtPassword');
+            $CurrentPassword.val(currentPassword);
             $("#PhoneNo").on("keypress keyup blur", function (event) {
                 $(this).val($(this).val().replace(/[^\d].+/, ""));
                 if ((event.which < 48 || event.which > 57)) {
@@ -323,6 +325,7 @@
                 success: function (result) {
 
                     if (result == 1) {
+                        $('#txtPassword').val($("#txtPassword1").val());
                         $("#txtPassword1").val('');
                         $("#txtPassword2").val('');
                         toastr.success("User Password updated successfully!");
@@ -351,5 +354,9 @@
                 input.attr("type", "password");
             }
         });
+
+        function makeReadonlyField(obj, value) {
+            $(obj).prop('readonly', value);
+        }
     </script>
 }
