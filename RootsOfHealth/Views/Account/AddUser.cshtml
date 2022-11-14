@@ -148,7 +148,7 @@
                             <div class="form-group">
                                 @Html.Label("User Name", htmlAttributes: new { @class = "control-label required" })
 
-                                @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control", @maxlength = "16" } })
                                 @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
                             </div>
                         </div>
@@ -185,10 +185,12 @@
                                 @Html.ValidationMessageFor(model => model.PhoneNo, "", new { @class = "text-danger" })
                             </div>
                         </div>
-                        <div class="col-md-6" id="divclinic" hidden="hidden">
+                        <div class="col-md-6" id="divclinic">
                             <div class="form-group">
-                                <label class="control-label">Select Clinic</label>
-                                <select id="ddlClinic" class="form-control"></select>
+                                @Html.Label("Select Clinic", htmlAttributes: new { @class = "control-label required" })
+                                @Html.EditorFor(model => model.ClinicID, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.ClinicID, "", new { @class = "text-danger" })
+                                
 
                             </div>
                         </div>
@@ -312,7 +314,7 @@
                 success: function (result) {
 
                     $("#RoleID")
-                        .replaceWith('<select id="RoleID" name="RoleID" onchange="CheckRole()" class="form-control list-box tri-state">' +
+                        .replaceWith('<select id="RoleID" name="RoleID" /*onchange="CheckRole()"*/ class="form-control list-box tri-state">' +
                         '<option value="1">1</option>' +
                         '<option value="2">2</option>' +
                         '</select>');
@@ -451,12 +453,12 @@
                 toastr.error("Phone No. is required");
                 return false;
             }
-            if ($("#RoleID option:selected").text().toLowerCase() == 'navigator' || $("#RoleID option:selected").text().toLowerCase() == 'supervisor') {
-                if ($("#ddlClinic option:selected").val() == '0') {
-                    toastr.error("please select a clinic");
-                    return false;
-                }
+  
+            if ($("#ClinicID option:selected").val() == '0') {
+               toastr.error("please select a clinic");
+               return false;
             }
+            
            
             if (check == false) {
                 toastr.error("username already exist.please try diffrent username.");
@@ -466,7 +468,7 @@
                 toastr.error("Email already exist.please try diffrent email.");
                 return false;
             };
-            var clinicId = $("#ddlClinic").val();
+            var clinicId = $("#ClinicID").val();
             if (clinicId == '0') {
                 clinicId = null;
             }
@@ -531,12 +533,16 @@
                 dataType: "json",
                 success: function (result) {
                     if (result.length) {
-                        $("#ddlClinic").html('');
-                        var s = '<option value="0">Please Select a Clinc</option>';
+                        $("#ClinicID")
+                            .replaceWith('<select id="ClinicID" name="ClinicID" class="form-control list-box tri-state">' +
+                                '<option value="0">Select clinic</option>' +
+                                '</select>');
+                        var s = '<option value="0">Select clinic</option>';
                         for (var i = 0; i < result.length; i++) {
                             s += '<option value="' + result[i].ClinicID + '">' + result[i].ClinicName + '</option>';
                         }
-                        $("#ddlClinic").html(s);
+                        $("#ClinicID").html('');
+                        $("#ClinicID").html(s);
                     }
                  
                 },
