@@ -118,7 +118,9 @@
         var PrevUserrole = "@Model.RoleID";
         var userId="@Session["userid"]"
         var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]';
-        var currentPassword = "@Model.Password";
+        var userPassword = "@Model.Password";
+        var currentPassword = userPassword.replace("&amp;", "&");
+        
         $("#usersImg").change(function () {
 
             var formData = new FormData();
