@@ -9,6 +9,7 @@ var filePath = '';
 var $tblPotientialPatient = $('#tblPotientialPatient');
 var summaryElem = $('#summary');
 var TotalFileColumns = '';
+var potentialClientsIdArray = [];
 
 
 
@@ -575,11 +576,18 @@ function BindPotentialClientsTable() {
             "dataType": "JSON"
         },
         'columnDefs': [{
-            'targets': [6],
+            'targets': [0,7],
             'orderable': false
         }],
-        'order': [[5, 'desc']],
+        'order': [[1, 'desc']],
         "columns": [
+            {
+                "data": null,
+                "render": function () {
+                    return '<input type="checkbox" class="chkRow" name="chkRow">';
+                }
+              
+            },
             {
                 "data": "PatientId"
             },
@@ -659,11 +667,12 @@ function BindPotentialClientsTable() {
         ],
         "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
             if (duplicates.filter(e => e.EmailAddress === aData.EmailAddress).length > 0) {
-                var firstCell = $(nRow).children('td:first');
+                var IdCell = $(nRow).find('td:nth-child(2)');
+                
                 $('td', nRow).css('background-color', '#f78888');
                 $('td', nRow).css('color', 'White');
-                firstCell.css('cursor', 'pointer');
-                firstCell.click(function () {
+                IdCell.css('cursor', 'pointer');
+                IdCell.click(function () {
                     GetDuplicateRecordDetails(aData.PatientId)
                 })
             }
@@ -674,9 +683,85 @@ function BindPotentialClientsTable() {
         },
         "fnInitComplete": function () {
             setTimeout(UpdateIsNewPatientColumn(), 5000);
+            $("input[name='chkRow']").bind("change", function () {
+                if ($("input[name='chkRow']").length == $("input[name='chkRow']:checked").length) {
+                    $('#checkbox-chkAllRows').prop('checked', 'checked');
+                }
+                else {
+                    $('#checkbox-chkAllRows').prop('checked', false);
+                }
+                
+                var row = $(this).closest('tr');
+                var id = row.find("td:eq(1)").text();
+                BuildDeleteString(this, id);
+                if ($("input[name='chkRow']:checked").length > 0) {
+                    $('#btnDeleteMultiplePC').removeClass('d-none');
+                }
+                else {
+                    $('#btnDeleteMultiplePC').addClass('d-none');
+                }
+            })
         }
     });
-  
+    
+}
+
+
+$('#checkbox-chkAllRows').change(function () {
+    $('.chkRow').prop('checked', $(this).prop('checked'));
+
+    $('.chkRow').each(function (index, element) {
+        var row = $(element).closest('tr');
+        var id = row.find("td:eq(1)").text();
+        BuildDeleteString($(element),id);
+
+    })
+    if ($(this).is(':checked')) {
+        $('#btnDeleteMultiplePC').removeClass('d-none');
+    }
+    else {
+        $('#btnDeleteMultiplePC').addClass('d-none');
+    }
+})
+function BuildDeleteString(elem, id) {
+    if ($(elem).is(':checked')) {
+        if (potentialClientsIdArray.indexOf(id) == -1) {
+            potentialClientsIdArray.push(id);
+        }
+    }
+    else {
+        var idx = potentialClientsIdArray.indexOf(id);
+        if (idx != -1) {
+            potentialClientsIdArray.splice(idx, 1);
+        }
+    }
+};
+function DeleteMultiplePC() {
+    if (potentialClientsIdArray.length ==0) {
+        return false;
+        toastr.error("No potential client selected!");
+    }
+    $.ajax({
+        type: "DELETE",
+        url: Apipath + '/api/PatientMain/DeleteMultiplePotentialClient',
+        dataType: "json",
+        data: JSON.stringify(potentialClientsIdArray),
+        async: false,
+        contentType: "application/json; charset=utf-8",
+        success: function (result) {
+            if (result > 0) {
+                toastr.success("Selected potential clients Deleted successfully.");
+                potentialClientsIdArray = [];
+                $('#checkbox-chkAllRows').prop('checked', false);
+                BindPotentialClientsTable();
+            }
+            $('#btnDeleteMultiplePC').addClass('d-none');
+        },
+        error: function (e) {
+            toastr.error("Unexpected error!");
+            $('#btnDeleteMultiplePC').addClass('d-none');
+        }
+    });
 }
 function GetFullName(firstname , lastname) {
     var fullname = "";
@@ -947,6 +1032,9 @@ function DeletePotentialPatient(id) {
                             if (result == 1) {
                                 toastr.success("Potiental Client Deleted successfully");
                                 BindPotentialClientsTable();
+                                $('#btnDeleteMultiplePC').addClass('d-none');
+                                $('#checkbox-chkAllRows').prop('checked', false);
+                                potentialClientsIdArray = [];
                             }
                             else {
                                 toastr.error("unexpected error Happened");

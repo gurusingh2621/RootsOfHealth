@@ -203,7 +203,7 @@
     div#PotentialClientFileUpload .modal-content {
         overflow: hidden;
     }
-    button#btnpatientDelete {
+    button#btnpatientDelete, button#btnDeleteMultiplePC {
         border-radius: 50px;
     }
     table#tblInvalidClients {
@@ -234,6 +234,10 @@
             right: 10px;
         }
     }
+    button#btnDeleteMultiplePC {
+        width: 80px;
+        height: 36px;
+    }
 </style>
 <section id="content" class="responsive-container">
     <div class="inner-content mt-0">
@@ -256,6 +260,14 @@
                         <input type="submit" value=" Download Sample Excel File" class="btn btn-success" />
 
                     }
+                    @if (potentialClientPerm.Where(x => x.CanDelete == true).Any())
+                    {
+                        <button id="btnDeleteMultiplePC" onclick="DeleteMultiplePC()" class="btn btn-danger ml-auto d-none">
+                            <i class=""></i>
+                            Delete
+                        </button>
+                       
+                    }
                     @if (potentialClientPerm.Where(x => x.CanCreate == true).Any())
                     {
                         <a class="btn btn-success ml-auto" href="/Patient/AddPotentialPatient">Add New</a>
@@ -265,6 +277,7 @@
 
                     <thead>
                         <tr class="table-active">
+                            <th><input type="checkbox" id="checkbox-chkAllRows" name="checkbox-chkAllRows" class=""></th>
                             <th>ClientId</th>
                             <th>Name</th>
                             <th>Email</th>
