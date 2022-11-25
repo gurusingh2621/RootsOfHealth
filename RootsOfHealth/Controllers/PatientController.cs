@@ -892,7 +892,7 @@ namespace RootsOfHealth.Controllers
 
         public ActionResult GetPotientialPatient()
         {
-           
+
             return View();
         }
         [HttpPost]
@@ -1743,6 +1743,19 @@ namespace RootsOfHealth.Controllers
 
                 return PartialView("~/Views/Shared/Patient/_PatientPrograms.cshtml", lst);
             }
+        }
+
+        public ActionResult RefreshSession(bool isPotentialPatient = false)
+        {
+            
+            var updated = false;
+            if (isPotentialPatient)
+            {
+                Session.Timeout = 120;
+                updated = true;
+            }
+            return Json(new
+            {  sessionUpdated = updated });
         }
     }
 }

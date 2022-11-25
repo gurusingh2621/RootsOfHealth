@@ -11,7 +11,10 @@ var summaryElem = $('#summary');
 var TotalFileColumns = '';
 var potentialClientsIdArray = [];
 
-
+$(document).ready(function () {
+    RefreshSessionForPC();
+});
+setInterval(function () { RefreshSessionForPC() }, 600000);
 
 $btnsavepotentialclients.click(function () {
     
@@ -1568,4 +1571,21 @@ function UpdateIsNewPatientColumn() {
             $(".loaderOverlay").hide();
         }
     })
+}
+
+function RefreshSessionForPC() {
+   
+    $.ajax({
+        type: "GET",
+        url: "/Patient/RefreshSession?isPotentialPatient="+true,
+        dataType: "json",
+        async: false,
+        contentType: "application/json; charset=utf-8",
+        success: function (result) {
+            
+        },
+        error: function (e) {
+           
+        }
+    });
 }
