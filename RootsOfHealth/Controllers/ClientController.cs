@@ -25,6 +25,7 @@ using S = DocumentFormat.OpenXml.Spreadsheet.Sheets;
 using E = DocumentFormat.OpenXml.OpenXmlElement;
 using A = DocumentFormat.OpenXml.OpenXmlAttribute;
 using System.Reflection;
+using System.Diagnostics;
 
 namespace RootsOfHealth.Controllers
 {
@@ -173,6 +174,8 @@ namespace RootsOfHealth.Controllers
 
         public ActionResult Add(string patientId = "0", string CurrentTab = null, string Subtab = null,int ClientFormID=0)
         {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             double sub;
             Common objCommon = new Common();
             PatientDetailBO patientdetailobj = new PatientDetailBO();
@@ -1071,7 +1074,9 @@ namespace RootsOfHealth.Controllers
             {
                 patientdetailobj.PatientMain.ImportDate = DateTime.Now;
             }
-                return View(patientdetailobj);
+            sw.Stop();
+            var time = sw.Elapsed;
+            return View(patientdetailobj);
         }
 
         [HttpGet]
