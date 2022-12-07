@@ -187,7 +187,7 @@
                     <a class="nav-link active" id="Profile-tab" data-toggle="tab" data-FormName="Profile" href="#Profile" role="tab"
                        aria-controls="Profile" aria-selected="true">Profile</a>
                 </li>
-                @if (Model != null)
+                @*@if (Model != null)
                 {
                     foreach (var item in Model.Where(p => p.ParentFormID == null || p.ParentFormID == 0))
                     {
@@ -203,7 +203,7 @@
                         }
 
                     }
-                }
+                }*@
 
 
                 <li class="nav-item" id="programtbs" style="display:none;/*left: 155px;*/">
