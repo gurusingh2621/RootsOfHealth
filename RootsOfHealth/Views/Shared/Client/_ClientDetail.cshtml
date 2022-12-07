@@ -36,14 +36,117 @@
 <ul class="nav nav-tabs" style="display:none;" id="myChildTab" role="tablist">
 </ul>
 
+@if (Model.ClientForm != null)
+{
 
+    foreach (var item in Model.ClientForm)
+    {
+        var formpermission = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["userid"]),item.ClientFormID,true);
+        var FormName = item.FormName.Replace(" ", "");
+        <div class="tab-pane fade" id="@(FormName + "only")" role="tabpanel" aria-labelledby="@("a"+FormName)">
+            <div class="inner-content">
+                <div class="paitent-detail">
+                    <div class="row">
+                        <div id="pat_out_div" class="col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="paitent-detail-left">
+                                @{
+                                    Html.RenderPartial("~/Views/Shared/Client/_ClientInfo.cshtml");
+                                }
+
+                                <div class="detail-heading d-flex">
+                                    @foreach (var items in Model.ClientForm.Where(p => p.ClientFormID == item.ParentFormID))
+                                    {
+                                        string FormNames = @items.FormName.Replace(" ", "");
+                                        <a id="@("a" + FormNames)" class="nav-link" data-toggle="tab"
+                                           href="@("#" + FormNames + "only")" data-ClientFormID="@items.ClientFormID" data-PatientID="@items.patientID" onclick="loadClient(this)" data-TemplateID="@items.TemplateID" data-FormName=@(FormNames)>@items.FormName>><span class="check @Html.Raw(items.Saved ? "" : "d-none")"></span></a>
+                                    }
+                                    <h2 style="padding-top:10px">@item.FormName</h2>
+                                    <div class="detail-button ml-auto">
+                                        @*<a href="javascript:{}" onclick="return OpenFormHistory(@item.ClientFormID,@Model.PatientMain.PatientID,true);" data-save="@(item.Saved ? "True" : "False")" class="btn btn-success ml-auto">
+                                            <i class="far fa-save"></i>
+                                            History
+                                        </a>*@
+                                        <a href="javascript:{}" onclick="return saveProgramBasicInfo('@item.TemplateID','@item.TemplateTable',@item.ClientFormID,@item.patientID);" data-save="@(item.Saved ? "True" : "False")" class="btn btn-success ml-auto btnprogramsave">
+                                            <i class="far fa-save"></i>
+                                            Save
+                                        </a>
+                                        @if (formpermission.Where(f => f.CanUpdate == true).Any())
+                                        {
+                                            <a href="javascript:{}" onclick="ActivateTab(@ViewBag.PatientID,'','@FormName',@item.ClientFormID)"
+                                               class="btn btn-success label-fields btnProgramEdit">
+                                                <i class="far fa-edit"></i>
+                                                Edit
+                                            </a>
+                                        }
+                                        <a href="javascript:{}" onclick="PrintProgram('@FormName')"
+                                           class="btn btn-success label-fields btnprogramPrint">
+                                            <i class="far fa-save"></i>
+                                            Print
+                                        </a>
+                                    </div>
+
+                                </div>
+                                <div class="score-result score_Result d-none" id="ScoreStatus_@item.ClientFormID">
+                                    <div class="score-full">
+                                        <div class="form-row-first label-fields mt-0">
+                                            <div class="top-form-row d-flex height-auto">
+                                                <div class="two-columns">
+
+                                                    <label class="label-fields">
+                                                        Score
+                                                    </label>
+                                                </div>
+                                                <div class="two-columns">
+
+                                                    <label class="label-fields">
+                                                        Status
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                            <div class="bootom-form-row d-flex">
+                                                <div class="two-columns">
+
+                                                    <label id="txtoverallscore" class="label-fields"></label>
+
+                                                </div>
+
+                                                <div class="two-columns">
+
+                                                    <label id="txtoverallstatus" class="label-fields"></label>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="SidebarScroll scroll inner-main-content">
+                                    <style>
+                                        ul.file_uploaded_list li img {
+                                            max-width: 90px;
+                                            margin-right: 10px;
+                                        }
+                                    </style>
+                                    <div id="@(FormName + "render-basicform")" class="render-basicProgramform" style="padding-bottom:100px"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+}
 
 
 <!-- Programs Tab start here  -->
 
-@*@{
+@{
     Html.RenderPartial("~/Views/Shared/Patient/_PatientPrograms.cshtml", Model.Programs);
-}*@
+}
 
 <!-- Programs Tab end here  -->
 
@@ -702,7 +805,7 @@
            if (currenttab == 'ProgramTab') {
 
                 if (@Model.Programs.Count> 0) {
-                  /*  LoadPrograms();*/
+                    LoadPrograms();
                 }
                 else {
                     $('#Profile-tab').click();
@@ -757,9 +860,8 @@
                     }
                 });
             }
-        //showNotificationsOnInfo();
-        function showNotificationsOnInfo() {
-                      @if (Model.ScheduleDate.IsHousingDue=="Red")
+
+          @if (Model.ScheduleDate.IsHousingDue=="Red")
         {
             @: $("#HouNot").attr('class', 'notCountR');
             @: $("#Housing-tab").css('border-left', '5px solid #a53333');
@@ -794,6 +896,11 @@
         @: $("#HouNot").attr('title', 'Due after ' +  @Model.ScheduleDate.HousingNotification+' days.');
 
         }
+
+
+
+
+
 
           @if (Model.ScheduleDate.IsFinancialDue== "Red")
           {
@@ -1407,7 +1514,6 @@
                }
 
            }*@
-        }
 
           console.log('hide controls');
         $('.form-control').css('display', 'none');
@@ -1417,7 +1523,80 @@
         //$('#pat_out_div').addClass('col-lg-8 col-md-12 col-sm-12 col-12 pr-0');
         $('.recent-paitents').css('display', 'block');
         $('#appointement_div').css('display', 'block');
-       
+        //getListAllAppointments();
+       // getListAllNotesLoadMore();
+        //-----------Score Bind Start------------------------------//
+        //-----------------Housingscore start----------------------//
+        @*$('#txthousingscore').html(@Model.PatientScore.housingscore+"/26");
+          $('#txthousingstatus').html('@Model.PatientScore.housingstatus');
+        //  InsertBadge( $('#txthousingstatus'),'@Model.PatientScore.housingstatus')
+         //-----------------Housingscore end----------------------//
+         //----------------financialscore start----------------------//
+        $('#txtfinancialscore').html(@Model.PatientScore.financialcscore+"/22");
+          $('#txtfinancialstatus').html('@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Model.PatientScore.financialcstatus.ToLower())');
+        //  InsertBadge( $('#txtfinancialstatus'),'@Model.PatientScore.financialcstatus')
+         //-----------------financialscore end----------------------//
+         //----------------Employmentscore start----------------------//
+        $('#txtemploymentscore').html(@Model.PatientScore.employmentscore+"/20");
+          $('#txtemploymentstatus').html('@Model.PatientScore.employmentstatus');
+        //  InsertBadge( $('#txtemploymentstatus'),'@Model.PatientScore.employmentstatus')
+         //-----------------Employmentscore end----------------------//
+        //----------------communicationscore start----------------------//
+        $('#txtcommunscore').html(@Model.PatientScore.communicationscore+"/12");
+          $('#txtcommunstatus').html('@Model.PatientScore.communicationstatus');
+      //    InsertBadge($('#txtcommunstatus'),'@Model.PatientScore.communicationstatus')
+         //-----------------communicationscore end----------------------//
+          //----------------Healthcarescore start----------------------//
+        $('#txthealthscore').html(@Model.PatientScore.healthcarescore+"/26");
+          $('#txthealthstatus').html('@Model.PatientScore.healthcarestatus');
+        //  InsertBadge( $('#txthealthstatus'),'@Model.PatientScore.healthcarestatus')
+         //-----------------Healthcarescore end----------------------//
+        //----------------Socialscore start----------------------//
+        $('#txtsocialscore').html(@Model.PatientScore.socialsupportscore+"/12");
+          $('#txtsocialstatus').html('@Model.PatientScore.socialsupportstatus');
+          InsertBadge( $('#txtsocialstatus'),'@Model.PatientScore.socialsupportstatus')
+         //-----------------Socialscore end----------------------//
+         //----------------Legalscore start----------------------//
+        $('#txtlegalscore').html(@Model.PatientScore.legalstatusscore+"/18");
+          $('#txtlegalstatus').html('@Model.PatientScore.legalstatusstatus');
+          InsertBadge( $('#txtlegalstatus'),'@Model.PatientScore.legalstatusstatus')
+         //-----------------Legalscore end----------------------//
+           //----------------Substancescore start----------------------//
+        $('#txtsubtscore').html(@Model.PatientScore.substancescore+"/20");
+          $('#txtsubtstatus').html('@Model.PatientScore.substancestatus');
+          InsertBadge($('#txtsubtstatus'),'@Model.PatientScore.substancestatus')
+         //-----------------Substancescore end----------------------//
+          //----------------Mental Health score start----------------------//
+        $('#txtmentalscore').html(@Model.PatientScore.mentalhealthscore+"/20");
+          $('#txtmentalstatus').html('@Model.PatientScore.mentalhealthstatus');
+          InsertBadge( $('#txtmentalstatus'),'@Model.PatientScore.mentalhealthstatus')*@
+         //-----------------Mental Health score end----------------------//
+
+            //----------------Food Access score start----------------------//
+        @*$('#txtfoodscore').html(@Model.PatientScore.foodaccessscore+"/26");
+          $('#txtfoodstatus').html('@Model.PatientScore.foodaccessstatus');
+          InsertBadge($('#txtfoodstatus'),'@Model.PatientScore.foodaccessstatus')
+         //-----------------Food Access score end----------------------//
+
+          //----------------Profile(Overall) score start----------------------//
+          $('#txtoverallscore').html(@Model.PatientScore.OverallScore+"/200");*@
+
+         @*$('#txtoverallstatus').html('@System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Model.PatientScore.OverallStatus.ToLower())');*@
+        @*//  $('#txtoverallstatus').html('@Model.PatientScore.OverallStatus');
+         // InsertBadge( $('#txtoverallstatus'),'@Model.PatientScore.OverallStatus')*@
+          GetScoreClient(0)
+         //-----------------Profile(Overall) score end----------------------//
+
+
+          //-----------Score Bind end------------------------------//
+
+        //----------------PeraltaCollege Start----------------//
+
+        //var lblOneYouAre = $('#lblOneYouAre').html();
+        //if (lblOneYouAre == "Student") {
+        //    $('#divStudent').css('display', 'block');
+        //}
+        //----------------PeraltaCollege end----------------//
 
         var lblgender = $('#lblGender').html();
         if (lblgender == "Other") {
@@ -3106,7 +3285,7 @@
         dataType: "json",
         async: false,
         success: function (result) {
-
+            
             if (result != "" && result != null) {
                 var filesArr = result.Files.split(',');
                 var namesArr = result.FileNames.split(',');
@@ -3114,7 +3293,7 @@
                 if (result.FilesDescription != null) {
                     descriptionArr = result.FilesDescription.split(',');
                 }
-
+              
                 var selectedFiles = "";
                 selectedFiles = `<ul class="file_uploaded_list onlylinkslist">`;
                     var ext = "";
@@ -3910,7 +4089,7 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (data) {
-
+                
                 if (data) {
                     var element = $('#ScoreStatus_' + clientformid)
                     var scoreElement = $(element).find('#txtoverallscore');
