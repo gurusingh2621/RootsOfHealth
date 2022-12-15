@@ -35,6 +35,7 @@ namespace RootsOfHealth.Models
         public CareplanCountBO CarePlanCount { get; set; }
 
         public ClientMainFormInfoBO MainFormInfoBO { get; set; }
+        public string ClientMainFormData { get; set; }
         public PatientDetailBO()
         {
 

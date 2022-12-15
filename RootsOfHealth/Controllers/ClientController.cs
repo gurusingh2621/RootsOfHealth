@@ -4740,6 +4740,7 @@ namespace RootsOfHealth.Controllers
             {
 
             }
+            patientdetailobj.ClientMainFormData = GetClientMainFormBasicFormValue(ClientMainFormId, MainFormData.TemplateId, PatientId).ToString();
             MainFormData.ClientMainFormId = ClientMainFormId;
             patientdetailobj.MainFormInfoBO = MainFormData;
             ViewBag.currentTab = CurrentTab;
@@ -4835,7 +4836,29 @@ namespace RootsOfHealth.Controllers
             MainFormData.ClientMainFormId = ClientMainFormId;
             patientdetailobj.MainFormInfoBO = MainFormData;
             ViewBag.currentTab = CurrentTab;
+            patientdetailobj.ClientMainFormData = GetClientMainFormBasicFormValue(ClientMainFormId, MainFormData.TemplateId, PatientId).ToString();
             return View(patientdetailobj);
+        }
+        public string GetClientMainFormBasicFormValue(int clientFormId, int templateId, int patientId)
+        {
+            var data = "";
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                var responseTask = client.GetAsync("/api/PatientMain/getfieldvaluebyClientFormid?ClientFormID=" + clientFormId + "&TemplateId=" + templateId + "&PatientId=" + patientId);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsStringAsync();
+                    readTask.Wait();
+                    data = readTask.Result;
+                   
+
+                }
+
+                return data;
+            }
         }
     }
 }
