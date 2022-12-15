@@ -4726,6 +4726,117 @@ namespace RootsOfHealth.Controllers
              data = clientForm
             },JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult AddClient(int PatientId = 0, string CurrentTab = "profile", string SubTab = "", int ClientFormID = 0)
+        {
+            PatientDetailBO patientdetailobj = new PatientDetailBO();
+            var ClientMainFormId = GetClientMainFormId();
+            var MainFormData = GetClientMainFormInfo(ClientMainFormId);
+            if (PatientId > 0 && CurrentTab.ToLower() == "profile")
+            {
+                patientdetailobj.PatientMain = GetMainClientInfo(PatientId);
+            }
+            else
+            {
+
+            }
+            MainFormData.ClientMainFormId = ClientMainFormId;
+            patientdetailobj.MainFormInfoBO = MainFormData;
+            ViewBag.currentTab = CurrentTab;
+            return View(patientdetailobj);
+        }
+        public PatientMainBO GetMainClientInfo(int patientId)
+        {
+            var patientInfo = new PatientMainBO();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                var responseTask = client.GetAsync("/api/PatientMain/GetMainClientDetail?Id=" + patientId);
+
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<PatientMainBO>();
+                    readTask.Wait();
+                    patientInfo = readTask.Result;
+                }
+
+            }
+            return patientInfo;
+        }
+        public int GetClientMainFormId()
+        {
+            var clientMainFormId = 0;
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                var responseTask = client.GetAsync("/api/PatientMain/GetClientMainFormIdByFormName");
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+
+                if (result.IsSuccessStatusCode)
+                {
+                    var data = result.Content.ReadAsStringAsync().Result;
+                    
+                    clientMainFormId = Convert.ToInt32(data);
+                }
+
+            }
+            return clientMainFormId;
+        }
+        public ClientMainFormInfoBO GetClientMainFormInfo(int ClientFormId)
+        {
+            string PathName = string.Empty;
+            ClientFormtemplateBO data = new ClientFormtemplateBO();
+            ClientMainFormInfoBO ClientMainFormInfo = new ClientMainFormInfoBO(); 
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                var responseTask = client.GetAsync("/api/PatientMain/GetClientFormTemplateByClientFormId?ClientFormId=" + ClientFormId);
+                responseTask.Wait();
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<ClientFormtemplateBO>();
+                    readTask.Wait();
+                    data = readTask.Result;
+                }
+                PathName = data.TemplatePath;
+                if (PathName != "" && PathName != null)
+                {
+                    var gethtml = System.IO.File.ReadAllText(Server.MapPath("~/App_Data/Templates/ClientFormTemplate/" + PathName));
+                   ClientMainFormInfo.FormHtml = gethtml;
+                    ClientMainFormInfo.TemplateId = data.TemplateID;
+                    ClientMainFormInfo.TableName = data.TemplateTable;
+                }
+
+                return ClientMainFormInfo;
+            }
+        }
+
+        public ActionResult ClientInfo(int PatientId, string CurrentTab = "profile", string Subtab = null, int ClientFormId = 0)
+        {
+
+            PatientDetailBO patientdetailobj = new PatientDetailBO();
+            var ClientMainFormId = GetClientMainFormId();
+            var MainFormData = GetClientMainFormInfo(ClientMainFormId);
+            if (PatientId > 0 && CurrentTab.ToLower() == "profile")
+            {
+                patientdetailobj.PatientMain = GetMainClientInfo(PatientId);
+            }
+            else
+            {
+
+            }
+            MainFormData.ClientMainFormId = ClientMainFormId;
+            patientdetailobj.MainFormInfoBO = MainFormData;
+            ViewBag.currentTab = CurrentTab;
+            return View(patientdetailobj);
+        }
     }
 }
 

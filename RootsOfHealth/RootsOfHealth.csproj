@@ -213,6 +213,7 @@
     <Compile Include="Models\CarePlanTemplateFieldBO.cs" />
     <Compile Include="Models\CarePlanTemplateListInfoBO.cs" />
     <Compile Include="Models\ClientFormtemplateListInfoBO.cs" />
+    <Compile Include="Models\ClientMainFormInfoBO.cs" />
     <Compile Include="Models\ClinicBO.cs" />
     <Compile Include="Models\DastBO.cs" />
     <Compile Include="Models\DreamOnlyBO.cs" />
@@ -665,6 +666,7 @@
     <Content Include="Scripts\ClientForms\htmlcontrol.js" />
     <Content Include="Scripts\ClientForms\ClientFormbasetemplatecontrolhtml.js" />
     <Content Include="Scripts\ClientForms\ClientFormlist.js" />
+    <Content Include="Scripts\custom.js" />
     <Content Include="Scripts\FormSchedule\formscheduling.js" />
     <Content Include="Scripts\fullcalendar.min.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -786,6 +788,11 @@
     <Content Include="Views\DashBoard\GetErrorLogDetails.cshtml" />
     <Content Include="Views\Shared\Client\_ClientFormDetail.cshtml" />
     <Content Include="Views\Shared\Client\_ClientFormDetailForEditPage.cshtml" />
+    <Content Include="Views\Shared\Client\_MainClientInfo.cshtml" />
+    <Content Include="Views\Client\AddClient.cshtml" />
+    <Content Include="Views\Client\_ClientFormsSlide.cshtml" />
+    <Content Include="Views\Client\_ClientFormsDetail.cshtml" />
+    <Content Include="Views\Client\ClientInfo.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -1,0 +1,1004 @@
+﻿@model RootsOfHealth.Models.PatientDetailBO
+@using RootsOfHealth.Commom
+@{
+    ViewBag.Title = "Info";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
+<style>
+    .showHide, .open-eye {
+        display: none;
+    }
+
+    .inner-main-content {
+        height: calc(100vh - 240px);
+    }
+
+    .paitent-detail-left {
+        height: calc(100vh - 160px);
+        overflow: hidden;
+    }
+
+    #content .profile-tabs .paitent-detail-left .nav-tabs {
+        border-bottom: 0px;
+    }
+
+        .paitent-detail-left .profile-tabs .nav-tabs:hover, #content .profile-tabs .paitent-detail-left .nav-tabs:hover {
+            overflow-x: hidden !important;
+        }
+
+    /* New css
+    -------------------------------------------------*/
+
+    #content .profile-tabs .tabs-scroll {
+        position: fixed;
+        top: 60px;
+        right: 0;
+        width: 310px;
+        z-index: 99;
+        flex-direction: column;
+        display: block;
+        height: calc(100vh - 60px);
+        left: auto;
+        margin: 0;
+        background: #34425a;
+        overflow: auto;
+        transform: translateX(100%);
+        -webkit-transform: translateX(100%);
+        transition: all ease 0.4s;
+    }
+
+    .tabs-scroll > ul#myTab > li > a .notCountR,
+    .tabs-scroll > ul#myTab > li > a .notCountO,
+    .tabs-scroll > ul#myTab > li > a .notCountG,
+    .tabs-scroll > ul#myTab > li > a .notCountR {
+        top: 7px;
+        right: 35px;
+    }
+
+    #content {
+        padding-top: 0px !important;
+    }
+
+        #content .inner-content {
+            margin-top: 0px !important;
+        }
+
+        #content.showHidecontent .profile-tabs .tabs-scroll {
+            transform: translateX(0%);
+            -webkit-transform: translateX(0%);
+        }
+
+        #content .profile-tabs .tabs-scroll > .nav-tabs {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            margin: 0;
+            position: static;
+            height: auto;
+            padding: 0;
+            background: transparent;
+            border: 0px;
+        }
+
+        #content .profile-tabs .tabs-scroll > ul#myTab > li {
+            margin: 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+            #content .profile-tabs .tabs-scroll > ul#myTab > li > a {
+                margin: 0;
+            }
+
+                #content .profile-tabs .tabs-scroll > ul#myTab > li > a:after {
+                    content: none;
+                }
+
+    .tabs-scroll > ul#myTab > li > a .check {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        z-index: 9;
+    }
+
+    .inner-main-content {
+        height: calc(100vh - 180px);
+    }
+
+    .paitent-detail-left {
+        height: calc(100vh - 100px);
+    }
+
+    #menu-toggle {
+        right: 0;
+        top: 20px;
+        transition: all ease 0.4s;
+    }
+
+    div#menu-toggle.open {
+        right: 310px;
+    }
+
+    .btnDisplayProgram, .btnprogramsave {
+        display: none !important
+    }
+
+    .btnProgramEdit {
+        display: block !important
+    }
+
+    .score_Result {
+        max-width: 630px;
+        width: 100%;
+        margin: 0 0 30px auto;
+    }
+
+    .pColorCircle {
+        height: 10px;
+        width: 10px;
+        position: absolute;
+        top: 50%;
+        right: 43px;
+        border-radius: 50px;
+        margin-top: -5px;
+    }
+
+    .historyFormLogTableWrap.table-responsive {
+        max-height: calc(100vh - 160px);
+    }
+
+    #clientMainFormDetail .frmbtn {
+        border: 1px solid #e2e2e2;
+        padding: 10px;
+        position: relative;
+        margin: 0 0 10px 0;
+    }
+
+        #clientMainFormDetail .frmbtn .form-group label:first-child {
+            background: #f0f0f0;
+            display: block;
+            margin: -11px -11px 10px;
+            padding: 4px 10px;
+            font-size: 14px;
+            color: #343434;
+            font-weight: 500;
+            line-height: normal;
+            vertical-align: middle;
+        }
+
+        #clientMainFormDetail .frmbtn .form-group label span.desc {
+            display: block;
+            margin: 3px 0 0;
+            color: #777;
+            font-weight: normal;
+        }
+
+    span.fileDescription {
+        padding-left: 20px;
+        font-size: 13px;
+        color: #555;
+    }
+    .form-control, .custom-control-input, .custom-control-label, .custom-file-label, .Add {
+        display: none;
+    }
+</style>
+<!-- Content start here -->
+<section id="content" class="responsive-container">
+    <div class="profile-tabs">
+        <div class="tabs-scroll">
+
+        </div>
+
+        <div id="menu-toggle" class="">
+            <div id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div id="cross" title="Hide patient Menu">
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        <div class="tab-content" id="myTabContent">
+            @if (ViewBag.currentTab == "profile")
+            {
+                Html.RenderPartial("~/Views/Shared/Client/_MainClientInfo.cshtml", Model.PatientMain);
+            }
+        </div>
+
+        <!--Recent Patient Modal start here-->
+        <div class="modal fade" id="recentpatientModal" tabindex="-1" role="dialog" aria-labelledby="recentpatientModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:80%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="recentpatientModalLabel">Recent Client</h5>
+                        <button type="button" data-dismiss="modal" class="close" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="inner-content mt-0" id="recent-p">
+                            <div class="row" style="margin-top: -50px;">
+                                <div class="col-lg-12 col-md-8 col-sm-12 col-12 pr-0">
+                                    <div class="recent-paitents">
+
+
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        @*@{
+            Html.RenderPartial("~/Views/Shared/Client/_LogHistoryPopUp.cshtml");
+        }*@
+
+
+
+
+        <!--Recent Patient End Here-->
+    </div>
+
+</section>
+@section scripts {
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.js"></script>
+    <script src="~/Content/script/jquery.timeselector.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/ui/1.12.0-rc.2/jquery-ui.min.js"
+            integrity="sha256-55Jz3pBCF8z9jBO1qQ7cIf0L+neuPTD1u7Ytzrp2dqo="
+            crossorigin="anonymous"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script>
+       var ViewBagClientFormId = '@ViewBag.ClientFormID'
+       var patientId = "@Model.PatientMain.PatientID";
+       var currenttab = '@ViewBag.CurrentTab';
+       var currentSubtab = '@ViewBag.CurrentSubtab'
+       var ClientMainFormHtml = @Html.Raw(Json.Encode(Model.MainFormInfoBO.FormHtml));
+       var _mainFormtemplateId = "@Model.MainFormInfoBO.TemplateId";
+       var _mainFormtemplatetable = "@Model.MainFormInfoBO.TableName";
+       var _ClientMainFormID = '@Model.MainFormInfoBO.ClientMainFormId';
+       var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]'
+       var  programUploadedPath="@System.Web.Configuration.WebConfigurationManager.AppSettings["ProgramUploadPath"]";
+        // Hamburger menu js
+         $('#myTab a').each(function () {
+        $(this).click(function () {
+            $('#menu-toggle').click();
+        })
+
+    });
+        $('.selectboxmultiple').css('display', 'none');
+        $('#menu-toggle').click(function () {
+            $(this).toggleClass('open');
+            if ($("#menu-toggle").hasClass("open")) {
+                $("#cross").attr("title", "Hide Client Menu")
+            } else {
+                $("#cross").attr("title", "Show Client Menu")
+            }
+            $("#myTab").toggleClass('showHide');
+            $(".inner-content").toggleClass("showHideInner");
+            $(".paitent-detail-left").toggleClass("showHidepaitent-detail-left");
+            $(".inner-main-content").toggleClass("showHidepaitentinner-main-content");
+            $(".body").toggleClass("showHidebody");
+            $("#content").toggleClass("showHidecontent");
+
+            //$(".appointement").toggleClass("showHideappotment");
+
+        })
+
+        $('#btnaddprogram').click(function (e) {
+
+            GetPatientPrograms()
+            var value = $('#btnaddprogram').attr('data-totalProgramCount')
+            if (value <= 0) {
+                e.preventDefault();
+                e.stopPropagation();
+                toastr.error('No program available')
+            }
+
+        })
+
+        $(document).ready(function () {
+            LoadClientMainFormData(ClientMainFormHtml);
+            GetScoreClient(0);
+            $(".nav-menu").removeClass("active");
+            $("#DashBoard").addClass("active");
+            $("#btnProfileCancel").hide();
+            $("#btnProfileSave").hide();
+            $(".input-fields").hide();
+
+            $("#btnProfileEdit").click(function () {
+                $("#btnProfileEdit").hide();
+                $("#btnProfileCancel").show();
+                $("#btnProfileSave").show();
+                $(".input-fields").show();
+                $(".label-fields").hide();
+
+                //onchange divs hides.
+                $("#divOtherGender").hide();
+                $("#divIfNoAddress").hide();
+                $("#divMaritalStatus").hide();
+                $("#divOtherLanguage").hide();
+                $("#divOtherPronouns").hide();
+                $("#divOtherYouThink").hide();
+                $("#divhaveYouQuit").hide();
+                $("#divQuitDate").hide();
+                $("#divOtherContact").hide();
+
+            })
+
+            $("#btnProfileSave").click(function () {
+                onSaveAndCancel();
+            });
+
+            $("#btnProfileCancel").click(function () {
+                onSaveAndCancel();
+            })
+
+            function onSaveAndCancel() {
+                $("#btnProfileEdit").show();
+                $("#btnProfileCancel").hide();
+                $("#btnProfileSave").hide();
+                $(".input-fields").hide();
+                $(".label-fields").show();
+
+                // onchange divs show.
+                $("#divOtherGender").show();
+                $("#divIfNoAddress").show();
+                $("#divMaritalStatus").show();
+                $("#divOtherLanguage").show();
+                $("#divOtherPronouns").show();
+                $("#divOtherYouThink").show();
+                $("#divhaveYouQuit").show();
+                $("#divQuitDate").show();
+                $("#divOtherContact").show();
+            }
+            // change function of gender
+            $("#ddlGendar").change(function () {
+                if ($("#ddlGendar").val() == "other") {
+                    $("#divOtherGender").show();
+                }
+                else {
+                    $("#divOtherGender").hide();
+                }
+            })
+
+            $("#ddlContact").change(function () {
+                if ($("#ddlContact").val() == "Other") {
+                    $("#divOtherContact").show();
+                }
+                else {
+                    $("#divOtherContact").hide();
+                }
+            })
+
+            $("#ddlSmoker").change(function () {
+                if ($("#ddlSmoker").val() == "Yes") {
+                    $("#divhaveYouQuit").show();
+                }
+                else {
+                    $("#divhaveYouQuit").hide();
+                    $("#divQuitDate").hide();
+                }
+            })
+
+            $("#ddlHaveYouQuit").change(function () {
+                if ($("#ddlHaveYouQuit").val() == "Yes") {
+                    $("#divQuitDate").show();
+                }
+                else {
+                    $("#divQuitDate").hide();
+                }
+            })
+
+            $("#ddlDoYouThink").change(function () {
+                if ($("#ddlDoYouThink").val() == "Unspecified/Other") {
+                    $("#divOtherYouThink").show();
+                }
+                else {
+                    $("#divOtherYouThink").hide();
+                }
+            })
+
+            $("#ddlMaritalStatus").change(function () {
+
+                if ($("#ddlMaritalStatus").val() == "other") {
+                    $("#divMaritalStatus").show();
+                }
+                else {
+                    $("#divMaritalStatus").hide();
+                }
+            })
+
+            $("#ddlPreferredPronouns").change(function () {
+                if ($("#ddlPreferredPronouns").val() == "Other") {
+                    $("#divOtherPronouns").show();
+                }
+                else {
+                    $("#divOtherPronouns").hide();
+                }
+            })
+
+            $("#ddlLanguage").change(function () {
+                if ($("#ddlLanguage").val() == "Other") {
+                    $("#divOtherLanguage").show();
+                }
+                else {
+                    $("#divOtherLanguage").hide();
+                }
+            })
+
+            $("#ddlLiveAddress").change(function () {
+                if ($("#ddlLiveAddress").val() == "No") {
+                    $("#divIfNoAddress").show();
+                }
+                else {
+                    $("#divIfNoAddress").hide();
+                }
+            })
+
+            $('.nav-menu').click(function () {
+                if ($(".sidebar-menu").hasClass("sidebar-res")) {
+                    $('.sidebar-menu').removeClass('sidebar-res');
+                    $('#content').removeClass('responsive-container');
+
+                } else {
+
+                    $('.sidebar-menu').addClass('sidebar-res');
+                    $('#content').addClass('responsive-container');
+                }
+            })
+            $('.selectboxmultiple').selectpicker();
+
+        });
+        $(".ssn-icon-label").click(function () {
+            $(this).toggleClass("showlbl");
+        });
+        function showSSnlabel() {
+            $(".stardiv").hide();
+            $(".lbl-hide").show();
+        }
+        function Hidessnlabel() {
+            $(".stardiv").show();
+            $(".lbl-hide").hide();
+        }
+        function LoadClientMainFormData(data) {
+
+
+            var formElem = $('#clientMainFormDetail');
+                formElem.html("").append(data);
+
+            getClientMainFormBasicFormValue(_ClientMainFormID, _mainFormtemplateId)
+                formElem.find(".event-btn-right").remove();
+                formElem.find(".ck-editor-header").remove();
+                formElem.find(".question-container").parent().css("border", "none");
+                formElem.find(".dragresize").find(".question-container").remove();
+                formElem.find(".dragresize").find(".bootom-form-row").css({ "padding": "7px 0px", "margin": "0" });
+                formElem.find(".html-content").prev().css("display", "none");
+
+
+                $("textarea.program-control,textarea.base-control").summernote({
+                    toolbar: [
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['style', ['bold', 'italic', 'underline', 'clear']],
+                        ['font', ['strikethrough', 'superscript', 'subscript']],
+                    ],
+                    placeholder: "Type here",
+                    callbacks: {
+                        onInit: function (e) {
+                            this.placeholder
+                                ? e.editingArea.find(".note-placeholder").html(this.placeholder)
+                                : e.editingArea.remove(".note-placeholder")
+                        }
+                    },
+                    height: 150,
+                });
+
+                makeMainFormBasicInfoReadonly(formElem)
+
+        }
+        function makeMainFormBasicInfoReadonly(formElem) {
+
+
+            var value = "";
+
+            formElem.find(".program-control,.base-control").each(function (index, item) {
+                if ($(item).is("div")) {
+                    var selectedValues = $.map($(item).find("input:checked"), function (n, i) {
+                        return n.value;
+                    }).join(',');
+                    if (selectedValues == "") {
+                        if ($(item).hasClass("base-control")) {
+                            $(item).find("label.label-base").html("").show();
+                            $(item).find("div.inputContent").find("div").first().hide();
+                        } else {
+                            $(item).find("label.label-program").html("").show();
+                            $(item).find("div.inputContent").find("div").first().hide();
+                        }
+                    } else {
+                        var valueArr = selectedValues.split(',');
+                        var valueTxt = "";
+                        for (var i = 0; i < valueArr.length; i++) {
+                            valueTxt += $(item).find(`input[value=${valueArr[i]}]`).next().text() + ", ";
+                        }
+                        valueTxt = valueTxt.slice(0, -2);
+                        if ($(item).hasClass("base-control")) {
+                            $(item).find("label.label-base").html("").append(valueTxt).show();
+                            $(item).find("div.inputContent").find("div").first().hide();
+                        } else {
+                            $(item).find("label.label-program").html("").append(valueTxt).show();
+                            $(item).find("div.inputContent").find("div").first().hide();
+                        }
+
+                    }
+                }
+                if ($(item).is("input")) {
+                    switch ($(item).attr("type")) {
+                        case "file":
+                            if ($(item).hasClass("base-control") && (typeof $(item).attr("data-column") !== 'undefined' && $(item).attr("data-column") !== false)) {
+                                getMainFormBaseFilesReadonly($(item).attr("id"), formElem);
+                            }
+                            $(item).hide();
+                            break;
+                        default:
+                            value = $(item).val();
+                            $(item).next().html("").append(value).show();
+                            $(item).hide();
+                            break;
+                    }
+                }
+                if ($(item).is("select")) {
+                    value = $(item).find('option:selected').val();
+                    if (value == 0) {
+                        value = '';
+                    }
+                    else {
+                        value = $(item).find('option:selected').text();
+                    }
+                    $(item).next().html("").append(value).show();
+                    $(item).hide();
+                }
+                if ($(item).is("textarea")) {
+                    value = $(item).summernote('code');
+                    if ($(item).hasClass("base-control")) {
+                        $(item).parent().find("label.label-base").html("").append(value).show();
+                    } else {
+                        $(item).parent().find("label.label-program").html("").append(value).show();
+                    }
+                    $(item).next().hide();
+                }
+            });
+        }
+        function getMainFormBaseFieldData(formElem) {
+
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/getClientFormbasefieldbypatientid?Patientid=' + patientId,
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                async: false,
+                success: function (result) {
+                    if (result.length) {
+                        var baseFields = result[0];
+                        var value = "";
+                        formElem.find(".form-control.base-control,input.custom-control-input").each(function (index, item) {
+                            if ($(item).is("input")) {
+                                switch ($(item).attr("type")) {
+                                    case "radio":
+                                    case "checkbox":
+
+                                        if ((typeof $(item).attr("data-column") !== 'undefined' && $(item).attr("data-column") !== false)) {
+                                            if ($(item).closest("div.inputContent").parent().hasClass("base-control")) {
+                                                value = baseFields[$(item).attr("data-column")];
+                                                if (value == null || value == "" || value == undefined) {
+                                                    $(item).closest("div.inputContent").find("label.label-base").html("").show();
+                                                    $(item).closest("div.inputContent").find("div").first().hide();
+                                                } else {
+                                                    var valueArr = value.split(SeperationString);
+                                                    var valueTxt = "";
+                                                    for (var i = 0; i < valueArr.length; i++) {
+                                                        valueTxt += $(item).closest("div.inputContent").find(`input[value="${valueArr[i]}"]`).next().text() + ", ";
+                                                    }
+
+                                                    valueTxt = valueTxt.slice(0, -2);
+                                                    $(item).closest("div.inputContent").find("label.label-base").html("").append(valueTxt).show();
+                                                    $(item).closest("div.inputContent").find("div").first().hide();
+                                                }
+                                            }
+                                        }
+                                        break;
+                                    case "file":
+
+                                        getClientMainFormBaseFilesReadonly($(item).attr("id"));
+                                        $(item).hide();
+
+                                        break;
+                                    default:
+
+                                        value = baseFields[$(item).attr("data-column")];
+
+                                        $(item).next().html("").append(value).show();
+                                        $(item).hide();
+
+                                        break;
+                                }
+                            }
+                            if ($(item).is("select")) {
+                                value = baseFields[$(item).attr("data-column")];
+
+                                if (value == 0) {
+                                    value = '';
+                                }
+                                else {
+                                    value = $(item).find(`option[value=${value}]`).text();
+                                }
+                                $(item).next().html("").append(value).show();
+                                $(item).hide();
+
+                            }
+                            if ($(item).hasClass("priority")) {
+                                value = baseFields[$(item).attr("data-column")];
+                                var splitvalues = value.split(SeperationString);
+
+                                var result = '';
+
+                                for (let i = 0; i < splitvalues.length; i++) {
+                                    if ($(item).find('li[value="' + splitvalues[i] + '"]')) {
+                                        result += $(item).find('li[value="' + splitvalues[i] + '"]')[0].outerHTML;
+                                    }
+
+                                }
+                                if (result.length > 0) {
+                                    $(item).html(result);
+                                }
+                            }
+                            if ($(item).is("textarea")) {
+                                value = baseFields[$(item).attr("data-column")];
+
+                                $(item).parent().find("label.label-base").html("").append(value).show();
+                                $(item).next().hide();
+
+                            }
+                        });
+                    }
+                },
+                error: function (e) {
+                    toastr.error("Unexpected error!");
+                    $(".loaderOverlay").hide();
+                }
+            });
+        }
+        function getClientMainFormBaseFilesReadonly(Id) {
+
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/getClientFormbasefilesbypatientid?PatientId=' + patientId + '&controlid=' + Id,
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                async: false,
+                success: function (result) {
+                    if (result != "" && result != null) {
+
+                        var filesArr = result.Files.split(',');
+                        var namesArr = result.FileNames.split(',');
+                        var selectedFiles = `<ul class="file_uploaded_list onlylinkslist">`;
+                        var ext = "";
+                        for (var i = 0; i < filesArr.length; i++) {
+                            ext = filesArr[i].split('.').pop();
+                            switch (ext) {
+                                case "png":
+                                case "jpg":
+                                case "jpeg":
+                                    selectedFiles += '<li><img style="max-width: 90px;margin-right: 10px;" src="/' + programUploadedPath + filesArr[i] + '" alt="Care Plan Upload"><span><a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></span></li>';
+                                    break;
+                                default:
+                                    selectedFiles += '<li><a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></li>';
+                                    break;
+                            }
+
+                        }
+                        selectedFiles += `</ul>`;
+                        $('#clientMainFormDetail').find('#' + Id).next().next().html("").append(selectedFiles);
+                    }
+                }, error: function (e) {
+                    toastr.error("Unexpected error!");
+                    $(".loaderOverlay").hide();
+                }
+            });
+        }
+        function getClientMainFormBasicFormValue(ClientFormID, templateid) {
+            var formEle = $('#clientMainFormDetail');
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/getfieldvaluebyClientFormid?ClientFormID=' + ClientFormID + "&TemplateId=" + templateid + "&PatientId=" + patientId,
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                async: false,
+                success: function (result) {
+
+                    if (result.length) {
+                        var fields = result[0];
+                        var value = "";
+                        formEle.find(".program-control,input.custom-control-input").each(function (index, item) {
+                            if ($(item).is("input")) {
+                                switch ($(item).attr("type")) {
+                                    case "radio":
+                                    case "checkbox":
+                                        if ((typeof $(item).attr("data-column") !== 'undefined' && $(item).attr("data-column") !== false) && $(item).closest("div.inputContent").parent().hasClass("program-control")) {
+                                            value = fields[$(item).attr("data-column")];
+
+                                            if (value == null || value == "") {
+
+                                            } else {
+
+                                                var valueArr = value.split(SeperationString);
+                                                var valueTxt = "";
+
+                                                for (var i = 0; i < valueArr.length; i++) {
+                                                    $(item).closest("div.inputContent").find(`input[value="${valueArr[i]}"]`).prop("checked", true);
+                                                }
+
+                                            }
+                                        }
+                                        break;
+                                    case "file":
+                                        getClientMainFormModuleFilesReadOnly(ClientFormID, $(item).attr("id"));
+
+                                        break;
+                                    default:
+
+                                        value = fields[$(item).attr("data-column")];
+
+                                        item.value = value;
+
+                                        break;
+                                }
+                            }
+                            if ($(item).is("select")) {
+                                value = fields[$(item).attr("data-column")];
+
+                                item.value = value;
+
+                            }
+                            if ($(item).hasClass("priority")) {
+
+                                value = fields[$(item).attr("data-column")];
+                                var splitvalues = (value != "" && value != undefined) ? value.split(SeperationString) : "";
+
+                                var result = '';
+
+                                for (let i = 0; i < splitvalues.length; i++) {
+                                    if ($(item).find('li[value="' + splitvalues[i] + '"]')) {
+                                        result += $(item).find('li[value="' + splitvalues[i] + '"]')[0].outerHTML;
+                                    }
+
+
+                                }
+                                if (result.length > 0) {
+                                    $(item).html(result);
+                                }
+                            }
+                            if ($(item).is("textarea")) {
+                                value = fields[$(item).attr("data-column")];
+
+                                $(item).summernote('code', value);
+
+                            }
+                        });
+                    }
+                    var labelprogram = formEle.find('.inputContent .label-program');
+                    labelprogram.css('display','block');
+
+                    if (formEle.find(".basecontentarea").length > 0) {
+                        getClientFormBaseFieldData();
+                    }
+                }, error: function (e) {
+                    toastr.error("Unexpected error!");
+                    $(".loaderOverlay").hide();
+                }
+            });
+        }
+        function getClientMainFormModuleFilesReadOnly(ClientFormID, Id) {
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/getfilesbyClientFormid?ClientFormID=' + ClientFormID + '&controlid=' + Id + '&patientid=' + patientId,
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                async: false,
+                success: function (result) {
+
+                    if (result != "" && result != null) {
+                        var filesArr = result.Files.split(',');
+                        var namesArr = result.FileNames.split(',');
+                        var descriptionArr = [];
+                        if (result.FilesDescription != null) {
+                            descriptionArr = result.FilesDescription.split(',');
+                        }
+
+                        var ext = "";
+                        var selectedFiles = `<ul class="file_uploaded_list onlylinkslist">`;
+
+                        for (var i = 0; i < filesArr.length; i++) {
+
+                            ext = filesArr[i].split('.').pop();
+                            switch (ext) {
+                                case "png":
+                                case "jpg":
+                                case "jpeg":
+                                    selectedFiles += '<li><span><a href="/' + programUploadedPath + filesArr[i] + '" target="_blank"> <img  src="/' + programUploadedPath + filesArr[i] + '" alt="File Upload"></a></span><span><a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></span><span class="fileDescription">' + descriptionArr[i] +'</span></li>';
+                                    break;
+                                default:
+                                    selectedFiles += '<li><span><a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a></span> <span class="fileDescription">' + descriptionArr[i]+'</span></li>';
+                                    break;
+                            }
+
+                        }
+                        selectedFiles += "</ul>";
+
+                        $('#clientMainFormDetail').find("#" + Id).next().next().html("").append(selectedFiles);
+                    }
+                }, error: function (e) {
+                    toastr.error("Unexpected error!");
+                    $(".loaderOverlay").hide();
+                }
+            });
+        }
+
+        function RecentClients() {
+              $.ajax({
+
+            type: "Get",
+            url: '/Client/GetRecentClientForm?clinicid='+'@Session["ClinicID"]',
+                dataType: "html",
+                  contentType: "application/json; charset=utf-8",
+                  beforeSend: function () {
+                      _Loader.StartLoader();
+                  },
+                success: function (result) {
+
+                    $('.recent-paitents').html(result);
+
+                    $('#recentpatientModal').modal('show')
+                  },
+                  error: function () {
+                      _Loader.StopLoader();
+                    toastr.error("Some error occurred!! or data not found");
+                },
+                complete: function () {
+                    _Loader.StopLoader();
+                   // bindTopPatient('@ViewBag.PatientID');
+                }
+            });
+        }
+
+        var toppatient = "";
+
+
+
+        function GetPatientPrograms(toppatient) {
+
+            var id = "";
+
+            if (toppatient == "" || toppatient == undefined) {
+                id = $('#topPatientId').val();
+            }
+            else {
+                id = toppatient;
+            }
+
+            $.ajax({
+
+                type: "Post",
+                url: '/Client/GetClientFormPrograms',
+                data: JSON.stringify({ PatientID: id }),
+
+                dataType: "html",
+                contentType: "application/json; charset=utf-8",
+                success: function (result) {
+
+                   var programCount ='@ViewBag.programCount';
+                    //console.log(programCount);
+                   $('#programList').html(result);
+
+                },
+                error: function () {
+                    _Loader.StopLoader()
+                    toastr.error("Some error occurred!! or data not found");
+                },
+                complete: function () {
+
+                    $(".scroll").animate({ scrollTop: 0 }, "slow");
+                    _Loader.StopLoader()
+                    recentpcloseModel();
+
+                }
+            });
+        }
+
+        function GetScoreClient(clientformid) {
+
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/getclientscorestatus?clientformid=' + clientformid + '&clientid=' + patientId,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+
+                    if (data) {
+                        var element = $('#ScoreStatus_' + clientformid)
+                        var scoreElement = $(element).find('#txtoverallscore');
+                        var statusElement = $(element).find('#txtoverallstatus');
+
+                        if (data.OverAllScore != 0 && data.OverAllScore != null && data.OverAllScore != undefined) {
+                            $(scoreElement).html(data.Score + '/' + data.OverAllScore);
+
+                            $(element).removeClass('d-none')
+
+                            if (data.Crisis != null && data.Crisis != '' && data.Crisis != undefined) {
+                                let crisis = data.Crisis.split('-');
+                                let Secure = data.Secure.split('-');
+                                let Struggling = data.Struggling.split('-');
+                                let AtRisk = data.AtRisk.split('-')
+                                let status = ''
+                                let badge = ''
+                                let score = data.Score
+                                if (score >= crisis[0] && score <= crisis[1]) {
+                                    status = 'crisis'
+                                    badge = '<span class="badge badge-danger" style="height:10px; position:relative; top:4px;">&nbsp; &nbsp;</span>'
+                                }
+                                else if (score > AtRisk[0] && score <= AtRisk[1]) {
+                                    status = 'at risk'
+                                    badge = '<span class="badge badge-warning"style="height:10px; position:relative; top:4px; background-color:#FF8C00!important">&nbsp; &nbsp;</span>'
+                                }
+                                else if (score > Struggling[0] && score <= Struggling[1]) {
+                                    status = 'struggling'
+                                    badge = '<span class="badge badge-warning" style="height:10px; position:relative; top:4px;background-color:#ecec04!important">&nbsp; &nbsp;</span>'
+                                }
+                                else if (score >= Secure[0] && score <= Secure[1]) {
+                                    status = 'secure'
+                                    badge = '<span class="badge badge-success" style="height:10px; position:relative; top:4px;">&nbsp; &nbsp;</span>'
+                                }
+                                $(statusElement).html(status);
+                                $(statusElement).parent().append(badge)
+                            }
+                        }
+
+                    }
+
+                },
+                error: function (e) {
+                    toastr.error("Error while getting appotment data.");
+                }
+            });
+        }
+
+
+        function recentpcloseModel()
+        {
+            $('.close').click();
+
+
+    }
+
+        function ActivateTab(PatientId, Tab,Subtab,ClientFormID) {
+        window.location.href = '/Client/Add?PatientID=' + PatientId + '&CurrentTab=' + Tab + '&SubTab=' + Subtab +'&ClientFormID='+ClientFormID;
+
+        }
+        $("#Profile-tab").click(function () {
+            $("#myChildTab").css("display", "none");
+        })
+        $("#programtbs").click(function () {
+            $("#myChildTab").css("display", "none");
+        })
+
+    </script>
+}
