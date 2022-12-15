@@ -264,11 +264,13 @@
        var currenttab = '@ViewBag.CurrentTab';
        var currentSubtab = '@ViewBag.CurrentSubtab'
        var ClientMainFormHtml = @Html.Raw(Json.Encode(Model.MainFormInfoBO.FormHtml));
+       var ClientMainFormData = @Html.Raw(Json.Encode(Model.ClientMainFormData));
        var _mainFormtemplateId = "@Model.MainFormInfoBO.TemplateId";
        var _mainFormtemplatetable = "@Model.MainFormInfoBO.TableName";
        var _ClientMainFormID = '@Model.MainFormInfoBO.ClientMainFormId';
        var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]'
-       var  programUploadedPath="@System.Web.Configuration.WebConfigurationManager.AppSettings["ProgramUploadPath"]";
+       var programUploadedPath = "@System.Web.Configuration.WebConfigurationManager.AppSettings["ProgramUploadPath"]";
+        $(".loaderOverlay").show();
         // Hamburger menu js
          $('#myTab a').each(function () {
         $(this).click(function () {
@@ -308,7 +310,7 @@
         })
 
         $(document).ready(function () {
-           /* LoadClientMainFormData(ClientMainFormHtml);*/
+            LoadClientMainFormData(ClientMainFormHtml);
             GetScoreClient(0);
             $(".nav-menu").removeClass("active");
             $("#DashBoard").addClass("active");
@@ -458,7 +460,7 @@
                 }
             })
             $('.selectboxmultiple').selectpicker();
-
+            $(".loaderOverlay").hide();
         });
         $(".ssn-icon-label").click(function () {
             $(this).toggleClass("showlbl");
@@ -477,7 +479,7 @@
             var formElem = $('#clientMainFormDetail');
                 formElem.html("").append(data);
 
-            getClientMainFormBasicFormValue(_ClientMainFormID, _mainFormtemplateId)
+            getClientMainFormBasicFormValue(ClientMainFormData)
                 formElem.find(".event-btn-right").remove();
                 formElem.find(".ck-editor-header").remove();
                 formElem.find(".question-container").parent().css("border", "none");
@@ -715,97 +717,84 @@
                 }
             });
         }
-        function getClientMainFormBasicFormValue(ClientFormID, templateid) {
+        function getClientMainFormBasicFormValue(data) {
+            var result = JSON.parse(data);
             var formEle = $('#clientMainFormDetail');
-            $.ajax({
-                type: "GET",
-                url: Apipath + '/api/PatientMain/getfieldvaluebyClientFormid?ClientFormID=' + ClientFormID + "&TemplateId=" + templateid + "&PatientId=" + patientId,
-                contentType: 'application/json; charset=UTF-8',
-                dataType: "json",
-                async: false,
-                success: function (result) {
-
-                    if (result.length) {
-                        var fields = result[0];
-                        var value = "";
-                        formEle.find(".program-control,input.custom-control-input").each(function (index, item) {
-                            if ($(item).is("input")) {
-                                switch ($(item).attr("type")) {
-                                    case "radio":
-                                    case "checkbox":
-                                        if ((typeof $(item).attr("data-column") !== 'undefined' && $(item).attr("data-column") !== false) && $(item).closest("div.inputContent").parent().hasClass("program-control")) {
-                                            value = fields[$(item).attr("data-column")];
-
-                                            if (value == null || value == "") {
-
-                                            } else {
-
-                                                var valueArr = value.split(SeperationString);
-                                                var valueTxt = "";
-
-                                                for (var i = 0; i < valueArr.length; i++) {
-                                                    $(item).closest("div.inputContent").find(`input[value="${valueArr[i]}"]`).prop("checked", true);
-                                                }
-
-                                            }
-                                        }
-                                        break;
-                                    case "file":
-                                        getClientMainFormModuleFilesReadOnly(ClientFormID, $(item).attr("id"));
-
-                                        break;
-                                    default:
-
-                                        value = fields[$(item).attr("data-column")];
-
-                                        item.value = value;
-
-                                        break;
-                                }
-                            }
-                            if ($(item).is("select")) {
+            var fields = result[0];
+            var value = "";
+            formEle.find(".program-control,input.custom-control-input").each(function (index, item) {
+                if ($(item).is("input")) {
+                    switch ($(item).attr("type")) {
+                        case "radio":
+                        case "checkbox":
+                            if ((typeof $(item).attr("data-column") !== 'undefined' && $(item).attr("data-column") !== false) && $(item).closest("div.inputContent").parent().hasClass("program-control")) {
                                 value = fields[$(item).attr("data-column")];
 
-                                item.value = value;
+                                if (value == null || value == "") {
 
-                            }
-                            if ($(item).hasClass("priority")) {
+                                } else {
 
-                                value = fields[$(item).attr("data-column")];
-                                var splitvalues = (value != "" && value != undefined) ? value.split(SeperationString) : "";
+                                    var valueArr = value.split(SeperationString);
+                                    var valueTxt = "";
 
-                                var result = '';
-
-                                for (let i = 0; i < splitvalues.length; i++) {
-                                    if ($(item).find('li[value="' + splitvalues[i] + '"]')) {
-                                        result += $(item).find('li[value="' + splitvalues[i] + '"]')[0].outerHTML;
+                                    for (var i = 0; i < valueArr.length; i++) {
+                                        $(item).closest("div.inputContent").find(`input[value="${valueArr[i]}"]`).prop("checked", true);
                                     }
 
-
-                                }
-                                if (result.length > 0) {
-                                    $(item).html(result);
                                 }
                             }
-                            if ($(item).is("textarea")) {
-                                value = fields[$(item).attr("data-column")];
+                            break;
+                        case "file":
+                            getClientMainFormModuleFilesReadOnly(_ClientMainFormID, $(item).attr("id"));
 
-                                $(item).summernote('code', value);
+                            break;
+                        default:
 
-                            }
-                        });
+                            value = fields[$(item).attr("data-column")];
+
+                            item.value = value;
+
+                            break;
                     }
-                    var labelprogram = formEle.find('.inputContent .label-program');
-                    labelprogram.css('display','block');
+                }
+                if ($(item).is("select")) {
+                    value = fields[$(item).attr("data-column")];
 
-                    if (formEle.find(".basecontentarea").length > 0) {
-                        getClientFormBaseFieldData();
+                    item.value = value;
+
+                }
+                if ($(item).hasClass("priority")) {
+
+                    value = fields[$(item).attr("data-column")];
+                    var splitvalues = (value != "" && value != undefined) ? value.split(SeperationString) : "";
+
+                    var result = '';
+
+                    for (let i = 0; i < splitvalues.length; i++) {
+                        if ($(item).find('li[value="' + splitvalues[i] + '"]')) {
+                            result += $(item).find('li[value="' + splitvalues[i] + '"]')[0].outerHTML;
+                        }
+
+
                     }
-                }, error: function (e) {
-                    toastr.error("Unexpected error!");
-                    $(".loaderOverlay").hide();
+                    if (result.length > 0) {
+                        $(item).html(result);
+                    }
+                }
+                if ($(item).is("textarea")) {
+                    value = fields[$(item).attr("data-column")];
+
+                    $(item).summernote('code', value);
+
                 }
             });
+
+            var labelprogram = formEle.find('.inputContent .label-program');
+            labelprogram.css('display', 'block');
+
+            if (formEle.find(".basecontentarea").length > 0) {
+                getClientFormBaseFieldData();
+            }
         }
         function getClientMainFormModuleFilesReadOnly(ClientFormID, Id) {
             $.ajax({
@@ -932,7 +921,6 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (data) {
-
                     if (data) {
                         var element = $('#ScoreStatus_' + clientformid)
                         var scoreElement = $(element).find('#txtoverallscore');
