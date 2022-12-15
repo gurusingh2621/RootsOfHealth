@@ -1,0 +1,63 @@
+﻿@model RootsOfHealth.Models.PatientDetailBO
+@using RootsOfHealth.Commom
+
+@if (Model.ClientForm != null)
+{
+    foreach (var item in Model.ClientForm)
+    {
+        var formpermission = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["userid"]), item.ClientFormID, true);
+        var FormName = item.FormName.Replace(" ", "");
+        <div class="tab-pane fade" id="@(FormName + "only")" role="tabpanel" aria-labelledby="@("a"+FormName)">
+            <div class="inner-content">
+                <div class="paitent-detail">
+                    <div class="row">
+                        <div id="pat_out_div" class="col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="paitent-detail-left">
+                                @{
+                                    Html.RenderPartial("~/Views/Shared/Client/_ClientInfo.cshtml");
+                                }
+
+                                <div class="detail-heading d-flex">
+                                    @foreach (var items in Model.ClientForm.Where(p => p.ClientFormID == item.ParentFormID))
+                                    {
+                                        string FormNames = @items.FormName.Replace(" ", "");
+                                        <a id="@("a" + FormNames)" class="nav-link" data-toggle="tab"
+                                           href="@("#" + FormNames + "only")" data-ClientFormID="@items.ClientFormID" data-PatientID="@items.patientID" onclick="RebindClientFormEvent(this)" data-TemplateID="@items.TemplateID" data-FormName=@(FormNames)>@items.FormName<span class="check @Html.Raw(items.Saved ? "" : "d-none")"></span></a>
+                                    }
+                                    <h2 style="padding-top:10px">@item.FormName</h2>
+                                    <div class="detail-button ml-auto">
+
+                                        <a href="javascript:{}" onclick="DisplayForm(@ViewBag.PatientID,'@item.FormName'+'Tab','@FormName',@item.ClientFormID)"
+                                           class="btn btn-success  btnDisplayProgram">
+                                            <i class="far fa-edit"></i>
+                                            Display
+                                        </a>
+                                        @if (formpermission.Where(f => f.CanUpdate == true).Any())
+                                        {
+                                            <a href="javascript:{}" onclick="return saveClientFormBasicInfo('@item.TemplateID','@item.TemplateTable',@item.ClientFormID,@item.patientID);" data-save="@(item.Saved ? "True" : "False")" class="btn btn-success ml-auto btnprogramsave">
+                                                <i class="far fa-save"></i>
+                                                Save
+                                            </a>
+                                        }
+
+                                    </div>
+                                </div>
+
+                                <div class="SidebarScroll scroll inner-main-content">
+                                    <style>
+                                        ul.file_uploaded_list li img {
+                                            max-width: 90px;
+                                            margin-right: 10px;
+                                        }
+                                    </style>
+                                    <div id="@(FormName + "render-basicform")" class="render-basicProgramform" style="padding-bottom:100px"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+}

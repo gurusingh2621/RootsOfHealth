@@ -34,7 +34,7 @@ namespace RootsOfHealth.Models
         public List<Form_ScheduleResultBO> FormScheduling { get; set; }
         public CareplanCountBO CarePlanCount { get; set; }
 
-
+        public ClientMainFormInfoBO MainFormInfoBO { get; set; }
         public PatientDetailBO()
         {
 

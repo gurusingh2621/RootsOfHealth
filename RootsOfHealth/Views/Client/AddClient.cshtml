@@ -1,0 +1,2198 @@
+﻿@model RootsOfHealth.Models.PatientDetailBO
+@using RootsOfHealth.Commom
+
+@{
+    ViewBag.Title = "Patient";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+    var PatientEmail = "";
+
+    if (!String.IsNullOrEmpty(Model.PatientMain.EmailAddress))
+    {
+        PatientEmail = Model.PatientMain.EmailAddress;
+    }
+    else
+    {
+        if (!String.IsNullOrEmpty(Model.PatientMain.EmergencyContact1EmailAddress))
+        {
+            PatientEmail = Model.PatientMain.EmergencyContact1EmailAddress;
+        }
+
+    }
+    var modulePermissions = new Common().GetMainModulesPermission(Convert.ToInt32(Session["userid"]));
+}
+<style>
+    .showHide {
+        display: none;
+    }
+
+    .inner-main-content {
+        height: calc(100vh - 240px);
+    }
+
+    .paitent-detail-left {
+        height: calc(100vh - 160px);
+        overflow: hidden;
+    }
+    /*.row {
+            margin-right: 0px;
+        }*/
+
+    .divAnyVaccinations button.multiselect {
+        background-color: transparent;
+        color: #999;
+        background: url(../images/chevron-arrow-down.svg) no-repeat;
+        background-position: 95% 13px;
+        background-size: 12px;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        line-height: normal;
+        /* color: #818181; */
+        width: 100% !important;
+        padding: 5px 20px 5px 10px;
+        border-radius: 0;
+        border: 1px solid #e2e2e2;
+        border-radius: 0;
+        font-size: 14px;
+        height: 42px;
+        text-align: left;
+    }
+
+    .render-basicProgramform .priority > li {
+        cursor: move
+    }
+
+    div#clientMainFormDetail .priority > li {
+        cursor: move;
+    }
+
+    .divAnyVaccinations ul.multiselect-container.dropdown-menu.show {
+        padding: 8px 2px;
+        width: 100%;
+    }
+
+        .divAnyVaccinations ul.multiselect-container.dropdown-menu.show li a {
+            /* padding: 0px 8px; */
+            font-style: normal;
+            font-weight: normal;
+            font-size: 12px;
+            line-height: normal;
+            color: #5d5d5d;
+            height: 23px;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            padding: .25rem .5rem;
+        }
+
+    .divAnyVaccinations ul.multiselect-container li label {
+        margin-bottom: 0px;
+    }
+
+        .divAnyVaccinations ul.multiselect-container li label input[type="checkbox"] {
+            position: absolute;
+            left: 10px;
+            width: 18px;
+            height: 18px;
+            opacity: 0;
+        }
+
+        .divAnyVaccinations ul.multiselect-container li label input[type="checkbox"] {
+            position: absolute;
+            left: 10px;
+            width: 18px;
+            height: 18px;
+            opacity: 0;
+        }
+
+    .divAnyVaccinations .dropdown-menu li.active span:before {
+        content: "";
+        background: url(../images/checkbox.svg) no-repeat center #22baa0;
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        vertical-align: middle;
+        border-radius: 3px;
+        text-align: center;
+        float: left;
+        padding: 4px 7px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        background-size: 15px;
+    }
+
+    .divAnyVaccinations a {
+        text-decoration: none;
+    }
+
+    .list-height {
+        height: calc(100vh - 300px);
+    }
+
+
+    /* New css
+    -------------------------------------------------*/
+    #content .profile-tabs .tabs-scroll {
+        position: fixed;
+        top: 60px;
+        right: 0;
+        width: 310px;
+        z-index: 9990;
+        flex-direction: column;
+        display: block;
+        height: calc(100vh - 60px);
+        left: auto;
+        margin: 0;
+        background: #34425a;
+        overflow: auto;
+        transform: translateX(100%);
+        -webkit-transform: translateX(100%);
+        transition: all ease 0.4s;
+    }
+
+    .tabs-scroll > ul#myTab > li > a .notCountR,
+    .tabs-scroll > ul#myTab > li > a .notCountO,
+    .tabs-scroll > ul#myTab > li > a .notCountG,
+    .tabs-scroll > ul#myTab > li > a .notCountR {
+        top: 7px;
+        right: 35px;
+    }
+
+    #content {
+        padding-top: 0px !important;
+    }
+
+        #content .inner-content {
+            margin-top: 0px !important;
+        }
+
+        #content.showHidecontent .profile-tabs .tabs-scroll {
+            transform: translateX(0%);
+            -webkit-transform: translateX(0%);
+        }
+
+        #content .profile-tabs .tabs-scroll > .nav-tabs {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            margin: 0;
+            position: static;
+            height: auto;
+            padding: 0;
+            background: transparent;
+            border: 0px;
+            overflow: hidden;
+        }
+
+        #content .profile-tabs .tabs-scroll > ul#myTab > li {
+            margin: 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+            #content .profile-tabs .tabs-scroll > ul#myTab > li > a {
+                margin: 0;
+                width: 100%;
+            }
+
+                #content .profile-tabs .tabs-scroll > ul#myTab > li > a:after {
+                    content: none;
+                }
+
+    .tabs-scroll > ul#myTab > li > a .check {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        z-index: 9;
+    }
+
+    .inner-main-content {
+        height: calc(100vh - 180px);
+    }
+
+    .paitent-detail-left {
+        height: calc(100vh - 100px);
+    }
+
+    #menu-toggle {
+        right: 0;
+        top: 20px;
+        transition: all ease 0.4s;
+    }
+
+    div#menu-toggle.open {
+        right: 310px;
+    }
+
+    .pColorCircle {
+        height: 10px;
+        width: 10px;
+        position: absolute;
+        top: 50%;
+        right: 43px;
+        border-radius: 50px;
+        margin-top: -5px;
+    }
+
+    .historyFormLogTableWrap.table-responsive {
+        max-height: calc(100vh - 160px);
+    }
+
+    ul.clientInfo {
+        font-size: 14px;
+        list-style: none;
+        padding: 8px 20px 8px;
+        margin: -20px -20px 10px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-end;
+        background: #f9f9f9;
+        flex-wrap: wrap;
+    }
+
+        ul.clientInfo li > span.ci_value {
+            font-weight: 500;
+            color: #22baa0;
+        }
+
+        ul.clientInfo li > span:not(.ci_value) {
+            text-transform: uppercase;
+        }
+
+        ul.clientInfo li {
+            padding: 0 15px;
+        }
+
+    #clientMainFormDetail .frmbtn {
+        border: 1px solid #e2e2e2;
+        padding: 10px;
+        position: relative;
+        margin: 0 0 10px 0;
+    }
+
+        #clientMainFormDetail .frmbtn .form-group label:first-child {
+            background: #f0f0f0;
+            display: block;
+            margin: -11px -11px 10px;
+            padding: 4px 10px;
+            font-size: 14px;
+            color: #343434;
+            font-weight: 500;
+            line-height: normal;
+            vertical-align: middle;
+        }
+
+        #clientMainFormDetail .frmbtn .form-group label span.desc {
+            display: block;
+            margin: 3px 0 0;
+            color: #777;
+            font-weight: normal;
+        }
+
+    .label-fields, .ssn-label, .score-result {
+        display: none !important;
+    }
+
+    .open-eye {
+        display: block;
+    }
+</style>
+
+<!-- Content start here -->
+<section id="content" class="responsive-container ">
+    <div class="profile-tabs">
+        <div class="tabs-scroll">
+
+        </div>
+        <div id="menu-toggle" class="">
+            <div id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div id="cross" title="Hide Client Menu">
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        <div class="tab-content" id="myTabContent">
+            <ul class="nav nav-tabs" style="display:none;" id="myChildTab" role="tablist">
+            </ul>
+            <!-- Profile tab start here  -->
+
+            @if (ViewBag.currentTab == "profile")
+            {
+                Html.RenderPartial("~/Views/Shared/Client/_MainClientInfo.cshtml", Model.PatientMain);
+            }
+
+            <!-- Profile Tab end here -->
+            <!-- Dynamic tab start here  -->
+            <!-- Dynamic Tab end here -->
+            <!-- Programs Tab start here  -->
+
+            <div class="tab-pane fade" id="Programs" role="tabpanel" aria-labelledby="Programs-tab">
+            </div>
+
+            <!-- Programs Tab end here  -->
+
+        </div>
+    </div>
+    @{
+        Html.RenderPartial("~/Views/Shared/Client/_LogHistoryPopUp.cshtml");
+    }
+</section>
+<!-- Content end here -->
+
+@section scripts {
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.js"></script>
+    <script src="~/Content/script/jquery.timeselector.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-lite.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/ui/1.12.0-rc.2/jquery-ui.min.js"
+            integrity="sha256-55Jz3pBCF8z9jBO1qQ7cIf0L+neuPTD1u7Ytzrp2dqo="
+            crossorigin="anonymous"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script>
+    var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]'
+    var userId = "@Session["userid"]";
+    var patientId = "@Model.PatientMain.PatientID";
+    var IsUserCarePlanApprover = '@Session["IsCarePlanApprover"]'
+    var IsRequestSent = false;
+    var IsCarePlanChanged = false;
+    var IsCarePlanApproved = false;
+    var RequestType = '';
+    var RequestStatus = 0;
+    var RequestId=0
+    var careplanUploadedPath = "@System.Web.Configuration.WebConfigurationManager.AppSettings["CarePlanUploadPath"]";
+    var  programUploadedPath="@System.Web.Configuration.WebConfigurationManager.AppSettings["ProgramUploadPath"]";
+    var canEditClient = '@modulePermissions.Where(x => x.ModuleName == "Client" && x.CanUpdate == true).Any()'
+    var _ClientMainFormID = '@Model.MainFormInfoBO.ClientMainFormId';
+    var _isMainFormSaved = false;
+    var _mainFormtemplateId = "@Model.MainFormInfoBO.TemplateId";
+    var _mainFormtemplatetable = "@Model.MainFormInfoBO.TableName";
+    var ClientMainFormHtml = @Html.Raw(Json.Encode(Model.MainFormInfoBO.FormHtml));
+    var RaceEthnicity = [];
+    var LanguagesSpeak = [];
+    var EverMemberOfUSArmedForces = "";
+    var PatientChildrensAges = "";
+    var PatientImg = "";
+    var formName = "";
+    if (patientId != undefined && patientId != '' && patientId != '0') {
+            $('#btnaddprogram').removeClass('d-none');
+            $('.btnDisplayProgram').removeClass('d-none');
+        }
+    $(".ssn-icon-eye").click(function () {
+        $(this).toggleClass("showpwd");
+    });
+
+    $(".ssn-icon-label").click(function () {
+        $(this).toggleClass("showlbl");
+    });
+    $('.date').datepicker(
+        {
+            uiLibrary: 'bootstrap',
+            changeYear: true,
+            changeMonth: true,
+        }
+
+        );
+
+        var lblgender = $('#lblGender').html();
+        if (lblgender == "Other") {
+            $('#divOtherGender').css('display', 'block');
+        }
+
+        var lblRace = $('#lblOtherRace').html();
+        if (lblRace != "") {
+            $('#OtherRace').css('display', 'block');
+        }
+
+        var lblPerAdd = $('#lblPerAdd').html();
+        if (lblPerAdd == "False") {
+            $('#divPermanentAddress').css('display', 'block');
+        }
+
+        var lblContact = $('#lblContact').html();
+        if (lblContact == "Other") {
+            $('#OtherContact').css('display', 'block');
+        }
+
+        var lblMarital = $('#lblMarital').html();
+        if (lblMarital == "Other") {
+            $('#OtherMaritalStatus').css('display', 'block');
+        }
+
+        var lblOtherLang = $('#lblOtherLang').html();
+        if (lblOtherLang != "") {
+            $('#OtherLanguage').css('display', 'block');
+        }
+
+        var lblSmoker = $('#lblSmoker').html();
+        if (lblSmoker == "Yes") {
+            $('#divQuit').css('display', 'block');
+            $('#divLastTimeYouSmoked').css('display', 'block');
+        }
+
+        var lblQuit = $('#lblQuit').html();
+        if (lblQuit == "Yes") {
+            $('#divSmokingQuitDate').css('display', 'block');
+        }
+
+        var lblPronoun = $('#lblPronoun').html();
+        if (lblPronoun == "Other") {
+            $('#divOtherPronouns').css('display', 'block');
+        }
+
+        var lblThink = $('#lblThink').html();
+        if (lblThink == "Unspecified/Other") {
+            $('#divOtherThinkYourselfAs').css('display', 'block');
+        }
+
+        var lblNumChildren = $('#lblNumChildren').html();
+        $('.ChildrenAgeDiv').html('');
+        var divhtml = '';
+        for (var i = 1; i <= parseInt(lblNumChildren); i++) {
+            var temp = $('.ChildrenAgeTemp').html();
+            temp = temp.replace('#number', i);
+            temp = temp.replace('#yearid', 'year_' + i);
+            temp = temp.replace('#daysid', 'days_' + i);
+            divhtml = divhtml + temp;
+        }
+
+        $('.ChildrenAgeDiv').html(divhtml);
+
+        var lblAgeChildren = $('#lblAgeChildren').html();
+
+        var AgeChildrenArray = lblAgeChildren != undefined ? lblAgeChildren.split(',') : '';
+
+        for (var i = 0; i < AgeChildrenArray.length; i++) {
+            var AgeChildren = AgeChildrenArray[i].split(':');
+            $('#year_' + (i + 1)).html(AgeChildren[0]);
+            $('#days_' + (i + 1)).html(AgeChildren[1]);
+        }
+        //------------Profile Start--------------------------------------//
+
+        if (patientId != 0) {
+            var lblOtherArray = ["Other"];
+            var lblRace = $('#lblRace').html();
+            if (lblRace == "") {
+                $("#ddRace").val(lblOtherArray);
+                $('.selectboxmultiple button[data-id="ddRace"]').find('.filter-option-inner-inner').html("Other");
+                $('#OtherRace').show();
+            } else {
+                var lblRaceArray = lblRace != undefined ? lblRace.split(',') : '';
+                $("#ddRace").val(lblRaceArray);
+                $('.selectboxmultiple button[data-id="ddRace"]').find('.filter-option-inner-inner').html(lblRace);
+            }
+
+
+            var lblLanguages = $('#lblLanguages').html();
+            if (lblLanguages == "") {
+                $("#ddLanguages").val(lblOtherArray);
+                $('.selectboxmultiple button[data-id="ddLanguages"]').find('.filter-option-inner-inner').html("Other");
+                $('#OtherLanguage').show();
+            } else {
+                var lblLanguagesArray = lblLanguages != undefined ? lblLanguages.split(',') : '';
+                $("#ddLanguages").val(lblLanguagesArray);
+                $('.selectboxmultiple button[data-id="ddLanguages"]').find('.filter-option-inner-inner').html(lblLanguages);
+            }
+        }
+
+        var lblUSArmedForces = $('#lblUSArmedForces').html().toLocaleLowerCase();
+        $("input[name=USArmedRadio][value='" + lblUSArmedForces + "']").prop('checked', true);
+
+        var lblEverSmoker = $('#lblEverSmoker').html().toLocaleLowerCase();
+        $('#ddSmoker').val('' + lblEverSmoker);
+        if (lblEverSmoker == "true") {
+            $('#divQuit').show();
+            $('#divLastTimeYouSmoked').show();
+        }
+
+        var lblQuitSmoking = $('#lblQuitSmoking').html().toLocaleLowerCase();
+        $('#ddQuit').val('' + lblQuitSmoking);
+        if (lblQuitSmoking == "true") {
+            $('#divSmokingQuitDate').show();
+        }
+
+        var lblLastTime = $('#lblLastTime').html().toLocaleLowerCase();
+        $('#ddLastTimeYouSmoked').val('' + lblLastTime);
+
+        var lblGender = $('#lblGender').html();
+        $('#ddGender').val('' + lblGender);
+        if (lblGender == "Other") {
+            $('#divOtherGender').show();
+        }
+
+        var lblPerAdd = $('#lblPerAdd').html().toLocaleLowerCase();
+        $('#ddPermanentAddress').val('' + lblPerAdd);
+        if (lblPerAdd == "false") {
+            $('#divPermanentAddress').show();
+        }
+
+        var lblContact = $('#lblContact').html();
+        $('#ddWayToContact').val('' + lblContact);
+        if (lblContact == "Other") {
+            $('#OtherContact').show();
+        }
+
+        var lblMarital = $('#lblMarital').html();
+        $('#ddMaritalStatus').val('' + lblMarital);
+        if (lblMarital == "Other") {
+            $('#OtherMaritalStatus').show();
+        }
+
+        var lblPronoun = $('#lblPronoun').html();
+        $('#ddPreferredPronouns').val('' + lblPronoun);
+        if (lblPronoun == "Other") {
+            $('#divOtherPronouns').show();
+        }
+
+        var lblThink = $('#lblThink').html();
+        $('#ddThinkYourselfAs').val('' + lblThink);
+        if (lblThink == "Unspecified/Other") {
+            $('#divOtherThinkYourselfAs').show();
+        }
+        $('.selectboxmultiple').selectpicker();
+
+
+        var txtChildren = $("#txtChildren").val();
+        if (txtChildren != "") {
+
+
+            $('.ChildrenAgeDiv').html('');
+
+            var val = $('#txtChildren').val();
+
+            var divhtml = '';
+
+            for (var i = 1; i <= parseInt(val); i++) {
+
+                var temp = $('.ChildrenAgeTemplate').html();
+                temp = temp.replace('#number', i);
+                temp = temp.replace('#yearid', 'child_year_' + i);
+                temp = temp.replace('#daysid', 'child_days_' + i);
+                divhtml = divhtml + temp;
+            }
+
+            $('.ChildrenAgeDiv').html(divhtml);
+            var lblAgeChildren = $('#lblAgeChildren').html();
+            var AgeChildrenArray = lblAgeChildren != undefined ? lblAgeChildren.split(',') : '';
+            if (AgeChildrenArray != '') {
+                for (var i = 0; i < AgeChildrenArray.length; i++) {
+                    var AgeChildren = AgeChildrenArray != '' ? AgeChildrenArray[i].split(':') : '';
+                    $('#child_year_' + (i + 1)).val(AgeChildren[0].toString());
+                    $('#child_days_' + (i + 1)).val(AgeChildren[1].toString());
+                }
+            }
+        }
+
+        //------------Profile End--------------------------------------//
+
+        //------------Profile Change Events Start--------------------------------------//
+        $("#PatientImg").change(function () {
+
+            var formData = new FormData();
+            var totalFiles = document.getElementById("PatientImg").files.length;
+            for (var i = 0; i < totalFiles; i++) {
+                var file = document.getElementById("PatientImg").files[i];
+                file = this.files[i];
+                const fileType = file['type'];
+                const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+                if (!validImageTypes.includes(fileType)) {
+                    // invalid file type code goes here.
+                    toastr.error("Invalid Image");
+                }
+
+                formData.append("PatientImg", file);
+            }
+            $.ajax({
+                type: "POST",
+                url: '/Patient/Upload',
+                data: formData,
+                dataType: 'html',
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    PatientImg = response;
+
+                    $("input[type=hidden][name=PatientImg]").val(PatientImg);
+                    $("#patientpic").attr('src', "/Files/" + response)
+                },
+                error: function (error) {
+                    toastr.error("errror");
+                },
+            })
+        });
+
+        $('#ddGender').on('change', function () {
+            var selected = $('#ddGender option:selected').val();
+            var divOtherGender = $('#divOtherGender');
+            var txtOtherGender = $('#txtOtherGender');
+
+            if (selected == 'Other') {
+                divOtherGender.show();
+            }
+            else {
+                divOtherGender.hide();
+                txtOtherGender.val('');
+            }
+        });
+
+        $('#ddMaritalStatus').on('change', function () {
+            var selected = $('#ddMaritalStatus option:selected').val();
+            var divOtherMaritalStatus = $('#OtherMaritalStatus');
+
+            if (selected == 'Other') {
+                divOtherMaritalStatus.show();
+            }
+            else {
+                divOtherMaritalStatus.hide();
+            }
+        });
+
+        $('#ddSmoker').on('change', function () {
+            var selected = $('#ddSmoker option:selected').val();
+            var divQuit = $('#divQuit');
+            var divLastTimeYouSmoked = $('#divLastTimeYouSmoked');
+            var divSmokingQuitDate = $('#divSmokingQuitDate');
+            var ddQuit = $('#ddQuit');
+            var ddLastTimeYouSmoked = $('#ddLastTimeYouSmoked');
+
+            if (selected == "true") {
+                divQuit.show();
+                divLastTimeYouSmoked.show();
+            }
+            else {
+                divQuit.hide();
+                divLastTimeYouSmoked.hide();
+                divSmokingQuitDate.hide();
+                ddQuit.val(0);
+                ddLastTimeYouSmoked.val(0);
+            }
+        });
+
+        $('#ddQuit').on('change', function () {
+            var selected = $('#ddQuit option:selected').val();
+            var divSmokingQuitDate = $('#divSmokingQuitDate');
+
+            if (selected == "true") {
+                divSmokingQuitDate.show();
+            }
+            else {
+                divSmokingQuitDate.hide();
+            }
+        });
+
+        $('#ddPreferredPronouns').on('change', function () {
+            var selected = $('#ddPreferredPronouns option:selected').val();
+            var divOtherPronouns = $('#divOtherPronouns');
+            var txtOtherPronouns = $('#txtOtherPronouns');
+
+
+            if (selected == 'Other') {
+                divOtherPronouns.show();
+            }
+            else {
+                divOtherPronouns.hide();
+                txtOtherPronouns.val('');
+            }
+        });
+
+        $('#ddThinkYourselfAs').on('change', function () {
+            var selected = $('#ddThinkYourselfAs option:selected').val();
+            var divOtherThinkYourselfAs = $('#divOtherThinkYourselfAs');
+            var txtOtherThinkYourself = $('#txtOtherThinkYourself');
+
+            if (selected == 'Unspecified/Other') {
+                divOtherThinkYourselfAs.show();
+            }
+            else {
+                divOtherThinkYourselfAs.hide();
+                txtOtherThinkYourself.val('');
+            }
+        });
+
+        $('#ddPermanentAddress').on('change', function () {
+            var selected = $('#ddPermanentAddress option:selected').val();
+            var divPermanentAddress = $('#divPermanentAddress');
+            var txtPermanentAddress = $('#txtPermanentAddress');
+
+            if (selected == "false") {
+                divPermanentAddress.show();
+            }
+            else {
+                divPermanentAddress.hide();
+                txtPermanentAddress.val('');
+            }
+        });
+
+        $('#ddWayToContact').on('change', function () {
+            var selected = $('#ddWayToContact option:selected').val();
+            var divOtherContact = $('#OtherContact');
+            var txtOtherContact = $('#txtOtherContact');
+
+            if (selected == 'Other') {
+                divOtherContact.show();
+            }
+            else {
+                divOtherContact.hide();
+                txtOtherContact.val('');
+            }
+        });
+
+        $('#ddRace').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+            // do something...
+
+            //  var selected = $('#ddRace option:selected').val();
+            var divOtherRace = $('#OtherRace');
+
+            var selectedvalues = $('#ddRace').selectpicker().val();
+
+            if ($.inArray("Other", selectedvalues) != -1) {
+                divOtherRace.show();
+            }
+            else {
+                divOtherRace.hide();
+
+            }
+
+
+            // check if option at index 0 is clicked
+            if (clickedIndex == 0 || clickedIndex == null) {
+                var all = $(this).children('option[value="Select All"]');
+                optionvalue = all.html();
+
+                // check if All option is clicked
+                if (optionvalue == "Select All") {
+
+                    // check if all option is selected or not
+                    if (isSelected || isSelected == null) {
+
+                        // make all option selected if all option is selected
+                        $(this).selectpicker('selectAll');
+
+                    } else {
+
+                        // make all option un-selected if all option is un-selected
+                        $(this).selectpicker('deselectAll');
+                    }
+                }
+            }
+            else {
+
+                // get selected values and convert it into array
+                var selectedarray = $(this).val().toString() != '' ? $(this).val().toString().split(',') : '';
+
+                // check if all values are selected
+                if (selectedarray.length >= 7 && $.inArray("Select All", selectedarray) == -1) {
+
+                    // select all option if all values are selected
+                    $(this).children('option[value="Select All"]').prop("selected", true);
+
+                }
+                else {
+
+                    // un-select all option if all values are selected
+                    $(this).children('option[value="Select All"]').prop("selected", false);
+
+                }
+
+            }
+
+            // refresh select list
+            $(this).selectpicker('refresh');
+
+
+            $.each($("#ddRace option:selected"), function () {
+
+                if ($(this).val() == "Other" || $(this).val() == "Select All") {
+
+                }
+                else {
+                    if (jQuery.inArray($(this).val(), RaceEthnicity) == -1) {
+                        RaceEthnicity.push($(this).val());
+                    }
+                }
+
+            });
+
+        });
+
+        $.each($("#ddRace option:selected"), function () {
+
+            if ($(this).val() == "Other" || $(this).val() == "Select All") {
+
+            }
+            else {
+                if (jQuery.inArray($(this).val(), RaceEthnicity) == -1) {
+                    RaceEthnicity.push($(this).val());
+                }
+            }
+
+        });
+
+        $('#ddLanguages').on('changed.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+            // do something...
+
+            var divOtherLanguage = $('#OtherLanguage');
+
+            var selectedvalues = $('#ddLanguages').selectpicker().val();
+
+            if ($.inArray("Other", selectedvalues) != -1) {
+                divOtherLanguage.show();
+            }
+            else {
+                divOtherLanguage.hide();
+
+            }
+
+
+            // check if option at index 0 is clicked
+            if (clickedIndex == 0 || clickedIndex == null) {
+                var all = $(this).children('option[value="Select All"]');
+                optionvalue = all.html();
+
+                // check if All option is clicked
+                if (optionvalue == "Select All") {
+
+                    // check if all option is selected or not
+                    if (isSelected || isSelected == null) {
+
+                        // make all option selected if all option is selected
+                        $(this).selectpicker('selectAll');
+
+                    } else {
+
+                        // make all option un-selected if all option is un-selected
+                        $(this).selectpicker('deselectAll');
+                    }
+                }
+            }
+            else {
+
+                // get selected values and convert it into array
+                var selectedarray = $(this).val().toString() ? $(this).val().toString().split(',') : '';
+
+                // check if all values are selected
+                if (selectedarray.length >= 6 && $.inArray("Select All", selectedarray) == -1) {
+
+                    // select all option if all values are selected
+                    $(this).children('option[value="Select All"]').prop("selected", true);
+
+                }
+                else {
+
+                    // un-select all option if all values are selected
+                    $(this).children('option[value="Select All"]').prop("selected", false);
+
+                }
+
+            }
+
+            // refresh select list
+            $(this).selectpicker('refresh');
+
+
+            $.each($("#ddLanguages option:selected"), function () {
+                if ($(this).val() == "Other" || $(this).val() == "Select All") {
+
+                }
+                else {
+                    if (jQuery.inArray($(this).val(), LanguagesSpeak) == -1) {
+                        LanguagesSpeak.push($(this).val());
+                    }
+                }
+            });
+
+        });
+
+        $.each($("#ddLanguages option:selected"), function () {
+            //second
+            if ($(this).val() == "Other" || $(this).val() == "Select All") {
+
+            }
+            else {
+                if (jQuery.inArray($(this).val(), LanguagesSpeak) == -1) {
+                    LanguagesSpeak.push($(this).val());
+                }
+
+            }
+
+        });
+
+        $('#Profile').find('input').on('input change', function () {
+
+            $('#Profile').find('#ProfileSave').removeClass('disabled').css({ 'border': '1px solid rgb(34, 186, 160)', 'background-color': 'rgb(34, 186, 160)' })
+        })
+
+        $('#Profile').find('select').on('change', function () {
+            $('#Profile').find('#ProfileSave').removeClass('disabled').css({ 'border': '1px solid rgb(34, 186, 160)', 'background-color': 'rgb(34, 186, 160)' })
+        })
+
+        //------------Profile Change Events End--------------------------------------//
+        var fileDataP1 = new FormData();
+        var fileDataP2 = new FormData();
+        var fileDataP3 = new FormData();
+        var fileDataP4 = new FormData();
+        var fileDataP5 = new FormData();
+        var fileDataP6 = new FormData();
+        var fileDataP7 = new FormData();
+        var fileDataP8 = new FormData();
+        var fileDataP9 = new FormData();
+        var fileDataP10 = new FormData();
+
+    function showSSn() {
+        $("#txtSocialSecNo").attr("type", "text");
+        }
+
+    function Hidessn() {
+        $("#txtSocialSecNo").attr("type", "password");
+        }
+
+    function addChildrenDiv() {
+            $('.ChildrenAgeDiv').html('');
+
+            var val = $('#txtChildren').val();
+
+            var divhtml = '';
+
+            for (var i = 1; i <= parseInt(val); i++) {
+
+                var temp = $('.ChildrenAgeTemplate').html();
+                temp = temp.replace('#number', i);
+                temp = temp.replace('#yearid', 'child_year_' + i);
+                temp = temp.replace('#daysid', 'child_days_' + i);
+                divhtml = divhtml + temp;
+            }
+
+            $('.ChildrenAgeDiv').html(divhtml);
+        }
+
+    function Validation() {
+            var check = true;
+            if (check == true) {
+                if ($('#ddSmoker option:selected').val() == 0) {
+
+                    $('#ddSmoker').addClass('invalid-field');
+                    check = false;
+                }
+                else {
+                    $('#ddSmoker').removeClass('invalid-field');
+                }
+
+                if ($('#ddSmoker option:selected').val() == "true") {
+
+                    $('#ddQuit').addClass('invalid-field');
+                    check = false;
+                    if ($('#ddQuit option:selected').val() == 0) {
+                        $('#ddQuit').addClass('invalid-field');
+                        check = false;
+                    }
+                    else {
+                        $('#ddQuit').removeClass('invalid-field');
+                        check = true;
+                    }
+                }
+
+                else {
+                    $('#ddQuit').removeClass('invalid-field');
+                }
+                if ($('#ddQuit option:selected').val() == "true") {
+
+                    $('#txtQuitDate').addClass('invalid-field');
+                    check = false;
+                    if ($('#txtQuitDate').val() == '') {
+                        $('#txtQuitDate').addClass('invalid-field');
+                        check = false;
+                    }
+                    else {
+                        $('#txtQuitDate').removeClass('invalid-field');
+                        check = true;
+                    }
+
+                }
+                else {
+                    $('#txtQuitDate').removeClass('invalid-field');
+                }
+
+
+
+
+                if ($('#txtFirstName').val() == '') {
+                    $('#txtFirstName').addClass('invalid-field');
+                    check = false;
+                }
+                else {
+                    $('#txtFirstName').removeClass('invalid-field');
+                }
+
+                if ($('#txtLastName').val() == '') {
+                    $('#txtLastName').addClass('invalid-field');
+                    check = false;
+                }
+                else {
+                    $('#txtLastName').removeClass('invalid-field');
+                }
+                if ($('#txtDOB').val() == '') {
+                    $('#txtDOB').addClass('invalid-field');
+                    check = false;
+                }
+                else {
+                    $('#txtDOB').removeClass('invalid-field');
+                }
+                if ($('#ddGender option:selected').val() == 0) {
+                    $('#ddGender').addClass('invalid-field');
+                    check = false;
+                }
+                else {
+                    $('#ddGender').removeClass('invalid-field');
+                }
+                if ($('#txtEmergencyContact1').val() == '') {
+                    $('#txtEmergencyContact1').addClass('invalid-field');
+                    check = false;
+                }
+                else {
+                    $('#txtEmergencyContact1').removeClass('invalid-field');
+                }
+                if ($('#txtChildrenUnder18').val() == '') {
+                    $('#txtChildrenUnder18').addClass('invalid-field');
+                    check = false;
+                }
+                else {
+                    $('#txtChildrenUnder18').removeClass('invalid-field');
+                }
+                if ($('#txtAdults18to65').val() == '') {
+                    $('#txtAdults18to65').addClass('invalid-field');
+                    check = false;
+                }
+                else {
+                    $('#txtAdults18to65').removeClass('invalid-field');
+                }
+                if ($('#Adults65Plus').val() == '') {
+                    $('#Adults65Plus').addClass('invalid-field');
+                    check = false;
+                }
+                else {
+                    $('#Adults65Plus').removeClass('invalid-field');
+                }
+
+
+
+
+                if ($('#txtEmergencyContact1Name').val() == '') {
+                    $('#txtEmergencyContact1Name').addClass('invalid-field');
+                    check = false;
+                }
+                else {
+                    $('#txtEmergencyContact1Name').removeClass('invalid-field');
+                }
+                if ($('#txtEmergencyContact1Address').val() == '') {
+                    $('#txtEmergencyContact1Address').addClass('invalid-field');
+                    check = false;
+                }
+                else {
+                    $('#txtEmergencyContact1Address').removeClass('invalid-field');
+                }
+                if ($('#txtEmergencyContact1EmailAddress').val() == '') {
+                    $('#txtEmergencyContact1EmailAddress').addClass('invalid-field');
+                    check = false;
+                }
+                else {
+                    $('#txtEmergencyContact1EmailAddress').removeClass('invalid-field');
+                }
+                if ($('#txtEmergencyContact1Relationship').val() == '') {
+                    $('#txtEmergencyContact1Relationship').addClass('invalid-field');
+                    check = false;
+                }
+                else {
+                    $('#txtEmergencyContact1Relationship').removeClass('invalid-field');
+                }
+
+                var RaceValue = $('#ddRace').selectpicker().val();
+                if (RaceValue.length == 0) {
+                    $('#Profile').find('.selectboxmultiple button[data-id="ddRace"]').addClass('invalid-field');
+                    check = false;
+
+                }
+                else {
+                    $('#Profile').find('.selectboxmultiple button[data-id="ddRace"]').removeClass('invalid-field');
+                }
+                if ($.inArray("Other", RaceValue) != -1 && RaceValue.length < 7 && $('#txtOtherRace').val().trim() == "") {
+                    $('#txtOtherRace').addClass('invalid-field');
+                    check = false;
+                } else {
+                    $('#txtOtherRace').removeClass('invalid-field');
+                }
+                var LanguagesValue = $('#ddLanguages').selectpicker().val();
+
+                if (LanguagesValue.length == 0) {
+                    $('#Profile').find('.selectboxmultiple button[data-id="ddLanguages"]').addClass('invalid-field');
+                    check = false;
+
+                }
+                else {
+                    $('#Profile').find('.selectboxmultiple button[data-id="ddLanguages"]').removeClass('invalid-field');
+                }
+                if ($.inArray("Other", LanguagesValue) != -1 && LanguagesValue.length < 7 && $('#txtOtherLanguage').val().trim() == "") {
+                    $('#txtOtherLanguage').addClass('invalid-field');
+                    check = false;
+                } else {
+                    $('#txtOtherLanguage').removeClass('invalid-field');
+                }
+            }
+            if (check == false) {
+                //alert("Please Fill all Required Fields");
+                toastr.error('Please enter all required fields')
+            }
+
+            return check;
+
+        }
+
+    function Radio() {
+
+
+            EverMemberOfUSArmedForces = $("input[name='USArmedRadio']:checked").val();
+            IncomeCoverHouseholdExpenses = $("input[name='HouseholdExpensesRadio']:checked").val();
+            CalworksBenefits = $("input[name='Calworks']:checked").val();
+            SocialSecurityDisabilityInsurance = $("input[name='SSIRadio']:checked").val();
+            GeneralAssistance = $("input[name='GARadio']:checked").val();
+            WomenInfantChildrenBenefits = $("input[name='WICRadio']:checked").val();
+            UnemploymentBenefits = $("input[name='Unemployment']:checked").val();
+            StateDisabilityInsuranceBenefits = $("input[name='SDIRadio']:checked").val();
+            RentalAssistanceBenefits = $("input[name='RentalAssistance']:checked").val();
+            PersonalPhone = $("input[name='Phone']:checked").val();
+
+            HealthInsurance = $("input[name='InsuranceRadio']:checked").val();
+            if (HealthInsurance == "true") {
+                $('#divInsuranceYes').show();
+            }
+            else {
+                $('#divInsuranceYes').hide();
+                $('#txtPlanName').val('');
+                $('#txtPolicyNumber').val('');
+                $('#txtSSN').val('');
+
+            }
+
+            PrimaryCareDoctor = $("input[name='RegularDoctorRadio']:checked").val();
+            if (PrimaryCareDoctor == "true") {
+                $('#divRegularDoctorYes').show();
+            }
+            else {
+                $('#divRegularDoctorYes').hide();
+                //$('#ddLastSeeDoctor').val(0);
+                $('#txtNameOfDoctor').val('');
+                $('#txtDoctorLocation').val('');
+
+            }
+
+            RegularDentist = $("input[name='RegularDentistRadio']:checked").val();
+            if (RegularDentist == "true") {
+                $('#divRegularDentistYes').show();
+            }
+            else {
+                $('#divRegularDentistYes').hide();
+                //$('#ddLastSeeDentist').val(0);
+                $('#txtNameOfDentist').val('');
+                $('#txtDentistLocation').val('');
+
+            }
+
+            OtherDoctorsTherapists = $("input[name='OtherDoctorsRadio']:checked").val();
+            if (OtherDoctorsTherapists == "true") {
+                $('#divOtherDoctorsYes').show();
+            }
+            else {
+                $('#divOtherDoctorsYes').hide();
+                $('#txtTherapistsName').val('');
+                $('#txtTherapistsLocation').val('');
+            }
+
+            CaseManager = $("input[name='SocialWorkerRadio']:checked").val();
+            if (CaseManager == "true") {
+                $('#divSocialWorker').show();
+            }
+            else {
+                $('#divSocialWorker').hide();
+                $('#txtCaseManagerName').val('');
+                $('#txtCaseManagerLocation').val('');
+            }
+            //-----------------------OUonly Start------------------------//
+            Neighborhoods = $("input[name='frmOU_radio1']:checked").val();
+            if (Neighborhoods == "True") {
+                $('#divNeighborhoods').show();
+
+            }
+            else {
+                $('#divNeighborhoods').hide();
+            }
+
+            PendingDate = $("input[name='frmOU_radio4']:checked").val();
+            if (PendingDate == "True") {
+                $('#divPendingDate').show();
+
+            }
+            else {
+                $('#divPendingDate').hide();
+            }
+
+            ConvictedOffense = $("input[name='frmOU_radio5']:checked").val();
+            if (ConvictedOffense == "True") {
+                $('#divMisdemeanor').show();
+                $('#divFelony').show();
+
+            }
+            else {
+                $('#divMisdemeanor').hide();
+                $('#divFelony').hide();
+            }
+
+            Misdemeanor = $("input[name='frmOU_radio6']:checked").val();
+            if (Misdemeanor == "True") {
+                $('#divMisdemeanorDates').show();
+
+            }
+            else {
+                $('#divMisdemeanorDates').hide();
+            }
+
+            Felony = $("input[name='frmOU_radio7']:checked").val();
+            if (Felony == "True") {
+                $('#divFelonyDates').show();
+
+            }
+            else {
+                $('#divFelonyDates').hide();
+            }
+
+            RestrainingOrders = $("input[name='frmOU_radio8']:checked").val();
+            if (RestrainingOrders == "True") {
+                $('#divRestrictions').show();
+
+            }
+            else {
+                $('#divRestrictions').hide();
+            }
+
+            AngerManagement = $("input[name='frmOU_radio9']:checked").val();
+            if (AngerManagement == "True") {
+                $('#divAngerPY').show();
+
+            }
+            else {
+                $('#divAngerPY').hide();
+            }
+
+
+            ViolentOffense = $("input[name='frmOU_radio16']:checked").val();
+            if (ViolentOffense == "True") {
+                $('#divProbation').show();
+
+            }
+            else {
+                $('#divProbation').hide();
+            }
+
+            EligibleForEmployment = $("input[name='frmOU_radio20']:checked").val();
+            if (EligibleForEmployment == "True") {
+                $('#divSSN').show();
+
+            }
+            else {
+                $('#divSSN').hide();
+            }
+
+            //-----------------------OUonly end------------------------//
+
+
+
+            //-------------------HealthCare start--------------//
+
+
+
+
+
+            SmokeCigarettes = $("input[name='SmokeRadio']:checked").val();
+            if (SmokeCigarettes == "true") {
+                $('#divSmoke').show();
+            }
+            else {
+                $('#divSmoke').hide();
+                $('#ddSmokePerDay').val(0);
+                $('#ddFrequentlySmoke').val(0);
+
+            }
+
+            TobaccoProducts = $("input[name='TobaccoProductsRadio']:checked").val();
+
+            //-------------------HealthCare end--------------//
+
+
+
+            IsSomeoneYouCanDependOn = $("input[name='DependOnRadio']:checked").val();
+            InvolvedInCommunityGroup = $("input[name='CommunityGroup']:checked").val();
+            IsSomeoneYouCanCall = $("input[name='CallRadio']:checked").val();
+            IsAnyoneThreatenYou = $("input[name='ThreatenYouRadio']:checked").val();
+
+            EverBeenArrested = $("input[name='ArrestedRadio']:checked").val();
+            OnGoingCriminalCase = $("input[name='CriminalCaseRadio']:checked").val();
+            InterestedInCriminalRecordClearing = $("input[name='RecordClearingRadio']:checked").val();
+            OweRestitution = $("input[name='RestitutionRadio']:checked").val();
+            EverBeenInPrison = $("input[name='PrisonRadio']:checked").val();
+
+            if (EverBeenInPrison == "Yes") {
+                $('#divPrison').show();
+            }
+            else {
+                $('#divPrison').hide();
+                //$('#ddLastReleased').val(0);
+                $('#txtCDC').val('');
+                $('#txtHowMuchOwe').val('');
+                $('#ClearingRadioYes').prop("checked", false);
+                $('#ClearingRadioNo').prop("checked", false);
+                $('#RestitutionRadioYes').prop("checked", false);
+                $('#RestitutionRadioNo').prop("checked", false);
+            }
+
+            if (OweRestitution == "true") {
+                $('#divOwe').show();
+            }
+            else {
+                $('#divOwe').hide();
+                $('#txtHowMuchOwe').val('');
+
+            }
+
+            CurrentlyOnParole = $("input[name='CurrentlyOnParoleRadio']:checked").val();
+            if (CurrentlyOnParole == "Yes") {
+                $('#divParoleProbation').show();
+            }
+            else {
+                $('#divParoleProbation').hide();
+                $('#txtProbParoleEnd').val('');
+                //$('#ddParoleProbation').val(0);
+
+            }
+
+            DifficultiesInGettingAJob = $("input[name='GettingAJobRadio']:checked").val();
+
+            GovernmentIssuedID = $("input[name='GovernmentIDRadio']:checked").val();
+            if (GovernmentIssuedID == "true") {
+                $('#divGovernmentImg').show();
+            }
+            else {
+                $('#divGovernmentImg').hide();
+
+            }
+
+
+            ConcernsAboutFamilyImmigrationStatus = $("input[name='ImmigrationStatusRadio']:checked").val();
+            ConcernsWithLandlord = $("input[name='LandlordRadio']:checked").val();
+
+        }
+
+    function ChildrenAges() {
+
+            var val = $('#txtChildren').val();
+            var result = "";
+            // PatientChildrensAges = '';
+            for (var i = 1; i <= parseInt(val); i++) {
+
+                var yearid = $('#child_year_' + i).val();
+                var daysid = $('#child_days_' + i).val();
+                if (yearid == "" && daysid == "") {
+                    yearid = "0";
+                    daysid = "0";
+
+                }
+                else if (yearid == "" && daysid != "") {
+                    yearid = "0";
+                    daysid = daysid;
+                }
+                else if (yearid != "" && daysid == "") {
+                    yearid = yearid;
+                    daysid = "0";
+                }
+                result = result + yearid + ":" + daysid + ",";
+            }
+            PatientChildrensAges = result;
+            var lastChar = PatientChildrensAges.slice(-1);
+            if (lastChar == ',') {
+                PatientChildrensAges = PatientChildrensAges.slice(0, -1);
+            }
+        }
+
+    function AddDate() {
+
+            var d = new Date();
+            var month = d.getMonth() + 1;
+            var day = d.getDate();
+            var time = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+            CreatedDate = d.getFullYear() + '/' +
+                (month < 10 ? '0' : '') + month + '/' +
+                (day < 10 ? '0' : '') + day + "  " + time;
+
+            ShortDate = d.getFullYear() + '/' +
+                (month < 10 ? '0' : '') + month + '/' +
+                (day < 10 ? '0' : '') + day;
+
+            ModifiedDate = d.getFullYear() + '/' +
+                (month < 10 ? '0' : '') + month + '/' +
+                (day < 10 ? '0' : '') + day + "  " + time;
+        }
+
+    function validateDOB() {
+            var dob = $('#txtDOB').val();
+
+            var pattern = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
+            if (!pattern.test(dob)) {
+                toastr.error("Date of birth is invalid.")
+                $('#txtDOB').addClass('invalid-field');
+                return false;
+            }
+            else {
+                var date = new Date(dob);
+                var year = date.getFullYear();
+                var currentYear = new Date().getFullYear() + 1
+
+                if (year > 1900 && year <= currentYear) {
+                    return true;
+                }
+
+                toastr.error("Birth year should be in between 1900 and " + currentYear + '.');
+                $('#txtDOB').addClass('invalid-field');
+                return false
+            }
+        }
+
+    function ValidateMainForm() {
+            var isvalid = true;
+            var _mainFormElement = $('#clientMainFormDetail');
+        _mainFormElement.find(".base-control,.program-control,input.custom-control-input").each(function (index, item) {
+            var datacolumnattr = $(item).attr('data-column');
+            
+            if ($(item).is("input") && (typeof datacolumnattr !== 'undefined' && datacolumnattr !== false)) {
+                    switch ($(item).attr("type")) {
+                        case "radio":
+                        case "checkbox":
+                            if ($(item).closest(".inputContent").prev().hasClass("required-asterisk") && $(item).closest("div.inputContent").find("input:checked").length == 0) {
+                                isvalid = false;
+                            }
+                            break;
+                        case "file":
+                            if ($(item).closest(".inputContent").prev().hasClass("required-asterisk")) {
+                                if ($(item).next().next().find("input").length == 0) {
+                                    isvalid = false;
+                                }
+                            }
+                            break;
+                        default:
+                            if ($(item).closest(".inputContent").prev().hasClass("required-asterisk") && $(item).val().trim() == "") {
+                                isvalid = false;
+                            }
+                            break;
+
+                    }
+                }
+
+            if ($(item).is("select") && (typeof datacolumnattr !== 'undefined' && datacolumnattr !== false) && ($(item).val().trim() == "" || $(item).val() == "0")) {
+                    if ($(item).closest(".inputContent").prev().hasClass("required-asterisk")) {
+                        isvalid = false;
+                    }
+                }
+            if ($(item).is("textarea") && (typeof datacolumnattr !== 'undefined' && datacolumnattr !== false)) {
+                    if ($(item).closest(".inputContent").prev().hasClass("required-asterisk") && $(item).summernote("isEmpty")) {
+                        isvalid = false;
+                    }
+                }
+
+            });
+            if (!isvalid) {
+                toastr.error("Field marked with asterisk(*) are mandatory");
+                return;
+            }
+            if (_mainFormElement.find("input[type='file']").length) {
+                _mainFormElement.find("input[type='file']").each(function (index, item) {
+                    if (typeof datacolumnattr !== 'undefined' && datacolumnattr !== false) {
+                        if ($(item).hasClass("program-control") || $(item).hasClass("base-control")) {
+                            var res = validateFiles($(item).attr("id"));
+                            if (res == false) {
+                                return false;
+                            }
+                        }
+                    }
+                });
+            }
+            //if (_mainFormElement.find("input.invaild-input").length) {
+            //    return false;
+            //}
+            return isvalid;
+        }
+        
+    function saveClientMainFormBasicInfo() {
+            $.ajax({
+                type: "GET",
+                url: '/Client/GetClientMainFormDetail/?PatientID=' + patientId + '&formId=' + _ClientMainFormID,
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                async: false,
+                success: function (result) {
+                    var res = result.data[0];
+                    _isMainFormSaved = res.Saved;
+
+                },
+                error: function () {
+
+                }
+
+            });
+            var _mainFormElement = $('#clientMainFormDetail');
+
+            var _Saved = _isMainFormSaved;
+            if (_isMainFormSaved == "True" || _isMainFormSaved == "False") {
+                _isMainFormSaved = (_isMainFormSaved == "True") ? true : false
+            }
+
+            var fieldmodel = [];
+
+            fieldmodel.push({ ColumnName: "PatientID", FieldValue: patientId });
+            fieldmodel.push({ ColumnName: "TemplateID", FieldValue: _mainFormtemplateId });
+            fieldmodel.push({ ColumnName: "ClientFormID", FieldValue: _ClientMainFormID });
+            if (_Saved == 'False') {
+                fieldmodel.push({ ColumnName: "CreatedBy", FieldValue: userId });
+                fieldmodel.push({ ColumnName: "CreatedDate", FieldValue: getActualFullDate() });
+            }
+        fieldmodel.push({ ColumnName: "ModifiedBy", FieldValue: userId });
+            fieldmodel.push({ ColumnName: "ModifiedDate", FieldValue: getActualFullDate() });
+            if (_mainFormElement.find(".base-control").length) {
+                fieldmodel.push({ ColumnName: "BaseTemplateID", FieldValue: basetemplateid });
+            }
+        
+        debugger
+        _mainFormElement.find("[type=text],[type=number],[type=file],[type=date]").each(function (index, item) {
+               var datacolumnattr = $(item).attr('data-column');
+                if ((typeof datacolumnattr !== 'undefined' && datacolumnattr !== false) && $(item).val() != "" && $(item).hasClass("program-control")) {
+                    fieldmodel.push({ ColumnName: $(item).attr("data-column"), FieldValue: $(item).val() });
+                }
+            });
+        _mainFormElement.find("select").each(function (index, item) {
+            var datacolumnattr = $(item).attr('data-column');
+                if ((typeof datacolumnattr !== 'undefined' && datacolumnattr !== false) && $(item).val() != "" && $(item).hasClass("program-control")) {
+                    fieldmodel.push({ ColumnName: $(item).attr("data-column"), FieldValue: $(item).val() });
+                }
+            });
+            _mainFormElement.find(".priority").each(function (index, item) {
+                var datacolumnattr = $(item).attr('data-column');
+                if ((typeof datacolumnattr !== 'undefined' && datacolumnattr !== false) && $(item).hasClass("program-control")) {
+                    var id = $(item).attr("id")
+
+                    var strvalue = ''
+                    $.each($('#' + id + ' li'), function () {
+                        strvalue += $(this).attr('value') + SeperationString
+                    });
+
+                    strvalue = strvalue.substr(0, strvalue.length - SeperationString.length)
+                    fieldmodel.push({ ColumnName: $(item).attr("data-column"), FieldValue: strvalue });
+                }
+            });
+            _mainFormElement.find("[type=checkbox], [type=radio]").each(function (index, item) {
+                var selectedValues = ''
+                var datacolAttr = $(item).attr('data-column');
+                if ((typeof datacolAttr !== 'undefined' && datacolAttr !== false) && $(item).closest(".form-group").hasClass("program-control")) {
+                    selectedValues = $.map($(item).closest("div.inputContent").find("input:checked"), function (n, i) {
+                        return n.value;
+                    }).join(SeperationString);
+                    fieldmodel.push({ ColumnName: $(item).attr("data-column"), FieldValue: selectedValues });
+                }
+
+            });
+        _mainFormElement.find("textarea").each(function (index, item) {
+             var datcolAttr = $(item).attr('data-column');
+            if ((typeof datcolAttr !== 'undefined' && datcolAttr !== false) && $(item).val() != "" && $(item).hasClass("program-control")) {
+                    fieldmodel.push({ ColumnName: $(item).attr("data-column"), FieldValue: $(item).val() });
+                }
+            });
+
+            var model = {
+                ClientFormID: _ClientMainFormID,
+                TableName: _mainFormtemplatetable,
+                ClientFormCols: fieldmodel,
+                PatientID: patientId,
+                IsUpdated: _isMainFormSaved
+            }
+            $(".loaderOverlay").show();
+            $.ajax({
+                type: "POST",
+                url: Apipath + '/api/PatientMain/saveClientFormbasicinfo',
+                contentType: 'application/json; charset=UTF-8',
+                data: JSON.stringify(model),
+                dataType: "json",
+                success: function (res) {
+                    if (_mainFormElement.find(".base-control").length) {
+                        saveClientFormBaseFieldInfo(_ClientMainFormID, _mainFormtemplateId, _Saved);
+
+                    } 
+                      
+                    $(".basic-info-actions").hide();
+                   
+                    if (_mainFormElement.find("input[type='file']").length) {
+                        _mainFormElement.find("input[type='file']").each(function (index, item) {
+                            var datacolAttr = $(item).attr('data-column');
+                            
+                            if ((typeof datacolAttr !== 'undefined' && datacolAttr !== false)) {
+                                if ($(item).hasClass("program-control") || $(item).hasClass("base-control")) {
+
+                                    switch (index) {
+                                        case 0:
+                                            uploadClientFormFiles($(item).attr("id"), fileDataP1, _ClientMainFormID, _mainFormElement);
+                                            break;
+                                        case 1:
+                                            uploadClientFormFiles($(item).attr("id"), fileDataP2, _ClientMainFormID, _mainFormElement);
+                                            break;
+                                        case 2:
+                                            uploadClientFormFiles($(item).attr("id"), fileDataP3, _ClientMainFormID, _mainFormElement);
+                                            break;
+                                        case 3:
+                                            uploadClientFormFiles($(item).attr("id"), fileDataP4, _ClientMainFormID, _mainFormElement);
+                                            break;
+                                        case 4:
+                                            uploadClientFormFiles($(item).attr("id"), fileDataP5, _ClientMainFormID, _mainFormElement);
+                                            break;
+                                        case 5:
+                                            uploadClientFormFiles($(item).attr("id"), fileDataP6, _ClientMainFormID, _mainFormElement);
+                                            break;
+                                        case 6:
+                                            uploadClientFormFiles($(item).attr("id"), fileDataP7, _ClientMainFormID, _mainFormElement);
+                                            break;
+                                        case 7:
+                                            uploadClientFormFiles($(item).attr("id"), fileDataP8, _ClientMainFormID, _mainFormElement);
+                                            break;
+                                        case 8:
+                                            uploadClientFormFiles($(item).attr("id"), fileDataP9, _ClientMainFormID, _mainFormElement);
+                                            break;
+                                        case 9:
+                                            uploadClientFormFiles($(item).attr("id"), fileDataP10, _ClientMainFormID, _mainFormElement);
+                                            break;
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    clearProgramFileData();
+
+                },
+                error: function (e) {
+                    toastr.error("Unexpected error!");
+                    $(".loaderOverlay").hide();
+                },
+                complete: function () {
+                    $(".loaderOverlay").hide();
+                }
+            });
+
+        }
+
+    $.fn.serializeObject = function () {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function () {
+                if (o[this.name]) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
+
+    function ProfileSave()
+    {
+        $(".loaderOverlay").css("display", "flex");
+        Radio();
+        ChildrenAges();
+
+        if (Validation() && validateDOB() && ValidateMainForm()) {
+
+            AddDate();
+            $("input[type=hidden][name=CreatedDate]").val(CreatedDate);
+            $("input[type=hidden][name=ModifiedDate]").val(ModifiedDate);
+
+            $("input[type=hidden][name=PatientChildrensAges]").val(PatientChildrensAges);
+            $("input[type=hidden][name=EverMemberOfUSArmedForces]").val(EverMemberOfUSArmedForces);
+            var selectedracevalues = $("#ddRace").selectpicker().val();
+            if (selectedracevalues.indexOf("Other") != -1 && selectedracevalues.length < 7) {
+                RaceEthnicity = [];
+
+            } else if (selectedracevalues.length < 7) {
+                RaceEthnicity = [];
+                $.each($("#ddRace option:selected"), function () {
+                    if ($(this).val() == "Other" || $(this).val() == "Select All") {
+
+                    }
+                    else {
+                        if (jQuery.inArray($(this).val(), RaceEthnicity) == -1) {
+                            RaceEthnicity.push($(this).val());
+                        }
+                    }
+                });
+                $("#txtOtherRace").val("");
+            }
+            $("input[type=hidden][name=RaceEthnicity]").val(RaceEthnicity);
+            var selectedvalues = $('#ddLanguages').selectpicker().val();
+            if (selectedvalues.indexOf("Other") != -1 && selectedvalues.length < 7) {
+                LanguagesSpeak = [];
+
+            } else if (selectedvalues.length < 7) {
+                LanguagesSpeak = [];
+                $.each($("#ddLanguages option:selected"), function () {
+                    if ($(this).val() == "Other" || $(this).val() == "Select All") {
+
+                    }
+                    else {
+                        if (jQuery.inArray($(this).val(), LanguagesSpeak) == -1) {
+                            LanguagesSpeak.push($(this).val());
+                        }
+                    }
+                });
+                $("#txtOtherLanguage").val("");
+            }
+            $("input[type=hidden][name=LanguagesSpeak]").val(LanguagesSpeak);
+            $("input[type=hidden][name=ClinicID]").val('@Session["ClinicID"]');
+            //document.getElementById('frmProfile').submit();
+            var formData = $("#frmProfile").serializeObject();
+
+           // console.log(formData);
+
+             $.ajax({
+                type: "POST",
+                 url: Apipath +'/api/PatientMain/PatientProfile',
+                 data: JSON.stringify(formData),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                 success: function (result) {
+
+                    var isexist = result;
+                    if (isexist == 1) {
+                        toastr.error("Combination of CellPhone and Email already exists");
+
+                        $(".loaderOverlay").hide();
+                    }
+                    else {
+
+                        $("input[type=hidden][name=PatientID]").val(result);
+                        patientId = result;
+
+                        var patname = $('#txtFirstName').val() + ' ' + $('#txtMiddleName').val() + ' ' + $('#txtLastName').val();
+                        var dob = $('#txtDOB').val();
+                        var ssn = $('#txtSocialSecNo').val();
+
+                        $("#PFirstName").html(patname);
+                        $("#PDOB").html(dob);
+                        $("#mentalPDOB").html(ShortDate);
+                        $('#txtSSN').val(ssn);
+
+                        $('#btnaddprogram').css('display', 'block');
+                        $('#Profile').find('#ProfileSave').addClass('disabled').css({ 'border': '1px solid rgb(161, 161, 161)', 'background-color': 'rgb(161, 161, 161)' })
+                        toastr.success("Record saved successfully");
+                        $('.isProfileSaved').attr("data-toggle", "tab")
+                        $('.isProfileSaved').removeClass("disabled-li1");
+                        $('.isProfileSaved').removeAttr("onclick");
+                        $('.isProfileSaved').attr("onclick", "RebindClientFormEvent(this)")
+                        $('#Housing-tab').attr("data-toggle", "tab");
+                        $('#Housing-tab').removeClass("disabled-li1");
+                        $('#Financial-tab').attr("data-toggle", "tab");
+                        $('#Financial-tab').removeClass("disabled-li1");
+                        $('#Employment-tab').attr("data-toggle", "tab");
+                        $('#Employment-tab').removeClass("disabled-li1");
+                        $('#Communication-tab').attr("data-toggle", "tab");
+                        $('#Communication-tab').removeClass("disabled-li1");
+                        $('#Healthcare-tab').attr("data-toggle", "tab");
+                        $('#Healthcare-tab').removeClass("disabled-li1");
+                        $('#SocialSupports-tab').attr("data-toggle", "tab");
+                        $('#SocialSupports-tab').removeClass("disabled-li1");
+                        $('#LegalStatus-tab').attr("data-toggle", "tab");
+                        $('#LegalStatus-tab').removeClass("disabled-li1");
+
+                        $('#Alcohol-tab').attr("data-toggle", "tab");
+                        $('#Alcohol-tab').removeClass("disabled-li1");
+
+                        $('#MentalHealth-tab').attr("data-toggle", "tab");
+                        $('#MentalHealth-tab').removeClass("disabled-li1");
+
+                        $('#FoodAccess-tab').attr("data-toggle", "tab");
+                        $('#FoodAccess-tab').removeClass("disabled-li1");
+                        isprofilesave = true;
+                        saveClientMainFormBasicInfo();
+                        $(".loaderOverlay").hide();
+                    }
+
+
+
+                },
+                error: function () {
+
+                    toastr.error("Error while inserting data");
+
+                    $(".loaderOverlay").hide();
+                }
+            });
+
+
+        }
+        else
+        {
+            $(".loaderOverlay").hide();
+            return false;
+        }
+
+        }
+    function LoadClientMainFormData(data) {
+        var formElem = $('#clientMainFormDetail');
+            formElem.html("").append(data);
+
+            getClientMainFormBasicFormValue(_ClientMainFormID, _mainFormtemplateId)
+            formElem.find(".event-btn-right").remove();
+            formElem.find(".ck-editor-header").remove();
+            formElem.find(".question-container").parent().css("border", "none");
+            formElem.find(".dragresize").find(".question-container").remove();
+            formElem.find(".dragresize").find(".bootom-form-row").css({ "padding": "7px 0px", "margin": "0" });
+            formElem.find(".html-content").prev().css("display", "none");
+
+
+            $("textarea.program-control,textarea.base-control").summernote({
+                toolbar: [
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    ['font', ['strikethrough', 'superscript', 'subscript']],
+                ],
+                placeholder: "Type here",
+                callbacks: {
+                    onChange: function () {
+                        $('#Profile').find('#ProfileSave').removeClass('disabled').css({ 'border': '1px solid rgb(34, 186, 160)', 'background-color': 'rgb(34, 186, 160)' })
+                    },
+                    onInit: function (e) {
+                        this.placeholder
+                            ? e.editingArea.find(".note-placeholder").html(this.placeholder)
+                            : e.editingArea.remove(".note-placeholder")
+                    }
+                },
+                height: 150,
+            });
+            formElem.find(".priority").each((index, item) => {
+                $(item).sortable({
+                    change: function (event, ui) {
+                        $('#Profile').find('#ProfileSave').removeClass('disabled').css({ 'border': '1px solid rgb(34, 186, 160)', 'background-color': 'rgb(34, 186, 160)' })
+
+                    }
+                });
+            })
+            formElem.find('input').on('input change', function () {
+
+                $('#Profile').find('#ProfileSave').removeClass('disabled').css({ 'border': '1px solid rgb(34, 186, 160)', 'background-color': 'rgb(34, 186, 160)' })
+            });
+            formElem.find('select').on('change', function () {
+                $('#Profile').find('#ProfileSave').removeClass('disabled').css({ 'border': '1px solid rgb(34, 186, 160)', 'background-color': 'rgb(34, 186, 160)' })
+            })
+
+
+        }
+    function uploadClientFormFiles(Id, fileData, ClientFormID, formElement) {
+       debugger
+
+            if (formElement == undefined) {
+                formElement = $('#' + formName + 'only');
+            }
+
+            var files = formElement.find("#" + Id).get(0).files;
+            var fileNames = [];
+            var savedfiles = [];
+            var filesDecription = [];
+            formElement.find("#" + Id).next().next().find("input").each(function (index, item) {
+                filesDecription.push($(item).val());
+
+                if (typeof $(item).attr("data-file") !== 'undefined' && $(item).attr("data-file") !== false) {
+                    savedfiles.push($(item).attr("data-file"));
+                }
+                if (typeof $(item).attr("fileName") !== 'undefined' && $(item).attr("fileName") !== false) {
+                    fileNames.push($(item).attr("fileName"));
+                }
+            });
+            if (files.length == 0 && savedfiles.length == 0) {
+                $.ajax({
+                    type: "POST",
+                    url: Apipath + '/api/PatientMain/DeleteClientFormFiles?clientformId=' + ClientFormID + "&controlid=" + Id + "&patientId=" + patientId,
+                    contentType: 'application/json; charset=UTF-8',
+                    dataType: "json",
+                    async: false,
+                    success: function (result) {
+                        fileData = new FormData();
+                    }, error: function (e) {
+                        toastr.error("Unexpected error!");
+                        $(".loaderOverlay").hide();
+                        return false
+                    }
+                });
+                return;
+            }
+            if (filesDecription.length == 0) {
+                return;
+            }
+            fileData.append("ClientFormID", ClientFormID);
+            fileData.append("ControlId", Id);
+            fileData.append("Files", savedfiles.join(","));
+            fileData.append("FilesDescription", filesDecription.join(","));
+            fileData.append("FileNames", fileNames.join(","));
+            fileData.append("PatientId", patientId);
+            fileData.append("IsBaseField", $("#" + Id).hasClass("base-control"));
+
+            $.ajax({
+                type: "POST",
+                url: "/Client/UploadFiles",
+                dataType: "json",
+                contentType: false,
+                processData: false,
+                data: fileData,
+                async: false,
+                success: function (result, status, xhr) {
+                    fileData = new FormData();
+                }, error: function (e) {
+                    toastr.error("Unexpected error!");
+                    $(".loaderOverlay").hide();
+                    return false
+                }
+            });
+        }
+    function getClientMainFormBasicFormValue(ClientFormID, templateid) {
+            var formEle = $('#clientMainFormDetail');
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/getfieldvaluebyClientFormid?ClientFormID=' + ClientFormID + "&TemplateId=" + templateid + "&PatientId=" + patientId,
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                async: false,
+                success: function (result) {
+                    if (result.length) {
+                        var fields = result[0];
+                        var value = "";
+                        formEle.find(".program-control,input.custom-control-input").each(function (index, item) {
+                            if ($(item).is("input")) {
+                                var datacolumnattr = $(item).attr('data-column');
+                                switch ($(item).attr("type")) {
+                                    case "radio":
+                                    case "checkbox":
+                                        if ((typeof datacolumnattr !== 'undefined' && datacolumnattr !== false) && $(item).closest("div.inputContent").parent().hasClass("program-control")) {
+                                            value = fields[$(item).attr("data-column")];
+
+                                            if (value == null || value == "") {
+
+                                            } else {
+
+                                                var valueArr = value.split(SeperationString);
+                                                var valueTxt = "";
+
+                                                for (var i = 0; i < valueArr.length; i++) {
+                                                    $(item).closest("div.inputContent").find(`input[value="${valueArr[i]}"]`).prop("checked", true);
+                                                }
+
+                                            }
+                                        }
+                                        break;
+                                    case "file":
+                                        getClientMainFormModuleFiles(ClientFormID, $(item).attr("id"));
+
+                                        break;
+                                    default:
+
+                                        value = fields[$(item).attr("data-column")];
+
+                                        item.value = value;
+
+                                        break;
+                                }
+                            }
+                            if ($(item).is("select")) {
+                                value = fields[$(item).attr("data-column")];
+
+                                item.value = value;
+
+                            }
+                            if ($(item).hasClass("priority")) {
+
+                                value = fields[$(item).attr("data-column")];
+                                var splitvalues = (value != "" && value != undefined) ? value.split(SeperationString) : "";
+
+                                var result = '';
+
+                                for (let i = 0; i < splitvalues.length; i++) {
+                                    if ($(item).find('li[value="' + splitvalues[i] + '"]')) {
+                                        result += $(item).find('li[value="' + splitvalues[i] + '"]')[0].outerHTML;
+                                    }
+
+
+                                }
+                                if (result.length > 0) {
+                                    $(item).html(result);
+                                }
+                            }
+                            if ($(item).is("textarea")) {
+                                value = fields[$(item).attr("data-column")];
+
+                                $(item).summernote('code', value);
+
+                            }
+                        });
+                    }
+                    if (formEle.find(".basecontentarea").length > 0) {
+                        getClientFormBaseFieldData();
+                    }
+                },
+                error: function (e) {
+                    toastr.error("Unexpected error!");
+                    $(".loaderOverlay").hide();
+                }
+            });
+        }
+    function getClientMainFormModuleFiles(ClientFormID, Id) {
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/getfilesbyClientFormid?ClientFormID=' + ClientFormID + '&controlid=' + Id + '&patientid=' + patientId,
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                async: false,
+                success: function (result) {
+
+                    if (result != "" && result != null) {
+                        var filesArr = result.Files.split(',');
+                        var namesArr = result.FileNames.split(',');
+                        var descriptionArr = [];
+                        if (result.FilesDescription != null) {
+                            descriptionArr = result.FilesDescription.split(',');
+                        }
+                        var selectedFiles = "";
+
+                        selectedFiles = `<div class="label">File Names</div><ul class="file_uploaded_list file_uploaded_inputs">`;
+                        for (var i = 0; i < filesArr.length; i++) {
+                            selectedFiles += `<li><input class="form-control" data-file="${filesArr[i]}" placeholder="Enter file name here" type="text" value="${descriptionArr[i]}" fileName= "${namesArr[i]}"/>`
+                            selectedFiles += '<a href="/' + programUploadedPath + filesArr[i] + '" target="_blank">' + namesArr[i] + '</a><span onclick="removeClientFormUpload(this)" class="removeUploadFile"><i class="fa fa-times"></i></span></li>';
+                        }
+                        selectedFiles += "</ul>";
+
+                        $('#clientMainFormDetail').find("#" + Id).next().next().html("").append(selectedFiles);
+
+
+                    }
+                }, error: function (e) {
+                    toastr.error("Unexpected error!");
+                    $(".loaderOverlay").hide();
+                }
+            });
+        }
+    function removeClientFormUpload(obj) {
+            var parentElement = $(obj).parent().parent().parent().parent().parent().parent().parent().parent();
+            var id = parentElement.attr('id')
+            if (id == "clientMainFormDetail") {
+                _programelement = $('#clientMainFormDetail');
+            }
+
+            $.confirm({
+                icon: 'fas fa-exclamation-triangle',
+                title: 'Confirm',
+                content: 'Are you sure to delete this attachment ?',
+                type: 'red',
+                typeAnimated: true,
+                buttons: {
+                    yes: {
+                        btnClass: 'btn-danger',
+                        action: function () {
+                            var inputId = $(obj).parent().parent().parent().prev().prev('input[type="file"]').attr("id");
+                            var dataremoveattr = $(obj).attr('data-remove');
+                            if (_programelement.find("input[type='file']").length && (typeof dataremoveattr !== 'undefined' && dataremoveattr !== false)) {
+                                _programelement.find("input[type='file']").each(function (index, item) {
+                                    var datacolumnattr = $(obj).attr('data-column');
+                                    if (typeof datacolumnattr !== 'undefined' && datacolumnattr !== false) {
+                                        if ($(item).hasClass("program-control") || (typeof datacolumnattr !== 'undefined' && datacolumnattr !== false)) {
+                                            if ($(item).attr("id") == inputId) {
+                                                switch (index) {
+                                                    case 0:
+                                                        fileDataP1.delete($(obj).attr("data-remove"));;
+                                                        break;
+                                                    case 1:
+                                                        fileDataP2.delete($(obj).attr("data-remove"));
+                                                        break;
+                                                    case 2:
+                                                        fileDataP3.delete($(obj).attr("data-remove"));
+                                                        break;
+                                                    case 3:
+                                                        fileDataP4.delete($(obj).attr("data-remove"));
+                                                        break;
+                                                    case 4:
+                                                        fileDataP5.delete($(obj).attr("data-remove"));
+                                                        break;
+                                                    case 5:
+                                                        fileDataP6.delete($(obj).attr("data-remove"));
+                                                        break;
+                                                    case 6:
+                                                        fileDataP7.delete($(obj).attr("data-remove"));
+                                                        break;
+                                                    case 7:
+                                                        fileDataP8.delete($(obj).attr("data-remove"));
+                                                        break;
+                                                    case 8:
+                                                        fileDataP9.delete($(obj).attr("data-remove"));
+                                                        break;
+                                                    case 9:
+                                                        fileDataP10.delete($(obj).attr("data-remove"));
+                                                        break;
+                                                }
+
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                            if ($(obj).parent().parent().find("li").length == 1) {
+                                $(obj).parent().parent().parent().prev().prev('input[type="file"]').val('');
+                                $(obj).parent().parent().parent().html("");
+                            } else {
+                                $(obj).closest("li").remove();
+                            }
+                            enableClientFormSave();
+                        }
+                    },
+                    no: {
+
+                    }
+                },
+
+            });
+        }
+    function clearProgramFileData() {
+            fileDataP1 = new FormData();
+            fileDataP2 = new FormData();
+            fileDataP3 = new FormData();
+            fileDataP4 = new FormData();
+            fileDataP5 = new FormData();
+            fileDataP6 = new FormData();
+            fileDataP7 = new FormData();
+            fileDataP8 = new FormData();
+            fileDataP9 = new FormData();
+            fileDataP10 = new FormData();
+        }
+    function enableClientFormSave() {
+            $('#' + formName + 'only').find('.btnprogramsave').removeClass('disabled')
+            $('#' + formName + 'only').find('.btnprogramsave').css({ "background-color": "#22baa0", "border": "1px solid #22baa0" });
+        }
+    $(function () {
+        LoadClientMainFormData(ClientMainFormHtml);
+    });
+
+    </script>
+}
