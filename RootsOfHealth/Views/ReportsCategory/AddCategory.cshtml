@@ -1,0 +1,9 @@
+﻿@model RootsOfHealth.Models.ReportCategoryBO
+
+<form id="formAddCategory" class="AddCategory-form">
+    <input id="CategoryId" type="hidden" value="@Model.CategoryID"/>
+    <div class="form-group d-flex align-items-center">
+        <label for="txtCategoryName" class="m-0 required">Category Name</label>
+        <input id="txtCategoryName" type="text" class="form-control" value="@Model.Name">
+    </div>
+</form>

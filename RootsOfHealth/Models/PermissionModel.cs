@@ -48,7 +48,9 @@ namespace RootsOfHealth.Models
             Programs,
             ClientForms,
             ClientrequestIntake,
-            Notes
+            Notes,
+            Reports,
+            ReportCategories
 
         }
         public static bool HasPermission(int ModuleId,int PermissionType) {
