@@ -1088,7 +1088,7 @@
                 {
                     <li id="FormSchedulingNavItem"><a href="/Patient/FormScheduling" id="FormScheduling" class="nav-menu"><span class="form-sched-icon"></span> Form Scheduling</a></li>
                 }
-                @if (modulePermissions.Where(x => x.ModuleName == "Potential Client" && (x.CanList == true || x.CanUpdate == true || x.CanDelete == true|| x.CanMove == true)).Any())
+                @if (modulePermissions.Where(x => x.ModuleName == "Potential Client" && (x.CanList == true || x.CanUpdate == true || x.CanDelete == true || x.CanMove == true)).Any())
                 {
                     <li id="PotentialClientNavItem"><a href="/Patient/GetPotientialPatient" id="PotientPatient" class="nav-menu"><span class="add-icon"></span> Potential Clients</a></li>
                 }
@@ -1108,29 +1108,38 @@
                 {
                     <li id="ClientFormsNavItem"><a href="/Client/ClientsFormList" id="ClientsForm" class="nav-menu"><span class="patient-icon"></span> Clients Forms</a></li>
                 }
-              
-                    <li id="CarePlanRequestNavItem" class="@(Convert.ToBoolean(@Session["IsCarePlanApprover"]) ? "" : "d-none")"><a href="/CarePlan/Requests" id="requests" class="nav-menu"><span class="program-icon"></span> Care Plan Requests</a></li>
-                
-                    @if (modulePermissions.Where(x => x.ModuleName == "Client Request Intake" && (x.CanList == true || x.CanUpdate == true)).Any())
-                    {
-                        <li id="FormsSharinigNavItem" class="@(Convert.ToString(Session["Roles"]).Contains("Navigator") || Convert.ToString(Session["Roles"]).Contains("Supervisor") ? "" : "d-none")">
-                            <a id="formSharing" class="nav-menu" onclick="ResetFormSharingPopup();"><span class="patient-icon"></span>Form Sharing</a>
-                        </li>
-                    }
-                    @if (modulePermissions.Where(x => x.ModuleName == "Form Sharing Export" && x.CanList == true).Any())
-                    {
-                        <li id="SharedFormExport" class="@(Convert.ToString(Session["Roles"]).Contains("Supervisor") ? "" : "d-none")">
-                            <a class="nav-menu" onclick="ExportSharedForms();"><span class="patient-icon"></span>Form Sharing Export</a>
-                        </li>
-                    }
 
-                    @if ((Convert.ToString(Session["Roles"]).Contains("Navigator") || Convert.ToString(Session["Roles"]).Contains("Supervisor")) && modulePermissions.Where(x => x.ModuleName == "System Setting" && (x.CanList == true || x.CanUpdate == true)).Any())
-                    {
-                        <li id="AccountSettingNavItem"><a class="nav-menu" href="/Account/Settings"><span class="fas fa-users-cog"></span> System Setting</a></li>
+                <li id="CarePlanRequestNavItem" class="@(Convert.ToBoolean(@Session["IsCarePlanApprover"]) ? "" : "d-none")"><a href="/CarePlan/Requests" id="requests" class="nav-menu"><span class="program-icon"></span> Care Plan Requests</a></li>
 
-                    }
-                    <li><a href="/Account/Logout" id="logout" class="nav-menu"><span class="logout-icon"></span>Log Out</a></li>
-                </ul>
+                @if (modulePermissions.Where(x => x.ModuleName == "Client Request Intake" && (x.CanList == true || x.CanUpdate == true)).Any())
+                {
+                    <li id="FormsSharinigNavItem" class="@(Convert.ToString(Session["Roles"]).Contains("Navigator") || Convert.ToString(Session["Roles"]).Contains("Supervisor") ? "" : "d-none")">
+                        <a id="formSharing" class="nav-menu" onclick="ResetFormSharingPopup();"><span class="patient-icon"></span>Form Sharing</a>
+                    </li>
+                }
+                @if (modulePermissions.Where(x => x.ModuleName == "Form Sharing Export" && x.CanList == true).Any())
+                {
+                    <li id="SharedFormExport" class="@(Convert.ToString(Session["Roles"]).Contains("Supervisor") ? "" : "d-none")">
+                        <a class="nav-menu" onclick="ExportSharedForms();"><span class="patient-icon"></span>Form Sharing Export</a>
+                    </li>
+                }
+
+                @if ((Convert.ToString(Session["Roles"]).Contains("Navigator") || Convert.ToString(Session["Roles"]).Contains("Supervisor")) && modulePermissions.Where(x => x.ModuleName == "System Setting" && (x.CanList == true || x.CanUpdate == true)).Any())
+                {
+                    <li id="AccountSettingNavItem"><a class="nav-menu" href="/Account/Settings"><span class="fas fa-users-cog"></span> System Setting</a></li>
+
+                }
+                @if (modulePermissions.Where(x => x.ModuleName == "Reports" && x.CanList == true).Any())
+                {
+                    <li id="reportNavItem"><a class="nav-menu" href="/Reports/Index"><span class=""></span> Reports</a></li>
+                }
+                @if (modulePermissions.Where(x => x.ModuleName == "ReportCategories" && x.CanList == true).Any())
+                {
+                    <li id="categoryNavItem"><a class="nav-menu" href="/ReportsCategory/Index"><span class=""></span> Reports Categories</a></li>
+                }
+
+                <li><a href="/Account/Logout" id="logout" class="nav-menu"><span class="logout-icon"></span>Log Out</a></li>
+            </ul>
         </aside>
         <!-- Sidebar end here  -->
         @RenderBody()
