@@ -316,28 +316,46 @@
         }
 
         function Deletecategory(id) {
-             if (confirm("Are you sure,you want to delete the category.")) {
-
-                $.ajax({
-                    type: "POST",
-                    url: Apipath + '/api/PatientMain/DeleteReportCategory?Id=' + id,
-                    contentType: 'application/json; charset=UTF-8',
-                    dataType: "json",
-                    success: function (result) {
-                        if (result != '') {
-                            BindReportsCategoriesTable();
-                            toastr.success("category deleted successfully");
-                        }
-                        else {
-                            toastr.error("Error while Deleting data");
-                        }
-                    },
-                    error: function () {
-
-                        toastr.error("Error while deleting data");
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/IsCategoryInUse?categoryId=' + id,
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                success: function (result) {
+                    if (result == true) {
+                        toastr.error("Category is in use.");
                     }
-                });
-            }
+                    else {
+                        if (confirm("Are you sure,you want to delete the category.")) {
+
+                            $.ajax({
+                                type: "POST",
+                                url: Apipath + '/api/PatientMain/DeleteReportCategory?Id=' + id,
+                                contentType: 'application/json; charset=UTF-8',
+                                dataType: "json",
+                                success: function (result) {
+                                    if (result != '') {
+                                        BindReportsCategoriesTable();
+                                        toastr.success("category deleted successfully");
+                                    }
+                                    else {
+                                        toastr.error("Error while Deleting data");
+                                    }
+                                },
+                                error: function () {
+
+                                    toastr.error("Error while deleting data");
+                                }
+                            });
+                        }
+                    }
+                },
+                error: function () {
+
+                    toastr.error("Error while deleting data");
+                }
+            });
+            
         }
     </script>
 }
