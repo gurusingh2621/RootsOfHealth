@@ -113,14 +113,19 @@
         position: absolute;
         left: 50%;
         width: 100%;
-        max-width: 400px;
+        max-width: 600px;
         margin: 0px;
         padding: 0px 10px;
     }
         div#CreateCategoryModal .modal-dialog.modal-lg .modal-content {
             min-height: unset !important;
             padding-bottom: 10px;
+            height:400px;
         }
+    div#CreateCategoryModal .modal-content .modal-body form#formAddCategory {
+        position: relative;
+        top: calc(50% - 75px);
+    }
 </style>
 <section id="content" class="responsive-container pt-0">
     <div class="inner-content mt-0">
@@ -155,7 +160,7 @@
 <div class="modal fade" id="CreateCategoryModal" data-toggle="modal" tabindex="-1" role="dialog" aria-labelledby="CreateCategoryModal"
      aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content" style="min-height:300px">
+        <div class="modal-content" style="min-height:450px">
             <div class="modal-header">
                 <h5 id="modalHeaderTitle" style="margin: 0;padding: 4px 0;">Create Category</h5>
                 <div class="ml-auto">
@@ -282,37 +287,56 @@
                 toastr.error("Category Name is required.");
                 return false;
             }
-            var model = {
-                CategoryID: $('#CategoryId').val(),
-                Name: $('#txtCategoryName').val().trim(),
-                Createdby: parseInt(loginUserId),
-                ModifiedBy: $('#CategoryId').val() > 0 ? parseInt(loginUserId) : null
-            }
+           
             $(".loaderOverlay").show();
             $.ajax({
-                type: "POST",
-                url: '/ReportsCategory/AddCategory',
-                data: JSON.stringify(model),
+                type: "GET",
+                url: Apipath + '/api/PatientMain/IsCategoryExists?categoryName=' + $('#txtCategoryName').val() + '&categoryId=' + $('#CategoryId').val(),
                 contentType: 'application/json; charset=UTF-8',
                 dataType: "json",
+                async: false,
                 success: function (result) {
-                    if (result == "0") {
-                        toastr.error("unexpected error Happened");
+                    if (result > 0) {
+                        toastr.error("Category name already exists.");
+                        $(".loaderOverlay").hide();
                     }
                     else {
-                        if (model.CategoryID > 0) {
-                            toastr.success("", "Updated successfully", { progressBar: true });
+                        var model = {
+                            CategoryID: $('#CategoryId').val(),
+                            Name: $('#txtCategoryName').val().trim(),
+                            Createdby: parseInt(loginUserId),
+                            ModifiedBy: $('#CategoryId').val() > 0 ? parseInt(loginUserId) : null
                         }
-                        else {
-                            toastr.success("", "Created successfully", { progressBar: true });
-                        }
-                        $('#CreateCategoryModal').modal('hide');
+                        $.ajax({
+                            type: "POST",
+                            url: '/ReportsCategory/AddCategory',
+                            data: JSON.stringify(model),
+                            contentType: 'application/json; charset=UTF-8',
+                            dataType: "json",
+                            success: function (result) {
+                                if (result == "0") {
+                                    toastr.error("unexpected error Happened");
+                                }
+                                else {
+                                    if (model.CategoryID > 0) {
+                                        toastr.success("", "Updated successfully", { progressBar: true });
+                                    }
+                                    else {
+                                        toastr.success("", "Created successfully", { progressBar: true });
+                                    }
+                                    $('#CreateCategoryModal').modal('hide');
+                                }
+                                $(".loaderOverlay").hide();
+                                BindReportsCategoriesTable();
+
+                            }
+                        });
                     }
-                    $(".loaderOverlay").hide();
-                    BindReportsCategoriesTable();
 
                 }
-            })
+            });
+            
+           
         }
 
         function Deletecategory(id) {
