@@ -83,7 +83,7 @@ namespace RootsOfHealth.Controllers
             return report;
         }
         [HttpPost]
-        public ActionResult GetAllReports(string reportName, int categoryId)
+        public ActionResult GetAllReports(int categoryId)
         {
             string draw = Request.Form.GetValues("draw")[0];
             string sortBy = Request.Form.GetValues("order[0][column]")[0];
@@ -97,7 +97,7 @@ namespace RootsOfHealth.Controllers
             {
                 client.BaseAddress = new Uri(WebApiKey);
                 //HTTP GET
-                var responseTask = client.GetAsync("/api/PatientMain/GetReportsList?skipRecords=" + skipRecords + "&pageSize=" + pageSize + "&sortby=" + sortBy + "&sortDir=" + sortDir + "&search=" + searchTerm+ "&reportName="+reportName+ "&categoryId="+categoryId);
+                var responseTask = client.GetAsync("/api/PatientMain/GetReportsList?skipRecords=" + skipRecords + "&pageSize=" + pageSize + "&sortby=" + sortBy + "&sortDir=" + sortDir + "&search=" + searchTerm+ "&categoryId="+categoryId);
                 responseTask.Wait();
 
                 var result = responseTask.Result;
