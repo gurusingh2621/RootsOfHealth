@@ -235,7 +235,6 @@
 
         $(document).ready(function () {
             BindCategoryFilterDD();
-            BindNameFilterDD();
             BindReportsTable();
         });
 
@@ -383,7 +382,6 @@
                                 }
                                 $(".loaderOverlay").hide();
                                 BindReportsTable();
-                                BindNameFilterDD()
                             }
                         });
                     }
@@ -450,24 +448,6 @@
                     });
 
                     $('#ddlCategoryFilter').html('').html(html);
-
-                }
-            })
-        }
-        function BindNameFilterDD() {
-            $.ajax({
-                type: "Get",
-                url: Apipath + '/api/PatientMain/GetReportNameDD',
-                contentType: 'application/json; charset=UTF-8',
-                dataType: "json",
-                async: false,
-                success: function (result) {
-                    var html = '<option value="">--Select--</option>';
-                    $.each(result, function (key, value) {
-                        html += '<option value="' + value + '">' + value + '</option>'
-                    });
-
-                    $('#ddlNameFilter').html('').html(html);
 
                 }
             })

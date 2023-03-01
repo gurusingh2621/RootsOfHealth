@@ -3576,7 +3576,63 @@
         return check;
 
     }
+    function validatePatientEmails() {
 
+        if ($('#txtEmailAddress').val() != '') {
+            var valid = validateEmail($('#txtEmailAddress').val());
+            if (valid == false) {
+                toastr.error('Please enter valid email');
+                $('#txtEmailAddress').addClass('invalid-field');
+                $('#txtEmailAddress').focus();
+                return false;
+            } else {
+                $('#txtEmailAddress').removeClass('invalid-field');
+            }
+        }
+        if ($('#txtEmergencyContact1EmailAddress').val() != '') {
+            var valid = validateEmail($('#txtEmergencyContact1EmailAddress').val());
+            if (valid == false) {
+                toastr.error('Please enter valid email');
+                $('#txtEmergencyContact1EmailAddress').addClass('invalid-field');
+                $('#txtEmergencyContact1EmailAddress').focus();
+                return false;
+            }
+            else {
+                $('#txtEmergencyContact1EmailAddress').removeClass('invalid-field');
+            }
+        }
+        if ($('#txtEmergencyContact2EmailAddress').val() != '') {
+            var valid = validateEmail($('#txtEmergencyContact2EmailAddress').val());
+            if (valid == false) {
+                toastr.error('Please enter valid email');
+                $('#txtEmergencyContact2EmailAddress').addClass('invalid-field');
+                $('#txtEmergencyContact2EmailAddress').focus();
+                return false;
+
+            }
+            else {
+                $('#txtEmergencyContact2EmailAddress').removeClass('invalid-field');
+            }
+        }
+        return true;
+           
+
+        }
+        function validateEmail(sEmail) {
+        var filter = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+
+        if (filter.test(sEmail)) {
+
+            return true;
+
+        }
+
+        else {
+
+            return false;
+
+        }
+    }
     function Radio()
     {
 
@@ -3978,7 +4034,7 @@
         Radio();
         ChildrenAges();
 
-        if (Validation() && validateDOB() && ValidateMainForm()) {
+        if (Validation() && validatePatientEmails() && validateDOB() && ValidateMainForm()) {
 
             AddDate();
             $("input[type=hidden][name=CreatedDate]").val(CreatedDate);

@@ -454,12 +454,30 @@
 
     var isNotesLoaded = false;
     function LoadAllNotes() {
+
         if (!isNotesLoaded) {
             getListAllNotesLoadMore();
         }
         isNotesLoaded = true;
     }
+    $('#opennotepopup').click(function () {
+        $.ajax({
+            type: "Get",
+            url: Apipath + '/api/PatientMain/getProgramsForPatient?PatientId='+'@ViewBag.PatientId',
+            contentType: 'application/json; charset=UTF-8',
+            dataType: "json",
+            async: false,
+            success: function (result) {
+                var html = '<option value="0">None</option>';
+                $.each(result, function (key, value) {
+                    html += '<option value="' + value.ProgramID + '">' + value.ProgramName + '</option>'
+                });
 
+                $('#ddlProgramType').html('').html(html);
+
+            }
+        })
+    })
 
     function getListAllNotesLoadMore() {
 
@@ -3285,7 +3303,7 @@
         dataType: "json",
         async: false,
         success: function (result) {
-            
+
             if (result != "" && result != null) {
                 var filesArr = result.Files.split(',');
                 var namesArr = result.FileNames.split(',');
@@ -3293,7 +3311,7 @@
                 if (result.FilesDescription != null) {
                     descriptionArr = result.FilesDescription.split(',');
                 }
-              
+
                 var selectedFiles = "";
                 selectedFiles = `<ul class="file_uploaded_list onlylinkslist">`;
                     var ext = "";
@@ -4089,7 +4107,7 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (data) {
-                
+
                 if (data) {
                     var element = $('#ScoreStatus_' + clientformid)
                     var scoreElement = $(element).find('#txtoverallscore');
