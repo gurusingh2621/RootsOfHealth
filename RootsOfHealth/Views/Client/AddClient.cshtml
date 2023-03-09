@@ -329,6 +329,10 @@
             {
                 Html.RenderPartial("~/Views/Shared/Client/_MainClientInfo.cshtml", Model.PatientMain);
             }
+            else
+            {
+
+            }
 
             <!-- Profile Tab end here -->
             <!-- Dynamic tab start here  -->
@@ -382,7 +386,7 @@
     var PatientChildrensAges = "";
     var PatientImg = "";
     var formName = "";
-    $(".loaderOverlay").show();
+        $(".loaderOverlay").css("display", "flex");
     if (patientId != undefined && patientId != '' && patientId != '0') {
             $('#btnaddprogram').removeClass('d-none');
             $('.btnDisplayProgram').removeClass('d-none');
@@ -2182,6 +2186,22 @@
     $(function () {
           LoadClientMainFormData(ClientMainFormHtml);
         $(".loaderOverlay").hide();
+        $('#menu-toggle').click(function () {
+            $(this).toggleClass('open');
+            if ($("#menu-toggle").hasClass("open")) {
+                $("#cross").attr("title", "Hide Client Menu")
+            } else {
+                $("#cross").attr("title", "Show Client Menu")
+            }
+            $("#myTab").toggleClass('showHide');
+            $(".inner-content").toggleClass("showHideInner");
+            $(".paitent-detail-left").toggleClass("showHidepaitent-detail-left");
+            $(".inner-main-content").toggleClass("showHidepaitentinner-main-content");
+            $(".body").toggleClass("showHidebody");
+            $("#content").toggleClass("showHidecontent");
+            $(".scroll-height").toggleClass("showHideappotment");
+
+        })
     });
 
     </script>

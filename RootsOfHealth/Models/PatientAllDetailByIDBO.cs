@@ -15,5 +15,8 @@ namespace RootsOfHealth.Models
         private List<Form_ScheduleResultBO> _form_schedule = new List<Form_ScheduleResultBO>();
         public List<FormSchedulingBO> FormScheduling { get { return _formschedule; } set { _formschedule = value; } }
         public List<Form_ScheduleResultBO> FormSchedulingResult { get { return _form_schedule; } set { _form_schedule = value; } }
+        public ClientMainFormInfoBO MainFormInfoBO { get; set; }
+        public ClientMainFormTemplateBO ClientMainFormTemplate { get; set; }
+
     }
 }

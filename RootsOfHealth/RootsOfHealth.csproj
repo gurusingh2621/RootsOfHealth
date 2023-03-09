@@ -216,6 +216,7 @@
     <Compile Include="Models\CarePlanTemplateListInfoBO.cs" />
     <Compile Include="Models\ClientFormtemplateListInfoBO.cs" />
     <Compile Include="Models\ClientMainFormInfoBO.cs" />
+    <Compile Include="Models\ClientMainFormTemplateBO.cs" />
     <Compile Include="Models\ClinicBO.cs" />
     <Compile Include="Models\DastBO.cs" />
     <Compile Include="Models\DreamOnlyBO.cs" />
