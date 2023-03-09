@@ -4730,29 +4730,29 @@ namespace RootsOfHealth.Controllers
         public ActionResult AddClient(int PatientId = 0, string CurrentTab = "profile", string SubTab = "", int ClientFormID = 0)
         {
             PatientDetailBO patientdetailobj = new PatientDetailBO();
-            var ClientMainFormId = GetClientMainFormId();
-            var MainFormData = GetClientMainFormInfo(ClientMainFormId);
-            if (PatientId > 0 && CurrentTab.ToLower() == "profile")
+            if (CurrentTab.ToLower() == "profile")
             {
-                patientdetailobj.PatientMain = GetMainClientInfo(PatientId);
+                var patientInfo = GetMainClientInfo(PatientId);
+                patientdetailobj.PatientMain = patientInfo.PatientDetail.PatientMain;
+                patientdetailobj.MainFormInfoBO = patientInfo.MainFormInfoBO;
             }
             else
             {
 
             }
-            patientdetailobj.ClientMainFormData = GetClientMainFormBasicFormValue(ClientMainFormId, MainFormData.TemplateId, PatientId).ToString();
-            MainFormData.ClientMainFormId = ClientMainFormId;
-            patientdetailobj.MainFormInfoBO = MainFormData;
+            
+            patientdetailobj.ClientMainFormData = GetClientMainFormBasicFormValue(patientdetailobj.MainFormInfoBO.ClientMainFormId, patientdetailobj.MainFormInfoBO.TemplateId, PatientId).ToString();
             ViewBag.currentTab = CurrentTab;
             return View(patientdetailobj);
         }
-        public PatientMainBO GetMainClientInfo(int patientId)
+        public PatientAllDetailByIDBO GetMainClientInfo(int patientId)
         {
-            var patientInfo = new PatientMainBO();
+            var patientAllDetail = new PatientAllDetailByIDBO();
+            ClientMainFormInfoBO ClientMainFormInfo = new ClientMainFormInfoBO();
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(WebApiKey);
-                var responseTask = client.GetAsync("/api/PatientMain/GetMainClientDetail?Id=" + patientId);
+                var responseTask = client.GetAsync("/api/PatientMain/GetPatientAllDetail?patientId=" + patientId);
 
                 responseTask.Wait();
 
@@ -4760,13 +4760,23 @@ namespace RootsOfHealth.Controllers
 
                 if (result.IsSuccessStatusCode)
                 {
-                    var readTask = result.Content.ReadAsAsync<PatientMainBO>();
+                    var readTask = result.Content.ReadAsAsync<PatientAllDetailByIDBO>();
                     readTask.Wait();
-                    patientInfo = readTask.Result;
+                    patientAllDetail = readTask.Result;
                 }
+                var clientMainFormdetail = patientAllDetail.ClientMainFormTemplate;
+                if (clientMainFormdetail.TemplatePath != "" && clientMainFormdetail.TemplatePath != null)
+                {
+                    var gethtml = System.IO.File.ReadAllText(Server.MapPath("~/App_Data/Templates/ClientFormTemplate/" + clientMainFormdetail.TemplatePath));
+                    ClientMainFormInfo.FormHtml = gethtml;
+                    ClientMainFormInfo.TemplateId = clientMainFormdetail.TemplateID;
+                    ClientMainFormInfo.TableName = clientMainFormdetail.TemplateTable;
+                    ClientMainFormInfo.ClientMainFormId = clientMainFormdetail.ClientFormID ?? 0;
 
+                }
+                patientAllDetail.MainFormInfoBO = ClientMainFormInfo;
             }
-            return patientInfo;
+            return patientAllDetail;
         }
         public int GetClientMainFormId()
         {
@@ -4789,7 +4799,7 @@ namespace RootsOfHealth.Controllers
             }
             return clientMainFormId;
         }
-        public ClientMainFormInfoBO GetClientMainFormInfo(int ClientFormId)
+        public ClientMainFormInfoBO GetClientMainFormInfo()
         {
             string PathName = string.Empty;
             ClientFormtemplateBO data = new ClientFormtemplateBO();
@@ -4797,7 +4807,7 @@ namespace RootsOfHealth.Controllers
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(WebApiKey);
-                var responseTask = client.GetAsync("/api/PatientMain/GetClientFormTemplateByClientFormId?ClientFormId=" + ClientFormId);
+                var responseTask = client.GetAsync("/api/PatientMain/GetClientMainFormTemplateByClientFormId");
                 responseTask.Wait();
                 var result = responseTask.Result;
                 if (result.IsSuccessStatusCode)
@@ -4813,6 +4823,7 @@ namespace RootsOfHealth.Controllers
                    ClientMainFormInfo.FormHtml = gethtml;
                     ClientMainFormInfo.TemplateId = data.TemplateID;
                     ClientMainFormInfo.TableName = data.TemplateTable;
+                    ClientMainFormInfo.ClientMainFormId = data.ClientFormID ?? 0;
                 }
 
                 return ClientMainFormInfo;
@@ -4823,20 +4834,19 @@ namespace RootsOfHealth.Controllers
         {
 
             PatientDetailBO patientdetailobj = new PatientDetailBO();
-            var ClientMainFormId = GetClientMainFormId();
-            var MainFormData = GetClientMainFormInfo(ClientMainFormId);
-            if (PatientId > 0 && CurrentTab.ToLower() == "profile")
+            if (CurrentTab.ToLower() == "profile")
             {
-                patientdetailobj.PatientMain = GetMainClientInfo(PatientId);
+                var patientInfo = GetMainClientInfo(PatientId);
+                patientdetailobj.PatientMain = patientInfo.PatientDetail.PatientMain;
+                patientdetailobj.MainFormInfoBO = patientInfo.MainFormInfoBO;
             }
             else
             {
 
             }
-            MainFormData.ClientMainFormId = ClientMainFormId;
-            patientdetailobj.MainFormInfoBO = MainFormData;
+
+            patientdetailobj.ClientMainFormData = GetClientMainFormBasicFormValue(patientdetailobj.MainFormInfoBO.ClientMainFormId, patientdetailobj.MainFormInfoBO.TemplateId, PatientId).ToString();
             ViewBag.currentTab = CurrentTab;
-            patientdetailobj.ClientMainFormData = GetClientMainFormBasicFormValue(ClientMainFormId, MainFormData.TemplateId, PatientId).ToString();
             return View(patientdetailobj);
         }
         public string GetClientMainFormBasicFormValue(int clientFormId, int templateId, int patientId)

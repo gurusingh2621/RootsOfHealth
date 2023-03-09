@@ -270,14 +270,14 @@
        var _ClientMainFormID = '@Model.MainFormInfoBO.ClientMainFormId';
        var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]'
        var programUploadedPath = "@System.Web.Configuration.WebConfigurationManager.AppSettings["ProgramUploadPath"]";
-        $(".loaderOverlay").show();
+        $(".loaderOverlay").css("display", "flex");
         // Hamburger menu js
-         $('#myTab a').each(function () {
-        $(this).click(function () {
-            $('#menu-toggle').click();
-        })
+        $('#myTab a').each(function () {
+                $(this).click(function () {
+                    $('#menu-toggle').click();
+                })
 
-    });
+        });
         $('.selectboxmultiple').css('display', 'none');
         $('#menu-toggle').click(function () {
             $(this).toggleClass('open');
@@ -487,7 +487,6 @@
                 formElem.find(".dragresize").find(".bootom-form-row").css({ "padding": "7px 0px", "margin": "0" });
                 formElem.find(".html-content").prev().css("display", "none");
 
-
                 $("textarea.program-control,textarea.base-control").summernote({
                     toolbar: [
                         ['para', ['ul', 'ol', 'paragraph']],
@@ -530,7 +529,7 @@
                         var valueArr = selectedValues.split(',');
                         var valueTxt = "";
                         for (var i = 0; i < valueArr.length; i++) {
-                            valueTxt += $(item).find(`input[value=${valueArr[i]}]`).next().text() + ", ";
+                            valueTxt += $(item).find(`input[value='${valueArr[i]}']`).next().text() + ", ";
                         }
                         valueTxt = valueTxt.slice(0, -2);
                         if ($(item).hasClass("base-control")) {
