@@ -1071,6 +1071,7 @@ namespace RootsOfHealth.Controllers
             {
                 patientdetailobj.PatientMain.ImportDate = DateTime.Now;
             }
+           
                 return View(patientdetailobj);
         }
 
@@ -4740,11 +4741,55 @@ namespace RootsOfHealth.Controllers
             {
 
             }
-            
             patientdetailobj.ClientMainFormData = GetClientMainFormBasicFormValue(patientdetailobj.MainFormInfoBO.ClientMainFormId, patientdetailobj.MainFormInfoBO.TemplateId, PatientId).ToString();
             ViewBag.currentTab = CurrentTab;
+            ViewBag.ClientFormID = ClientFormID;
+            patientdetailobj.ClientForm = GetClientFormsValue(PatientId);
+            patientdetailobj.Programs = GetProgramsFromAllDetails(PatientId);
+            patientdetailobj.FormScheduling = (List<Form_ScheduleResultBO>)Session["formSchedulingList"];
+
+            ViewBag.PatientID = PatientId;
+            ViewBag.CurrentSubtab = SubTab;
+            Session["patientId"] = PatientId;
+            Session["patientdetailobj"] = patientdetailobj;
             return View(patientdetailobj);
         }
+
+        public List<ProgramsForPatientBO> GetProgramsFromAllDetails(int PatientId)
+        {
+            List<ProgramsForPatientBO> programs = new List<ProgramsForPatientBO>();
+           
+            using (var client = new HttpClient())
+            {
+                
+                client.BaseAddress = new Uri(WebApiKey);
+                //HTTP GET
+                var responseTask = client.GetAsync("/api/PatientMain/GetDetailOfPatientForClientForm?patientid=" + PatientId);
+                //  var responseTask1 = client.GetAsync("/api/PatientMain/GetFormScheduling");
+
+                responseTask.Wait();
+                //  responseTask1.Wait();
+
+                var result = responseTask.Result;
+                //var result1 = responseTask1.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<PatientAllDetailByIDBO>();
+                    readTask.Wait();
+
+                    //var readTask1 = result1.Content.ReadAsAsync<List<FormSchedulingBO>>();
+                    //readTask1.Wait();
+
+
+                    programs =  readTask.Result.PatientDetail.Programs;
+                    Session["formSchedulingList"] = readTask.Result.FormSchedulingResult;
+
+                }
+            }
+
+            return programs;
+        }
+
         public PatientAllDetailByIDBO GetMainClientInfo(int patientId)
         {
             var patientAllDetail = new PatientAllDetailByIDBO();
@@ -4834,6 +4879,8 @@ namespace RootsOfHealth.Controllers
         {
 
             PatientDetailBO patientdetailobj = new PatientDetailBO();
+
+           
             if (CurrentTab.ToLower() == "profile")
             {
                 var patientInfo = GetMainClientInfo(PatientId);
@@ -4844,11 +4891,31 @@ namespace RootsOfHealth.Controllers
             {
 
             }
-
+            ViewBag.ClientFormID = ClientFormId;
+            patientdetailobj.ClientForm = GetClientFormsValue(PatientId);
             patientdetailobj.ClientMainFormData = GetClientMainFormBasicFormValue(patientdetailobj.MainFormInfoBO.ClientMainFormId, patientdetailobj.MainFormInfoBO.TemplateId, PatientId).ToString();
+            patientdetailobj.Programs = GetProgramsFromAllDetails(PatientId);
+            patientdetailobj.FormScheduling = (List<Form_ScheduleResultBO>)Session["formSchedulingList"];
+
             ViewBag.currentTab = CurrentTab;
+            ViewBag.PatientID = PatientId;
+            ViewBag.CurrentSubtab = Subtab;
+            Session["patientId"] = PatientId;
+            Session["patientdetailobj"] = patientdetailobj;
             return View(patientdetailobj);
         }
+
+        public PartialViewResult ClientProgramView() 
+        {
+
+            PatientDetailBO patientdetailobj = new PatientDetailBO();
+            patientdetailobj = (PatientDetailBO)Session["patientdetailobj"];
+
+            ViewBag.PatientID = Convert.ToString(Session["patientId"]);
+           
+            return PartialView("~/Views/Shared/Client/_ClientProgramView.cshtml", patientdetailobj);
+        }
+
         public string GetClientMainFormBasicFormValue(int clientFormId, int templateId, int patientId)
         {
             var data = "";
@@ -4869,6 +4936,37 @@ namespace RootsOfHealth.Controllers
 
                 return data;
             }
+        }
+
+        public List<ClientFormForPatientBO> GetClientFormsValue(int PatientId) {
+            List<ClientFormForPatientBO> ClientFormsList = new List<ClientFormForPatientBO>();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                //HTTP GET
+                var responseTask = client.GetAsync("/api/PatientMain/GetDetailOfClientForm?id=" + PatientId);
+
+
+                responseTask.Wait();
+
+
+                var result = responseTask.Result;
+
+
+                if (result.IsSuccessStatusCode)
+                {
+
+                    var readTask = result.Content.ReadAsAsync<List<ClientFormForPatientBO>>();
+                    readTask.Wait();
+                    ClientFormsList = readTask.Result;
+                    //clientForm= readTask.Result.PatientDetail;
+
+                }
+              
+
+            }
+            return ClientFormsList;
+
         }
     }
 }
