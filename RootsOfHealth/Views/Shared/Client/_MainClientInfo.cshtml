@@ -304,8 +304,21 @@
     ul.needGoalsChecklist li .form-group.active i.down_arrow {
         transform: rotate( -180deg );
     }
+
+    #RequestUserModel .btn.dropdown-toggle .filter-option {
+        height: 40px;
+        display: flex;
+        align-items: center;
+    }
+
+    #RequestUserModel .btn.dropdown-toggle {
+        height: 40px;
+        background-position: 97% 14px;
+        border-radius: 5px;
+    }
+
 </style>
-<div class="test" id="Profile" role="tabpanel" aria-labelledby="Profile-tab">
+<div class="tab-pane fade test active show" id="Profile" role="tabpanel" aria-labelledby="Profile-tab">
     <!-- Inner content start here  -->
     <div class="inner-content">
         <div class="paitent-detail">
@@ -1782,10 +1795,514 @@
                     </div>
                 </div>
 
+
+                <!--Sidebar html start-->
+                <div class="right_sidebar" id="carePlansSidebar">
+                    <div class="right_sidebar_head">
+                        <h3>Care Plans</h3>
+                        <div class="ml-auto">
+                            @*<a href="#" class="btn btn-success" data-toggle="addNewCarePlansSidebar">Add New</a>*@
+                            @if (modulePermissions.Where(x => x.ModuleName == "Client" && x.CanUpdate == true).Any())
+                            {
+                                <a href="javascript:void(0);" class="btn btn-success" onclick="getCareProgramOptions()">Add New</a>
+                            }
+                            <a class="close_right_sidebar carePlan_sideBar" href="javascript:void(0);"><i class="fa fa-times"></i></a>
+                        </div>
+                    </div>
+                    <div class="right_sidebar_body">
+                        <div class="care_plans_table_wrap table-responsive">
+                            <table class="table table-hover careplanlist">
+                                <thead>
+                                    <tr class="table-active text-center">
+                                        <th>Care Plan</th>
+                                        <th>Programs</th>
+                                        <th>Status</th>
+                                        <th>Created On</th>
+                                        <th>Modified On</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Care Plan Name</td>
+                                        <td>Personalized Injury Analysis</td>
+                                        <td class="text-center"><span class="status_value completed">Completed</span></td>
+                                        <td class="text-right">15-01-2020</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Care Plan Name</td>
+                                        <td>List of Most useful physioadvisor Resources</td>
+                                        <td class="text-center"><span class="status_value inProgress">In Progress</span></td>
+                                        <td class="text-right">15-01-2020</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Care Plan Name</td>
+                                        <td>PhysioAdvisor Membership</td>
+                                        <td class="text-center"><span class="status_value notStarted">Not Started</span></td>
+                                        <td class="text-right">15-01-2020</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Care Plan Name</td>
+                                        <td>Referral Advice</td>
+                                        <td class="text-center"><span class="status_value asDraft">Saved As Draft</span></td>
+                                        <td class="text-right">15-01-2020</td>
+                                    </tr>
+                                    <tr>
+
+
+                                        <td>Care Plan Name</td>
+                                        <td>Personalized Injury Analysis</td>
+                                        <td class="text-center"><span class="status_value notStarted">Not started</span></td>
+                                        <td class="text-right">15-01-2020</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Care Plan Name</td>
+                                        <td>Referral Advice</td>
+                                        <td class="text-center"><span class="status_value notStarted">Not started</span></td>
+                                        <td class="text-right">15-01-2020</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                @{
+                    Html.RenderPartial("CarePlan/_CareplanSidebar");
+                }
+
             </div>
 
         </div>
 
     </div>
+
+    <!--View Careplan changes Modal Starts here-->
+    <div class="modal fade" id="ViewCareplanChanges" tabindex="-1" role="dialog" aria-labelledby="ViewCareplanChanges" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered preview-modal" role="document">
+            <div class="modal-content" style="height:90%">
+
+                <div class="modal-header preview-header">
+                    <h4 class="modal-title">Select Needs and Goals</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body preview-body scroll">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--View Careplan changes Modal Ends here-->
+    <!--Request User Modal Starts here-->
+    <div class="modal fade" id="RequestUserModel" tabindex="-1" role="dialog" aria-labelledby="RequestUserModel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered preview-modal" role="document">
+            <div class="modal-content" style="height:90%">
+
+                <div class="modal-header preview-header">
+                    <h5 class="modal-title" id="PreviewModalTitle">Request</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body preview-body scroll">
+                    <div class="form-group">
+                        <select class="form-control selectpicker" id="UserAndGroups" title="Select members to add" data-live-search="true" data-selected-text-format="count>0" data-actions-box="true" multiple></select>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" id="RequestMessage" style="display:block!important;"></textarea>
+                    </div>
+                    <button class="btn btn-success" id="btnsendAproval" onclick="$(this).prop('disabled',true);;ApprovalOrRevertRequestRequest('1');">Send Request</button>
+                    <button class="btn btn-success" id="btnsendRevoke" onclick="$(this).prop('disabled', true);ApprovalOrRevertRequestRequest('3');">Revoke Request</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Request User Modal Ends here-->
+    <div class="modal fade" id="AMDProfile" data-toggle="modal" tabindex="-1" role="dialog" aria-labelledby="AMDProfileModal"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content" style="min-height:600px">
+                <div class="modal-header">
+                    <h5 style="margin: 0;padding: 4px 0;">AMD Profile</h5>
+                    <div class="ml-auto">
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="modal-body">
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!--Notes Modal start here-->
+    <div class="modal fade" id="notesModal" tabindex="-1" role="dialog" aria-labelledby="notesModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notesModalLabel">Client Note</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formNotes" class="appointement-form">
+                        <div class="NotesScroll">
+                            <div class="form-group">
+                                <label>Select Program:</label>
+                                <select id="ddlProgramType" class="form-control" onchange="GetFieldsByProgramID()">
+                                    <option value='0'>None</option>
+                                    <option value='1'>Clinic</option>
+                                    <option value='2'>Dream</option>
+                                    <option value='3'>OU</option>
+                                    <option value='4'>Peralta College</option>
+                                </select>
+                            </div>
+                            <input hidden="hidden" id="noteshdnID" value="0" />
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea cols="2" id="txtNotes1" rows="2" style="height:38px !important" class="form-control"></textarea>
+
+                            </div>
+                            <div class="tmpdiv">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" onclick="notescloseModel()" class="btn btn-secondary">Cancel</button>
+                            <button type="button" onclick="notesSave()" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--Notes mOdal End Here-->
+    <!--Notes Modal Readonly start here-->
+    <div class="modal fade" id="notesreadonlyModal" tabindex="-1" role="dialog" aria-labelledby="notesreadonlyModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notesreadonlyModalLabel">Client Note</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="ReadonlyformNotes" class="appointement-form">
+                        <div class="ReadonlyNotesScroll">
+
+                            <div class="form-group">
+                                <label>Description</label>
+
+                                <label id="txtNotesReadonly1"></label>
+                            </div>
+                            <div class="tmpdivreadonly">
+                            </div>
+                        </div>
+                        <div class="modal-footer" hidden="hidden">
+                            <button type="button" onclick="notescloseModel()" class="btn btn-secondary">Cancel</button>
+                            <button type="button" onclick="notesSave()" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--Notes mOdal Readonly End Here-->
+    <!-- Programe Modal start here  -->
+    <div class="programeModal">
+        <div class="modal fade" id="myModal">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add/Remove Client Programs</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="programList">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Programe Modal end here -->
+    <!--Appointment Modal Starts Here-->
+    <div class="modal fade" id="AppointmentModal" tabindex="-1" role="dialog" aria-labelledby="AppointmentModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"> Appointment</h5>
+                    <button type="button" class="close" data-dismiss="modal" onclick="closeModel()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formAppointment" class="appointement-form">
+                        <div class="form-group d-flex align-items-center">
+                            <label for="staticEmail" class="m-0"> Date:</label>
+                            <input type="text" class="form-control dispaly-input-select" id="datepicker" placeholder="">
+                        </div>
+
+                        <div class="form-group d-flex align-items-center">
+                            <label for="inputPassword" class="m-0"> Start Time:</label>
+                            <input type="text" class="form-control timepicker _time_picker dispaly-input-select" id="timepicker" placeholder="">
+                        </div>
+
+                        <div class="form-group d-flex align-items-center">
+                            <label for="inputPassword" class="m-0"> End Time:</label>
+                            <input type="text" class="form-control timepicker _time_picker dispaly-input-select" id="endtimepicker" placeholder="">
+                        </div>
+
+                        @*<div class="form-group d-flex align-items-center">
+                            <label for="inputPassword">Select Patient</label>
+                            <input id="autoPatientList" class="form-control" />*@
+
+                        @*<select class="form-control select2" id="example1" name="state">
+
+                                <option value="">John</option>
+                                <option>Eric Jones</option>
+                                <option>Elina</option>
+                                <option>Thomas</option>
+
+                            </select>*@
+
+
+                        @*</div>*@
+                        <div class="form-group d-flex align-items-center">
+                            <label for="inputPassword">Type:</label>
+                            <select tabindex="13" id="ddlTypeOfAppointment" class="form-control dispaly-input-select"></select>
+                        </div>
+                        <div class="form-group d-flex align-items-center">
+                            <label for="inputPassword">Location:</label>
+                            <select tabindex="13" id="ddlLocationOfAppointment" class="form-control dispaly-input-select"></select>
+                        </div>
+
+                        <div class="form-group mb-0 d-flex align-items-center">
+                            <label for="inputPassword">Notes</label>
+                            <textarea cols="10" id="txtNotes" rows="5" class="form-control dispaly-input-select"></textarea>
+                            <input type="hidden" value="0" id="hdnAppointmentID" />
+                            <input type="hidden" value="0" id="hdnPatientId" />
+                        </div>
+                        <div class="modal-footer">
+                            <button id="closeAppointmentModel" type="button" onclick="closeModel()" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Cancel</button>
+                            <button type="button" onclick="saveAppointment()" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Appointment Modal end here -->
+    <!--AddCarePlan Modal Starts Here-->
+    <div class="modal fade" id="AddCarePlanModal" tabindex="-1" role="dialog" aria-labelledby="AddCarePlanModal"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"> Add Care plan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form createtemplate">
+                        <div class="form-group col-md-12">
+                            <label for="templateName">Care plan name</label>
+                            <input type="text" class="form-control form-control-sm" id="carePlanName">
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="ddlProgram">Select program</label>
+                            <select class="form-control form-control-sm" id="ddlProgram"></select>
+                        </div>
+                    </div>
+                    <div class="notemplate" style="display: block;">
+                        <p class="text-center">No programs available for careplan creation.</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href='javascript:{}' class="btn btn-success label-fields btnCareplanProceed" onclick="saveCareplan()">Proceed</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- AddCarePlan Modal end here -->
+    <!--CarePlan Change Status Modal Starts Here-->
+    <div class="modal fade" id="CarePlanChangeStatusModal" tabindex="-1" role="dialog" aria-labelledby="CarePlanChangeStatusModal"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Change Status</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="status_description">
+                        <label>Description</label>
+                        <p>Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy.</p>
+                    </div>
+                    <div class="form row">
+                        <div class="form-group col-md-12">
+                            <label>Select Status</label>
+                            <select class="form-control form-control-sm ddlStatus">
+                                <option value="0">Not Started</option>
+                                <option value="1">In Progress</option>
+                                <option value="2">Completed</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="ddlProgram">Add Note</label>
+                            <textarea class="form-control form-control-sm needNote"></textarea>
+                            <textarea class="form-control form-control-sm goalNote"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href='javascript:{}' class="btn btn-success label-fields submitNeedStatus" onclick="UpdateNeedStatus()">Submit</a>
+                    <a href='javascript:{}' class="btn btn-success label-fields submitGoalStatus" onclick="UpdateGoalStatus()">Submit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- CarePlan Change Status Modal end here -->
+    <!--CarePlan Outcome Modal Starts Here-->
+    <div class="modal fade carePlanOutcomes" id="carePlanOutcomes" tabindex="-1" role="dialog" aria-labelledby="carePlanOutcomes"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title outcomeTitle">Outcomes(<span class="outcomecount">0</span>)</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="addOutcomeWrap">
+                        <div class="addNewOutcome">
+                            <div class="a_outcome_item">
+                                <div class="a_o_head">
+                                    <div class="a_o_head_name">
+                                        <span class="name_thumb c_blue">@Session["OutcomeAddedBy"]</span>
+                                        @*<input type="text" name="add-New-Outcome" class="txtOutcome" placeholder="+ Add New Outcomes">*@
+                                        <textarea class="txtOutcome" placeholder="+ Add New Outcomes" onkeyup="textAreaAdjust(this)"></textarea>
+                                        <textarea class="txtIntervention" placeholder="+ Add New Intervention" onkeyup="textAreaAdjust(this)"></textarea>
+                                    </div>
+                                </div>
+                                <div class="addNewHeadAction">
+                                    <button type="button" class="checkBtn btnOutcome" onclick="SaveOutCome(this)"><i class="fa fa-check"></i></button>
+                                    <button type="button" class="checkBtn btnIntervention" onclick="SaveIntervention(this)"><i class="fa fa-check"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="a_outcome_list_wrap">
+                            <div class="a_outcome_list scroll">
+                                <div class="a_outcome_item">
+                                    <div class="a_o_head">
+                                        <div class="a_o_head_name">
+                                            <span class="name_thumb c_blue">AD</span><strong>Amardeep Singh</strong>
+                                        </div>
+                                        <div class="a_o_date">Jan 08, 2020 at 11:10 AM</div>
+                                    </div>
+                                    <div class="a_o_content">
+                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
+                                        <div class="status_changed"><b>Status Changed:</b> From Not Started To In Progress</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- CarePlan Outcome Modal end here -->
+    <!--CarePlan Summary Modal Starts Here-->
+    <div class="modal fade" id="AddSummaryModal" tabindex="-1" role="dialog" aria-labelledby="AddSummaryModal"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Care Plan Summary</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form">
+                        <div class="form-group col-md-12">
+                            <label>Next Review Date</label>
+                            <input type="text" class="form-control txtNextReviewDate" />
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label>Summary</label>
+                            <textarea class="form-control form-control-sm txtSummaryNote"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href='javascript:{}' class="btn btn-default label-fields" onclick="clearSummary()">Cancel</a>
+                    <a href='javascript:{}' class="btn btn-success label-fields" onclick="AddSummary()">Submit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- CarePlan Summary Modal end here -->
+    <!--Default need popup start here-->
+    <div class="modal fade defaultsNeedsGoals" id="DefaultNeedsPopUp" tabindex="-1" role="dialog" aria-labelledby="DefaultNeedsPopUp"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title defaultNeedTitle">Default Needs</h5>
+                    <button type="button" class="close" aria-label="Close">
+                        <span aria-hidden="true" class="closeDefaultNeed">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="defaultsNeedsGoals_div">
+                        <div class="d_n_actions defaultNeedAction d-flex">
+                            <label class="checkbox_input"><input class="defaultallneed" type="checkbox" onchange="checkAllDefaultNeed(this)" name="defaultNeeds" value="" /><span>Select All </span></label>
+                            <a href="#" class="btn btn-success ml-auto" onclick="AddDefaultneeds()">Add to care plan</a>
+                            <a href="#" class="btn btn-success" onclick="closeDefaultNeed()">Add new need</a>
+                            <a href="#" class="btn btn-success btn-cancel" onclick="closeDefaultNeed()">Cancel</a>
+                        </div>
+                        <div class="d_n_actions defaultGoalAction d-none">
+                            <label class="checkbox_input"><input class="defaultallneed" type="checkbox" onchange="checkAllDefaultNeed(this)" name="defaultNeeds" value="" /><span>Select All </span></label>
+                            <a href="#" class="btn btn-success ml-auto" onclick="AddDefaultgoals()">Add to need</a>
+                            <a href="#" class="btn btn-success" onclick="focusAddGoals()">Add new goal</a>
+                            <a href="#" class="btn btn-success btn-cancel" onclick="closeDefaultGoals()">Cancel</a>
+                        </div>
+                        <ul class="defaultneedul scroll">
+                            <li>
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text</p>
+                                <label class="checkbox_input"><input type="checkbox" name="defaultNeeds" value="" /><span></span></label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
 </div>
 <script src="~/Scripts/custom.js"></script>

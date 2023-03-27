@@ -1,0 +1,121 @@
+﻿@model RootsOfHealth.Models.PatientDetailBO
+@using RootsOfHealth.Commom
+
+<ul class="nav nav-tabs showHide" id="myTab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link" id="Profile-tab" data-toggle="tab" data-FormName="Profile" href="#Profile" role="tab" onclick="HideSideBar();"
+           aria-controls="Profile" aria-selected="true">Profile</a>
+    </li>
+
+
+    @if (Model.ClientForm != null)
+    {
+        foreach (var item in Model.ClientForm.Where(p => p.ParentFormID == null || p.ParentFormID == 0))
+        {
+            var formpermission = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["userid"]), item.ClientFormID, true);
+            if (formpermission.Where(f => f.CanList == true || f.CanUpdate == true).Any())
+            {
+                if (ViewBag.PatientID == "0" || ViewBag.PatientID == null)
+                {
+                    var FormName = @item.FormName.Replace(" ", "");
+                    <li class="nav-item">
+                        <a id="@("a" + FormName)" class="nav-link ProfileNotSaved isProfileSaved" data-toggle
+                           href="@("#" + FormName + "only")" data-ClientFormID="@item.ClientFormID" onclick="ErrorTab()" data-PatientID="@item.patientID" data-TemplateID="@item.TemplateID" data-FormName=@(FormName)>@item.FormName<span class="check @Html.Raw(item.Saved ? "" : "d-none")"><i class="fas fa-check-circle"></i></span></a>
+
+                    </li>
+                }
+                else
+                {
+                    var FormName = @item.FormName.Replace(" ", "");
+                    <li class="nav-item">
+                        <a id="@("a" + FormName)" class="nav-link ProfileNotSaved isProfileSaved" data-toggle="tab"
+                           href="@("#" + FormName + "only")" data-ClientFormID="@item.ClientFormID" onclick="RebindClientFormEvent(this)" data-PatientID="@item.patientID" data-TemplateID="@item.TemplateID" data-FormName=@(FormName)>@item.FormName<span class="pColorCircle" style="display:none"></span><span class="notCount" id="@(FormName + "Notify")" style="display:none"></span><span class="check @Html.Raw(item.Saved ? "" : "d-none")"><i class="fas fa-check-circle"></i></span></a>
+
+                    </li>
+                }
+            }
+
+        }
+    }
+
+
+    <li class="nav-item" id="programtbs" style="display:none;/*left: 155px;*/">
+        <a class="nav-link" id="Programs-tab" data-toggle="tab" href="#Programs" role="tab"
+           aria-controls="Programs" aria-selected="false">Programs <span class="notCount" id="ProgramNotify" style="display:none"></span><span class="check" data-FormName="Profile" style="display:none"><i class="fas fa-check-circle"></i></span></a>
+    </li>
+
+    <li class="nav-item " style="display:none" id="RecentClientli">
+        <a class="nav-link" id="RecentClient-tab" onclick="RecentClients()" href="#" data-toggle="modal">Recent Clients</a>
+    </li>
+
+</ul>
+
+    
+<script type="text/javascript">
+    if (@Model.Programs.Count > 0) {
+        $("#programtbs").show();
+    } else {
+        $("#programtbs").hide();
+    }
+
+    $("#programtbs").click(function () {
+        $("#myChildTab").css("display", "none");
+    })
+
+    $('#programtbs').click(function () {
+       
+        HideSideBar();
+        $(".loaderOverlay").css('display', 'flex');
+        $('#Programs').html('')
+        $.ajax({
+
+            type: "Get",
+            url: '/Patient/GetProgramsForPatient?PatientID=' + patientId,
+            dataType: "html",
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+
+                $('#Programs')[0].outerHTML = result;
+
+                $('#Programs').addClass('active show')
+                $('#myTab .nav-link').each(function () {
+                    $(this).removeClass('active show')
+                })
+                $('#Programs-tab').addClass('active show')
+                SetScheduling()
+                RebindEvent();
+
+                if ($("#tabPills .nav-item").length > 0) {
+                    if (currentSubtab == 'undefined') {
+                        $("#tabPills .nav-item a").get(0).click();
+                    }
+                    else {
+                        if ($("#tabPills .nav-item   #a" + currentSubtab).length > 0) {
+                            $("#tabPills .nav-item  #a" + currentSubtab).click();
+                        }
+                        else {
+                            $("#tabPills .nav-item a").get(0).click();
+                        }
+                    }
+                }
+                $(".btnProgramEdit").css('display', 'none')
+
+            },
+            error: function () {
+                $(".loaderOverlay").hide()
+                toastr.error("Some error occurred!! or data not found");
+            },
+            complete: function () {
+
+                ShowPatientInfo(_PatientName, _PatientEmail)
+            }
+        });
+    })
+
+
+
+
+
+</script>    
+    
+
