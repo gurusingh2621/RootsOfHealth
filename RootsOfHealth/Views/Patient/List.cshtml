@@ -259,12 +259,12 @@
 
                             var html = "";
                             if (canList == "True") {
-                                html += `<a href='/Client/Info?patientid=${data.PatientId}'
+                                html += `<a href='/Client/ClientInfo?patientid=${data.PatientId}'
                            id='btnProfileEdit' class='btn btn-success label-fields'><i class="far fa-edit"></i>View</a>`;
 
                             }
                             if (canUpdate == "True") {
-                                html += `<a href='/Client/Add?PatientID=${data.PatientId}'
+                                html += `<a href='/Client/AddClient?PatientID=${data.PatientId}'
                              id='btnProfileEdit' class='btn btn-success label-fields'><i class="far fa-edit"></i>Edit</a>`
                             }
                             return html;
@@ -280,7 +280,7 @@
                 var iPos = oTable.fnGetPosition(this);
                 var aData = oTable.fnGetData(iPos);
                 var patientId = aData.PatientId;
-                window.location = '/Client/Info?patientid=' + patientId;
+                window.location = '/Client/ClientInfo?patientid=' + patientId;
             });
         }
 

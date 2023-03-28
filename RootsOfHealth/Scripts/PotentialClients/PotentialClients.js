@@ -1300,7 +1300,7 @@ function GetDuplicateRecordDetails(id) {
                     else
                     {
                         var html = `<div class="p_content_block">`
-                        html += `<div class="form-group"><label>Client ID:</label> <label><a href="/Client/Info?patientid=${result[i].PatientID}" target="_blank">${result[i].PatientID}</a></label></div>
+                        html += `<div class="form-group"><label>Client ID:</label> <label><a href="/Client/ClientInfo?patientid=${result[i].PatientID}" target="_blank">${result[i].PatientID}</a></label></div>
                                  <div class="form-group"><label>Name:</label> <label>${GetFullName(result[i].FirstName, result[i].LastName)}</label></div>`
                         if (result[i].EmailAddress != null && result[i].EmailAddress != "") {
                             html += `<div class="form-group"><label>Email:</label> <label>${result[i].EmailAddress != null ? result[i].EmailAddress : ""}</label></div>`

@@ -95,7 +95,7 @@
         </a>*@
                     @if (clientPerm.Where(x => x.CanList == true).Any())
                     {
-                        <a href='' onclick="this.href='/Client/Info?patientid='+@p.PatientID"
+                        <a href='' onclick="this.href='/Client/ClientInfo?patientid='+@p.PatientID"
                            id="btnProfileEdit" class="btn btn-success label-fields">
                             <i class="far fa-edit"></i>
                             View
@@ -103,7 +103,7 @@
                     }
                         @if (clientPerm.Where(x => x.CanUpdate == true).Any())
                         {
-                            <a href='' onclick="this.href='/Client/Add?PatientID='+@p.PatientID"
+                            <a href='' onclick="this.href='/Client/AddClient?PatientID='+@p.PatientID"
                                id="btnProfileEdit" class="btn btn-success label-fields">
                                 <i class="far fa-edit"></i>
                                 Edit
