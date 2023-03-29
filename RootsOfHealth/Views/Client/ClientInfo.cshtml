@@ -398,13 +398,13 @@
 
         function AppendClientPrograms() {
 
-            var currenttab = 'Profile-tab'
-            var currentSubtab = '@ViewBag.CurrentSubtab'
-
+            var currenttab = 'Profile-tab';
+            var currentSubtab = '@ViewBag.CurrentSubtab';
+            var patientId = @ViewBag.PatientId;
             if (IsClientPrograms == 0) {
 
                 $.ajax({
-                    url: '/Client/ClientProgramView',
+                    url: '/Client/ClientProgramView?PatientId='+ patientId +'',
                     beforeSend: function () {
                         _Loader.StartLoader();
                     },
@@ -599,7 +599,7 @@
         })
 
         $(document).ready(function () {
-           //getCarePlanCount();
+            getCarePlanCount();
             LoadClientMainFormData(ClientMainFormHtml);
             GetScoreClient(0);
             $(".nav-menu").removeClass("active");
@@ -1282,7 +1282,7 @@
 
         var isNotesLoaded = false;
         function LoadAllNotes() {
-          
+
 
             toggleNotesSlider();
             if (!isNotesLoaded) {
@@ -1344,7 +1344,7 @@
         };
 
         function getListAllNotesLoadMore() {
-            
+
                 var data = {
                     PatientID: patientId,
                 };
@@ -3098,7 +3098,7 @@
         //-------------------------------------------------------------------------------------------------------------
 
         function RebindClientFormEvent(item) {
-           
+
             $('#btnprogramPrint').css("display", "block !important");
             $('#btnprogramPrint').removeClass("d-none");
 

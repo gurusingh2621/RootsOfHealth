@@ -4877,10 +4877,7 @@ namespace RootsOfHealth.Controllers
 
         public ActionResult ClientInfo(int PatientId, string CurrentTab = "profile", string Subtab = null, int ClientFormId = 0)
         {
-
             PatientDetailBO patientdetailobj = new PatientDetailBO();
-
-           
             if (CurrentTab.ToLower() == "profile")
             {
                 var patientInfo = GetMainClientInfo(PatientId);
@@ -4894,25 +4891,26 @@ namespace RootsOfHealth.Controllers
             ViewBag.ClientFormID = ClientFormId;
             patientdetailobj.ClientForm = GetClientFormsValue(PatientId);
             patientdetailobj.ClientMainFormData = GetClientMainFormBasicFormValue(patientdetailobj.MainFormInfoBO.ClientMainFormId, patientdetailobj.MainFormInfoBO.TemplateId, PatientId).ToString();
-            patientdetailobj.Programs = GetProgramsFromAllDetails(PatientId);
-            patientdetailobj.FormScheduling = (List<Form_ScheduleResultBO>)Session["formSchedulingList"];
+            //patientdetailobj.Programs = GetProgramsFromAllDetails(PatientId);
+            //patientdetailobj.FormScheduling = (List<Form_ScheduleResultBO>)Session["formSchedulingList"];
 
             ViewBag.currentTab = CurrentTab;
             ViewBag.PatientID = PatientId;
             ViewBag.CurrentSubtab = Subtab;
-            Session["patientId"] = PatientId;
-            Session["patientdetailobj"] = patientdetailobj;
+            //Session["patientId"] = PatientId;
+            //Session["patientdetailobj"] = patientdetailobj;
             return View(patientdetailobj);
         }
 
-        public PartialViewResult ClientProgramView() 
+        public PartialViewResult ClientProgramView(int PatientId) 
         {
-
             PatientDetailBO patientdetailobj = new PatientDetailBO();
-            patientdetailobj = (PatientDetailBO)Session["patientdetailobj"];
+            patientdetailobj.ClientForm = GetClientFormsValue(PatientId);
+            patientdetailobj.Programs = GetProgramsFromAllDetails(PatientId);
+            patientdetailobj.FormScheduling = (List<Form_ScheduleResultBO>)Session["formSchedulingList"];
+            //patientdetailobj = (PatientDetailBO)Session["patientdetailobj"];
+            ViewBag.PatientID = PatientId;
 
-            ViewBag.PatientID = Convert.ToString(Session["patientId"]);
-           
             return PartialView("~/Views/Shared/Client/_ClientProgramView.cshtml", patientdetailobj);
         }
 
