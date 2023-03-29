@@ -440,8 +440,8 @@
               $.ajax({
                   url: '/Client/ClientFormsView?PatientId=' + patientId +'',
                   success: function (response) {
-                      console.log(oldHtml);
-                      console.log(response);
+                      //console.log(oldHtml);
+                      //console.log(response);
                       $("#myTabContent").html(oldHtml + response);
                   },
                   error: function () {

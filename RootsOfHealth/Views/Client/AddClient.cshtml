@@ -338,9 +338,9 @@
             <!-- Dynamic tab start here -->
             <!--later added by Nitesh-->
 
-            @{
+            @*@{
                 Html.RenderPartial("~/Views/Shared/Client/_DynamicClientForms.cshtml", Model.ClientForm);
-            }
+            }*@
             <!-- Dynamic Tab end here -->
             <!-- Programs Tab start here  -->
 
@@ -2752,10 +2752,11 @@
 
         function AppendClientPrograms() {
             var currenttab = 'Profile-tab'
+            var patientId = @ViewBag.PatientId;
             if (IsClientPrograms == 0) {
 
                 $.ajax({
-                    url: '/Client/ClientProgramView',
+                    url: '/Client/ClientProgramView?PatientId=' + patientId +'',
                     beforeSend: function () {
                         _Loader.StartLoader();
                     },
@@ -2778,7 +2779,28 @@
                     }
 
                 });
+                AppendClientForms(patientId);
             }
+
+        }
+        function AppendClientForms(patientId) {
+
+            var oldHtml = $('#myTabContent').html();
+
+            $.ajax({
+                url: '/Client/ClientFormsView?PatientId=' + patientId + '',
+                success: function (response) {
+                    console.log(oldHtml + response);
+                    
+                    $("#myTabContent").html('');
+                    $("#myTabContent").html(oldHtml + response);
+                },
+                error: function () {
+
+                    toastr.error("Some error occurred!! or data not found");
+                },
+
+            });
 
         }
         function DisplayForm(PatientId, Tab, Subtab, ClientFormID) {
@@ -2829,7 +2851,7 @@
         })
 
         $('#programtbs').click(function () {
-            
+
             $(".loaderOverlay").css('display', 'flex');
             $('#Programs').html('')
             $.ajax({
