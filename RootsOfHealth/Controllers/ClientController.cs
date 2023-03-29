@@ -26,6 +26,7 @@ using E = DocumentFormat.OpenXml.OpenXmlElement;
 using A = DocumentFormat.OpenXml.OpenXmlAttribute;
 using System.Reflection;
 
+
 namespace RootsOfHealth.Controllers
 {
     [SessionTimeout]
@@ -4889,37 +4890,41 @@ namespace RootsOfHealth.Controllers
 
             }
             ViewBag.ClientFormID = ClientFormId;
-            //patientdetailobj.ClientForm = GetClientFormsValue(PatientId);
+           
             patientdetailobj.ClientMainFormData = GetClientMainFormBasicFormValue(patientdetailobj.MainFormInfoBO.ClientMainFormId, patientdetailobj.MainFormInfoBO.TemplateId, PatientId).ToString();
-            //patientdetailobj.Programs = GetProgramsFromAllDetails(PatientId);
-            //patientdetailobj.FormScheduling = (List<Form_ScheduleResultBO>)Session["formSchedulingList"];
 
             ViewBag.currentTab = CurrentTab;
             ViewBag.PatientID = PatientId;
             ViewBag.CurrentSubtab = Subtab;
-            //Session["patientId"] = PatientId;
-            //Session["patientdetailobj"] = patientdetailobj;
+            
             return View(patientdetailobj);
         }
 
         public PartialViewResult ClientProgramView(int PatientId) 
         {
             PatientDetailBO patientdetailobj = new PatientDetailBO();
-            //patientdetailobj.ClientForm = GetClientFormsValue(PatientId);
+           
             patientdetailobj.ClientForm = GetClientFormsValue(PatientId);
             patientdetailobj.Programs = GetProgramsFromAllDetails(PatientId);
             patientdetailobj.FormScheduling = (List<Form_ScheduleResultBO>)Session["formSchedulingList"];
-            //patientdetailobj = (PatientDetailBO)Session["patientdetailobj"];
+            
             ViewBag.PatientID = Convert.ToString(PatientId);
+            var ClientFormIdList = patientdetailobj.ClientForm.Select(u => u.ClientFormID).ToList();
+            patientdetailobj.ClientFormPermissions = new Common().GetPermissionsByModuleIdList(Convert.ToInt32(Session["userid"]), ClientFormIdList);
+            TempData["ModulePermission"] = patientdetailobj.ClientFormPermissions;
 
             return PartialView("~/Views/Shared/Client/_ClientProgramView.cshtml", patientdetailobj);
         }
 
         public PartialViewResult ClientFormsView(int PatientId)
         {
-            List<ClientFormForPatientBO> ClientForm = new List<ClientFormForPatientBO>();
-;           ClientForm = GetClientFormsValue(PatientId);
-            return PartialView("~/Views/Shared/Client/_DynamicClientForms.cshtml", ClientForm);
+          
+            PatientDetailBO patientdetailobj = new PatientDetailBO();
+            patientdetailobj.ClientForm = GetClientFormsValue(PatientId);
+            if (TempData.ContainsKey("ModulePermission"))
+                patientdetailobj.ClientFormPermissions = (List<ModulepermissionsBO>)TempData["ModulePermission"]; // returns "Bill" 
+
+            return PartialView("~/Views/Shared/Client/_DynamicClientForms.cshtml", patientdetailobj);
         }
         public string GetClientMainFormBasicFormValue(int clientFormId, int templateId, int patientId)
         {
