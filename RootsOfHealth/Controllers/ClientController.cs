@@ -4889,7 +4889,7 @@ namespace RootsOfHealth.Controllers
 
             }
             ViewBag.ClientFormID = ClientFormId;
-            patientdetailobj.ClientForm = GetClientFormsValue(PatientId);
+            //patientdetailobj.ClientForm = GetClientFormsValue(PatientId);
             patientdetailobj.ClientMainFormData = GetClientMainFormBasicFormValue(patientdetailobj.MainFormInfoBO.ClientMainFormId, patientdetailobj.MainFormInfoBO.TemplateId, PatientId).ToString();
             //patientdetailobj.Programs = GetProgramsFromAllDetails(PatientId);
             //patientdetailobj.FormScheduling = (List<Form_ScheduleResultBO>)Session["formSchedulingList"];
@@ -4905,15 +4905,22 @@ namespace RootsOfHealth.Controllers
         public PartialViewResult ClientProgramView(int PatientId) 
         {
             PatientDetailBO patientdetailobj = new PatientDetailBO();
+            //patientdetailobj.ClientForm = GetClientFormsValue(PatientId);
             patientdetailobj.ClientForm = GetClientFormsValue(PatientId);
             patientdetailobj.Programs = GetProgramsFromAllDetails(PatientId);
             patientdetailobj.FormScheduling = (List<Form_ScheduleResultBO>)Session["formSchedulingList"];
             //patientdetailobj = (PatientDetailBO)Session["patientdetailobj"];
-            ViewBag.PatientID = PatientId;
+            ViewBag.PatientID = Convert.ToString(PatientId);
 
             return PartialView("~/Views/Shared/Client/_ClientProgramView.cshtml", patientdetailobj);
         }
 
+        public PartialViewResult ClientFormsView(int PatientId)
+        {
+            List<ClientFormForPatientBO> ClientForm = new List<ClientFormForPatientBO>();
+;           ClientForm = GetClientFormsValue(PatientId);
+            return PartialView("~/Views/Shared/Client/_DynamicClientForms.cshtml", ClientForm);
+        }
         public string GetClientMainFormBasicFormValue(int clientFormId, int templateId, int patientId)
         {
             var data = "";
