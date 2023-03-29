@@ -1,25 +1,16 @@
-﻿@model List<RootsOfHealth.Models.ClientFormForPatientBO>
+﻿@model RootsOfHealth.Models.PatientDetailBO
 @using RootsOfHealth.Commom
 @using RootsOfHealth.Models
 
 @{
-    List<ModulepermissionsBO> formpermissionlist = new List<ModulepermissionsBO>();
 
-
-    if (Model != null)
+    if (Model.ClientForm != null)
     {
 
-        var ClientFormIdList = Model.ToList().Select(u => u.ClientFormID).ToList();
-
-        if (ClientFormIdList.Count > 0)
+        List<ModulepermissionsBO> formpermission;
+        foreach (var item in Model.ClientForm)
         {
-            formpermissionlist = new Common().GetPermissionsByModuleIdList(Convert.ToInt32(Session["userid"]), ClientFormIdList);
-
-        }
-
-        foreach (var item in Model)
-        {
-            // var formpermission = new Common().GetPermissionsByModuleId(Convert.ToInt32(Session["userid"]), item.ClientFormID, true);
+            formpermission = Model.ClientFormPermissions.Where(c => c.ModuleId == item.ClientFormID).ToList();
             var FormName = item.FormName.Replace(" ", "");
             <div class="tab-pane fade" id="@(FormName + "only")" role="tabpanel" aria-labelledby="@("a"+FormName)">
                 <div class="inner-content">
@@ -32,7 +23,7 @@
                                     }
 
                                     <div class="detail-heading d-flex">
-                                        @foreach (var items in Model.Where(p => p.ClientFormID == item.ParentFormID))
+                                        @foreach (var items in Model.ClientForm.Where(p => p.ClientFormID == item.ParentFormID))
                                         {
                                             string FormNames = @items.FormName.Replace(" ", "");
                                             <a id="@("a" + FormNames)" class="nav-link" data-toggle="tab"
@@ -46,7 +37,7 @@
                                                 <i class="far fa-edit"></i>
                                                 Display
                                             </a>
-                                            @if (formpermissionlist.Where(f => f.ModuleId == item.ClientFormID && f.CanUpdate == true).Any())
+                                            @if (formpermission.Where(f =>  f.CanUpdate == true).Any())
                                             {
                                                 <a href="javascript:{}" onclick="ActivateTab(@ViewBag.PatientID,'','@FormName',@item.ClientFormID)"
                                                    class="btn btn-success label-fields btnProgramEdit">

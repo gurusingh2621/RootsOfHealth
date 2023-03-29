@@ -36,6 +36,8 @@ namespace RootsOfHealth.Models
 
         public ClientMainFormInfoBO MainFormInfoBO { get; set; }
         public string ClientMainFormData { get; set; }
+
+        public List<ModulepermissionsBO> ClientFormPermissions { get; set; }
         public PatientDetailBO()
         {
 
@@ -61,6 +63,7 @@ namespace RootsOfHealth.Models
             PatientScore = new PatientScoreBO();
             ScheduleDate = new ScheduleDateBO();
             FormScheduling = new List<Form_ScheduleResultBO>();
+            ClientFormPermissions = new List<ModulepermissionsBO>();
 
 
 
