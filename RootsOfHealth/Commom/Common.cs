@@ -938,14 +938,35 @@ namespace RootsOfHealth.Commom
                     var readTask = result.Content.ReadAsAsync<List<ModulepermissionsBO>>();
                     readTask.Wait();
                     permissionModel = readTask.Result;
-
-
                 }
 
             }
             return permissionModel;
         }
 
+        public List<ModulepermissionsBO> GetPermissionsByModuleIdList(int userId, IEnumerable<Int32> moduleIdList,bool isClientForm = true) 
+        {
+
+            String ModuleIdList = String.Join(",", moduleIdList);
+            List<ModulepermissionsBO> permissionModel = new List<ModulepermissionsBO>();
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(WebApiKey);
+                //HTTP GET
+                var responseTask = client.GetAsync("/api/PatientMain/GetPermissionsByModuleIdList?userId=" + userId + "&&moduleIdList=" + ModuleIdList + "&&isClientForm=" + isClientForm);
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<List<ModulepermissionsBO>>();
+                    readTask.Wait();
+                    permissionModel = readTask.Result;
+                }
+
+            }
+            return permissionModel;
+        }
         public void LogExceptionToDb(Exception objException)
         {
             using (var client = new HttpClient())
