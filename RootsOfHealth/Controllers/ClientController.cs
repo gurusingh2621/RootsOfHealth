@@ -4744,9 +4744,9 @@ namespace RootsOfHealth.Controllers
             patientdetailobj.ClientMainFormData = GetClientMainFormBasicFormValue(patientdetailobj.MainFormInfoBO.ClientMainFormId, patientdetailobj.MainFormInfoBO.TemplateId, PatientId).ToString();
             ViewBag.currentTab = CurrentTab;
             ViewBag.ClientFormID = ClientFormID;
-            patientdetailobj.ClientForm = GetClientFormsValue(PatientId);
-            patientdetailobj.Programs = GetProgramsFromAllDetails(PatientId);
-            patientdetailobj.FormScheduling = (List<Form_ScheduleResultBO>)Session["formSchedulingList"];
+            //patientdetailobj.ClientForm = GetClientFormsValue(PatientId);
+            //patientdetailobj.Programs = GetProgramsFromAllDetails(PatientId);
+            //patientdetailobj.FormScheduling = (List<Form_ScheduleResultBO>)Session["formSchedulingList"];
 
             ViewBag.PatientID = PatientId;
             ViewBag.CurrentSubtab = SubTab;
