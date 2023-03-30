@@ -4737,12 +4737,14 @@ namespace RootsOfHealth.Controllers
                 var patientInfo = GetMainClientInfo(PatientId);
                 patientdetailobj.PatientMain = patientInfo.PatientDetail.PatientMain;
                 patientdetailobj.MainFormInfoBO = patientInfo.MainFormInfoBO;
+                patientdetailobj.ClientMainFormData = patientInfo.PatientDetail.ClientMainFormData;
             }
             else
             {
 
             }
-            patientdetailobj.ClientMainFormData = GetClientMainFormBasicFormValue(patientdetailobj.MainFormInfoBO.ClientMainFormId, patientdetailobj.MainFormInfoBO.TemplateId, PatientId).ToString();
+            
+           // patientdetailobj.ClientMainFormData = GetClientMainFormBasicFormValue(patientdetailobj.MainFormInfoBO.ClientMainFormId, patientdetailobj.MainFormInfoBO.TemplateId, PatientId).ToString();
             ViewBag.currentTab = CurrentTab;
             ViewBag.ClientFormID = ClientFormID;
             //patientdetailobj.ClientForm = GetClientFormsValue(PatientId);
@@ -4821,6 +4823,7 @@ namespace RootsOfHealth.Controllers
 
                 }
                 patientAllDetail.MainFormInfoBO = ClientMainFormInfo;
+                
             }
             return patientAllDetail;
         }
@@ -4884,14 +4887,15 @@ namespace RootsOfHealth.Controllers
                 var patientInfo = GetMainClientInfo(PatientId);
                 patientdetailobj.PatientMain = patientInfo.PatientDetail.PatientMain;
                 patientdetailobj.MainFormInfoBO = patientInfo.MainFormInfoBO;
+                patientdetailobj.ClientMainFormData = patientInfo.PatientDetail.ClientMainFormData;
             }
             else
             {
 
             }
             ViewBag.ClientFormID = ClientFormId;
-           
-            patientdetailobj.ClientMainFormData = GetClientMainFormBasicFormValue(patientdetailobj.MainFormInfoBO.ClientMainFormId, patientdetailobj.MainFormInfoBO.TemplateId, PatientId).ToString();
+            
+            //patientdetailobj.ClientMainFormData = GetClientMainFormBasicFormValue(patientdetailobj.MainFormInfoBO.ClientMainFormId, patientdetailobj.MainFormInfoBO.TemplateId, PatientId).ToString();
 
             ViewBag.currentTab = CurrentTab;
             ViewBag.PatientID = PatientId;
@@ -4928,6 +4932,9 @@ namespace RootsOfHealth.Controllers
         }
         public string GetClientMainFormBasicFormValue(int clientFormId, int templateId, int patientId)
         {
+
+
+            
             var data = "";
             using (var client = new HttpClient())
             {

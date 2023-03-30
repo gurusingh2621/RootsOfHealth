@@ -321,7 +321,8 @@
        var canDeleteNote = '@modulePermissions.Where(x=> x.ModuleName == "Notes" && x.CanDelete == true).Any()';
        var canEditClient = '@modulePermissions.Where(x => x.ModuleName == "Client" && x.CanUpdate == true).Any()';
        var userId = @Session["userid"].ToString();
-       var IsUserCarePlanApprover = '@Session["IsCarePlanApprover"]';
+        var IsUserCarePlanApprover = '@Session["IsCarePlanApprover"]';
+        var IsCarePlanApproved = false;
        var IsRequestSent = false;
        var _PatientName = '@Model.PatientMain.FirstName' + ' ' + '@Model.PatientMain.LastName';
        var _PatientEmail = '@PatientEmail'
@@ -785,6 +786,93 @@
             $(".stardiv").show();
             $(".lbl-hide").hide();
         }
+
+        function LoadClientMainForm() {
+            $.ajax({
+                type: "GET",
+                url: Apipath + '/api/PatientMain/GetClientMainFormIdByFormName',
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                async: false,
+                success: function (result) {
+                    if (result != null && result != '') {
+                        LoadClientMainFormTemplate(result);
+                    }
+
+                }
+
+            });
+        }
+        function LoadClientMainFormTemplate(ClientFormId) {
+
+            $.ajax({
+                type: "GET",
+                url: '/Client/GetClientFormTemplateByClientFormId?ClientFormId=' + ClientFormId,
+                contentType: 'application/json; charset=UTF-8',
+                dataType: "json",
+                beforeSend: function () {
+                    $(".loaderOverlay").css('display', 'flex');
+                },
+                async: false,
+                success: function (result) {
+                    var formElem = $('#clientMainFormDetail');
+
+                    if (result.html == "") {
+                        toastr.error("No template found");
+                    } else {
+                        _mainFormtemplateId = result.TemplateId;
+                        _mainFormtemplatetable = result.tableName;
+                        formElem.html("").append(result.html);
+
+                        formElem.html("").append(result.html);
+
+                        //tableName = result.tableName;
+                        //templateid = result.TemplateId;
+
+                        //if ($('#clientMainFormDetail').find(".basecontentarea").length > 0) {
+                        //    getClientFormHeaderAndFooter();
+
+                        //}
+                        getClientMainFormBasicFormValue(ClientFormId, _mainFormtemplateId)
+                        formElem.find(".event-btn-right").remove();
+                        formElem.find(".ck-editor-header").remove();
+                        formElem.find(".question-container").parent().css("border", "none");
+                        formElem.find(".dragresize").find(".question-container").remove();
+                        formElem.find(".dragresize").find(".bootom-form-row").css({ "padding": "7px 0px", "margin": "0" });
+                        formElem.find(".html-content").prev().css("display", "none");
+
+
+                        $("textarea.program-control,textarea.base-control").summernote({
+                            toolbar: [
+                                ['para', ['ul', 'ol', 'paragraph']],
+                                ['style', ['bold', 'italic', 'underline', 'clear']],
+                                ['font', ['strikethrough', 'superscript', 'subscript']],
+                            ],
+                            placeholder: "Type here",
+                            callbacks: {
+                                onInit: function (e) {
+                                    this.placeholder
+                                        ? e.editingArea.find(".note-placeholder").html(this.placeholder)
+                                        : e.editingArea.remove(".note-placeholder")
+                                }
+                            },
+                            height: 150,
+                        });
+                        //toogleProgramToolTip();
+
+
+                        makeMainFormBasicInfoReadonly(formElem)
+
+
+                    }
+                    $(".loaderOverlay").hide();
+                },
+                error: function (e) {
+                    toastr.error("Unexpected error!");
+                    $(".loaderOverlay").hide();
+                }
+            });
+        }
         function LoadClientMainFormData(data) {
 
 
@@ -1029,7 +1117,9 @@
             });
         }
         function getClientMainFormBasicFormValue(data) {
+            console.log(data);
             var result = JSON.parse(data);
+            console.log(result);
             var formEle = $('#clientMainFormDetail');
             var fields = result[0];
             var value = "";
@@ -1183,7 +1273,10 @@
 
         var toppatient = "";
 
+        function bindTopPatient(id) {
 
+            window.location = '/Client/ClientInfo?patientid=' + id;
+        }
 
         function GetPatientPrograms(toppatient) {
 
