@@ -4927,7 +4927,7 @@ namespace RootsOfHealth.Controllers
             patientdetailobj.ClientForm = GetClientFormsValue(PatientId);
             if (TempData.ContainsKey("ModulePermission"))
                 patientdetailobj.ClientFormPermissions = (List<ModulepermissionsBO>)TempData["ModulePermission"]; // returns "Bill" 
-
+            ViewBag.PatientID = PatientId;
             return PartialView("~/Views/Shared/Client/_DynamicClientForms.cshtml", patientdetailobj);
         }
         public string GetClientMainFormBasicFormValue(int clientFormId, int templateId, int patientId)
