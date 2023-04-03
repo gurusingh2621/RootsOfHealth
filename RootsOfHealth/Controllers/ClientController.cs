@@ -4732,19 +4732,19 @@ namespace RootsOfHealth.Controllers
         public ActionResult AddClient(int PatientId = 0, string CurrentTab = "profile", string SubTab = "", int ClientFormID = 0)
         {
             PatientDetailBO patientdetailobj = new PatientDetailBO();
-            if (CurrentTab.ToLower() == "profile")
-            {
+            //if (CurrentTab.ToLower() == "profile")
+            //{
                 var patientInfo = GetMainClientInfo(PatientId);
                 patientdetailobj.PatientMain = patientInfo.PatientDetail.PatientMain;
                 patientdetailobj.MainFormInfoBO = patientInfo.MainFormInfoBO;
                 patientdetailobj.ClientMainFormData = patientInfo.PatientDetail.ClientMainFormData;
-            }
-            else
-            {
+            //}
+            //else
+            //{
+            //    patientdetailobj.ClientMainFormData = GetClientMainFormBasicFormValue(patientdetailobj.MainFormInfoBO.ClientMainFormId, patientdetailobj.MainFormInfoBO.TemplateId, PatientId).ToString();
+            //}
 
-            }
-            
-           // patientdetailobj.ClientMainFormData = GetClientMainFormBasicFormValue(patientdetailobj.MainFormInfoBO.ClientMainFormId, patientdetailobj.MainFormInfoBO.TemplateId, PatientId).ToString();
+
             ViewBag.currentTab = CurrentTab;
             ViewBag.ClientFormID = ClientFormID;
             //patientdetailobj.ClientForm = GetClientFormsValue(PatientId);
