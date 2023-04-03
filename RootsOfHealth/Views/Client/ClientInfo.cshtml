@@ -622,9 +622,11 @@
         })
 
         $(document).ready(function () {
+            debugger
             getCarePlanCount();
-            LoadClientMainFormData(ClientMainFormHtml);
             GetScoreClient(0);
+            LoadClientMainFormData(ClientMainFormHtml);
+            
             $(".nav-menu").removeClass("active");
             $("#DashBoard").addClass("active");
             $("#btnProfileCancel").hide();
@@ -1319,7 +1321,7 @@
         }
 
         function GetScoreClient(clientformid) {
-
+            debugger
             $.ajax({
                 type: "GET",
                 url: Apipath + '/api/PatientMain/getclientscorestatus?clientformid=' + clientformid + '&clientid=' + patientId,
@@ -1382,9 +1384,12 @@
 
     }
 
-        function ActivateTab(PatientId, Tab,Subtab,ClientFormID) {
-       // window.location.href = '/Client/AddClient?PatientID=' + PatientId + '&CurrentTab=' + Tab + '&SubTab=' + Subtab +'&ClientFormID='+ClientFormID;
-            window.location.href = '/Client/AddClient?PatientID=' + PatientId;
+        function ActivateTab(PatientId, Tab, Subtab, ClientFormID) {
+            if (Tab == 'Profile-tab')
+                window.location.href = '/Client/AddClient?PatientID='+ PatientId;
+            else
+            window.location.href = '/Client/AddClient?PatientID=' + PatientId + '&CurrentTab=' + Tab + '&SubTab=' + Subtab +'&ClientFormID='+ClientFormID;
+            
         }
         $("#Profile-tab").click(function () {
             $("#myChildTab").css("display", "none");
