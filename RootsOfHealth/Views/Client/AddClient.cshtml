@@ -438,6 +438,8 @@
                     var anchorId = 'ul li a#' + $('#myTabContent').find(`${FormId}`).attr('aria-labelledby');
                     $('#dvProgramsLI').find('' + anchorId + '').click();
                     $('.loaderOverlay').hide();
+                    console.log(FormId);
+                    console.log(anchorId);
                 }, 2000);
 
             } else {
