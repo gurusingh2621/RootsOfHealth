@@ -438,11 +438,9 @@
                     FormID = '#@ViewBag.CurrentSubtab' + 'only';
                     var temp = $('#myTabContent').find('' + FormID + '').attr('aria-labelledby');
                     anchorId = 'ul li a#' + temp;
-                    
                     $('#dvProgramsLI').find('' + anchorId + '').click();
-                    console.log(FormID);
-                    console.log(anchorId);
                     $('.loaderOverlay').hide();
+                    console.log(anchorId);
                 }, 3600);
                
 
@@ -4823,7 +4821,7 @@
         }
 
         
-        debugger;
+       
         _Loader.StartLoader();
       
 
