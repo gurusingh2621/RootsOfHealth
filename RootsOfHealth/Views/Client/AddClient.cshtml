@@ -431,17 +431,18 @@
         $(document).ready(function () {
 
             if ('@ViewBag.CurrentSubtab' !== '') {
-
+                var FormID = '';
+                var anchorId = '';
                 AppendClientPrograms(false);
                 setTimeout(function () {
-                    var FormID = '#@ViewBag.CurrentSubtab' + 'only';
-                    var anchorId = 'ul li a#' + $('#myTabContent').find('' + FormID + '').attr('aria-labelledby');
+                    FormID = '#@ViewBag.CurrentSubtab' + 'only';
+                    var temp = $('#myTabContent').find('' + FormID + '').attr('aria-labelledby');
+                    anchorId = 'ul li a#' + temp;
                     $('#dvProgramsLI').find('' + anchorId + '').click();
-                   
-                    console.log(FormID);
-                    console.log(anchorId);
                     $('.loaderOverlay').hide();
-                }, 3000);
+                    console.log(anchorId);
+                }, 3600);
+               
 
             } else {
 
@@ -4820,7 +4821,7 @@
         }
 
         
-        debugger;
+       
         _Loader.StartLoader();
       
 
