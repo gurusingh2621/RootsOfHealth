@@ -423,49 +423,45 @@
         isprofilesave = false;
     }
 
-        
 
 
-       
+
+
 
         $(document).ready(function () {
 
             if ('@ViewBag.CurrentSubtab' !== '') {
-                var FormID = '';
-                var anchorId = '';
-                AppendClientPrograms(false);
-                setTimeout(function () {
-                    FormID = '#@ViewBag.CurrentSubtab' + 'only';
-                    var temp = $('#myTabContent').find('' + FormID + '').attr('aria-labelledby');
-                    anchorId = 'ul li a#' + temp;
-                    if (typeof temp == "undefined") {
 
-                        setTimeout(function () {
+                AppendClientPrograms(true);
+               // setTimeout(function () {
 
-                            temp = $('#myTabContent').find('' + FormID + '').attr('aria-labelledby');
-                            anchorId = 'ul li a#' + temp;
-                            $('#dvProgramsLI').find('' + anchorId + '').click();
-                            $('.loaderOverlay').hide();
-                            console.log(anchorId);
-                        }, 2000);
+                    //if (typeof temp == "undefined") {
 
-                    }
-                    else {
-                        $('#dvProgramsLI').find('' + anchorId + '').click();
-                        $('.loaderOverlay').hide();
-                        console.log(anchorId);
-                    }
-                   
-                    
-                   
-                }, 3000);
-               
+                    //    setTimeout(function () {
+
+                    //        temp = $('#myTabContent').find('' + FormID + '').attr('aria-labelledby');
+                    //        anchorId = 'ul li a#' + temp;
+                    //        $('#dvProgramsLI').find('' + anchorId + '').click();
+                    //        $('.loaderOverlay').hide();
+                    //        console.log(anchorId);
+                    //    }, 2000);
+
+                    //}
+                    //else {
+                    //    $('#dvProgramsLI').find('' + anchorId + '').click();
+                    //    $('.loaderOverlay').hide();
+                    //    console.log(anchorId);
+                    //}
+
+                //}, 3000);
+
+
 
             } else {
 
                 $('.loaderOverlay').hide();
             }
-            
+
         });
 
         var PatientImg = "";
@@ -2809,7 +2805,7 @@
         }
 
 
-        function AppendClientPrograms(startLoader = true) {
+        function AppendClientPrograms(IsEdit = false) {
             var currenttab = 'Profile-tab'
             var patientId = @ViewBag.PatientId;
             if (IsClientPrograms == 0) {
@@ -2817,7 +2813,7 @@
                 $.ajax({
                     url: '/Client/ClientProgramView?PatientId=' + patientId +'',
                     beforeSend: function () {
-                        if (startLoader) { _Loader.StartLoader(); }
+                         _Loader.StartLoader();
                     },
                     success: function (response) {
                         //console.log(response);
@@ -2833,23 +2829,24 @@
                         if ((currenttab == 'Profile-tab' || currenttab == '') && '@ViewBag.ClientFormID' == '0') {
                               $('#Profile').addClass('show active');
                               $('#Profile-tab').addClass('show active');
-                          }
-                        if (startLoader) { _Loader.StopLoader(); }
+                        }
+
+                        _Loader.StopLoader();
                     }
 
                 });
-                AppendClientForms(patientId);
+                AppendClientForms(patientId, IsEdit);
             }
 
         }
-        function AppendClientForms(patientId) {
+        function AppendClientForms(patientId, IsEdit = false) {
             debugger
             var oldHtml = $('#myTabContent').html();
 
             $.ajax({
                 url: '/Client/ClientFormsView?PatientId=' + patientId + '',
                 success: function (response) {
-                    
+
 
                     $("#myTabContent").html('');
                     $("#myTabContent").html(oldHtml + response);
@@ -2858,6 +2855,14 @@
 
                     toastr.error("Some error occurred!! or data not found");
                 },
+                complete: function () {
+                    if (IsEdit) {
+                        var FormID = '#@ViewBag.CurrentSubtab' + 'only';
+                        var temp = $('#myTabContent').find('' + FormID + '').attr('aria-labelledby');
+                        var anchorId = 'ul li a#' + temp;
+                        $('#dvProgramsLI').find('' + anchorId + '').click();
+                    }
+                }
 
             });
 
@@ -4837,12 +4842,12 @@
             });
         }
 
-        
-       
-        _Loader.StartLoader();
-      
 
-       
+
+        _Loader.StartLoader();
+
+
+
 
     </script>
 }
