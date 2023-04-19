@@ -622,7 +622,7 @@
         })
 
         $(document).ready(function () {
-            debugger
+         
             getCarePlanCount();
             GetScoreClient(0);
             LoadClientMainFormData(ClientMainFormHtml);
@@ -1119,78 +1119,85 @@
             });
         }
         function getClientMainFormBasicFormValue(data) {
+            debugger;
             console.log(data);
             var result = JSON.parse(data);
             console.log(result);
             var formEle = $('#clientMainFormDetail');
             var fields = result[0];
             var value = "";
-            formEle.find(".program-control,input.custom-control-input").each(function (index, item) {
-                if ($(item).is("input")) {
-                    switch ($(item).attr("type")) {
-                        case "radio":
-                        case "checkbox":
-                            if ((typeof $(item).attr("data-column") !== 'undefined' && $(item).attr("data-column") !== false) && $(item).closest("div.inputContent").parent().hasClass("program-control")) {
+
+            if (typeof fields != "undefined") {
+
+                formEle.find(".program-control,input.custom-control-input").each(function (index, item) {
+                    if ($(item).is("input")) {
+                        switch ($(item).attr("type")) {
+                            case "radio":
+                            case "checkbox":
+                                if ((typeof $(item).attr("data-column") !== 'undefined' && $(item).attr("data-column") !== false) && $(item).closest("div.inputContent").parent().hasClass("program-control")) {
+                                    value = fields[$(item).attr("data-column")];
+
+                                    if (value == null || value == "") {
+
+                                    } else {
+
+                                        var valueArr = value.split(SeperationString);
+                                        var valueTxt = "";
+
+                                        for (var i = 0; i < valueArr.length; i++) {
+                                            $(item).closest("div.inputContent").find(`input[value="${valueArr[i]}"]`).prop("checked", true);
+                                        }
+
+                                    }
+                                }
+                                break;
+                            case "file":
+                                getClientMainFormModuleFilesReadOnly(_ClientMainFormID, $(item).attr("id"));
+
+                                break;
+                            default:
+
                                 value = fields[$(item).attr("data-column")];
 
-                                if (value == null || value == "") {
+                                item.value = value;
 
-                                } else {
-
-                                    var valueArr = value.split(SeperationString);
-                                    var valueTxt = "";
-
-                                    for (var i = 0; i < valueArr.length; i++) {
-                                        $(item).closest("div.inputContent").find(`input[value="${valueArr[i]}"]`).prop("checked", true);
-                                    }
-
-                                }
-                            }
-                            break;
-                        case "file":
-                            getClientMainFormModuleFilesReadOnly(_ClientMainFormID, $(item).attr("id"));
-
-                            break;
-                        default:
-
-                            value = fields[$(item).attr("data-column")];
-
-                            item.value = value;
-
-                            break;
-                    }
-                }
-                if ($(item).is("select")) {
-                    value = fields[$(item).attr("data-column")];
-
-                    item.value = value;
-
-                }
-                if ($(item).hasClass("priority")) {
-
-                    value = fields[$(item).attr("data-column")];
-                    var splitvalues = (value != "" && value != undefined) ? value.split(SeperationString) : "";
-
-                    var result = '';
-
-                    for (let i = 0; i < splitvalues.length; i++) {
-                        if ($(item).find('li[value="' + splitvalues[i] + '"]').length > 0) {
-                            result += $(item).find('li[value="' + splitvalues[i] + '"]')[0].outerHTML;
+                                break;
                         }
+                    }
+                    if ($(item).is("select")) {
+                        value = fields[$(item).attr("data-column")];
 
+                        item.value = value;
 
                     }
-                    if (result.length > 0) {
-                        $(item).html(result);
+                    if ($(item).hasClass("priority")) {
+
+                        value = fields[$(item).attr("data-column")];
+                        var splitvalues = (value != "" && value != undefined) ? value.split(SeperationString) : "";
+
+                        var result = '';
+
+                        for (let i = 0; i < splitvalues.length; i++) {
+                            if ($(item).find('li[value="' + splitvalues[i] + '"]').length > 0) {
+                                result += $(item).find('li[value="' + splitvalues[i] + '"]')[0].outerHTML;
+                            }
+
+
+                        }
+                        if (result.length > 0) {
+                            $(item).html(result);
+                        }
                     }
-                }
-                if ($(item).is("textarea")) {
-                    value = fields[$(item).attr("data-column")];
+                    if ($(item).is("textarea")) {
+                        value = fields[$(item).attr("data-column")];
 
-                    $(item).summernote('code', value);
+                        $(item).summernote('code', value);
 
-                }
-            });
+                    }
+                });
+
+            }
+            
 
             var labelprogram = formEle.find('.inputContent .label-program');
             labelprogram.css('display', 'block');
@@ -1321,7 +1328,7 @@
         }
 
         function GetScoreClient(clientformid) {
-            debugger
+           
             $.ajax({
                 type: "GET",
                 url: Apipath + '/api/PatientMain/getclientscorestatus?clientformid=' + clientformid + '&clientid=' + patientId,
@@ -2650,7 +2657,7 @@
                         }
 
                         $.each(data, function (i, item) {
-                            debugger;
+                            
                             if (item.ClientFormID != ClientFormId) {
                                 var canViewChildForm = false;
                                 $.ajax({
