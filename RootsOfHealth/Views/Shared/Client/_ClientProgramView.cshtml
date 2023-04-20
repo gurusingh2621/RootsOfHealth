@@ -10,19 +10,19 @@
 
 
     @if (Model.ClientForm != null)
+    {
+        List<ModulepermissionsBO> formpermission;
+        foreach (var item in Model.ClientForm.Where(p => p.ParentFormID == null || p.ParentFormID == 0))
+        {
+            formpermission = Model.ClientFormPermissions.Where(c => c.ModuleId ==item.ClientFormID).ToList();
+            if (formpermission.Where(f => f.CanList == true || f.CanUpdate == true).Any())
+            {
+                if (ViewBag.PatientID == "0" || ViewBag.PatientID == null)
                 {
-                    List<ModulepermissionsBO> formpermission;
-                    foreach (var item in Model.ClientForm.Where(p => p.ParentFormID == null || p.ParentFormID == 0))
-                    {
-                        formpermission = Model.ClientFormPermissions.Where(c => c.ModuleId ==item.ClientFormID).ToList();
-                        if (formpermission.Where(f => f.CanList == true || f.CanUpdate == true).Any())
-                        {
-                            if (ViewBag.PatientID == "0" || ViewBag.PatientID == null)
-                            {
-                                var FormName = @item.FormName.Replace(" ", "");
+                    var FormName = @item.FormName.Replace(" ", "");
                     <li class="nav-item">
                         <a id="@("a" + FormName)" class="nav-link ProfileNotSaved isProfileSaved" data-toggle
-                           href="@("#" + FormName + "only")" data-ClientFormID="@item.ClientFormID" onclick="ErrorTab()" data-PatientID="@item.patientID" data-TemplateID="@item.TemplateID" data-FormName=@(FormName)>@item.FormName<span class="check @Html.Raw(item.Saved ? "" : "d-none")"><i class="fas fa-check-circle"></i></span></a>
+                            href="@("#" + FormName + "only")" data-ClientFormID="@item.ClientFormID" onclick="ErrorTab()" data-PatientID="@item.patientID" data-TemplateID="@item.TemplateID" data-FormName=@(FormName)>@item.FormName<span class="check @Html.Raw(item.Saved ? "" : "d-none")"><i class="fas fa-check-circle"></i></span></a>
 
                     </li>
                 }
@@ -31,7 +31,7 @@
                     var FormName = @item.FormName.Replace(" ", "");
                     <li class="nav-item">
                         <a id="@("a" + FormName)" class="nav-link ProfileNotSaved isProfileSaved" data-toggle="tab"
-                           href="@("#" + FormName + "only")" data-ClientFormID="@item.ClientFormID" onclick="RebindClientFormEvent(this)" data-PatientID="@item.patientID" data-TemplateID="@item.TemplateID" data-FormName=@(FormName)>@item.FormName<span class="pColorCircle" style="display:none"></span><span class="notCount" id="@(FormName + "Notify")" style="display:none"></span><span class="check @Html.Raw(item.Saved ? "" : "d-none")"><i class="fas fa-check-circle"></i></span></a>
+                            href="@("#" + FormName + "only")" data-ClientFormID="@item.ClientFormID" onclick="RebindClientFormEvent(this)" data-PatientID="@item.patientID" data-TemplateID="@item.TemplateID" data-FormName=@(FormName)>@item.FormName<span class="pColorCircle" style="display:none"></span><span class="notCount" id="@(FormName + "Notify")" style="display:none"></span><span class="check @Html.Raw(item.Saved ? "" : "d-none")"><i class="fas fa-check-circle"></i></span></a>
 
                     </li>
                 }

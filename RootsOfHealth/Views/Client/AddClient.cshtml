@@ -331,7 +331,7 @@
             }
             else
             {
-
+                Html.RenderPartial("~/Views/Shared/Client/_MainClientInfo.cshtml", Model.PatientMain);
             }
 
             <!-- Profile Tab end here -->
@@ -2089,6 +2089,9 @@
             var formEle = $('#clientMainFormDetail');
             var fields = result[0];
             var value = "";
+
+        if (typeof fields != 'undefined') {
+
             formEle.find(".program-control,input.custom-control-input").each(function (index, item) {
                 if ($(item).is("input")) {
                     var datacolumnattr = $(item).attr('data-column');
@@ -2139,7 +2142,7 @@
                     var result = '';
 
                     for (let i = 0; i < splitvalues.length; i++) {
-                        if ($(item).find('li[value="' + splitvalues[i] + '"]').length>0) {
+                        if ($(item).find('li[value="' + splitvalues[i] + '"]').length > 0) {
                             result += $(item).find('li[value="' + splitvalues[i] + '"]')[0].outerHTML;
                         }
 
@@ -2156,6 +2159,9 @@
 
                 }
             });
+
+
+        }           
 
             if (formEle.find(".basecontentarea").length > 0) {
                 getClientFormBaseFieldData();
@@ -2869,7 +2875,8 @@
         }
         function DisplayForm(PatientId, Tab, Subtab, ClientFormID) {
 
-            window.location.href = '/Client/ClientInfo?PatientID=' + PatientId;
+            //window.location.href = '/Client/ClientInfo?PatientID=' + PatientId;
+            window.location.href = '/Client/ClientInfo?PatientID=' + PatientId + '&CurrentTab=' + Tab + '&SubTab=' + Subtab + '&ClientFormID=' + ClientFormID;
 
         }
 
@@ -4842,7 +4849,23 @@
             });
         }
 
+        function getActualFullDate() {
+            var d = new Date();
+            var day = addZero(d.getDate());
+            var month = addZero(d.getMonth() + 1);
+            var year = addZero(d.getFullYear());
+            var h = addZero(d.getHours());
+            var m = addZero(d.getMinutes());
+            var s = addZero(d.getSeconds());
+            return year + "-" + month + "-" + day + " " + h + ":" + m + ":" + s;
+        }
 
+        function addZero(i) {
+            if (i < 10) {
+                i = "0" + i;
+            }
+            return i;
+        }
 
         _Loader.StartLoader();
 
