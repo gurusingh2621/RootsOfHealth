@@ -2089,6 +2089,9 @@
             var formEle = $('#clientMainFormDetail');
             var fields = result[0];
             var value = "";
+
+        if (typeof fields != 'undefined') {
+
             formEle.find(".program-control,input.custom-control-input").each(function (index, item) {
                 if ($(item).is("input")) {
                     var datacolumnattr = $(item).attr('data-column');
@@ -2139,7 +2142,7 @@
                     var result = '';
 
                     for (let i = 0; i < splitvalues.length; i++) {
-                        if ($(item).find('li[value="' + splitvalues[i] + '"]').length>0) {
+                        if ($(item).find('li[value="' + splitvalues[i] + '"]').length > 0) {
                             result += $(item).find('li[value="' + splitvalues[i] + '"]')[0].outerHTML;
                         }
 
@@ -2156,6 +2159,10 @@
 
                 }
             });
+
+
+        }
+            
 
             if (formEle.find(".basecontentarea").length > 0) {
                 getClientFormBaseFieldData();
