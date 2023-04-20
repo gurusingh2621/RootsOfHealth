@@ -331,7 +331,7 @@
             }
             else
             {
-
+                Html.RenderPartial("~/Views/Shared/Client/_MainClientInfo.cshtml", Model.PatientMain);
             }
 
             <!-- Profile Tab end here -->
@@ -2161,8 +2161,7 @@
             });
 
 
-        }
-            
+        }           
 
             if (formEle.find(".basecontentarea").length > 0) {
                 getClientFormBaseFieldData();
@@ -2876,7 +2875,8 @@
         }
         function DisplayForm(PatientId, Tab, Subtab, ClientFormID) {
 
-            window.location.href = '/Client/ClientInfo?PatientID=' + PatientId;
+            //window.location.href = '/Client/ClientInfo?PatientID=' + PatientId;
+            window.location.href = '/Client/ClientInfo?PatientID=' + PatientId + '&CurrentTab=' + Tab + '&SubTab=' + Subtab + '&ClientFormID=' + ClientFormID;
 
         }
 
@@ -4849,7 +4849,23 @@
             });
         }
 
+        function getActualFullDate() {
+            var d = new Date();
+            var day = addZero(d.getDate());
+            var month = addZero(d.getMonth() + 1);
+            var year = addZero(d.getFullYear());
+            var h = addZero(d.getHours());
+            var m = addZero(d.getMinutes());
+            var s = addZero(d.getSeconds());
+            return year + "-" + month + "-" + day + " " + h + ":" + m + ":" + s;
+        }
 
+        function addZero(i) {
+            if (i < 10) {
+                i = "0" + i;
+            }
+            return i;
+        }
 
         _Loader.StartLoader();
 
