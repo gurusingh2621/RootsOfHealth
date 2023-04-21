@@ -318,7 +318,7 @@
     }
 
 </style>
-<div class="tab-pane fade test active show" id="Profile" role="tabpanel" aria-labelledby="Profile-tab">
+<div class="tab-pane fade test" id="Profile" role="tabpanel" aria-labelledby="Profile-tab">
     <!-- Inner content start here  -->
     <div class="inner-content">
         <div class="paitent-detail">
@@ -2306,3 +2306,40 @@
 
 </div>
 <script src="~/Scripts/custom.js"></script>
+<script src="~/Scripts/Careplan/CareplanPatient.js"></script>
+<script>
+
+    $("#btnPatientAppointments").click(function (e) {
+        $("#appointementContent").show();
+        $('#appointement_div').show();
+        $(".appointement-notes").hide();
+        $('#pat_out_div').removeClass('col-lg-12 col-md-12 col-sm-12 col-12');
+        $('#pat_out_div').addClass('col-lg-8 col-md-12 col-sm-12 col-12 pr-0');
+        e.preventDefault();
+    });
+
+    $("#hideAppointmentContent").click(function (e) {
+        $("#appointementContent").hide();
+        $('#pat_out_div').addClass('col-lg-12 col-md-12 col-sm-12 col-12');
+        $('#pat_out_div').removeClass('col-lg-8 col-md-12 col-sm-12 col-12 pr-0');
+        e.preventDefault();
+    });
+
+
+    $("#btnPatientNotes").click(function (e) {
+        $("#appointementContent").hide();
+        $(".appointement-notes").show();
+        $('#pat_out_div').removeClass('col-lg-12 col-md-12 col-sm-12 col-12');
+        $('#pat_out_div').addClass('col-lg-8 col-md-12 col-sm-12 col-12 pr-0');
+        e.preventDefault();
+    });
+
+
+    $("#hideNoteContent").click(function (e) {
+        $(".appointement-notes").hide();
+        $('#pat_out_div').addClass('col-lg-12 col-md-12 col-sm-12 col-12');
+        $('#pat_out_div').removeClass('col-lg-8 col-md-12 col-sm-12 col-12 pr-0');
+        e.preventDefault();
+    });
+
+</script>
