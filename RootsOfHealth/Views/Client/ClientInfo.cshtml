@@ -225,20 +225,24 @@
             </div>
         </div>
         <div class="tab-content" id="myTabContent">
-            @if (ViewBag.currentTab == "profile")
+            <ul class="nav nav-tabs" style="display:none;" id="myChildTab" role="tablist">
+            </ul>
+
+            @if (ViewBag.currentTab == "profile" || ViewBag.currentTab == "ProgramTab")
             {
                 Html.RenderPartial("~/Views/Shared/Client/_MainClientInfo.cshtml", Model.PatientMain);
             }
-            else {
+            else if (ViewBag.currentTab != "ProgramTab")
+            {
 
                 Html.RenderPartial("~/Views/Shared/Client/_MainClientInfo.cshtml", Model.PatientMain);
+                Html.RenderPartial("~/Views/Shared/Client/_EditClientForm.cshtml", Model);
             }
             <!-- Dynamic tab start here -->
             <!--later added by Nitesh-->
-
             @*@{
-                Html.RenderPartial("~/Views/Shared/Client/_DynamicClientForms.cshtml", Model.ClientForm);
-            }*@
+            Html.RenderPartial("~/Views/Shared/Client/_DynamicClientForms.cshtml", Model.ClientForm);
+        }*@
             <!-- Dynamic Tab end here -->
             <!-- Programs Tab start here  -->
 
@@ -310,7 +314,7 @@
        var currenttab = '@ViewBag.CurrentTab';
         var currentSubtab = '@ViewBag.CurrentSubtab';
 
-        
+
 
 
        var ClientMainFormHtml = @Html.Raw(Json.Encode(Model.MainFormInfoBO.FormHtml));
@@ -351,6 +355,19 @@
             isprofilesave = false;
         }
 
+        if (currenttab != 'profile') {
+            $('#Profile').removeClass('active show');
+        } else {
+            $('#Profile').addClass('active show');
+        }
+
+        if (currenttab == "ProgramTab") {
+
+            $('#Programs').show();
+           
+
+        }
+
         var SchedulingList = JSON.parse('@Html.Raw(Json.Encode(Model.FormScheduling))');
         $(".loaderOverlay").css("display", "flex");
         // Hamburger menu js
@@ -383,6 +400,15 @@
 
 
         })
+
+        function HideChildTab() {
+
+            HideSideBar();
+
+            $('ul#myChildTab').css('display', 'none');
+            $('ul#myChildTab li').css('display', 'none');
+        }
+
 
         function HideSideBar() {
 
@@ -422,7 +448,7 @@
                         IsClientPrograms = 1;
                         SetScheduling();
                         $("#RecentClientli").css("display", "block");
-                       
+
                     },
                     error: function () {
                         _Loader.StopLoader();
@@ -436,10 +462,10 @@
                           }
                         AppendClientForms(patientId, display);
                         _Loader.StopLoader();
-                        
+
                     }
                 });
-                
+
             }
 
 
@@ -451,7 +477,7 @@
 
               $.ajax({
                   url: '/Client/ClientFormsView?PatientId=' + patientId + '',
-              
+
                   success: function (response) {
                       //console.log(oldHtml);
                       //console.log(response);
@@ -459,7 +485,22 @@
                   },
                   complete: function () {
                       if (_display) {
-                          $('#a' + currentSubtab).click();
+                          /*$('#a' + currentSubtab).click();*/
+                          var currenttab = '@ViewBag.CurrentTab';
+                          var currentSubtab = '@ViewBag.CurrentSubtab';
+
+                          if (currenttab == "ProgramTab") {
+                              /* RebindClientFormEvent($('#Programs-tab'));*/
+                              $('#programtbs').click();
+                              //$('#Programs-tab').click();
+                          } else {
+                              RebindClientFormEvent($('#a' + currentSubtab));
+                          }
+
+
+
+
+
                       }
                   },
                   error: function () {
@@ -639,10 +680,65 @@
         })
 
         $(document).ready(function () {
-            
-            if (currenttab != 'profile') {
 
+            $('#programtbs').click(function () {
+                $(".loaderOverlay").css('display', 'flex');
+                $('Programs').html('')
+                $.ajax({
+
+                    type: "Get",
+                    url: '/Patient/GetProgramsForPatient?PatientID=' + _PatientId,
+                    dataType: "html",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (result) {
+
+                        $('#Programs')[0].outerHTML = result;
+
+                        $('#Programs').addClass('active show')
+                        $('#myTab .nav-link').each(function () {
+                            $(this).removeClass('active show')
+                        })
+                        $('#Programs-tab').addClass('active show')
+                        SetScheduling()
+                        RebindEvent();
+
+                        if ($("#tabPills .nav-item").length > 0) {
+                            if (currentSubtab == 'undefined') {
+                                $("#tabPills .nav-item a").get(0).click();
+                            }
+                            else {
+                                if ($("#tabPills .nav-item   #a" + currentSubtab).length > 0) {
+                                    $("#tabPills .nav-item  #a" + currentSubtab).click();
+                                }
+                                else {
+                                    $("#tabPills .nav-item a").get(0).click();
+                                }
+                            }
+                        }
+                        $(".btnProgramEdit").css('display', 'none')
+
+                    },
+                    error: function () {
+                        $(".loaderOverlay").hide()
+                        toastr.error("Some error occurred!! or data not found");
+                    },
+                    complete: function () {
+                        ShowPatientInfo(_PatientName, _PatientEmail)
+                    }
+                });
+            })
+
+            if (currenttab != 'profile') {
+                $('#Profile').removeClass('active show');
                 AppendClientPrograms(true);
+            } else {
+                $('#Profile').addClass('active show');
+            }
+
+            if (currenttab == "ProgramTab") {
+
+                $('#Programs').show();
+                
             }
 
             getCarePlanCount();
@@ -798,6 +894,9 @@
             })
             $('.selectboxmultiple').selectpicker();
             $(".loaderOverlay").hide();
+
+
+
         });
         $(".ssn-icon-label").click(function () {
             $(this).toggleClass("showlbl");
@@ -810,6 +909,7 @@
             $(".stardiv").show();
             $(".lbl-hide").hide();
         }
+
 
         function LoadClientMainForm() {
             $.ajax({
@@ -2527,7 +2627,7 @@
                     EditClientForm(ClientFormId, _templateID)
                 }
             }
-           
+
             //})
         }
 

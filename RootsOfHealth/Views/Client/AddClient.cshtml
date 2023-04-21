@@ -325,13 +325,14 @@
             </ul>
             <!-- Profile tab start here  -->
 
-            @if (ViewBag.currentTab == "profile")
+            @if (ViewBag.currentTab == "profile" || ViewBag.currentTab == "ProgramTab")
             {
                 Html.RenderPartial("~/Views/Shared/Client/_MainClientInfo.cshtml", Model.PatientMain);
             }
-            else
+            else if(ViewBag.currentTab != "ProgramTab")
             {
                 Html.RenderPartial("~/Views/Shared/Client/_MainClientInfo.cshtml", Model.PatientMain);
+                Html.RenderPartial("~/Views/Shared/Client/_EditClientForm.cshtml", Model);
             }
 
             <!-- Profile Tab end here -->
@@ -388,7 +389,8 @@
         };
     var Apipath = '@System.Configuration.ConfigurationManager.AppSettings["WebApi"]'
     var userId = "@Session["userid"]";
-    var patientId = "@Model.PatientMain.PatientID";
+        var patientId = "@Model.PatientMain.PatientID";
+        currenttab = '@ViewBag.currentTab'
     var currentSubtab = '@ViewBag.CurrentSubtab'
     var IsUserCarePlanApprover = '@Session["IsCarePlanApprover"]'
     var IsRequestSent = false;
@@ -414,53 +416,101 @@
         var isprofilesave = false;
           var _PatientName = '@Model.PatientMain.FirstName' + ' ' + '@Model.PatientMain.LastName';
       var _PatientEmail = '@PatientEmail'
-
+        var IsClientFormAppended = 0;
 
     if (@ViewBag.PatientID != "0" && @ViewBag.PatientID != null) {
         isprofilesave = true;
     }
     if ('@ViewBag.CurrentSubtab' == '') {
         isprofilesave = false;
+        }
+    if ('@ViewBag.CurrentSubtab' !== '') {
+        $('#Profile').removeClass('active show');
+    } else {
+        $('#Profile').addClass('active show');
     }
 
+    if (currenttab == "ProgramTab") {
 
+        $('#Programs').show();
+        
 
-
+    }
 
 
         $(document).ready(function () {
 
+            $('#programtbs').click(function () {
+
+                $(".loaderOverlay").css('display', 'flex');
+                $('#Programs').html('')
+                $.ajax({
+
+                    type: "Get",
+                    url: '/Patient/GetProgramsForPatient?PatientID=' + patientId,
+                    dataType: "html",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (result) {
+
+                        $('#Programs')[0].outerHTML = result;
+
+                        $('#Programs').addClass('active show')
+                        $('#myTab .nav-link').each(function () {
+                            $(this).removeClass('active show')
+                        })
+                        $('#Programs-tab').addClass('active show')
+                        SetScheduling()
+                        RebindEvent();
+
+                        if ($("#tabPills .nav-item").length > 0) {
+                            if (currentSubtab == 'undefined') {
+                                $("#tabPills .nav-item a").get(0).click();
+                            }
+                            else {
+                                if ($("#tabPills .nav-item   #a" + currentSubtab).length > 0) {
+                                    $("#tabPills .nav-item  #a" + currentSubtab).click();
+                                }
+                                else {
+                                    $("#tabPills .nav-item a").get(0).click();
+                                }
+                            }
+                        }
+                        $(".btnProgramEdit").css('display', 'none')
+
+                    },
+                    error: function () {
+                        $(".loaderOverlay").hide()
+                        toastr.error("Some error occurred!! or data not found");
+                    },
+                    complete: function () {
+
+                        ShowPatientInfo(_PatientName, _PatientEmail);
+                        $('a#btnDisplayProgram').removeClass('label-fields');
+                    }
+                });
+            })
+
             if ('@ViewBag.CurrentSubtab' !== '') {
 
+                $('#Profile').removeClass('active show');
                 AppendClientPrograms(true);
-               // setTimeout(function () {
-
-                    //if (typeof temp == "undefined") {
-
-                    //    setTimeout(function () {
-
-                    //        temp = $('#myTabContent').find('' + FormID + '').attr('aria-labelledby');
-                    //        anchorId = 'ul li a#' + temp;
-                    //        $('#dvProgramsLI').find('' + anchorId + '').click();
-                    //        $('.loaderOverlay').hide();
-                    //        console.log(anchorId);
-                    //    }, 2000);
-
-                    //}
-                    //else {
-                    //    $('#dvProgramsLI').find('' + anchorId + '').click();
-                    //    $('.loaderOverlay').hide();
-                    //    console.log(anchorId);
-                    //}
-
-                //}, 3000);
-
-
 
             } else {
 
                 $('.loaderOverlay').hide();
+                $('#Profile').addClass('active show');
+
             }
+
+            if (currenttab == "ProgramTab") {
+
+                $('#Programs').show();
+                
+
+            }
+
+
+
 
         });
 
@@ -2161,7 +2211,7 @@
             });
 
 
-        }           
+        }
 
             if (formEle.find(".basecontentarea").length > 0) {
                 getClientFormBaseFieldData();
@@ -2790,6 +2840,14 @@
         })
     });
 
+        function HideChildTab() {
+
+            HideSideBar();
+
+            $('ul#myChildTab').css('display', 'none');
+            $('ul#myChildTab li').css('display', 'none');
+        }
+
         function HideSideBar() {
 
             $('#menu-toggle').removeClass("open");
@@ -2812,8 +2870,10 @@
 
 
         function AppendClientPrograms(IsEdit = false) {
-            var currenttab = 'Profile-tab'
+            debugger;
+            var currenttab = '@ViewBag.Currenttab';
             var patientId = @ViewBag.PatientId;
+            var currentSubtab = '@ViewBag.CurrentSubtab';
             if (IsClientPrograms == 0) {
 
                 $.ajax({
@@ -2832,23 +2892,30 @@
                         toastr.error("Some error occurred!! or data not found");
                     },
                     complete: function () {
-                        if ((currenttab == 'Profile-tab' || currenttab == '') && '@ViewBag.ClientFormID' == '0') {
-                              $('#Profile').addClass('show active');
-                              $('#Profile-tab').addClass('show active');
+                        if ((currenttab == 'Profile-tab' || currenttab == 'profile') && '@ViewBag.ClientFormID' == '0') {
+                            $('#Profile').addClass('show active');
+                            $('#Profile-tab').addClass('show active');
                         }
+                        else {
+                            //var ClientForm = "#"+currentSubtab + "only";
+                            //$('#myTabContent').find('#Profile').addClass('show active');
+                            //$('#myTabContent').find('' + ClientForm + '').addClass('show active');
+                            //console.log("Your current Sub Tab is : #"+currentSubtab+"only");
 
+                        }
+                        AppendClientForms(patientId, IsEdit);
                         _Loader.StopLoader();
                     }
 
                 });
-                AppendClientForms(patientId, IsEdit);
+
             }
 
         }
         function AppendClientForms(patientId, IsEdit = false) {
             debugger
             var oldHtml = $('#myTabContent').html();
-
+            var ClientFormId = '@ViewBag.ClientFormID';
             $.ajax({
                 url: '/Client/ClientFormsView?PatientId=' + patientId + '',
                 success: function (response) {
@@ -2863,10 +2930,32 @@
                 },
                 complete: function () {
                     if (IsEdit) {
-                        var FormID = '#@ViewBag.CurrentSubtab' + 'only';
-                        var temp = $('#myTabContent').find('' + FormID + '').attr('aria-labelledby');
-                        var anchorId = 'ul li a#' + temp;
-                        $('#dvProgramsLI').find('' + anchorId + '').click();
+                          var currenttab = '@ViewBag.Currenttab';
+                        var currentSubtab = '@ViewBag.CurrentSubtab';
+                        if (currenttab == "ProgramTab") {
+                            /* RebindClientFormEvent($('#Programs-tab'));*/
+                            $('#programtbs').click();
+                            //$('#Programs-tab').click();
+                        } else {
+                            RebindClientFormEvent($('#a' + currentSubtab));
+                        }
+
+
+                        //var FormID = '#@ViewBag.CurrentSubtab' + 'only';
+                        //var temp = $('#myTabContent').find('' + FormID + '').attr('aria-labelledby');
+                       // var anchorId = 'ul li a#' + temp;
+
+                        //$('#dvProgramsLI').find('' + anchorId + '').click();
+
+                        //if ($("ul#myChildTab").find('li a').attr('data-clientformid') == ClientFormId) {
+
+                        //    $("ul#myChildTab").find('li a').attr('data-clientformid', function (i, v) {
+                        //        if (v == ClientFormId) {
+                        //            $(this).click();
+                        //        }
+                        //    });
+                        //}
+
                     }
                 }
 
@@ -2921,54 +3010,7 @@
             $("#myChildTab").css("display", "none");
         })
 
-        $('#programtbs').click(function () {
 
-            $(".loaderOverlay").css('display', 'flex');
-            $('#Programs').html('')
-            $.ajax({
-
-                type: "Get",
-                url: '/Patient/GetProgramsForPatient?PatientID=' + patientId,
-                dataType: "html",
-                contentType: "application/json; charset=utf-8",
-                success: function (result) {
-
-                    $('#Programs')[0].outerHTML = result;
-
-                    $('#Programs').addClass('active show')
-                    $('#myTab .nav-link').each(function () {
-                        $(this).removeClass('active show')
-                    })
-                    $('#Programs-tab').addClass('active show')
-                    SetScheduling()
-                    RebindEvent();
-
-                    if ($("#tabPills .nav-item").length > 0) {
-                        if (currentSubtab == 'undefined') {
-                            $("#tabPills .nav-item a").get(0).click();
-                        }
-                        else {
-                            if ($("#tabPills .nav-item   #a" + currentSubtab).length > 0) {
-                                $("#tabPills .nav-item  #a" + currentSubtab).click();
-                            }
-                            else {
-                                $("#tabPills .nav-item a").get(0).click();
-                            }
-                        }
-                    }
-                    $(".btnProgramEdit").css('display', 'none')
-
-                },
-                error: function () {
-                    $(".loaderOverlay").hide()
-                    toastr.error("Some error occurred!! or data not found");
-                },
-                complete: function () {
-
-                    ShowPatientInfo(_PatientName, _PatientEmail)
-                }
-            });
-        })
 
         function LoadSchedulingAfterSave() {
             $.ajax({
@@ -4105,54 +4147,59 @@
                     $(item).removeClass('client-form-margin-top');
                 })
 
-                $(".render-basicProgramform").each(function (index, item) {
-                    $(item).html("");
-                });
-                var item = $(item);
-                var ClientFormID = item.attr("data-ClientFormID")
-                if (ClientFormID == undefined) {
+                 $(".render-basicProgramform").each(function (index, item) {
+                     $(item).html("");
+                 });
 
-                    if ('@ViewBag.ClientFormID' != 0) {
-                        ClientFormID =@ViewBag.ClientFormID;
-                        getParentForm(ClientFormID);
-                    }
-                    setTimeout(function () {
-                        LoadChildMenu(ClientFormID);
-                    }, 1000)
-                }
-                else {
-                    LoadChildMenu(ClientFormID);
-                }
-                formName = item.attr("data-FormName");
+                  var item = $(item);
+                    var ClientFormID = item.attr("data-ClientFormID")
+                    if (ClientFormID == undefined) {
 
-                var id = item.attr("id");
-                if ($("#" + id).hasClass("Child")) {
-                    $("#myChildTab li").each(function (index, item) {
-                        $(item).removeClass("active show");
-                    })
-                    $(".Child").removeClass('active show');
-                    $("#" + id).addClass('active show');
-                }
-
-                if (formName != undefined) {
-                    $('#' + formName + 'only').find('.Child').removeClass('active show ');
-                    $('#' + formName + 'only').find("#a" + formName).addClass('active show ');
-                    _programelement = $("#" + formName + "render-basicform")
-                    _IsSaved = $('#' + formName + 'only').find('.btnprogramsave').attr('data-save');
-                    $('#' + formName + 'only').addClass('active show');
-                    var _templateID = item.attr("data-TemplateID");
-                    $('.btnprogramPrint').addClass('d-none')
-
-
-
-                    if (_IsSaved == 'False') {
-                        LoadClientFormTemplate(ClientFormID)
+                        if ('@ViewBag.ClientFormID' != 0) {
+                            ClientFormID =@ViewBag.ClientFormID;
+                            getParentForm(ClientFormID);
+                        }
+                        setTimeout(function () {
+                            LoadChildMenu(ClientFormID);
+                        }, 1000)
                     }
                     else {
-                        EditClientForm(ClientFormID, _templateID)
+                        LoadChildMenu(ClientFormID);
                     }
-                }
-                //})
+
+
+                    formName = item.attr("data-FormName");
+
+                    var id = item.attr("id");
+                    if ($("#" + id).hasClass("Child")) {
+                        $("#myChildTab li").each(function (index, item) {
+                            $(item).removeClass("active show");
+                        })
+                        $(".Child").removeClass('active show');
+                        $("#" + id).addClass('active show');
+                    }
+
+                    if (formName != undefined) {
+                        $('#' + formName + 'only').find('.Child').removeClass('active show ');
+                        $('#' + formName + 'only').find("#a" + formName).addClass('active show ');
+                        _programelement = $("#" + formName + "render-basicform")
+                        _IsSaved = $('#' + formName + 'only').find('.btnprogramsave').attr('data-save');
+                        $('#' + formName + 'only').addClass('active show');
+                        var _templateID = item.attr("data-TemplateID");
+                        $('.btnprogramPrint').addClass('d-none')
+
+
+
+                        if (_IsSaved == 'False') {
+                            LoadClientFormTemplate(ClientFormID)
+                        }
+                        else {
+                            EditClientForm(ClientFormID, _templateID)
+                        }
+                    }
+                    //})
+
+
             }
             isprofilesave = true;
 

@@ -806,6 +806,7 @@
     <Content Include="Views\Reports\AddReport.cshtml" />
     <Content Include="Views\Shared\Client\_ClientProgramView.cshtml" />
     <Content Include="Views\Shared\Client\_DynamicClientForms.cshtml" />
+    <Content Include="Views\Shared\Client\_EditClientForm.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
